@@ -3,8 +3,19 @@
 
 class Rule {
 public:
+  Rule() {};
+  virtual ~Rule(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;
 };
 
-endif
+template<class T>
+class Reg {
+  T storage;
+public:
+  Reg();
+  T read();
+  void write(T v);
+};
+
+#endif
