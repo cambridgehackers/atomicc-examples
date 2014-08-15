@@ -14,6 +14,7 @@ class Reg {
   T storage;
 public:
   Reg();
+  Reg(T v);
   T read();
   void write(T v);
 };
