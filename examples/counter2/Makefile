@@ -9,6 +9,11 @@ CPPFLAGS = -I../../cpp/ -I. -S -emit-llvm -std=c++11 -std=gnu++11
 
 all:
 	$(CPP) $(CPPFLAGS) -o counter.ll counter.cpp
+	sed -e 's/{/\n{\n/g' \
+            -e 's/\" \"/\"\n\"/g' \
+            -e 's/}/\n}/g' \
+            -e 's/\"(/\"\n        (/g' \
+            <counter.ll >counter.tmp
 
 backend:
 	$(LLC) counter.ll
