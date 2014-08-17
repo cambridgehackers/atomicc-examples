@@ -1,45 +1,27 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <functional>
+
 #include <atomicc2.h>
 
-class Count {
-public:
-  int x;
-public:
-  Count();
-};
+extern void append(std::function<bool ()> f1, std::function<void ()> f2);
 
-Count::Count()
+void foo()
 {
+  int x;
   x = 0;
-  class Countup : public Rule, public Count {
-    int temp_x;
-  public:
-    Countup() {}
-    bool guard() {
-      return x < 30;
-    }
-    void body() {
+  append([&](){ return x < 30;}, [&]()
+  {
+      int temp_x;
       int y = x;
+      x = y + 1;
       temp_x = y + 1;
       printf("x=%d, y=%d", x, y);
-    }
-    void cleanup() {
       x = temp_x;
-    }
-  } countup;
-
-  class Done : public Rule, public Count {
-  public:
-    Done() {}
-    bool guard() {
-      return x >= 30;
-    }
-    void body() {
+  });
+  append([&](){ return x >= 30;}, [&]()
+  {
       exit(0);
-    }
-  } done;
-
+  });
 }
 
-Count countTest;

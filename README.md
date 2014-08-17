@@ -8,3 +8,7 @@ C++ as the source language.
 
 Atomic C compiles C++ to LLVM intermediate language, then performs
 static elaboration, then generates code.
+
+
+To install clang/llvm on Ubuntu:
+    sudo apt-get install clang llvm
