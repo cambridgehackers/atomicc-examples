@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <functional>
-
-#include <atomicc2.h>
+//#include <functional>
+#include "functional_simple"
 
 extern "C" void append(std::function<bool ()> guard, std::function<void ()> body, std::function<void ()> cleanup);
 

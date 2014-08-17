@@ -1,0 +1,185 @@
+
+#pragma GCC system_header
+#include <bits/c++config.h>
+#include <bits/stl_function.h>
+#include <typeinfo>
+#include <new>
+#include <tuple>
+#include <type_traits>
+#include <bits/functexcept.h>
+#include <bits/functional_hash.h>
+namespace std _GLIBCXX_VISIBILITY(default)
+{
+_GLIBCXX_BEGIN_NAMESPACE_VERSION
+_GLIBCXX_HAS_NESTED_TYPE(result_type)
+  template<bool _Has_result_type, typename _Functor>
+    struct _Maybe_get_result_type
+    { };
+  template<typename _Res, typename... _ArgTypes>
+    struct _Maybe_unary_or_binary_function { };
+  template<typename _Tp>
+    struct __is_location_invariant
+    : integral_constant<bool, (is_pointer<_Tp>::value
+                               || is_member_pointer<_Tp>::value)>
+    { };
+  class _Undefined_class;
+  union _Nocopy_types
+  {
+    void*       _M_object;
+    const void* _M_const_object;
+    void (*_M_function_pointer)();
+    void (_Undefined_class::*_M_member_pointer)();
+  };
+  union _Any_data
+  {
+    void*       _M_access()       { return &_M_pod_data[0]; }
+    const void* _M_access() const { return &_M_pod_data[0]; }
+    template<typename _Tp> _Tp& _M_access() { return *static_cast<_Tp*>(_M_access()); }
+    template<typename _Tp> const _Tp& _M_access() const { return *static_cast<const _Tp*>(_M_access()); }
+    _Nocopy_types _M_unused;
+    char _M_pod_data[sizeof(_Nocopy_types)];
+  };
+  enum _Manager_operation { };
+  template<typename _Tp>
+    struct _Simple_type_wrapper
+    {
+      _Simple_type_wrapper(_Tp __value) : __value(__value) { }
+      _Tp __value;
+    };
+  template<typename _Tp> struct __is_location_invariant<_Simple_type_wrapper<_Tp> > : __is_location_invariant<_Tp> { };
+  template<typename _Functor> inline _Functor& __callable_functor(_Functor& __f) { return __f; }
+  template<typename _Signature>
+    class function;
+  class _Function_base
+  {
+  public:
+    static const std::size_t _M_max_size = sizeof(_Nocopy_types);
+    static const std::size_t _M_max_align = __alignof__(_Nocopy_types);
+#if 1
+    template<typename _Functor>
+      class _Base_manager
+      {
+      protected:
+        static const bool __stored_locally =
+        (__is_location_invariant<_Functor>::value
+         && sizeof(_Functor) <= _M_max_size
+         && __alignof__(_Functor) <= _M_max_align
+         && (_M_max_align % __alignof__(_Functor) == 0));
+        typedef integral_constant<bool, __stored_locally> _Local_storage;
+        static _Functor*
+        _M_get_pointer(const _Any_data& __source)
+        {
+          const _Functor* __ptr =
+            __stored_locally? std::__addressof(__source._M_access<_Functor>())
+            /* have stored a pointer */ : __source._M_access<_Functor*>();
+          return const_cast<_Functor*>(__ptr);
+        }
+      public:
+        static bool _M_manager(_Any_data& __dest, const _Any_data& __source, _Manager_operation __op) { return false; }
+        static void
+        _M_init_functor(_Any_data& __functor, _Functor&& __f)
+        { _M_init_functor(__functor, std::move(__f), _Local_storage()); }
+        template<typename _Signature>
+          static bool
+          _M_not_empty_function(const function<_Signature>& __f)
+          { return static_cast<bool>(__f); }
+        template<typename _Tp>
+          static bool
+          _M_not_empty_function(const _Tp*& __fp)
+          { return __fp; }
+        template<typename _Class, typename _Tp>
+          static bool
+          _M_not_empty_function(_Tp _Class::* const& __mp)
+          { return __mp; }
+        template<typename _Tp>
+          static bool
+          _M_not_empty_function(const _Tp&)
+          { return true; }
+      private:
+        static void
+        _M_init_functor(_Any_data& __functor, _Functor&& __f, true_type)
+        { new (__functor._M_access()) _Functor(std::move(__f)); }
+        static void
+        _M_init_functor(_Any_data& __functor, _Functor&& __f, false_type)
+        { __functor._M_access<_Functor*>() = new _Functor(std::move(__f)); }
+      };
+    template<typename _Functor>
+      class _Ref_manager : public _Base_manager<_Functor*>
+      {
+        typedef _Function_base::_Base_manager<_Functor*> _Base;
+    public:
+        static bool
+        _M_manager(_Any_data& __dest, const _Any_data& __source,
+                   _Manager_operation __op)
+        {
+          _Base::_M_manager(__dest, __source, __op);
+          return false;
+        }
+        static void
+        _M_init_functor(_Any_data& __functor, reference_wrapper<_Functor> __f)
+        {
+          _Base::_M_init_functor(__functor, &__f.get());
+        }
+      };
+#endif
+    _Function_base() : _M_manager(0) { }
+    ~_Function_base() { }
+    typedef bool (*_Manager_type)(_Any_data&, const _Any_data&, _Manager_operation);
+    _Any_data     _M_functor;
+    _Manager_type _M_manager;
+  };
+  template<typename _Signature, typename _Functor>
+    class _Function_handler;
+  template<typename _Res, typename _Functor, typename... _ArgTypes>
+    class _Function_handler<_Res(_ArgTypes...), _Functor>
+    : public _Function_base::_Base_manager<_Functor>
+    {
+      typedef _Function_base::_Base_manager<_Functor> _Base;
+    public:
+      static _Res
+      _M_invoke(const _Any_data& __functor, _ArgTypes... __args)
+      {
+        return (*_Base::_M_get_pointer(__functor))(
+            std::forward<_ArgTypes>(__args)...);
+      }
+    };
+  template<typename _Res, typename... _ArgTypes>
+    class function<_Res(_ArgTypes...)>
+    : public _Maybe_unary_or_binary_function<_Res, _ArgTypes...>,
+      private _Function_base
+    {
+      typedef _Res _Signature_type(_ArgTypes...);
+      struct _Useless { };
+    public:
+      typedef _Res result_type;
+      function() : _Function_base() { }
+      function(nullptr_t) : _Function_base() { }
+      function(const function& __x);
+      template<typename _Functor>
+        function(_Functor __f,
+                 typename enable_if<
+                           !is_integral<_Functor>::value, _Useless>::type
+                   = _Useless());
+      _Res operator()(_ArgTypes... __args) const;
+    private:
+      typedef _Res (*_Invoker_type)(const _Any_data&, _ArgTypes...);
+      _Invoker_type _M_invoker;
+  };
+  template<typename _Res, typename... _ArgTypes>
+    template<typename _Functor>
+      function<_Res(_ArgTypes...)>::
+      function(_Functor __f,
+               typename enable_if<
+                        !is_integral<_Functor>::value, _Useless>::type)
+      : _Function_base()
+      {
+        typedef _Function_handler<_Signature_type, _Functor> _My_handler;
+        if (_My_handler::_M_not_empty_function(__f))
+          {
+            _M_invoker = &_My_handler::_M_invoke;
+            _M_manager = &_My_handler::_M_manager;
+            _My_handler::_M_init_functor(_M_functor, std::move(__f));
+          }
+      }
+_GLIBCXX_END_NAMESPACE_VERSION
+} // namespace std
