@@ -6,6 +6,14 @@
 #include <tuple>
 
 namespace std {
+template<typename T>
+   struct zzremove_reference { typedef T     type; };
+template <class T>
+   typename zzremove_reference<T>::type&
+   zzmove(T& a)
+   {
+       return a;
+   }
   template<typename _Signature> class function;
   template<typename _Signature, typename _Functor> class _Function_handler;
   template<typename _Res, typename _Functor, typename... _ArgTypes>
@@ -26,6 +34,7 @@ namespace std {
       function(_Functor __f) {
         typedef _Function_handler<_Res(_ArgTypes...), _Functor> _My_handler;
         _M_invoker = &_My_handler::_M_invoke;
-        new (_M_functor) _Functor(std::move(__f));
+        //new (_M_functor) _Functor(std::move(__f));
+        new (_M_functor) _Functor(zzmove(__f));
       }
 } // namespace std
