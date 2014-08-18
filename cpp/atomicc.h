@@ -7,6 +7,7 @@ public:
   virtual ~Rule(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;
+  virtual void update() = 0;
 };
 
 template<class T>
@@ -15,8 +16,9 @@ class Reg {
 public:
   Reg();
   Reg(T v);
-  T read();
-  void write(T v);
+  T operator *() const { return storage; };
+  operator T () const { return storage; };
+  void operator =(T v) { storage = v; };
 };
 
 #endif
