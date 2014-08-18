@@ -4,18 +4,22 @@
 
 class Count {
 protected:
-  Reg<int> *x;
+  Reg<int> x;
+  int new_x;
   class Countup : public Rule {
     Count *module;
   public:
     Countup(Count *module) : module(module) {}
     bool guard() {
-      return module->x->read() < 30;
+      return module->x < 30;
     }
     void body() {
-      int y = module->x->read();
-      module->x->write(y + 1);
-      printf("x=%d, y=%d", module->x->read(), y);
+      int y = module->x;
+      module->new_x  = y + 1;
+      printf("x=%d, y=%d", (int)module->x, y);
+    }
+    void update() {
+      module->x = module->new_x;
     }
   } countup;
 
@@ -24,9 +28,11 @@ protected:
   public:
     Done(Count *module) : module(module) {}
     bool guard() {
-      return module->x->read() >= 30;
+      return module->x >= 30;
     }
     void body() {
+    }
+    void update() {
       exit(0);
     }
   } done;
@@ -37,7 +43,7 @@ public:
 };
 
 Count::Count()
-  : x(new Reg<int>(0)), countup(this), done(this)
+  : x(0), countup(this), done(this)
 {
 }
 
