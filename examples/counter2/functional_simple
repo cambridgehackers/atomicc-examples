@@ -26,10 +26,9 @@ template <class T>
   template<typename _Res, typename... _ArgTypes>
     class function<_Res(_ArgTypes...)> {
     public:
-      typedef _Res (*MFUN)(_ArgTypes...);
       template<typename _Functor> function(_Functor __f);
       _Res (*_M_invoker)(void *, _ArgTypes...);
-      MFUN func2;
+      _Res (*func2)(_ArgTypes...);
     };
   template<typename _Res, typename... _ArgTypes> template<typename _Functor> function<_Res(_ArgTypes...)>::
       function(_Functor __f) {
