@@ -17,12 +17,9 @@ template <class T>
   template<typename _Signature> class function;
   template<typename _Signature, typename _Functor> class _Function_handler;
   template<typename _Res, typename _Functor, typename... _ArgTypes>
-    class _Function_handler<_Res(_ArgTypes...), _Functor> {
-    public:
-        static _Res _M_invoke(void * __functor, _ArgTypes... __args) {
-          return (*(_Functor *)__functor)( std::forward<_ArgTypes>(__args)...);
-        }
-    };
+    static _Res _M_invoke(void * __functor, _ArgTypes... __args) {
+      return (*(_Functor *)__functor)( std::forward<_ArgTypes>(__args)...);
+    }
   template<typename _Res, typename... _ArgTypes>
     class function<_Res(_ArgTypes...)> {
     public:
@@ -32,7 +29,7 @@ template <class T>
     };
   template<typename _Res, typename... _ArgTypes> template<typename _Functor> function<_Res(_ArgTypes...)>::
       function(_Functor __f) {
-        _M_invoker = &_Function_handler<_Res(_ArgTypes...), _Functor>::_M_invoke;
+        _M_invoker = &_M_invoke<_Res, _Functor, _ArgTypes...>;
         // uses 'placement new'
         new ((void *)func2) _Functor(zzmove(__f));
       }
