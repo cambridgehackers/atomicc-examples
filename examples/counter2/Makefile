@@ -17,6 +17,7 @@ all:
             -e 's/}/\n}/g' \
             -e 's/\"(/\"\n        (/g' \
             <counter.ll >counter.tmp
+	c++filt < counter.tmp > counter.tmp2
 
 backend:
 	$(LLC) counter.ll
