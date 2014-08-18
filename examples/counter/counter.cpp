@@ -5,7 +5,7 @@
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
   class name : public Rule {moduletype *module; public: name() : module(0) {module->addRule(this);} virtual bool guard() guardbody; virtual void body() bodybody; void update() updatebody } name ## Instance;
 
-class Count {
+class Count : public Module {
 protected:
   Reg<int> x;
   int new_x;
