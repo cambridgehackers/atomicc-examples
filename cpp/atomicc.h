@@ -10,6 +10,14 @@ public:
   virtual void update() = 0;
 };
 
+class Module {
+  //std::list<Rule*> rules;
+ public:
+  void addRule(Rule *rule) {
+    rule->setModule(this);
+  }
+}
+
 template<class T>
 class Reg {
   T storage;

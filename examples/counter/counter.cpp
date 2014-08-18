@@ -3,7 +3,7 @@
 #include <atomicc.h>
 
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
-  class name : public Rule {moduletype *module; public: name(moduletype *module=0) : module(module) {} virtual bool guard() guardbody; virtual void body() bodybody; void update() updatebody } name ## Instance;
+  class name : public Rule {moduletype *module; public: name() : module(0) {module->addRule(this);} virtual bool guard() guardbody; virtual void body() bodybody; void update() updatebody } name ## Instance;
 
 class Count {
 protected:
@@ -37,7 +37,7 @@ public:
 };
 
 Count::Count()
-  : x(0), countInstance(this), doneInstance(this)
+  : x(0)
 {
 }
 
