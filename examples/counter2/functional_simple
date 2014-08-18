@@ -29,7 +29,6 @@ template <class T>
       typedef _Res (*MFUN)(_ArgTypes...);
       template<typename _Functor> function(_Functor __f);
       _Res (*_M_invoker)(void *, _ArgTypes...);
-      void *_M_functor;
       MFUN func2;
     };
   template<typename _Res, typename... _ArgTypes> template<typename _Functor> function<_Res(_ArgTypes...)>::
@@ -38,7 +37,7 @@ template <class T>
         _M_invoker = &_My_handler::_M_invoke;
         // uses 'placement new'
         //new (_M_functor) _Functor(std::move(__f));
-        new (_M_functor) _Functor(zzmove(__f));
-        func2 = (MFUN) _M_functor;
+        //new (_M_functor) _Functor(zzmove(__f));
+        new ((void *)func2) _Functor(zzmove(__f));
       }
 } // namespace std
