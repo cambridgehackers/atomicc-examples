@@ -1,7 +1,7 @@
 
 #pragma GCC system_header
 #include <bits/c++config.h>
-#include <bits/stl_function.h>
+//#include <bits/stl_function.h>
 #include <new>
 #include <tuple>
 
@@ -26,15 +26,19 @@ template <class T>
   template<typename _Res, typename... _ArgTypes>
     class function<_Res(_ArgTypes...)> {
     public:
+      typedef _Res (*MFUN)(_ArgTypes...);
       template<typename _Functor> function(_Functor __f);
       _Res (*_M_invoker)(void *, _ArgTypes...);
       void *_M_functor;
+      MFUN func2;
     };
   template<typename _Res, typename... _ArgTypes> template<typename _Functor> function<_Res(_ArgTypes...)>::
       function(_Functor __f) {
         typedef _Function_handler<_Res(_ArgTypes...), _Functor> _My_handler;
         _M_invoker = &_My_handler::_M_invoke;
+        // uses 'placement new'
         //new (_M_functor) _Functor(std::move(__f));
         new (_M_functor) _Functor(zzmove(__f));
+        func2 = (MFUN) _M_functor;
       }
 } // namespace std
