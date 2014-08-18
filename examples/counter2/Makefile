@@ -24,4 +24,4 @@ backend:
 	$(LLC) counter.ll
 
 clean:
-	rm -f counter.ll counter.S counter.o counter.tmp counter.tmp2
+	rm -f counter.ll counter.s counter.S counter.o counter.tmp counter.tmp2

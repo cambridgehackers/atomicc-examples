@@ -1,26 +1,25 @@
 
-#pragma GCC system_header
 #include <bits/c++config.h>
 #include <new>
 #include <tuple>
 
 namespace std {
-template<typename T>
-   struct zzremove_reference { typedef T     type; };
-template <class T>
-   inline typename zzremove_reference<T>::type&
-   zzmove(T& a)
-   {
-       return a;
-   }
-
   template<typename _Signature> class function;
   template<typename _Res, typename... _ArgTypes>
     class function<_Res(_ArgTypes...)> {
-    public:
-      template<typename _Functor> function(_Functor __f);
+    private:
+       template <typename T>
+          struct zzremove_reference { typedef T     type; };
+       template <class T>
+          inline typename zzremove_reference<T>::type&
+          zzmove(T& a)
+          {
+              return a;
+          }
       _Res (*_M_invoker)(void *, _ArgTypes...);
+    public:
       _Res (*func2)(_ArgTypes...);
+      template<typename _Functor> function(_Functor __f);
       template<typename _Functor>
          static _Res _M_invoke(void * __functor, _ArgTypes... __args) {
            return (*(_Functor *)__functor)( std::forward<_ArgTypes>(__args)...);
