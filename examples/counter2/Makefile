@@ -11,16 +11,17 @@ LLVMFLAGS = -S -emit-llvm
 
 all:
 	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o counter.ll counter.cpp
-	$(CPP) -c $(CPPFLAGS) -o counter.o counter.cpp
-	sed -e 's/{/\n{\n/g' \
+	$(CPP) -S $(CPPFLAGS) -o counter.S counter.cpp
+	c++filt < counter.ll \
+	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
             -e 's/}/\n}/g' \
             -e 's/\"(/\"\n        (/g' \
-            <counter.ll >counter.tmp
-	c++filt < counter.tmp > counter.tmp2
+            >counter.tmp
+	c++filt < counter.S >counter.s
 
 backend:
 	$(LLC) counter.ll
 
 clean:
-	rm -f counter.ll counter.s
+	rm -f counter.ll counter.S counter.o counter.tmp counter.tmp2
