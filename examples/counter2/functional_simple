@@ -2,80 +2,30 @@
 #pragma GCC system_header
 #include <bits/c++config.h>
 #include <bits/stl_function.h>
-#include <typeinfo>
 #include <new>
 #include <tuple>
-#include <type_traits>
-#include <bits/functexcept.h>
-#include <bits/functional_hash.h>
-namespace std _GLIBCXX_VISIBILITY(default)
-{
-  template<bool _Has_result_type, typename _Functor> struct _Maybe_get_result_type { };
-  template<typename _Res, typename... _ArgTypes> struct _Maybe_unary_or_binary_function { };
-  union _Any_data
-  {
-    void*       _M_access()       { return &_M_pod_data[0]; }
-    const void* _M_access() const { return &_M_pod_data[0]; }
-    template<typename _Tp> _Tp& _M_access() { return *static_cast<_Tp*>(_M_access()); }
-    template<typename _Tp> const _Tp& _M_access() const { return *static_cast<const _Tp*>(_M_access()); }
-    char _M_pod_data[sizeof(void *)];
-  };
+
+namespace std {
   template<typename _Signature> class function;
-  class _Function_base
-  {
-  public:
-    template<typename _Functor>
-      class _Base_manager
-      {
-      public:
-        static _Functor* _M_get_pointer(const _Any_data& __source)
-        {
-          const _Functor* __ptr = std::__addressof(__source._M_access<_Functor>());
-          return const_cast<_Functor*>(__ptr);
-        }
-        static void _M_init_functor(_Any_data& __functor, _Functor&& __f) { new (__functor._M_access()) _Functor(std::move(__f)); }
-      };
-    template<typename _Functor>
-      class _Ref_manager : public _Base_manager<_Functor*>
-      {
-        typedef _Function_base::_Base_manager<_Functor*> _Base;
-    public:
-        static void _M_init_functor(_Any_data& __functor, reference_wrapper<_Functor> __f)
-        {
-          _Base::_M_init_functor(__functor, &__f.get());
-        }
-      };
-    _Any_data     _M_functor;
-  };
   template<typename _Signature, typename _Functor> class _Function_handler;
   template<typename _Res, typename _Functor, typename... _ArgTypes>
-    class _Function_handler<_Res(_ArgTypes...), _Functor> : public _Function_base::_Base_manager<_Functor>
-    {
-      typedef _Function_base::_Base_manager<_Functor> _Base;
+    class _Function_handler<_Res(_ArgTypes...), _Functor> {
     public:
-      static _Res _M_invoke(const _Any_data& __functor, _ArgTypes... __args)
-      {
-        return (*_Base::_M_get_pointer(__functor))( std::forward<_ArgTypes>(__args)...);
-      }
+        static _Res _M_invoke(void * __functor, _ArgTypes... __args) {
+          return (*(_Functor *)__functor)( std::forward<_ArgTypes>(__args)...);
+        }
     };
   template<typename _Res, typename... _ArgTypes>
-    class function<_Res(_ArgTypes...)> : public _Maybe_unary_or_binary_function<_Res, _ArgTypes...>, private _Function_base
-    {
-      typedef _Res _Signature_type(_ArgTypes...);
-      struct _Useless { };
+    class function<_Res(_ArgTypes...)> {
     public:
-      typedef _Res result_type;
-      function() : _Function_base() { }
-      template<typename _Functor> function(_Functor __f, typename enable_if< !is_integral<_Functor>::value, _Useless>::type = _Useless());
-    private:
-      _Res (*_M_invoker)(const _Any_data&, _ArgTypes...);
-  };
-  template<typename _Res, typename... _ArgTypes>
-    template<typename _Functor> function<_Res(_ArgTypes...)>::
-      function(_Functor __f, typename enable_if< !is_integral<_Functor>::value, _Useless>::type) : _Function_base()
-      {
-        typedef _Function_handler<_Signature_type, _Functor> _My_handler;
-            _M_invoker = &_My_handler::_M_invoke;
-            _My_handler::_M_init_functor(_M_functor, std::move(__f));
+      template<typename _Functor> function(_Functor __f);
+      _Res (*_M_invoker)(void *, _ArgTypes...);
+      void *_M_functor;
+    };
+  template<typename _Res, typename... _ArgTypes> template<typename _Functor> function<_Res(_ArgTypes...)>::
+      function(_Functor __f) {
+        typedef _Function_handler<_Res(_ArgTypes...), _Functor> _My_handler;
+        _M_invoker = &_My_handler::_M_invoke;
+        new (_M_functor) _Functor(std::move(__f));
       }
 } // namespace std
