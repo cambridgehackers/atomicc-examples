@@ -8,7 +8,7 @@ typedef void (*VFUN)();
 #define BF(A) std::function<bool()>(A).func2
 #define VF(A) std::function<void()>(A).func2
 
-extern "C" void append(BFUN guard, VFUN body, VFUN cleanup);
+extern "C" void rule(BFUN guard, VFUN body, VFUN cleanup);
 
 class Count {
 protected:
@@ -20,7 +20,7 @@ public:
   Count()
 {
   x = 0;
-  append(BF([this] () { return x < 30;}),
+  rule(BF([this] () { return x < 30;}),
   VF([this] ()
   {
       int localy = x;
@@ -34,7 +34,7 @@ public:
       x = temp_x;
       y = temp_y;
   }));
-  append(BF([this] () { return x >= 30;}),
+  rule(BF([this] () { return x >= 30;}),
   VF([this] ()
   {
       exit(0);
