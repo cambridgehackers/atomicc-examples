@@ -3,22 +3,23 @@
 
 #include <vector>
 
+template<class V>
 class Action;
 class Rule;
 class Module;
 
+template<class V>
 class Action {
 public:
   Action() {};
   virtual ~Action(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;
+  virtual void body(V v) = 0;
   virtual void update() = 0;
 };
 
-class Rule : public Action {
-  // needs to be some sort of smart pointer?
-  std::vector<Action*> actions;
+class Rule {
 public:
   Rule() {};
   virtual ~Rule(){}
@@ -26,9 +27,6 @@ public:
   virtual void body() = 0;
   virtual void update() = 0;
   virtual void setModule(Module *m) = 0;
-  void append(Action *action) {
-    actions.push_back(action);
-  };
 };
 
 class Module {
@@ -45,10 +43,11 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    name() : module(0) {module->addRule(this);} \
+    name(moduletype *module) : module(module) {module->addRule(this);} \
     void setModule(Module *m) { module = static_cast<moduletype *>(m); } \
     virtual bool guard() guardbody;\
     virtual void body() bodybody;\
+    virtual void body(bool v) {};\
     void update() updatebody \
   } name ## Rule;
 

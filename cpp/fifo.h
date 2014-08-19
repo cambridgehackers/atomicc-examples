@@ -9,9 +9,9 @@ class Fifo : public Module {
  public:
   Fifo() {}
   virtual ~Fifo() {}
-  virtual Action *enq(T &v) = 0;
+  virtual Action<T> *enq() = 0;
   virtual T first() const = 0;
-  virtual Action * deq() = 0;
+  virtual Action<T> *deq() = 0;
   virtual bool notEmpty() const = 0;
   virtual bool notFull() const = 0;
 };
@@ -21,33 +21,36 @@ class Fifo1 : public Fifo<T> {
   T element;
   bool full;
 
-  class EnqAction : public Action {
+  class EnqAction : public Action<T> {
     Fifo1 *fifo;
-    T &v;
+    T elt;
   public:
-  EnqAction(Fifo1 *fifo, T &v) : fifo(fifo), v(v) {}
+  EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
     bool guard() { return fifo->notFull(); }
     void body() { }
+    void body(T v) { elt = v; }
     void update() {
       // ok, how do we get the value we wanted?
-      fifo->element = v;
+      fifo->element = elt;
       fifo->full = true;
     }
-  };
+  } enqAction;
   friend class EnqAction;
-  class DeqAction : public Action {
+  class DeqAction : public Action<T> {
     Fifo1 *fifo;
     public:
       DeqAction(Fifo1 *fifo) : fifo(fifo) {}
       bool guard() { return fifo->notEmpty(); }
       void body() { }
+      void body(T v) { }
       void update() {
 	fifo->full = false;
       }
-    };
+    } deqAction;
   friend class DeqAction;
  public:
-  Fifo1() {};
+ Fifo1() 
+   : enqAction(this), deqAction(this) {};
   ~Fifo1() {}
 
   bool notEmpty() const {
@@ -56,15 +59,15 @@ class Fifo1 : public Fifo<T> {
   bool notFull() const {
     return !full;
   }
-  Action *enq(T &v) {
-    return new EnqAction(this, v);
+  Action<T> *enq() {
+    return &enqAction;
   }
   T first() const {
     assert(full);
     return element;
   }
-  Action *deq() {
-    return new DeqAction(this);
+  Action<T> *deq() {
+    return &deqAction;
   }
 };
 

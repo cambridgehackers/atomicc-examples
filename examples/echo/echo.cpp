@@ -18,21 +18,24 @@ class Echo : public Module {
   EchoIndication *ind;
   int response;
   RULE(Echo,respond,
-       { return module->fifo->notEmpty(); },
+       {
+	 return module->fifo->deq()->guard();
+       },
        { 
 	 module->response = module->fifo->first();
        },
        {
 	 module->ind->echo(module->response);
+	 module->fifo->deq()->update();
        });
 public:
-  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind)
+  Echo(EchoIndication *ind)
+    : fifo(new Fifo1<int>()), ind(ind), respondRule(this)
   {
   };
   ~Echo();
-  Action *echo(int &v) {
-    respondRule.append(fifo->deq());
-    return fifo->enq(v);
+  Action<int> *echo() {
+    return fifo->enq();
   }
 };
 
@@ -50,22 +53,20 @@ public:
 
 class EchoTest : public Module {
   Echo *echo;
-  int msg;
-  bool valid;
   RULE(EchoTest,drive,
-       { return true; },
        {
-	 module->msg = 22;
-	 module->valid = true;
+	 return module->echo->echo()->guard();
        },
        {
+	 module->echo->echo()->body(22);
+       },
+       {
+	 module->echo->echo()->update();
        });
 
 public:
   EchoTest()
-    : echo(new Echo(new EchoIndicationTest())), msg(0), valid(false) {
-    // append the echo() action to driveRule
-    driveRule.append(echo->echo(msg));
+    : echo(new Echo(new EchoIndicationTest())), driveRule(this) {
   }
   ~EchoTest();
 };
