@@ -1,7 +1,16 @@
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
 
-class Rule {
+class Action {
+public:
+  Action() {};
+  virtual ~Action(){}
+  virtual bool guard() { return true; };
+  virtual void body() = 0;
+  virtual void update() = 0;
+};
+
+class Rule : public Action{
 public:
   Rule() {};
   virtual ~Rule(){}
