@@ -27,6 +27,10 @@ class Module {
   }
 }
 
+#define RULE(moduletype,name,guardbody,bodybody,updatebody) \
+  class name : public Rule {moduletype *module; public: name() : module(0) {module->addRule(this);} virtual bool guard() guardbody; virtual void body() bodybody; void update() updatebody } name ## Instance;
+
+
 template<class T>
 class Reg {
   T storage;
