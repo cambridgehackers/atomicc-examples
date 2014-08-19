@@ -9,6 +9,13 @@ class Rule;
 class Module;
 
 template<class V>
+class GuardedValue {
+ public:
+  virtual bool guard() = 0;
+  virtual V value() = 0;
+};
+
+template<class V>
 class Action {
 public:
   Action() {};

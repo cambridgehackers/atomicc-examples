@@ -10,7 +10,7 @@ class Fifo : public Module {
   Fifo() {}
   virtual ~Fifo() {}
   virtual Action<T> *enq() = 0;
-  virtual T first() const = 0;
+  virtual GuardedValue<T> *first() = 0;
   virtual Action<T> *deq() = 0;
   virtual bool notEmpty() const = 0;
   virtual bool notFull() const = 0;
@@ -48,9 +48,17 @@ class Fifo1 : public Fifo<T> {
       }
     } deqAction;
   friend class DeqAction;
+
+  class FirstValue : public GuardedValue<T> {
+    Fifo1 *fifo;
+  public:
+  FirstValue(Fifo1 *fifo) : fifo(fifo) {}
+    bool guard() { return fifo->full; }
+    T value() { return fifo->element; }
+  } firstValue;
  public:
  Fifo1() 
-   : enqAction(this), deqAction(this) {};
+   : enqAction(this), deqAction(this), firstValue(this) {};
   ~Fifo1() {}
 
   bool notEmpty() const {
@@ -62,9 +70,8 @@ class Fifo1 : public Fifo<T> {
   Action<T> *enq() {
     return &enqAction;
   }
-  T first() const {
-    assert(full);
-    return element;
+  GuardedValue<T> *first() {
+    return &firstValue;
   }
   Action<T> *deq() {
     return &deqAction;

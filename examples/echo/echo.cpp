@@ -19,10 +19,11 @@ class Echo : public Module {
   int response;
   RULE(Echo,respond,
        {
-	 return module->fifo->deq()->guard();
+	 return module->fifo->deq()->guard()
+	   && module->fifo->first()->guard();
        },
        { 
-	 module->response = module->fifo->first();
+	 module->response = module->fifo->first()->value();
        },
        {
 	 module->ind->echo(module->response);
