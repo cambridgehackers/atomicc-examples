@@ -34,7 +34,7 @@ public:
 };
 
 Count::Count()
-  : x(0)
+  : x(0), countRule(this), doneRule(this)
 {
 }
 
