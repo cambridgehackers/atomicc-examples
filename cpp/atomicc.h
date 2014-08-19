@@ -1,6 +1,8 @@
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
 
+#include <vector>
+
 class Action;
 class Rule;
 class Module;
@@ -15,6 +17,8 @@ public:
 };
 
 class Rule : public Action {
+  // needs to be some sort of smart pointer?
+  std::vector<Action*> actions;
 public:
   Rule() {};
   virtual ~Rule(){}
@@ -22,6 +26,9 @@ public:
   virtual void body() = 0;
   virtual void update() = 0;
   virtual void setModule(Module *m) = 0;
+  void append(Action *action) {
+    actions.push_back(action);
+  };
 };
 
 class Module {
@@ -43,7 +50,7 @@ class Module {
     virtual bool guard() guardbody;\
     virtual void body() bodybody;\
     void update() updatebody \
-  } name ## Instance;
+  } name ## Rule;
 
 template<class T>
 class Reg {
