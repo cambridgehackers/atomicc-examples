@@ -22,6 +22,8 @@ public:
 class Module {
   //std::list<Rule*> rules;
  public:
+  Module();
+  virtual ~Module() {}
   void addRule(Rule *rule) {
     rule->setModule(this);
   }
