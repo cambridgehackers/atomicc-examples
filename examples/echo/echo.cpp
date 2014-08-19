@@ -2,6 +2,7 @@
 #include <atomicc.h>
 #include <fifo.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 ////////////////////////////////////////////////////////////
 // Echo
@@ -30,6 +31,7 @@ public:
   };
   ~Echo();
   Action *echo(int &v) {
+    respondRule.append(fifo->deq());
     return fifo->enq(v);
   }
 };
