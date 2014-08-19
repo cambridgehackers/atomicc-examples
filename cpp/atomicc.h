@@ -10,7 +10,7 @@ public:
   virtual void update() = 0;
 };
 
-class Rule : public Action{
+class Rule : public Action {
 public:
   Rule() {};
   virtual ~Rule(){}
