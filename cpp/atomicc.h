@@ -1,6 +1,10 @@
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
 
+class Action;
+class Rule;
+class Module;
+
 class Action {
 public:
   Action() {};
@@ -17,6 +21,7 @@ public:
   virtual bool guard() { return true; };
   virtual void body() = 0;
   virtual void update() = 0;
+  virtual void setModule(Module *m) = 0;
 };
 
 class Module {
@@ -27,11 +32,18 @@ class Module {
   void addRule(Rule *rule) {
     rule->setModule(this);
   }
-}
+};
 
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
-  class name : public Rule {moduletype *module; public: name() : module(0) {module->addRule(this);} virtual bool guard() guardbody; virtual void body() bodybody; void update() updatebody } name ## Instance;
-
+  class name : public Rule {\
+    moduletype *module;\
+  public:\
+    name() : module(0) {module->addRule(this);} \
+    void setModule(Module *m) { module = static_cast<moduletype *>(m); } \
+    virtual bool guard() guardbody;\
+    virtual void body() bodybody;\
+    void update() updatebody \
+  } name ## Instance;
 
 template<class T>
 class Reg {
