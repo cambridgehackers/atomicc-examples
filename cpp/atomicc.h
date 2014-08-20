@@ -62,8 +62,8 @@ template<class T>
 class Reg {
   T storage;
 public:
-  Reg();
-  Reg(T v);
+  Reg() {};
+  Reg(T v) {};
   T operator *() const { return storage; };
   operator T () const { return storage; };
   void operator =(T v) { storage = v; };

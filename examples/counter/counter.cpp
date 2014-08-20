@@ -38,4 +38,14 @@ Count::Count()
 {
 }
 
+Module::Module()
+{
+printf("[%s:%d]\n", __FUNCTION__, __LINE__);
+}
 Count countTest;
+
+int main(int argc, const char *argv[])
+{
+  printf("[%s:%d] starting\n", __FUNCTION__, __LINE__);
+  return 0;
+}
