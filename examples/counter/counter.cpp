@@ -38,10 +38,7 @@ Count::Count()
 {
 }
 
-Module::Module()
-{
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-}
+Module *Module::first = NULL;
 Count countTest;
 
 int main(int argc, const char *argv[])

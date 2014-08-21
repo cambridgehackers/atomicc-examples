@@ -34,16 +34,23 @@ public:
   virtual void body() = 0;
   virtual void update() = 0;
   virtual void setModule(Module *m) = 0;
+  Rule *next;
 };
 
 class Module {
   //std::list<Rule*> rules;
  public:
-  Module();
+  Module(): rfirst(NULL) {
+     next = first;
+     first = this;
+  };
   virtual ~Module() {}
   void addRule(Rule *rule) {
     rule->setModule(this);
   }
+  static Module *first;
+  Rule *rfirst;
+  Module *next;
 };
 
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
@@ -51,7 +58,10 @@ class Module {
     moduletype *module;\
   public:\
     name(moduletype *module) : module(module) {module->addRule(this);} \
-    void setModule(Module *m) { module = static_cast<moduletype *>(m); } \
+    void setModule(Module *m) { module = static_cast<moduletype *>(m); \
+       next = module->rfirst; \
+       module->rfirst = this; \
+    } \
     virtual bool guard() guardbody;\
     virtual void body() bodybody;\
     virtual void body(bool v) {};\
