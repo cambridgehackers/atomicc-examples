@@ -41,7 +41,7 @@ class Module {
   //std::list<Rule*> rules;
  public:
   Module(): rfirst(NULL) {
-printf("[%s:%d] add module to list\n", __FUNCTION__, __LINE__);
+printf("[%s:%d] add module to list first %p this %p\n", __FUNCTION__, __LINE__, first, this);
      next = first;
      first = this;
   };
@@ -60,7 +60,7 @@ printf("[%s:%d] add module to list\n", __FUNCTION__, __LINE__);
   public:\
     name(moduletype *module) : module(module) {module->addRule(this);} \
     void setModule(Module *m) { module = static_cast<moduletype *>(m); \
-printf("[%s:%d] add rule to module list\n", __FUNCTION__, __LINE__); \
+printf("[%s:%d] add rule to module list rfirst %p this %p\n", __FUNCTION__, __LINE__, module->rfirst, this); \
        next = module->rfirst; \
        module->rfirst = this; \
     } \
