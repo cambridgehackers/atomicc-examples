@@ -9,6 +9,7 @@ LLVMFLAGS = -S -emit-llvm
 all:
 	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o echo.ll echo.cpp
 	$(CPP) -c $(CPPFLAGS) -o echo.o echo.cpp
+	$(CPP) -c $(CPPFLAGS) -o atomicc.o ../../cpp/atomicc.cpp
 	sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
             -e 's/}/\n}/g' \

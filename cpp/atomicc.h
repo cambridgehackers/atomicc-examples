@@ -1,6 +1,7 @@
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
 
+#include <stdio.h>
 #include <vector>
 
 template<class V>

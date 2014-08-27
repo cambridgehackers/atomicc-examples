@@ -15,6 +15,7 @@ LLVMFLAGS = -emit-llvm
 all:
 	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -S -o counter.ll counter.cpp
 	$(CPP) -c $(CPPFLAGS) -o counter.o counter.cpp
+	$(CPP) -c $(CPPFLAGS) -o atomicc.o ../../cpp/atomicc.cpp
 	c++filt < counter.ll  \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
@@ -30,8 +31,9 @@ clean:
 
 exe:
 	$(CPP) -DEXE -c $(CPPFLAGS) $(LLVMFLAGS) -o counter.bc counter.cpp
+	$(CPP) -DEXE -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../cpp/atomicc.cpp
 	#LD_PRELOAD=/usr/lib/llvm-3.3/lib/LLVMgold.so:/usr/lib/llvm-3.3/lib/libLTO.so:/usr/lib/x86_64-linux-gnu/libLLVM-3.3.so.1 catchsegv $(CC) -use-gold-plugin -Wl,-plugin-opt=also-emit-llvm -o counter.exe counter.bc
-	llvm-link-3.3 counter.bc >counter.exe.bc
+	llvm-link-3.3 counter.bc atomicc.bc >counter.exe.bc
 
 run:
 	lli-3.3 -force-interpreter=true counter.exe.bc foo

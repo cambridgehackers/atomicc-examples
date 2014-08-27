@@ -31,15 +31,9 @@ public:
 	 exit(0);
        })
 public:
-  Count();
+  Count() : x(0), countRule(this), doneRule(this) {};
 };
 
-Count::Count()
-  : x(0), countRule(this), doneRule(this)
-{
-}
-
-Module *Module::first = NULL;
 Count countTest;
 
 int main(int argc, const char *argv[])

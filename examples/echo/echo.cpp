@@ -74,3 +74,9 @@ public:
 
 EchoTest echoTest;
 
+int main(int argc, const char *argv[])
+{
+  printf("[%s:%d] starting\n", __FUNCTION__, __LINE__);
+  return 0;
+}
+
