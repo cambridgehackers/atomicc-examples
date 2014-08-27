@@ -6,6 +6,7 @@ class Count : public Module {
 protected:
   Reg<int> x;
   int new_x;
+public:
   RULE(Count,count,
        {
 	 return module->x < 30;
