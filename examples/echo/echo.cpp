@@ -10,7 +10,9 @@
 
 class EchoIndication {
 public:
-  void echo(int v);
+  virtual void echo(int v) = 0;
+  EchoIndication() {}
+  ~EchoIndication() {}
 };
 
 class Echo : public Module {
@@ -30,12 +32,9 @@ class Echo : public Module {
 	 module->fifo->deq()->update();
        });
 public:
-  Echo(EchoIndication *ind)
-    : fifo(new Fifo1<int>()), ind(ind), respondRule(this)
-  {
-  };
-  ~Echo();
-  Action<int> *echo() {
+  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) { };
+  ~Echo() {}
+  Action<int> *echof() {
     return fifo->enq();
   }
 };
@@ -56,20 +55,17 @@ class EchoTest : public Module {
   Echo *echo;
   RULE(EchoTest,drive,
        {
-	 return module->echo->echo()->guard();
+	 return module->echo->echof()->guard();
        },
        {
-	 module->echo->echo()->body(22);
+	 module->echo->echof()->body(22);
        },
        {
-	 module->echo->echo()->update();
+	 module->echo->echof()->update();
        });
-
 public:
-  EchoTest()
-    : echo(new Echo(new EchoIndicationTest())), driveRule(this) {
-  }
-  ~EchoTest();
+  EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }
+  ~EchoTest() {}
 };
 
 EchoTest echoTest;
