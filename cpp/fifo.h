@@ -27,7 +27,7 @@ class Fifo1 : public Fifo<T> {
   public:
   EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
     bool guard() { return fifo->notFull(); }
-    void body() { }
+    //void body() { }
     void body(T v) { elt = v; }
     void update() {
       // ok, how do we get the value we wanted?
@@ -41,7 +41,7 @@ class Fifo1 : public Fifo<T> {
     public:
       DeqAction(Fifo1 *fifo) : fifo(fifo) {}
       bool guard() { return fifo->notEmpty(); }
-      void body() { }
+      //void body() { }
       void body(T v) { }
       void update() {
 	fifo->full = false;
@@ -53,12 +53,12 @@ class Fifo1 : public Fifo<T> {
     Fifo1 *fifo;
   public:
   FirstValue(Fifo1 *fifo) : fifo(fifo) {}
-    bool guard() { return fifo->full; }
+    bool guard() { return fifo->notEmpty(); }
     T value() { return fifo->element; }
   } firstValue;
  public:
  Fifo1() 
-   : enqAction(this), deqAction(this), firstValue(this) {};
+   : full(false), enqAction(this), deqAction(this), firstValue(this) {};
   ~Fifo1() {}
 
   bool notEmpty() const {

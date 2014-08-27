@@ -1,3 +1,23 @@
+/* Copyright (c) 2014 Quanta Research Cambridge, Inc
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
 
 #include <atomicc.h>
 #include <fifo.h>
@@ -19,6 +39,7 @@ class Echo : public Module {
   Fifo<int> *fifo;
   EchoIndication *ind;
   int response;
+public:
   RULE(Echo,respond,
        {
 	 return module->fifo->deq()->guard()
@@ -34,7 +55,7 @@ class Echo : public Module {
 public:
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) { };
   ~Echo() {}
-  Action<int> *echof() {
+  Action<int> *echoreq() {
     return fifo->enq();
   }
 };
@@ -52,16 +73,19 @@ public:
 };
 
 class EchoTest : public Module {
+public:
   Echo *echo;
   RULE(EchoTest,drive,
        {
-	 return module->echo->echof()->guard();
+	 return module->echo->echoreq()->guard();
        },
        {
-	 module->echo->echof()->body(22);
+printf("[%s:%d]\n", __FUNCTION__, __LINE__);
+	 module->echo->echoreq()->body(22);
        },
        {
-	 module->echo->echof()->update();
+printf("[%s:%d]\n", __FUNCTION__, __LINE__);
+	 module->echo->echoreq()->update();
        });
 public:
   EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }
@@ -72,7 +96,10 @@ EchoTest echoTest;
 
 int main(int argc, const char *argv[])
 {
-  printf("[%s:%d] starting\n", __FUNCTION__, __LINE__);
+  printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+  if (argc != 1)
+      Module::run();
+  printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
   return 0;
 }
 

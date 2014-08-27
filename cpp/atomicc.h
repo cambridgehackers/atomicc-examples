@@ -22,7 +22,7 @@ public:
   Action() {};
   virtual ~Action(){}
   virtual bool guard() { return true; };
-  virtual void body() = 0;
+  //virtual void body() = 0;
   virtual void body(V v) = 0;
   virtual void update() = 0;
 };
@@ -42,7 +42,7 @@ class Module {
   //std::list<Rule*> rules;
  public:
   Module(): rfirst(NULL) {
-printf("[%s:%d] add module to list first %p this %p\n", __FUNCTION__, __LINE__, first, this);
+     printf("[%s] add module to list first %p this %p\n", __FUNCTION__, first, this);
      next = first;
      first = this;
   };
@@ -53,6 +53,21 @@ printf("[%s:%d] add module to list first %p this %p\n", __FUNCTION__, __LINE__, 
   static Module *first;
   Rule *rfirst;
   Module *next;
+  static void run() {
+    while (1) {
+      Module *curmod = Module::first;
+      while (curmod) {
+          Rule *currule = curmod->rfirst;
+          while (currule) {
+              currule->body();
+              if (currule->guard())
+                  currule->update();
+              currule = currule->next;
+          }
+          curmod = curmod->next;
+      }
+    }
+  }
 };
 
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
@@ -61,7 +76,7 @@ printf("[%s:%d] add module to list first %p this %p\n", __FUNCTION__, __LINE__, 
   public:\
     name(moduletype *module) : module(module) {module->addRule(this);} \
     void setModule(Module *m) { module = static_cast<moduletype *>(m); \
-printf("[%s:%d] add rule to module list rfirst %p this %p\n", __FUNCTION__, __LINE__, module->rfirst, this); \
+       printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, module->rfirst, this); \
        next = module->rfirst; \
        module->rfirst = this; \
     } \
