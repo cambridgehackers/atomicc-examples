@@ -13,7 +13,8 @@ LLVMFLAGS = -emit-llvm
 # -stdlib=libc++
 
 all:
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -S -o counter.ll counter.cpp
+	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -S -o counter.ll counter.cpp
+	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -S -o atomicc.ll ../../cpp/atomicc.cpp
 	$(CPP) -c $(CPPFLAGS) -o counter.o counter.cpp
 	$(CPP) -c $(CPPFLAGS) -o atomicc.o ../../cpp/atomicc.cpp
 	c++filt < counter.ll  \

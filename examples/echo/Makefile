@@ -3,11 +3,11 @@ CPP = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/cla
 LLC = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/llc
 CPPFLAGS = -g -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-cxa-atexit
 #CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
-LLVMFLAGS = -S -emit-llvm
+LLVMFLAGS = -emit-llvm
 
 all:
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o echo.ll echo.cpp
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
+	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
+	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
 	c++filt < echo.ll  \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \

@@ -39,25 +39,29 @@ class Echo : public Module {
   Fifo<int> *fifo;
   EchoIndication *ind;
   int response;
+  GuardedValue<int> *firstreq;
+  Action<int> *deqreq;
 public:
   RULE(Echo,respond,
        {
-	 return module->fifo->deq()->guard()
-	   && module->fifo->first()->guard();
+	 return module->deqreq->guard()
+	   && module->firstreq->guard();
        },
        { 
-	 module->response = module->fifo->first()->value();
+	 module->response = module->firstreq->value();
        },
        {
 	 module->ind->echo(module->response);
-	 module->fifo->deq()->update();
+	 module->deqreq->update();
        });
 public:
-  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) { };
+  Action<int> *echoreq;
+  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
+    echoreq = fifo->enq();
+    firstreq = fifo->first();
+    deqreq = fifo->deq();
+  };
   ~Echo() {}
-  Action<int> *echoreq() {
-    return fifo->enq();
-  }
 };
 
 ////////////////////////////////////////////////////////////
@@ -77,15 +81,15 @@ public:
   Echo *echo;
   RULE(EchoTest,drive,
        {
-	 return module->echo->echoreq()->guard();
+	 return module->echo->echoreq->guard();
        },
        {
 printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-	 module->echo->echoreq()->body(22);
+	 module->echo->echoreq->body(22);
        },
        {
 printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-	 module->echo->echoreq()->update();
+	 module->echo->echoreq->update();
        });
 public:
   EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }
@@ -94,6 +98,13 @@ public:
 
 EchoTest echoTest;
 
+class BOZOME {
+   int ABOZO;
+   int BBOZO;
+   int BOZOU(void) {return ABOZO;}
+};
+
+BOZOME fooglobal;
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
