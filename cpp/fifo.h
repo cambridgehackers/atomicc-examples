@@ -18,6 +18,7 @@ class Fifo : public Module {
 
 template<class T>
 class Fifo1 : public Fifo<T> {
+public:
   T element;
   bool full;
 
@@ -25,7 +26,7 @@ class Fifo1 : public Fifo<T> {
     Fifo1 *fifo;
     T elt;
   public:
-  EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
+    EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
     bool guard() { return fifo->notFull(); }
     //void body() { }
     void body(T v) { elt = v; }
@@ -38,44 +39,31 @@ class Fifo1 : public Fifo<T> {
   friend class EnqAction;
   class DeqAction : public Action<T> {
     Fifo1 *fifo;
-    public:
-      DeqAction(Fifo1 *fifo) : fifo(fifo) {}
-      bool guard() { return fifo->notEmpty(); }
-      //void body() { }
-      void body(T v) { }
-      void update() {
-	fifo->full = false;
-      }
-    } deqAction;
+  public:
+    DeqAction(Fifo1 *fifo) : fifo(fifo) {}
+    bool guard() { return fifo->notEmpty(); }
+    //void body() { }
+    void body(T v) { }
+    void update() {
+      fifo->full = false;
+    }
+  } deqAction;
   friend class DeqAction;
 
   class FirstValue : public GuardedValue<T> {
     Fifo1 *fifo;
   public:
-  FirstValue(Fifo1 *fifo) : fifo(fifo) {}
+    FirstValue(Fifo1 *fifo) : fifo(fifo) {}
     bool guard() { return fifo->notEmpty(); }
     T value() { return fifo->element; }
   } firstValue;
- public:
- Fifo1() 
-   : full(false), enqAction(this), deqAction(this), firstValue(this) {};
+  Fifo1() : full(false), enqAction(this), deqAction(this), firstValue(this) {};
   ~Fifo1() {}
-
-  bool notEmpty() const {
-    return full;
-  }
-  bool notFull() const {
-    return !full;
-  }
-  Action<T> *enq() {
-    return &enqAction;
-  }
-  GuardedValue<T> *first() {
-    return &firstValue;
-  }
-  Action<T> *deq() {
-    return &deqAction;
-  }
+  bool notEmpty() const { return full; }
+  bool notFull() const { return !full; }
+  Action<T> *enq() { return &enqAction; }
+  GuardedValue<T> *first() { return &firstValue; }
+  Action<T> *deq() { return &deqAction; }
 };
 
 #endif

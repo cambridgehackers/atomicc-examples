@@ -21,4 +21,21 @@
 
 #include <atomicc.h>
 
+void Module::run()
+{
+    while (1) {
+        Module *curmod = Module::first;
+        while (curmod) {
+            Rule *currule = curmod->rfirst;
+            while (currule) {
+                currule->body();
+                if (currule->guard())
+                    currule->update();
+                currule = currule->next;
+            }
+            curmod = curmod->next;
+        }
+    }
+}
+
 Module *Module::first = NULL;
