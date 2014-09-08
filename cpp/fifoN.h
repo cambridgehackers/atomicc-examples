@@ -1,9 +1,9 @@
-#ifndef _FIFO_H_
-#define _FIFO_H_
+#ifndef _FIFON_H_
+#define _FIFON_H_
 
 #include <assert.h>
 #include <atomicc.h>
-#include <fifoh.h>
+#include <fifo.h>
 
 template<class T>
 class FifoN : public Fifo<T> {
@@ -15,24 +15,24 @@ class FifoN : public Fifo<T> {
   bool full;
 
   class EnqAction : public Action<T> {
-    Fifo1 *fifo;
+    FifoN *fifo;
     T elt;
   public:
-  EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
+  EnqAction(FifoN *fifo) : fifo(fifo), elt() {}
     bool guard() { return fifo->notFull(); }
     //void body() { }
     void body(T v) { elt = v; }
     void update() {
       // ok, how do we get the value we wanted?
-      fifo->element[fifo->writeIndex] = elt;
+      fifo->elements[fifo->writeIndex] = elt;
       fifo->writeIndex = (fifo->writeIndex + 1 ) % fifo->nelem;
     }
   } enqAction;
   friend class EnqAction;
   class DeqAction : public Action<T> {
-    Fifo1 *fifo;
+    FifoN *fifo;
     public:
-      DeqAction(Fifo1 *fifo) : fifo(fifo) {}
+      DeqAction(FifoN *fifo) : fifo(fifo) {}
       bool guard() { return fifo->notEmpty(); }
       //void body() { }
       void body(T v) { }
@@ -43,32 +43,32 @@ class FifoN : public Fifo<T> {
   friend class DeqAction;
 
   class FirstValue : public GuardedValue<T> {
-    Fifo1 *fifo;
+    FifoN *fifo;
   public:
-  FirstValue(Fifo1 *fifo) : fifo(fifo) {}
+  FirstValue(FifoN *fifo) : fifo(fifo) {}
     bool guard() { return fifo->notEmpty(); }
-    T value() { return fifo->element[readIndex]; }
+    T value() { return fifo->elements[fifo->readIndex]; }
   } firstValue;
 
  public:
-   FifoN(unsigned size):
+   FifoN(unsigned size)
 
    : full(false), enqAction(this), deqAction(this), firstValue(this) 
   {
-    fifo->nelem = size;
-    fifo->readIndex = 0;
-    fifo->writeIndex = 0;
-    fifo->elements = new T[size]'
+    nelem = size;
+    readIndex = 0;
+    writeIndex = 0;
+    elements = new T[size];
   }
   ~FifoN() {
-    delete[] fifo->elements;
+    delete[] elements;
   }
 
   bool notEmpty() const {
-    return (fifo->readIndex != fifo->writeIndex);
+    return (readIndex != writeIndex);
   }
   bool notFull() const {
-    return !(((fifo->writeIndex + 1) % fifo->nelem) == fifo->readIndex);
+    return !(((writeIndex + 1) % nelem) == readIndex);
   }
   Action<T> *enq() {
     return &enqAction;
