@@ -23,9 +23,9 @@ public:
   bool full;
 
   class EnqAction : public Action<T> {
+  public:
     Fifo1 *fifo;
     T elt;
-  public:
     EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
     bool guard() { return fifo->notFull(); }
     //void body() { }
@@ -38,8 +38,8 @@ public:
   } enqAction;
   friend class EnqAction;
   class DeqAction : public Action<T> {
-    Fifo1 *fifo;
   public:
+    Fifo1 *fifo;
     DeqAction(Fifo1 *fifo) : fifo(fifo) {}
     bool guard() { return fifo->notEmpty(); }
     //void body() { }
@@ -51,8 +51,8 @@ public:
   friend class DeqAction;
 
   class FirstValue : public GuardedValue<T> {
-    Fifo1 *fifo;
   public:
+    Fifo1 *fifo;
     FirstValue(Fifo1 *fifo) : fifo(fifo) {}
     bool guard() { return fifo->notEmpty(); }
     T value() { return fifo->element; }

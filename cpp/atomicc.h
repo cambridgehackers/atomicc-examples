@@ -12,35 +12,21 @@ class Module;
 template<class V>
 class GuardedValue {
  public:
-  GuardedValue() {
-     next = first;
-     first = this;
-  };
+  GuardedValue() { };
   virtual bool guard() = 0;
   virtual V value() = 0;
-  static GuardedValue *first;
-  GuardedValue *next;
 };
-template<class V>
-GuardedValue<V> *GuardedValue<V>::first = NULL;
 
 template<class V>
 class Action {
 public:
-  Action() {
-     next = first;
-     first = this;
-  };
+  Action() { };
   virtual ~Action(){}
   virtual bool guard() { return true; };
   //virtual void body() = 0;
   virtual void body(V v) = 0;
   virtual void update() = 0;
-  static Action *first;
-  Action *next;
 };
-template<class V>
-Action<V> *Action<V>::first = NULL;
 
 class Rule {
 public:

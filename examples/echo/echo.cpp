@@ -98,13 +98,6 @@ public:
 
 EchoTest echoTest;
 
-class BOZOME {
-   int ABOZO;
-   int BBOZO;
-   int BOZOU(void) {return ABOZO;}
-};
-
-BOZOME fooglobal;
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
