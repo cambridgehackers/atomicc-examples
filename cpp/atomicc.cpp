@@ -21,7 +21,7 @@
 
 #include <atomicc.h>
 
-void Module::run()
+void run_main_program()
 {
     while (1) {
         Module *curmod = Module::first;

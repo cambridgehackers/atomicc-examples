@@ -102,7 +102,7 @@ int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
   if (argc != 1)
-      Module::run();
+      run_main_program();
   printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
   return 0;
 }

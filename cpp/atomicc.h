@@ -40,7 +40,6 @@ public:
 };
 
 class Module {
-  //std::list<Rule*> rules;
  public:
   Module(): rfirst(NULL) {
      printf("[%s] add module to list first %p this %p\n", __FUNCTION__, first, this);
@@ -54,7 +53,6 @@ class Module {
   static Module *first;
   Rule *rfirst;
   Module *next;
-  static void run();
 };
 
 #define RULE(moduletype,name,guardbody,bodybody,updatebody) \
@@ -83,5 +81,6 @@ public:
   operator T () const { return storage; };
   void operator =(T v) { storage = v; };
 };
+extern void run_main_program();
 
 #endif
