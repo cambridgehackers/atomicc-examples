@@ -21,16 +21,22 @@
 
 #include <atomicc.h>
 
+int stop_main_program;
 void run_main_program()
 {
-    while (1) {
+    while (!stop_main_program) {
         Module *curmod = Module::first;
         while (curmod) {
+printf("%s: module %p\n", __FUNCTION__, curmod);
             Rule *currule = curmod->rfirst;
             while (currule) {
+printf("     body %p\n", currule);
                 currule->body();
-                if (currule->guard())
+printf("     guard %p\n", currule);
+                if (currule->guard()) {
+printf("     update %p\n", currule);
                     currule->update();
+                }
                 currule = currule->next;
             }
             curmod = curmod->next;

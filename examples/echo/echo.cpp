@@ -44,15 +44,18 @@ class Echo : public Module {
 public:
   RULE(Echo,respond,
        {
-	 return module->deqreq->guard()
-	   && module->firstreq->guard();
+printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
+	 return module->deqreq->guard();
        },
        { 
+printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
 	 module->response = module->firstreq->value();
+	 module->deqreq->body();
        },
        {
+printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
 	 module->ind->echo(module->response);
-	 module->deqreq->update();
+	 //module->deqreq->update();
        });
 public:
   Action<int> *echoreq;
@@ -72,7 +75,7 @@ class EchoIndicationTest : public EchoIndication {
 public:
   void echo(int v) {
     printf("Heard an echo: %d\n", v);
-    exit(0);
+    stop_main_program = 1;
   }
 };
 
@@ -81,15 +84,15 @@ public:
   Echo *echo;
   RULE(EchoTest,drive,
        {
+printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
 	 return module->echo->echoreq->guard();
        },
        {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
 	 module->echo->echoreq->body(22);
        },
        {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-	 module->echo->echoreq->update();
+printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
        });
 public:
   EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }

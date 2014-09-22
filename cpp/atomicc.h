@@ -23,7 +23,7 @@ public:
   Action() { };
   virtual ~Action(){}
   virtual bool guard() { return true; };
-  //virtual void body() = 0;
+  virtual void body() = 0;
   virtual void body(V v) = 0;
   virtual void update() = 0;
 };
@@ -82,5 +82,6 @@ public:
   void operator =(T v) { storage = v; };
 };
 extern void run_main_program();
+extern int stop_main_program;
 
 #endif
