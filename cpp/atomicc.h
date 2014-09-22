@@ -55,7 +55,7 @@ class Module {
   Module *next;
 };
 
-#define RULE(moduletype,name,guardbody,bodybody,updatebody) \
+#define RULE(moduletype,name,bodybody) \
   class name : public Rule {\
     moduletype *module;\
   public:\
@@ -65,10 +65,10 @@ class Module {
        next = module->rfirst; \
        module->rfirst = this; \
     } \
-    virtual bool guard() guardbody;\
+    virtual bool guard() { return true; };\
     virtual void body() bodybody;\
     virtual void body(bool v) {};\
-    void update() updatebody \
+    void update() {} \
   } name ## Rule;
 
 template<class T>

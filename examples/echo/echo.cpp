@@ -43,14 +43,9 @@ class Echo : public Module {
   Action<int> *deqreq;
 public:
   RULE(Echo,respond,
-       {
-	 return true;
-       },
        { 
 	 module->response = module->firstreq->value();
 	 module->deqreq->body();
-       },
-       {
 	 module->ind->echo(module->response);
        });
 public:
@@ -80,12 +75,7 @@ public:
   Echo *echo;
   RULE(EchoTest,drive,
        {
-	 return true;
-       },
-       {
 	 module->echo->echoreq->body(22);
-       },
-       {
        });
 public:
   EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }
