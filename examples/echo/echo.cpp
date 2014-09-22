@@ -44,18 +44,14 @@ class Echo : public Module {
 public:
   RULE(Echo,respond,
        {
-printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
-	 return module->deqreq->guard();
+	 return true;
        },
        { 
-printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
 	 module->response = module->firstreq->value();
 	 module->deqreq->body();
        },
        {
-printf("[%s:%d]respond\n", __FUNCTION__, __LINE__);
 	 module->ind->echo(module->response);
-	 //module->deqreq->update();
        });
 public:
   Action<int> *echoreq;
@@ -84,15 +80,12 @@ public:
   Echo *echo;
   RULE(EchoTest,drive,
        {
-printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
-	 return module->echo->echoreq->guard();
+	 return true;
        },
        {
-printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
 	 module->echo->echoreq->body(22);
        },
        {
-printf("[%s:%d]drive\n", __FUNCTION__, __LINE__);
        });
 public:
   EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }

@@ -27,15 +27,10 @@ public:
     Fifo1 *fifo;
     T elt;
     EnqAction(Fifo1 *fifo) : fifo(fifo), elt() {}
-    bool guard() { 
-printf("        EnqAction: guard\n");
-return fifo->notFull(); }
+    bool guard() { return fifo->notFull(); }
     void body() { }
-    void body(T v) {
-printf("        EnqAction: body\n");
- elt = v; }
+    void body(T v) { elt = v; }
     void update() {
-printf("        EnqAction: update\n");
       // ok, how do we get the value we wanted?
       fifo->element = elt;
       fifo->full = true;
@@ -46,15 +41,10 @@ printf("        EnqAction: update\n");
   public:
     Fifo1 *fifo;
     DeqAction(Fifo1 *fifo) : fifo(fifo) {}
-    bool guard() { 
-printf("        DeqAction: guard\n");
-return fifo->notEmpty(); }
+    bool guard() { return fifo->notEmpty(); }
     void body() { }
-    void body(T v) { 
-printf("        DeqAction: body\n");
-}
+    void body(T v) { }
     void update() {
-printf("        DeqAction: update\n");
       fifo->full = false;
     }
   } deqAction;
@@ -64,12 +54,8 @@ printf("        DeqAction: update\n");
   public:
     Fifo1 *fifo;
     FirstValue(Fifo1 *fifo) : fifo(fifo) {}
-    bool guard() { 
-printf("        FirstValue: guard\n");
-return fifo->notEmpty(); }
-    T value() { 
-printf("        FirstValue: value\n");
-return fifo->element; }
+    bool guard() { return fifo->notEmpty(); }
+    T value() { return fifo->element; }
   } firstValue;
   Fifo1() : full(false), enqAction(this), deqAction(this), firstValue(this) {};
   ~Fifo1() {}
