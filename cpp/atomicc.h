@@ -30,7 +30,7 @@ public:
 
 class Rule {
 public:
-  Rule() {};
+  Rule() { printf("Rule: addr %p size 0x%lx\n", this, sizeof(*this)); };
   virtual ~Rule(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;

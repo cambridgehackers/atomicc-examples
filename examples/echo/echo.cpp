@@ -36,12 +36,12 @@ public:
 };
 
 class Echo : public Module {
+public:
   Fifo<int> *fifo;
   EchoIndication *ind;
   int response;
   GuardedValue<int> *firstreq;
   Action<int> *deqreq;
-public:
   RULE(Echo,respond,
        { 
 	 module->response = module->firstreq->value();
@@ -51,6 +51,7 @@ public:
 public:
   Action<int> *echoreq;
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
+    printf("Echo: addr %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     echoreq = fifo->enq();
     firstreq = fifo->first();
     deqreq = fifo->deq();
@@ -78,7 +79,7 @@ public:
 	 module->echo->echoreq->body(22);
        });
 public:
-  EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { }
+  EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
   ~EchoTest() {}
 };
 
