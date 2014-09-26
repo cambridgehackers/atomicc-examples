@@ -50,7 +50,7 @@ public:
        });
 public:
   Action<int> *echoreq;
-  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
+  Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
     printf("Echo: addr %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     echoreq = fifo->enq();
     firstreq = fifo->first();
@@ -79,7 +79,7 @@ public:
 	 module->echo->echoreq->body(22);
        });
 public:
-  EchoTest(): echo(new Echo(new EchoIndicationTest())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndicationTest())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
   ~EchoTest() {}
 };
 

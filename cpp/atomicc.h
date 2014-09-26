@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 #include <vector>
+#include <stdlib.h>
+#include <string.h>
 
 template<class V>
 class Action;
@@ -41,18 +43,22 @@ public:
 
 class Module {
  public:
-  Module(): rfirst(NULL) {
+  Module(size_t size): rfirst(NULL), next(first), size(size) {
      printf("[%s] add module to list first %p this %p\n", __FUNCTION__, first, this);
-     next = first;
      first = this;
+     void *temp = malloc(size);
+     memset(temp, 0, size);
+     shadow = (Module *)temp;
   };
   virtual ~Module() {}
   void addRule(Rule *rule) {
     rule->setModule(this);
   }
-  static Module *first;
   Rule *rfirst;
   Module *next;
+  Module *shadow;
+  size_t size;
+  static Module *first;
 };
 
 #define RULE(moduletype,name,bodybody) \

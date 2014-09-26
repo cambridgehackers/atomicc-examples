@@ -7,7 +7,7 @@
 template<class T>
 class Fifo : public Module {
  public:
-  Fifo() { printf("Fifo: addr %p size 0x%lx\n", this, sizeof(*this)); }
+  Fifo(size_t size) : Module(size) {}
   virtual ~Fifo() {}
   virtual Action<T> *enq() = 0;
   virtual GuardedValue<T> *first() = 0;
@@ -57,7 +57,7 @@ public:
     bool guard() { return fifo->notEmpty(); }
     T value() { return fifo->element; }
   } firstValue;
-  Fifo1() : full(false), enqAction(this), deqAction(this), firstValue(this) { printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); };
+  Fifo1() : Fifo<T>(sizeof(Fifo1<T>)), full(false), enqAction(this), deqAction(this), firstValue(this) { printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); };
   ~Fifo1() {}
   bool notEmpty() const { return full; }
   bool notFull() const { return !full; }
