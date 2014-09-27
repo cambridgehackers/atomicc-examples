@@ -77,6 +77,17 @@ class Module {
     void update() {} \
   } name ## Rule;
 
+#define RULE2(moduletype,name,bodybody) \
+  class name { \
+  public:\
+    RULE(moduletype,name ## 1,bodybody); \
+    RULE(moduletype,name ## 2,{}); \
+  public:\
+    name(moduletype *module) : name ## 1Rule(module), name ## 2Rule(module) {} \
+  } name ## Rule;
+
+extern "C" int PIPELINE(int A);
+
 template<class T>
 class Reg {
   T storage;
