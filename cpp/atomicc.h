@@ -87,9 +87,8 @@ class Module {
   } name ## Rule;
 
 template <typename T>
-     T PIPELINEMARKER(T A);
-//extern "C" int PIPELINE(int A);
-#define PIPELINE(A) PIPELINEMARKER<typeof(A)>(A)
+     T PIPELINEMARKER(T A, T &B);
+#define PIPELINE(A,B) PIPELINEMARKER<typeof(A)>(A, B)
 
 template<class T>
 class Reg {

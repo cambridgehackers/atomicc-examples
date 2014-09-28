@@ -42,9 +42,10 @@ public:
   int response;
   GuardedValue<int> *firstreq;
   Action<int> *deqreq;
+  int pipetemp;
   RULE2(Echo,respond,
        { 
-	 module->response = PIPELINE(module->firstreq->value());
+	 module->response = PIPELINE(module->firstreq->value(), module->pipetemp);
 	 module->deqreq->body();
 	 module->ind->echo(module->response);
        });
