@@ -52,6 +52,9 @@ class Module {
   };
   virtual ~Module() {}
   void addRule(Rule *rule) {
+    printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, rfirst, this);
+    rule->next = rfirst;
+    rfirst = rule;
     rule->setModule(this);
   }
   Rule *rfirst;
@@ -66,11 +69,7 @@ class Module {
     moduletype *module;\
   public:\
     name(moduletype *module) : module(module) {module->addRule(this);} \
-    void setModule(Module *m) { module = static_cast<moduletype *>(m); \
-       printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, module->rfirst, this); \
-       next = module->rfirst; \
-       module->rfirst = this; \
-    } \
+    void setModule(Module *m) { module = static_cast<moduletype *>(m); } \
     virtual bool guard() { return true; };\
     virtual void body() bodybody;\
     virtual void body(bool v) {};\
