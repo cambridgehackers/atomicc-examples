@@ -101,6 +101,6 @@ public:
   void operator =(T v) { storage = v; };
 };
 extern void run_main_program();
-extern int stop_main_program;
+extern unsigned int stop_main_program;
 
 #endif

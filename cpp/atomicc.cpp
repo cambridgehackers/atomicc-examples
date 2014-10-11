@@ -21,7 +21,7 @@
 
 #include <atomicc.h>
 
-int stop_main_program;
+unsigned int stop_main_program;
 void run_main_program()
 {
     while (!stop_main_program) {
