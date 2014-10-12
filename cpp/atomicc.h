@@ -9,7 +9,6 @@
 template<class V>
 class GuardedValue {
  public:
-  GuardedValue() { };
   virtual bool guard() = 0;
   virtual V value() = 0;
 };
@@ -17,8 +16,6 @@ class GuardedValue {
 template<class V>
 class Action {
 public:
-  Action() { };
-  virtual ~Action(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;
   virtual void body(V v) = 0;
@@ -27,11 +24,9 @@ public:
 
 class Rule {
 public:
-  virtual bool guard() { return true; };
+  virtual bool guard() = 0;
   virtual void body() = 0;
   virtual void update() = 0;
-  Rule() { printf("Rule: addr %p size 0x%lx\n", this, sizeof(*this)); };
-  virtual ~Rule(){}
   Rule *next;
 };
 
@@ -44,7 +39,7 @@ class Module {
      memset(temp, 0, size);
      shadow = (Module *)temp;
   };
-  virtual ~Module() {}
+  //~Module() {}
   void addRule(Rule *rule) {
     printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, rfirst, this);
     rule->next = rfirst;
@@ -61,11 +56,11 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    name(moduletype *module) : module(module) {module->addRule(this);} \
-    virtual bool guard() { return true; };\
-    virtual void body() bodybody;\
-    virtual void body(bool v) {};\
+    bool guard() { return true; };\
+    void body() bodybody;\
     void update() {} \
+    void body(bool v) {};\
+    name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule;
 
 #define RULE2(moduletype,name,bodybody) \
