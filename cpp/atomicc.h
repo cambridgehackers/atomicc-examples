@@ -7,11 +7,6 @@
 #include <string.h>
 
 template<class V>
-class Action;
-class Rule;
-class Module;
-
-template<class V>
 class GuardedValue {
  public:
   GuardedValue() { };
@@ -37,7 +32,6 @@ public:
   virtual bool guard() { return true; };
   virtual void body() = 0;
   virtual void update() = 0;
-  virtual void setModule(Module *m) = 0;
   Rule *next;
 };
 
@@ -55,7 +49,6 @@ class Module {
     printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, rfirst, this);
     rule->next = rfirst;
     rfirst = rule;
-    rule->setModule(this);
   }
   Rule *rfirst;
   Module *next;
@@ -69,7 +62,6 @@ class Module {
     moduletype *module;\
   public:\
     name(moduletype *module) : module(module) {module->addRule(this);} \
-    void setModule(Module *m) { module = static_cast<moduletype *>(m); } \
     virtual bool guard() { return true; };\
     virtual void body() bodybody;\
     virtual void body(bool v) {};\
