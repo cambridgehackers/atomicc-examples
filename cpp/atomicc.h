@@ -27,11 +27,11 @@ public:
 
 class Rule {
 public:
-  Rule() { printf("Rule: addr %p size 0x%lx\n", this, sizeof(*this)); };
-  virtual ~Rule(){}
   virtual bool guard() { return true; };
   virtual void body() = 0;
   virtual void update() = 0;
+  Rule() { printf("Rule: addr %p size 0x%lx\n", this, sizeof(*this)); };
+  virtual ~Rule(){}
   Rule *next;
 };
 
