@@ -30,7 +30,7 @@
 
 class EchoIndication {
 public:
-  virtual void echo(int v) = 0;
+  static void echo(int v);
   EchoIndication() {}
   ~EchoIndication() {}
 };
@@ -64,13 +64,11 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-class EchoIndicationTest : public EchoIndication {
-public:
-  void echo(int v) {
+void EchoIndication::echo(int v)
+{
     printf("Heard an echo: %d\n", v);
     stop_main_program = 1;
-  }
-};
+}
 
 class EchoTest : public Module {
 public:
@@ -80,7 +78,7 @@ public:
 	 module->echo->echoreq->body(22);
        });
 public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndicationTest())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
   ~EchoTest() {}
 };
 
