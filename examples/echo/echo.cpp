@@ -53,9 +53,9 @@ public:
   Action<int> *echoreq;
   Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
     printf("Echo: addr %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    echoreq = fifo->enq();
-    firstreq = fifo->first();
-    deqreq = fifo->deq();
+    echoreq = fifo->enq;
+    firstreq = fifo->first;
+    deqreq = fifo->deq;
   };
   ~Echo() {}
 };

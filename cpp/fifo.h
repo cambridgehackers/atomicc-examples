@@ -7,11 +7,12 @@
 template<class T>
 class Fifo : public Module {
  public:
-  Fifo(size_t size) : Module(size) {}
+  Fifo(size_t size, Action<T> *enq, GuardedValue<T> *first, Action<T> *deq) :
+    Module(size), enq(enq), first(first), deq(deq) {}
   virtual ~Fifo() {}
-  virtual Action<T> *enq() = 0;
-  virtual GuardedValue<T> *first() = 0;
-  virtual Action<T> *deq() = 0;
+  Action<T> *enq;
+  GuardedValue<T> *first;
+  Action<T> *deq;
   virtual bool notEmpty() const = 0;
   virtual bool notFull() const = 0;
 };
@@ -57,13 +58,15 @@ public:
     bool guard() { return fifo->notEmpty(); }
     T value() { return fifo->element; }
   } firstValue;
-  Fifo1() : Fifo<T>(sizeof(Fifo1<T>)), full(false), enqAction(this), deqAction(this), firstValue(this) { printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); };
+  Fifo1() : Fifo<T>(sizeof(Fifo1<T>), &enqAction, &firstValue, &deqAction), full(false), enqAction(this), deqAction(this), firstValue(this) {
+    printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); 
+  };
   ~Fifo1() {}
   bool notEmpty() const { return full; }
   bool notFull() const { return !full; }
-  Action<T> *enq() { return &enqAction; }
-  GuardedValue<T> *first() { return &firstValue; }
-  Action<T> *deq() { return &deqAction; }
+  //Action<T> *enq() { return &enqAction; }
+  //GuardedValue<T> *first() { return &firstValue; }
+  //Action<T> *deq() { return &deqAction; }
 };
 
 #endif
