@@ -39,7 +39,6 @@ class Module {
      memset(temp, 0, size);
      shadow = (Module *)temp;
   };
-  //~Module() {}
   void addRule(Rule *rule) {
     printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, rfirst, this);
     rule->next = rfirst;
