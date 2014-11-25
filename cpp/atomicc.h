@@ -73,7 +73,7 @@ class Module {
 
 template <typename T>
      T PIPELINEMARKER(T A, T &B);
-#define PIPELINE(A,B) PIPELINEMARKER<typeof(A)>(A, B)
+#define PIPELINE(A,B) PIPELINEMARKER<decltype(A)>(A, B)
 
 template<class T>
 class Reg {
