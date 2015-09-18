@@ -79,6 +79,7 @@ class EchoTest : public Module {
 public:
   Echo *echo;
   int x;
+  // this should go in class Module
   std::vector<rule> rules;
 public:
   EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
