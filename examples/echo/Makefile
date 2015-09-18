@@ -11,7 +11,7 @@ CPPFLAGS = -g -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit
 LLVMFLAGS = -emit-llvm
 
 all:
-	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
+	$(CPP) -fblocks $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
 	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
 	c++filt < echo.ll  \
 	  | sed -e 's/{/\n{\n/g' \

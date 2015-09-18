@@ -23,6 +23,7 @@
 #include <fifo.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <vector>
 
 ////////////////////////////////////////////////////////////
 // Echo
@@ -70,15 +71,22 @@ void EchoIndication::echo(int v)
     stop_main_program = 1;
 }
 
+typedef void (^rule)();
+
+#define RULE2(b) rules.push_back(b);
+
 class EchoTest : public Module {
 public:
   Echo *echo;
-  RULE(EchoTest,drive,
-       {
-	 module->echo->echoreq->body(22);
-       });
+  int x;
+  std::vector<rule> rules;
 public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest)); }
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
+    RULE2(^{
+      x++;
+      echo->echoreq->body(x);
+     })
+  }
   ~EchoTest() {}
 };
 
