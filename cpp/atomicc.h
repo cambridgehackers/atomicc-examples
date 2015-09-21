@@ -62,6 +62,17 @@ class Module {
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule;
 
+#define RULEN(moduletype,name,bodybody) \
+  class name : public Rule {\
+    moduletype *module;\
+  public:\
+    bool guard() { return true; };\
+    void body() bodybody;\
+    void update() {} \
+    void body(bool v) {};\
+    name(moduletype *module) : module(module) {module->addRule(this);} \
+  } name ## Rule(this);
+
 #define RULE2(moduletype,name,bodybody) \
   class name { \
   public:\

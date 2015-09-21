@@ -73,20 +73,24 @@ void EchoIndication::echo(int v)
 
 typedef void (^rule)();
 
-#define RULE2(b) rules.push_back(b);
+#define RULE9(b) rules.push_back(b);
 
 class EchoTest : public Module {
 public:
   Echo *echo;
   int x;
   // this should go in class Module
-  std::vector<rule> rules;
+  //std::vector<rule> rules;
+  RULE(EchoTest,drive,
+       {
+        module->echo->echoreq->body(22);
+       });
 public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
-    RULE2(^{
-      x++;
-      echo->echoreq->body(x);
-     })
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
+    //RULE9(^{
+      //module->x++;
+      //module->echo->echoreq->body(module->x);
+     //})
   }
   ~EchoTest() {}
 };
