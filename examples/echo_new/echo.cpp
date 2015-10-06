@@ -38,7 +38,7 @@ public:
 
 class Echo : public Module {
 public:
-  Fifo1<int> *fifo;
+  Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
   RULE2(Echo,respond,

@@ -9,15 +9,15 @@ class Fifo : public Module {
  public:
   Fifo(size_t size): Module(size) {}
   virtual ~Fifo() {}
-  ACTION(enq, (T v), notFull()) {}
-  ACTION(deq, (void), notEmpty()) {}
-  GVALUE(first, T, notEmpty()) { return 0; }
+  ACTION(enq, (T v), notFull()) = 0;
+  ACTION(deq, (void), notEmpty()) = 0;
+  GVALUE(first, T, notEmpty()) = 0;
   virtual bool notEmpty() const = 0;
   virtual bool notFull() const = 0;
 };
 
 template<class T>
-class Fifo1 //: public Fifo<T> 
+class Fifo1 : public Fifo<T> 
 {
 public:
   T element;
@@ -33,7 +33,7 @@ public:
   GVALUE(first, T, notEmpty()) {
     return element;
     }
-  Fifo1() : //Fifo<T>(sizeof(Fifo1<T>)), 
+  Fifo1() : Fifo<T>(sizeof(Fifo1<T>)), 
     full(false) {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); 
   }
