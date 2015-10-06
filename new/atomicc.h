@@ -6,22 +6,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-template<class V>
-class GuardedValue {
- public:
-  virtual bool guard() = 0;
-  virtual V value() = 0;
-};
-
-template<class V>
-class Action {
-public:
-  virtual bool guard() { return true; };
-  virtual void body() = 0;
-  virtual void body(V v) = 0;
-  virtual void update() = 0;
-};
-
 #define ACTION(A,B,C) \
    virtual bool A ## __guard() { return (C); } \
    virtual void A B
@@ -32,7 +16,6 @@ public:
 class Rule {
 public:
   virtual bool guard() = 0;
-  virtual void body() = 0;
   virtual void update() = 0;
   Rule *next;
 };
@@ -63,9 +46,7 @@ class Module {
     moduletype *module;\
   public:\
     bool guard() { return true; };\
-    void body() bodybody;\
-    void update() {} \
-    void body(bool v) {};\
+    void update() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule;
 
@@ -74,9 +55,7 @@ class Module {
     moduletype *module;\
   public:\
     bool guard() { return true; };\
-    void body() bodybody;\
-    void update() {} \
-    void body(bool v) {};\
+    void update() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule(this);
 

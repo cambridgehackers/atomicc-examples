@@ -7,12 +7,11 @@
 template<class T>
 class Fifo : public Module {
  public:
-  Fifo(size_t size, Action<T> *enq, GuardedValue<T> *first, Action<T> *deq) :
-    Module(size), enq(enq), first(first), deq(deq) {}
+  Fifo(size_t size): Module(size) {}
   virtual ~Fifo() {}
-  Action<T> *enq;
-  GuardedValue<T> *first;
-  Action<T> *deq;
+  ACTION(enq, (T v), notFull()) {}
+  ACTION(deq, (void), notEmpty()) {}
+  GVALUE(first, T, notEmpty()) { return 0; }
   virtual bool notEmpty() const = 0;
   virtual bool notFull() const = 0;
 };
@@ -34,10 +33,10 @@ public:
   GVALUE(first, T, notEmpty()) {
     return element;
     }
-  Fifo1()// : Fifo<T>(sizeof(Fifo1<T>), &enqAction, &firstValue, &deqAction), full(false), enqAction(this), deqAction(this), firstValue(this)
-  {
+  Fifo1() : //Fifo<T>(sizeof(Fifo1<T>)), 
+    full(false) {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this)); 
-  };
+  }
   ~Fifo1() {}
   bool notEmpty() const { return full; }
   bool notFull() const { return !full; }

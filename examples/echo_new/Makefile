@@ -14,7 +14,7 @@ LLVMFLAGS = -emit-llvm
 
 all:
 	$(CPP) -fblocks $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
-	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
+	$(CPP) $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../new/atomicc.cpp
 	c++filt < echo.ll  \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
@@ -30,6 +30,6 @@ clean:
 
 run:
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o echo.bc echo.cpp
-	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../cpp/atomicc.cpp
+	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../new/atomicc.cpp
 	llvm-link-3.3 -v echo.bc atomicc.bc >echo.exe.bc
 	../../../llvm/build/Debug+Asserts/bin/lli -force-interpreter=true echo.exe.bc foo
