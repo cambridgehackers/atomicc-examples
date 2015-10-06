@@ -38,25 +38,18 @@ public:
 
 class Echo : public Module {
 public:
-  Fifo<int> *fifo;
+  Fifo1<int> *fifo;
   EchoIndication *ind;
-  int response;
-  GuardedValue<int> *firstreq;
-  Action<int> *deqreq;
   int pipetemp;
   RULE2(Echo,respond,
        { 
-	 module->response = PIPELINE(module->firstreq->value(), module->pipetemp);
-	 module->deqreq->body();
-	 module->ind->echo(module->response);
+	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
+	 module->fifo->deq();
+	 module->ind->echo(module->fifo->first());
        });
 public:
-  Action<int> *echoreq;
   Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
     printf("Echo: addr %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    echoreq = fifo->enq;
-    firstreq = fifo->first;
-    deqreq = fifo->deq;
   };
   ~Echo() {}
 };
@@ -71,26 +64,17 @@ void EchoIndication::echo(int v)
     stop_main_program = 1;
 }
 
-typedef void (^rule)();
-
-#define RULE9(b) rules.push_back(b);
-
 class EchoTest : public Module {
 public:
   Echo *echo;
   int x;
-  // this should go in class Module
-  //std::vector<rule> rules;
   RULE(EchoTest,drive,
        {
-        module->echo->echoreq->body(22);
+        module->echo->fifo->enq(22);
        });
 public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7), driveRule(this) { printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
-    //RULE9(^{
-      //module->x++;
-      //module->echo->echoreq->body(module->x);
-     //})
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7), driveRule(this) {
+      printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
   }
   ~EchoTest() {}
 };

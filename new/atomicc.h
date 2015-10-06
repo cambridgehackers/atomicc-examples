@@ -22,6 +22,13 @@ public:
   virtual void update() = 0;
 };
 
+#define ACTION(A,B,C) \
+   virtual bool A ## __guard() { return (C); } \
+   virtual void A B
+#define GVALUE(A,B,C) \
+   virtual bool A ## __guard() { return (C); } \
+   virtual B A(void)
+
 class Rule {
 public:
   virtual bool guard() = 0;
