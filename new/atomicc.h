@@ -7,16 +7,16 @@
 #include <string.h>
 
 #define ACTION(A,B,C) \
-   virtual bool A ## __guard() { return (C); } \
+   virtual bool A ## __RDY() { return (C); } \
    virtual void A B
 #define GVALUE(A,B,C) \
-   virtual bool A ## __guard() { return (C); } \
+   virtual bool A ## __RDY() { return (C); } \
    virtual B A(void)
 
 class Rule {
 public:
-  virtual bool guard() = 0;
-  virtual void update() = 0;
+  virtual bool RDY() = 0;
+  virtual void ENA() = 0;
   Rule *next;
 };
 
@@ -45,8 +45,8 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    bool guard() { return true; };\
-    void update() bodybody;\
+    bool RDY() { return true; };\
+    void ENA() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule;
 
@@ -54,8 +54,8 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    bool guard() { return true; };\
-    void update() bodybody;\
+    bool RDY() { return true; };\
+    void ENA() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule(this);
 

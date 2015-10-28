@@ -30,10 +30,10 @@ void run_main_program()
 printf("%s: module %p\n", __FUNCTION__, curmod);
             Rule *currule = curmod->rfirst;
             while (currule) {
-printf("     guard %p\n", currule);
-                if (currule->guard()) {
-printf("     update %p\n", currule);
-                    currule->update();
+printf("     RDY %p\n", currule);
+                if (currule->RDY()) {
+printf("     ENA %p\n", currule);
+                    currule->ENA();
                 }
                 currule = currule->next;
             }
