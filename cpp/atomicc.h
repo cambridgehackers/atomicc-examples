@@ -6,27 +6,17 @@
 #include <stdlib.h>
 #include <string.h>
 
-template<class V>
-class GuardedValue {
- public:
-  virtual bool guard() = 0;
-  virtual V value() = 0;
-};
-
-template<class V>
-class Action {
-public:
-  virtual bool guard() { return true; };
-  virtual void body() = 0;
-  virtual void body(V v) = 0;
-  virtual void update() = 0;
-};
+#define ACTION(A,B,C) \
+   virtual bool A ## __RDY() { return (C); } \
+   virtual void A B
+#define GVALUE(A,B,C) \
+   virtual bool A ## __RDY() { return (C); } \
+   virtual B A(void)
 
 class Rule {
 public:
-  virtual bool guard() = 0;
-  virtual void body() = 0;
-  virtual void update() = 0;
+  virtual bool RDY() = 0;
+  virtual void ENA() = 0;
   Rule *next;
 };
 
@@ -44,6 +34,17 @@ class Module {
     rule->next = rfirst;
     rfirst = rule;
   }
+  void run(void) {
+      Rule *currule = rfirst;
+      while (currule) {
+printf("     RDY %p\n", currule);
+          if (currule->RDY()) {
+printf("     ENA %p\n", currule);
+              currule->ENA();
+          }
+          currule = currule->next;
+      }
+  }
   Rule *rfirst;
   Module *next;
   Module *shadow;
@@ -55,10 +56,8 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    bool guard() { return true; };\
-    void body() bodybody;\
-    void update() {} \
-    void body(bool v) {};\
+    bool RDY() { return true; };\
+    void ENA() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule;
 
@@ -66,10 +65,8 @@ class Module {
   class name : public Rule {\
     moduletype *module;\
   public:\
-    bool guard() { return true; };\
-    void body() bodybody;\
-    void update() {} \
-    void body(bool v) {};\
+    bool RDY() { return true; };\
+    void ENA() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
   } name ## Rule(this);
 

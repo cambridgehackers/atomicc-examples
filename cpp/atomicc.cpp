@@ -28,17 +28,7 @@ void run_main_program()
         Module *curmod = Module::first;
         while (curmod) {
 printf("%s: module %p\n", __FUNCTION__, curmod);
-            Rule *currule = curmod->rfirst;
-            while (currule) {
-printf("     body %p\n", currule);
-                currule->body();
-printf("     guard %p\n", currule);
-                if (currule->guard()) {
-printf("     update %p\n", currule);
-                    currule->update();
-                }
-                currule = currule->next;
-            }
+            curmod->run();
             curmod = curmod->next;
         }
     }
