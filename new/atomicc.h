@@ -34,6 +34,17 @@ class Module {
     rule->next = rfirst;
     rfirst = rule;
   }
+  void run(void) {
+      Rule *currule = rfirst;
+      while (currule) {
+printf("     RDY %p\n", currule);
+          if (currule->RDY()) {
+printf("     ENA %p\n", currule);
+              currule->ENA();
+          }
+          currule = currule->next;
+      }
+  }
   Rule *rfirst;
   Module *next;
   Module *shadow;

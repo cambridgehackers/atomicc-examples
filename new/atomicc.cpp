@@ -28,15 +28,7 @@ void run_main_program()
         Module *curmod = Module::first;
         while (curmod) {
 printf("%s: module %p\n", __FUNCTION__, curmod);
-            Rule *currule = curmod->rfirst;
-            while (currule) {
-printf("     RDY %p\n", currule);
-                if (currule->RDY()) {
-printf("     ENA %p\n", currule);
-                    currule->ENA();
-                }
-                currule = currule->next;
-            }
+            curmod->run();
             curmod = curmod->next;
         }
     }
