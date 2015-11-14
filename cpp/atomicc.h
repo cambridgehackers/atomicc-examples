@@ -21,11 +21,11 @@
 // SOFTWARE.
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
-
 #include <stdio.h>
-#include <vector>
 #include <stdlib.h>
 #include <string.h>
+//#include <vector>
+//#include <list>
 
 #define ACTION(A,B,C) \
    virtual bool A ## __RDY(void) { return (C); } \
@@ -40,20 +40,26 @@ public:
   virtual void ENA(void) = 0;
   Rule *next;
 };
-typedef bool (Rule::*RDY_POINTER)(void);
-typedef void (Rule::*ENA_POINTER)(void);
+class Module;
+typedef bool (Module::*RDY_POINTER)(void);
+typedef void (Module::*ENA_POINTER)(void);
+typedef struct {
+    typedef bool (Module::*RDY_POINTER)(void);
+    typedef void (Module::*ENA_POINTER)(void);
+} RULE_PAIR;
 
 class Module {
  public:
+  //std::list<RULE_PAIR> rules;
   Module(size_t size): rfirst(NULL), next(first), size(size) {
-     printf("[%s] add module to list first %p this %p\n", __FUNCTION__, first, this);
+     printf("[%s] add module to list first [%p]=%p this %p size %ld.\n", __FUNCTION__, &first, first, this, (long)size);
      first = this;
-     void *temp = malloc(size);
-     memset(temp, 0, size);
-     shadow = (Module *)temp;
+     //void *temp = malloc(size);
+     //memset(temp, 0, size);
+     //shadow = (Module *)temp;
   };
   void addRule(Rule *rule) {
-    printf("[%s] add rule to module list rfirst %p this %p\n", __FUNCTION__, rfirst, this);
+    printf("[%s] add rule to module list rfirst [%p]=%p this %p rule %p rulevptr %p &rule->next %p\n", __FUNCTION__, &rfirst, rfirst, this, rule, *((void **)(&rule->next)-1), &rule->next);
     rule->next = rfirst;
     rfirst = rule;
   }
@@ -70,7 +76,7 @@ printf("     ENA %p\n", currule);
   }
   Rule *rfirst;
   Module *next;
-  Module *shadow;
+  //Module *shadow;
   size_t size;
   static Module *first;
 };
