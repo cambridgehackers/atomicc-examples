@@ -88,7 +88,8 @@ printf("     ENA %p\n", currule);
     bool RDY() { return true; };\
     void ENA() bodybody;\
     name(moduletype *module) : module(module) {module->addRule(this);} \
-  } name ## Rule;
+  };\
+  static name *name ## Rule = new name(this);
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\

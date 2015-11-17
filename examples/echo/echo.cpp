@@ -41,15 +41,15 @@ public:
   Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
-  RULE2(Echo,respond,
+public:
+  Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind) {
+    printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
+    RULE(Echo,respond,
        { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 module->fifo->deq();
 	 module->ind->echo(module->fifo->first());
        });
-public:
-  Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind), respondRule(this) {
-    printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
   };
   ~Echo() {}
 };
@@ -68,13 +68,12 @@ class EchoTest : public Module {
 public:
   Echo *echo;
   int x;
-  RULE(EchoTest,drive,
-       {
+public:
+  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) {
+      printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
+      RULE(EchoTest,drive, {
         module->echo->fifo->enq(22);
        });
-public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7), driveRule(this) {
-      printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
   }
   ~EchoTest() {}
 };
