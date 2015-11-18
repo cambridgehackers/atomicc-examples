@@ -47,8 +47,8 @@ public:
     RULE(Echo,respond,
        { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
-	 module->fifo->deq();
-	 module->ind->echo(module->fifo->first());
+	 this->fifo->deq();
+	 this->ind->echo(this->fifo->first());
        });
   };
   ~Echo() {}
@@ -72,7 +72,7 @@ public:
   EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) {
       printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
       RULE(EchoTest,drive, {
-        module->echo->fifo->enq(22);
+        this->echo->fifo->enq(22);
        });
   }
   ~EchoTest() {}

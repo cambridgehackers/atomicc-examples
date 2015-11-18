@@ -41,12 +41,8 @@ public:
   Rule *next;
 };
 class Module;
-typedef bool (Module::*RDY_POINTER)(void);
-typedef void (Module::*ENA_POINTER)(void);
 typedef struct {
-    typedef bool (Module::*RDY_POINTER)(void);
-    typedef void (Module::*ENA_POINTER)(void);
-} RULE_PAIR;
+} ATOMIC_RULE_PAIR;
 
 class Module {
  public:
@@ -81,15 +77,9 @@ printf("     ENA %p\n", currule);
   static Module *first;
 };
 
+extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 #define RULE(moduletype,name,bodybody) \
-  class name : public Rule {\
-    moduletype *module;\
-  public:\
-    bool RDY() { return true; };\
-    void ENA() bodybody;\
-    name(moduletype *module) : module(module) {module->addRule(this);} \
-  };\
-  static name *name ## Rule = new name(this);
+  addBaseRule(this, #name, ^{ return true; }, ^ bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\
