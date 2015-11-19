@@ -24,6 +24,7 @@
 unsigned int stop_main_program;
 void run_main_program()
 {
+#if 0
     while (!stop_main_program) {
         Module *curmod = Module::first;
         while (curmod) {
@@ -32,6 +33,7 @@ printf("%s: module %p\n", __FUNCTION__, curmod);
             curmod = curmod->next;
         }
     }
+#endif
 }
 
 Module *Module::first = NULL;

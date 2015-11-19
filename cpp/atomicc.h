@@ -24,8 +24,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-//#include <vector>
-//#include <list>
 
 #define ACTION(A,B,C) \
    virtual bool A ## __RDY(void) { return (C); } \
@@ -46,40 +44,19 @@ typedef struct {
 
 class Module {
  public:
-  //std::list<RULE_PAIR> rules;
   Module(size_t size): rfirst(NULL), next(first), size(size) {
      printf("[%s] add module to list first [%p]=%p this %p size %ld.\n", __FUNCTION__, &first, first, this, (long)size);
      first = this;
-     //void *temp = malloc(size);
-     //memset(temp, 0, size);
-     //shadow = (Module *)temp;
   };
-  void addRule(Rule *rule) {
-    printf("[%s] add rule to module list rfirst [%p]=%p this %p rule %p rulevptr %p &rule->next %p\n", __FUNCTION__, &rfirst, rfirst, this, rule, *((void **)(&rule->next)-1), &rule->next);
-    rule->next = rfirst;
-    rfirst = rule;
-  }
-  void run(void) {
-      Rule *currule = rfirst;
-      while (currule) {
-printf("     RDY %p\n", currule);
-          if (currule->RDY()) {
-printf("     ENA %p\n", currule);
-              currule->ENA();
-          }
-          currule = currule->next;
-      }
-  }
   Rule *rfirst;
   Module *next;
-  //Module *shadow;
   size_t size;
   static Module *first;
 };
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 #define RULE(moduletype,name,bodybody) \
-  addBaseRule(this, #name, ^{ return true; }, ^ bodybody )
+  addBaseRule(this, "rule_" #name, ^{ (void)this; return true; }, ^ bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\
