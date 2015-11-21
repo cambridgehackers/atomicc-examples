@@ -32,8 +32,8 @@
 class EchoIndication {
 public:
   static void echo(int v);
-  EchoIndication() {}
-  ~EchoIndication() {}
+  //EchoIndication() {}
+  //~EchoIndication() {}
 };
 
 class Echo : public Module {
@@ -42,10 +42,9 @@ public:
   EchoIndication *ind;
   int pipetemp;
 public:
-  Echo(EchoIndication *ind) : Module(sizeof(Echo)), fifo(new Fifo1<int>()), ind(ind) {
+  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    RULE(Echo,respond,
-       { 
+    RULE(Echo,respond, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 this->fifo->deq();
 	 this->ind->echo(this->fifo->first());
@@ -69,7 +68,7 @@ public:
   Echo *echo;
   int x;
 public:
-  EchoTest(): Module(sizeof(Echo)), echo(new Echo(new EchoIndication())), x(7) {
+  EchoTest(): echo(new Echo(new EchoIndication())), x(7) {
       printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
       RULE(EchoTest,drive, {
         this->echo->fifo->enq(22);

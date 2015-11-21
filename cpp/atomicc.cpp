@@ -35,5 +35,3 @@ printf("%s: module %p\n", __FUNCTION__, curmod);
     }
 #endif
 }
-
-Module *Module::first = NULL;

@@ -18,6 +18,7 @@ LLVMFLAGS = -emit-llvm
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
+	$(LLC) -march=cpp -o echo.llvm.output echo.ll
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
 	c++filt < echo.ll  \
 	  | sed -e 's/{/\n{\n/g' \

@@ -32,26 +32,16 @@
    virtual bool A ## __RDY(void) { return (C); } \
    virtual B A(void)
 
-class Rule {
-public:
-  virtual bool RDY(void) = 0;
-  virtual void ENA(void) = 0;
-  Rule *next;
-};
-class Module;
-typedef struct {
-} ATOMIC_RULE_PAIR;
-
+// This is a marker for classes that should be synthesized in hardware
 class Module {
  public:
-  Module(size_t size): rfirst(NULL), next(first), size(size) {
-     printf("[%s] add module to list first [%p]=%p this %p size %ld.\n", __FUNCTION__, &first, first, this, (long)size);
-     first = this;
-  };
-  Rule *rfirst;
-  Module *next;
-  size_t size;
-  static Module *first;
+    Module() {}
+    ~Module() {}
+    long unused_data_to_force_inheritance;
+ private:
+    // copy ops are private to prevent copying
+    Module(const Module&); // no implementation
+    Module& operator=(const Module&);
 };
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
