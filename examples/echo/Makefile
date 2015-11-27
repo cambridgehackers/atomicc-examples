@@ -12,7 +12,7 @@ LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
 endif
 CPPFLAGS = -g -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
-#-fblocks 
+#CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 #CPPFLAGS += -fno-catch-undefined-behavior -O
 LLVMFLAGS = -emit-llvm
 
