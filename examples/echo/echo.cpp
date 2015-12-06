@@ -31,9 +31,7 @@
 
 class EchoIndication {
 public:
-  static void echo(int v);
-  //EchoIndication() {}
-  //~EchoIndication() {}
+  virtual void echo(int v);
 };
 
 class Echo : public Module {
