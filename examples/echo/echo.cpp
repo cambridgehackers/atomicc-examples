@@ -61,7 +61,7 @@ void EchoIndication::echo(int v)
     stop_main_program = 1;
 }
 
-class EchoTest : public Module {
+class EchoTest {
 public:
   Echo *echo;
   int x;
