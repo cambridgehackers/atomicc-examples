@@ -29,19 +29,26 @@
 // Echo
 ////////////////////////////////////////////////////////////
 
+int bozo;
 class EchoIndication {
 public:
-  virtual void echo(int v);
+  INDICATION(echo, (int v));
 };
 
 class Echo : public Module {
-public:
   Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
 public:
+  virtual void bozofunc(void) {}
+  REQUEST(echoReq, (int v)) {
+      fifo->enq(v);
+  }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
+    RULE(Echo,respondexport, { 
+         this->echoReq(99);
+       });
     RULE(Echo,respond, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 this->fifo->deq();
@@ -68,9 +75,6 @@ public:
 public:
   EchoTest(): echo(new Echo(new EchoIndication())), x(7) {
       printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
-      RULE(EchoTest,drive, {
-        this->echo->fifo->enq(22);
-       });
   }
   ~EchoTest() {}
 };
@@ -80,6 +84,7 @@ EchoTest echoTest;
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+  echoTest.echo->echoReq(22);
   if (argc != 1)
       run_main_program();
   printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);

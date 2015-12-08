@@ -26,11 +26,18 @@
 #include <string.h>
 
 #define ACTION(A,B,C) \
-   virtual bool A ## __RDY(void) { return (C); } \
-   virtual void A B
+    virtual bool A ## __RDY(void) { return (C); } \
+    virtual void A B
 #define GVALUE(A,B,C) \
-   virtual bool A ## __RDY(void) { return (C); } \
-   virtual B A(void)
+    virtual bool A ## __RDY(void) { return (C); } \
+    virtual B A(void)
+#define REQUEST(NAME, BODY) \
+    long unused_data_to_flag_request_ ## NAME; \
+    virtual bool NAME ## __RDY(void) { return true; } \
+    virtual void NAME BODY
+#define INDICATION(NAME, TYPE) \
+    long unused_data_to_flag_indication_ ## NAME; \
+    virtual void NAME TYPE;
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
