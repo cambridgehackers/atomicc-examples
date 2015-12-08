@@ -25,19 +25,19 @@
 #include <stdlib.h>
 #include <string.h>
 
+extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
+extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
 #define ACTION(A,B,C) \
     virtual bool A ## __RDY(void) { return (C); } \
     virtual void A B
 #define GVALUE(A,B,C) \
     virtual bool A ## __RDY(void) { return (C); } \
     virtual B A(void)
-#define REQUEST(NAME, BODY) \
-    long unused_data_to_flag_request_ ## NAME; \
-    virtual bool NAME ## __RDY(void) { return true; } \
-    virtual void NAME BODY
 #define INDICATION(NAME, TYPE) \
     long unused_data_to_flag_indication_ ## NAME; \
-    virtual void NAME TYPE;
+    virtual void NAME TYPE
+#define EXPORTREQUEST(NAME) \
+    exportSymbol(this, #NAME, 0)
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
@@ -51,7 +51,6 @@ class Module {
     Module& operator=(const Module&);
 };
 
-extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 #define RULE(moduletype,name,bodybody) \
   addBaseRule(this, "rule_" #name, ^{ (void)this; return true; }, ^ bodybody )
 
