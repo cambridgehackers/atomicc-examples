@@ -29,7 +29,6 @@
 // Echo
 ////////////////////////////////////////////////////////////
 
-int bozo;
 class EchoIndication {
 public:
   INDICATION(echo, (int v));
@@ -40,7 +39,6 @@ class Echo : public Module {
   EchoIndication *ind;
   int pipetemp;
 public:
-  virtual void bozofunc(void) {}
   ACTION(echoReq, (int v), 1) {
       fifo->enq(v);
   }
