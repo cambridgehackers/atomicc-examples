@@ -41,7 +41,7 @@ class Echo : public Module {
   int pipetemp;
 public:
   virtual void bozofunc(void) {}
-  REQUEST(echoReq, (int v)) {
+  ACTION(echoReq, (int v), 1) {
       fifo->enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
