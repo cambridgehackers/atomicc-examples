@@ -31,7 +31,7 @@
 
 class EchoIndication {
 public:
-  INDICATION(echo, (int v));
+  INDICATION(echo, (int v), true);
 };
 
 class Echo : public Module {
@@ -39,7 +39,7 @@ class Echo : public Module {
   EchoIndication *ind;
   int pipetemp;
 public:
-  ACTION(echoReq, (int v), 1) {
+  METHOD(echoReq, (int v), 1) {
       fifo->enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {

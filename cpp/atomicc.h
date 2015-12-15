@@ -27,14 +27,14 @@
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
-#define ACTION(A,B,C) \
+#define METHOD(A,B,C) \
     virtual bool A ## __RDY(void) { return (C); } \
     virtual void A B
 #define GVALUE(A,B,C) \
     virtual bool A ## __RDY(void) { return (C); } \
     virtual B A(void)
-#define INDICATION(NAME, TYPE) \
-    long unused_data_to_flag_indication_ ## NAME; \
+#define INDICATION(NAME, TYPE, RDYEXPRESSION) \
+    virtual bool NAME ## __RDY(void) { return (RDYEXPRESSION); } \
     virtual void NAME TYPE
 #define EXPORTREQUEST(NAME) \
     exportSymbol(this, #NAME, 0)
@@ -52,7 +52,7 @@ class Module {
 };
 
 #define RULE(moduletype,name,bodybody) \
-  addBaseRule(this, "rule_" #name, ^{ (void)this; return true; }, ^ bodybody )
+  addBaseRule(this, #name "_rule", ^{ (void)this; return true; }, ^ bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\

@@ -8,8 +8,8 @@
 template<class T>
 class Fifo : public Module {
  public:
-  ACTION(enq, (T v), notFull()) {}
-  ACTION(deq, (void), notEmpty()) {}
+  METHOD(enq, (T v), notFull()) {}
+  METHOD(deq, (void), notEmpty()) {}
   GVALUE(first, T, notEmpty()) { return (T)0; }
   virtual bool notEmpty() const { return false; }
   virtual bool notFull() const { return false; }
@@ -22,11 +22,11 @@ public:
   T element;
   bool full;
 
-  ACTION(enq, (T v), notFull()) {
+  METHOD(enq, (T v), notFull()) {
       element = v;
       full = true;
     }
-  ACTION(deq, (void), notEmpty()) {
+  METHOD(deq, (void), notEmpty()) {
       full = false;
     }
   GVALUE(first, T, notEmpty()) {
