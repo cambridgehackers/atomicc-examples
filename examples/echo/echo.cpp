@@ -31,7 +31,7 @@
 
 class EchoIndication {
 public:
-  INDICATION(echo, (int v), true);
+  INDICATION(heard, (int v), true);
 };
 
 class Echo : public Module {
@@ -39,16 +39,16 @@ class Echo : public Module {
   EchoIndication *ind;
   int pipetemp;
 public:
-  METHOD(echoReq, (int v), 1) {
+  METHOD(say, (int v), 1) {
       fifo->enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    EXPORTREQUEST(echoReq);
+    EXPORTREQUEST(say);
     RULE(Echo,respond, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 this->fifo->deq();
-	 this->ind->echo(this->fifo->first());
+	 this->ind->heard(this->fifo->first());
        });
   };
   ~Echo() {}
@@ -58,7 +58,7 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void EchoIndication::echo(int v)
+void EchoIndication::heard(int v)
 {
     printf("Heard an echo: %d\n", v);
     stop_main_program = 1;
@@ -80,7 +80,7 @@ EchoTest echoTest;
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-  echoTest.echo->echoReq(22);
+  echoTest.echo->say(22);
   if (argc != 1)
       run_main_program();
   printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
