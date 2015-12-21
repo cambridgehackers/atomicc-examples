@@ -34,7 +34,12 @@ public:
   INDICATION(heard, (int v), true);
 };
 
-class Echo : public Module {
+class EchoRequest {
+public:
+  METHOD(say, (int v), 1){}
+};
+
+class Echo : public Module, EchoRequest {
   Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
