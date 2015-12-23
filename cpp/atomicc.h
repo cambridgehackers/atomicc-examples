@@ -61,6 +61,42 @@ class ModuleStub {
     ModuleStub& operator=(const ModuleStub&);
 };
 
+#if 0
+template<class T, typename Instance, bool (Instance::*enqMethod__RDY)(void), void (Instance::*enqMethod)(T v)>
+class PipeIn {
+  Instance *p;
+ public:
+  METHOD(enq, (T v), {return p->enqMethod__RDY(); }) { p->enqMethod(v); }
+  PipeIn(Instance *parg): p(parg) {}
+};
+
+template<class T, typename Instance, bool (Instance::*deqMethod__RDY)(void), void (Instance::*deqMethod)(T v),
+       bool (Instance::*firstMethod__RDY)(void), T (Instance::*firstMethod)(void)>
+class PipeOut {
+  Instance *p;
+ public:
+  METHOD(deq, (void), {return p->deqMethod__RDY(); }) { p->deqMethod(); }
+  GVALUE(first, T, {return p->firstMethod__RDY(); }) { return p->firstMethod(); }
+  PipeOut(Instance *parg): p(parg) {}
+};
+#else
+template<class T>
+class PipeIn {
+ public:
+  METHOD(enq, (T v), ;//{return false; }
+);// { }
+};
+
+template<class T>
+class PipeOut {
+ public:
+  METHOD(deq, (void), ;//{return false; }
+);// { }
+  GVALUE(first, T, ;//{return false; }
+);// { return (T) 0; }
+};
+#endif
+
 #define RULE(moduletype,name,bodybody) \
   addBaseRule(this, #name "_rule", ^{ (void)this; return true; }, ^ bodybody )
 

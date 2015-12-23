@@ -51,6 +51,13 @@ class Fifo1 : public Fifo<T>
 {
   FIFODATA
 public:
+#if 0
+  PipeIn<T> in;
+      //METHOD(enq, (T v), {return false; }) { }
+  PipeOut<T> out;
+      //METHOD(deq, (void), {return false; }) { }
+      //GVALUE(first, T, {return false; }) { return (T) 0; }
+#endif
   METHOD(enq, (T v), BODYGUARD) BODYACTION
   METHOD(deq, (void), BODYGUARD) BODYACTION
   GVALUE(first, T, BODYGUARD) BODYVALUE
