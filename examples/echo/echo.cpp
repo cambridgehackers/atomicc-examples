@@ -31,12 +31,12 @@
 
 class EchoIndication {
 public:
-  INDICATION(heard, (int v), true);
+  INDICATION(heard, (int v), { return true; });
 };
 
 class EchoRequest {
 public:
-  METHOD(say, (int v), 1){}
+  METHOD(say, (int v), {return true; }){}
 };
 
 class Echo : public Module, EchoRequest {
@@ -44,7 +44,7 @@ class Echo : public Module, EchoRequest {
   EchoIndication *ind;
   int pipetemp;
 public:
-  METHOD(say, (int v), 1) {
+  METHOD(say, (int v), {return true; }) {
       fifo->enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {

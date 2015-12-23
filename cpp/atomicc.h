@@ -28,16 +28,16 @@
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
 #define METHOD(A,B,C) \
-    virtual bool A ## __RDY(void) { return (C); } \
+    virtual bool A ## __RDY(void) C \
     virtual void A B
 #define GVALUE(A,B,C) \
-    virtual bool A ## __RDY(void) { return (C); } \
+    virtual bool A ## __RDY(void) C \
     virtual B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    virtual bool NAME ## __RDY(void) { return (RDYEXPRESSION); } \
+    virtual bool NAME ## __RDY(void) RDYEXPRESSION \
     virtual void NAME TYPE
 #define EXPORTREQUEST(NAME) \
-    exportSymbol(this, #NAME, 0)
+    {} //exportSymbol(this, #NAME, 0)
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
