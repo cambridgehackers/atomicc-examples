@@ -67,7 +67,7 @@ bool Fifo1<T>::notFull() const {
 };
 
 Fifo1<int> ff1Int;
-//Fifo1<unsigned char> ff1Char;
+Fifo1<unsigned char> ff1Char;
 int main()
 {
     return 0;
