@@ -1,13 +1,9 @@
-#ifndef _FIFO_H_
-#define _FIFO_H_
-
 #include <assert.h>
 #include <atomicc.h>
 #include <typeinfo>
 
 template<class T>
-class Fifo : public ModuleStub
-{
+class Fifo : public Module {
  public:
   METHOD(enq, (T v), notFull()) {}
   METHOD(deq, (void), notEmpty()) {}
@@ -16,7 +12,6 @@ class Fifo : public ModuleStub
   virtual bool notFull() const { return false; }
 };
 
-#if 0
 template<class T>
 class Fifo1 : public Fifo<T> 
 {
@@ -40,18 +35,10 @@ public:
   bool notEmpty() const { return full; }
   bool notFull() const { return !full; }
 };
-#else
-template<class T>
-class Fifo1 : public Fifo<T> 
-{
-public:
-  METHOD(enq, (T v), true) {}
-  METHOD(deq, (void), true) {}
-  GVALUE(first, T, true) { return (T)0; }
-  Fifo1(): Fifo<T>() { }
-  virtual bool notEmpty() const { return false; }
-  virtual bool notFull() const { return false; }
-};
-#endif
 
-#endif
+Fifo1<int> ff1Int;
+//Fifo1<unsigned char> ff1Char;
+int main()
+{
+    return 0;
+}

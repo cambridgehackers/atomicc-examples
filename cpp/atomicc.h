@@ -50,6 +50,16 @@ class Module {
     Module(const Module&); // no implementation
     Module& operator=(const Module&);
 };
+class ModuleStub {
+ public:
+    ModuleStub() {}
+    ~ModuleStub() {}
+    long unused_data_to_force_inheritance;
+ private:
+    // copy ops are private to prevent copying
+    ModuleStub(const ModuleStub&); // no implementation
+    ModuleStub& operator=(const ModuleStub&);
+};
 
 #define RULE(moduletype,name,bodybody) \
   addBaseRule(this, #name "_rule", ^{ (void)this; return true; }, ^ bodybody )

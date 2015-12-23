@@ -20,6 +20,7 @@ all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
 	$(LLC) -march=cpp -o echo.llvm.output echo.ll
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
 	c++filt < echo.ll  \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
