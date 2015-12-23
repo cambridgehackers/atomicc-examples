@@ -41,11 +41,9 @@ template<class T>
 class Fifo : public FIFODEFINE
 {
  public:
-  METHOD(enq, (T v), {return notFull(); }) {}
-  METHOD(deq, (void), {return notEmpty(); }) {}
-  GVALUE(first, T, {return notEmpty(); }) { return (T)0; }
-  virtual bool notEmpty() const { return false; }
-  virtual bool notFull() const { return false; }
+  METHOD(enq, (T v), {return false; }) {}
+  METHOD(deq, (void), {return false; }) {}
+  GVALUE(first, T, {return false; }) { return (T)0; }
 };
 
 template<class T>
@@ -57,8 +55,8 @@ public:
   METHOD(deq, (void), BODYGUARD) BODYACTION
   GVALUE(first, T, BODYGUARD) BODYVALUE
   Fifo1() BODYACTION
-  virtual bool notEmpty() const BODYGUARD
-  virtual bool notFull() const BODYGUARD
+  bool notEmpty() const BODYGUARD
+  bool notFull() const BODYGUARD
 };
 
 #endif
