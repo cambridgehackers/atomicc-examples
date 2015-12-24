@@ -55,6 +55,8 @@ T Fifo1<T>::first(void) {
 template<class T>
 Fifo1<T>::Fifo1(): Fifo<T>(), full(false) {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
+    //in.set(this);
+    //out.set(this);
 };
 template<class T>
 bool Fifo1<T>::notEmpty() const {
@@ -65,9 +67,33 @@ template<class T>
 bool Fifo1<T>::notFull() const {
     return !full;
 };
+template<class T, typename Instance>
+bool PipeIn<T, Instance>::enq__RDY(void) {
+    return p->enq__RDY();
+}
+template<class T, typename Instance>
+void PipeIn<T, Instance>::enq(T v) {
+    p->enq(v);
+}
+template<class T, typename Instance>
+bool PipeOut<T, Instance>::deq__RDY(void) {
+    return p->deq__RDY();
+}
+template<class T, typename Instance>
+void PipeOut<T, Instance>::deq(void) {
+    p->deq();
+}
+template<class T, typename Instance>
+bool PipeOut<T, Instance>::first__RDY(void) {
+    return p->first__RDY();
+}
+template<class T, typename Instance>
+T PipeOut<T, Instance>::first(void) {
+    return p->first();
+}
 
-Fifo1<int> ff1Int;
-Fifo1<unsigned char> ff1Char;
+template class Fifo1<int>;
+//Fifo1<unsigned char> ff1Char;
 int main()
 {
     return 0;

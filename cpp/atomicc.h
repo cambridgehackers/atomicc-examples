@@ -62,7 +62,7 @@ class ModuleStub {
 };
 
 #if 0
-template<class T, typename Instance, bool (Instance::*enqMethod__RDY)(void), void (Instance::*enqMethod)(T v)>
+template<class T, class Instance, bool (Instance::*enqMethod__RDY)(void), void (Instance::*enqMethod)(T v)>
 class PipeIn {
   Instance *p;
  public:
@@ -70,7 +70,7 @@ class PipeIn {
   PipeIn(Instance *parg): p(parg) {}
 };
 
-template<class T, typename Instance, bool (Instance::*deqMethod__RDY)(void), void (Instance::*deqMethod)(T v),
+template<class T, class Instance, bool (Instance::*deqMethod__RDY)(void), void (Instance::*deqMethod)(T v),
        bool (Instance::*firstMethod__RDY)(void), T (Instance::*firstMethod)(void)>
 class PipeOut {
   Instance *p;
@@ -80,20 +80,23 @@ class PipeOut {
   PipeOut(Instance *parg): p(parg) {}
 };
 #else
-template<class T>
+template<class T, class Instance>
 class PipeIn {
+  Instance *p;
  public:
-  METHOD(enq, (T v), ;//{return false; }
-);// { }
+  METHOD(enq, (T v), ;);
+  void set(Instance *v) { p = v; }
+  PipeIn(): p(NULL){}
 };
 
-template<class T>
+template<class T, class Instance>
 class PipeOut {
+  Instance *p;
  public:
-  METHOD(deq, (void), ;//{return false; }
-);// { }
-  GVALUE(first, T, ;//{return false; }
-);// { return (T) 0; }
+  METHOD(deq, (void), ;);
+  GVALUE(first, T, ;);
+  void set(Instance *v) { p = v; }
+  PipeOut(): p(NULL){}
 };
 #endif
 
