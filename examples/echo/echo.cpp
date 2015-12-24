@@ -48,15 +48,19 @@ public:
 template <class T>
 class POUT {
 public:
-    GUARDPTR deq__RDY;
-    void (Module::*deq)(void);
-    GUARDPTR first__RDY;
-    T (Module::*FIRSTPTR)(void);
+    void *p;
+    GUARDPTR2 deq__RDYp;
+    void (*deqp)(void *p);
+    GUARDPTR2 first__RDYp;
+    T (*FIRSTPTR)(void *p);
 };
 
 //template <class T>
-PIN<int> bozome;
+Fifo1<int> bozome;
 PIN<int> finbozo = PIN<int>{&bozome, Fifo1<int>::enq__RDY_static, Fifo1<int>::enq_static};
+POUT<int> foutbozo = POUT<int>{&bozome, Fifo1<int>::deq__RDY_static, Fifo1<int>::deq_static, Fifo1<int>::first__RDY_static, Fifo1<int>::first_static};
+typedef bool (Fifo1<int>::*GUARDME)(void);
+GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY};
 
 class EchoRequest {
 public:
