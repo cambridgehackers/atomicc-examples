@@ -34,6 +34,30 @@ public:
   INDICATION(heard, (int v), { return true; });
 };
 
+typedef bool (*GUARDPTR)(void);
+typedef bool (*GUARDPTR2)(void *);
+template <class T>
+class PIN {
+public:
+    void *p;
+    GUARDPTR2 enq__RDYp;
+    void (*enqp)(void *p, T v);
+    bool enq__RDY() { return enq__RDYp(p); }
+    void enq(T v) { enqp(p, v); }
+};
+template <class T>
+class POUT {
+public:
+    GUARDPTR deq__RDY;
+    void (Module::*deq)(void);
+    GUARDPTR first__RDY;
+    T (Module::*FIRSTPTR)(void);
+};
+
+//template <class T>
+PIN<int> bozome;
+PIN<int> finbozo = PIN<int>{&bozome, Fifo1<int>::enq__RDY_static, Fifo1<int>::enq_static};
+
 class EchoRequest {
 public:
   METHOD(say, (int v), {return true; }){}

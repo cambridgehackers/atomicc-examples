@@ -56,8 +56,14 @@ public:
   PipeOut<T, Fifo1<T>> out;
 #endif
   METHOD(enq, (T v), BODYGUARD) BODYACTION
+  static bool enq__RDY_static(void *p) { return ((Fifo1<int> *)p)->enq__RDY(); }
+  static void enq_static(void *p, T v) { ((Fifo1<int> *)p)->enq(v); }
   METHOD(deq, (void), BODYGUARD) BODYACTION
+  static bool deq__RDY_static(void *p) { return ((Fifo1<int> *)p)->deq__RDY(); }
+  static void deq_static(void *p) { ((Fifo1<int> *)p)->deq(); }
   GVALUE(first, T, BODYGUARD) BODYVALUE
+  static bool first__RDY_static(void *p) { return ((Fifo1<int> *)p)->first__RDY(); }
+  static T first_static(void *p) { return ((Fifo1<int> *)p)->first(); }
   Fifo1() BODYACTION
   bool notEmpty() const BODYGUARD
   bool notFull() const BODYGUARD
