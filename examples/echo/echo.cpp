@@ -34,7 +34,7 @@ public:
   INDICATION(heard, (int v), { return true; });
 };
 
-#if 1
+#if 0
 typedef bool (*GUARDPTR2)(void *);
 template <class T>
 class PIN {
@@ -56,7 +56,9 @@ public:
 };
 
 typedef bool (Fifo1<int>::*GUARDME)(void);
-//GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY};
+extern "C" void *methodToFunction(GUARDME *v, void *STy);
+GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY,
+(GUARDME)&Fifo1<int>::enq,(GUARDME) &Fifo1<int>::deq,(GUARDME) &Fifo1<int>::first};
 void memdump(unsigned char *p, int len, const char *title);
 #endif
 
@@ -75,6 +77,16 @@ public:
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
+#if 0
+memdump((unsigned char *)bazbozo, sizeof(bazbozo), "BAZ");
+Fifo1<int> *haha;
+static GUARDME zz1 = &Fifo1<int>::enq__RDY; methodToFunction (&zz1, haha);
+static GUARDME zz2 = &Fifo1<int>::deq__RDY; methodToFunction (&zz2, haha);
+static GUARDME zz3 = &Fifo1<int>::first__RDY; methodToFunction (&zz3, haha);
+static GUARDME zz4 = (GUARDME)&Fifo1<int>::enq; methodToFunction (&zz4, haha);
+static GUARDME zz5 = (GUARDME) &Fifo1<int>::deq; methodToFunction (&zz5, haha);
+static GUARDME zz6 = (GUARDME) &Fifo1<int>::first; methodToFunction (&zz6, haha);
+#endif
     EXPORTREQUEST(say);
     RULE(Echo,respond, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);

@@ -41,9 +41,18 @@ template<class T>
 class Fifo : public FIFODEFINE
 {
  public:
-  METHOD(enq, (T v), {return false; }) {}
-  METHOD(deq, (void), {return false; }) {}
-  GVALUE(first, T, {return false; }) { return (T)0; }
+    PipeIn<T> in;
+    PipeOut<T> out;
+    METHOD(enq, (T v), {return false; }) {}
+    METHOD(deq, (void), {return false; }) {}
+    GVALUE(first, T, {return false; }) { return (T)0; }
+    //static METHPTR menqr = METH(&Fifo::enq__RDY), menq = METH(&Fifo::enq),
+       //mdeqr = METH(&Fifo::deq__RDY), mdeq = METH(&Fifo::deq),
+       //mfirstr = METH(&Fifo::first__RDY), mfirst = METH(&Fifo::first);
+    //Fifo(): in(this, METH(menqr), METH(menq)),
+        //out(this, METH(mdeqr), METH(mdeq), METH(mfirstr), METH(mfirst)) {}
+    Fifo(): in(this, METH(&Fifo::enq__RDY), METH(&Fifo::enq)),
+        out(this, METH(&Fifo::deq__RDY), METH(&Fifo::deq), METH(&Fifo::first__RDY), METH(&Fifo::first)) {}
 };
 
 template<class T>
@@ -51,10 +60,6 @@ class Fifo1 : public Fifo<T>
 {
   FIFODATA
 public:
-#if 0
-  PipeIn<T, Fifo1<T>> in;
-  PipeOut<T, Fifo1<T>> out;
-#endif
   METHOD(enq, (T v), BODYGUARD) BODYACTION
   METHOD(deq, (void), BODYGUARD) BODYACTION
   GVALUE(first, T, BODYGUARD) BODYVALUE

@@ -67,19 +67,20 @@ template<class T>
 bool Fifo1<T>::notFull() const {
     return !full;
 };
-template<class T, typename Instance>
-bool PipeIn<T, Instance>::enq__RDY(void) {
-    return p->enq__RDY();
-}
-template<class T, typename Instance>
-void PipeIn<T, Instance>::enq(T v) {
-    p->enq(v);
-}
-template<class T, typename Instance>
-bool PipeOut<T, Instance>::deq__RDY(void) {
-    return p->deq__RDY();
-}
-template<class T, typename Instance>
+#if 0
+//template<class T, typename Instance>
+//bool PipeIn<T, Instance>::enq__RDY(void) {
+    //return p->enq__RDY();
+//}
+//template<class T, typename Instance>
+//void PipeIn<T, Instance>::enq(T v) {
+    //p->enq(v);
+//}
+//template<class T, typename Instance>
+//bool PipeOut<T, Instance>::deq__RDY(void) {
+    //return p->deq__RDY();
+//}
+//template<class T, typename Instance>
 void PipeOut<T, Instance>::deq(void) {
     p->deq();
 }
@@ -91,6 +92,7 @@ template<class T, typename Instance>
 T PipeOut<T, Instance>::first(void) {
     return p->first();
 }
+#endif
 
 template class Fifo1<int>;
 //Fifo1<unsigned char> ff1Char;

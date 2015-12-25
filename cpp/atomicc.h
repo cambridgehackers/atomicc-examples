@@ -23,10 +23,14 @@
 #define _ATOMICC_H_
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <string.h>
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
+class Module;
+typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
+extern "C" void *methodToFunction(METHPTR v, void *STy);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
@@ -70,44 +74,36 @@ class ModuleStub {
     ModuleStub& operator=(const ModuleStub&);
 };
 
-#if 0
-template<class T, class Instance, bool (Instance::*enqMethod__RDY)(void), void (Instance::*enqMethod)(T v)>
+#define METH(A) ((METHPTR)(A))
+//#define MM(A) (((uint64_t *)&(A))[0])
+#define MM(A) (A)
+typedef bool (*GUARDPTR)(void *);
+template<class T>
 class PipeIn {
-  Instance *p;
+    void *p;
  public:
-  METHOD(enq, (T v), {return p->enqMethod__RDY(); }) { p->enqMethod(v); }
-  PipeIn(Instance *parg): p(parg) {}
+    GUARDPTR enq__RDYp;
+    void (*enqp)(void *p, T v);
+    METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
+    PipeIn(): p(NULL){}
+    PipeIn(void *ap, METHPTR aenq__RDYp, METHPTR aenqp):
+         p(ap), enq__RDYp((GUARDPTR)methodToFunction(MM(aenq__RDYp), ap)), enqp((void (*)(void *, T))methodToFunction(MM(aenqp), ap)){}
 };
 
-template<class T, class Instance, bool (Instance::*deqMethod__RDY)(void), void (Instance::*deqMethod)(T v),
-       bool (Instance::*firstMethod__RDY)(void), T (Instance::*firstMethod)(void)>
+template<class T>
 class PipeOut {
-  Instance *p;
+    void *p;
  public:
-  METHOD(deq, (void), {return p->deqMethod__RDY(); }) { p->deqMethod(); }
-  GVALUE(first, T, {return p->firstMethod__RDY(); }) { return p->firstMethod(); }
-  PipeOut(Instance *parg): p(parg) {}
+    GUARDPTR deq__RDYp;
+    void (*deqp)(void *p);
+    GUARDPTR first__RDYp;
+    T (*firstp)(void *p);
+    METHOD(deq, (void), {return deq__RDYp(p); }) { deqp(p); }
+    GVALUE(first, T, {return first__RDYp(p); }) { return firstp(p); }
+    PipeOut(void *ap, METHPTR adeq__RDYp, METHPTR adeqp, METHPTR afirst__RDYp, METHPTR afirstp):
+         p(ap), deq__RDYp((GUARDPTR)methodToFunction(MM(adeq__RDYp), ap)), deqp((void (*)(void *))methodToFunction(MM(adeqp), ap)),
+             first__RDYp((GUARDPTR)methodToFunction(MM(afirst__RDYp), ap)), firstp((T (*)(void *))methodToFunction(MM(afirstp), ap)){}
 };
-#else
-template<class T, class Instance>
-class PipeIn {
-  Instance *p;
- public:
-  METHOD(enq, (T v), ;);
-  void set(Instance *v) { p = v; }
-  PipeIn(): p(NULL){}
-};
-
-template<class T, class Instance>
-class PipeOut {
-  Instance *p;
- public:
-  METHOD(deq, (void), ;);
-  GVALUE(first, T, ;);
-  void set(Instance *v) { p = v; }
-  PipeOut(): p(NULL){}
-};
-#endif
 
 #define RULE(moduletype,name,bodybody) \
   addBaseRule(this, #name "_rule", ^{ (void)this; return true; }, ^ bodybody )
