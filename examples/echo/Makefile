@@ -11,9 +11,13 @@ CPP = $(CLANGBASE)clang++
 LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
 endif
-CPPFLAGS = -g -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
-#CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
+CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
+CPPFLAGS += -g
+#CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -fno-catch-undefined-behavior -O
+#these 2 flags did not force generation of non-virtual method function names into output file
+#CPPFLAGS += -femit-all-decls
+#CPPFLAGS += -fvisibility-inlines-hidden
 LLVMFLAGS = -emit-llvm
 
 all:

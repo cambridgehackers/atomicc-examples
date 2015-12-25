@@ -34,7 +34,7 @@ public:
   INDICATION(heard, (int v), { return true; });
 };
 
-typedef bool (*GUARDPTR)(void);
+#if 1
 typedef bool (*GUARDPTR2)(void *);
 template <class T>
 class PIN {
@@ -55,12 +55,10 @@ public:
     T (*FIRSTPTR)(void *p);
 };
 
-//template <class T>
-Fifo1<int> bozome;
-PIN<int> finbozo = PIN<int>{&bozome, Fifo1<int>::enq__RDY_static, Fifo1<int>::enq_static};
-POUT<int> foutbozo = POUT<int>{&bozome, Fifo1<int>::deq__RDY_static, Fifo1<int>::deq_static, Fifo1<int>::first__RDY_static, Fifo1<int>::first_static};
 typedef bool (Fifo1<int>::*GUARDME)(void);
-GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY};
+//GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY};
+void memdump(unsigned char *p, int len, const char *title);
+#endif
 
 class EchoRequest {
 public:
@@ -113,6 +111,8 @@ EchoTest echoTest;
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+  while (!echoTest.echo->say__RDY())
+      ;
   echoTest.echo->say(22);
   if (argc != 1)
       run_main_program();

@@ -27,6 +27,15 @@
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
+/*
+ * Note: The 'virtual' attribute is needed on guarded interfaces so that
+ * references to them are preserved by clang, even if they are not
+ * referenced in the original C++ code.  During guard hoisting operations,
+ * many new references to '__RDY' methods are created and propigated.
+ *
+ * The 'virtual' attribute forces all the function names to appear in the
+ * vtable, which makes them visible to the atomicc code generation phase.
+ */
 #define METHOD(A,B,C) \
     virtual bool A ## __RDY(void) C \
     virtual void A B
