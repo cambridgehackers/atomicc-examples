@@ -30,7 +30,7 @@ extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^
 extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
-extern "C" void *methodToFunction(METHPTR v, void *STy);
+extern "C" void *methodToFunction(METHPTR v);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
@@ -74,9 +74,7 @@ class ModuleStub {
     ModuleStub& operator=(const ModuleStub&);
 };
 
-#define METH(A) ((METHPTR)(A))
-//#define MM(A) (((uint64_t *)&(A))[0])
-#define MM(A) (A)
+#define METH(A) methodToFunction((METHPTR)(A))
 typedef bool (*GUARDPTR)(void *);
 template<class T>
 class PipeIn {
@@ -86,8 +84,8 @@ class PipeIn {
     void (*enqp)(void *p, T v);
     METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
     PipeIn(): p(NULL){}
-    PipeIn(void *ap, METHPTR aenq__RDYp, METHPTR aenqp):
-         p(ap), enq__RDYp((GUARDPTR)methodToFunction(MM(aenq__RDYp), ap)), enqp((void (*)(void *, T))methodToFunction(MM(aenqp), ap)){}
+    PipeIn(void *ap, void *aenq__RDYp, void *aenqp):
+         p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) {}
 };
 
 template<class T>
@@ -100,9 +98,9 @@ class PipeOut {
     T (*firstp)(void *p);
     METHOD(deq, (void), {return deq__RDYp(p); }) { deqp(p); }
     GVALUE(first, T, {return first__RDYp(p); }) { return firstp(p); }
-    PipeOut(void *ap, METHPTR adeq__RDYp, METHPTR adeqp, METHPTR afirst__RDYp, METHPTR afirstp):
-         p(ap), deq__RDYp((GUARDPTR)methodToFunction(MM(adeq__RDYp), ap)), deqp((void (*)(void *))methodToFunction(MM(adeqp), ap)),
-             first__RDYp((GUARDPTR)methodToFunction(MM(afirst__RDYp), ap)), firstp((T (*)(void *))methodToFunction(MM(afirstp), ap)){}
+    PipeOut(void *ap, void *adeq__RDYp, void *adeqp, void *afirst__RDYp, void *afirstp):
+         p(ap), deq__RDYp((GUARDPTR)adeq__RDYp), deqp((void (*)(void *))adeqp),
+             first__RDYp((GUARDPTR)afirst__RDYp), firstp((T (*)(void *))afirstp) {}
 };
 
 #define RULE(moduletype,name,bodybody) \
