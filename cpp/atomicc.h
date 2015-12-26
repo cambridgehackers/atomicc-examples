@@ -79,11 +79,10 @@ typedef bool (*GUARDPTR)(void *);
 template<class T>
 class PipeIn {
     void *p;
- public:
     GUARDPTR enq__RDYp;
     void (*enqp)(void *p, T v);
+ public:
     METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
-    PipeIn(): p(NULL){}
     PipeIn(void *ap, void *aenq__RDYp, void *aenqp):
          p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) {}
 };
@@ -91,11 +90,11 @@ class PipeIn {
 template<class T>
 class PipeOut {
     void *p;
- public:
     GUARDPTR deq__RDYp;
     void (*deqp)(void *p);
     GUARDPTR first__RDYp;
     T (*firstp)(void *p);
+ public:
     METHOD(deq, (void), {return deq__RDYp(p); }) { deqp(p); }
     GVALUE(first, T, {return first__RDYp(p); }) { return firstp(p); }
     PipeOut(void *ap, void *adeq__RDYp, void *adeqp, void *afirst__RDYp, void *afirstp):
