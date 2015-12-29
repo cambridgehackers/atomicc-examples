@@ -27,7 +27,6 @@
 #include <string.h>
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
-extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 extern "C" void *methodToFunction(METHPTR v);
@@ -50,8 +49,7 @@ extern "C" void registerInstance(void *v, unsigned long STy, const char *name);
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
     virtual bool NAME ## __RDY(void) RDYEXPRESSION \
     virtual void NAME TYPE
-#define EXPORTREQUEST(NAME) \
-    {} //exportSymbol(this, #NAME, 0)
+#define EXPORTREQUEST(NAME) {}
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
