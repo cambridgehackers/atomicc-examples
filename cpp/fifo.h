@@ -26,15 +26,20 @@
 #include <atomicc.h>
 #include <typeinfo>
 
+#define FIFOBASECONSTRUCTOR(A) : in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
+        out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first)) {}
+
 #ifndef FIFODEFINE
 #define FIFODEFINE ModuleStub
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
+#define FIFOCONSTRUCTOR(A) FIFOBASECONSTRUCTOR(A)
 #define FIFODATA
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
+#define FIFOCONSTRUCTOR(A) ;
 #define BODYVALUE ;
 #endif
 template<class T>
@@ -46,8 +51,7 @@ class Fifo : public FIFODEFINE
     METHOD(enq, (T v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
     GVALUE(first, T, {return false; }) { return (T)0; }
-    Fifo(): in(this, METH(&Fifo::enq__RDY), METH(&Fifo::enq)),
-        out(this, METH(&Fifo::deq__RDY), METH(&Fifo::deq), METH(&Fifo::first__RDY), METH(&Fifo::first)) {}
+    Fifo() FIFOBASECONSTRUCTOR(Fifo)
 };
 
 template<class T>
@@ -60,9 +64,10 @@ public:
     METHOD(enq, (T v), BODYGUARD) BODYACTION
     METHOD(deq, (void), BODYGUARD) BODYACTION
     GVALUE(first, T, BODYGUARD) BODYVALUE
-    Fifo1() BODYACTION
+    Fifo1() FIFOCONSTRUCTOR(Fifo1)
     bool notEmpty() const BODYGUARD
     bool notFull() const BODYGUARD
 };
 
+static Fifo1<int> bozouseless;
 #endif

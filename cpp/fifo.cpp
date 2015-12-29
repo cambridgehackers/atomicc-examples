@@ -54,8 +54,8 @@ T Fifo1<T>::first(void) {
 };
 template<class T>
 Fifo1<T>::Fifo1(): Fifo<T>(), full(false),
-    in(this, METH(&Fifo1<T>::enq__RDY), METH(&Fifo1<T>::enq)),
-        out(this, METH(&Fifo1<T>::deq__RDY), METH(&Fifo1<T>::deq), METH(&Fifo1<T>::first__RDY), METH(&Fifo1<T>::first))
+    in("in", this, METH(&Fifo1<T>::enq__RDY), METH(&Fifo1<T>::enq)),
+        out("out", this, METH(&Fifo1<T>::deq__RDY), METH(&Fifo1<T>::deq), METH(&Fifo1<T>::first__RDY), METH(&Fifo1<T>::first))
  {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
     //in.set(this);
