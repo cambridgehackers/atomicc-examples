@@ -53,13 +53,9 @@ T Fifo1<T>::first(void) {
     return element;
 };
 template<class T>
-Fifo1<T>::Fifo1(): Fifo<T>(), full(false),
-    in("in", this, METH(&Fifo1<T>::enq__RDY), METH(&Fifo1<T>::enq)),
-        out("out", this, METH(&Fifo1<T>::deq__RDY), METH(&Fifo1<T>::deq), METH(&Fifo1<T>::first__RDY), METH(&Fifo1<T>::first))
- {
+Fifo1<T>::Fifo1(): Fifo<T>(), full(false), FIFOBASECONSTRUCTOR(Fifo1<T>)
+{
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
-    //in.set(this);
-    //out.set(this);
 };
 template<class T>
 bool Fifo1<T>::notEmpty() const {

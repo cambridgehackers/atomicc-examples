@@ -64,6 +64,7 @@ class Module {
     Module(const Module&); // no implementation
     Module& operator=(const Module&);
 };
+// This is a marker for classes that should not be generated (they are separately compiled)
 class ModuleStub {
  public:
     ModuleStub() {}
@@ -74,6 +75,7 @@ class ModuleStub {
     ModuleStub(const ModuleStub&); // no implementation
     ModuleStub& operator=(const ModuleStub&);
 };
+// This is a marker for classes that are exported interfaces from a containing class
 class InterfaceClass {
  public:
     InterfaceClass() {}

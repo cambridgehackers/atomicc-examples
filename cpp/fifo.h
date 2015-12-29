@@ -26,15 +26,15 @@
 #include <atomicc.h>
 #include <typeinfo>
 
-#define FIFOBASECONSTRUCTOR(A) : in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
-        out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first)) {}
+#define FIFOBASECONSTRUCTOR(A) in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
+        out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
 
 #ifndef FIFODEFINE
 #define FIFODEFINE ModuleStub
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-#define FIFOCONSTRUCTOR(A) FIFOBASECONSTRUCTOR(A)
+#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) {}
 #define FIFODATA
 #else
 #define BODYGUARD ;
@@ -51,7 +51,7 @@ class Fifo : public FIFODEFINE
     METHOD(enq, (T v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
     GVALUE(first, T, {return false; }) { return (T)0; }
-    Fifo() FIFOBASECONSTRUCTOR(Fifo)
+    Fifo() : FIFOBASECONSTRUCTOR(Fifo) {}
 };
 
 template<class T>
