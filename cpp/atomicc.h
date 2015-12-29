@@ -31,6 +31,7 @@ extern "C" void exportSymbol(void *thisp, const char *name, unsigned long STy);
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 extern "C" void *methodToFunction(METHPTR v);
+extern "C" void registerInstance(void *v, unsigned long STy);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
@@ -83,8 +84,9 @@ class PipeIn {
     void (*enqp)(void *p, T v);
  public:
     METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
+    PipeIn(): p(NULL), enq__RDYp(NULL), enqp(NULL) { }
     PipeIn(void *ap, void *aenq__RDYp, void *aenqp):
-         p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) {}
+         p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) { registerInstance(this, 0L); }
 };
 
 template<class T>
@@ -97,9 +99,10 @@ class PipeOut {
  public:
     METHOD(deq, (void), {return deq__RDYp(p); }) { deqp(p); }
     GVALUE(first, T, {return first__RDYp(p); }) { return firstp(p); }
+    PipeOut(): p(NULL), deq__RDYp(NULL), deqp(NULL), first__RDYp(NULL), firstp(NULL) { }
     PipeOut(void *ap, void *adeq__RDYp, void *adeqp, void *afirst__RDYp, void *afirstp):
          p(ap), deq__RDYp((GUARDPTR)adeq__RDYp), deqp((void (*)(void *))adeqp),
-             first__RDYp((GUARDPTR)afirst__RDYp), firstp((T (*)(void *))afirstp) {}
+             first__RDYp((GUARDPTR)afirst__RDYp), firstp((T (*)(void *))afirstp) { registerInstance(this, 0L); }
 };
 
 #define RULE(moduletype,name,bodybody) \

@@ -34,34 +34,6 @@ public:
   INDICATION(heard, (int v), { return true; });
 };
 
-#if 0
-typedef bool (*GUARDPTR2)(void *);
-template <class T>
-class PIN {
-public:
-    void *p;
-    GUARDPTR2 enq__RDYp;
-    void (*enqp)(void *p, T v);
-    bool enq__RDY() { return enq__RDYp(p); }
-    void enq(T v) { enqp(p, v); }
-};
-template <class T>
-class POUT {
-public:
-    void *p;
-    GUARDPTR2 deq__RDYp;
-    void (*deqp)(void *p);
-    GUARDPTR2 first__RDYp;
-    T (*FIRSTPTR)(void *p);
-};
-
-typedef bool (Fifo1<int>::*GUARDME)(void);
-extern "C" void *methodToFunction(GUARDME *v, void *STy);
-GUARDME bazbozo[] = {&Fifo1<int>::enq__RDY, &Fifo1<int>::deq__RDY, &Fifo1<int>::first__RDY,
-(GUARDME)&Fifo1<int>::enq,(GUARDME) &Fifo1<int>::deq,(GUARDME) &Fifo1<int>::first};
-void memdump(unsigned char *p, int len, const char *title);
-#endif
-
 class EchoRequest {
 public:
   METHOD(say, (int v), {return true; }){}
@@ -73,25 +45,15 @@ class Echo : public Module, EchoRequest {
   int pipetemp;
 public:
   METHOD(say, (int v), {return true; }) {
-      fifo->enq(v);
+      fifo->in.enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-#if 0
-memdump((unsigned char *)bazbozo, sizeof(bazbozo), "BAZ");
-Fifo1<int> *haha;
-static GUARDME zz1 = &Fifo1<int>::enq__RDY; methodToFunction (&zz1, haha);
-static GUARDME zz2 = &Fifo1<int>::deq__RDY; methodToFunction (&zz2, haha);
-static GUARDME zz3 = &Fifo1<int>::first__RDY; methodToFunction (&zz3, haha);
-static GUARDME zz4 = (GUARDME)&Fifo1<int>::enq; methodToFunction (&zz4, haha);
-static GUARDME zz5 = (GUARDME) &Fifo1<int>::deq; methodToFunction (&zz5, haha);
-static GUARDME zz6 = (GUARDME) &Fifo1<int>::first; methodToFunction (&zz6, haha);
-#endif
     EXPORTREQUEST(say);
     RULE(Echo,respond, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
-	 this->fifo->deq();
-	 this->ind->heard(this->fifo->first());
+	 this->fifo->out.deq();
+	 this->ind->heard(this->fifo->out.first());
        });
   };
   ~Echo() {}

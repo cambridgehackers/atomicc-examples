@@ -53,14 +53,16 @@ class Fifo : public FIFODEFINE
 template<class T>
 class Fifo1 : public Fifo<T> 
 {
-  FIFODATA
+    FIFODATA
 public:
-  METHOD(enq, (T v), BODYGUARD) BODYACTION
-  METHOD(deq, (void), BODYGUARD) BODYACTION
-  GVALUE(first, T, BODYGUARD) BODYVALUE
-  Fifo1() BODYACTION
-  bool notEmpty() const BODYGUARD
-  bool notFull() const BODYGUARD
+    PipeIn<T> in;
+    PipeOut<T> out;
+    METHOD(enq, (T v), BODYGUARD) BODYACTION
+    METHOD(deq, (void), BODYGUARD) BODYACTION
+    GVALUE(first, T, BODYGUARD) BODYVALUE
+    Fifo1() BODYACTION
+    bool notEmpty() const BODYGUARD
+    bool notFull() const BODYGUARD
 };
 
 #endif
