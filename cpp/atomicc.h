@@ -74,11 +74,21 @@ class ModuleStub {
     ModuleStub(const ModuleStub&); // no implementation
     ModuleStub& operator=(const ModuleStub&);
 };
+class InterfaceClass {
+ public:
+    InterfaceClass() {}
+    ~InterfaceClass() {}
+    long unused_data_to_force_inheritance;
+ private:
+    // copy ops are private to prevent copying
+    InterfaceClass(const InterfaceClass&); // no implementation
+    InterfaceClass& operator=(const InterfaceClass&);
+};
 
 #define METH(A) methodToFunction((METHPTR)(A))
 typedef bool (*GUARDPTR)(void *);
 template<class T>
-class PipeIn {
+class PipeIn: InterfaceClass {
     void *p;
     GUARDPTR enq__RDYp;
     void (*enqp)(void *p, T v);
@@ -90,7 +100,7 @@ class PipeIn {
 };
 
 template<class T>
-class PipeOut {
+class PipeOut: InterfaceClass {
     void *p;
     GUARDPTR deq__RDYp;
     void (*deqp)(void *p);
