@@ -70,7 +70,3 @@ bool Fifo1<T>::notFull() const {
 //template class 
 Fifo1<int> unused;
 //Fifo1<unsigned char> ff1Char;
-int main()
-{
-    return 0;
-}
