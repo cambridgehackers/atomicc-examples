@@ -29,8 +29,10 @@
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
+#define METH(A) methodToFunction((METHPTR)(A))
 extern "C" unsigned long methodToFunction(METHPTR v);
 extern "C" void registerInstance(void *v, unsigned long STy, const char *name);
+extern "C" void exportRequest(unsigned long v);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
@@ -49,7 +51,7 @@ extern "C" void registerInstance(void *v, unsigned long STy, const char *name);
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
     virtual bool NAME ## __RDY(void) RDYEXPRESSION \
     virtual void NAME TYPE
-#define EXPORTREQUEST(NAME) {}
+#define EXPORTREQUEST(NAME) exportRequest(METH(&NAME));
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
@@ -85,7 +87,6 @@ class InterfaceClass {
     InterfaceClass& operator=(const InterfaceClass&);
 };
 
-#define METH(A) methodToFunction((METHPTR)(A))
 typedef bool (*GUARDPTR)(void *);
 template<class T>
 class PipeIn: InterfaceClass {
