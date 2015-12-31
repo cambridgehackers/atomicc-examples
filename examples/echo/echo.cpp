@@ -32,11 +32,17 @@
 class EchoIndication {
 public:
   INDICATION(heard, (int v), { return true; });
+  EchoIndication() {
+    EXPORTREQUEST(EchoIndication::heard);
+  }
 };
 
 class EchoRequest {
 public:
   METHOD(say, (int v), {return true; }){}
+  EchoRequest() {
+    EXPORTREQUEST(EchoRequest::say);
+  }
 };
 
 class Echo : public Module, EchoRequest {
