@@ -28,6 +28,10 @@
 #include <fifo.h>
 
 template<class T>
+Fifo<T>::Fifo(): FIFOBASECONSTRUCTOR(Fifo1<T>) {
+};
+
+template<class T>
 bool Fifo1<T>::enq__RDY(void) {
     return notFull();
 };

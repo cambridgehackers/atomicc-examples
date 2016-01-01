@@ -35,13 +35,11 @@
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
 #define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) {}
-#define FIFOBCONSTRUCTOR(A)
 #define FIFODATA
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
 #define FIFOCONSTRUCTOR(A) ;
-#define FIFOBCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A)
 #define BODYVALUE ;
 #endif
 template<class T>
@@ -53,7 +51,7 @@ class Fifo : public FIFODEFINE
     METHOD(enq, (T v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
     GVALUE(first, T, {return false; }) { return (T)0; }
-    Fifo() FIFOBCONSTRUCTOR(Fifo) {}
+    Fifo() FIFOCONSTRUCTOR(Fifo)
 };
 
 template<class T>
