@@ -31,7 +31,6 @@ class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 #define METH(A) methodToFunction((METHPTR)(A))
 extern "C" unsigned long methodToFunction(METHPTR v);
-extern "C" void registerInstance(void *v, unsigned long STy, const char *name);
 extern "C" void exportRequest(unsigned long v);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
@@ -97,7 +96,7 @@ class PipeIn: InterfaceClass {
     METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
     PipeIn(): p(NULL), enq__RDYp(NULL), enqp(NULL) { }
     PipeIn(const char *name, void *ap, unsigned long aenq__RDYp, unsigned long aenqp):
-         p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) { registerInstance(this, 0L, name); }
+         p(ap), enq__RDYp((GUARDPTR)aenq__RDYp), enqp((void (*)(void *, T))aenqp) { }
 };
 
 template<class T>
@@ -113,7 +112,7 @@ class PipeOut: InterfaceClass {
     PipeOut(): p(NULL), deq__RDYp(NULL), deqp(NULL), first__RDYp(NULL), firstp(NULL) { }
     PipeOut(const char *name, void *ap, unsigned long adeq__RDYp, unsigned long adeqp, unsigned long afirst__RDYp, unsigned long afirstp):
          p(ap), deq__RDYp((GUARDPTR)adeq__RDYp), deqp((void (*)(void *))adeqp),
-             first__RDYp((GUARDPTR)afirst__RDYp), firstp((T (*)(void *))afirstp) { registerInstance(this, 0L, name); }
+             first__RDYp((GUARDPTR)afirst__RDYp), firstp((T (*)(void *))afirstp) { }
 };
 
 #define RULE(moduletype,name,bodybody) \
