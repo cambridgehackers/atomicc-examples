@@ -45,12 +45,15 @@ public:
     PipeIn<T> in;
     PipeOut<T> out;
     METHOD(enq, (T v), { return notFull(); }) {
-        element1 = v;
+        if (pong)
+            element2 = v;
+        else
+            element1 = v;
         full = true;
     }
-    METHOD(deq, (void), { return notEmpty(); }) { full = false; }
-    GVALUE(first, T, { return notEmpty(); }) { return element1; }
-    FifoPong(): Fifo<T>(), full(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+    METHOD(deq, (void), { return notEmpty(); }) { full = false; pong = !pong; }
+    GVALUE(first, T, { return notEmpty(); }) { return pong ? element2 : element1; }
+    FifoPong(): Fifo<T>(), full(false), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
     bool notEmpty() const { return full; }
