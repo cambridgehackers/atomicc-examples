@@ -28,7 +28,7 @@
 #include <fifo.h>
 
 template<class T>
-Fifo<T>::Fifo(): FIFOBASECONSTRUCTOR(Fifo1<T>) {
+Fifo<T>::Fifo(): FIFOBASECONSTRUCTOR(Fifo<T>) {
 };
 
 template<class T>

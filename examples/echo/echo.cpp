@@ -18,17 +18,47 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
 #include <atomicc.h>
-#include <fifo.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <vector>
 
 ////////////////////////////////////////////////////////////
 // Echo
 ////////////////////////////////////////////////////////////
 
+#if 1
+#define ECHO_FIFO Fifo1
+#include <fifo.h>
+#else
+#define FIFODEFINE Module
+#include <fifo.h>
+#define ECHO_FIFO FifoPong
+template<class T>
+Fifo<T>::Fifo(): FIFOBASECONSTRUCTOR(Fifo<T>) {
+};
+template<class T>
+class FifoPong : public Fifo<T> 
+{
+    T element1;
+    T element2;
+    bool pong;
+    bool full;
+public:
+    PipeIn<T> in;
+    PipeOut<T> out;
+    METHOD(enq, (T v), { return notFull(); }) {
+        element1 = v;
+        full = true;
+    }
+    METHOD(deq, (void), { return notEmpty(); }) { full = false; }
+    GVALUE(first, T, { return notEmpty(); }) { return element1; }
+    FifoPong(): Fifo<T>(), full(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+        printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
+    };
+    bool notEmpty() const { return full; }
+    bool notFull() const { return !full; }
+};
+#endif
+
+static ECHO_FIFO<int> bozouseless;
 class EchoIndication {
 public:
   INDICATION(heard, (int v), { return true; });
@@ -53,7 +83,7 @@ public:
   METHOD(say, (int v), {return true; }) {
       fifo->in.enq(v);
   }
-  Echo(EchoIndication *ind) : fifo(new Fifo1<int>()), ind(ind) {
+  Echo(EchoIndication *ind) : fifo(new ECHO_FIFO<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     EXPORTREQUEST(Echo::say);
     RULE(Echo,respond, { 

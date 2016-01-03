@@ -35,12 +35,15 @@
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
 #define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) {}
-#define FIFODATA
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
 #define FIFOCONSTRUCTOR(A) ;
 #define BODYVALUE ;
+#endif
+
+#ifndef FIFODATA
+#define FIFODATA
 #endif
 template<class T>
 class Fifo : public FIFODEFINE
@@ -68,6 +71,4 @@ public:
     bool notEmpty() const BODYGUARD
     bool notFull() const BODYGUARD
 };
-
-static Fifo1<int> bozouseless;
 #endif
