@@ -21,10 +21,7 @@
 // SOFTWARE.
 #ifndef _FIFO_H_
 #define _FIFO_H_
-
-#include <assert.h>
 #include <atomicc.h>
-#include <typeinfo>
 
 #define FIFOBASECONSTRUCTOR(A) in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
         out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
@@ -46,7 +43,7 @@
 #define FIFODATA
 #endif
 template<class T>
-class Fifo : public FIFODEFINE
+class Fifo : public ModuleStub
 {
  public:
     PipeIn<T> in;
@@ -54,7 +51,7 @@ class Fifo : public FIFODEFINE
     METHOD(enq, (T v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
     GVALUE(first, T, {return false; }) { return (T)0; }
-    Fifo() FIFOCONSTRUCTOR(Fifo)
+    Fifo(): FIFOBASECONSTRUCTOR(Fifo) {}
 };
 
 template<class T>
