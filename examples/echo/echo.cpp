@@ -28,6 +28,7 @@
 #define ECHO_FIFO Fifo1
 #include <fifo.h>
 #else
+#if 1
 #define FIFODEFINE Module
 #include <fifo.h>
 #define ECHO_FIFO FifoPong
@@ -59,6 +60,32 @@ public:
     bool notEmpty() const { return full; }
     bool notFull() const { return !full; }
 };
+#else
+//#define FIFODEFINE Module
+#include <fifo.h>
+#define ECHO_FIFO FifoPong
+template<class T>
+class FifoPong : public Fifo<T> 
+{
+    Fifo1<T> element1;
+    Fifo1<T> element2;
+    bool pong;
+public:
+    PipeIn<T> in;
+    PipeOut<T> out;
+    METHOD(enq, (T v), { return true; }) {
+        if (pong)
+            element2.enq(v);
+        else
+            element1.enq(v);
+    }
+    METHOD(deq, (void), { return true; }) { pong = !pong; }
+    GVALUE(first, T, { return true; }) { return pong ? element2.first() : element1.first(); }
+    FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+        printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
+    };
+};
+#endif
 #endif
 
 static ECHO_FIFO<int> bozouseless;
