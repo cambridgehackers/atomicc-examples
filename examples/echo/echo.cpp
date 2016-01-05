@@ -57,7 +57,7 @@ public:
 };
 #else
 template<class T>
-class FifoPong : public Fifo<T> 
+class FifoPong : public Fifo<T>, public Module
 {
     Fifo1<T> element1;
     Fifo1<T> element2;
@@ -67,12 +67,18 @@ public:
     PipeOut<T> out;
     METHOD(enq, (T v), { return true; }) {
         if (pong)
-            element2.enq(v);
+            element2.in.enq(v);
         else
-            element1.enq(v);
+            element1.in.enq(v);
     }
-    METHOD(deq, (void), { return true; }) { pong = !pong; }
-    GVALUE(first, T, { return true; }) { return pong ? element2.first() : element1.first(); }
+    METHOD(deq, (void), { return true; }) {
+        if (pong)
+            element2.out.deq();
+        else
+            element1.out.deq();
+        pong = !pong;
+    }
+    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
