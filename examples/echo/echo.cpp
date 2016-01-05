@@ -19,6 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <atomicc.h>
+#include <fifo.h>
 
 ////////////////////////////////////////////////////////////
 // Echo
@@ -26,17 +27,11 @@
 
 #if 1
 #define ECHO_FIFO Fifo1
-#include <fifo.h>
 #else
-#if 1
-#define FIFODEFINE Module
-#include <fifo.h>
 #define ECHO_FIFO FifoPong
+#if 1
 template<class T>
-Fifo<T>::Fifo(): FIFOBASECONSTRUCTOR(Fifo<T>) {
-};
-template<class T>
-class FifoPong : public Fifo<T> 
+class FifoPong : public Fifo<T>, public Module
 {
     T element1;
     T element2;
@@ -61,9 +56,6 @@ public:
     bool notFull() const { return !full; }
 };
 #else
-//#define FIFODEFINE Module
-#include <fifo.h>
-#define ECHO_FIFO FifoPong
 template<class T>
 class FifoPong : public Fifo<T> 
 {

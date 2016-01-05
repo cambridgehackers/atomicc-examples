@@ -43,7 +43,7 @@
 #define FIFODATA
 #endif
 template<class T>
-class Fifo : public ModuleStub
+class Fifo
 {
  public:
     PipeIn<T> in;
@@ -55,7 +55,7 @@ class Fifo : public ModuleStub
 };
 
 template<class T>
-class Fifo1 : public Fifo<T> 
+class Fifo1 : public Fifo<T> , public FIFODEFINE
 {
     FIFODATA
 public:
