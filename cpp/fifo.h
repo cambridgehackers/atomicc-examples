@@ -26,8 +26,20 @@
 #define FIFOBASECONSTRUCTOR(A) in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
         out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
 
+template<class T>
+class Fifo
+{
+    METHOD(enq, (T v), {return false; }) {}
+    METHOD(deq, (void), {return false; }) {}
+    GVALUE(first, T, {return false; }) { return (T)0; }
+ public:
+    PipeIn<T> in;
+    PipeOut<T> out;
+    Fifo(): FIFOBASECONSTRUCTOR(Fifo) {}
+};
+
 #ifndef FIFODEFINE
-#define FIFODEFINE ModuleStub
+#define FIFODEFINE ModuleExternal
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
@@ -35,37 +47,26 @@
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
-#define FIFOCONSTRUCTOR(A) ;
 #define BODYVALUE ;
+#define FIFOCONSTRUCTOR(A) ;
 #endif
 
 #ifndef FIFODATA
 #define FIFODATA
 #endif
-template<class T>
-class Fifo
-{
- public:
-    PipeIn<T> in;
-    PipeOut<T> out;
-    METHOD(enq, (T v), {return false; }) {}
-    METHOD(deq, (void), {return false; }) {}
-    GVALUE(first, T, {return false; }) { return (T)0; }
-    Fifo(): FIFOBASECONSTRUCTOR(Fifo) {}
-};
 
 template<class T>
 class Fifo1 : public Fifo<T> , public FIFODEFINE
 {
     FIFODATA
-public:
-    PipeIn<T> in;
-    PipeOut<T> out;
     METHOD(enq, (T v), BODYGUARD) BODYACTION
     METHOD(deq, (void), BODYGUARD) BODYACTION
     GVALUE(first, T, BODYGUARD) BODYVALUE
-    Fifo1() FIFOCONSTRUCTOR(Fifo1)
     bool notEmpty() const BODYGUARD
     bool notFull() const BODYGUARD
+public:
+    PipeIn<T> in;
+    PipeOut<T> out;
+    Fifo1() FIFOCONSTRUCTOR(Fifo1)
 };
 #endif

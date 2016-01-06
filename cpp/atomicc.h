@@ -64,15 +64,15 @@ class Module {
     Module& operator=(const Module&);
 };
 // This is a marker for classes that should not be generated (they are separately compiled)
-class ModuleStub {
+class ModuleExternal {
  public:
-    ModuleStub() {}
-    ~ModuleStub() {}
+    ModuleExternal() {}
+    ~ModuleExternal() {}
     long unused_data_to_force_inheritance;
  private:
     // copy ops are private to prevent copying
-    ModuleStub(const ModuleStub&); // no implementation
-    ModuleStub& operator=(const ModuleStub&);
+    ModuleExternal(const ModuleExternal&); // no implementation
+    ModuleExternal& operator=(const ModuleExternal&);
 };
 // This is a marker for classes that are exported interfaces from a containing class
 class InterfaceClass {
