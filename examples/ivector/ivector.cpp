@@ -18,8 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <atomicc.h>
-#include <fifo.h>
+#include <fifo.cpp>
 
 template<class T>
 class FifoPong : public Fifo<T>, public Module
