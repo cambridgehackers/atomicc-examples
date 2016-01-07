@@ -20,6 +20,15 @@
  */
 #include <fifo.cpp>
 
+typedef struct {
+    int a;
+    int b;
+    int c[20];
+} ValuePair;
+
+#define UTYPE ValuePair
+//#define UTYPE int
+
 template<class T>
 class FifoPong : public Fifo<T>, public Module
 {
@@ -48,10 +57,10 @@ public:
     };
 };
 
-static FifoPong<int> bozouseless;
+static FifoPong<UTYPE> bozouseless;
 class IVectorIndication {
 public:
-    INDICATION(heard, (int v), { return true; });
+    INDICATION(heard, (UTYPE v), { return true; });
     IVectorIndication() {
         EXPORTREQUEST(IVectorIndication::heard);
     }
@@ -59,21 +68,20 @@ public:
 
 class IVectorRequest {
 public:
-    METHOD(say, (int v), {return true; }){}
+    METHOD(say, (UTYPE v), {return true; }){}
     IVectorRequest() {
         EXPORTREQUEST(IVectorRequest::say);
     }
 };
 
 class IVector : public Module, IVectorRequest {
-    Fifo<int> *fifo;
+    Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
-    int pipetemp;
 public:
-    METHOD(say, (int v), {return true; }) {
+    METHOD(say, (UTYPE v), {return true; }) {
         fifo->in.enq(v);
     }
-    IVector(IVectorIndication *ind) : fifo(new FifoPong<int>()), ind(ind) {
+    IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
         EXPORTREQUEST(IVector::say);
         RULE(IVector,respond, { 
@@ -89,18 +97,17 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorIndication::heard(int v)
+void IVectorIndication::heard(UTYPE v)
 {
-    printf("Heard an ivector: %d\n", v);
+    printf("Heard an ivector: %d %d\n", v.a, v.b);
     stop_main_program = 1;
 }
 
 class IVectorTest {
 public:
     IVector *ivector;
-    int x;
 public:
-    IVectorTest(): ivector(new IVector(new IVectorIndication())), x(7) {
+    IVectorTest(): ivector(new IVector(new IVectorIndication())) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }
     ~IVectorTest() {}
@@ -113,7 +120,7 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     while (!ivectorTest.ivector->say__RDY())
         ;
-    ivectorTest.ivector->say(22);
+    ivectorTest.ivector->say(UTYPE{22, 44});
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
