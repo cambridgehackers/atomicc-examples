@@ -99,7 +99,13 @@ public:
 
 void IVectorIndication::heard(UTYPE v)
 {
-    printf("Heard an ivector: %d %d\n", v.a, v.b);
+    printf("Heard an ivector: %d %d\n", v
+#if 0
+, 0
+#else
+.a, v.b
+#endif
+);
     stop_main_program = 1;
 }
 
@@ -120,7 +126,11 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     while (!ivectorTest.ivector->say__RDY())
         ;
-    ivectorTest.ivector->say(UTYPE{22, 44});
+    ivectorTest.ivector->say(UTYPE{22
+#if 1
+, 44
+#endif
+});
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
