@@ -60,7 +60,7 @@ public:
 static FifoPong<UTYPE> bozouseless;
 class IVectorIndication {
 public:
-    INDICATION(heard, (UTYPE v), { return true; });
+    INDICATION(heard, (int meth, int v), { return true; });
     IVectorIndication() {
         EXPORTREQUEST(IVectorIndication::heard);
     }
@@ -68,7 +68,7 @@ public:
 
 class IVectorRequest {
 public:
-    METHOD(say, (UTYPE v), {return true; }){}
+    METHOD(say, (int meth, int v), {return true; }){}
     IVectorRequest() {
         EXPORTREQUEST(IVectorRequest::say);
     }
@@ -78,16 +78,19 @@ class IVector : public Module, IVectorRequest {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
 public:
-    METHOD(say, (UTYPE v), {return true; }) {
-        fifo->in.enq(v);
+    METHOD(say, (int meth, int v), {return true; }) {
+        UTYPE temp;
+        temp.a = meth;
+        temp.b = v;
+        fifo->in.enq(temp);
     }
     IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
         EXPORTREQUEST(IVector::say);
         RULE(IVector,respond, { 
-	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
+            UTYPE temp = this->fifo->out.first();
 	    this->fifo->out.deq();
-	    this->ind->heard(this->fifo->out.first());
+	    this->ind->heard(temp.a, temp.b);
             });
     };
     ~IVector() {}
@@ -97,15 +100,9 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorIndication::heard(UTYPE v)
+void IVectorIndication::heard(int meth, int v)
 {
-    printf("Heard an ivector: %d %d\n", v
-#if 0
-, 0
-#else
-.a, v.b
-#endif
-);
+    printf("Heard an ivector: %d %d\n", meth, v);
     stop_main_program = 1;
 }
 
@@ -126,11 +123,7 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     while (!ivectorTest.ivector->say__RDY())
         ;
-    ivectorTest.ivector->say(UTYPE{22
-#if 1
-, 44
-#endif
-});
+    ivectorTest.ivector->say(22, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
