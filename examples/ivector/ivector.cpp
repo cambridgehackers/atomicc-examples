@@ -77,21 +77,27 @@ public:
 class IVector : public Module, IVectorRequest {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
+    int vsize;
 public:
     METHOD(say, (int meth, int v), {return true; }) {
         UTYPE temp;
         temp.a = meth;
         temp.b = v;
-        fifo->in.enq(temp);
+        fifo[1].in.enq(temp);
     }
-    IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
-        printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
+    IVector(IVectorIndication *ind, int size) : ind(ind), vsize(size) {
+        //for (int i = 0; i < vsize; i++)
+            //fifo[i] = new FifoPong<UTYPE>();
+        fifo = new FifoPong<UTYPE>[vsize];
+        printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
         EXPORTREQUEST(IVector::say);
-        RULE(IVector,respond, { 
-            UTYPE temp = this->fifo->out.first();
-	    this->fifo->out.deq();
-	    this->ind->heard(temp.a, temp.b);
-            });
+        for (int i = 0; i < vsize; i++) {
+            RULE(IVector,respond, {
+                UTYPE temp = this->fifo[i].out.first();
+	        this->fifo[i].out.deq();
+	        this->ind->heard(temp.a, temp.b);
+                });
+        }
     };
     ~IVector() {}
 };
@@ -110,7 +116,7 @@ class IVectorTest {
 public:
     IVector *ivector;
 public:
-    IVectorTest(): ivector(new IVector(new IVectorIndication())) {
+    IVectorTest(): ivector(new IVector(new IVectorIndication(), 10)) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }
     ~IVectorTest() {}
@@ -123,7 +129,7 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     while (!ivectorTest.ivector->say__RDY())
         ;
-    ivectorTest.ivector->say(22, 44);
+    ivectorTest.ivector->say(2, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
