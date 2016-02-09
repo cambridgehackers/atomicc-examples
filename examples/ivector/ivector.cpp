@@ -91,8 +91,8 @@ public:
         fifo = new FifoPong<UTYPE>[vsize];
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
         EXPORTREQUEST(IVector::say);
-        for (int i = 0; i < vsize; i++) {
-            RULE(IVector,respond, {
+        for (int i = vsize -1; i >= 0; i--) {
+            RULE(IVector,("respond" + utostr(i)).c_str(), {
                 UTYPE temp = this->fifo[i].out.first();
 	        this->fifo[i].out.deq();
 	        this->ind->heard(temp.a, temp.b);

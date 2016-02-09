@@ -25,6 +25,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
+#include <string>
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 class Module;
@@ -116,7 +117,7 @@ class PipeOut: InterfaceClass {
 };
 
 #define RULE(moduletype,name,bodybody) \
-  addBaseRule(this, #name "_rule", ^{ (void)this; return true; }, ^ bodybody )
+  addBaseRule(this, name, ^{ (void)this; return true; }, ^ bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\
@@ -152,5 +153,16 @@ public:
 };
 extern void run_main_program();
 extern unsigned int stop_main_program;
+
+static inline std::string utostr(uint64_t X) {
+  char Buffer[21], *BufPtr = Buffer+21;
+  if (X == 0) *--BufPtr = '0';  // Handle special case...
+  while (X) {
+    *--BufPtr = '0' + char(X % 10);
+    X /= 10;
+  }
+  return std::string(BufPtr, Buffer+21);
+}
+
 
 #endif
