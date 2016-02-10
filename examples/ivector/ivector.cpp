@@ -83,7 +83,17 @@ public:
         UTYPE temp;
         temp.a = meth;
         temp.b = v;
-        fifo[1].in.enq(temp);
+        //fifo[meth].in.enq(temp);
+        ((meth == 0) ? fifo[0] :
+         (meth == 1) ? fifo[1] :
+         (meth == 2) ? fifo[2] :
+         (meth == 3) ? fifo[3] :
+         (meth == 4) ? fifo[4] :
+         (meth == 5) ? fifo[5] :
+         (meth == 6) ? fifo[6] :
+         (meth == 7) ? fifo[7] :
+         (meth == 8) ? fifo[8] :
+                       fifo[9] ).in.enq(temp);
     }
     IVector(IVectorIndication *ind, int size) : ind(ind), vsize(size) {
         //for (int i = 0; i < vsize; i++)
