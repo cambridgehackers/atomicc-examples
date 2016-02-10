@@ -53,7 +53,7 @@ public:
     }
     GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
-        printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
+        //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
 
@@ -81,9 +81,11 @@ class IVector : public Module, IVectorRequest {
 public:
     METHOD(say, (int meth, int v), {return true; }) {
         UTYPE temp;
-        temp.a = meth;
+        temp.a = 99; //meth;
         temp.b = v;
-        //fifo[meth].in.enq(temp);
+#if 0
+        fifo[meth].in.enq(temp);
+#else
         ((meth == 0) ? fifo[0] :
          (meth == 1) ? fifo[1] :
          (meth == 2) ? fifo[2] :
@@ -94,6 +96,7 @@ public:
          (meth == 7) ? fifo[7] :
          (meth == 8) ? fifo[8] :
                        fifo[9] ).in.enq(temp);
+#endif
     }
     IVector(IVectorIndication *ind, int size) : ind(ind), vsize(size) {
         //for (int i = 0; i < vsize; i++)
@@ -101,11 +104,11 @@ public:
         fifo = new FifoPong<UTYPE>[vsize];
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
         EXPORTREQUEST(IVector::say);
-        for (int i = vsize -1; i >= 0; i--) {
+        for (int i = 0; i < vsize; i++) {
             RULE(IVector,("respond" + utostr(i)).c_str(), {
                 UTYPE temp = this->fifo[i].out.first();
 	        this->fifo[i].out.deq();
-	        this->ind->heard(temp.a, temp.b);
+	        this->ind->heard(i, temp.b);
                 });
         }
     };
