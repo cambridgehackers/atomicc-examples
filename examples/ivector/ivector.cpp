@@ -83,9 +83,10 @@ public:
         UTYPE temp;
         temp.a = 99; //meth;
         temp.b = v;
-#if 0
+#if 1
         fifo[meth].in.enq(temp);
 #else
+#if 1
         ((meth == 0) ? fifo[0] :
          (meth == 1) ? fifo[1] :
          (meth == 2) ? fifo[2] :
@@ -96,6 +97,22 @@ public:
          (meth == 7) ? fifo[7] :
          (meth == 8) ? fifo[8] :
                        fifo[9] ).in.enq(temp);
+#else
+         Fifo<UTYPE> *tfifo;
+         switch(meth) {
+         case 0: tfifo = &fifo[0]; break;
+         case 1: tfifo = &fifo[1]; break;
+         case 2: tfifo = &fifo[2]; break;
+         case 3: tfifo = &fifo[3]; break;
+         case 4: tfifo = &fifo[4]; break;
+         case 5: tfifo = &fifo[5]; break;
+         case 6: tfifo = &fifo[6]; break;
+         case 7: tfifo = &fifo[7]; break;
+         case 8: tfifo = &fifo[8]; break;
+         default: tfifo = &fifo[9];
+         }
+         tfifo->in.enq(temp);
+#endif
 #endif
     }
     IVector(IVectorIndication *ind, int size) : ind(ind), vsize(size) {
