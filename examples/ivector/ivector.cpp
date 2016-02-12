@@ -81,7 +81,6 @@ class IVector : public Module, IVectorRequest {
 public:
     METHOD(say, (int meth, int v), {return true; }) {
         UTYPE temp;
-        temp.a = 99; //meth;
         temp.b = v;
 #if 1
         fifo[meth].in.enq(temp);

@@ -31,7 +31,7 @@ class Fifo
 {
     METHOD(enq, (T v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
-    GVALUE(first, T, {return false; }) { return (T){0}; }
+    GVALUE(first, T, {return false; }) { return (T){}; }
  public:
     PipeIn<T> in;
     PipeOut<T> out;
