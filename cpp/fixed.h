@@ -27,6 +27,7 @@ template<int32_t precision_bits>
 	class FixedPoint {
             long data;
         public:
+            static const int size = precision_bits;
             FixedPoint(void): data(0) {}
             FixedPoint(long val): data(val) {}
 	};
