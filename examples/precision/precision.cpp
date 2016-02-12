@@ -26,31 +26,8 @@ typedef FixedPoint<4> myint4;
 typedef struct {
     myint6 a;
     myint4 b;
-    int c[20];
-} ValuePair;
+} ValueType;
 
-#define UTYPE ValuePair
-
-template<class T>
-class FifoPong : public Fifo<T>, public Module
-{
-    Fifo1<T> element1;
-public:
-    PipeIn<T> in;
-    PipeOut<T> out;
-    METHOD(enq, (T v), { return true; }) {
-            element1.in.enq(v);
-    }
-    METHOD(deq, (void), { return true; }) {
-            element1.out.deq();
-    }
-    GVALUE(first, T, { return true; }) { return element1.out.first(); }
-    FifoPong(): Fifo<T>(), FIFOBASECONSTRUCTOR(FifoPong<T>) {
-        //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
-    };
-};
-
-static FifoPong<UTYPE> bozouseless;
 class IVectorIndication {
 public:
     INDICATION(heard, (myint6 meth, myint4 v), { return true; });
@@ -68,12 +45,11 @@ public:
 };
 
 class IVector : public Module, IVectorRequest {
-    Fifo<UTYPE> fifo;
+    Fifo<ValueType> fifo;
     IVectorIndication *ind;
-    int vsize;
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }) {
-        UTYPE temp;
+        ValueType temp;
         temp.a = meth;
         temp.b = v;
         fifo.in.enq(temp);
@@ -81,7 +57,7 @@ public:
     IVector(IVectorIndication *ind) : ind(ind) {
         EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", {
-            UTYPE temp = this->fifo.out.first();
+            ValueType temp = this->fifo.out.first();
 	    this->fifo.out.deq();
 	    this->ind->heard(temp.a, temp.b);
             });
