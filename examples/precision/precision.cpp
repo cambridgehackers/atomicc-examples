@@ -31,6 +31,10 @@ template<int32_t precision_bits>
         ~FixedPoint() {}
         FixedPoint(long val): data(val) {}
         virtual void fixedPrecMeth(void) {}
+        inline FixedPoint & operator=(const FixedPoint & arg) {
+            this->data = arg.data;
+            return *this;
+        }
     };
 #if 1
 typedef FixedPoint<6> myint6;
