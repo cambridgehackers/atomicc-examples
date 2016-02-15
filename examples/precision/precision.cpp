@@ -29,6 +29,7 @@ template<int32_t precision_bits>
             static const int size = precision_bits;
             FixedPoint(void) { data = new Bit[size]; }
             FixedPoint(long val) { data = new Bit[size]; }
+            virtual void fixedPrecMeth(void) {}
 	};
 typedef FixedPoint<6> myint6;
 typedef FixedPoint<4> myint4;
@@ -62,6 +63,10 @@ public:
 };
 
 ValueType grumpy;
+//typedef FixedPoint<lrint(log(4))> logType;
+//err_template_arg_not_address_constant
+typedef FixedPoint<((4))> logType;
+logType foo;
 
 class IVector : public Module, IVectorRequest {
     Fifo<ValueType> fifo;
