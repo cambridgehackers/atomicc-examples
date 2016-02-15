@@ -1,4 +1,4 @@
-/* Copyright (c) 2014 Quanta Research Cambridge, Inc
+/* Copyright (c) 2016 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -19,9 +19,26 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <fifo.cpp>
-#include <fixed.h>
+#include <math.h>
+//#include <fixed.h>
+typedef uint8_t Bit;
+template<int32_t precision_bits>
+	class FixedPoint: public BitsClass {
+            Bit *data;
+        public:
+            static const int size = precision_bits;
+            FixedPoint(void) { data = new Bit[size]; }
+            FixedPoint(long val) { data = new Bit[size]; }
+	};
 typedef FixedPoint<6> myint6;
 typedef FixedPoint<4> myint4;
+class FixedPointV: public BitsClass {
+    Bit *data;
+public:
+    int size;
+    FixedPointV(int precision_bits): size(precision_bits) { data = new Bit[size]; }
+    FixedPointV(int precision_bits, long val): size(precision_bits) { data = new Bit[size]; }
+};
 
 typedef struct {
     myint6 a;
@@ -44,8 +61,12 @@ public:
     }
 };
 
+ValueType grumpy;
+
 class IVector : public Module, IVectorRequest {
     Fifo<ValueType> fifo;
+    FixedPointV      counter;
+    FixedPointV      gcounter;
     IVectorIndication *ind;
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }) {
@@ -54,7 +75,7 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *ind) : ind(ind) {
+    IVector(IVectorIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size) {
         EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", {
             ValueType temp = this->fifo.out.first();
@@ -71,7 +92,8 @@ public:
 
 void IVectorIndication::heard(myint6 meth, myint4 v)
 {
-    printf("Heard an ivector: %d %d\n", meth, v);
+    //printf("Heard an ivector: %d %d\n", meth, v);
+    printf("Heard an ivector: %d %d\n", 0, 0);
     stop_main_program = 1;
 }
 
