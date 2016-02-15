@@ -23,16 +23,22 @@
 //#include <fixed.h>
 typedef uint8_t Bit;
 template<int32_t precision_bits>
-	class FixedPoint: public BitsClass {
-            Bit *data;
-        public:
-            static const int size = precision_bits;
-            FixedPoint(void) { data = new Bit[size]; }
-            FixedPoint(long val) { data = new Bit[size]; }
-            virtual void fixedPrecMeth(void) {}
-	};
+    class FixedPoint: public BitsClass {
+        long data;
+    public:
+        static const int size = precision_bits;
+        FixedPoint(): data(0) {}
+        ~FixedPoint() {}
+        FixedPoint(long val): data(val) {}
+        virtual void fixedPrecMeth(void) {}
+    };
+#if 1
 typedef FixedPoint<6> myint6;
 typedef FixedPoint<4> myint4;
+#else
+typedef int myint6;
+typedef int myint4;
+#endif
 class FixedPointV: public BitsClass {
     Bit *data;
 public:
@@ -70,8 +76,8 @@ logType foo;
 
 class IVector : public Module, IVectorRequest {
     Fifo<ValueType> fifo;
-    FixedPointV      counter;
-    FixedPointV      gcounter;
+    //FixedPointV      counter;
+    //FixedPointV      gcounter;
     IVectorIndication *ind;
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }) {
@@ -80,12 +86,13 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size) {
+    IVector(IVectorIndication *ind) : ind(ind) //, counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    {
         EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", {
             ValueType temp = this->fifo.out.first();
-	    this->fifo.out.deq();
-	    this->ind->heard(temp.a, temp.b);
+            this->fifo.out.deq();
+            this->ind->heard(temp.a, temp.b);
             });
     };
     ~IVector() {}

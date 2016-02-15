@@ -92,6 +92,9 @@ class BitsClass {
     BitsClass() {}
     ~BitsClass() {}
     long unused_data_to_force_inheritance;
+ //private:
+    //BitsClass(const BitsClass&) {}
+    //BitsClass& operator=(const BitsClass&) {}
 };
 
 typedef bool (*GUARDPTR)(void *);
