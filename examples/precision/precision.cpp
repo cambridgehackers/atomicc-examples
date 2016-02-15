@@ -79,7 +79,7 @@ typedef FixedPoint<((4))> logType;
 logType foo;
 
 class IVector : public Module, IVectorRequest {
-    Fifo<ValueType> fifo;
+    Fifo1<ValueType> fifo;
     //FixedPointV      counter;
     //FixedPointV      gcounter;
     IVectorIndication *ind;
