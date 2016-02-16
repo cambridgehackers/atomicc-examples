@@ -27,7 +27,7 @@ template<int32_t precision_bits>
         long data;
     public:
         static const int size = precision_bits;
-        FixedPoint(): data(0) {}
+        FixedPoint() {}
         ~FixedPoint() {}
         FixedPoint(long val): data(val) {}
         virtual void fixedPrecMeth(void) {}
