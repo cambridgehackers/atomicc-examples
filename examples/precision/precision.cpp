@@ -21,35 +21,40 @@
 #include <fifo.cpp>
 #include <math.h>
 //#include <fixed.h>
+extern "C" long fixedGet(void *);
+extern "C" void fixedSet(void *, long);
 typedef uint8_t Bit;
 template<int32_t precision_bits>
     class FixedPoint: public BitsClass {
         long data;
     public:
-        static const int size = precision_bits;
+        static const unsigned long size = precision_bits;
         FixedPoint() {}
+        FixedPoint(const FixedPoint &arg) { fixedSet((void *)this, fixedGet((void *)&arg)); }
         ~FixedPoint() {}
         FixedPoint(long val): data(val) {}
         virtual void fixedPrecMeth(void) {}
         inline FixedPoint & operator=(const FixedPoint & arg) {
-            this->data = arg.data;
+            //this->data = arg.data;
+            fixedSet((void *)this, fixedGet((void *)&arg));
             return *this;
         }
     };
-#if 1
+
+class FixedPointV: public BitsClass {
+public:
+    long data;
+    unsigned long size;
+    FixedPointV(int precision_bits): size(precision_bits) { }
+    FixedPointV(int precision_bits, long val): size(precision_bits) { }
+    inline FixedPointV & operator=(const FixedPointV & arg) {
+        fixedSet((void *)this, fixedGet((void *)&arg));
+        return *this;
+    }
+};
+
 typedef FixedPoint<6> myint6;
 typedef FixedPoint<4> myint4;
-#else
-typedef int myint6;
-typedef int myint4;
-#endif
-class FixedPointV: public BitsClass {
-    Bit *data;
-public:
-    int size;
-    FixedPointV(int precision_bits): size(precision_bits) { data = new Bit[size]; }
-    FixedPointV(int precision_bits, long val): size(precision_bits) { data = new Bit[size]; }
-};
 
 typedef struct {
     myint6 a;
@@ -73,15 +78,12 @@ public:
 };
 
 ValueType grumpy;
-//typedef FixedPoint<lrint(log(4))> logType;
-//err_template_arg_not_address_constant
-typedef FixedPoint<((4))> logType;
-logType foo;
 
 class IVector : public Module, IVectorRequest {
     Fifo1<ValueType> fifo;
-    //FixedPointV      counter;
-    //FixedPointV      gcounter;
+    FixedPoint<23>   fcounter;
+    FixedPointV      counter;    // the precision of these members is set by the constructor
+    FixedPointV      gcounter;
     IVectorIndication *ind;
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }) {
@@ -90,13 +92,14 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *ind) : ind(ind) //, counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    IVector(IVectorIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
     {
         EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", {
             ValueType temp = this->fifo.out.first();
             this->fifo.out.deq();
             this->ind->heard(temp.a, temp.b);
+            fixedSet((void *)&this->gcounter, fixedGet((void *)&this->gcounter) + 1);
             });
     };
     ~IVector() {}
