@@ -192,28 +192,69 @@ private:
 /////////////////////////////////////////////////////////
 class MemreadIndication {
 public:
+    METHOD(heard, (int meth, int v), = 0;) = 0;
+};
+
+typedef struct {
+    int tag;
+#define MemreadIndication_heard 1
+    union {
+        struct {
+            int meth;
+            int v;
+        } heard;
+    } data;
+} MemreadIndication_data;
+
+class MemreadIndicationOutput : public MemreadIndication {
+public:
+    PipeIn<MemreadIndication_data> *pipe;
+    METHOD(heard, (int meth, int v), { return true; }) {
+        MemreadIndication_data ind;
+        ind.tag = MemreadIndication_heard;
+        ind.data.heard.meth = meth;
+        ind.data.heard.v = v;
+        pipe->enq(ind);
+    }
 };
 
 class MemreadRequest {
 public:
+    METHOD(say, (int meth, int v), = 0;) = 0;
 };
 
-class MemreadIndicationOutput {
-public:
-    MemreadIndication ifc;
-    PipeOut<Dummy> pipes;
-};
+typedef struct {
+    int tag;
+#define MemreadRequest_say 1
+    union {
+        struct {
+            int meth;
+            int v;
+        } say;
+    } data;
+} MemreadRequest_data;
+
 class MemreadRequestInput {
 public:
     MemreadRequest *request;
-    PipeIn<Dummy> pipes;
+    PipeIn<MemreadRequest_data> pipe;
+    METHOD(enq, (MemreadRequest_data v), {return false; }) {
+        switch (v.tag) {
+        case MemreadRequest_say:
+            request->say(v.data.say.meth, v.data.say.v);
+            break;
+        }
+    }
+    MemreadRequestInput() : pipe("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq)) {}
 };
 
-class Memread {
+class Memread: public MemreadRequest {
 public:
     MemReadClient *readers;
-    MemreadRequest request;
-    Memread(MemreadIndication indication) {
+    //MemreadRequest request;
+    METHOD(say, (int meth, int v), { return true; }) {
+    }
+    Memread(MemreadIndication *indication) {
         readers = new MemReadClient[NumReadClients];
     }
 };
@@ -226,10 +267,10 @@ public:
     /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
     MemReadClient *readers;
     CnocTop() :
-        lMemread(lMemreadIndicationOutput.ifc)
+        lMemread(&lMemreadIndicationOutput)
         {
         readers = lMemread.readers;
-        lMemreadRequestInput.request = &lMemread.request;
+        lMemreadRequestInput.request = &lMemread;
     //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
     //let lMemreadRequestInputNoc <- mkPortalMsgRequest(extend(pack(IfcNames_MemreadRequestS2H)), lMemreadRequestInput.portalIfc.requests);
     //Vector#(NumReadClients,MemReadClient#(DataBusWidth)) nullReaders = replicate(null_mem_read_client());
