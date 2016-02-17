@@ -1,0 +1,226 @@
+/* Copyright (c) 2016 The Connectal Project
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a
+ * copy of this software and associated documentation files (the "Software"),
+ * to deal in the Software without restriction, including without limitation
+ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software, and to permit persons to whom the
+ * Software is furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included
+ * in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+ * OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+ * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+ * DEALINGS IN THE SOFTWARE.
+ */
+#include <fifo.cpp>
+#include <math.h>
+#if 0
+#define max(log(NumberOfTiles - 1),1) TileTagBits
+typedef struct {
+        MemRequest req;
+        FixedPoint<addrWidth> pa;
+        FixedPoint<MemTagSize> rename_tag;
+        FixedPoint<log(max(1,numClients))> client;
+} RRec#(numeric type numClients, numeric type addrWidth);
+
+class MemReadInternal {
+public:
+   Put#(TileControl) tileControl;
+   PhysMemReadClient#(addrWidth,busWidth) client;
+   MemReadServer#(busWidth) servers[numServers];
+private:
+   FixedPoint<log(numTags)> compTagReg;
+   FixedPoint<log(max(1,numServers))> compClientReg;
+   Fifo1<FixedPoint<1 + log(max(1,numServers))>> clientSelect = new FIFO;
+   Fifo1<FixedPoint<log(numTags)>> serverTag = new FIFO;
+   TagGen#(numTags) tag_gen;
+
+   MemReadInternal(MemServerIndication ind, Server#(AddrTransRequest,FixedPoint<addrWidth)) mmus[numMMUs]) {
+   busWidthBytes = busWidth / 8;
+   beatShift = log(busWidthBytes);
+   assert( beatShift <= 8 ,
+        log(numTags) <= MemTagSize ,
+        beatShift <= BurstLenSize ,
+        (busWidth / 8) <= ByteEnableSize ,
+        );
+   Fifo1<LRec#(numServers,addrWidth)> clientRequest = new SizedFIFO(MMU_PIPELINE_DEPTH);
+   Fifo1<RRec#(numServers,addrWidth)>  serverRequest = new FIFO;
+   BRAM2Port#(FixedPoint<log(numTags)>, DRec#(numServers,addrWidth)) serverProcessing = new BRAM2Server(bramConfig);
+   BRAM2Port#(FixedPoint<log(numTags) + BurstLenSize - beatShift>, MemData#(busWidth)) clientData = new BRAM2Server(bramConfig);
+   RegFile#(FixedPoint<log(numTags)>,Tuple2#(Bool,FixedPoint<BurstLenSize>)) clientBurstLen = new RegFileFull();
+   MemReadServer#(busWidth) sv = newVector[numServers];
+   interface servers = sv;
+};
+
+class MemServerRead {
+   MemServerRead(MemServerIndication indication, MMU#(addrWidth) mmus[numMMUs]) {
+   nrc = numClients / numServers;
+   assert(
+        addrWidth <= 64 ,
+        log(busWidth / 8) <= 8 ,
+        log(busWidth / 8) <= BurstLenSize ,
+        busWidth / 8 <= ByteEnableSize ,
+        );
+   ArbitratedMMU#(addrWidth,numClients) mmu_servers[numMMUs] <- mapM(mkArbitratedMMU,map(selectMMUPort,genVector));
+   MemReadInternal#(addrWidth,busWidth,MemServerTags,nrc) readers[numClients];
+   PhysMemReadClient#(addrWidth,busWidth) read_clients[numClients];
+   MemReadServer#(busWidth) read_servers[numServers];
+};
+
+class MemServer {
+public:
+   MemServerRequest request;
+   PhysMemMaster#(addrWidth, busWidth) masters[nMasters];
+   MemServer((MemReadClient#(busWidth) readClients[numReadClients], MMU#(addrWidth) mmus[numMMUs], MemServerIndication indication)) {
+   nws = (numWriteClients / nMasters) * nMasters;
+   nrs = (numReadClients / nMasters) * nMasters;
+   assert(
+        log(busWidth / 8) <= 8 ,
+        log(busWidth / 8) <= BurstLenSize ,
+        addrWidth <= 64 ,
+        numWriteClients <= nws ,
+        numReadClients <= nrs ,
+        busWidth / 8 <= ByteEnableSize ,
+        );
+   MemServerRead#(addrWidth,busWidth,nMasters,nrs)  reader = new MemServerRead(indication, mmus);
+   zipWithM_(mkConnection,readClients,take(reader.servers));
+   }
+};
+
+class Platform {
+public:
+   PhysMemSlave#(32,32) slave;
+   PhysMemMaster#(PhysAddrWidth, DataBusWidth)) masters[NumberOfMasters];
+   Bool interrupt[MaxNumberOfPortals];
+   PinType pins;
+private:
+   PhysMemSlave#(18,32) tile_slaves[NumberOfUserTiles];
+   Vector#(NumReadClients, MemReadClient#(DataBusWidth)) tile_read_clients[NumberOfUserTiles];
+
+   Platform(ConnectalTop tiles[NumberOfUserTiles]) {
+   MMUIndicationProxy lMMUIndicationProxy = new MMUIndicationProxy(PlatformIfcNames_MMUIndicationH2S);
+   MemServerIndicationProxy lMemServerIndicationProxy = new MemServerIndicationProxy(PlatformIfcNames_MemServerIndicationH2S);
+   MMU#(PhysAddrWidth) lMMU = new MMU(0,True, lMMUIndicationProxy.ifc);
+   MemReadClient#(DataBusWidth) tile_read_clients_renamed[NumberOfUserTiles * NumReadClients] <- zipWith3M(renameReads, concat(read_client_tile_numbers), concat(tile_read_clients), replicate(lMemServerIndicationProxy.ifc));
+   MemServer#(PhysAddrWidth,DataBusWidth,NumberOfMasters) lMemServer = new MemServer(tile_read_clients_renamed, tile_write_clients_renamed, lMMU, lMemServerIndicationProxy.ifc);
+   MMURequestWrapper lMMURequestWrapper = new MMURequestWrapper(PlatformIfcNames_MMURequestS2H, lMMU.request);
+   MemServerRequestWrapper lMemServerRequestWrapper = new MemServerRequestWrapper(PlatformIfcNames_MemServerRequestS2H, lMemServer.request);
+   StdPortal framework_portals[4];
+   framework_portals[0] = lMMUIndicationProxy.portalIfc;
+   PhysMemSlave#(18,32) framework_ctrl_mux = new SlaveMux(framework_portals);
+   let framework_intr = new InterruptMux(getInterruptVector(framework_portals));
+   PhysMemSlave#(32,32) ctrl_mux = new PhysMemSlaveMux(cons(framework_ctrl_mux,tile_slaves));
+   Bool interrupts[MaxNumberOfPortals] = replicate(interface ReadOnly; method Bool _read(); return False; endmethod endinterface);
+};
+
+class XsimMemoryConnection {
+   XsimMemoryConnection(PhysMemMaster#(addrWidth, dataWidth) master) {
+   assert ( dataWidth % 32 == 0,
+         (DataBusWidth / 8) <= (dataWidth / 8) );
+   PhysMemSlave#(addrWidth,dataWidth) slave = new SimDmaDmaMaster();
+   mkConnection(master, slave);
+};
+
+class XsimTop {
+   XSimTop(Clock derivedClock, Reset derivedReset, Clock sys_clk) {
+   mkConnection(lMMURequestInput.pipes, lMMU.request);
+   MemServer#(PhysAddrWidth,DataBusWidth,NumberOfMasters) lMemServer = new MemServer(top.readers, top.writers, cons(lMMU,nil), lMemServerIndicationOutput.ifc);
+   mkConnection(lMemServerRequestInput.pipes, lMemServer.request);
+   let lMMUIndicationOutputNoc = new PortalMsgIndication(extend(pack(PlatformIfcNames_MMUIndicationH2S)), lMMUIndicationOutput.portalIfc.indications, lMMUIndicationOutput.portalIfc.messageSize);
+   mapM_(mkXsimSink, append(top.requests, lMMURequestInputNoc, lMemServerRequestInputNoc));
+};
+#endif
+
+typedef FixedPoint<6> myint6;
+typedef FixedPoint<4> myint4;
+
+typedef struct {
+    myint6 a;
+    myint4 b;
+} ValueType;
+
+class ConnectIndication {
+public:
+    INDICATION(heard, (myint6 meth, myint4 v), { return true; });
+    ConnectIndication() {
+        EXPORTREQUEST(ConnectIndication::heard);
+    }
+};
+
+class ConnectRequest {
+public:
+    METHOD(say, (myint6 meth, myint4 v), {return true; }){}
+    ConnectRequest() {
+        EXPORTREQUEST(ConnectRequest::say);
+    }
+};
+
+ValueType grumpy;
+
+class Connect : public Module, ConnectRequest {
+    Fifo1<ValueType> fifo;
+    FixedPoint<23>   fcounter;
+    FixedPointV      counter;    // the precision of these members is set by the constructor
+    FixedPointV      gcounter;
+    ConnectIndication *ind;
+public:
+    METHOD(say, (myint6 meth, myint4 v), {return true; }) {
+        ValueType temp;
+        temp.a = meth;
+        temp.b = v;
+        fifo.in.enq(temp);
+    }
+    Connect(ConnectIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    {
+        EXPORTREQUEST(Connect::say);
+        RULE(Connect, "respond", {
+            ValueType temp = this->fifo.out.first();
+            this->fifo.out.deq();
+            this->ind->heard(temp.a, temp.b);
+            fixedSet((void *)&this->gcounter, fixedGet((void *)&this->gcounter) + 1);
+            });
+    };
+    ~Connect() {}
+};
+
+////////////////////////////////////////////////////////////
+// Test Bench
+////////////////////////////////////////////////////////////
+
+void ConnectIndication::heard(myint6 meth, myint4 v)
+{
+    //printf("Heard an connect: %d %d\n", meth, v);
+    printf("Heard an connect: %d %d\n", 0, 0);
+    stop_main_program = 1;
+}
+
+class ConnectTest {
+public:
+    Connect *connect;
+public:
+    ConnectTest(): connect(new Connect(new ConnectIndication())) {
+        printf("ConnectTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(ConnectTest));
+    }
+    ~ConnectTest() {}
+};
+
+ConnectTest connectTest;
+
+int main(int argc, const char *argv[])
+{
+    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+    while (!connectTest.connect->say__RDY())
+        ;
+    connectTest.connect->say(2, 44);
+    if (argc != 1)
+        run_main_program();
+    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
+    return 0;
+}
+
