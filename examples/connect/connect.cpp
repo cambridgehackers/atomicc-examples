@@ -210,11 +210,11 @@ class MemreadIndicationOutput : public MemreadIndication {
 public:
     PipeIn<MemreadIndication_data> *pipe;
     METHOD(heard, (int meth, int v), { return true; }) {
-        MemreadIndication_data ind;
-        ind.tag = MemreadIndication_heard;
-        ind.data.heard.meth = meth;
-        ind.data.heard.v = v;
-        pipe->enq(ind);
+        //MemreadIndication_data ind;
+        //ind.tag = MemreadIndication_heard;
+        //ind.data.heard.meth = meth;
+        //ind.data.heard.v = v;
+        //pipe->enq(ind);
     }
 };
 
@@ -226,12 +226,12 @@ public:
 typedef struct {
     int tag;
 #define MemreadRequest_say 1
-    union {
-        struct {
-            int meth;
-            int v;
-        } say;
-    } data;
+    //union {
+        //struct {
+            //int meth;
+            //int v;
+        //} say;
+    //} data;
 } MemreadRequest_data;
 
 class MemreadRequestInput {
@@ -239,11 +239,11 @@ public:
     MemreadRequest *request;
     PipeIn<MemreadRequest_data> pipe;
     METHOD(enq, (MemreadRequest_data v), {return false; }) {
-        switch (v.tag) {
-        case MemreadRequest_say:
-            request->say(v.data.say.meth, v.data.say.v);
-            break;
-        }
+        //switch (v.tag) {
+        //case MemreadRequest_say:
+            //request->say(v.data.say.meth, v.data.say.v);
+            //break;
+        //}
     }
     MemreadRequestInput() : pipe("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq)) {}
 };
