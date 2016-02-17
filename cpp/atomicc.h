@@ -174,5 +174,36 @@ static inline std::string utostr(uint64_t X) {
   return std::string(BufPtr, Buffer+21);
 }
 
+extern "C" long fixedGet(void *);
+extern "C" void fixedSet(void *, long);
+typedef uint8_t Bit;
+template<int32_t precision_bits>
+    class FixedPoint: public BitsClass {
+        long data;
+    public:
+        static const unsigned long size = precision_bits;
+        FixedPoint() {}
+        FixedPoint(const FixedPoint &arg) { fixedSet((void *)this, fixedGet((void *)&arg)); }
+        ~FixedPoint() {}
+        FixedPoint(long val): data(val) {}
+        virtual void fixedPrecMeth(void) {}
+        inline FixedPoint & operator=(const FixedPoint & arg) {
+            //this->data = arg.data;
+            fixedSet((void *)this, fixedGet((void *)&arg));
+            return *this;
+        }
+    };
+
+class FixedPointV: public BitsClass {
+public:
+    long data;
+    unsigned long size;
+    FixedPointV(int precision_bits): size(precision_bits) { }
+    FixedPointV(int precision_bits, long val): size(precision_bits) { }
+    inline FixedPointV & operator=(const FixedPointV & arg) {
+        fixedSet((void *)this, fixedGet((void *)&arg));
+        return *this;
+    }
+};
 
 #endif
