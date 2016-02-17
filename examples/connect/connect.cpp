@@ -29,9 +29,7 @@ typedef int Reset;
 #define NumReadClients 2
 typedef int SGListId;
 
-class Pipes {
-public:
-};
+class Dummy {};
 
 class MemRequest {
 public:
@@ -52,12 +50,12 @@ public:
 class MMURequestInput {
 public:
     MMURequest *request;
-    Pipes pipes;
+    PipeIn<Dummy> pipes;
 };
 class MMUIndicationOutput {
 public:
     MMUIndication ifc;
-    Pipes pipes;
+    PipeOut<Dummy> pipes;
 };
 
 class MemServerRequest {
@@ -69,33 +67,33 @@ public:
 class MemServerRequestInput {
 public:
     MemServerRequest *request;
-    Pipes pipes;
+    PipeIn<Dummy> pipes;
 };
 class MemServerIndicationOutput {
 public:
     MemServerIndication ifc;
-    Pipes pipes;
+    PipeOut<Dummy> pipes;
 };
 /////////////////////////////////////////////////
 
 typedef struct {
-        MemRequest req;
-        //FixedPoint<addrWidth> pa;
-        FixedPoint<MemTagSize> rename_tag;
-        //FixedPoint<log(max(1,numClients))> client;
+    MemRequest req;
+    //FixedPoint<addrWidth> pa;
+    FixedPoint<MemTagSize> rename_tag;
+    //FixedPoint<log(max(1,numClients))> client;
 } RRec;//#(numeric type numClients, numeric type addrWidth);
 
 typedef struct {
-   SGListId             id;
-   FixedPoint<MemOffsetSize> off;
+    SGListId             id;
+    FixedPoint<MemOffsetSize> off;
 } AddrTransRequest;
 
 class MMU {
 public:
-   MMURequest request;
-   //Server#(AddrTransRequest,Bit#(addrWidth)) addr[2];
+    MMURequest request;
+    //Server#(AddrTransRequest,Bit#(addrWidth)) addr[2];
     MMU(int iid, bool hostMapped, MMUIndication mmuIndication) {
-   //provisos(Log#(MaxNumSGLists, listIdxSize),
+    //provisos(Log#(MaxNumSGLists, listIdxSize),
             //Add#(listIdxSize,8, entryIdxSize),
             //Add#(a__,addrWidth,MemOffsetSize));
     }
@@ -203,17 +201,18 @@ public:
 class MemreadIndicationOutput {
 public:
     MemreadIndication ifc;
-    Pipes pipes;
+    PipeOut<Dummy> pipes;
 };
 class MemreadRequestInput {
 public:
-    MemreadRequest ifc;
-    Pipes pipes;
+    MemreadRequest *request;
+    PipeIn<Dummy> pipes;
 };
 
 class Memread {
 public:
     MemReadClient *readers;
+    MemreadRequest request;
     Memread(MemreadIndication indication) {
         readers = new MemReadClient[NumReadClients];
     }
@@ -224,13 +223,13 @@ class CnocTop {
     MemreadRequestInput lMemreadRequestInput;
     Memread lMemread;
 public:
+    /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
     MemReadClient *readers;
-    CnocTop(/*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/) :
+    CnocTop() :
         lMemread(lMemreadIndicationOutput.ifc)
         {
         readers = lMemread.readers;
-    //mkConnection(lMemreadRequestInput.pipes, lMemread.request);
-
+        lMemreadRequestInput.request = &lMemread.request;
     //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
     //let lMemreadRequestInputNoc <- mkPortalMsgRequest(extend(pack(IfcNames_MemreadRequestS2H)), lMemreadRequestInput.portalIfc.requests);
     //Vector#(NumReadClients,MemReadClient#(DataBusWidth)) nullReaders = replicate(null_mem_read_client());
