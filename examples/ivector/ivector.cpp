@@ -52,7 +52,8 @@ public:
         pong = !pong;
     }
     GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+    FifoPong(): Fifo<T>(), pong(false) {
+        FIFOBASECONSTRUCTOR(FifoPong<T>);
         //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };

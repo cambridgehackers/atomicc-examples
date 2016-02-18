@@ -26,9 +26,8 @@
 
 #if 1
 #define ECHO_FIFO Fifo1
-#else
+#elif 1
 #define ECHO_FIFO FifoPong
-#if 1
 template<class T>
 class FifoPong : public Fifo<T>, public Module
 {
@@ -48,13 +47,15 @@ public:
     }
     METHOD(deq, (void), { return notEmpty(); }) { full = false; pong = !pong; }
     GVALUE(first, T, { return notEmpty(); }) { return pong ? element2 : element1; }
-    FifoPong(): Fifo<T>(), full(false), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+    FifoPong(): Fifo<T>(), full(false), pong(false) {
+        FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
     bool notEmpty() const { return full; }
     bool notFull() const { return !full; }
 };
 #else
+#define ECHO_FIFO FifoPong
 template<class T>
 class FifoPong : public Fifo<T>, public Module
 {
@@ -78,11 +79,11 @@ public:
         pong = !pong;
     }
     GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+    FifoPong(): Fifo<T>(), pong(false) {
+        FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
-#endif
 #endif
 
 static ECHO_FIFO<int> bozouseless;

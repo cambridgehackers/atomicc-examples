@@ -23,8 +23,8 @@
 #define _FIFO_H_
 #include <atomicc.h>
 
-#define FIFOBASECONSTRUCTOR(A) in("in", this, METH(&A::enq__RDY), METH(&A::enq)), \
-        out("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
+#define FIFOBASECONSTRUCTOR(A) in.init("in", this, METH(&A::enq__RDY), METH(&A::enq)); \
+        out.init("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
 
 template<class T>
 class Fifo
@@ -35,7 +35,7 @@ class Fifo
  public:
     PipeIn<T> in;
     PipeOut<T> out;
-    Fifo(): FIFOBASECONSTRUCTOR(Fifo) {}
+    Fifo() { FIFOBASECONSTRUCTOR(Fifo); }
 };
 
 #ifndef FIFODEFINE
@@ -43,7 +43,7 @@ class Fifo
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) {}
+#define FIFOCONSTRUCTOR(A) { FIFOBASECONSTRUCTOR(A); }
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
