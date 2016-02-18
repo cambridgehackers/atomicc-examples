@@ -38,9 +38,11 @@ typedef struct {
     } data;
 } MemreadIndication_data;
 
+typedef PipeIn<MemreadIndication_data> MemreadIndicationPipe;
+
 class MemreadIndicationOutput : public MemreadIndication {
 public:
-    PipeIn<MemreadIndication_data> *pipe;
+    MemreadIndicationPipe *pipe;
     METHOD(heard, (int meth, int v), { return true; }) {
         MemreadIndication_data ind;
         ind.tag = MemreadIndication_tag_heard;
@@ -77,7 +79,8 @@ public:
             break;
         }
     }
-    MemreadRequestInput() {
+    MemreadRequestInput(MemreadRequest *req) {
+        request = req;
         //pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
     }
 };
@@ -104,10 +107,10 @@ public:
     /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
     //MemReadClient *readers;
     CnocTop() :
+        lMemreadRequestInput(&lMemread),
         lMemread(&lMemreadIndicationOutput)
         {
         //readers = lMemread.readers;
-        lMemreadRequestInput.request = &lMemread;
     //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
     //let lMemreadRequestInputNoc <- mkPortalMsgRequest(extend(pack(IfcNames_MemreadRequestS2H)), lMemreadRequestInput.portalIfc.requests);
     //Vector#(NumReadClients,MemReadClient#(DataBusWidth)) nullReaders = replicate(null_mem_read_client());
