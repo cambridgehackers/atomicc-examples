@@ -42,11 +42,11 @@ class MemreadIndicationOutput : public MemreadIndication {
 public:
     PipeIn<MemreadIndication_data> *pipe;
     METHOD(heard, (int meth, int v), { return true; }) {
-        //MemreadIndication_data ind;
-        //ind.tag = MemreadIndication_tag_heard;
-        //ind.data.heard.meth = meth;
-        //ind.data.heard.v = v;
-        //pipe->enq(ind);
+        MemreadIndication_data ind;
+        ind.tag = MemreadIndication_tag_heard;
+        ind.data.heard.meth = meth;
+        ind.data.heard.v = v;
+        pipe->enq(ind);
     }
 };
 
@@ -71,11 +71,11 @@ public:
     MemreadRequest *request;
     //PipeIn<MemreadRequest_data> pipe;
     METHOD(enq, (MemreadRequest_data v), {return false; }) {
-        //switch (v.tag) {
-        //case MemreadRequest_tag_say:
-            //request->say(v.data.say.meth, v.data.say.v);
-            //break;
-        //}
+        switch (v.tag) {
+        case MemreadRequest_tag_say:
+            request->say(v.data.say.meth, v.data.say.v);
+            break;
+        }
     }
     MemreadRequestInput() {
         //pipe.init("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq));
@@ -84,11 +84,14 @@ public:
 
 class Memread: public MemreadRequest {
 public:
+    MemreadIndication *indication;
     //MemReadClient *readers;
     //MemreadRequest request;
     METHOD(say, (int meth, int v), { return true; }) {
+        indication->heard(meth, v);
     }
-    Memread(MemreadIndication *indication) {
+    Memread(MemreadIndication *ind) {
+        indication = ind;
         //readers = new MemReadClient[NumReadClients];
     }
 };
