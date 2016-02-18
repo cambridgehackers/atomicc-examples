@@ -30,9 +30,8 @@ class MemreadIndication: InterfaceClass {
     METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
     MemreadIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
     void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
-         p = ap;
-         heard__RDYp = (decltype(heard__RDYp))aheard__RDYp;
-         heardp = (decltype(heardp))aheardp;
+        p = ap;
+        ASSIGNIFCPTR(heard);
     }
 };
 
@@ -73,9 +72,8 @@ class MemreadRequest: InterfaceClass {
     METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
     MemreadRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
-         p = ap;
-         say__RDYp = (decltype(say__RDYp))asay__RDYp;
-         sayp = (decltype(sayp))asayp;
+        p = ap;
+        ASSIGNIFCPTR(say);
     }
 };
 
