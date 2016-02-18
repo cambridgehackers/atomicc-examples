@@ -24,7 +24,7 @@
 
 class MemreadIndication {
 public:
-    METHOD(heard, (int meth, int v), = 0;) = 0;
+    METHOD(heard, (int meth, int v), { return true; } ) {}
 };
 
 typedef struct {
@@ -52,9 +52,18 @@ public:
     }
 };
 
-class MemreadRequest {
-public:
-    METHOD(say, (int meth, int v), = 0;) = 0;
+class MemreadRequest: InterfaceClass {
+    void *p;
+    GUARDPTR say__RDYp;
+    void (*sayp)(void *p, int meth, int v);
+ public:
+    METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
+    MemreadRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
+    void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
+         p = ap;
+         say__RDYp = (GUARDPTR)asay__RDYp;
+         sayp = (void (*)(void *, int, int))asayp;
+    }
 };
 
 typedef struct {
@@ -72,7 +81,7 @@ class MemreadRequestInput {
 public:
     MemreadRequest *request;
     PipeIn<MemreadRequest_data> pipe;
-    METHOD(enq, (const MemreadRequest_data &v), {return false; }) {
+    METHOD(enq, (const MemreadRequest_data &v), {return true; }) {
         switch (v.tag) {
         case MemreadRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
@@ -81,12 +90,13 @@ public:
     }
     MemreadRequestInput(MemreadRequest *req) {
         request = req;
-        //pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
+        pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
     }
 };
 
-class Memread: public MemreadRequest {
+class Memread {
 public:
+    MemreadRequest request;
     MemreadIndication *indication;
     //MemReadClient *readers;
     //MemreadRequest request;
@@ -95,6 +105,7 @@ public:
     }
     Memread(MemreadIndication *ind) {
         indication = ind;
+        request.init("request", this, IFC(Memread, say));
         //readers = new MemReadClient[NumReadClients];
     }
 };
@@ -107,7 +118,7 @@ public:
     /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
     //MemReadClient *readers;
     CnocTop() :
-        lMemreadRequestInput(&lMemread),
+        lMemreadRequestInput(&lMemread.request),
         lMemread(&lMemreadIndicationOutput)
         {
         //readers = lMemread.readers;
