@@ -32,7 +32,7 @@ bool Fifo1<T>::enq__RDY(void) {
     return notFull();
 };
 template<class T>
-void Fifo1<T>::enq(T v) {
+void Fifo1<T>::enq(const T &v) {
     element = v;
     full = true;
 };

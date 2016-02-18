@@ -38,7 +38,7 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (T v), { return true; }) {
+    METHOD(enq, (const T &v), { return true; }) {
         if (pong)
             element2.in.enq(v);
         else

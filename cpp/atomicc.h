@@ -102,14 +102,14 @@ template<class T>
 class PipeIn: InterfaceClass {
     void *p;
     GUARDPTR enq__RDYp;
-    void (*enqp)(void *p, T v);
+    void (*enqp)(void *p, const T &v);
  public:
-    METHOD(enq, (T v), {return enq__RDYp(p); }) { enqp(p, v); }
+    METHOD(enq, (const T &v), {return enq__RDYp(p); }) { enqp(p, v); }
     PipeIn(): p(NULL), enq__RDYp(NULL), enqp(NULL) { }
     void init(const char *name, void *ap, unsigned long aenq__RDYp, unsigned long aenqp) {
          p = ap;
          enq__RDYp = (GUARDPTR)aenq__RDYp;
-         enqp = (void (*)(void *, T))aenqp;
+         enqp = (void (*)(void *, const T &))aenqp;
     }
 };
 

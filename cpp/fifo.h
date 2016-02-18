@@ -29,7 +29,7 @@
 template<class T>
 class Fifo
 {
-    METHOD(enq, (T v), {return false; }) {}
+    METHOD(enq, (const T &v), {return false; }) {}
     METHOD(deq, (void), {return false; }) {}
     GVALUE(first, T, {return false; }) { return (T){}; }
  public:
@@ -59,7 +59,7 @@ template<class T>
 class Fifo1 : public Fifo<T> , public FIFODEFINE
 {
     FIFODATA
-    METHOD(enq, (T v), BODYGUARD) BODYACTION
+    METHOD(enq, (const T &v), BODYGUARD) BODYACTION
     METHOD(deq, (void), BODYGUARD) BODYACTION
     GVALUE(first, T, BODYGUARD) BODYVALUE
     bool notEmpty() const BODYGUARD

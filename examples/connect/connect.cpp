@@ -70,7 +70,7 @@ class MemreadRequestInput {
 public:
     MemreadRequest *request;
     PipeIn<MemreadRequest_data> pipe;
-    METHOD(enq, (MemreadRequest_data v), {return false; }) {
+    METHOD(enq, (const MemreadRequest_data &v), {return false; }) {
         switch (v.tag) {
         case MemreadRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
