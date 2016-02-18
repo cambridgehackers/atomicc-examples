@@ -108,8 +108,8 @@ class PipeIn: InterfaceClass {
     PipeIn(): p(NULL), enq__RDYp(NULL), enqp(NULL) { }
     void init(const char *name, void *ap, unsigned long aenq__RDYp, unsigned long aenqp) {
          p = ap;
-         enq__RDYp = (GUARDPTR)aenq__RDYp;
-         enqp = (void (*)(void *, const T &))aenqp;
+         enq__RDYp = (decltype(enq__RDYp))aenq__RDYp;
+         enqp = (decltype(enqp))aenqp;
     }
 };
 
@@ -126,10 +126,10 @@ class PipeOut: InterfaceClass {
     PipeOut(): p(NULL), deq__RDYp(NULL), deqp(NULL), first__RDYp(NULL), firstp(NULL) { }
     void init(const char *name, void *ap, unsigned long adeq__RDYp, unsigned long adeqp, unsigned long afirst__RDYp, unsigned long afirstp) {
         p = ap;
-        deq__RDYp = (GUARDPTR)adeq__RDYp;
-        deqp = (void (*)(void *))adeqp;
-        first__RDYp = (GUARDPTR)afirst__RDYp;
-        firstp = (T (*)(void *))afirstp;
+        deq__RDYp = (decltype(deq__RDYp))adeq__RDYp;
+        deqp = (decltype(deqp))adeqp;
+        first__RDYp = (decltype(first__RDYp))afirst__RDYp;
+        firstp = (decltype(firstp))afirstp;
         }
 };
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)

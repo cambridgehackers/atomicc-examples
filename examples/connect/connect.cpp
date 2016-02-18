@@ -22,16 +22,25 @@
 #include <math.h>
 //#include "memserver.h"
 
-class MemreadIndication {
-public:
-    METHOD(heard, (int meth, int v), { return true; } ) {}
+class MemreadIndication: InterfaceClass {
+    void *p;
+    GUARDPTR heard__RDYp;
+    void (*heardp)(void *p, int meth, int v);
+ public:
+    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
+    MemreadIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
+    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
+         p = ap;
+         heard__RDYp = (decltype(heard__RDYp))aheard__RDYp;
+         heardp = (decltype(heardp))aheardp;
+    }
 };
 
 typedef struct {
     int tag;
 #define MemreadIndication_tag_heard 1
     union MemreadIndication_union {
-        struct MemreadIndication_say {
+        struct MemreadIndication_heard {
             int meth;
             int v;
         } heard;
@@ -40,15 +49,19 @@ typedef struct {
 
 typedef PipeIn<MemreadIndication_data> MemreadIndicationPipe;
 
-class MemreadIndicationOutput : public MemreadIndication {
+class MemreadIndicationOutput {
 public:
     MemreadIndicationPipe *pipe;
+    MemreadIndication indication;
     METHOD(heard, (int meth, int v), { return true; }) {
         MemreadIndication_data ind;
         ind.tag = MemreadIndication_tag_heard;
         ind.data.heard.meth = meth;
         ind.data.heard.v = v;
         pipe->enq(ind);
+    }
+    MemreadIndicationOutput() {
+        indication.init("indication", this, IFC(MemreadIndicationOutput, heard));
     }
 };
 
@@ -61,8 +74,8 @@ class MemreadRequest: InterfaceClass {
     MemreadRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
          p = ap;
-         say__RDYp = (GUARDPTR)asay__RDYp;
-         sayp = (void (*)(void *, int, int))asayp;
+         say__RDYp = (decltype(say__RDYp))asay__RDYp;
+         sayp = (decltype(sayp))asayp;
     }
 };
 
@@ -119,7 +132,7 @@ public:
     //MemReadClient *readers;
     CnocTop() :
         lMemreadRequestInput(&lMemread.request),
-        lMemread(&lMemreadIndicationOutput)
+        lMemread(&lMemreadIndicationOutput.indication)
         {
         //readers = lMemread.readers;
     //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
