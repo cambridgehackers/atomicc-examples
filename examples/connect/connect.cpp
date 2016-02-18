@@ -58,7 +58,7 @@ public:
 typedef struct {
     int tag;
 #define MemreadRequest_tag_say 1
-    union MemreadRequest_union {
+    struct MemreadRequest_union {
         struct MemreadRequest_say {
             int meth;
             int v;
@@ -69,7 +69,7 @@ typedef struct {
 class MemreadRequestInput {
 public:
     MemreadRequest *request;
-    //PipeIn<MemreadRequest_data> pipe;
+    PipeIn<MemreadRequest_data> pipe;
     METHOD(enq, (MemreadRequest_data v), {return false; }) {
         switch (v.tag) {
         case MemreadRequest_tag_say:
@@ -78,7 +78,7 @@ public:
         }
     }
     MemreadRequestInput() {
-        //pipe.init("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq));
+        pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
     }
 };
 
