@@ -78,7 +78,7 @@ public:
         }
     }
     MemreadRequestInput() {
-        pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
+        //pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
     }
 };
 

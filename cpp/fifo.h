@@ -23,8 +23,8 @@
 #define _FIFO_H_
 #include <atomicc.h>
 
-#define FIFOBASECONSTRUCTOR(A) in.init("in", this, METH(&A::enq__RDY), METH(&A::enq)); \
-        out.init("out", this, METH(&A::deq__RDY), METH(&A::deq), METH(&A::first__RDY), METH(&A::first))
+#define FIFOBASECONSTRUCTOR(A) in.init("in", this, IFC(A, enq)); \
+        out.init("out", this, IFC(A, deq), IFC(A, first))
 
 template<class T>
 class Fifo

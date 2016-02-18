@@ -132,6 +132,7 @@ class PipeOut: InterfaceClass {
         firstp = (T (*)(void *))afirstp;
         }
 };
+#define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
 
 #define RULE(moduletype,name,bodybody) \
   addBaseRule(this, name, ^{ (void)this; return true; }, ^ bodybody )
