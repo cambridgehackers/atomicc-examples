@@ -20,24 +20,6 @@
  */
 #include <fifo.cpp>
 #include <math.h>
-
-#define TileTagBits max(log(NumberOfTiles - 1),1)
-typedef int Clock;
-typedef int Reset;
-#define MemOffsetSize 10
-#define MemTagSize 10
-#define NumReadClients 2
-typedef int SGListId;
-
-class Dummy {};
-
-class MemRequest {
-public:
-};
-
-class MemReadClient {
-};
-
 //#include "memserver.h"
 
 class MemreadIndication {
@@ -47,9 +29,9 @@ public:
 
 typedef struct {
     int tag;
-#define MemreadIndication_heard 1
-    union {
-        struct {
+#define MemreadIndication_tag_heard 1
+    union MemreadIndication_union {
+        struct MemreadIndication_say {
             int meth;
             int v;
         } heard;
@@ -61,7 +43,7 @@ public:
     PipeIn<MemreadIndication_data> *pipe;
     METHOD(heard, (int meth, int v), { return true; }) {
         //MemreadIndication_data ind;
-        //ind.tag = MemreadIndication_heard;
+        //ind.tag = MemreadIndication_tag_heard;
         //ind.data.heard.meth = meth;
         //ind.data.heard.v = v;
         //pipe->enq(ind);
@@ -75,37 +57,39 @@ public:
 
 typedef struct {
     int tag;
-#define MemreadRequest_say 1
-    //union {
-        //struct {
-            //int meth;
-            //int v;
-        //} say;
-    //} data;
+#define MemreadRequest_tag_say 1
+    union MemreadRequest_union {
+        struct MemreadRequest_say {
+            int meth;
+            int v;
+        } say;
+    } data;
 } MemreadRequest_data;
 
 class MemreadRequestInput {
 public:
     MemreadRequest *request;
-    PipeIn<MemreadRequest_data> pipe;
+    //PipeIn<MemreadRequest_data> pipe;
     METHOD(enq, (MemreadRequest_data v), {return false; }) {
         //switch (v.tag) {
-        //case MemreadRequest_say:
+        //case MemreadRequest_tag_say:
             //request->say(v.data.say.meth, v.data.say.v);
             //break;
         //}
     }
-    MemreadRequestInput() { pipe.init("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq)); }
+    MemreadRequestInput() {
+        //pipe.init("pipe", this, METH(&MemreadRequestInput::enq__RDY), METH(&MemreadRequestInput::enq));
+    }
 };
 
 class Memread: public MemreadRequest {
 public:
-    MemReadClient *readers;
+    //MemReadClient *readers;
     //MemreadRequest request;
     METHOD(say, (int meth, int v), { return true; }) {
     }
     Memread(MemreadIndication *indication) {
-        readers = new MemReadClient[NumReadClients];
+        //readers = new MemReadClient[NumReadClients];
     }
 };
 
@@ -115,11 +99,11 @@ class CnocTop {
     Memread lMemread;
 public:
     /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
-    MemReadClient *readers;
+    //MemReadClient *readers;
     CnocTop() :
         lMemread(&lMemreadIndicationOutput)
         {
-        readers = lMemread.readers;
+        //readers = lMemread.readers;
         lMemreadRequestInput.request = &lMemread;
     //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
     //let lMemreadRequestInputNoc <- mkPortalMsgRequest(extend(pack(IfcNames_MemreadRequestS2H)), lMemreadRequestInput.portalIfc.requests);

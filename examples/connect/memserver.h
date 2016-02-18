@@ -1,3 +1,21 @@
+
+#define TileTagBits max(log(NumberOfTiles - 1),1)
+
+typedef int Clock;
+typedef int Reset;
+#define MemOffsetSize 10
+#define MemTagSize 10
+#define NumReadClients 2
+typedef int SGListId;
+
+class Dummy {};
+
+class MemRequest {
+public:
+};
+
+class MemReadClient {
+};
 /////////////////////////////////////////////////
 class MMURequest {
 public:
