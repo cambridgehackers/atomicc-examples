@@ -97,7 +97,7 @@ public:
 
 class EchoRequest {
 public:
-  METHOD(say, (int v), {return true; }){}
+  METHOD(say, (const int &v), {return true; }){}
   EchoRequest() {
     EXPORTREQUEST(EchoRequest::say);
   }
@@ -108,7 +108,7 @@ class Echo : public Module, EchoRequest {
   EchoIndication *ind;
   int pipetemp;
 public:
-  METHOD(say, (int v), {return true; }) {
+  METHOD(say, (const int &v), {return true; }) {
       fifo->in.enq(v);
   }
   Echo(EchoIndication *ind) : fifo(new ECHO_FIFO<int>()), ind(ind) {
