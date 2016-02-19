@@ -120,40 +120,16 @@ public:
         //readers = new MemReadClient[NumReadClients];
     }
 };
-
-class CnocTop {
-    MemreadIndicationOutput lMemreadIndicationOutput;
-    MemreadRequestInput lMemreadRequestInput;
-    Memread lMemread;
-public:
-    /*NumberOfRequests,NumberOfIndications,PhysAddrWidth,DataBusWidth,`PinType,NumberOfMasters*/
-    //MemReadClient *readers;
-    CnocTop() :
-        lMemreadRequestInput(&lMemread.request),
-        lMemread(&lMemreadIndicationOutput.indication)
-        {
-        //readers = lMemread.readers;
-    //let lMemreadIndicationOutputNoc <- mkPortalMsgIndication(extend(pack(IfcNames_MemreadIndicationH2S)), lMemreadIndicationOutput.portalIfc.indications, lMemreadIndicationOutput.portalIfc.messageSize);
-    //let lMemreadRequestInputNoc <- mkPortalMsgRequest(extend(pack(IfcNames_MemreadRequestS2H)), lMemreadRequestInput.portalIfc.requests);
-    //Vector#(NumReadClients,MemReadClient#(DataBusWidth)) nullReaders = replicate(null_mem_read_client());
-    //interface requests = cons(lMemreadRequestInputNoc,nil);
-    //interface indications = cons(lMemreadIndicationOutputNoc,nil);
-    //interface readers = take((nullReaders));
-    }
-};
 //#include "xsimtop.h"
 
-typedef FixedPoint<6> myint6;
-typedef FixedPoint<4> myint4;
-
 typedef struct {
-    myint6 a;
-    myint4 b;
+    int a;
+    int b;
 } ValueType;
 
 class ConnectIndication {
 public:
-    INDICATION(heard, (myint6 meth, myint4 v), { return true; });
+    INDICATION(heard, (int meth, int v), { return true; });
     ConnectIndication() {
         EXPORTREQUEST(ConnectIndication::heard);
     }
@@ -161,7 +137,7 @@ public:
 
 class ConnectRequest {
 public:
-    METHOD(say, (myint6 meth, myint4 v), {return true; }){}
+    METHOD(say, (int meth, int v), {return true; }){}
     ConnectRequest() {
         EXPORTREQUEST(ConnectRequest::say);
     }
@@ -171,20 +147,20 @@ ValueType grumpy;
 
 class Connect : public Module, ConnectRequest {
     Fifo1<ValueType> fifo;
-    FixedPoint<23>   fcounter;
-    FixedPointV      counter;    // the precision of these members is set by the constructor
-    FixedPointV      gcounter;
     ConnectIndication *ind;
-    CnocTop          top;
-    //XsimTop          lXsimTop;
+    MemreadIndicationOutput lMemreadIndicationOutput;
+    MemreadRequestInput lMemreadRequestInput;
+    Memread lMemread;
 public:
-    METHOD(say, (myint6 meth, myint4 v), {return true; }) {
+    METHOD(say, (int meth, int v), {return true; }) {
         ValueType temp;
         temp.a = meth;
         temp.b = v;
         fifo.in.enq(temp);
     }
-    Connect(ConnectIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    Connect(ConnectIndication *ind) : ind(ind),
+        lMemreadRequestInput(&lMemread.request),
+        lMemread(&lMemreadIndicationOutput.indication)
         //, lXsimTop(0, 0, 0)
     {
         EXPORTREQUEST(Connect::say);
@@ -192,7 +168,6 @@ public:
             ValueType temp = this->fifo.out.first();
             this->fifo.out.deq();
             this->ind->heard(temp.a, temp.b);
-            fixedSet((void *)&this->gcounter, fixedGet((void *)&this->gcounter) + 1);
             });
     };
     ~Connect() {}
@@ -202,7 +177,7 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void ConnectIndication::heard(myint6 meth, myint4 v)
+void ConnectIndication::heard(int meth, int v)
 {
     //printf("Heard an connect: %d %d\n", meth, v);
     printf("Heard an connect: %d %d\n", 0, 0);
