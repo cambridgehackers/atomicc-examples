@@ -18,6 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#include <atomicc.h>
 
 typedef struct {
     int a;
@@ -30,8 +31,7 @@ ValueType bozoreturnfunc(int a)
 {
     return haha;
 }
-#if 1
-#include <fifo.cpp>
+
 // Serialization structures
 typedef struct {
     int tag;
@@ -198,7 +198,6 @@ public:
 };
 
 class Connect : public Module, ConnectRequest {
-    Fifo1<ValueType> fifo;
     ConnectIndication *ind;
     EchoIndicationOutput lEchoIndicationOutput;
     EchoRequestInput lEchoRequestInput;
@@ -209,10 +208,6 @@ class Connect : public Module, ConnectRequest {
     EchoIndication indication_test;
 public:
     METHOD(say, (int meth, int v), {return true; }) {
-        //ValueType temp;
-        //temp.a = meth;
-        //temp.b = v;
-        //fifo.in.enq(temp);
         printf("entered Connect::say\n");
         lEchoRequestOutput_test.request.say(meth, v);
     }
@@ -228,11 +223,6 @@ public:
         lEchoRequestOutput_test.init(&lEchoRequestInput.pipe);
         lEchoIndicationInput_test.init(&indication_test);
         indication_test.init("indication_test", this, IFC(EchoIndication, heard));
-        RULE(Connect, "respond", {
-            ValueType temp = this->fifo.out.first();
-            this->fifo.out.deq();
-            this->ind->heard(temp.a, temp.b);
-            });
     };
     ~Connect() {}
 };
@@ -243,8 +233,7 @@ public:
 
 void ConnectIndication::heard(int meth, int v)
 {
-    //printf("Heard an connect: %d %d\n", meth, v);
-    printf("Heard an connect: %d %d\n", 0, 0);
+    printf("Heard an connect: %d %d\n", meth, v);
     stop_main_program = 1;
 }
 
@@ -272,4 +261,3 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
-#endif
