@@ -99,7 +99,8 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    EchoRequestOutput() {
+    void init(EchoRequestPipe *req) {
+        pipe = req;
         indication.init("indication", this, IFC(EchoRequestOutput, say));
     }
 };
@@ -193,6 +194,7 @@ class Connect : public Module, ConnectRequest {
     EchoRequestInput lEchoRequestInput;
     Echo lEcho;
 
+    EchoRequestOutput lEchoRequestOutput_test;
     EchoIndicationInput lEchoIndicationInput_test;
     EchoIndication indication_test;
 public:
@@ -211,6 +213,7 @@ public:
         lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
         lEcho.init(&lEchoIndicationOutput.indication);
 
+        lEchoRequestOutput_test.init(&lEchoRequestInput.pipe);
         lEchoIndicationInput_test.init(&indication_test);
         indication_test.init("indication_test", this, IFC(EchoIndication, heard));
         RULE(Connect, "respond", {
