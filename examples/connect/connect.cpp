@@ -64,10 +64,12 @@ class EchoRequest: InterfaceClass {
     void (*sayp)(void *p, int meth, int v);
  public:
     METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
-    EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
         p = ap;
         ASSIGNIFCPTR(say);
+    }
+    EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
+        //EXPORTREQUEST(EchoRequest::say);
     }
 };
 EchoRequest unusedER;
@@ -78,10 +80,12 @@ class EchoIndication: InterfaceClass {
     void (*heardp)(void *p, int meth, int v);
  public:
     METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
     void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
         p = ap;
         ASSIGNIFCPTR(heard);
+    }
+    EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) {
+        //EXPORTREQUEST(EchoIndication::heard);
     }
 };
 EchoIndication unusedEI;
@@ -90,7 +94,7 @@ typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 EchoRequestPipe unusedERP;
 class EchoRequestOutput : public Module { // method -> pipe
 public:
-    EchoRequest indication;
+    EchoRequest request;
     EchoRequestPipe *pipe;
     METHOD(say, (int meth, int v), { return true; }) {
         EchoRequest_data ind;
@@ -101,7 +105,8 @@ public:
     }
     void init(EchoRequestPipe *req) {
         pipe = req;
-        indication.init("indication", this, IFC(EchoRequestOutput, say));
+        request.init("request", this, IFC(EchoRequestOutput, say));
+        EXPORTREQUEST(EchoRequestOutput::say);
     }
 };
 
@@ -119,6 +124,7 @@ public:
     void init(EchoRequest *req) {
         request = req;
         pipe.init("pipe", this, IFC(EchoRequestInput, enq));
+        EXPORTREQUEST(EchoRequestInput::enq);
     }
 };
 
@@ -138,6 +144,7 @@ public:
     void init(EchoIndicationPipe *ind) {
         pipe = ind;
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
+        EXPORTREQUEST(EchoIndicationOutput::heard);
     }
 };
 
@@ -155,6 +162,7 @@ public:
     void init(EchoIndication *req) {
         request = req;
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
+        EXPORTREQUEST(EchoIndicationInput::enq);
     }
 };
 
@@ -199,10 +207,12 @@ class Connect : public Module, ConnectRequest {
     EchoIndication indication_test;
 public:
     METHOD(say, (int meth, int v), {return true; }) {
-        ValueType temp;
-        temp.a = meth;
-        temp.b = v;
-        fifo.in.enq(temp);
+        //ValueType temp;
+        //temp.a = meth;
+        //temp.b = v;
+        //fifo.in.enq(temp);
+        //printf("HA\n");
+        lEchoRequestOutput_test.request.say(meth, v);
     }
     METHOD(heard, (int meth, int v), { return true; }) {
         ind->heard(meth, v);
