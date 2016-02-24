@@ -178,6 +178,7 @@ public:
     void init(EchoIndication *ind) {
         indication = ind;
         request.init("request", this, IFC(Echo, say));
+        EXPORTREQUEST(Echo::say);
     }
 };
 
@@ -207,6 +208,7 @@ class Connect : public Module, ConnectRequest {
     EchoIndicationInput lEchoIndicationInput_test;
     EchoIndication indication_test;
 public:
+#if 0
     METHOD(say, (int meth, int v), {return true; }) {
         printf("entered Connect::say\n");
         lEchoRequestOutput_test.request.say(meth, v);
@@ -214,6 +216,7 @@ public:
     METHOD(heard, (int meth, int v), { return true; }) {
         ind->heard(meth, v);
     }
+#endif
     Connect(ConnectIndication *ind) : ind(ind) {
         EXPORTREQUEST(Connect::say);
         lEchoRequestInput.init(&lEcho.request);
