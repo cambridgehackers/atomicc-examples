@@ -97,6 +97,7 @@ public:
     EchoRequest request;
     EchoRequestPipe *pipe;
     METHOD(say, (int meth, int v), { return true; }) {
+        printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
         ind.data.say.meth = meth;
@@ -115,6 +116,7 @@ public:
     EchoRequestPipe pipe;
     EchoRequest *request;
     METHOD(enq, (const EchoRequest_data &v), {return true; }) {
+        printf("entered EchoRequestInput::enq\n");
         switch (v.tag) {
         case EchoRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
@@ -211,7 +213,7 @@ public:
         //temp.a = meth;
         //temp.b = v;
         //fifo.in.enq(temp);
-        //printf("HA\n");
+        printf("entered Connect::say\n");
         lEchoRequestOutput_test.request.say(meth, v);
     }
     METHOD(heard, (int meth, int v), { return true; }) {
