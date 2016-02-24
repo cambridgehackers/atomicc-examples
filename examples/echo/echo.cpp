@@ -116,8 +116,9 @@ public:
     EXPORTREQUEST(Echo::say);
     RULE(Echo,"respond_rule", { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
+	 int temp = this->fifo->out.first();
 	 this->fifo->out.deq();
-	 this->ind->heard(this->fifo->out.first());
+	 this->ind->heard(temp);
        });
   };
   ~Echo() {}

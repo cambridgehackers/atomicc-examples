@@ -18,114 +18,150 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <fifo.cpp>
-#include <math.h>
-//#include "memserver.h"
 
-class MemreadIndication: InterfaceClass {
-    void *p;
-    GUARDPTR heard__RDYp;
-    void (*heardp)(void *p, int meth, int v);
- public:
-    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    MemreadIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
-    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
-        p = ap;
-        ASSIGNIFCPTR(heard);
-    }
-};
+typedef struct {
+    int a;
+    int b;
+//char fooo[200];
+} ValueType;
+
+ValueType haha;
+ValueType bozoreturnfunc(int a)
+{
+    return haha;
+}
+#if 1
+#include <fifo.cpp>
+// Serialization structures
+typedef struct {
+    int tag;
+#define EchoRequest_tag_say 1
+    struct EchoRequest_union {
+        struct EchoRequest_say {
+            int meth;
+            int v;
+        } say;
+    } data;
+} EchoRequest_data;
 
 typedef struct {
     int tag;
-#define MemreadIndication_tag_heard 1
-    union MemreadIndication_union {
-        struct MemreadIndication_heard {
+#define EchoIndication_tag_heard 1
+    struct EchoIndication_union {
+        struct EchoIndication_heard {
             int meth;
             int v;
         } heard;
     } data;
-} MemreadIndication_data;
+} EchoIndication_data;
 
-typedef PipeIn<MemreadIndication_data> MemreadIndicationPipe;
-
-class MemreadIndicationOutput {
-public:
-    MemreadIndicationPipe *pipe;
-    MemreadIndication indication;
-    METHOD(heard, (int meth, int v), { return true; }) {
-        MemreadIndication_data ind;
-        ind.tag = MemreadIndication_tag_heard;
-        ind.data.heard.meth = meth;
-        ind.data.heard.v = v;
-        pipe->enq(ind);
-    }
-    MemreadIndicationOutput() {
-        indication.init("indication", this, IFC(MemreadIndicationOutput, heard));
-    }
-};
-
-class MemreadRequest: InterfaceClass {
+// Interface classes
+class EchoRequest: InterfaceClass {
     void *p;
     GUARDPTR say__RDYp;
     void (*sayp)(void *p, int meth, int v);
  public:
     METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
-    MemreadRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
+    EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) { }
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
         p = ap;
         ASSIGNIFCPTR(say);
     }
 };
 
-typedef struct {
-    int tag;
-#define MemreadRequest_tag_say 1
-    struct MemreadRequest_union {
-        struct MemreadRequest_say {
-            int meth;
-            int v;
-        } say;
-    } data;
-} MemreadRequest_data;
+class EchoIndication: InterfaceClass {
+    void *p;
+    GUARDPTR heard__RDYp;
+    void (*heardp)(void *p, int meth, int v);
+ public:
+    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
+    EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
+    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
+        p = ap;
+        ASSIGNIFCPTR(heard);
+    }
+};
 
-class MemreadRequestInput {
+typedef PipeIn<EchoRequest_data> EchoRequestPipe;
+class EchoRequestOutput : public Module { // method -> pipe
 public:
-    MemreadRequest *request;
-    PipeIn<MemreadRequest_data> pipe;
-    METHOD(enq, (const MemreadRequest_data &v), {return true; }) {
+    EchoRequest indication;
+    EchoRequestPipe *pipe;
+    METHOD(say, (int meth, int v), { return true; }) {
+        EchoRequest_data ind;
+        ind.tag = EchoRequest_tag_say;
+        ind.data.say.meth = meth;
+        ind.data.say.v = v;
+        pipe->enq(ind);
+    }
+    EchoRequestOutput() {
+        indication.init("indication", this, IFC(EchoRequestOutput, say));
+    }
+};
+
+class EchoRequestInput : public Module { // pipe -> method
+public:
+    EchoRequestPipe pipe;
+    EchoRequest *request;
+    METHOD(enq, (const EchoRequest_data &v), {return true; }) {
         switch (v.tag) {
-        case MemreadRequest_tag_say:
+        case EchoRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
             break;
         }
     }
-    MemreadRequestInput(MemreadRequest *req) {
+    void init(EchoRequest *req) {
         request = req;
-        pipe.init("pipe", this, IFC(MemreadRequestInput, enq));
+        pipe.init("pipe", this, IFC(EchoRequestInput, enq));
     }
 };
 
-class Memread {
+typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
+class EchoIndicationOutput : public Module { // method -> pipe
 public:
-    MemreadRequest request;
-    MemreadIndication *indication;
-    //MemReadClient *readers;
-    //MemreadRequest request;
+    EchoIndication indication;
+    EchoIndicationPipe *pipe;
+    METHOD(heard, (int meth, int v), { return true; }) {
+        EchoIndication_data ind;
+        ind.tag = EchoIndication_tag_heard;
+        ind.data.heard.meth = meth;
+        ind.data.heard.v = v;
+        pipe->enq(ind);
+    }
+    EchoIndicationOutput() {
+        indication.init("indication", this, IFC(EchoIndicationOutput, heard));
+    }
+};
+
+class EchoIndicationInput : public Module { // pipe -> method
+public:
+    EchoIndicationPipe pipe;
+    EchoIndication *request;
+    METHOD(enq, (const EchoIndication_data &v), {return true; }) {
+        switch (v.tag) {
+        case EchoIndication_tag_heard:
+            request->heard(v.data.heard.meth, v.data.heard.v);
+            break;
+        }
+    }
+    void init(EchoIndication *req) {
+        request = req;
+        pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
+    }
+};
+
+class Echo : public Module {
+public:
+    EchoRequest request;
+    EchoIndication *indication;
     METHOD(say, (int meth, int v), { return true; }) {
         indication->heard(meth, v);
     }
-    Memread(MemreadIndication *ind) {
+    void init(EchoIndication *ind) {
         indication = ind;
-        request.init("request", this, IFC(Memread, say));
-        //readers = new MemReadClient[NumReadClients];
+        request.init("request", this, IFC(Echo, say));
     }
 };
-//#include "xsimtop.h"
-
-typedef struct {
-    int a;
-    int b;
-} ValueType;
 
 class ConnectIndication {
 public:
@@ -143,14 +179,12 @@ public:
     }
 };
 
-ValueType grumpy;
-
 class Connect : public Module, ConnectRequest {
     Fifo1<ValueType> fifo;
     ConnectIndication *ind;
-    MemreadIndicationOutput lMemreadIndicationOutput;
-    MemreadRequestInput lMemreadRequestInput;
-    Memread lMemread;
+    EchoIndicationOutput lEchoIndicationOutput;
+    EchoRequestInput lEchoRequestInput;
+    Echo lEcho;
 public:
     METHOD(say, (int meth, int v), {return true; }) {
         ValueType temp;
@@ -158,12 +192,10 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    Connect(ConnectIndication *ind) : ind(ind),
-        lMemreadRequestInput(&lMemread.request),
-        lMemread(&lMemreadIndicationOutput.indication)
-        //, lXsimTop(0, 0, 0)
-    {
+    Connect(ConnectIndication *ind) : ind(ind) {
         EXPORTREQUEST(Connect::say);
+        lEchoRequestInput.init(&lEcho.request);
+        lEcho.init(&lEchoIndicationOutput.indication);
         RULE(Connect, "respond", {
             ValueType temp = this->fifo.out.first();
             this->fifo.out.deq();
@@ -208,3 +240,4 @@ int main(int argc, const char *argv[])
     return 0;
 }
 
+#endif
