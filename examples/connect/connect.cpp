@@ -43,6 +43,7 @@ typedef struct {
         } say;
     } data;
 } EchoRequest_data;
+EchoRequest_data unusedERD;
 
 typedef struct {
     int tag;
@@ -54,6 +55,7 @@ typedef struct {
         } heard;
     } data;
 } EchoIndication_data;
+EchoIndication_data unusedEID;
 
 // Interface classes
 class EchoRequest: InterfaceClass {
@@ -68,6 +70,7 @@ class EchoRequest: InterfaceClass {
         ASSIGNIFCPTR(say);
     }
 };
+EchoRequest unusedER;
 
 class EchoIndication: InterfaceClass {
     void *p;
@@ -81,8 +84,10 @@ class EchoIndication: InterfaceClass {
         ASSIGNIFCPTR(heard);
     }
 };
+EchoIndication unusedEI;
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
+EchoRequestPipe unusedERP;
 class EchoRequestOutput : public Module { // method -> pipe
 public:
     EchoRequest indication;
@@ -117,6 +122,7 @@ public:
 };
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
+EchoIndicationPipe unusedEIP;
 class EchoIndicationOutput : public Module { // method -> pipe
 public:
     EchoIndication indication;
@@ -128,7 +134,8 @@ public:
         ind.data.heard.v = v;
         pipe->enq(ind);
     }
-    EchoIndicationOutput() {
+    void init(EchoIndicationPipe *ind) {
+        pipe = ind;
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
     }
 };
@@ -185,6 +192,9 @@ class Connect : public Module, ConnectRequest {
     EchoIndicationOutput lEchoIndicationOutput;
     EchoRequestInput lEchoRequestInput;
     Echo lEcho;
+
+    EchoIndicationInput lEchoIndicationInput_test;
+    EchoIndication indication_test;
 public:
     METHOD(say, (int meth, int v), {return true; }) {
         ValueType temp;
@@ -192,10 +202,17 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
+    METHOD(heard, (int meth, int v), { return true; }) {
+        ind->heard(meth, v);
+    }
     Connect(ConnectIndication *ind) : ind(ind) {
         EXPORTREQUEST(Connect::say);
         lEchoRequestInput.init(&lEcho.request);
+        lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
         lEcho.init(&lEchoIndicationOutput.indication);
+
+        lEchoIndicationInput_test.init(&indication_test);
+        indication_test.init("indication_test", this, IFC(EchoIndication, heard));
         RULE(Connect, "respond", {
             ValueType temp = this->fifo.out.first();
             this->fifo.out.deq();
