@@ -182,6 +182,15 @@ public:
     }
 };
 
+class foo: public EchoIndication {
+    void heard(unsigned int heard_meth, unsigned int heard_v) {
+        printf("Heard an echo: %d %d\n", heard_meth, heard_v);
+            stop_main_program = 1;
+    };
+    bool heard__RDY(void) { return true;}
+};
+class foo zConnectresp;
+
 class Connect : public Module {
 public:
     EchoIndicationOutput lEchoIndicationOutput;
@@ -190,17 +199,14 @@ public:
 
     EchoRequestOutput lEchoRequestOutput_test;
     EchoIndicationInput lEchoIndicationInput_test;
-    EchoIndication indication_test;
     Connect() {
         lEchoRequestInput.init(&lEcho.request);
         lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
         lEcho.init(&lEchoIndicationOutput.indication);
 
         lEchoRequestOutput_test.init(&lEchoRequestInput.pipe);
-        lEchoIndicationInput_test.init(&indication_test);
-        indication_test.init("indication_test", this, IFC(EchoIndication, heard));
+        lEchoIndicationInput_test.init(&zConnectresp);
     };
-    ~Connect() {}
 };
 
 Connect connectTest;
