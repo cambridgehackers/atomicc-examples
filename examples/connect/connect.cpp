@@ -182,6 +182,7 @@ public:
     }
 };
 
+#if 0
 class ConnectIndication {
 public:
     INDICATION(heard, (int meth, int v), { return true; });
@@ -197,28 +198,18 @@ public:
         EXPORTREQUEST(ConnectRequest::say);
     }
 };
+#endif
 
-class Connect : public Module, ConnectRequest {
-    ConnectIndication *ind;
+class Connect : public Module {
     EchoIndicationOutput lEchoIndicationOutput;
     EchoRequestInput lEchoRequestInput;
     Echo lEcho;
 
+public:
     EchoRequestOutput lEchoRequestOutput_test;
     EchoIndicationInput lEchoIndicationInput_test;
     EchoIndication indication_test;
-public:
-#if 0
-    METHOD(say, (int meth, int v), {return true; }) {
-        printf("entered Connect::say\n");
-        lEchoRequestOutput_test.request.say(meth, v);
-    }
-    METHOD(heard, (int meth, int v), { return true; }) {
-        ind->heard(meth, v);
-    }
-#endif
-    Connect(ConnectIndication *ind) : ind(ind) {
-        EXPORTREQUEST(Connect::say);
+    Connect() {
         lEchoRequestInput.init(&lEcho.request);
         lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
         lEcho.init(&lEchoIndicationOutput.indication);
@@ -234,17 +225,11 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void ConnectIndication::heard(int meth, int v)
-{
-    printf("Heard an connect: %d %d\n", meth, v);
-    stop_main_program = 1;
-}
-
 class ConnectTest {
 public:
     Connect *connect;
 public:
-    ConnectTest(): connect(new Connect(new ConnectIndication())) {
+    ConnectTest(): connect(new Connect()) {
         printf("ConnectTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(ConnectTest));
     }
     ~ConnectTest() {}
@@ -255,9 +240,9 @@ ConnectTest connectTest;
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!connectTest.connect->say__RDY())
+    while (!connectTest.connect->lEchoRequestOutput_test.say__RDY())
         ;
-    connectTest.connect->say(2, 44);
+    connectTest.connect->lEchoRequestOutput_test.say(2, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
