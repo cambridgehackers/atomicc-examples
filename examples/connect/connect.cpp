@@ -182,24 +182,6 @@ public:
     }
 };
 
-#if 0
-class ConnectIndication {
-public:
-    INDICATION(heard, (int meth, int v), { return true; });
-    ConnectIndication() {
-        EXPORTREQUEST(ConnectIndication::heard);
-    }
-};
-
-class ConnectRequest {
-public:
-    METHOD(say, (int meth, int v), {return true; }){}
-    ConnectRequest() {
-        EXPORTREQUEST(ConnectRequest::say);
-    }
-};
-#endif
-
 class Connect : public Module {
     EchoIndicationOutput lEchoIndicationOutput;
     EchoRequestInput lEchoRequestInput;
@@ -221,28 +203,14 @@ public:
     ~Connect() {}
 };
 
-////////////////////////////////////////////////////////////
-// Test Bench
-////////////////////////////////////////////////////////////
-
-class ConnectTest {
-public:
-    Connect *connect;
-public:
-    ConnectTest(): connect(new Connect()) {
-        printf("ConnectTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(ConnectTest));
-    }
-    ~ConnectTest() {}
-};
-
-ConnectTest connectTest;
+Connect connectTest;
 
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!connectTest.connect->lEchoRequestOutput_test.say__RDY())
+    while (!connectTest.lEchoRequestOutput_test.say__RDY())
         ;
-    connectTest.connect->lEchoRequestOutput_test.say(2, 44);
+    connectTest.lEchoRequestOutput_test.say(2, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
