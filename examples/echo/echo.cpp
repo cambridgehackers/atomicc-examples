@@ -38,15 +38,15 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (T v), { return notFull(); }) {
+    METHOD(enq, (const T &v), override { return notFull(); }) override {
         if (pong)
             element2 = v;
         else
             element1 = v;
         full = true;
     }
-    METHOD(deq, (void), { return notEmpty(); }) { full = false; pong = !pong; }
-    GVALUE(first, T, { return notEmpty(); }) { return pong ? element2 : element1; }
+    METHOD(deq, (void), override { return notEmpty(); }) override { full = false; pong = !pong; }
+    GVALUE(first, T, override { return notEmpty(); }) override { return pong ? element2 : element1; }
     FifoPong(): Fifo<T>(), full(false), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -65,23 +65,25 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (T v), { return true; }) {
+    METHOD(enq, (const T &v), override { return true; }) override {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), { return true; }) {
+    METHOD(deq, (void), override { return true; }) override {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
+    GVALUE(first, T, override { return true; }) override { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
+        printf("in.enq %p in.enq__RDY %p out.deq %p out.deq__RDY %p\n",
+           in.enqp, in.enq__RDYp, out.deqp, out.deq__RDYp);
     };
 };
 #endif

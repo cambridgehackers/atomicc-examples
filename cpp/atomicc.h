@@ -104,6 +104,7 @@ typedef bool (*GUARDPTR)(void *);
          A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
 class PipeIn: InterfaceClass {
+ public:
     void *p;
     GUARDPTR enq__RDYp;
     void (*enqp)(void *p, const T &v);
@@ -118,6 +119,7 @@ class PipeIn: InterfaceClass {
 
 template<class T>
 class PipeOut: InterfaceClass {
+ public:
     void *p;
     GUARDPTR deq__RDYp;
     void (*deqp)(void *p);
