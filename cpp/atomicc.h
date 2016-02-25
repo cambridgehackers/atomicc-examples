@@ -26,6 +26,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <string>
+#include <stddef.h> // offsetof
 
 extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
 class Module;
@@ -213,5 +214,9 @@ public:
         return *this;
     }
 };
+
+#define container_of(ptr, type, member) ({			\
+	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
+	(type *)( (char *)__mptr - offsetof(type,member) );})
 
 #endif
