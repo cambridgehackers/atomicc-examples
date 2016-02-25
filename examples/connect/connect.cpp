@@ -183,11 +183,11 @@ public:
 };
 
 class Connect : public Module {
+public:
     EchoIndicationOutput lEchoIndicationOutput;
     EchoRequestInput lEchoRequestInput;
     Echo lEcho;
 
-public:
     EchoRequestOutput lEchoRequestOutput_test;
     EchoIndicationInput lEchoIndicationInput_test;
     EchoIndication indication_test;
