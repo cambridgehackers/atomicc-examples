@@ -56,6 +56,8 @@ public:
 };
 #else
 #define ECHO_FIFO FifoPong
+#define OVERRIDE override
+//#define OVERRIDE
 template<class T>
 class FifoPong : public Fifo<T>, public Module
 {
@@ -65,20 +67,21 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (const T &v), override { return true; }) override {
+    //bad version for testing METHOD(enq, (T v), OVERRIDE { return true; }) OVERRIDE {
+    METHOD(enq, (const T &v), OVERRIDE { return true; }) OVERRIDE {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), override { return true; }) override {
+    METHOD(deq, (void), OVERRIDE { return true; }) OVERRIDE {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, override { return true; }) override { return pong ? element2.out.first() : element1.out.first(); }
+    GVALUE(first, T, OVERRIDE { return true; }) OVERRIDE { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));

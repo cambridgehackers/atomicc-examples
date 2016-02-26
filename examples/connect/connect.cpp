@@ -108,6 +108,7 @@ public:
         pipe = req;
         request.init("request", this, IFC(EchoRequestOutput, say));
         EXPORTREQUEST(EchoRequestOutput::say);
+        EXPORTREQUEST(EchoRequest::say);
     }
 };
 
@@ -147,6 +148,7 @@ public:
         pipe = ind;
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         EXPORTREQUEST(EchoIndicationOutput::heard);
+        EXPORTREQUEST(EchoIndication::heard);
     }
 };
 
