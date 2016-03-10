@@ -176,6 +176,9 @@ public:
     int busy;
     int meth_temp;
     int v_temp;
+    int busy_delay;
+    int meth_delay;
+    int v_delay;
     EchoIndication *indication;
     METHOD(say, (int meth, int v), { return !busy; }) {
         meth_temp = meth;
@@ -186,9 +189,15 @@ public:
         indication = ind;
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
-        RULE(Echo,"respond_rule", this->busy != 0, { 
-             busy = 0;
-             indication->heard(meth_temp, v_temp);
+        RULE(Echo,"delay_rule", this->busy != 0, {
+             this->busy = 0;
+             this->busy_delay = 1;
+             this->meth_delay = this->meth_temp;
+             this->v_delay = this->v_temp;
+           });
+        RULE(Echo,"respond_rule", this->busy_delay != 0, {
+             this->busy_delay = 0;
+             indication->heard(this->meth_delay, this->v_delay);
            });
     }
 };
