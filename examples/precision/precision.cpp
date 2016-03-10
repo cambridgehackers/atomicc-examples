@@ -63,7 +63,7 @@ public:
     IVector(IVectorIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
     {
         EXPORTREQUEST(IVector::say);
-        RULE(IVector, "respond", {
+        RULE(IVector, "respond", true, {
             ValueType temp = this->fifo.out.first();
             this->fifo.out.deq();
             this->ind->heard(temp.a, temp.b);

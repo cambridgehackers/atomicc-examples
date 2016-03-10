@@ -119,7 +119,7 @@ public:
   Echo(EchoIndication *ind) : fifo(new ECHO_FIFO<int>()), ind(ind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     EXPORTREQUEST(Echo::say);
-    RULE(Echo,"respond_rule", { 
+    RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 int temp = this->fifo->out.first();
 	 this->fifo->out.deq();

@@ -173,14 +173,23 @@ public:
 class Echo : public Module {
 public:
     EchoRequest request;
+    int busy;
+    int meth_temp;
+    int v_temp;
     EchoIndication *indication;
-    METHOD(say, (int meth, int v), { return true; }) {
-        indication->heard(meth, v);
+    METHOD(say, (int meth, int v), { return !busy; }) {
+        meth_temp = meth;
+        v_temp = v;
+        busy = 1;
     }
     void init(EchoIndication *ind) {
         indication = ind;
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
+        RULE(Echo,"respond_rule", this->busy != 0, { 
+             busy = 0;
+             indication->heard(meth_temp, v_temp);
+           });
     }
 };
 

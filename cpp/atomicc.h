@@ -137,8 +137,8 @@ class PipeOut: InterfaceClass {
 };
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
 
-#define RULE(moduletype,name,bodybody) \
-  addBaseRule(this, name, ^{ (void)this; return true; }, ^ bodybody )
+#define RULE(moduletype,name, guardExpr, bodybody) \
+  addBaseRule(this, name, ^{ (void)this; return (guardExpr); }, ^ bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\
