@@ -196,7 +196,7 @@ printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         EXPORTREQUEST(EchoIndicationInput::enq);
         RULE(Echo,"input_rule", this->busy_delay != 0, {
-printf("[%s:%d]EchoIndicationInput\n", __FUNCTION__, __LINE__);
+printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
              this->busy_delay = 0;
              request->heard(this->meth_delay, this->v_delay);
            });
@@ -224,14 +224,14 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
         RULE(Echo,"delay_rule", this->busy != 0, {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[delay_rule:%d]Echo\n", __LINE__);
              this->busy = 0;
              this->busy_delay = 1;
              this->meth_delay = this->meth_temp;
              this->v_delay = this->v_temp;
            });
         RULE(Echo,"respond_rule", this->busy_delay != 0, {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[respond_rule:%d]Echo\n", __LINE__);
              this->busy_delay = 0;
              indication->heard(this->meth_delay, this->v_delay);
            });
