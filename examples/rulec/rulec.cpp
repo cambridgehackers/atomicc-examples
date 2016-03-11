@@ -117,7 +117,7 @@ public:
     EchoRequestPipe pipe;
     EchoRequest *request;
     METHOD(enq, (const EchoRequest_data &v), {return true; }) {
-        printf("entered EchoRequestInput::enq\n");
+        printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
@@ -137,18 +137,40 @@ class EchoIndicationOutput : public Module { // method -> pipe
 public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
-    METHOD(heard, (int meth, int v), { return true; }) {
-        EchoIndication_data ind;
-        ind.tag = EchoIndication_tag_heard;
-        ind.data.heard.meth = meth;
-        ind.data.heard.v = v;
-        pipe->enq(ind);
+    EchoIndication_data ind0;
+    EchoIndication_data ind1;
+    int ind_busy;
+    int even;
+    METHOD(heard, (int meth, int v), { return !ind_busy; }) {
+printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
+        if (even) {
+        ind1.tag = EchoIndication_tag_heard;
+        ind1.data.heard.meth = meth;
+        ind1.data.heard.v = v;
+        }
+        else {
+        ind0.tag = EchoIndication_tag_heard;
+        ind0.data.heard.meth = meth;
+        ind0.data.heard.v = v;
+        }
+        ind_busy = 1;
+        even = !even;
     }
     void init(EchoIndicationPipe *ind) {
         pipe = ind;
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         EXPORTREQUEST(EchoIndicationOutput::heard);
         EXPORTREQUEST(EchoIndication::heard);
+        RULE(Echo,"output_rulee", ((this->ind_busy != 0) & (this->even != 0)) != 0, {
+printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, this->ind0.tag);
+             this->ind_busy = 0;
+             this->pipe->enq(this->ind0);
+           });
+        RULE(Echo,"output_ruleo", ((this->ind_busy != 0) & (this->even == 0)) != 0, {
+printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, this->ind1.tag);
+             this->ind_busy = 0;
+             this->pipe->enq(this->ind1);
+           });
     }
 };
 
@@ -156,10 +178,16 @@ class EchoIndicationInput : public Module { // pipe -> method
 public:
     EchoIndicationPipe pipe;
     EchoIndication *request;
-    METHOD(enq, (const EchoIndication_data &v), {return true; }) {
+    int busy_delay;
+    int meth_delay;
+    int v_delay;
+    METHOD(enq, (const EchoIndication_data &v), {return !busy_delay; }) {
+printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
-            request->heard(v.data.heard.meth, v.data.heard.v);
+            meth_delay = v.data.heard.meth;
+            v_delay = v.data.heard.v;
+            busy_delay = 1;
             break;
         }
     }
@@ -167,6 +195,11 @@ public:
         request = req;
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         EXPORTREQUEST(EchoIndicationInput::enq);
+        RULE(Echo,"input_rule", this->busy_delay != 0, {
+printf("[%s:%d]EchoIndicationInput\n", __FUNCTION__, __LINE__);
+             this->busy_delay = 0;
+             request->heard(this->meth_delay, this->v_delay);
+           });
     }
 };
 
@@ -181,6 +214,7 @@ public:
     int v_delay;
     EchoIndication *indication;
     METHOD(say, (int meth, int v), { return !busy; }) {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
@@ -190,12 +224,14 @@ public:
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
         RULE(Echo,"delay_rule", this->busy != 0, {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
              this->busy = 0;
              this->busy_delay = 1;
              this->meth_delay = this->meth_temp;
              this->v_delay = this->v_temp;
            });
         RULE(Echo,"respond_rule", this->busy_delay != 0, {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
              this->busy_delay = 0;
              indication->heard(this->meth_delay, this->v_delay);
            });
