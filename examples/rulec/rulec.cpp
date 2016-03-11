@@ -249,19 +249,19 @@ class foo zConnectresp;
 
 class Connect : public Module {
 public:
-    EchoIndicationOutput lEchoIndicationOutput;
-    EchoRequestInput lEchoRequestInput;
+    EchoIndicationOutput lEIO;
+    EchoRequestInput lERI;
     Echo lEcho;
 
-    EchoRequestOutput lEchoRequestOutput_test;
-    EchoIndicationInput lEchoIndicationInput_test;
+    EchoRequestOutput lERO_test;
+    EchoIndicationInput lEII_test;
     Connect() {
-        lEchoRequestInput.init(&lEcho.request);
-        lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
-        lEcho.init(&lEchoIndicationOutput.indication);
+        lERI.init(&lEcho.request);
+        lEIO.init(&lEII_test.pipe);
+        lEcho.init(&lEIO.indication);
 
-        lEchoRequestOutput_test.init(&lEchoRequestInput.pipe);
-        lEchoIndicationInput_test.init(&zConnectresp);
+        lERO_test.init(&lERI.pipe);
+        lEII_test.init(&zConnectresp);
     };
 };
 
@@ -270,9 +270,9 @@ Connect connectTest;
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!connectTest.lEchoRequestOutput_test.say__RDY())
+    while (!connectTest.lERO_test.say__RDY())
         ;
-    connectTest.lEchoRequestOutput_test.say(2, 44);
+    connectTest.lERO_test.say(2, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
