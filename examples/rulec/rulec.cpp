@@ -104,8 +104,7 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void init(EchoRequestPipe *req) {
-        pipe = req;
+    void init() {
         request.init("request", this, IFC(EchoRequestOutput, say));
         EXPORTREQUEST(EchoRequestOutput::say);
         EXPORTREQUEST(EchoRequest::say);
@@ -124,8 +123,7 @@ public:
             break;
         }
     }
-    void init(EchoRequest *req) {
-        request = req;
+    void init() {
         pipe.init("pipe", this, IFC(EchoRequestInput, enq));
         EXPORTREQUEST(EchoRequestInput::enq);
     }
@@ -156,8 +154,7 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         ind_busy = 1;
         even = !even;
     }
-    void init(EchoIndicationPipe *ind) {
-        pipe = ind;
+    void init() {
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         EXPORTREQUEST(EchoIndicationOutput::heard);
         EXPORTREQUEST(EchoIndication::heard);
@@ -177,7 +174,7 @@ printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, this->ind1.ta
 class EchoIndicationInput : public Module { // pipe -> method
 public:
     EchoIndicationPipe pipe;
-    EchoIndication *request;
+    EchoIndication *indication;
     int busy_delay;
     int meth_delay;
     int v_delay;
@@ -191,14 +188,13 @@ printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
             break;
         }
     }
-    void init(EchoIndication *req) {
-        request = req;
+    void init() {
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         EXPORTREQUEST(EchoIndicationInput::enq);
         RULE(Echo,"input_rule", this->busy_delay != 0, {
 printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
              this->busy_delay = 0;
-             request->heard(this->meth_delay, this->v_delay);
+             indication->heard(this->meth_delay, this->v_delay);
            });
     }
 };
@@ -219,8 +215,7 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
-    void init(EchoIndication *ind) {
-        indication = ind;
+    void init() {
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
         RULE(Echo,"delay_rule", (this->busy != 0 & this->busy_delay == 0) != 0, {
@@ -256,12 +251,18 @@ public:
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
     Connect() {
-        lERI.init(&lEcho.request);
-        lEIO.init(&lEII_test.pipe);
-        lEcho.init(&lEIO.indication);
-        lERO_test.init(&lERI.pipe);
+        lERI.request = &lEcho.request;
+        lEIO.pipe = &lEII_test.pipe;
+        lEcho.indication = &lEIO.indication;
+        lERO_test.pipe = &lERI.pipe;
 
-        lEII_test.init(&zConnectresp); // user indication
+        lERI.init();
+        lEIO.init();
+        lEcho.init();
+        lERO_test.init();
+
+        lEII_test.indication = &zConnectresp; // user indication
+        lEII_test.init();
     };
 };
 
