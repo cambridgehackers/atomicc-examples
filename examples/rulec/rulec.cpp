@@ -251,10 +251,10 @@ public:
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
     Connect() {
-        lERI.request = &lEcho.request;
-        lEIO.pipe = &lEII_test.pipe;
-        lEcho.indication = &lEIO.indication;
-        lERO_test.pipe = &lERI.pipe;
+        connectInterface(this, (void **)&lERI.request, &lEcho.request);
+        connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
+        connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
+        connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
 
         lERI.init();
         lEIO.init();

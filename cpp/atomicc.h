@@ -34,6 +34,7 @@ typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 #define METH(A) methodToFunction((METHPTR)(A))
 extern "C" unsigned long methodToFunction(METHPTR v);
 extern "C" void exportRequest(unsigned long v);
+extern "C" void connectInterface(void *classp, void **target, void *source);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
