@@ -223,7 +223,7 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         indication = ind;
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
-        RULE(Echo,"delay_rule", this->busy != 0, {
+        RULE(Echo,"delay_rule", (this->busy != 0 & this->busy_delay == 0) != 0, {
 printf("[delay_rule:%d]Echo\n", __LINE__);
              this->busy = 0;
              this->busy_delay = 1;
@@ -259,9 +259,9 @@ public:
         lERI.init(&lEcho.request);
         lEIO.init(&lEII_test.pipe);
         lEcho.init(&lEIO.indication);
-
         lERO_test.init(&lERI.pipe);
-        lEII_test.init(&zConnectresp);
+
+        lEII_test.init(&zConnectresp); // user indication
     };
 };
 
@@ -270,6 +270,7 @@ Connect connectTest;
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+    //connectTest.lEII_test.init(&zConnectresp);
     while (!connectTest.lERO_test.say__RDY())
         ;
     connectTest.lERO_test.say(2, 44);
