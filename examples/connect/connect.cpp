@@ -104,8 +104,7 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void init(EchoRequestPipe *req) {
-        pipe = req;
+    void init() {
         request.init("request", this, IFC(EchoRequestOutput, say));
         EXPORTREQUEST(EchoRequestOutput::say);
         EXPORTREQUEST(EchoRequest::say);
@@ -124,8 +123,7 @@ public:
             break;
         }
     }
-    void init(EchoRequest *req) {
-        request = req;
+    void init() {
         pipe.init("pipe", this, IFC(EchoRequestInput, enq));
         EXPORTREQUEST(EchoRequestInput::enq);
     }
@@ -144,8 +142,7 @@ public:
         ind.data.heard.v = v;
         pipe->enq(ind);
     }
-    void init(EchoIndicationPipe *ind) {
-        pipe = ind;
+    void init() {
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         EXPORTREQUEST(EchoIndicationOutput::heard);
         EXPORTREQUEST(EchoIndication::heard);
@@ -155,16 +152,15 @@ public:
 class EchoIndicationInput : public Module { // pipe -> method
 public:
     EchoIndicationPipe pipe;
-    EchoIndication *request;
+    EchoIndication *indication;
     METHOD(enq, (const EchoIndication_data &v), {return true; }) {
         switch (v.tag) {
         case EchoIndication_tag_heard:
-            request->heard(v.data.heard.meth, v.data.heard.v);
+            indication->heard(v.data.heard.meth, v.data.heard.v);
             break;
         }
     }
-    void init(EchoIndication *req) {
-        request = req;
+    void init() {
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         EXPORTREQUEST(EchoIndicationInput::enq);
     }
@@ -177,37 +173,53 @@ public:
     METHOD(say, (int meth, int v), { return true; }) {
         indication->heard(meth, v);
     }
-    void init(EchoIndication *ind) {
-        indication = ind;
+    void init() {
         request.init("request", this, IFC(Echo, say));
         EXPORTREQUEST(Echo::say);
     }
 };
 
-class foo: public EchoIndication {
-    void heard(unsigned int heard_meth, unsigned int heard_v) {
-        printf("Heard an echo: %d %d\n", heard_meth, heard_v);
+class foo : public Module { // method -> pipe
+public:
+    EchoIndication indication;
+    METHOD(heard, (int meth, int v), { return true; }) {
+        printf("Heard an echo: %d %d\n", meth, v);
             stop_main_program = 1;
-    };
-    bool heard__RDY(void) { return true;}
+    }
+    void init() {
+        indication.init("indication", this, IFC(foo, heard));
+    }
 };
 class foo zConnectresp;
 
 class Connect : public Module {
 public:
-    EchoIndicationOutput lEchoIndicationOutput;
-    EchoRequestInput lEchoRequestInput;
+    EchoIndicationOutput lEIO;
+    EchoRequestInput lERI;
     Echo lEcho;
 
-    EchoRequestOutput lEchoRequestOutput_test;
-    EchoIndicationInput lEchoIndicationInput_test;
+    EchoRequestOutput lERO_test;
+    EchoIndicationInput lEII_test;
     Connect() {
-        lEchoRequestInput.init(&lEcho.request);
-        lEchoIndicationOutput.init(&lEchoIndicationInput_test.pipe);
-        lEcho.init(&lEchoIndicationOutput.indication);
+        //lERI.init(&lEcho.request);
+        //lEIO.init(&lEII_test.pipe);
+        //lEcho.init(&lEIO.indication);
 
-        lEchoRequestOutput_test.init(&lEchoRequestInput.pipe);
-        lEchoIndicationInput_test.init(&zConnectresp);
+        //lERO_test.init(&lERI.pipe);
+        //lEII_test.init(&zConnectresp);
+        connectInterface(this, (void **)&lERI.request, &lEcho.request);
+        connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
+        connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
+        connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
+
+        lERI.init();
+        lEIO.init();
+        lEcho.init();
+        lERO_test.init();
+
+        lEII_test.indication = &zConnectresp.indication; // user indication
+        lEII_test.init();
+
     };
 };
 
@@ -216,9 +228,9 @@ Connect connectTest;
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!connectTest.lEchoRequestOutput_test.say__RDY())
+    while (!connectTest.lERO_test.say__RDY())
         ;
-    connectTest.lEchoRequestOutput_test.say(2, 44);
+    connectTest.lERO_test.say(2, 44);
     if (argc != 1)
         run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);

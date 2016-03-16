@@ -53,9 +53,8 @@ T Fifo1<T>::first(void) {
     return element;
 };
 template<class T>
-Fifo1<T>::Fifo1(): Fifo<T>(), full(false)
+Fifo1<T>::Fifo1(): FIFOBASECONSTRUCTOR(Fifo1<T>), full(false)
 {
-    FIFOBASECONSTRUCTOR(Fifo1<T>);
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
 };
 template<class T>

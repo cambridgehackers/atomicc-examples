@@ -23,19 +23,20 @@
 #define _FIFO_H_
 #include <atomicc.h>
 
-#define FIFOBASECONSTRUCTOR(A) in.init("in", this, IFC(A, enq)); \
-        out.init("out", this, IFC(A, deq), IFC(A, first))
+#define FIFOBASECONSTRUCTOR(A) \
+    Fifo<T>(this, IFC(A, enq), IFC(A, deq), IFC(A, first))
 
 template<class T>
 class Fifo
 {
-    METHOD(enq, (const T &v), {return false; }) {}
-    METHOD(deq, (void), {return false; }) {}
-    GVALUE(first, T, {return false; }) { return (T){}; }
  public:
     PipeIn<T> in;
     PipeOut<T> out;
-    Fifo() { FIFOBASECONSTRUCTOR(Fifo); }
+    Fifo() { }
+    Fifo(void *p, unsigned long aenq__RDY, unsigned long aenq, unsigned long adeq__RDY, unsigned long adeq, unsigned long afirst__RDY, unsigned long afirst) {
+        in.init("in", p, aenq__RDY, aenq);
+        out.init("out", p, adeq__RDY, adeq, afirst__RDY, afirst);
+    }
 };
 
 #ifndef FIFODEFINE
@@ -43,7 +44,7 @@ class Fifo
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-#define FIFOCONSTRUCTOR(A) { FIFOBASECONSTRUCTOR(A); }
+#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
 #else
 #define BODYGUARD ;
 #define BODYACTION ;
@@ -65,8 +66,6 @@ class Fifo1 : public Fifo<T> , public FIFODEFINE
     bool notEmpty() const BODYGUARD
     bool notFull() const BODYGUARD
 public:
-    PipeIn<T> in;
-    PipeOut<T> out;
     Fifo1() FIFOCONSTRUCTOR(Fifo1)
 };
 #endif
