@@ -233,12 +233,18 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
-class foo: public EchoIndication {
-    void heard(unsigned int heard_meth, unsigned int heard_v) {
-        printf("Heard an echo: %d %d\n", heard_meth, heard_v);
+class foo : public Module { // method -> pipe
+public:
+    EchoIndication indication;
+    METHOD(heard, (int meth, int v), { return true; }) {
+        printf("Heard an echo: %d %d\n", meth, v);
             stop_main_program = 1;
-    };
-    bool heard__RDY(void) { return true;}
+    }
+    void init() {
+        indication.init("indication", this, IFC(foo, heard));
+        //EXPORTREQUEST(EchoIndicationOutput::heard);
+        //EXPORTREQUEST(EchoIndication::heard);
+    }
 };
 class foo zConnectresp;
 
@@ -261,7 +267,7 @@ public:
         lEcho.init();
         lERO_test.init();
 
-        lEII_test.indication = &zConnectresp; // user indication
+        lEII_test.indication = &zConnectresp.indication; // user indication
         lEII_test.init();
     };
 };
