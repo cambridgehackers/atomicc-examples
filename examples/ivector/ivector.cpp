@@ -36,8 +36,6 @@ class FifoPong : public Fifo<T>, public Module
     Fifo1<T> element2;
     bool pong;
 public:
-    PipeIn<T> in;
-    PipeOut<T> out;
     METHOD(enq, (const T &v), { return true; }) {
         if (pong)
             element2.in.enq(v);
@@ -52,8 +50,7 @@ public:
         pong = !pong;
     }
     GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false) {
-        FIFOBASECONSTRUCTOR(FifoPong<T>);
+    FifoPong(): FIFOBASECONSTRUCTOR(FifoPong<T>), pong(false) {
         //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
