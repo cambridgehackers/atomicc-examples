@@ -36,11 +36,17 @@ ValueType bozoreturnfunc(int a)
 typedef struct {
     int tag;
 #define EchoRequest_tag_say 1
+#define EchoRequest_tag_say2 2
     struct EchoRequest_union {
         struct EchoRequest_say {
             int meth;
             int v;
         } say;
+        struct EchoRequest_say2 {
+            int meth;
+            int v;
+            int v2;
+        } say2;
     } data;
 } EchoRequest_data;
 EchoRequest_data unusedERD;
@@ -62,11 +68,15 @@ class EchoRequest: InterfaceClass {
     void *p;
     GUARDPTR say__RDYp;
     void (*sayp)(void *p, int meth, int v);
+    GUARDPTR say2__RDYp;
+    void (*say2p)(void *p, int meth, int v);
  public:
     METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
-    void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
+    METHOD(say2, (int meth, int v), {return true; } ) { say2p(p, meth, v); }
+    void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp, unsigned long asay2__RDYp, unsigned long asay2p) {
         p = ap;
         ASSIGNIFCPTR(say);
+        ASSIGNIFCPTR(say2);
     }
     EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
         //EXPORTREQUEST(EchoRequest::say);
@@ -104,10 +114,20 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
+    METHOD(say2, (int meth, int v), { return true; }) {
+        printf("entered EchoRequestOutput::say2\n");
+        EchoRequest_data ind;
+        ind.tag = EchoRequest_tag_say2;
+        ind.data.say2.meth = meth;
+        ind.data.say2.v = v;
+        pipe->enq(ind);
+    }
     void init() {
-        request.init("request", this, IFC(EchoRequestOutput, say));
+        request.init("request", this, IFC(EchoRequestOutput, say), IFC(EchoRequestOutput, say2));
         EXPORTREQUEST(EchoRequestOutput::say);
         EXPORTREQUEST(EchoRequest::say);
+        EXPORTREQUEST(EchoRequestOutput::say2);
+        EXPORTREQUEST(EchoRequest::say2);
     }
 };
 
@@ -120,6 +140,9 @@ public:
         switch (v.tag) {
         case EchoRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
+            break;
+        case EchoRequest_tag_say2:
+            request->say2(v.data.say2.meth, v.data.say2.v);
             break;
         }
     }
@@ -215,9 +238,16 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
+    METHOD(say2, (int meth, int v), { return !busy; }) {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+        meth_temp = meth;
+        v_temp = v;
+        busy = 1;
+    }
     void init() {
-        request.init("request", this, IFC(Echo, say));
+        request.init("request", this, IFC(Echo, say), IFC(Echo, say2));
         EXPORTREQUEST(Echo::say);
+        EXPORTREQUEST(Echo::say2);
         RULE(Echo,"delay_rule", (this->busy != 0 & this->busy_delay == 0) != 0, {
 printf("[delay_rule:%d]Echo\n", __LINE__);
              this->busy = 0;
