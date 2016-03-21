@@ -47,8 +47,24 @@ public:
     }
 };
 
+class LpmMemory : public Module {
+    int delayCount;
+    ValuePair saved;
+public:
+    METHOD(req, (ValuePair v), {return delayCount == 0; }){ delayCount = 4; saved = v; }
+    METHOD(resAccept, (void), {return delayCount == 1; }){ delayCount = 0;}
+    GVALUE(resValue, ValuePair, {return delayCount == 1; }) { return saved; }
+    LpmMemory() {
+        RULE(Lpm, "memdelay", delayCount > 1, { delayCount--; });
+    }
+};
+
 class Lpm : public Module, LpmRequest {
+    Fifo1<ValuePair> inQ;
     Fifo1<ValuePair> fifo;
+    Fifo1<ValuePair> outQ;
+    LpmMemory        mem;
+    int doneCount;
 public:
     LpmIndication *indication;
     METHOD(say, (int meth, int v), {return true; }) {
@@ -56,14 +72,44 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
         temp.b = v;
-        fifo.in.enq(temp);
+        inQ.in.enq(temp);
+    }
+    bool done() {
+        doneCount++;
+printf("[%s:%d] done [%d] = %d\n", __FUNCTION__, __LINE__, doneCount,  !(doneCount % 5));
+return 1;
+        return !(doneCount % 5);
     }
     Lpm() {
-        printf("Lpm: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), &fifo, sizeof(Lpm));
+        printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
         EXPORTREQUEST(Lpm::say);
-            RULE(Lpm, "respond", true, {
+            RULE(Lpm, "recirc", !done(), {
                 ValuePair temp = this->fifo.out.first();
+                ValuePair mtemp = this->mem.resValue();
+                this->mem.resAccept();
 	        this->fifo.out.deq();
+printf("recirc: (%d, %d)\n", temp.a, temp.b);
+	        this->fifo.in.enq(temp);
+	        this->mem.req(temp);
+                });
+            RULE(Lpm, "exit", done(), {
+                ValuePair temp = this->fifo.out.first();
+                ValuePair mtemp = this->mem.resValue();
+                this->mem.resAccept();
+	        this->fifo.out.deq();
+printf("exit: (%d, %d)\n", temp.a, temp.b);
+	        this->outQ.in.enq(temp);
+                });
+            RULE(Lpm, "enter", true, {
+                ValuePair temp = this->inQ.out.first();
+printf("enter: (%d, %d)\n", temp.a, temp.b);
+	        this->inQ.out.deq();
+	        this->fifo.in.enq(temp);
+	        this->mem.req(temp);
+                });
+            RULE(Lpm, "respond", true, {
+                ValuePair temp = this->outQ.out.first();
+	        this->outQ.out.deq();
 printf("respond: (%d, %d)\n", temp.a, temp.b);
 	        this->indication->heard(temp.a, temp.b);
                 });
