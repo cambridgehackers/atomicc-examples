@@ -18,6 +18,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+/* Test program for example from:
+ *     http://csg.csail.mit.edu/pubs/memos/Memo-500/memo500.pdf
+ *     (Originally from: http://csg.csail.mit.edu/pubs/memos/Memo-473/memo473.pdf )
+ */
 #include <fifo.cpp>
 
 typedef struct {
