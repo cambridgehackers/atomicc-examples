@@ -76,8 +76,6 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
     }
     bool done() {
         doneCount++;
-printf("[%s:%d] done [%d] = %d\n", __FUNCTION__, __LINE__, doneCount,  !(doneCount % 5));
-return 1;
         return !(doneCount % 5);
     }
     Lpm() {
