@@ -22,7 +22,28 @@
  *     http://csg.csail.mit.edu/pubs/memos/Memo-500/memo500.pdf
  *     (Originally from: http://csg.csail.mit.edu/pubs/memos/Memo-473/memo473.pdf )
  */
-#include <fifo.cpp>
+#include <fifo.h>
+
+template<class T>
+class Fifo2 : public Fifo<T> , public Module
+{
+    T element;
+    bool full;
+    METHOD(enq, (const T &v), { return notFull(); }) {
+        element = v;
+        full = true;
+    }
+    METHOD(deq, (void), { return notEmpty(); }) { full = false; }
+    GVALUE(first, T, { return notEmpty(); }) { return element; }
+    bool notEmpty() const { return full; }
+    bool notFull() const { return !full; }
+public:
+    Fifo2(): FIFOBASECONSTRUCTOR(Fifo2<T>), full(false) {
+        printf("Fifo2: addr %p size 0x%lx\n", this, sizeof(*this));
+    }
+};
+
+//Fifo2<int> unused;
 
 typedef struct {
     int a;
@@ -64,9 +85,9 @@ public:
 };
 
 class Lpm : public Module, LpmRequest {
-    Fifo1<ValuePair> inQ;
-    Fifo1<ValuePair> fifo;
-    Fifo1<ValuePair> outQ;
+    Fifo2<ValuePair> inQ;
+    Fifo2<ValuePair> fifo;
+    Fifo2<ValuePair> outQ;
     LpmMemory        mem;
     int doneCount;
 public:
