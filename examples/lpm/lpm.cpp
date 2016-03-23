@@ -24,26 +24,29 @@
  */
 #include <fifo.h>
 
+#define MAX_COUNT 2
 template<class T>
 class Fifo2 : public Fifo<T> , public Module
 {
-    T element;
-    bool full;
+    T *element;
+    int rindex;
+    int windex;
     METHOD(enq, (const T &v), { return notFull(); }) {
-        element = v;
-        full = true;
+        element[windex] = v;
+        windex = (windex + 1) % MAX_COUNT;
     }
-    METHOD(deq, (void), { return notEmpty(); }) { full = false; }
-    GVALUE(first, T, { return notEmpty(); }) { return element; }
-    bool notEmpty() const { return full; }
-    bool notFull() const { return !full; }
+    METHOD(deq, (void), { return notEmpty(); }) {
+        rindex = (rindex + 1) % MAX_COUNT;
+    }
+    GVALUE(first, T, { return notEmpty(); }) { return element[rindex]; }
+    bool notEmpty() const { return rindex != windex; }
+    bool notFull() const { return ((windex + 1) % MAX_COUNT) != rindex; }
 public:
-    Fifo2(): FIFOBASECONSTRUCTOR(Fifo2<T>), full(false) {
+    Fifo2(): FIFOBASECONSTRUCTOR(Fifo2<T>), rindex(0), windex(0) {
+        element = new T[MAX_COUNT];
         printf("Fifo2: addr %p size 0x%lx\n", this, sizeof(*this));
     }
 };
-
-//Fifo2<int> unused;
 
 typedef struct {
     int a;
