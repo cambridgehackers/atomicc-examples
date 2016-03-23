@@ -59,7 +59,7 @@ public:
     METHOD(resAccept, (void), {return delayCount == 1; }){ delayCount = 0;}
     GVALUE(resValue, ValuePair, {return delayCount == 1; }) { return saved; }
     LpmMemory() {
-        RULE(Lpm, "memdelay", delayCount > 1, { delayCount--; });
+        RULE(Lpm, "memdelay", delayCount > 1, { delayCount = delayCount - 1; });
     }
 };
 
