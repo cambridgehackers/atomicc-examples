@@ -38,15 +38,15 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (const T &v), override { return notFull(); }) override {
+    METHOD(enq, (const T &v), { return notFull(); }) {
         if (pong)
             element2 = v;
         else
             element1 = v;
         full = true;
     }
-    METHOD(deq, (void), override { return notEmpty(); }) override { full = false; pong = !pong; }
-    GVALUE(first, T, override { return notEmpty(); }) override { return pong ? element2 : element1; }
+    METHOD(deq, (void), { return notEmpty(); }) { full = false; pong = !pong; }
+    GVALUE(first, T, { return notEmpty(); }) { return pong ? element2 : element1; }
     FifoPong(): Fifo<T>(), full(false), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -56,8 +56,6 @@ public:
 };
 #else
 #define ECHO_FIFO FifoPong
-#define OVERRIDE override
-//#define OVERRIDE
 template<class T>
 class FifoPong : public Fifo<T>, public Module
 {
@@ -67,21 +65,21 @@ class FifoPong : public Fifo<T>, public Module
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    //bad version for testing METHOD(enq, (T v), OVERRIDE { return true; }) OVERRIDE {
-    METHOD(enq, (const T &v), OVERRIDE { return true; }) OVERRIDE {
+    //bad version for testing METHOD(enq, (T v), { return true; }) {
+    METHOD(enq, (const T &v), { return true; }) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), OVERRIDE { return true; }) OVERRIDE {
+    METHOD(deq, (void), { return true; }) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, OVERRIDE { return true; }) OVERRIDE { return pong ? element2.out.first() : element1.out.first(); }
+    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
