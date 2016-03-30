@@ -250,6 +250,10 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         x = y;
     }
+    METHOD(y2xnull, (void), { return true; }) {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+        //x = y;
+    }
     METHOD(x2y, (void), { return true; }) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         y = x;
@@ -316,7 +320,7 @@ printf("swap_rule:Connect\n");
            });
         RULE(Connect,"swap2_rule", true, {
 printf("swap2_rule:Connect\n");
-             this->lEcho.y2x();
+             this->lEcho.y2xnull();
            });
     };
 };
