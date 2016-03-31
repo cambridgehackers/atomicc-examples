@@ -42,8 +42,8 @@ class Fifo2 : public Fifo<T> , public Module
     bool notEmpty() const { return rindex != windex; }
     bool notFull() const { return ((windex + 1) % MAX_COUNT) != rindex; }
 public:
-    Fifo2(int size): FIFOBASECONSTRUCTOR(Fifo2<T>), rindex(0), windex(0) {
-        element = new T[size/*MAX_COUNT*/];
+    Fifo2(): FIFOBASECONSTRUCTOR(Fifo2<T>), rindex(0), windex(0) {
+        element = new T[MAX_COUNT];
         printf("Fifo2: addr %p size 0x%lx\n", this, sizeof(*this));
     }
 };
@@ -88,9 +88,9 @@ public:
 };
 
 class Lpm : public Module, LpmRequest {
-    Fifo2<ValuePair> *inQ;
-    Fifo2<ValuePair> *fifo;
-    Fifo2<ValuePair> *outQ;
+    Fifo2<ValuePair> inQ;
+    Fifo2<ValuePair> fifo;
+    Fifo2<ValuePair> outQ;
     LpmMemory        mem;
     int doneCount;
 public:
@@ -100,45 +100,42 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
         temp.b = v;
-        inQ->in.enq(temp);
+        inQ.in.enq(temp);
     }
     bool done() {
         doneCount++;
         return !(doneCount % 5);
     }
     Lpm() {
-        inQ = new Fifo2<ValuePair>(2);
-        fifo = new Fifo2<ValuePair>(2);
-        outQ = new Fifo2<ValuePair>(2);
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
         EXPORTREQUEST(Lpm::say);
             RULE(Lpm, "recirc", true, {
-                ValuePair temp = this->fifo->out.first();
+                ValuePair temp = this->fifo.out.first();
                 ValuePair mtemp = this->mem.resValue();
                 this->mem.resAccept();
-	        this->fifo->out.deq();
+	        this->fifo.out.deq();
 printf("recirc: (%d, %d)\n", temp.a, temp.b);
-	        this->fifo->in.enq(temp);
+	        this->fifo.in.enq(temp);
 	        this->mem.req(temp);
                 });
             RULE(Lpm, "exit", true, {
-                ValuePair temp = this->fifo->out.first();
+                ValuePair temp = this->fifo.out.first();
                 ValuePair mtemp = this->mem.resValue();
                 this->mem.resAccept();
-	        this->fifo->out.deq();
+	        this->fifo.out.deq();
 printf("exit: (%d, %d)\n", temp.a, temp.b);
-	        this->outQ->in.enq(temp);
+	        this->outQ.in.enq(temp);
                 });
             RULE(Lpm, "enter", true, {
-                ValuePair temp = this->inQ->out.first();
+                ValuePair temp = this->inQ.out.first();
 printf("enter: (%d, %d)\n", temp.a, temp.b);
-	        this->inQ->out.deq();
-	        this->fifo->in.enq(temp);
+	        this->inQ.out.deq();
+	        this->fifo.in.enq(temp);
 	        this->mem.req(temp);
                 });
             RULE(Lpm, "respond", true, {
-                ValuePair temp = this->outQ->out.first();
-	        this->outQ->out.deq();
+                ValuePair temp = this->outQ.out.first();
+	        this->outQ.out.deq();
 printf("respond: (%d, %d)\n", temp.a, temp.b);
 	        this->indication->heard(temp.a, temp.b);
                 });
