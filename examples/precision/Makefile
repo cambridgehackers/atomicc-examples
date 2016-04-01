@@ -9,8 +9,8 @@ LLVMFLAGS = -emit-llvm
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o precision.ll precision.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
+
+#	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
 
 clean:
 	rm -f *.bc *.o *.ll *.s precision.exe.* precision.tmp

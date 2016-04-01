@@ -184,7 +184,7 @@ public:
     EchoIndication indication;
     METHOD(heard, (int meth, int v), { return true; }) {
         printf("Heard an echo: %d %d\n", meth, v);
-            stop_main_program = 1;
+            //stop_main_program = 1;
     }
     void init() {
         indication.init("indication", this, IFC(foo, heard));
@@ -224,7 +224,7 @@ public:
 };
 
 Connect connectTest;
-
+#if 0
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
@@ -236,4 +236,4 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
     return 0;
 }
-
+#endif

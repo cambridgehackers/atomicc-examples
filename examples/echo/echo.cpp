@@ -134,7 +134,7 @@ public:
 void EchoIndication::heard(int v)
 {
     printf("Heard an echo: %d\n", v);
-    stop_main_program = 1;
+    //stop_main_program = 1;
 }
 
 class EchoTest {
@@ -149,7 +149,7 @@ public:
 };
 
 EchoTest echoTest;
-
+#if 0
 int main(int argc, const char *argv[])
 {
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
@@ -161,4 +161,4 @@ int main(int argc, const char *argv[])
   printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
   return 0;
 }
-
+#endif
