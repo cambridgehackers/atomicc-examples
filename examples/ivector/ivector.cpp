@@ -134,7 +134,7 @@ public:
 void IVectorIndication::heard(int meth, int v)
 {
     printf("Heard an ivector: %d %d\n", meth, v);
-    stop_main_program = 1;
+    //stop_main_program = 1;
 }
 
 class IVectorTest {
@@ -148,7 +148,7 @@ public:
 };
 
 IVectorTest ivectorTest;
-
+#if 0
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
@@ -160,4 +160,4 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
     return 0;
 }
-
+#endif
