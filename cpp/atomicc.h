@@ -35,6 +35,7 @@ typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 extern "C" unsigned long methodToFunction(METHPTR v);
 extern "C" void exportRequest(unsigned long v);
 extern "C" void connectInterface(void *classp, void **target, void *source);
+extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, unsigned long classPtr);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not

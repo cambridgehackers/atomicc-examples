@@ -139,6 +139,7 @@ printf("enter: (%d, %d)\n", temp.a, temp.b);
 printf("respond: (%d, %d)\n", temp.a, temp.b);
 	        this->indication->heard(temp.a, temp.b);
                 });
+            atomiccSchedulePriority("recirc", "high", 0);
     };
     ~Lpm() {}
 };
