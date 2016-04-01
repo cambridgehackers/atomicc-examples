@@ -224,16 +224,3 @@ public:
 };
 
 Connect connectTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!connectTest.lERO_test.say__RDY())
-        ;
-    connectTest.lERO_test.say(2, 44);
-    if (argc != 1)
-        run_main_program();
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
-#endif

@@ -181,15 +181,15 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         EXPORTREQUEST(EchoIndicationOutput::heard);
         EXPORTREQUEST(EchoIndication::heard);
-        RULE(Echo,"output_rulee", ((this->ind_busy != 0) & (this->even != 0)) != 0, {
-printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, this->ind0.tag);
-             this->ind_busy = 0;
-             this->pipe->enq(this->ind0);
+        RULE(Echo,"output_rulee", ((ind_busy != 0) & (even != 0)) != 0, {
+printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, ind0.tag);
+             ind_busy = 0;
+             pipe->enq(ind0);
            });
-        RULE(Echo,"output_ruleo", ((this->ind_busy != 0) & (this->even == 0)) != 0, {
-printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, this->ind1.tag);
-             this->ind_busy = 0;
-             this->pipe->enq(this->ind1);
+        RULE(Echo,"output_ruleo", ((ind_busy != 0) & (even == 0)) != 0, {
+printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, ind1.tag);
+             ind_busy = 0;
+             pipe->enq(ind1);
            });
     }
 };
@@ -214,10 +214,10 @@ printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
     void init() {
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         EXPORTREQUEST(EchoIndicationInput::enq);
-        RULE(Echo,"input_rule", this->busy_delay != 0, {
+        RULE(Echo,"input_rule", busy_delay != 0, {
 printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
-             this->busy_delay = 0;
-             indication->heard(this->meth_delay, this->v_delay);
+             busy_delay = 0;
+             indication->heard(meth_delay, v_delay);
            });
     }
 };
@@ -248,17 +248,17 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         request.init("request", this, IFC(Echo, say), IFC(Echo, say2));
         EXPORTREQUEST(Echo::say);
         EXPORTREQUEST(Echo::say2);
-        RULE(Echo,"delay_rule", (this->busy != 0 & this->busy_delay == 0) != 0, {
+        RULE(Echo,"delay_rule", (busy != 0 & busy_delay == 0) != 0, {
 printf("[delay_rule:%d]Echo\n", __LINE__);
-             this->busy = 0;
-             this->busy_delay = 1;
-             this->meth_delay = this->meth_temp;
-             this->v_delay = this->v_temp;
+             busy = 0;
+             busy_delay = 1;
+             meth_delay = meth_temp;
+             v_delay = v_temp;
            });
-        RULE(Echo,"respond_rule", this->busy_delay != 0, {
+        RULE(Echo,"respond_rule", busy_delay != 0, {
 printf("[respond_rule:%d]Echo\n", __LINE__);
-             this->busy_delay = 0;
-             indication->heard(this->meth_delay, this->v_delay);
+             busy_delay = 0;
+             indication->heard(meth_delay, v_delay);
            });
     }
 };
@@ -303,17 +303,3 @@ public:
 };
 
 Connect connectTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    //connectTest.lEII_test.init(&zConnectresp);
-    while (!connectTest.lERO_test.say__RDY())
-        ;
-    connectTest.lERO_test.say(2, 44);
-    if (argc != 1)
-        run_main_program();
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
-#endif

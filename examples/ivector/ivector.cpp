@@ -110,7 +110,7 @@ public:
          tfifo->in.enq(temp);
 #endif
     }
-    IVector(IVectorIndication *ind, int size) : ind(ind), vsize(size) {
+    IVector(IVectorIndication *aind, int size) : ind(aind), vsize(size) {
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = new FifoPong<UTYPE>[vsize];
@@ -118,9 +118,9 @@ public:
         EXPORTREQUEST(IVector::say);
         for (int i = 0; i < vsize; i++) {
             RULE(IVector,("respond" + utostr(i)).c_str(), true, {
-                UTYPE temp = this->fifo[i].out.first();
-	        this->fifo[i].out.deq();
-	        this->ind->heard(i, temp.b);
+                UTYPE temp = fifo[i].out.first();
+	        fifo[i].out.deq();
+	        ind->heard(i, temp.b);
                 });
         }
     };

@@ -60,14 +60,14 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *ind) : ind(ind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    IVector(IVectorIndication *aind) : ind(aind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
     {
         EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", true, {
-            ValueType temp = this->fifo.out.first();
-            this->fifo.out.deq();
-            this->ind->heard(temp.a, temp.b);
-            fixedSet((void *)&this->gcounter, fixedGet((void *)&this->gcounter) + 1);
+            ValueType temp = fifo.out.first();
+            fifo.out.deq();
+            ind->heard(temp.a, temp.b);
+            fixedSet((void *)&gcounter, fixedGet((void *)&gcounter) + 1);
             });
     };
     ~IVector() {}
@@ -81,7 +81,6 @@ void IVectorIndication::heard(myint6 meth, myint4 v)
 {
     //printf("Heard an ivector: %d %d\n", meth, v);
     printf("Heard an ivector: %d %d\n", 0, 0);
-    //stop_main_program = 1;
 }
 
 class IVectorTest {
@@ -95,16 +94,3 @@ public:
 };
 
 IVectorTest ivectorTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!ivectorTest.ivector->say__RDY())
-        ;
-    ivectorTest.ivector->say(2, 44);
-    if (argc != 1)
-        run_main_program();
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
-#endif

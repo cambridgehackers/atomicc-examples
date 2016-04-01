@@ -114,14 +114,14 @@ public:
   METHOD(say, (const int &v), {return true; }) {
       fifo->in.enq(v);
   }
-  Echo(EchoIndication *ind) : fifo(new ECHO_FIFO<int>()), ind(ind) {
+  Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     EXPORTREQUEST(Echo::say);
     RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
-	 int temp = this->fifo->out.first();
-	 this->fifo->out.deq();
-	 this->ind->heard(temp);
+	 int temp = fifo->out.first();
+	 fifo->out.deq();
+	 ind->heard(temp);
        });
   };
   ~Echo() {}
@@ -149,16 +149,3 @@ public:
 };
 
 EchoTest echoTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-  printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-  while (!echoTest.echo->say__RDY())
-      ;
-  echoTest.echo->say(22);
-  if (argc != 1)
-      run_main_program();
-  printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-  return 0;
-}
-#endif
