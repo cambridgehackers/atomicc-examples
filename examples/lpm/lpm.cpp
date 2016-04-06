@@ -22,7 +22,7 @@
  *     http://csg.csail.mit.edu/pubs/memos/Memo-500/memo500.pdf
  *     (Originally from: http://csg.csail.mit.edu/pubs/memos/Memo-473/memo473.pdf )
  */
-#include <fifo.h>
+#include <fifo.cpp>
 
 #define MAX_COUNT 2
 template<class T>
@@ -88,9 +88,9 @@ public:
 };
 
 class Lpm : public Module, LpmRequest {
-    Fifo2<ValuePair> inQ;
+    Fifo1<ValuePair> inQ;
     Fifo2<ValuePair> fifo;
-    Fifo2<ValuePair> outQ;
+    Fifo1<ValuePair> outQ;
     LpmMemory        mem;
     int doneCount;
 public:
@@ -139,7 +139,7 @@ printf("enter: (%d, %d)\n", temp.a, temp.b);
 printf("respond: (%d, %d)\n", temp.a, temp.b);
 	        this->indication->heard(temp.a, temp.b);
                 });
-            atomiccSchedulePriority("recirc", "high", 0);
+            atomiccSchedulePriority("recirc", "enter;exit", 0);
     };
     ~Lpm() {}
 };
