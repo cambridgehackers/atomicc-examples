@@ -48,6 +48,9 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
 #define METHOD(A,B,C) \
     virtual bool A ## __RDY(void) C \
     virtual void A B
+#define VMETHOD(A,B,C) \
+    virtual bool A ## __READY(void) C \
+    virtual void A B
 #define GVALUE(A,B,C) \
     virtual bool A ## __RDY(void) C \
     virtual B A(void)
@@ -101,6 +104,8 @@ class BitsClass {
 };
 
 typedef bool (*GUARDPTR)(void *);
+#define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
+#define VIFC(cname,mname) METH(&cname::mname ## __READY), METH(&cname::mname)
 #define ASSIGNIFCPTR(A) { \
          A ## __RDYp = (decltype(A ## __RDYp))a ## A ## __RDYp; \
          A ## p = (decltype(A ## p))a ## A ## p; }
@@ -137,7 +142,6 @@ class PipeOut: InterfaceClass {
         ASSIGNIFCPTR(first);
         }
 };
-#define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
 
 #define RULE(moduletype,name, guardExpr, bodybody) \
   addBaseRule(this, name, ^{ (void)this; return (guardExpr); }, ^ bodybody )

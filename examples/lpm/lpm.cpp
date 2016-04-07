@@ -59,7 +59,7 @@ class LpmIndication: InterfaceClass {
     GUARDPTR heard__RDYp;
     void (*heardp)(void *p, int meth, int v);
  public:
-    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
+    VMETHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
     void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
         p = ap;
         ASSIGNIFCPTR(heard);
@@ -69,7 +69,7 @@ class LpmIndication: InterfaceClass {
 
 class LpmRequest {
 public:
-    METHOD(say, (int meth, int v), {return true; }){}
+    VMETHOD(say, (int meth, int v), {return true; }){}
     LpmRequest() {
         EXPORTREQUEST(LpmRequest::say);
     }
@@ -95,7 +95,7 @@ class Lpm : public Module, LpmRequest {
     int doneCount;
 public:
     LpmIndication *indication;
-    METHOD(say, (int meth, int v), {return true; }) {
+    VMETHOD(say, (int meth, int v), {return true; }) {
 printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
@@ -147,12 +147,12 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
 class foo : public Module { // method -> pipe
 public:
     LpmIndication indication;
-    METHOD(heard, (int meth, int v), { return true; }) {
+    VMETHOD(heard, (int meth, int v), { return true; }) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
     void init() {
-        indication.init("indication", this, IFC(foo, heard));
+        indication.init("indication", this, VIFC(foo, heard));
     }
 };
 class foo zConnectresp;
