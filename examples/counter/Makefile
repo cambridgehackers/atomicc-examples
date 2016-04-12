@@ -1,16 +1,12 @@
 
-#USE_LOCAL=1
-ifeq ($(USE_LOCAL),1)
-CPP = clang++
-LLC = llc
-else
-CPP = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/clang++ 
-LLC = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/llc
-endif
+CLANGBASE = ../../../llvm/build/Debug+Asserts/bin/
+CPP = $(CLANGBASE)clang++ 
+LLC = $(CLANGBASE)llc
+LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-cxa-atexit
 CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
+CPPFLAGS += -I/usr/include/c++/4.2.1
 LLVMFLAGS = -emit-llvm
-# -stdlib=libc++
 
 all:
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -S -o counter.ll counter.cpp
@@ -23,9 +19,6 @@ all:
             -e 's/}/\n}/g' \
             -e 's/\"(/\"\n        (/g' \
             >counter.tmp
-
-backend:
-	$(LLC) counter.ll
 
 clean:
 	rm -f counter.ll counter.s counter.tmp

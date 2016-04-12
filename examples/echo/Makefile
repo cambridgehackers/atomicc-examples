@@ -1,18 +1,12 @@
 
-#CLANGBASE = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/
-#CLANGBASE = /afs/csail.mit.edu/group/csg/tools/tools_lx86/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/
 CLANGBASE = ../../../llvm/build/Debug+Asserts/bin/
 UNAME := $(shell uname)
-ifeq ($(UNAME),Darwin)
-CPP = clang++-mp-3.3
-LINK = llvm-link-3.3
-else
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
-endif
 CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 CPPFLAGS += -g
+CPPFLAGS += -I/usr/include/c++/4.2.1
 #CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -fno-catch-undefined-behavior -O
 #these 2 flags did not force generation of non-virtual method function names into output file
