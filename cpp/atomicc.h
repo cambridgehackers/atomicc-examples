@@ -46,17 +46,17 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  * vtable, which makes them visible to the atomicc code generation phase.
  */
 #define METHOD(A,B,C) \
-    virtual bool A ## __RDY(void) C \
-    virtual void A B
+    [[ clang::atomicc_method ]] virtual bool A ## __RDY(void) C \
+    [[ clang::atomicc_method ]] virtual void A B
 #define VMETHOD(A,B,C) \
-    virtual bool A ## __READY(void) C \
-    virtual void A B
+    [[ clang::atomicc_method ]] virtual bool A ## __READY(void) C \
+    [[ clang::atomicc_method ]] virtual void A B
 #define GVALUE(A,B,C) \
-    virtual bool A ## __RDY(void) C \
-    virtual B A(void)
+    [[ clang::atomicc_method ]] virtual bool A ## __RDY(void) C \
+    [[ clang::atomicc_method ]] virtual B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    virtual bool NAME ## __RDY(void) RDYEXPRESSION \
-    virtual void NAME TYPE
+    [[ clang::atomicc_method ]] virtual bool NAME ## __RDY(void) RDYEXPRESSION \
+    [[ clang::atomicc_method ]] virtual void NAME TYPE
 #define EXPORTREQUEST(NAME) exportRequest(METH(&NAME));
 
 // This is a marker for classes that should be synthesized in hardware
