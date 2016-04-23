@@ -46,17 +46,18 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  * vtable, which makes them visible to the atomicc code generation phase.
  */
 #define METHOD(A,B,C) \
-    [[ clang::atomicc_method ]] virtual bool A ## __RDY(void) C \
-    [[ clang::atomicc_method ]] virtual void A B
+    void A ## __bogus(void){} \
+    [[ clang::atomicc_method ]] bool A ## __RDY(void) C \
+    [[ clang::atomicc_method ]] void A B
 #define VMETHOD(A,B,C) \
-    [[ clang::atomicc_method ]] virtual bool A ## __READY(void) C \
-    [[ clang::atomicc_method ]] virtual void A B
+    [[ clang::atomicc_method ]] bool A ## __READY(void) C \
+    [[ clang::atomicc_method ]] void A B
 #define GVALUE(A,B,C) \
-    [[ clang::atomicc_method ]] virtual bool A ## __RDY(void) C \
-    [[ clang::atomicc_method ]] virtual B A(void)
+    [[ clang::atomicc_method ]] bool A ## __RDY(void) C \
+    [[ clang::atomicc_method ]] B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    [[ clang::atomicc_method ]] virtual bool NAME ## __RDY(void) RDYEXPRESSION \
-    [[ clang::atomicc_method ]] virtual void NAME TYPE
+    [[ clang::atomicc_method ]] bool NAME ## __RDY(void) RDYEXPRESSION \
+    [[ clang::atomicc_method ]] void NAME TYPE
 #define EXPORTREQUEST(NAME) exportRequest(METH(&NAME));
 
 // This is a marker for classes that should be synthesized in hardware
@@ -203,7 +204,7 @@ template<int32_t precision_bits>
         FixedPoint(const FixedPoint &arg) { fixedSet((void *)this, fixedGet((void *)&arg)); }
         ~FixedPoint() {}
         FixedPoint(long val): data(val) {}
-        virtual void fixedPrecMeth(void) {}
+        void fixedPrecMeth(void) {}
         inline FixedPoint & operator=(const FixedPoint & arg) {
             //this->data = arg.data;
             fixedSet((void *)this, fixedGet((void *)&arg));

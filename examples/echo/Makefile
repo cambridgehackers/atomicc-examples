@@ -7,6 +7,7 @@ LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 CPPFLAGS += --target=atomicc-unknown-linux-gnu
 CPPFLAGS += -I/usr/include/c++/4.2.1
+CPPFLAGS += -fno-diagnostics-color
 #CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -fno-catch-undefined-behavior -O
 #these 2 flags did not force generation of non-virtual method function names into output file
