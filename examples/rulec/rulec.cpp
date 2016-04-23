@@ -69,10 +69,10 @@ class EchoRequest: InterfaceClass {
     GUARDPTR say__RDYp;
     void (*sayp)(void *p, int meth, int v);
     GUARDPTR say2__RDYp;
-    void (*say2p)(void *p, int meth, int v);
+    void (*say2p)(void *p, int meth, int v, int v2);
  public:
     METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
-    METHOD(say2, (int meth, int v), {return true; } ) { say2p(p, meth, v); }
+    METHOD(say2, (int meth, int v, int v2), {return true; } ) { say2p(p, meth, v, v2); }
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp, unsigned long asay2__RDYp, unsigned long asay2p) {
         p = ap;
         ASSIGNIFCPTR(say);
@@ -114,12 +114,13 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    METHOD(say2, (int meth, int v), { return true; }) {
+    METHOD(say2, (int meth, int v, int v2), { return true; }) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
         ind.data.say2.meth = meth;
         ind.data.say2.v = v;
+        ind.data.say2.v2 = v2;
         pipe->enq(ind);
     }
     void init() {
@@ -142,7 +143,7 @@ public:
             request->say(v.data.say.meth, v.data.say.v);
             break;
         case EchoRequest_tag_say2:
-            request->say2(v.data.say2.meth, v.data.say2.v);
+            request->say2(v.data.say2.meth, v.data.say2.v, v.data.say2.v2);
             break;
         }
     }
@@ -238,7 +239,7 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
-    METHOD(say2, (int meth, int v), { return !busy; }) {
+    METHOD(say2, (int meth, int v, int v2), { return !busy; }) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
