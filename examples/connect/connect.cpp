@@ -69,7 +69,6 @@ class EchoRequest: InterfaceClass {
         ASSIGNIFCPTR(say);
     }
     EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
-        //EXPORTREQUEST(EchoRequest::say);
     }
 };
 EchoRequest unusedER;
@@ -85,7 +84,6 @@ class EchoIndication: InterfaceClass {
         ASSIGNIFCPTR(heard);
     }
     EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) {
-        //EXPORTREQUEST(EchoIndication::heard);
     }
 };
 EchoIndication unusedEI;
@@ -106,8 +104,6 @@ public:
     }
     void init() {
         request.init("request", this, IFC(EchoRequestOutput, say));
-        EXPORTREQUEST(EchoRequestOutput::say);
-        EXPORTREQUEST(EchoRequest::say);
     }
 };
 
@@ -125,7 +121,6 @@ public:
     }
     void init() {
         pipe.init("pipe", this, IFC(EchoRequestInput, enq));
-        EXPORTREQUEST(EchoRequestInput::enq);
     }
 };
 
@@ -144,8 +139,6 @@ public:
     }
     void init() {
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
-        EXPORTREQUEST(EchoIndicationOutput::heard);
-        EXPORTREQUEST(EchoIndication::heard);
     }
 };
 
@@ -162,7 +155,6 @@ public:
     }
     void init() {
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
-        EXPORTREQUEST(EchoIndicationInput::enq);
     }
 };
 
@@ -175,7 +167,6 @@ public:
     }
     void init() {
         request.init("request", this, IFC(Echo, say));
-        EXPORTREQUEST(Echo::say);
     }
 };
 

@@ -71,7 +71,6 @@ class LpmRequest {
 public:
     VMETHOD(say, (int meth, int v), {return true; }){}
     LpmRequest() {
-        EXPORTREQUEST(LpmRequest::say);
     }
 };
 
@@ -108,7 +107,6 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
     }
     Lpm() {
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
-        EXPORTREQUEST(Lpm::say);
             RULE(Lpm, "recirc", true, {
                 ValuePair temp = fifo.out.first();
                 ValuePair mtemp = mem.resValue();

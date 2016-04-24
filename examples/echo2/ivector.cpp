@@ -62,7 +62,6 @@ class IVectorIndication {
 public:
     INDICATION(heard, (UTYPE v), { return true; });
     IVectorIndication() {
-        EXPORTREQUEST(IVectorIndication::heard);
     }
 };
 
@@ -70,7 +69,6 @@ class IVectorRequest {
 public:
     METHOD(say, (UTYPE v), {return true; }){}
     IVectorRequest() {
-        EXPORTREQUEST(IVectorRequest::say);
     }
 };
 
@@ -83,7 +81,6 @@ public:
     }
     IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
-        EXPORTREQUEST(IVector::say);
         RULE(IVector,respond, { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	    this->fifo->out.deq();

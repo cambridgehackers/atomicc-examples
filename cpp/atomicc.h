@@ -33,7 +33,6 @@ class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 #define METH(A) methodToFunction((METHPTR)(A))
 extern "C" unsigned long methodToFunction(METHPTR v);
-extern "C" void exportRequest(unsigned long v);
 extern "C" void connectInterface(void *classp, void **target, void *source);
 extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, unsigned long classPtr);
 /*
@@ -58,7 +57,6 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
     [[ gnu::used ]] [[ clang::atomicc_method ]] bool NAME ## __RDY(void) RDYEXPRESSION \
     [[ gnu::used ]] [[ clang::atomicc_method ]] void NAME TYPE
-#define EXPORTREQUEST(NAME) exportRequest(METH(&NAME));
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {

@@ -79,7 +79,6 @@ class EchoRequest: InterfaceClass {
         ASSIGNIFCPTR(say2);
     }
     EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
-        //EXPORTREQUEST(EchoRequest::say);
     }
 };
 EchoRequest unusedER;
@@ -95,7 +94,6 @@ class EchoIndication: InterfaceClass {
         ASSIGNIFCPTR(heard);
     }
     EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) {
-        //EXPORTREQUEST(EchoIndication::heard);
     }
 };
 EchoIndication unusedEI;
@@ -124,10 +122,6 @@ public:
     }
     void init() {
         request.init("request", this, IFC(EchoRequestOutput, say), IFC(EchoRequestOutput, say2));
-        EXPORTREQUEST(EchoRequestOutput::say);
-        EXPORTREQUEST(EchoRequest::say);
-        EXPORTREQUEST(EchoRequestOutput::say2);
-        EXPORTREQUEST(EchoRequest::say2);
     }
 };
 
@@ -148,7 +142,6 @@ public:
     }
     void init() {
         pipe.init("pipe", this, IFC(EchoRequestInput, enq));
-        EXPORTREQUEST(EchoRequestInput::enq);
     }
 };
 
@@ -179,8 +172,6 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
     }
     void init() {
         indication.init("indication", this, IFC(EchoIndicationOutput, heard));
-        EXPORTREQUEST(EchoIndicationOutput::heard);
-        EXPORTREQUEST(EchoIndication::heard);
         RULE(Echo,"output_rulee", ((ind_busy != 0) & (even != 0)) != 0, {
 printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
              ind_busy = 0;
@@ -213,7 +204,6 @@ printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
     }
     void init() {
         pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
-        EXPORTREQUEST(EchoIndicationInput::enq);
         RULE(Echo,"input_rule", busy_delay != 0, {
 printf("input_rule: EchoIndicationInput\n");
              busy_delay = 0;
@@ -260,8 +250,6 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
     void init() {
         request.init("request", this, IFC(Echo, say), IFC(Echo, say2));
-        EXPORTREQUEST(Echo::say);
-        EXPORTREQUEST(Echo::say2);
         RULE(Echo,"delay_rule", (busy != 0 & busy_delay == 0) != 0, {
 printf("delay_rule: Echo\n");
              busy = 0;
@@ -286,8 +274,6 @@ public:
     }
     void init() {
         indication.init("indication", this, IFC(foo, heard));
-        //EXPORTREQUEST(EchoIndicationOutput::heard);
-        //EXPORTREQUEST(EchoIndication::heard);
     }
 };
 class foo zConnectresp;

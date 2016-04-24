@@ -33,7 +33,6 @@ class IVectorIndication {
 public:
     INDICATION(heard, (myint6 meth, myint4 v), { return true; });
     IVectorIndication() {
-        EXPORTREQUEST(IVectorIndication::heard);
     }
 };
 
@@ -41,7 +40,6 @@ class IVectorRequest {
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }){}
     IVectorRequest() {
-        EXPORTREQUEST(IVectorRequest::say);
     }
 };
 
@@ -62,7 +60,6 @@ public:
     }
     IVector(IVectorIndication *aind) : ind(aind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
     {
-        EXPORTREQUEST(IVector::say);
         RULE(IVector, "respond", true, {
             ValueType temp = fifo.out.first();
             fifo.out.deq();

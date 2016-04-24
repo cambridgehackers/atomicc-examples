@@ -60,7 +60,6 @@ class IVectorIndication {
 public:
     INDICATION(heard, (int meth, int v), { return true; });
     IVectorIndication() {
-        EXPORTREQUEST(IVectorIndication::heard);
     }
 };
 
@@ -68,7 +67,6 @@ class IVectorRequest {
 public:
     METHOD(say, (int meth, int v), {return true; }){}
     IVectorRequest() {
-        EXPORTREQUEST(IVectorRequest::say);
     }
 };
 
@@ -115,7 +113,6 @@ public:
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = new FifoPong<UTYPE>[vsize];
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
-        EXPORTREQUEST(IVector::say);
         for (int i = 0; i < vsize; i++) {
             RULE(IVector,("respond" + utostr(i)).c_str(), true, {
                 UTYPE temp = fifo[i].out.first();

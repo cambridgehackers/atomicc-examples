@@ -94,7 +94,6 @@ class EchoIndication {
 public:
   INDICATION(heard, (int v), { return true; });
   EchoIndication() {
-    EXPORTREQUEST(EchoIndication::heard);
   }
 };
 
@@ -102,7 +101,6 @@ class EchoRequest {
 public:
   METHOD(say, (const int &v), {return true; }){}
   EchoRequest() {
-    EXPORTREQUEST(EchoRequest::say);
   }
 };
 
@@ -116,7 +114,6 @@ public:
   }
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    EXPORTREQUEST(Echo::say);
     RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 int temp = fifo->out.first();
