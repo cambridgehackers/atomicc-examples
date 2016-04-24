@@ -46,17 +46,17 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  */
 #define METHOD(A,B,C) \
     void A ## __bogus(void){} \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] bool A ## __RDY(void) C \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] void A B
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __RDY(void) C \
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void A B
 #define VMETHOD(A,B,C) \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] bool A ## __READY(void) C \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] void A B
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __READY(void) C \
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void A B
 #define GVALUE(A,B,C) \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] bool A ## __RDY(void) C \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] B A(void)
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __RDY(void) C \
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] bool NAME ## __RDY(void) RDYEXPRESSION \
-    [[ gnu::used ]] [[ clang::atomicc_method ]] void NAME TYPE
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool NAME ## __RDY(void) RDYEXPRESSION \
+    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void NAME TYPE
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
