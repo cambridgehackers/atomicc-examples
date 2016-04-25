@@ -28,7 +28,7 @@
 #include <string>
 #include <stddef.h> // offsetof
 
-extern "C" void addBaseRule(void *, const char *name, bool (^RDY)(void), void (^ENA)(void));
+extern "C" void addBaseRule(void *, const char *name, bool (^ __vectorcall RDY)(void), void (^ __vectorcall ENA)(void));
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 #define METH(A) methodToFunction((METHPTR)(A))
@@ -44,8 +44,8 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  * The 'virtual' attribute forces all the function names to appear in the
  * vtable, which makes them visible to the atomicc code generation phase.
  */
-#define METHODATTR [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __pascal
-//vectorcall
+#define METHODATTR [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
+//__pascal
 #define METHOD(A,B,C) \
     void A ## __bogus(void){} \
     METHODATTR bool A ## __RDY(void) C \
@@ -145,7 +145,7 @@ class PipeOut: InterfaceClass {
 };
 
 #define RULE(moduletype,name, guardExpr, bodybody) \
-  addBaseRule(this, name, ^{ (void)this; return (guardExpr); }, ^ bodybody )
+  addBaseRule(this, name, ^ __vectorcall { (void)this; return (guardExpr); }, ^ __vectorcall bodybody )
 
 #define RULEN(moduletype,name,bodybody) \
   class name : public Rule {\
