@@ -39,24 +39,26 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
  * referenced in the original C++ code.  During guard hoisting operations,
- * many new references to '__RDY' methods are created and propigated.
+ * many new references to '__RDY' methods are created and propagated.
  *
  * The 'virtual' attribute forces all the function names to appear in the
  * vtable, which makes them visible to the atomicc code generation phase.
  */
+#define METHODATTR [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __pascal
+//vectorcall
 #define METHOD(A,B,C) \
     void A ## __bogus(void){} \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __RDY(void) C \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void A B
+    METHODATTR bool A ## __RDY(void) C \
+    METHODATTR void A B
 #define VMETHOD(A,B,C) \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __READY(void) C \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void A B
+    METHODATTR bool A ## __READY(void) C \
+    METHODATTR void A B
 #define GVALUE(A,B,C) \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool A ## __RDY(void) C \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] B A(void)
+    METHODATTR bool A ## __RDY(void) C \
+    METHODATTR B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] bool NAME ## __RDY(void) RDYEXPRESSION \
-    [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] void NAME TYPE
+    METHODATTR bool NAME ## __RDY(void) RDYEXPRESSION \
+    METHODATTR void NAME TYPE
 
 // This is a marker for classes that should be synthesized in hardware
 class Module {
