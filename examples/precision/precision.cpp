@@ -21,8 +21,10 @@
 #include <fifo.cpp>
 #include <math.h>
 
-typedef FixedPoint<6> myint6;
-typedef FixedPoint<4> myint4;
+//typedef FixedPoint<6> myint6;
+//typedef FixedPoint<4> myint4;
+typedef int __attribute__(( atomicc_width(6) )) myint6;
+typedef int __attribute__(( atomicc_width(4) )) myint4;
 
 typedef struct {
     myint6 a;
@@ -58,7 +60,7 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *aind) : ind(aind), counter(lrint(log(4))), gcounter(grumpy.a.size + grumpy.b.size)
+    IVector(IVectorIndication *aind) : ind(aind), counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
     {
         RULE(IVector, "respond", true, {
             ValueType temp = fifo.out.first();

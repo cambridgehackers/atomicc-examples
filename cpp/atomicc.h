@@ -205,11 +205,13 @@ template<int32_t precision_bits>
         ~FixedPoint() {}
         FixedPoint(long val): data(val) {}
         void fixedPrecMeth(void) {}
+/*
         inline FixedPoint & operator=(const FixedPoint & arg) {
             //this->data = arg.data;
             fixedSet((void *)this, fixedGet((void *)&arg));
             return *this;
         }
+*/
     };
 
 class FixedPointV: public BitsClass {
