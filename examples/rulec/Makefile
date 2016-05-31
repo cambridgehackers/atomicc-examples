@@ -13,3 +13,9 @@ all:
 
 clean:
 	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp
+
+run:
+	clang++ -std=c++11 -Itmp -I.. -g testrulec.cpp
+	./a.out
+	rm -f a.out
+
