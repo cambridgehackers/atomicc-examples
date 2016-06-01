@@ -1,5 +1,5 @@
-`ifndef __foo_VH__
-`define __foo_VH__
+`ifndef __rulec_GENERATED__VH__
+`define __rulec_GENERATED__VH__
 
 `endif
 `define l_class_OC_EchoRequestOutput_RULE_COUNT (0)

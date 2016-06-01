@@ -1,5 +1,5 @@
-#ifndef __foo_H__
-#define __foo_H__
+#ifndef __rulec_GENERATED__H__
+#define __rulec_GENERATED__H__
 typedef struct {
 public:
   unsigned int a, a_shadow; bool a_valid;
@@ -248,4 +248,4 @@ public:
 typedef struct {
 public:
 }l_struct_OC___block_descriptor;
-#endif  // __foo_H__
+#endif  // __rulec_GENERATED__H__
