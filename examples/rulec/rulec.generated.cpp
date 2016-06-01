@@ -1,4 +1,4 @@
-#include "foo.h"
+#include "rulec.generated.h"
 void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
         l_class_OC_EchoRequestOutput * thisp = (l_class_OC_EchoRequestOutput *)thisarg;
         l_struct_OC_EchoRequest_data ind;

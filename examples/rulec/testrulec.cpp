@@ -28,7 +28,7 @@
 
 #define request0 request
 #define indication0 indication
-#include "foo.cpp"
+#include "rulec.generated.cpp"
 
 unsigned int stop_main_program;
 int testCount;

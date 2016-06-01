@@ -1,5 +1,5 @@
 
-`include "foo.vh"
+`include "foo.generated.vh"
 
 module l_class_OC_EchoRequestOutput (
     input CLK,
