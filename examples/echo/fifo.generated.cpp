@@ -1,11 +1,4 @@
 #include "fifo.generated.h"
-void l_class_OC_Fifo::run()
-{
-    commit();
-}
-void l_class_OC_Fifo::commit()
-{
-}
 void l_class_OC_Fifo1__deq(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         thisp->full_shadow = 0;

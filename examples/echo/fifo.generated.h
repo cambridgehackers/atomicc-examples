@@ -34,15 +34,6 @@ public:
     firstp = afirstp;
   }
 };
-class l_class_OC_Fifo;
-class l_class_OC_Fifo {
-public:
-  l_class_OC_PipeIn in;
-  l_class_OC_PipeOut out;
-public:
-  void run();
-  void commit();
-};
 class l_class_OC_Fifo1;
 extern void l_class_OC_Fifo1__deq(void *thisarg);
 extern bool l_class_OC_Fifo1__deq__RDY(void *thisarg);
