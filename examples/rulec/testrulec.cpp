@@ -28,12 +28,7 @@
 
 #define request0 request
 #define indication0 indication
-#include "l_class_OC_Connect.cpp"
-#include "l_class_OC_Echo.cpp"
-#include "l_class_OC_EchoIndicationOutput.cpp"
-#include "l_class_OC_EchoRequestInput.cpp"
-#include "l_class_OC_EchoRequestOutput.cpp"
-#include "l_class_OC_EchoIndicationInput.cpp"
+#include "foo.cpp"
 
 unsigned int stop_main_program;
 int testCount;
