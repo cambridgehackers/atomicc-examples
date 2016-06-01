@@ -13,11 +13,16 @@ CPPFLAGS += -fno-diagnostics-color
 #these 2 flags did not force generation of non-virtual method function names into output file
 #CPPFLAGS += -femit-all-decls
 #CPPFLAGS += -fvisibility-inlines-hidden
-LLVMFLAGS = -emit-llvm
+#LLVMFLAGS = -emit-llvm
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o echo.ll echo.cpp
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
+
+run:
+	clang++ -std=c++11 -I.. -g testecho.cpp
+	./a.out
+	rm -f a.out
 
 unused:
 	#$(LLC) -march=cpp -o echo.llvm.output echo.ll
@@ -34,7 +39,7 @@ backend:
 clean:
 	rm -f *.bc *.o *.ll *.s echo.exe.* echo.tmp
 
-run:
+zzrun:
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o echo.bc echo.cpp
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../cpp/atomicc.cpp
 	$(LINK) -v echo.bc atomicc.bc >echo.exe.bc
