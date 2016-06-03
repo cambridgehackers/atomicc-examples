@@ -1,16 +1,5 @@
 #ifndef __echo_GENERATED__H__
 #define __echo_GENERATED__H__
-class l_class_OC_EchoIndication;
-extern void l_class_OC_EchoIndication__heard(void *thisarg, unsigned int heard_v);
-extern bool l_class_OC_EchoIndication__heard__RDY(void *thisarg);
-class l_class_OC_EchoIndication {
-public:
-public:
-  void run();
-  void commit();
-  void heard(unsigned int heard_v) { l_class_OC_EchoIndication__heard(this, heard_v); }
-  bool heard__RDY(void) { return l_class_OC_EchoIndication__heard__RDY(this); }
-};
 class l_class_OC_EchoRequest;
 extern void l_class_OC_EchoRequest__say(void *thisarg, unsigned int say_v);
 extern bool l_class_OC_EchoRequest__say__RDY(void *thisarg);

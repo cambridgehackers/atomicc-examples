@@ -90,7 +90,7 @@ public:
 #endif
 
 static ECHO_FIFO<int> bozouseless;
-class EchoIndication {
+class EchoIndication : public ModuleExternal {
 public:
   INDICATION(heard, (int v), { return true; });
   EchoIndication() {

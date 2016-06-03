@@ -1,11 +1,4 @@
 #include "echo.generated.h"
-void l_class_OC_EchoIndication::run()
-{
-    commit();
-}
-void l_class_OC_EchoIndication::commit()
-{
-}
 void l_class_OC_EchoRequest__say(void *thisarg, unsigned int say_v) {
         l_class_OC_EchoRequest * thisp = (l_class_OC_EchoRequest *)thisarg;
 }
