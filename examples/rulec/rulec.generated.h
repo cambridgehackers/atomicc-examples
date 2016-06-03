@@ -60,20 +60,6 @@ public:
     say2p = asay2p;
   }
 };
-class l_class_OC_EchoIndication {
-public:
-  void *p;
-  bool  (*heard__RDYp) (void *);
-  void  (*heardp) (void *, unsigned int , unsigned int );
-public:
-  void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
-  bool heard__RDY(void) { return heard__RDYp(p); }
-  l_class_OC_EchoIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
-    p = ap;
-    heard__RDYp = aheard__RDYp;
-    heardp = aheardp;
-  }
-};
 class l_class_OC_PipeIn {
 public:
   void *p;
@@ -119,6 +105,20 @@ public:
       pipe(this, l_class_OC_EchoRequestInput__enq__RDY, l_class_OC_EchoRequestInput__enq) {
   }
   void setrequest(l_class_OC_EchoRequest *v) { request = v; }
+};
+class l_class_OC_EchoIndication {
+public:
+  void *p;
+  bool  (*heard__RDYp) (void *);
+  void  (*heardp) (void *, unsigned int , unsigned int );
+public:
+  void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
+  bool heard__RDY(void) { return heard__RDYp(p); }
+  l_class_OC_EchoIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
+    p = ap;
+    heard__RDYp = aheard__RDYp;
+    heardp = aheardp;
+  }
 };
 class l_class_OC_PipeIn_OC_0 {
 public:
