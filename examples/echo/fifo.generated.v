@@ -1,4 +1,3 @@
-
 `include "fifo.generated.vh"
 
 module l_class_OC_Fifo1 (

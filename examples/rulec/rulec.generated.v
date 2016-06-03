@@ -1,4 +1,3 @@
-
 `include "rulec.generated.vh"
 
 module l_class_OC_EchoRequestOutput (

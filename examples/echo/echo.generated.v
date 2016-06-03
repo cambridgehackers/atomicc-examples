@@ -1,4 +1,3 @@
-
 `include "echo.generated.vh"
 
 module l_class_OC_Echo (

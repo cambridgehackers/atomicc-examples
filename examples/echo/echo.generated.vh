@@ -1,7 +1,6 @@
 `ifndef __echo_GENERATED__VH__
 `define __echo_GENERATED__VH__
 
-`endif
 `define l_class_OC_Echo_RULE_COUNT (1 + `l_class_OC_Fifo1_RULE_COUNT)
 
 //METAINVOKE; respond_rule; :fifo$out$deq;:fifo$out$first;:ind$heard;
@@ -11,3 +10,4 @@
 //METARULES; respond_rule
 //METAINTERNAL; fifo; l_class_OC_Fifo1;
 //METAEXTERNAL; ind; l_class_OC_EchoIndication;
+`endif

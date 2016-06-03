@@ -1,7 +1,6 @@
 `ifndef __rulec_GENERATED__VH__
 `define __rulec_GENERATED__VH__
 
-`endif
 `define l_class_OC_EchoRequestOutput_RULE_COUNT (0)
 
 //METAINVOKE; request$say; :pipe$enq;
@@ -63,3 +62,4 @@
 //METAINTERNAL; lEcho; l_class_OC_Echo;
 //METAINTERNAL; lERO_test; l_class_OC_EchoRequestOutput;
 //METAINTERNAL; lEII_test; l_class_OC_EchoIndicationInput;
+`endif
