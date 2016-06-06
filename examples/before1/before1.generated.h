@@ -2,19 +2,19 @@
 #define __before1_GENERATED__H__
 typedef struct {
 public:
-  unsigned int a, a_shadow; bool a_valid;
-  unsigned int b, b_shadow; bool b_valid;
+  unsigned int a;
+  unsigned int b;
 }l_struct_OC_ValueType;
 typedef struct {
 public:
-  unsigned int meth, meth_shadow; bool meth_valid;
-  unsigned int v, v_shadow; bool v_valid;
+  unsigned int meth;
+  unsigned int v;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
 typedef struct {
 public:
-  unsigned int meth, meth_shadow; bool meth_valid;
-  unsigned int v, v_shadow; bool v_valid;
-  unsigned int v2, v2_shadow; bool v2_valid;
+  unsigned int meth;
+  unsigned int v;
+  unsigned int v2;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2;
 typedef struct {
 public:
@@ -23,13 +23,13 @@ public:
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
 typedef struct {
 public:
-  unsigned int tag, tag_shadow; bool tag_valid;
+  unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data;
 }l_struct_OC_EchoRequest_data;
 typedef struct {
 public:
-  unsigned int meth, meth_shadow; bool meth_valid;
-  unsigned int v, v_shadow; bool v_valid;
+  unsigned int meth;
+  unsigned int v;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
 typedef struct {
 public:
@@ -37,7 +37,7 @@ public:
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union;
 typedef struct {
 public:
-  unsigned int tag, tag_shadow; bool tag_valid;
+  unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
 }l_struct_OC_EchoIndication_data;
 class l_class_OC_EchoRequest {

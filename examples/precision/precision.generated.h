@@ -79,8 +79,8 @@ public:
 };
 typedef struct {
 public:
-  bool a, a_shadow; bool a_valid;
-  bool b, b_shadow; bool b_valid;
+  bool a;
+  bool b;
 }l_struct_OC_ValueType;
 class l_class_OC_PipeIn_OC_2 {
 public:

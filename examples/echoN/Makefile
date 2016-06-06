@@ -3,7 +3,7 @@ CPP = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/cla
 LLC = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/llc
 CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-cxa-atexit
 #CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
-LLVMFLAGS = -S -emit-llvm
+LLVMFLAGS = -S
 
 all:
 	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o echoN.ll echoN.cpp
