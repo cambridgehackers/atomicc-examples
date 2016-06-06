@@ -67,10 +67,9 @@ public:
   bool say__READY(void) { return l_class_OC_LpmRequest__say__READY(this); }
 };
 typedef struct {
-public:
-  unsigned int a, a_shadow; bool a_valid;
-  unsigned int b, b_shadow; bool b_valid;
-  unsigned int c, c_shadow[20]; bool c_valid;
+  unsigned int a;
+  unsigned int b;
+  unsigned int *c;
 }l_struct_OC_ValuePair;
 class l_class_OC_LpmMemory;
 extern void l_class_OC_LpmMemory__memdelay(void *thisarg);
@@ -183,7 +182,7 @@ public:
   void  (*heardp) (void *, unsigned int , unsigned int );
 public:
   void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
-  bool heard__READY(void) { return heard__READYp(p); }
+  bool heard__READY(void) { return heard__RDYp(p); }
   l_class_OC_LpmIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
     p = ap;
     heard__RDYp = aheard__RDYp;
