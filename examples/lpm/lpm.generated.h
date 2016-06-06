@@ -67,7 +67,6 @@ public:
   bool say__READY(void) { return l_class_OC_LpmRequest__say__READY(this); }
 };
 typedef struct {
-public:
   unsigned int a;
   unsigned int b;
   unsigned int c;
@@ -246,6 +245,5 @@ public:
   void commit();
 };
 typedef struct {
-public:
 }l_struct_OC___block_descriptor;
 #endif  // __lpm_GENERATED__H__

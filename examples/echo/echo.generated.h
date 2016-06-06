@@ -40,6 +40,5 @@ public:
   void commit();
 };
 typedef struct {
-public:
 }l_struct_OC___block_descriptor;
 #endif  // __echo_GENERATED__H__

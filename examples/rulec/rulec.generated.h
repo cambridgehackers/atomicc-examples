@@ -1,42 +1,34 @@
 #ifndef __rulec_GENERATED__H__
 #define __rulec_GENERATED__H__
 typedef struct {
-public:
   unsigned int a;
   unsigned int b;
 }l_struct_OC_ValueType;
 typedef struct {
-public:
   unsigned int meth;
   unsigned int v;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
 typedef struct {
-public:
   unsigned int meth;
   unsigned int v;
   unsigned int v2;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2;
 typedef struct {
-public:
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
 typedef struct {
-public:
   unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data;
 }l_struct_OC_EchoRequest_data;
 typedef struct {
-public:
   unsigned int meth;
   unsigned int v;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
 typedef struct {
-public:
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard;
 }l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union;
 typedef struct {
-public:
   unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
 }l_struct_OC_EchoIndication_data;
@@ -246,6 +238,5 @@ public:
   }
 };
 typedef struct {
-public:
 }l_struct_OC___block_descriptor;
 #endif  // __rulec_GENERATED__H__

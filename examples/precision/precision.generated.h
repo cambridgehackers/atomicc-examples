@@ -78,7 +78,6 @@ public:
   bool say__RDY(void) { return l_class_OC_IVectorRequest__say__RDY(this); }
 };
 typedef struct {
-public:
   bool a;
   bool b;
 }l_struct_OC_ValueType;
@@ -167,6 +166,5 @@ public:
   void commit();
 };
 typedef struct {
-public:
 }l_struct_OC___block_descriptor;
 #endif  // __precision_GENERATED__H__
