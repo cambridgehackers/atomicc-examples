@@ -1,5 +1,5 @@
 
-CLANGBASE = ../../../llvm/build/Debug+Asserts/bin/
+CLANGBASE = ../../../llvm/build/bin/
 UNAME := $(shell uname)
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc
