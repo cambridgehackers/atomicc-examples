@@ -67,6 +67,7 @@ public:
   bool say__READY(void) { return l_class_OC_LpmRequest__say__READY(this); }
 };
 typedef struct {
+public:
   unsigned int a;
   unsigned int b;
   unsigned int *c;
@@ -178,14 +179,14 @@ public:
 class l_class_OC_LpmIndication {
 public:
   void *p;
-  bool  (*heard__RDYp) (void *);
+  bool  (*heard__READYp) (void *);
   void  (*heardp) (void *, unsigned int , unsigned int );
 public:
   void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
-  bool heard__READY(void) { return heard__RDYp(p); }
-  l_class_OC_LpmIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
+  bool heard__READY(void) { return heard__READYp(p); }
+  l_class_OC_LpmIndication(decltype(p) ap, decltype(heard__READYp) aheard__READYp, decltype(heardp) aheardp) {
     p = ap;
-    heard__RDYp = aheard__RDYp;
+    heard__READYp = aheard__READYp;
     heardp = aheardp;
   }
 };

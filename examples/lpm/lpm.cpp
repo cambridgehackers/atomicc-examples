@@ -56,15 +56,15 @@ typedef struct {
 
 class LpmIndication: InterfaceClass {
     void *p;
-    GUARDPTR heard__RDYp;
+    GUARDPTR heard__READYp;
     void (*heardp)(void *p, int meth, int v);
  public:
     VMETHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
+    void init(const char *name, void *ap, unsigned long aheard__READYp, unsigned long aheardp) {
         p = ap;
-        ASSIGNIFCPTR(heard);
+        ASSIGNVIFCPTR(heard);
     }
-    LpmIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) { }
+    LpmIndication(): p(NULL), heard__READYp(NULL), heardp(NULL) { }
 };
 
 class LpmRequest {

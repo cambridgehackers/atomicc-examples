@@ -110,6 +110,9 @@ typedef bool (*GUARDPTR)(void *);
 #define ASSIGNIFCPTR(A) { \
          A ## __RDYp = (decltype(A ## __RDYp))a ## A ## __RDYp; \
          A ## p = (decltype(A ## p))a ## A ## p; }
+#define ASSIGNVIFCPTR(A) { \
+         A ## __READYp = (decltype(A ## __READYp))a ## A ## __READYp; \
+         A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
 class PipeIn: InterfaceClass {
  public:
