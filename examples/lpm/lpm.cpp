@@ -51,7 +51,7 @@ public:
 typedef struct {
     int a;
     int b;
-    int c[20];
+    int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
 class LpmIndication: InterfaceClass {

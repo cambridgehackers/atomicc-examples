@@ -70,12 +70,12 @@ typedef struct {
 public:
   unsigned int a;
   unsigned int b;
-  unsigned int *c;
+  unsigned int c;
 }l_struct_OC_ValuePair;
 class l_class_OC_LpmMemory;
 extern void l_class_OC_LpmMemory__memdelay(void *thisarg);
 extern bool l_class_OC_LpmMemory__memdelay__RDY(void *thisarg);
-extern void l_class_OC_LpmMemory__req(void *thisarg, unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2[20]);
+extern void l_class_OC_LpmMemory__req(void *thisarg, unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2);
 extern bool l_class_OC_LpmMemory__req__RDY(void *thisarg);
 extern void l_class_OC_LpmMemory__resAccept(void *thisarg);
 extern bool l_class_OC_LpmMemory__resAccept__RDY(void *thisarg);
@@ -90,7 +90,7 @@ public:
   void commit();
   void memdelay(void) { l_class_OC_LpmMemory__memdelay(this); }
   bool memdelay__RDY(void) { return l_class_OC_LpmMemory__memdelay__RDY(this); }
-  void req(unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2[20]) { l_class_OC_LpmMemory__req(this, req_v_2e_coerce0, req_v_2e_coerce1, req_v_2e_coerce2); }
+  void req(unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2) { l_class_OC_LpmMemory__req(this, req_v_2e_coerce0, req_v_2e_coerce1, req_v_2e_coerce2); }
   bool req__RDY(void) { return l_class_OC_LpmMemory__req__RDY(this); }
   void resAccept(void) { l_class_OC_LpmMemory__resAccept(this); }
   bool resAccept__RDY(void) { return l_class_OC_LpmMemory__resAccept__RDY(this); }

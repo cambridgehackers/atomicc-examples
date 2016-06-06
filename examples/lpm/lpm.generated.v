@@ -48,11 +48,11 @@ module l_class_OC_LpmMemory (
     input req__ENA,
     input [31:0]req_v.coerce0,
     input [31:0]req_v.coerce1,
-    input [639:0]req_v.coerce2,
+    input [31:0]req_v.coerce2,
     output req__RDY,
     input resAccept__ENA,
     output resAccept__RDY,
-    output [703:0]resValue,
+    output [95:0]resValue,
     output resValue__RDY,
     input [`l_class_OC_LpmMemory_RULE_COUNT:0]rule_enable,
     output [`l_class_OC_LpmMemory_RULE_COUNT:0]rule_ready);
@@ -63,7 +63,7 @@ module l_class_OC_LpmMemory (
     wire resAccept__RDY_internal;
     wire resAccept__ENA_internal = resAccept__ENA && resAccept__RDY_internal;
     reg[31:0] delayCount;
-    reg[703:0] saved;
+    reg[95:0] saved;
     assign memdelay__RDY_internal = delayCount > 1;
     assign req__RDY = req__RDY_internal;
     assign req__RDY_internal = delayCount == 0;
@@ -105,9 +105,9 @@ module l_class_OC_Fifo1_OC_0 (
     input out$deq__ENA,
     output out$deq__RDY,
     input in$enq__ENA,
-    input [703:0]in$enq_v,
+    input [95:0]in$enq_v,
     output in$enq__RDY,
-    output [703:0]out$first,
+    output [95:0]out$first,
     output out$first__RDY,
     input [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_enable,
     output [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_ready);
@@ -115,7 +115,7 @@ module l_class_OC_Fifo1_OC_0 (
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
     wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
-    reg[703:0] element;
+    reg[95:0] element;
     reg full;
     assign in$enq__RDY = in$enq__RDY_internal;
     assign in$enq__RDY_internal = full ^ 1;
@@ -150,9 +150,9 @@ module l_class_OC_Fifo2 (
     input out$deq__ENA,
     output out$deq__RDY,
     input in$enq__ENA,
-    input [703:0]in$enq_v,
+    input [95:0]in$enq_v,
     output in$enq__RDY,
-    output [703:0]out$first,
+    output [95:0]out$first,
     output out$first__RDY,
     input [`l_class_OC_Fifo2_RULE_COUNT:0]rule_enable,
     output [`l_class_OC_Fifo2_RULE_COUNT:0]rule_ready);
@@ -160,9 +160,9 @@ module l_class_OC_Fifo2 (
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
     wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
-    reg[703:0] element0;
-    reg[703:0] element1;
-    reg[703:0] element2;
+    reg[95:0] element0;
+    reg[95:0] element1;
+    reg[95:0] element2;
     reg[31:0] rindex;
     reg[31:0] windex;
     assign in$enq__RDY = in$enq__RDY_internal;
@@ -219,7 +219,7 @@ module l_class_OC_Lpm (
     wire say__READY_internal;
     wire say__VALID_internal = say__VALID && say__READY_internal;
     wire inQ$out$deq__RDY;
-    wire [703:0]inQ$out$first;
+    wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
     l_class_OC_Fifo1_OC_0 inQ (
         CLK,
@@ -235,7 +235,7 @@ module l_class_OC_Lpm (
         rule_ready[4:`l_class_OC_Fifo1_OC_0_RULE_COUNT]);
     wire fifo$out$deq__RDY;
     wire fifo$in$enq__RDY;
-    wire [703:0]fifo$out$first;
+    wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
     l_class_OC_Fifo2 fifo (
         CLK,
@@ -251,7 +251,7 @@ module l_class_OC_Lpm (
         rule_ready[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT:`l_class_OC_Fifo2_RULE_COUNT]);
     wire outQ$out$deq__RDY;
     wire outQ$in$enq__RDY;
-    wire [703:0]outQ$out$first;
+    wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
     l_class_OC_Fifo1_OC_0 outQ (
         CLK,
@@ -269,10 +269,10 @@ module l_class_OC_Lpm (
     wire mem$memdelay__RDY;
     wire [31:0]mem$req_v.coerce0;
     wire [31:0]mem$req_v.coerce1;
-    wire [639:0]mem$req_v.coerce2;
+    wire [31:0]mem$req_v.coerce2;
     wire mem$req__RDY;
     wire mem$resAccept__RDY;
-    wire [703:0]mem$resValue;
+    wire [95:0]mem$resValue;
     wire mem$resValue__RDY;
     l_class_OC_LpmMemory mem (
         CLK,

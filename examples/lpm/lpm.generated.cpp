@@ -61,7 +61,7 @@ bool l_class_OC_LpmMemory__memdelay__RDY(void *thisarg) {
         l_class_OC_LpmMemory * thisp = (l_class_OC_LpmMemory *)thisarg;
         return (thisp->delayCount) > 1;
 }
-void l_class_OC_LpmMemory__req(void *thisarg, unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2[20]) {
+void l_class_OC_LpmMemory__req(void *thisarg, unsigned int req_v_2e_coerce0, unsigned int req_v_2e_coerce1, unsigned int req_v_2e_coerce2) {
         l_class_OC_LpmMemory * thisp = (l_class_OC_LpmMemory *)thisarg;
         l_struct_OC_ValuePair v;
         v.a = req_v_2e_coerce0;
