@@ -162,7 +162,11 @@ void l_class_OC_FifoPong::commit()
 }
 void l_class_OC_IVectorIndication__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
         l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;
-        printf("Heard an ivector: %d %d\n", heard_meth, heard_v);
+        testCount = testCount + (-1);
+        if ((testCount + (-1)) <= 0) {
+            stop_main_program = 1;
+        }
+            printf("Heard an ivector: %d %d tcount %d\n", heard_meth, heard_v, testCount);
 }
 bool l_class_OC_IVectorIndication__heard__RDY(void *thisarg) {
         l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;

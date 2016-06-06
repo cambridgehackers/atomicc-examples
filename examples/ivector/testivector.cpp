@@ -22,22 +22,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h> //sleep
 //#include "fifo.generated.cpp"
-#include "ivector.generated.cpp"
 
 unsigned int stop_main_program;
 int testCount;
+#include "ivector.generated.cpp"
 class l_class_OC_IVectorIndication zIVectorIndication;
 class l_class_OC_IVector zIVector;
-
-bool l_class_OC_IVectorIndication__heard__RDY(void *thisp) {
-        return true;
-}
-void l_class_OC_IVectorIndication__heard(void *thisp, unsigned int meth, unsigned int v) {
-        printf("Heard an echo: %d %d\n", meth, v);
-        if (--testCount <= 0)
-            stop_main_program = 1;
-}
 
 int main(int argc, const char *argv[])
 {

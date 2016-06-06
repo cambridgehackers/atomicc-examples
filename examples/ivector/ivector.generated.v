@@ -48,9 +48,9 @@ module l_class_OC_Fifo1_OC_3 (
     input out$deq__ENA,
     output out$deq__RDY,
     input in$enq__ENA,
-    input [703:0]in$enq_v,
+    input [95:0]in$enq_v,
     output in$enq__RDY,
-    output [703:0]out$first,
+    output [95:0]out$first,
     output out$first__RDY,
     input [`l_class_OC_Fifo1_OC_3_RULE_COUNT:0]rule_enable,
     output [`l_class_OC_Fifo1_OC_3_RULE_COUNT:0]rule_ready);
@@ -58,7 +58,7 @@ module l_class_OC_Fifo1_OC_3 (
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
     wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
-    reg[703:0] element;
+    reg[95:0] element;
     reg full;
     assign in$enq__RDY = in$enq__RDY_internal;
     assign in$enq__RDY_internal = full ^ 1;
@@ -93,9 +93,9 @@ module l_class_OC_FifoPong (
     input out$deq__ENA,
     output out$deq__RDY,
     input in$enq__ENA,
-    input [703:0]in$enq_v,
+    input [95:0]in$enq_v,
     output in$enq__RDY,
-    output [703:0]out$first,
+    output [95:0]out$first,
     output out$first__RDY,
     input [`l_class_OC_FifoPong_RULE_COUNT:0]rule_enable,
     output [`l_class_OC_FifoPong_RULE_COUNT:0]rule_ready);
@@ -105,7 +105,7 @@ module l_class_OC_FifoPong (
     wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
     wire element1$out$deq__RDY;
     wire element1$in$enq__RDY;
-    wire [703:0]element1$out$first;
+    wire [95:0]element1$out$first;
     wire element1$out$first__RDY;
     l_class_OC_Fifo1_OC_3 element1 (
         CLK,
@@ -120,9 +120,9 @@ module l_class_OC_FifoPong (
         rule_enable[0:`l_class_OC_Fifo1_OC_3_RULE_COUNT],
         rule_ready[0:`l_class_OC_Fifo1_OC_3_RULE_COUNT]);
     wire element2$out$deq__RDY;
-    wire [703:0]element2$in$enq_v;
+    wire [95:0]element2$in$enq_v;
     wire element2$in$enq__RDY;
-    wire [703:0]element2$out$first;
+    wire [95:0]element2$out$first;
     wire element2$out$first__RDY;
     l_class_OC_Fifo1_OC_3 element2 (
         CLK,
@@ -196,9 +196,9 @@ module l_class_OC_IVector (
     wire say__ENA_internal = say__ENA && say__RDY_internal;
     wire fifo0$out$deq__RDY;
     wire fifo0$in$enq__ENA;
-    wire [703:0]fifo0$in$enq_v;
+    wire [95:0]fifo0$in$enq_v;
     wire fifo0$in$enq__RDY;
-    wire [703:0]fifo0$out$first;
+    wire [95:0]fifo0$out$first;
     wire fifo0$out$first__RDY;
     l_class_OC_FifoPong fifo0 (
         CLK,
@@ -214,9 +214,9 @@ module l_class_OC_IVector (
         rule_ready[10:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo1$out$deq__RDY;
     wire fifo1$in$enq__ENA;
-    wire [703:0]fifo1$in$enq_v;
+    wire [95:0]fifo1$in$enq_v;
     wire fifo1$in$enq__RDY;
-    wire [703:0]fifo1$out$first;
+    wire [95:0]fifo1$out$first;
     wire fifo1$out$first__RDY;
     l_class_OC_FifoPong fifo1 (
         CLK,
@@ -232,9 +232,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo2$out$deq__RDY;
     wire fifo2$in$enq__ENA;
-    wire [703:0]fifo2$in$enq_v;
+    wire [95:0]fifo2$in$enq_v;
     wire fifo2$in$enq__RDY;
-    wire [703:0]fifo2$out$first;
+    wire [95:0]fifo2$out$first;
     wire fifo2$out$first__RDY;
     l_class_OC_FifoPong fifo2 (
         CLK,
@@ -250,9 +250,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo3$out$deq__RDY;
     wire fifo3$in$enq__ENA;
-    wire [703:0]fifo3$in$enq_v;
+    wire [95:0]fifo3$in$enq_v;
     wire fifo3$in$enq__RDY;
-    wire [703:0]fifo3$out$first;
+    wire [95:0]fifo3$out$first;
     wire fifo3$out$first__RDY;
     l_class_OC_FifoPong fifo3 (
         CLK,
@@ -268,9 +268,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo4$out$deq__RDY;
     wire fifo4$in$enq__ENA;
-    wire [703:0]fifo4$in$enq_v;
+    wire [95:0]fifo4$in$enq_v;
     wire fifo4$in$enq__RDY;
-    wire [703:0]fifo4$out$first;
+    wire [95:0]fifo4$out$first;
     wire fifo4$out$first__RDY;
     l_class_OC_FifoPong fifo4 (
         CLK,
@@ -286,9 +286,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo5$out$deq__RDY;
     wire fifo5$in$enq__ENA;
-    wire [703:0]fifo5$in$enq_v;
+    wire [95:0]fifo5$in$enq_v;
     wire fifo5$in$enq__RDY;
-    wire [703:0]fifo5$out$first;
+    wire [95:0]fifo5$out$first;
     wire fifo5$out$first__RDY;
     l_class_OC_FifoPong fifo5 (
         CLK,
@@ -304,9 +304,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo6$out$deq__RDY;
     wire fifo6$in$enq__ENA;
-    wire [703:0]fifo6$in$enq_v;
+    wire [95:0]fifo6$in$enq_v;
     wire fifo6$in$enq__RDY;
-    wire [703:0]fifo6$out$first;
+    wire [95:0]fifo6$out$first;
     wire fifo6$out$first__RDY;
     l_class_OC_FifoPong fifo6 (
         CLK,
@@ -322,9 +322,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo7$out$deq__RDY;
     wire fifo7$in$enq__ENA;
-    wire [703:0]fifo7$in$enq_v;
+    wire [95:0]fifo7$in$enq_v;
     wire fifo7$in$enq__RDY;
-    wire [703:0]fifo7$out$first;
+    wire [95:0]fifo7$out$first;
     wire fifo7$out$first__RDY;
     l_class_OC_FifoPong fifo7 (
         CLK,
@@ -340,9 +340,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo8$out$deq__RDY;
     wire fifo8$in$enq__ENA;
-    wire [703:0]fifo8$in$enq_v;
+    wire [95:0]fifo8$in$enq_v;
     wire fifo8$in$enq__RDY;
-    wire [703:0]fifo8$out$first;
+    wire [95:0]fifo8$out$first;
     wire fifo8$out$first__RDY;
     l_class_OC_FifoPong fifo8 (
         CLK,
@@ -358,9 +358,9 @@ module l_class_OC_IVector (
         rule_ready[10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT:`l_class_OC_FifoPong_RULE_COUNT]);
     wire fifo9$out$deq__RDY;
     wire fifo9$in$enq__ENA;
-    wire [703:0]fifo9$in$enq_v;
+    wire [95:0]fifo9$in$enq_v;
     wire fifo9$in$enq__RDY;
-    wire [703:0]fifo9$out$first;
+    wire [95:0]fifo9$out$first;
     wire fifo9$out$first__RDY;
     l_class_OC_FifoPong fifo9 (
         CLK,
@@ -377,9 +377,9 @@ module l_class_OC_IVector (
     wire fifo10$out$deq__ENA;
     wire fifo10$out$deq__RDY;
     wire fifo10$in$enq__ENA;
-    wire [703:0]fifo10$in$enq_v;
+    wire [95:0]fifo10$in$enq_v;
     wire fifo10$in$enq__RDY;
-    wire [703:0]fifo10$out$first;
+    wire [95:0]fifo10$out$first;
     wire fifo10$out$first__RDY;
     l_class_OC_FifoPong fifo10 (
         CLK,

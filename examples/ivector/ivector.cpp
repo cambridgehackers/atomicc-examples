@@ -23,7 +23,7 @@
 typedef struct {
     int a;
     int b;
-    int c[20];
+    int c; // needs std::copy in c++ [20];
 } ValuePair;
 
 #define UTYPE ValuePair
@@ -127,11 +127,16 @@ public:
 ////////////////////////////////////////////////////////////
 // Test Bench
 ////////////////////////////////////////////////////////////
+int testCount;
+unsigned int stop_main_program;
 
 void IVectorIndication::heard(int meth, int v)
 {
-    printf("Heard an ivector: %d %d\n", meth, v);
+    printf("Heard an ivector: %d %d tcount %d\n", meth, v, testCount);
     //stop_main_program = 1;
+        if (--testCount <= 0)
+            stop_main_program = 1;
+
 }
 
 class IVectorTest {
