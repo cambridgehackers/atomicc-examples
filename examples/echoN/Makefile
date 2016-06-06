@@ -25,5 +25,5 @@ run:
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o echoN.bc echoN.cpp
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../cpp/atomicc.cpp
 	llvm-link-3.3 -v echoN.bc atomicc.bc >echoN.exe.bc
-#	../../../llvm/build/Debug+Asserts/bin/lli -force-interpreter=true echoN.exe.bc foo
+#	../../../llvm/build/bin/lli -force-interpreter=true echoN.exe.bc foo
 	lli-3.3 -force-interpreter=true echoN.exe.bc foo
