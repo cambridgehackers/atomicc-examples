@@ -94,8 +94,6 @@ module l_class_OC_IVector (
     output [5:0]ind$heard_heard_meth,
     output [3:0]ind$heard_heard_v,
     input ind$heard__RDY);
-    wire respond__RDY_internal;
-    wire respond__ENA_internal = rule_enable[0] && respond__RDY_internal;
     wire say__RDY_internal;
     wire say__ENA_internal = say__ENA && say__RDY_internal;
     wire fifo$out$deq__RDY;
@@ -118,7 +116,6 @@ module l_class_OC_IVector (
     assign ind$heard_heard_meth = ((say_meth) & (-1));
     assign ind$heard_heard_v = ((say_v) & (-1));
     assign respond__RDY_internal = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
-    assign rule_ready[0] = respond__RDY_internal;
     assign say__RDY = say__RDY_internal;
 
     always @( posedge CLK) begin

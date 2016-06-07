@@ -52,8 +52,6 @@ module l_class_OC_LpmMemory (
     output resAccept__RDY,
     output [95:0]resValue,
     output resValue__RDY);
-    wire memdelay__RDY_internal;
-    wire memdelay__ENA_internal = rule_enable[0] && memdelay__RDY_internal;
     wire req__RDY_internal;
     wire req__ENA_internal = req__ENA && req__RDY_internal;
     wire resAccept__RDY_internal;
@@ -67,7 +65,6 @@ module l_class_OC_LpmMemory (
     assign resAccept__RDY_internal = delayCount == 1;
     assign resValue = retval;
     assign resValue__RDY_internal = delayCount == 1;
-    assign rule_ready[0] = memdelay__RDY_internal;
     assign v$a = req_v_2e_coerce0;
     assign v$b = req_v_2e_coerce1;
     assign v$c = req_v_2e_coerce2;
@@ -198,14 +195,6 @@ module l_class_OC_Lpm (
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
     input indication$heard__READY);
-    wire enter__RDY_internal;
-    wire enter__ENA_internal = rule_enable[0] && enter__RDY_internal;
-    wire exit__RDY_internal;
-    wire exit__ENA_internal = rule_enable[1] && exit__RDY_internal;
-    wire recirc__RDY_internal;
-    wire recirc__ENA_internal = rule_enable[2] && recirc__RDY_internal;
-    wire respond__RDY_internal;
-    wire respond__ENA_internal = rule_enable[3] && respond__RDY_internal;
     wire say__READY_internal;
     wire say__VALID_internal = say__VALID && say__READY_internal;
     wire inQ$out$deq__RDY;
@@ -284,10 +273,6 @@ module l_class_OC_Lpm (
     assign mtemp$c = mtemp$c;
     assign recirc__RDY_internal = ((((fifo$out$first__RDY & mem$resValue__RDY) & mem$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
     assign respond__RDY_internal = (outQ$out$first__RDY & outQ$out$deq__RDY) & indication$heard__READY;
-    assign rule_ready[0] = enter__RDY_internal;
-    assign rule_ready[1] = exit__RDY_internal;
-    assign rule_ready[2] = recirc__RDY_internal;
-    assign rule_ready[3] = respond__RDY_internal;
     assign say__READY = say__READY_internal;
     assign temp$c = outQ$out$first.c;
 

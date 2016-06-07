@@ -160,26 +160,6 @@ module l_class_OC_IVector (
     output [31:0]ind$heard_heard_meth,
     output [31:0]ind$heard_heard_v,
     input ind$heard__RDY);
-    wire respond0__RDY_internal;
-    wire respond0__ENA_internal = rule_enable[0] && respond0__RDY_internal;
-    wire respond1__RDY_internal;
-    wire respond1__ENA_internal = rule_enable[1] && respond1__RDY_internal;
-    wire respond2__RDY_internal;
-    wire respond2__ENA_internal = rule_enable[2] && respond2__RDY_internal;
-    wire respond3__RDY_internal;
-    wire respond3__ENA_internal = rule_enable[3] && respond3__RDY_internal;
-    wire respond4__RDY_internal;
-    wire respond4__ENA_internal = rule_enable[4] && respond4__RDY_internal;
-    wire respond5__RDY_internal;
-    wire respond5__ENA_internal = rule_enable[5] && respond5__RDY_internal;
-    wire respond6__RDY_internal;
-    wire respond6__ENA_internal = rule_enable[6] && respond6__RDY_internal;
-    wire respond7__RDY_internal;
-    wire respond7__ENA_internal = rule_enable[7] && respond7__RDY_internal;
-    wire respond8__RDY_internal;
-    wire respond8__ENA_internal = rule_enable[8] && respond8__RDY_internal;
-    wire respond9__RDY_internal;
-    wire respond9__ENA_internal = rule_enable[9] && respond9__RDY_internal;
     wire say__RDY_internal;
     wire say__ENA_internal = say__ENA && say__RDY_internal;
     wire fifo0$out$deq__RDY;
@@ -375,16 +355,6 @@ module l_class_OC_IVector (
     assign respond7__RDY_internal = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & ind$heard__RDY;
     assign respond8__RDY_internal = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & ind$heard__RDY;
     assign respond9__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
-    assign rule_ready[0] = respond0__RDY_internal;
-    assign rule_ready[1] = respond1__RDY_internal;
-    assign rule_ready[2] = respond2__RDY_internal;
-    assign rule_ready[3] = respond3__RDY_internal;
-    assign rule_ready[4] = respond4__RDY_internal;
-    assign rule_ready[5] = respond5__RDY_internal;
-    assign rule_ready[6] = respond6__RDY_internal;
-    assign rule_ready[7] = respond7__RDY_internal;
-    assign rule_ready[8] = respond8__RDY_internal;
-    assign rule_ready[9] = respond9__RDY_internal;
     assign say__RDY = say__RDY_internal;
     assign say__RDY_internal = ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
     assign temp$a = fifo9$out$first.a;

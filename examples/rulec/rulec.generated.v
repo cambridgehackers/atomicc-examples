@@ -82,10 +82,6 @@ module l_class_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq_v,
     input pipe$enq__RDY);
-    wire output_rulee__RDY_internal;
-    wire output_rulee__ENA_internal = rule_enable[0] && output_rulee__RDY_internal;
-    wire output_ruleo__RDY_internal;
-    wire output_ruleo__ENA_internal = rule_enable[1] && output_ruleo__RDY_internal;
     wire indication$heard__RDY_internal;
     wire indication$heard__ENA_internal = indication$heard__ENA && indication$heard__RDY_internal;
     reg[95:0] ind0;
@@ -98,8 +94,6 @@ module l_class_OC_EchoIndicationOutput (
     assign output_ruleo__RDY_internal = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
     assign pipe$enq__ENA = output_rulee__ENA_internal || output_ruleo__ENA_internal;
     assign pipe$enq_v = output_rulee__ENA_internal ? ind0 : ind1;
-    assign rule_ready[0] = output_rulee__RDY_internal;
-    assign rule_ready[1] = output_ruleo__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -145,8 +139,6 @@ module l_class_OC_EchoIndicationInput (
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
     input indication$heard__RDY);
-    wire input_rule__RDY_internal;
-    wire input_rule__ENA_internal = rule_enable[0] && input_rule__RDY_internal;
     wire pipe$enq__RDY_internal;
     wire pipe$enq__ENA_internal = pipe$enq__ENA && pipe$enq__RDY_internal;
     reg[31:0] busy_delay;
@@ -158,7 +150,6 @@ module l_class_OC_EchoIndicationInput (
     assign input_rule__RDY_internal = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__RDY = pipe$enq__RDY_internal;
     assign pipe$enq__RDY_internal = (busy_delay != 0) ^ 1;
-    assign rule_ready[0] = input_rule__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -198,10 +189,6 @@ module l_class_OC_Echo (
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
     input indication$heard__RDY);
-    wire delay_rule__RDY_internal;
-    wire delay_rule__ENA_internal = rule_enable[0] && delay_rule__RDY_internal;
-    wire respond_rule__RDY_internal;
-    wire respond_rule__ENA_internal = rule_enable[1] && respond_rule__RDY_internal;
     wire request$say__RDY_internal;
     wire request$say__ENA_internal = request$say__ENA && request$say__RDY_internal;
     wire request$say2__RDY_internal;
@@ -221,8 +208,6 @@ module l_class_OC_Echo (
     assign request$say__RDY = request$say__RDY_internal;
     assign request$say__RDY_internal = (busy != 0) ^ 1;
     assign respond_rule__RDY_internal = (busy_delay != 0) & indication$heard__RDY;
-    assign rule_ready[0] = delay_rule__RDY_internal;
-    assign rule_ready[1] = respond_rule__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin
