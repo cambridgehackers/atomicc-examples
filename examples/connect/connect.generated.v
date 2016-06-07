@@ -9,9 +9,7 @@ module l_class_OC_EchoRequestOutput (
     output request$say__RDY,
     output pipe$enq__ENA,
     output [95:0]pipe$enq_v,
-    input pipe$enq__RDY,
-    input [`l_class_OC_EchoRequestOutput_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_EchoRequestOutput_RULE_COUNT:0]rule_ready);
+    input pipe$enq__RDY);
     wire request$say__RDY_internal;
     wire request$say__ENA_internal = request$say__ENA && request$say__RDY_internal;
     assign ind$tag = 1;
@@ -41,9 +39,7 @@ module l_class_OC_EchoRequestInput (
     output request$say__ENA,
     output [31:0]request$say_meth,
     output [31:0]request$say_v,
-    input request$say__RDY,
-    input [`l_class_OC_EchoRequestInput_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_EchoRequestInput_RULE_COUNT:0]rule_ready);
+    input request$say__RDY);
     wire pipe$enq__RDY_internal;
     wire pipe$enq__ENA_internal = pipe$enq__ENA && pipe$enq__RDY_internal;
     assign pipe$enq__RDY = pipe$enq__RDY_internal;
@@ -62,9 +58,7 @@ module l_class_OC_EchoIndicationOutput (
     output indication$heard__RDY,
     output pipe$enq__ENA,
     output [95:0]pipe$enq_v,
-    input pipe$enq__RDY,
-    input [`l_class_OC_EchoIndicationOutput_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_EchoIndicationOutput_RULE_COUNT:0]rule_ready);
+    input pipe$enq__RDY);
     wire indication$heard__RDY_internal;
     wire indication$heard__ENA_internal = indication$heard__ENA && indication$heard__RDY_internal;
     assign ind$tag = 1;
@@ -94,9 +88,7 @@ module l_class_OC_EchoIndicationInput (
     output indication$heard__ENA,
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
-    input indication$heard__RDY,
-    input [`l_class_OC_EchoIndicationInput_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_EchoIndicationInput_RULE_COUNT:0]rule_ready);
+    input indication$heard__RDY);
     wire pipe$enq__RDY_internal;
     wire pipe$enq__ENA_internal = pipe$enq__ENA && pipe$enq__RDY_internal;
     assign indication$heard__ENA = pipe$enq__ENA_internal & enq_v$tag == 1;
@@ -116,9 +108,7 @@ module l_class_OC_Echo (
     output indication$heard__ENA,
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
-    input indication$heard__RDY,
-    input [`l_class_OC_Echo_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Echo_RULE_COUNT:0]rule_ready);
+    input indication$heard__RDY);
     wire request$say__RDY_internal;
     wire request$say__ENA_internal = request$say__ENA && request$say__RDY_internal;
     assign indication$heard__ENA = request$say__ENA_internal;
@@ -134,9 +124,7 @@ module l_class_OC_foo (
     input indication$heard__ENA,
     input [31:0]indication$heard_meth,
     input [31:0]indication$heard_v,
-    output indication$heard__RDY,
-    input [`l_class_OC_foo_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_foo_RULE_COUNT:0]rule_ready);
+    output indication$heard__RDY);
     wire indication$heard__RDY_internal;
     wire indication$heard__ENA_internal = indication$heard__ENA && indication$heard__RDY_internal;
     assign indication$heard__RDY = indication$heard__RDY_internal;
@@ -145,9 +133,7 @@ endmodule
 
 module l_class_OC_Connect (
     input CLK,
-    input nRST,
-    input [`l_class_OC_Connect_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Connect_RULE_COUNT:0]rule_ready);
+    input nRST);
     wire lEIO$indication$heard__ENA;
     wire [31:0]lEIO$indication$heard_meth;
     wire [31:0]lEIO$indication$heard_v;
@@ -161,9 +147,7 @@ module l_class_OC_Connect (
         lEIO$indication$heard__RDY,
         lEIO$pipe$enq__ENA,
         lEIO$pipe$enq_v,
-        lEIO$pipe$enq__RDY,
-        rule_enable[0:`l_class_OC_EchoIndicationOutput_RULE_COUNT],
-        rule_ready[0:`l_class_OC_EchoIndicationOutput_RULE_COUNT]);
+        lEIO$pipe$enq__RDY);
     wire lERI$pipe$enq__ENA;
     wire [95:0]lERI$pipe$enq_v;
     wire lERI$pipe$enq__RDY;
@@ -176,9 +160,7 @@ module l_class_OC_Connect (
         lERI$request$say__ENA,
         lERI$request$say_meth,
         lERI$request$say_v,
-        lERI$request$say__RDY,
-        rule_enable[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT:`l_class_OC_EchoRequestInput_RULE_COUNT],
-        rule_ready[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT:`l_class_OC_EchoRequestInput_RULE_COUNT]);
+        lERI$request$say__RDY);
     wire lEcho$request$say__ENA;
     wire [31:0]lEcho$request$say_meth;
     wire [31:0]lEcho$request$say_v;
@@ -193,9 +175,7 @@ module l_class_OC_Connect (
         lEcho$indication$heard__ENA,
         lEcho$indication$heard_meth,
         lEcho$indication$heard_v,
-        lEcho$indication$heard__RDY,
-        rule_enable[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT:`l_class_OC_Echo_RULE_COUNT],
-        rule_ready[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT:`l_class_OC_Echo_RULE_COUNT]);
+        lEcho$indication$heard__RDY);
     wire lERO_test$request$say__ENA;
     wire [31:0]lERO_test$request$say_meth;
     wire [31:0]lERO_test$request$say_v;
@@ -209,9 +189,7 @@ module l_class_OC_Connect (
         lERO_test$request$say__RDY,
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq_v,
-        lERO_test$pipe$enq__RDY,
-        rule_enable[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT + `l_class_OC_Echo_RULE_COUNT:`l_class_OC_EchoRequestOutput_RULE_COUNT],
-        rule_ready[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT + `l_class_OC_Echo_RULE_COUNT:`l_class_OC_EchoRequestOutput_RULE_COUNT]);
+        lERO_test$pipe$enq__RDY);
     wire lEII_test$pipe$enq__ENA;
     wire [95:0]lEII_test$pipe$enq_v;
     wire lEII_test$pipe$enq__RDY;
@@ -224,8 +202,6 @@ module l_class_OC_Connect (
         lEII_test$indication$heard__ENA,
         lEII_test$indication$heard_meth,
         lEII_test$indication$heard_v,
-        lEII_test$indication$heard__RDY,
-        rule_enable[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT + `l_class_OC_Echo_RULE_COUNT + `l_class_OC_EchoRequestOutput_RULE_COUNT:`l_class_OC_EchoIndicationInput_RULE_COUNT],
-        rule_ready[0 + `l_class_OC_EchoIndicationOutput_RULE_COUNT + `l_class_OC_EchoRequestInput_RULE_COUNT + `l_class_OC_Echo_RULE_COUNT + `l_class_OC_EchoRequestOutput_RULE_COUNT:`l_class_OC_EchoIndicationInput_RULE_COUNT]);
+        lEII_test$indication$heard__RDY);
 endmodule 
 

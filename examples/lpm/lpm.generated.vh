@@ -1,15 +1,13 @@
 `ifndef __lpm_GENERATED__VH__
 `define __lpm_GENERATED__VH__
 
-`define l_class_OC_Fifo1_RULE_COUNT (0)
-
+//METASTART; l_class_OC_Fifo1
 //METAEXCLUSIVE; out$deq; in$enq
 //METAGUARD; out$deq; full;
 //METAGUARD; in$enq; full ^ 1;
 //METABEFORE; out$first; :in$enq
 //METAGUARD; out$first; full;
-`define l_class_OC_LpmMemory_RULE_COUNT (1)
-
+//METASTART; l_class_OC_LpmMemory
 //METAEXCLUSIVE; memdelay; req; resAccept
 //METABEFORE; memdelay; :req; :resAccept
 //METAGUARD; memdelay; delayCount > 1;
@@ -19,21 +17,18 @@
 //METABEFORE; resValue; :req
 //METAGUARD; resValue; delayCount == 1;
 //METARULES; memdelay
-`define l_class_OC_Fifo1_OC_0_RULE_COUNT (0)
-
+//METASTART; l_class_OC_Fifo1_OC_0
 //METAEXCLUSIVE; out$deq; in$enq
 //METAGUARD; out$deq; full;
 //METAGUARD; in$enq; full ^ 1;
 //METABEFORE; out$first; :in$enq
 //METAGUARD; out$first; full;
-`define l_class_OC_Fifo2_RULE_COUNT (0)
-
+//METASTART; l_class_OC_Fifo2
 //METAGUARD; out$deq; rindex != windex;
 //METAGUARD; in$enq; ((windex + 1) % 2) != rindex;
 //METABEFORE; out$first; :out$deq
 //METAGUARD; out$first; rindex != windex;
-`define l_class_OC_Lpm_RULE_COUNT (4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_Fifo2_RULE_COUNT + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_LpmMemory_RULE_COUNT)
-
+//METASTART; l_class_OC_Lpm
 //METAINVOKE; enter; :fifo$in$enq;:inQ$out$deq;:inQ$out$first;:mem$req;
 //METAEXCLUSIVE; enter; recirc
 //METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
@@ -53,7 +48,6 @@
 //METAINTERNAL; outQ; l_class_OC_Fifo1_OC_0;
 //METAINTERNAL; mem; l_class_OC_LpmMemory;
 //METAEXTERNAL; indication; l_class_OC_LpmIndication;
-`define l_class_OC_foo_RULE_COUNT (0)
-
+//METASTART; l_class_OC_foo
 //METAGUARDV; indication$heard; 1;
 `endif

@@ -9,9 +9,7 @@ module l_class_OC_Fifo1 (
     input [31:0]in$enq_v,
     output in$enq__RDY,
     output [31:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo1_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo1_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
@@ -51,9 +49,7 @@ module l_class_OC_Fifo1_OC_0 (
     input [9:0]in$enq_v,
     output in$enq__RDY,
     output [9:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
@@ -97,9 +93,7 @@ module l_class_OC_IVector (
     output ind$heard__ENA,
     output [5:0]ind$heard_heard_meth,
     output [3:0]ind$heard_heard_v,
-    input ind$heard__RDY,
-    input [`l_class_OC_IVector_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_IVector_RULE_COUNT:0]rule_ready);
+    input ind$heard__RDY);
     wire respond__RDY_internal;
     wire respond__ENA_internal = rule_enable[0] && respond__RDY_internal;
     wire say__RDY_internal;
@@ -116,9 +110,7 @@ module l_class_OC_IVector (
         temp,
         say__RDY_internal,
         fifo$out$first,
-        fifo$out$first__RDY,
-        rule_enable[1:`l_class_OC_Fifo1_OC_0_RULE_COUNT],
-        rule_ready[1:`l_class_OC_Fifo1_OC_0_RULE_COUNT]);
+        fifo$out$first__RDY);
     reg[:0] fcounter;
     reg[1:0] counter;
     reg[14:0] gcounter;

@@ -1,22 +1,19 @@
 `ifndef __ivector_GENERATED__VH__
 `define __ivector_GENERATED__VH__
 
-`define l_class_OC_Fifo1_RULE_COUNT (0)
-
+//METASTART; l_class_OC_Fifo1
 //METAEXCLUSIVE; out$deq; in$enq
 //METAGUARD; out$deq; full;
 //METAGUARD; in$enq; full ^ 1;
 //METABEFORE; out$first; :in$enq
 //METAGUARD; out$first; full;
-`define l_class_OC_Fifo1_OC_3_RULE_COUNT (0)
-
+//METASTART; l_class_OC_Fifo1_OC_3
 //METAEXCLUSIVE; out$deq; in$enq
 //METAGUARD; out$deq; full;
 //METAGUARD; in$enq; full ^ 1;
 //METABEFORE; out$first; :in$enq
 //METAGUARD; out$first; full;
-`define l_class_OC_FifoPong_RULE_COUNT (0 + `l_class_OC_Fifo1_OC_3_RULE_COUNT + `l_class_OC_Fifo1_OC_3_RULE_COUNT)
-
+//METASTART; l_class_OC_FifoPong
 //METAINVOKE; out$deq; pong ^ 1:element1$out$deq;pong:element2$out$deq;
 //METAGUARD; out$deq; (element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong);
 //METAINVOKE; in$enq; pong ^ 1:element1$in$enq;pong:element2$in$enq;
@@ -26,8 +23,7 @@
 //METAGUARD; out$first; (element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong);
 //METAINTERNAL; element1; l_class_OC_Fifo1_OC_3;
 //METAINTERNAL; element2; l_class_OC_Fifo1_OC_3;
-`define l_class_OC_IVector_RULE_COUNT (10 + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT + `l_class_OC_FifoPong_RULE_COUNT)
-
+//METASTART; l_class_OC_IVector
 //METAINVOKE; respond0; :fifo0$out$deq;:fifo0$out$first;:ind$heard;
 //METAEXCLUSIVE; respond0; respond1; respond2; respond3; respond4; respond5; respond6; respond7; respond8; respond9
 //METAGUARD; respond0; (fifo0$out$first__RDY & fifo0$out$deq__RDY) & ind$heard__RDY;

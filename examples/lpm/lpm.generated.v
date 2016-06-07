@@ -9,9 +9,7 @@ module l_class_OC_Fifo1 (
     input [31:0]in$enq_v,
     output in$enq__RDY,
     output [31:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo1_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo1_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
@@ -53,9 +51,7 @@ module l_class_OC_LpmMemory (
     input resAccept__ENA,
     output resAccept__RDY,
     output [95:0]resValue,
-    output resValue__RDY,
-    input [`l_class_OC_LpmMemory_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_LpmMemory_RULE_COUNT:0]rule_ready);
+    output resValue__RDY);
     wire memdelay__RDY_internal;
     wire memdelay__ENA_internal = rule_enable[0] && memdelay__RDY_internal;
     wire req__RDY_internal;
@@ -108,9 +104,7 @@ module l_class_OC_Fifo1_OC_0 (
     input [95:0]in$enq_v,
     output in$enq__RDY,
     output [95:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo1_OC_0_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
@@ -153,9 +147,7 @@ module l_class_OC_Fifo2 (
     input [95:0]in$enq_v,
     output in$enq__RDY,
     output [95:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo2_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo2_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
@@ -205,9 +197,7 @@ module l_class_OC_Lpm (
     output indication$heard__VALID,
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
-    input indication$heard__READY,
-    input [`l_class_OC_Lpm_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Lpm_RULE_COUNT:0]rule_ready);
+    input indication$heard__READY);
     wire enter__RDY_internal;
     wire enter__ENA_internal = rule_enable[0] && enter__RDY_internal;
     wire exit__RDY_internal;
@@ -230,9 +220,7 @@ module l_class_OC_Lpm (
         temp,
         say__READY_internal,
         inQ$out$first,
-        inQ$out$first__RDY,
-        rule_enable[4:`l_class_OC_Fifo1_OC_0_RULE_COUNT],
-        rule_ready[4:`l_class_OC_Fifo1_OC_0_RULE_COUNT]);
+        inQ$out$first__RDY);
     wire fifo$out$deq__RDY;
     wire fifo$in$enq__RDY;
     wire [95:0]fifo$out$first;
@@ -246,9 +234,7 @@ module l_class_OC_Lpm (
         enter__ENA_internal ? temp : temp,
         fifo$in$enq__RDY,
         fifo$out$first,
-        fifo$out$first__RDY,
-        rule_enable[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT:`l_class_OC_Fifo2_RULE_COUNT],
-        rule_ready[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT:`l_class_OC_Fifo2_RULE_COUNT]);
+        fifo$out$first__RDY);
     wire outQ$out$deq__RDY;
     wire outQ$in$enq__RDY;
     wire [95:0]outQ$out$first;
@@ -262,9 +248,7 @@ module l_class_OC_Lpm (
         temp,
         outQ$in$enq__RDY,
         outQ$out$first,
-        outQ$out$first__RDY,
-        rule_enable[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_Fifo2_RULE_COUNT:`l_class_OC_Fifo1_OC_0_RULE_COUNT],
-        rule_ready[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_Fifo2_RULE_COUNT:`l_class_OC_Fifo1_OC_0_RULE_COUNT]);
+        outQ$out$first__RDY);
     wire mem$memdelay__ENA;
     wire mem$memdelay__RDY;
     wire [31:0]mem$req_v.coerce0;
@@ -285,9 +269,7 @@ module l_class_OC_Lpm (
         exit__ENA_internal || recirc__ENA_internal,
         mem$resAccept__RDY,
         mem$resValue,
-        mem$resValue__RDY,
-        rule_enable[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_Fifo2_RULE_COUNT + `l_class_OC_Fifo1_OC_0_RULE_COUNT:`l_class_OC_LpmMemory_RULE_COUNT],
-        rule_ready[4 + `l_class_OC_Fifo1_OC_0_RULE_COUNT + `l_class_OC_Fifo2_RULE_COUNT + `l_class_OC_Fifo1_OC_0_RULE_COUNT:`l_class_OC_LpmMemory_RULE_COUNT]);
+        mem$resValue__RDY);
     reg[31:0] doneCount;
     assign enter__RDY_internal = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
     assign exit__RDY_internal = (((fifo$out$first__RDY & mem$resValue__RDY) & mem$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
@@ -322,9 +304,7 @@ module l_class_OC_foo (
     input indication$heard__VALID,
     input [31:0]indication$heard_meth,
     input [31:0]indication$heard_v,
-    output indication$heard__READY,
-    input [`l_class_OC_foo_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_foo_RULE_COUNT:0]rule_ready);
+    output indication$heard__READY);
     wire indication$heard__READY_internal;
     wire indication$heard__VALID_internal = indication$heard__VALID && indication$heard__READY_internal;
     assign indication$heard__READY = indication$heard__READY_internal;

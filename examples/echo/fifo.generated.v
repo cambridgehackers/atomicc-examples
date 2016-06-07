@@ -9,9 +9,7 @@ module l_class_OC_Fifo1 (
     input [31:0]in$enq_v,
     output in$enq__RDY,
     output [31:0]out$first,
-    output out$first__RDY,
-    input [`l_class_OC_Fifo1_RULE_COUNT:0]rule_enable,
-    output [`l_class_OC_Fifo1_RULE_COUNT:0]rule_ready);
+    output out$first__RDY);
     wire out$deq__RDY_internal;
     wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     wire in$enq__RDY_internal;
