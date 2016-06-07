@@ -29,6 +29,11 @@
 //METABEFORE; out$first; :out$deq
 //METAGUARD; out$first; rindex != windex;
 //METASTART; l_class_OC_Lpm
+//METAINTERNAL; inQ; l_class_OC_Fifo1_OC_0;
+//METAINTERNAL; fifo; l_class_OC_Fifo2;
+//METAINTERNAL; outQ; l_class_OC_Fifo1_OC_0;
+//METAINTERNAL; mem; l_class_OC_LpmMemory;
+//METAEXTERNAL; indication; l_class_OC_LpmIndication;
 //METAINVOKE; enter; :fifo$in$enq;:inQ$out$deq;:inQ$out$first;:mem$req;
 //METAEXCLUSIVE; enter; recirc
 //METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
@@ -43,11 +48,6 @@
 //METAGUARDV; say; inQ$in$enq__RDY;
 //METARULES; enter; exit; recirc; respond
 //METAPRIORITY; recirc; enter;exit
-//METAINTERNAL; inQ; l_class_OC_Fifo1_OC_0;
-//METAINTERNAL; fifo; l_class_OC_Fifo2;
-//METAINTERNAL; outQ; l_class_OC_Fifo1_OC_0;
-//METAINTERNAL; mem; l_class_OC_LpmMemory;
-//METAEXTERNAL; indication; l_class_OC_LpmIndication;
 //METASTART; l_class_OC_foo
 //METAGUARDV; indication$heard; 1;
 `endif
