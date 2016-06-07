@@ -76,9 +76,6 @@ module l_class_OC_Fifo1_OC_3 (
             element <= enq_v;
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$first_internal) begin
-            retval <= element;
-        end; // End of out$first
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -133,9 +130,6 @@ module l_class_OC_FifoPong (
     assign out$deq__RDY_internal = (element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong);
     assign out$first = retval;
     assign out$first__RDY_internal = (element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong);
-    assign retval$a = element1$out$first.a;
-    assign retval$b = element1$out$first.b;
-    assign retval$c = element1$out$first.c;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -76,9 +76,6 @@ module l_class_OC_Fifo1_OC_0 (
             element <= enq_v;
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$first_internal) begin
-            retval <= element;
-        end; // End of out$first
       end
     end // always @ (posedge CLK)
 endmodule 

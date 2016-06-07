@@ -85,9 +85,6 @@ module l_class_OC_LpmMemory (
         if (resAccept__ENA_internal) begin
             delayCount <= 0;
         end; // End of resAccept__ENA
-        if (resValue_internal) begin
-            retval <= saved;
-        end; // End of resValue
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -128,9 +125,6 @@ module l_class_OC_Fifo1_OC_0 (
             element <= enq_v;
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$first_internal) begin
-            retval <= element;
-        end; // End of out$first
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -177,9 +171,6 @@ module l_class_OC_Fifo2 (
             *(windex == 0 ? &element0:&element1) <= enq_v;
             windex <= (windex + 1) % 2;
         end; // End of in$enq__ENA
-        if (out$first_internal) begin
-            retval <= *(rindex == 0 ? &element0:&element1);
-        end; // End of out$first
       end
     end // always @ (posedge CLK)
 endmodule 
