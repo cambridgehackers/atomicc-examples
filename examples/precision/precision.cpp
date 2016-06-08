@@ -25,6 +25,7 @@
 //typedef FixedPoint<4> myint4;
 typedef int __attribute__(( atomicc_width(6) )) myint6;
 typedef int __attribute__(( atomicc_width(4) )) myint4;
+typedef int __attribute__(( atomicc_width(23) )) myint23;
 
 typedef struct {
     myint6 a;
@@ -49,7 +50,7 @@ ValueType grumpy;
 
 class IVector : public Module, IVectorRequest {
     Fifo1<ValueType> fifo;
-    FixedPoint<23>   fcounter;
+    myint23          fcounter;
     FixedPointV      counter;    // the precision of these members is set by the constructor
     FixedPointV      gcounter;
     IVectorIndication *ind;

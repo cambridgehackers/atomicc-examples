@@ -106,7 +106,7 @@ module l_class_OC_IVector (
         say__RDY_internal,
         fifo$out$first,
         fifo$out$first__RDY);
-    reg[:0] fcounter;
+    reg[22:0] fcounter;
     reg[1:0] counter;
     reg[14:0] gcounter;
     assign ind$heard__ENA = respond__ENA_internal;
@@ -117,6 +117,7 @@ module l_class_OC_IVector (
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        fcounter <= 0;
       end // nRST
       else begin
         if (respond__ENA_internal) begin

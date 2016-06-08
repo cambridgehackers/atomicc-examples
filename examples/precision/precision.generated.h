@@ -144,7 +144,7 @@ extern bool l_class_OC_IVector__say__RDY(void *thisarg);
 class l_class_OC_IVector {
 public:
   l_class_OC_Fifo1_OC_0 fifo;
-  BITS fcounter;
+  unsigned int fcounter, fcounter_shadow; bool fcounter_valid;
   BITS1 counter;
   BITS14 gcounter;
   l_class_OC_IVectorIndication *ind;

@@ -149,6 +149,8 @@ void l_class_OC_IVector::run()
 }
 void l_class_OC_IVector::commit()
 {
+    if (fcounter_valid) fcounter = fcounter_shadow;
+    fcounter_valid = 0;
     fifo.commit();
 }
 void l_class_OC_IVectorTest::run()

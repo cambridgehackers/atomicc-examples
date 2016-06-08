@@ -57,7 +57,7 @@ public:
 typedef struct {
     MemRequest req;
     //FixedPoint<addrWidth> pa;
-    FixedPoint<MemTagSize> rename_tag;
+    int __attribute__(( atomicc_width(MemTagSize) )) rename_tag;
     //FixedPoint<log(max(1,numClients))> client;
 } RRec;//#(numeric type numClients, numeric type addrWidth);
 
