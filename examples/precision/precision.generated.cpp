@@ -111,8 +111,8 @@ void l_class_OC_IVector__respond(void *thisarg) {
         unsigned long long call4;
         l_struct_OC_ValueType temp;
         call = thisp->fifo.out.first();
-        temp.a = ((call.a) & (-1));
-        temp.b = ((call.b) & (-1));
+        temp.a = call.a;
+        temp.b = call.b;
         call4 = thisp->gcounter;
         thisp->gcounter = call4 + 1;
         thisp->fifo.out.deq();
@@ -131,8 +131,8 @@ bool l_class_OC_IVector__respond__RDY(void *thisarg) {
 void l_class_OC_IVector__say(void *thisarg, bool say_meth, bool say_v) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         l_struct_OC_ValueType temp;
-        temp.a = ((say_meth) & (-1));
-        temp.b = ((say_v) & (-1));
+        temp.a = say_meth;
+        temp.b = say_v;
         thisp->fifo.in.enq(temp);
 }
 bool l_class_OC_IVector__say__RDY(void *thisarg) {

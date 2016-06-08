@@ -110,8 +110,8 @@ module l_class_OC_IVector (
     reg[1:0] counter;
     reg[14:0] gcounter;
     assign ind$heard__ENA = respond__ENA_internal;
-    assign ind$heard_heard_meth = ((say_meth) & (-1));
-    assign ind$heard_heard_v = ((say_v) & (-1));
+    assign ind$heard_heard_meth = say_meth;
+    assign ind$heard_heard_v = say_v;
     assign respond__RDY_internal = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
     assign say__RDY = say__RDY_internal;
 
