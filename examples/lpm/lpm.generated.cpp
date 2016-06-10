@@ -184,133 +184,78 @@ void l_class_OC_Fifo2::commit()
 }
 void l_class_OC_Lpm__enter(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair call;
         l_struct_OC_ValuePair temp;
-        call = thisp->inQ.out.first();
-        temp.a = call.a;
-        temp.b = call.b;
-        temp.c = call.c;
-        printf("enter: (%d, %d)\n", temp.a, temp.b);
+        temp.a = thisp->inQ.out.first().a;
+        temp.b = thisp->inQ.out.first().b;
+        temp.c = thisp->inQ.out.first().c;
         thisp->inQ.out.deq();
         thisp->fifo.in.enq(temp);
         thisp->mem.req(temp.a, temp.b, temp.c);
 }
 bool l_class_OC_Lpm__enter__RDY(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        bool tmp__1;
-        bool tmp__2;
-        bool tmp__3;
-        bool tmp__4;
-        tmp__1 = thisp->inQ.out.first__RDY();
-        tmp__2 = thisp->inQ.out.deq__RDY();
-        tmp__3 = thisp->fifo.in.enq__RDY();
-        tmp__4 = thisp->mem.req__RDY();
-        return ((tmp__1 & tmp__2) & tmp__3) & tmp__4;
+        return (((thisp->inQ.out.first__RDY()) & (thisp->inQ.out.deq__RDY())) & (thisp->fifo.in.enq__RDY())) & (thisp->mem.req__RDY());
 }
 void l_class_OC_Lpm__exit(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair call;
-        l_struct_OC_ValuePair call1;
         l_struct_OC_ValuePair mtemp;
         l_struct_OC_ValuePair temp;
-        call = thisp->fifo.out.first();
-        temp.a = call.a;
-        temp.b = call.b;
-        temp.c = call.c;
-        call1 = thisp->mem.resValue();
-        mtemp.a = call1.a;
-        mtemp.b = call1.b;
-        mtemp.c = call1.c;
+        temp.a = thisp->fifo.out.first().a;
+        temp.b = thisp->fifo.out.first().b;
+        temp.c = thisp->fifo.out.first().c;
+        mtemp.a = thisp->mem.resValue().a;
+        mtemp.b = thisp->mem.resValue().b;
+        mtemp.c = thisp->mem.resValue().c;
         thisp->mem.resAccept();
         thisp->fifo.out.deq();
-        printf("exit: (%d, %d)\n", temp.a, temp.b);
         thisp->outQ.in.enq(temp);
 }
 bool l_class_OC_Lpm__exit__RDY(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        bool tmp__1;
-        bool tmp__2;
-        bool tmp__3;
-        bool tmp__4;
-        bool tmp__5;
-        tmp__1 = thisp->fifo.out.first__RDY();
-        tmp__2 = thisp->mem.resValue__RDY();
-        tmp__3 = thisp->mem.resAccept__RDY();
-        tmp__4 = thisp->fifo.out.deq__RDY();
-        tmp__5 = thisp->outQ.in.enq__RDY();
-        return (((tmp__1 & tmp__2) & tmp__3) & tmp__4) & tmp__5;
+        return ((((thisp->fifo.out.first__RDY()) & (thisp->mem.resValue__RDY())) & (thisp->mem.resAccept__RDY())) & (thisp->fifo.out.deq__RDY())) & (thisp->outQ.in.enq__RDY());
 }
 void l_class_OC_Lpm__recirc(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair call;
-        l_struct_OC_ValuePair call1;
         l_struct_OC_ValuePair mtemp;
         l_struct_OC_ValuePair temp;
-        call = thisp->fifo.out.first();
-        temp.a = call.a;
-        temp.b = call.b;
-        temp.c = call.c;
-        call1 = thisp->mem.resValue();
-        mtemp.a = call1.a;
-        mtemp.b = call1.b;
-        mtemp.c = call1.c;
+        temp.a = thisp->fifo.out.first().a;
+        temp.b = thisp->fifo.out.first().b;
+        temp.c = thisp->fifo.out.first().c;
+        mtemp.a = thisp->mem.resValue().a;
+        mtemp.b = thisp->mem.resValue().b;
+        mtemp.c = thisp->mem.resValue().c;
         thisp->mem.resAccept();
         thisp->fifo.out.deq();
-        printf("recirc: (%d, %d)\n", temp.a, temp.b);
         thisp->fifo.in.enq(temp);
         thisp->mem.req(temp.a, temp.b, temp.c);
 }
 bool l_class_OC_Lpm__recirc__RDY(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        bool tmp__1;
-        bool tmp__2;
-        bool tmp__3;
-        bool tmp__4;
-        bool tmp__5;
-        bool tmp__6;
-        tmp__1 = thisp->fifo.out.first__RDY();
-        tmp__2 = thisp->mem.resValue__RDY();
-        tmp__3 = thisp->mem.resAccept__RDY();
-        tmp__4 = thisp->fifo.out.deq__RDY();
-        tmp__5 = thisp->fifo.in.enq__RDY();
-        tmp__6 = thisp->mem.req__RDY();
-        return ((((tmp__1 & tmp__2) & tmp__3) & tmp__4) & tmp__5) & tmp__6;
+        return (((((thisp->fifo.out.first__RDY()) & (thisp->mem.resValue__RDY())) & (thisp->mem.resAccept__RDY())) & (thisp->fifo.out.deq__RDY())) & (thisp->fifo.in.enq__RDY())) & (thisp->mem.req__RDY());
 }
 void l_class_OC_Lpm__respond(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair call;
         l_struct_OC_ValuePair temp;
-        call = thisp->outQ.out.first();
-        temp.a = call.a;
-        temp.b = call.b;
-        temp.c = call.c;
+        temp.a = thisp->outQ.out.first().a;
+        temp.b = thisp->outQ.out.first().b;
+        temp.c = thisp->outQ.out.first().c;
         thisp->outQ.out.deq();
-        printf("respond: (%d, %d)\n", temp.a, temp.b);
         thisp->indication->heard(temp.a, temp.b);
 }
 bool l_class_OC_Lpm__respond__RDY(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        bool tmp__1;
-        bool tmp__2;
-        bool tmp__3;
-        tmp__1 = thisp->outQ.out.first__RDY();
-        tmp__2 = thisp->outQ.out.deq__RDY();
-        tmp__3 = thisp->indication->heard__READY();
-        return (tmp__1 & tmp__2) & tmp__3;
+        return ((thisp->outQ.out.first__RDY()) & (thisp->outQ.out.deq__RDY())) & (thisp->indication->heard__READY());
 }
 void l_class_OC_Lpm__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
         l_struct_OC_ValuePair temp;
         temp.a = say_meth;
         temp.b = say_v;
-        printf("[%s:%d] (%d, %d)\n", ("say"), 98, say_meth, say_v);
         thisp->inQ.in.enq(temp);
 }
 bool l_class_OC_Lpm__say__READY(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->inQ.in.enq__RDY();
-        return tmp__1;
+        return thisp->inQ.in.enq__RDY();
 }
 void l_class_OC_Lpm::run()
 {
@@ -335,7 +280,6 @@ void l_class_OC_Lpm::commit()
 }
 void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
-        printf("Heard an lpm: %d %d\n", heard_meth, heard_v);
 }
 bool l_class_OC_foo__heard__READY(void *thisarg) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;

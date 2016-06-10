@@ -5,7 +5,6 @@ void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int say_meth, uns
         ind.tag = 1;
         ind.data.say.meth = say_meth;
         ind.data.say.v = say_v;
-        printf("entered EchoRequestOutput::say\n");
         thisp->pipe->enq(ind);
 }
 void l_class_OC_EchoRequestOutput__say2(void *thisarg, unsigned int say2_meth, unsigned int say2_v, unsigned int say2_v2) {
@@ -15,20 +14,15 @@ void l_class_OC_EchoRequestOutput__say2(void *thisarg, unsigned int say2_meth, u
         ind.data.say2.meth = say2_meth;
         ind.data.say2.v = say2_v;
         ind.data.say2.v2 = say2_v2;
-        printf("entered EchoRequestOutput::say2\n");
         thisp->pipe->enq(ind);
 }
 bool l_class_OC_EchoRequestOutput__say2__RDY(void *thisarg) {
         l_class_OC_EchoRequestOutput * thisp = (l_class_OC_EchoRequestOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return tmp__1;
+        return thisp->pipe->enq__RDY();
 }
 bool l_class_OC_EchoRequestOutput__say__RDY(void *thisarg) {
         l_class_OC_EchoRequestOutput * thisp = (l_class_OC_EchoRequestOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return tmp__1;
+        return thisp->pipe->enq__RDY();
 }
 void l_class_OC_EchoRequestOutput::run()
 {
@@ -39,7 +33,6 @@ void l_class_OC_EchoRequestOutput::commit()
 }
 void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_data enq_v) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
-        printf("entered EchoRequestInput::enq tag %d\n", enq_v.tag);
         if ((enq_v.tag) == 1)
             thisp->request->say(enq_v.data.say.meth, enq_v.data.say.v);
         if ((enq_v.tag) == 2)
@@ -47,11 +40,7 @@ void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_dat
 }
 bool l_class_OC_EchoRequestInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
-        bool tmp__1;
-        bool tmp__2;
-        tmp__1 = thisp->request->say__RDY();
-        tmp__2 = thisp->request->say2__RDY();
-        return tmp__1 & tmp__2;
+        return (thisp->request->say__RDY()) & (thisp->request->say2__RDY());
 }
 void l_class_OC_EchoRequestInput::run()
 {
@@ -84,7 +73,6 @@ void l_class_OC_EchoIndicationOutput__heard(void *thisarg, unsigned int heard_me
         thisp->ind_busy_valid = 1;
         thisp->even_shadow = ((thisp->even) != 0) ^ 1;
         thisp->even_valid = 1;
-        printf("[%s:%d]EchoIndicationOutput even %d\n", ("heard"), 160, thisp->even);
 }
 bool l_class_OC_EchoIndicationOutput__heard__RDY(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
@@ -94,27 +82,21 @@ void l_class_OC_EchoIndicationOutput__output_rulee(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
         thisp->ind_busy_shadow = 0;
         thisp->ind_busy_valid = 1;
-        printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", 177, thisp->ind0.tag);
         thisp->pipe->enq(thisp->ind0);
 }
 bool l_class_OC_EchoIndicationOutput__output_rulee__RDY(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return ((((thisp->ind_busy) != 0) & ((thisp->even) != 0)) != 0) & tmp__1;
+        return ((((thisp->ind_busy) != 0) & ((thisp->even) != 0)) != 0) & (thisp->pipe->enq__RDY());
 }
 void l_class_OC_EchoIndicationOutput__output_ruleo(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
         thisp->ind_busy_shadow = 0;
         thisp->ind_busy_valid = 1;
-        printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", 182, thisp->ind1.tag);
         thisp->pipe->enq(thisp->ind1);
 }
 bool l_class_OC_EchoIndicationOutput__output_ruleo__RDY(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return ((((thisp->ind_busy) != 0) & ((thisp->even) == 0)) != 0) & tmp__1;
+        return ((((thisp->ind_busy) != 0) & ((thisp->even) == 0)) != 0) & (thisp->pipe->enq__RDY());
 }
 void l_class_OC_EchoIndicationOutput::run()
 {
@@ -143,8 +125,7 @@ void l_class_OC_EchoIndicationInput__enq(void *thisarg, l_struct_OC_EchoIndicati
             thisp->busy_delay_shadow = 1;
         thisp->busy_delay_valid = 1;
         }
-            printf("[%s:%d]EchoIndicationInput tag %d\n", ("enq"), 197, enq_v.tag);
-}
+    }
 bool l_class_OC_EchoIndicationInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
         return ((thisp->busy_delay) != 0) ^ 1;
@@ -153,14 +134,11 @@ void l_class_OC_EchoIndicationInput__input_rule(void *thisarg) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
         thisp->busy_delay_shadow = 0;
         thisp->busy_delay_valid = 1;
-        printf("[input_rule:%d]EchoIndicationInput\n", 209);
         thisp->indication->heard(thisp->meth_delay, thisp->v_delay);
 }
 bool l_class_OC_EchoIndicationInput__input_rule__RDY(void *thisarg) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->indication->heard__RDY();
-        return ((thisp->busy_delay) != 0) & tmp__1;
+        return ((thisp->busy_delay) != 0) & (thisp->indication->heard__RDY());
 }
 void l_class_OC_EchoIndicationInput::run()
 {
@@ -186,7 +164,6 @@ void l_class_OC_Echo__delay_rule(void *thisarg) {
         thisp->meth_delay_valid = 1;
         thisp->v_delay_shadow = thisp->v_temp;
         thisp->v_delay_valid = 1;
-        printf("[delay_rule:%d]Echo\n", 241);
 }
 bool l_class_OC_Echo__delay_rule__RDY(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
@@ -196,14 +173,11 @@ void l_class_OC_Echo__respond_rule(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
         thisp->busy_delay_shadow = 0;
         thisp->busy_delay_valid = 1;
-        printf("[respond_rule:%d]Echo\n", 248);
         thisp->indication->heard(thisp->meth_delay, thisp->v_delay);
 }
 bool l_class_OC_Echo__respond_rule__RDY(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->indication->heard__RDY();
-        return ((thisp->busy_delay) != 0) & tmp__1;
+        return ((thisp->busy_delay) != 0) & (thisp->indication->heard__RDY());
 }
 void l_class_OC_Echo__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
@@ -213,7 +187,6 @@ void l_class_OC_Echo__say(void *thisarg, unsigned int say_meth, unsigned int say
         thisp->v_temp_valid = 1;
         thisp->busy_shadow = 1;
         thisp->busy_valid = 1;
-        printf("[%s:%d]Echo\n", ("say"), 227);
 }
 void l_class_OC_Echo__say2(void *thisarg, unsigned int say2_meth, unsigned int say2_v, unsigned int say2_v2) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
@@ -223,7 +196,6 @@ void l_class_OC_Echo__say2(void *thisarg, unsigned int say2_meth, unsigned int s
         thisp->v_temp_valid = 1;
         thisp->busy_shadow = 1;
         thisp->busy_valid = 1;
-        printf("[%s:%d]Echo\n", ("say2"), 233);
 }
 bool l_class_OC_Echo__say2__RDY(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
@@ -256,7 +228,6 @@ void l_class_OC_Echo::commit()
 }
 void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
-        printf("Heard an echo: %d %d\n", heard_meth, heard_v);
 }
 bool l_class_OC_foo__heard__RDY(void *thisarg) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;

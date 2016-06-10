@@ -5,14 +5,11 @@ void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int say_meth, uns
         ind.tag = 1;
         ind.data.say.meth = say_meth;
         ind.data.say.v = say_v;
-        printf("entered EchoRequestOutput::say\n");
         thisp->pipe->enq(ind);
 }
 bool l_class_OC_EchoRequestOutput__say__RDY(void *thisarg) {
         l_class_OC_EchoRequestOutput * thisp = (l_class_OC_EchoRequestOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return tmp__1;
+        return thisp->pipe->enq__RDY();
 }
 void l_class_OC_EchoRequestOutput::run()
 {
@@ -23,15 +20,12 @@ void l_class_OC_EchoRequestOutput::commit()
 }
 void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_data enq_v) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
-        printf("entered EchoRequestInput::enq\n");
         if ((enq_v.tag) == 1)
             thisp->request->say(enq_v.data.say.meth, enq_v.data.say.v);
 }
 bool l_class_OC_EchoRequestInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->request->say__RDY();
-        return tmp__1;
+        return thisp->request->say__RDY();
 }
 void l_class_OC_EchoRequestInput::run()
 {
@@ -50,9 +44,7 @@ void l_class_OC_EchoIndicationOutput__heard(void *thisarg, unsigned int heard_me
 }
 bool l_class_OC_EchoIndicationOutput__heard__RDY(void *thisarg) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->pipe->enq__RDY();
-        return tmp__1;
+        return thisp->pipe->enq__RDY();
 }
 void l_class_OC_EchoIndicationOutput::run()
 {
@@ -68,9 +60,7 @@ void l_class_OC_EchoIndicationInput__enq(void *thisarg, l_struct_OC_EchoIndicati
 }
 bool l_class_OC_EchoIndicationInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->indication->heard__RDY();
-        return tmp__1;
+        return thisp->indication->heard__RDY();
 }
 void l_class_OC_EchoIndicationInput::run()
 {
@@ -85,9 +75,7 @@ void l_class_OC_Echo__say(void *thisarg, unsigned int say_meth, unsigned int say
 }
 bool l_class_OC_Echo__say__RDY(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
-        bool tmp__1;
-        tmp__1 = thisp->indication->heard__RDY();
-        return tmp__1;
+        return thisp->indication->heard__RDY();
 }
 void l_class_OC_Echo::run()
 {
@@ -98,7 +86,6 @@ void l_class_OC_Echo::commit()
 }
 void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
-        printf("Heard an echo: %d %d\n", heard_meth, heard_v);
 }
 bool l_class_OC_foo__heard__RDY(void *thisarg) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
