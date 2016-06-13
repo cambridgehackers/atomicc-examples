@@ -110,6 +110,7 @@ void l_class_OC_IVector__respond(void *thisarg) {
         thisp->gcounter = (thisp->gcounter) + 1;
         thisp->fifo.out.deq();
         thisp->ind->heard(temp.a, temp.b);
+        ;
 }
 bool l_class_OC_IVector__respond__RDY(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
