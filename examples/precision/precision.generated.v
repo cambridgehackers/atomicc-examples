@@ -60,7 +60,7 @@ module l_class_OC_Fifo1_OC_0 (
     assign in$enq__RDY_internal = full ^ 1;
     assign out$deq__RDY = out$deq__RDY_internal;
     assign out$deq__RDY_internal = full;
-    assign out$first = retval;
+    assign out$first = element;
     assign out$first__RDY_internal = full;
 
     always @( posedge CLK) begin

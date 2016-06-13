@@ -63,7 +63,7 @@ module l_class_OC_LpmMemory (
     assign req__RDY_internal = delayCount == 0;
     assign resAccept__RDY = resAccept__RDY_internal;
     assign resAccept__RDY_internal = delayCount == 1;
-    assign resValue = retval;
+    assign resValue = saved;
     assign resValue__RDY_internal = delayCount == 1;
     assign v$a = req_v_2e_coerce0;
     assign v$b = req_v_2e_coerce1;
@@ -109,7 +109,7 @@ module l_class_OC_Fifo1_OC_0 (
     assign in$enq__RDY_internal = full ^ 1;
     assign out$deq__RDY = out$deq__RDY_internal;
     assign out$deq__RDY_internal = full;
-    assign out$first = retval;
+    assign out$first = element;
     assign out$first__RDY_internal = full;
 
     always @( posedge CLK) begin
@@ -152,7 +152,7 @@ module l_class_OC_Fifo2 (
     assign in$enq__RDY_internal = ((windex + 1) % 2) != rindex;
     assign out$deq__RDY = out$deq__RDY_internal;
     assign out$deq__RDY_internal = rindex != windex;
-    assign out$first = retval;
+    assign out$first = *(rindex == 0 ? &element0:&element1);
     assign out$first__RDY_internal = rindex != windex;
 
     always @( posedge CLK) begin

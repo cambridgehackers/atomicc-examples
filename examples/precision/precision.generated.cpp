@@ -87,9 +87,7 @@ bool l_class_OC_Fifo1_OC_0__enq__RDY(void *thisarg) {
 }
 l_struct_OC_ValueType l_class_OC_Fifo1_OC_0__first(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
-        l_struct_OC_ValueType retval;
-        retval = thisp->element;
-        return retval;
+        return thisp->element;
 }
 bool l_class_OC_Fifo1_OC_0__first__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;

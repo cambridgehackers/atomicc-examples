@@ -59,9 +59,7 @@ bool l_class_OC_Fifo1_OC_3__enq__RDY(void *thisarg) {
 }
 l_struct_OC_ValuePair l_class_OC_Fifo1_OC_3__first(void *thisarg) {
         l_class_OC_Fifo1_OC_3 * thisp = (l_class_OC_Fifo1_OC_3 *)thisarg;
-        l_struct_OC_ValuePair retval;
-        retval = thisp->element;
-        return retval;
+        return thisp->element;
 }
 bool l_class_OC_Fifo1_OC_3__first__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_3 * thisp = (l_class_OC_Fifo1_OC_3 *)thisarg;

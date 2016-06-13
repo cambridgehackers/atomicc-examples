@@ -86,9 +86,7 @@ bool l_class_OC_LpmMemory__resAccept__RDY(void *thisarg) {
 }
 l_struct_OC_ValuePair l_class_OC_LpmMemory__resValue(void *thisarg) {
         l_class_OC_LpmMemory * thisp = (l_class_OC_LpmMemory *)thisarg;
-        l_struct_OC_ValuePair retval;
-        retval = thisp->saved;
-        return retval;
+        return thisp->saved;
 }
 bool l_class_OC_LpmMemory__resValue__RDY(void *thisarg) {
         l_class_OC_LpmMemory * thisp = (l_class_OC_LpmMemory *)thisarg;
@@ -125,9 +123,7 @@ bool l_class_OC_Fifo1_OC_0__enq__RDY(void *thisarg) {
 }
 l_struct_OC_ValuePair l_class_OC_Fifo1_OC_0__first(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
-        l_struct_OC_ValuePair retval;
-        retval = thisp->element;
-        return retval;
+        return thisp->element;
 }
 bool l_class_OC_Fifo1_OC_0__first__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
@@ -163,9 +159,7 @@ bool l_class_OC_Fifo2__enq__RDY(void *thisarg) {
 }
 l_struct_OC_ValuePair l_class_OC_Fifo2__first(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
-        l_struct_OC_ValuePair retval;
-        retval = *((thisp->rindex) == 0 ? &thisp->element0:&thisp->element1);
-        return retval;
+        return *((thisp->rindex) == 0 ? &thisp->element0:&thisp->element1);
 }
 bool l_class_OC_Fifo2__first__RDY(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
