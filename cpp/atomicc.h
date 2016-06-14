@@ -93,13 +93,6 @@ class InterfaceClass {
     InterfaceClass(const InterfaceClass&); // no implementation
     InterfaceClass& operator=(const InterfaceClass&);
 };
-// This is a marker for classes that hold bitvectors
-class BitsClass {
- public:
-    BitsClass() {}
-    ~BitsClass() {}
-    long unused_data_to_force_inheritance;
-};
 
 typedef bool (*GUARDPTR)(void *);
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
