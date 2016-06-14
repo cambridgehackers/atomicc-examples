@@ -1,29 +1,29 @@
 #include "lpm.generated.h"
-void l_class_OC_Fifo1__deq(void *thisarg) {
+void l_class_OC_Fifo1__out$deq(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         thisp->full_shadow = 0;
         thisp->full_valid = 1;
 }
-bool l_class_OC_Fifo1__deq__RDY(void *thisarg) {
+bool l_class_OC_Fifo1__out$deq__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v) {
+void l_class_OC_Fifo1__in$enq(void *thisarg, unsigned int in$enq_v) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         thisp->element_shadow = in$enq_v;
         thisp->element_valid = 1;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
 }
-bool l_class_OC_Fifo1__enq__RDY(void *thisarg) {
+bool l_class_OC_Fifo1__in$enq__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return (thisp->full) ^ 1;
 }
-unsigned int l_class_OC_Fifo1__first(void *thisarg) {
+unsigned int l_class_OC_Fifo1__out$first(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->element;
 }
-bool l_class_OC_Fifo1__first__RDY(void *thisarg) {
+bool l_class_OC_Fifo1__out$first__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->full;
 }
@@ -102,30 +102,30 @@ void l_class_OC_LpmMemory::commit()
     if (delayCount_valid) delayCount = delayCount_shadow;
     delayCount_valid = 0;
 }
-void l_class_OC_Fifo1_OC_0__deq(void *thisarg) {
+void l_class_OC_Fifo1_OC_0__out$deq(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         thisp->full_shadow = 0;
         thisp->full_valid = 1;
 }
-bool l_class_OC_Fifo1_OC_0__deq__RDY(void *thisarg) {
+bool l_class_OC_Fifo1_OC_0__out$deq__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1_OC_0__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
+void l_class_OC_Fifo1_OC_0__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         thisp->element = in$enq_v;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
 }
-bool l_class_OC_Fifo1_OC_0__enq__RDY(void *thisarg) {
+bool l_class_OC_Fifo1_OC_0__in$enq__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         return (thisp->full) ^ 1;
 }
-l_struct_OC_ValuePair l_class_OC_Fifo1_OC_0__first(void *thisarg) {
+l_struct_OC_ValuePair l_class_OC_Fifo1_OC_0__out$first(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         return thisp->element;
 }
-bool l_class_OC_Fifo1_OC_0__first__RDY(void *thisarg) {
+bool l_class_OC_Fifo1_OC_0__out$first__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         return thisp->full;
 }
@@ -138,30 +138,30 @@ void l_class_OC_Fifo1_OC_0::commit()
     if (full_valid) full = full_shadow;
     full_valid = 0;
 }
-void l_class_OC_Fifo2__deq(void *thisarg) {
+void l_class_OC_Fifo2__out$deq(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         thisp->rindex_shadow = ((thisp->rindex) + 1) % 2;
         thisp->rindex_valid = 1;
 }
-bool l_class_OC_Fifo2__deq__RDY(void *thisarg) {
+bool l_class_OC_Fifo2__out$deq__RDY(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         return (thisp->rindex) != (thisp->windex);
 }
-void l_class_OC_Fifo2__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
+void l_class_OC_Fifo2__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         *((thisp->windex) == 0 ? &thisp->element0:&thisp->element1) = in$enq_v;
         thisp->windex_shadow = ((thisp->windex) + 1) % 2;
         thisp->windex_valid = 1;
 }
-bool l_class_OC_Fifo2__enq__RDY(void *thisarg) {
+bool l_class_OC_Fifo2__in$enq__RDY(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         return (((thisp->windex) + 1) % 2) != (thisp->rindex);
 }
-l_struct_OC_ValuePair l_class_OC_Fifo2__first(void *thisarg) {
+l_struct_OC_ValuePair l_class_OC_Fifo2__out$first(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         return *((thisp->rindex) == 0 ? &thisp->element0:&thisp->element1);
 }
-bool l_class_OC_Fifo2__first__RDY(void *thisarg) {
+bool l_class_OC_Fifo2__out$first__RDY(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         return (thisp->rindex) != (thisp->windex);
 }
@@ -272,10 +272,10 @@ void l_class_OC_Lpm::commit()
     outQ.commit();
     mem.commit();
 }
-void l_class_OC_foo__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v) {
+void l_class_OC_foo__indication$heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
 }
-bool l_class_OC_foo__heard__READY(void *thisarg) {
+bool l_class_OC_foo__indication$heard__READY(void *thisarg) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
         return 1;
 }

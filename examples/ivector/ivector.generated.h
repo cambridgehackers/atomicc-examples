@@ -35,12 +35,12 @@ public:
   }
 };
 class l_class_OC_Fifo1;
-extern void l_class_OC_Fifo1__deq(void *thisarg);
-extern bool l_class_OC_Fifo1__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v);
-extern bool l_class_OC_Fifo1__enq__RDY(void *thisarg);
-extern unsigned int l_class_OC_Fifo1__first(void *thisarg);
-extern bool l_class_OC_Fifo1__first__RDY(void *thisarg);
+extern void l_class_OC_Fifo1__out$deq(void *thisarg);
+extern bool l_class_OC_Fifo1__out$deq__RDY(void *thisarg);
+extern void l_class_OC_Fifo1__in$enq(void *thisarg, unsigned int in$enq_v);
+extern bool l_class_OC_Fifo1__in$enq__RDY(void *thisarg);
+extern unsigned int l_class_OC_Fifo1__out$first(void *thisarg);
+extern bool l_class_OC_Fifo1__out$first__RDY(void *thisarg);
 class l_class_OC_Fifo1 {
 public:
   l_class_OC_PipeIn in;
@@ -51,8 +51,8 @@ public:
   void run();
   void commit();
   l_class_OC_Fifo1():
-      in(this, l_class_OC_Fifo1__enq__RDY, l_class_OC_Fifo1__enq),
-      out(this, l_class_OC_Fifo1__deq__RDY, l_class_OC_Fifo1__deq, l_class_OC_Fifo1__first__RDY, l_class_OC_Fifo1__first) {
+      in(this, l_class_OC_Fifo1__in$enq__RDY, l_class_OC_Fifo1__in$enq),
+      out(this, l_class_OC_Fifo1__out$deq__RDY, l_class_OC_Fifo1__out$deq, l_class_OC_Fifo1__out$first__RDY, l_class_OC_Fifo1__out$first) {
   }
 };
 typedef struct {
@@ -95,12 +95,12 @@ public:
   }
 };
 class l_class_OC_Fifo1_OC_3;
-extern void l_class_OC_Fifo1_OC_3__deq(void *thisarg);
-extern bool l_class_OC_Fifo1_OC_3__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1_OC_3__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
-extern bool l_class_OC_Fifo1_OC_3__enq__RDY(void *thisarg);
-extern l_struct_OC_ValuePair l_class_OC_Fifo1_OC_3__first(void *thisarg);
-extern bool l_class_OC_Fifo1_OC_3__first__RDY(void *thisarg);
+extern void l_class_OC_Fifo1_OC_3__out$deq(void *thisarg);
+extern bool l_class_OC_Fifo1_OC_3__out$deq__RDY(void *thisarg);
+extern void l_class_OC_Fifo1_OC_3__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
+extern bool l_class_OC_Fifo1_OC_3__in$enq__RDY(void *thisarg);
+extern l_struct_OC_ValuePair l_class_OC_Fifo1_OC_3__out$first(void *thisarg);
+extern bool l_class_OC_Fifo1_OC_3__out$first__RDY(void *thisarg);
 class l_class_OC_Fifo1_OC_3 {
 public:
   l_class_OC_PipeIn_OC_1 in;
@@ -111,17 +111,17 @@ public:
   void run();
   void commit();
   l_class_OC_Fifo1_OC_3():
-      in(this, l_class_OC_Fifo1_OC_3__enq__RDY, l_class_OC_Fifo1_OC_3__enq),
-      out(this, l_class_OC_Fifo1_OC_3__deq__RDY, l_class_OC_Fifo1_OC_3__deq, l_class_OC_Fifo1_OC_3__first__RDY, l_class_OC_Fifo1_OC_3__first) {
+      in(this, l_class_OC_Fifo1_OC_3__in$enq__RDY, l_class_OC_Fifo1_OC_3__in$enq),
+      out(this, l_class_OC_Fifo1_OC_3__out$deq__RDY, l_class_OC_Fifo1_OC_3__out$deq, l_class_OC_Fifo1_OC_3__out$first__RDY, l_class_OC_Fifo1_OC_3__out$first) {
   }
 };
 class l_class_OC_FifoPong;
-extern void l_class_OC_FifoPong__deq(void *thisarg);
-extern bool l_class_OC_FifoPong__deq__RDY(void *thisarg);
-extern void l_class_OC_FifoPong__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
-extern bool l_class_OC_FifoPong__enq__RDY(void *thisarg);
-extern l_struct_OC_ValuePair l_class_OC_FifoPong__first(void *thisarg);
-extern bool l_class_OC_FifoPong__first__RDY(void *thisarg);
+extern void l_class_OC_FifoPong__out$deq(void *thisarg);
+extern bool l_class_OC_FifoPong__out$deq__RDY(void *thisarg);
+extern void l_class_OC_FifoPong__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
+extern bool l_class_OC_FifoPong__in$enq__RDY(void *thisarg);
+extern l_struct_OC_ValuePair l_class_OC_FifoPong__out$first(void *thisarg);
+extern bool l_class_OC_FifoPong__out$first__RDY(void *thisarg);
 class l_class_OC_FifoPong {
 public:
   l_class_OC_PipeIn_OC_1 in;
@@ -133,8 +133,8 @@ public:
   void run();
   void commit();
   l_class_OC_FifoPong():
-      in(this, l_class_OC_FifoPong__enq__RDY, l_class_OC_FifoPong__enq),
-      out(this, l_class_OC_FifoPong__deq__RDY, l_class_OC_FifoPong__deq, l_class_OC_FifoPong__first__RDY, l_class_OC_FifoPong__first) {
+      in(this, l_class_OC_FifoPong__in$enq__RDY, l_class_OC_FifoPong__in$enq),
+      out(this, l_class_OC_FifoPong__out$deq__RDY, l_class_OC_FifoPong__out$deq, l_class_OC_FifoPong__out$first__RDY, l_class_OC_FifoPong__out$first) {
   }
 };
 class l_class_OC_IVectorIndication;

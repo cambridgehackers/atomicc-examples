@@ -55,8 +55,8 @@ public:
   }
 };
 class l_class_OC_EchoRequestOutput;
-extern void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v);
-extern bool l_class_OC_EchoRequestOutput__say__RDY(void *thisarg);
+extern void l_class_OC_EchoRequestOutput__request$say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v);
+extern bool l_class_OC_EchoRequestOutput__request$say__RDY(void *thisarg);
 class l_class_OC_EchoRequestOutput {
 public:
   l_class_OC_EchoRequest request;
@@ -65,13 +65,13 @@ public:
   void run();
   void commit();
   l_class_OC_EchoRequestOutput():
-      request(this, l_class_OC_EchoRequestOutput__say__RDY, l_class_OC_EchoRequestOutput__say) {
+      request(this, l_class_OC_EchoRequestOutput__request$say__RDY, l_class_OC_EchoRequestOutput__request$say) {
   }
   void setpipe(l_class_OC_PipeIn *v) { pipe = v; }
 };
 class l_class_OC_EchoRequestInput;
-extern void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_data pipe$enq_v);
-extern bool l_class_OC_EchoRequestInput__enq__RDY(void *thisarg);
+extern void l_class_OC_EchoRequestInput__pipe$enq(void *thisarg, l_struct_OC_EchoRequest_data pipe$enq_v);
+extern bool l_class_OC_EchoRequestInput__pipe$enq__RDY(void *thisarg);
 class l_class_OC_EchoRequestInput {
 public:
   l_class_OC_PipeIn pipe;
@@ -80,7 +80,7 @@ public:
   void run();
   void commit();
   l_class_OC_EchoRequestInput():
-      pipe(this, l_class_OC_EchoRequestInput__enq__RDY, l_class_OC_EchoRequestInput__enq) {
+      pipe(this, l_class_OC_EchoRequestInput__pipe$enq__RDY, l_class_OC_EchoRequestInput__pipe$enq) {
   }
   void setrequest(l_class_OC_EchoRequest *v) { request = v; }
 };
@@ -113,8 +113,8 @@ public:
   }
 };
 class l_class_OC_EchoIndicationOutput;
-extern void l_class_OC_EchoIndicationOutput__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
-extern bool l_class_OC_EchoIndicationOutput__heard__RDY(void *thisarg);
+extern void l_class_OC_EchoIndicationOutput__indication$heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
+extern bool l_class_OC_EchoIndicationOutput__indication$heard__RDY(void *thisarg);
 class l_class_OC_EchoIndicationOutput {
 public:
   l_class_OC_EchoIndication indication;
@@ -123,13 +123,13 @@ public:
   void run();
   void commit();
   l_class_OC_EchoIndicationOutput():
-      indication(this, l_class_OC_EchoIndicationOutput__heard__RDY, l_class_OC_EchoIndicationOutput__heard) {
+      indication(this, l_class_OC_EchoIndicationOutput__indication$heard__RDY, l_class_OC_EchoIndicationOutput__indication$heard) {
   }
   void setpipe(l_class_OC_PipeIn_OC_0 *v) { pipe = v; }
 };
 class l_class_OC_EchoIndicationInput;
-extern void l_class_OC_EchoIndicationInput__enq(void *thisarg, l_struct_OC_EchoIndication_data pipe$enq_v);
-extern bool l_class_OC_EchoIndicationInput__enq__RDY(void *thisarg);
+extern void l_class_OC_EchoIndicationInput__pipe$enq(void *thisarg, l_struct_OC_EchoIndication_data pipe$enq_v);
+extern bool l_class_OC_EchoIndicationInput__pipe$enq__RDY(void *thisarg);
 class l_class_OC_EchoIndicationInput {
 public:
   l_class_OC_PipeIn_OC_0 pipe;
@@ -138,13 +138,13 @@ public:
   void run();
   void commit();
   l_class_OC_EchoIndicationInput():
-      pipe(this, l_class_OC_EchoIndicationInput__enq__RDY, l_class_OC_EchoIndicationInput__enq) {
+      pipe(this, l_class_OC_EchoIndicationInput__pipe$enq__RDY, l_class_OC_EchoIndicationInput__pipe$enq) {
   }
   void setindication(l_class_OC_EchoIndication *v) { indication = v; }
 };
 class l_class_OC_Echo;
-extern void l_class_OC_Echo__say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v);
-extern bool l_class_OC_Echo__say__RDY(void *thisarg);
+extern void l_class_OC_Echo__request$say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v);
+extern bool l_class_OC_Echo__request$say__RDY(void *thisarg);
 class l_class_OC_Echo {
 public:
   l_class_OC_EchoRequest request;
@@ -153,13 +153,13 @@ public:
   void run();
   void commit();
   l_class_OC_Echo():
-      request(this, l_class_OC_Echo__say__RDY, l_class_OC_Echo__say) {
+      request(this, l_class_OC_Echo__request$say__RDY, l_class_OC_Echo__request$say) {
   }
   void setindication(l_class_OC_EchoIndication *v) { indication = v; }
 };
 class l_class_OC_foo;
-extern void l_class_OC_foo__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
-extern bool l_class_OC_foo__heard__RDY(void *thisarg);
+extern void l_class_OC_foo__indication$heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
+extern bool l_class_OC_foo__indication$heard__RDY(void *thisarg);
 class l_class_OC_foo {
 public:
   l_class_OC_EchoIndication indication;
@@ -167,7 +167,7 @@ public:
   void run();
   void commit();
   l_class_OC_foo():
-      indication(this, l_class_OC_foo__heard__RDY, l_class_OC_foo__heard) {
+      indication(this, l_class_OC_foo__indication$heard__RDY, l_class_OC_foo__indication$heard) {
   }
 };
 class l_class_OC_Connect;
