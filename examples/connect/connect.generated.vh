@@ -7,7 +7,7 @@
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoRequestInput
 //METAEXTERNAL; request; l_class_OC_EchoRequest;
-//METAINVOKE; pipe$enq; enq_v$tag == 1:request$say;
+//METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
 //METAEXTERNAL; pipe; l_class_OC_PipeIn_OC_0;
@@ -15,7 +15,7 @@
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoIndicationInput
 //METAEXTERNAL; indication; l_class_OC_EchoIndication;
-//METAINVOKE; pipe$enq; enq_v$tag == 1:indication$heard;
+//METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:indication$heard;
 //METAGUARD; pipe$enq; indication$heard__RDY;
 //METASTART; l_class_OC_Echo
 //METAEXTERNAL; indication; l_class_OC_EchoIndication;

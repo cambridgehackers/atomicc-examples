@@ -8,9 +8,9 @@ bool l_class_OC_Fifo1__deq__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v) {
+void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
-        thisp->element_shadow = enq_v;
+        thisp->element_shadow = in$enq_v;
         thisp->element_valid = 1;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
@@ -47,9 +47,9 @@ bool l_class_OC_Fifo1_OC_3__deq__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_3 * thisp = (l_class_OC_Fifo1_OC_3 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1_OC_3__enq(void *thisarg, l_struct_OC_ValuePair enq_v) {
+void l_class_OC_Fifo1_OC_3__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_Fifo1_OC_3 * thisp = (l_class_OC_Fifo1_OC_3 *)thisarg;
-        thisp->element = enq_v;
+        thisp->element = in$enq_v;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
 }
@@ -87,12 +87,12 @@ bool l_class_OC_FifoPong__deq__RDY(void *thisarg) {
         l_class_OC_FifoPong * thisp = (l_class_OC_FifoPong *)thisarg;
         return ((thisp->element2.out.deq__RDY()) | ((thisp->pong) ^ 1)) & ((thisp->element1.out.deq__RDY()) | (thisp->pong));
 }
-void l_class_OC_FifoPong__enq(void *thisarg, l_struct_OC_ValuePair enq_v) {
+void l_class_OC_FifoPong__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_FifoPong * thisp = (l_class_OC_FifoPong *)thisarg;
         if (thisp->pong)
-            thisp->element2.in.enq(enq_v);
+            thisp->element2.in.enq(in$enq_v);
         if ((thisp->pong) ^ 1)
-            thisp->element1.in.enq(enq_v);
+            thisp->element1.in.enq(in$enq_v);
 }
 bool l_class_OC_FifoPong__enq__RDY(void *thisarg) {
         l_class_OC_FifoPong * thisp = (l_class_OC_FifoPong *)thisarg;

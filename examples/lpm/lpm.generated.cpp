@@ -8,9 +8,9 @@ bool l_class_OC_Fifo1__deq__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v) {
+void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
-        thisp->element_shadow = enq_v;
+        thisp->element_shadow = in$enq_v;
         thisp->element_valid = 1;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
@@ -111,9 +111,9 @@ bool l_class_OC_Fifo1_OC_0__deq__RDY(void *thisarg) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1_OC_0__enq(void *thisarg, l_struct_OC_ValuePair enq_v) {
+void l_class_OC_Fifo1_OC_0__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_Fifo1_OC_0 * thisp = (l_class_OC_Fifo1_OC_0 *)thisarg;
-        thisp->element = enq_v;
+        thisp->element = in$enq_v;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
 }
@@ -147,9 +147,9 @@ bool l_class_OC_Fifo2__deq__RDY(void *thisarg) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
         return (thisp->rindex) != (thisp->windex);
 }
-void l_class_OC_Fifo2__enq(void *thisarg, l_struct_OC_ValuePair enq_v) {
+void l_class_OC_Fifo2__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v) {
         l_class_OC_Fifo2 * thisp = (l_class_OC_Fifo2 *)thisarg;
-        *((thisp->windex) == 0 ? &thisp->element0:&thisp->element1) = enq_v;
+        *((thisp->windex) == 0 ? &thisp->element0:&thisp->element1) = in$enq_v;
         thisp->windex_shadow = ((thisp->windex) + 1) % 2;
         thisp->windex_valid = 1;
 }
@@ -272,7 +272,7 @@ void l_class_OC_Lpm::commit()
     outQ.commit();
     mem.commit();
 }
-void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
+void l_class_OC_foo__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
 }
 bool l_class_OC_foo__heard__READY(void *thisarg) {

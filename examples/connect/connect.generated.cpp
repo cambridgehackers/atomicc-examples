@@ -1,10 +1,10 @@
 #include "connect.generated.h"
-void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
+void l_class_OC_EchoRequestOutput__say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v) {
         l_class_OC_EchoRequestOutput * thisp = (l_class_OC_EchoRequestOutput *)thisarg;
         l_struct_OC_EchoRequest_data ind;
         ind.tag = 1;
-        ind.data.say.meth = say_meth;
-        ind.data.say.v = say_v;
+        ind.data.say.meth = request$say_meth;
+        ind.data.say.v = request$say_v;
         thisp->pipe->enq(ind);
 }
 bool l_class_OC_EchoRequestOutput__say__RDY(void *thisarg) {
@@ -18,10 +18,10 @@ void l_class_OC_EchoRequestOutput::run()
 void l_class_OC_EchoRequestOutput::commit()
 {
 }
-void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_data enq_v) {
+void l_class_OC_EchoRequestInput__enq(void *thisarg, l_struct_OC_EchoRequest_data pipe$enq_v) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
-        if ((enq_v.tag) == 1)
-            thisp->request->say(enq_v.data.say.meth, enq_v.data.say.v);
+        if ((pipe$enq_v.tag) == 1)
+            thisp->request->say(pipe$enq_v.data.say.meth, pipe$enq_v.data.say.v);
 }
 bool l_class_OC_EchoRequestInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoRequestInput * thisp = (l_class_OC_EchoRequestInput *)thisarg;
@@ -34,12 +34,12 @@ void l_class_OC_EchoRequestInput::run()
 void l_class_OC_EchoRequestInput::commit()
 {
 }
-void l_class_OC_EchoIndicationOutput__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
+void l_class_OC_EchoIndicationOutput__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v) {
         l_class_OC_EchoIndicationOutput * thisp = (l_class_OC_EchoIndicationOutput *)thisarg;
         l_struct_OC_EchoIndication_data ind;
         ind.tag = 1;
-        ind.data.heard.meth = heard_meth;
-        ind.data.heard.v = heard_v;
+        ind.data.heard.meth = indication$heard_meth;
+        ind.data.heard.v = indication$heard_v;
         thisp->pipe->enq(ind);
 }
 bool l_class_OC_EchoIndicationOutput__heard__RDY(void *thisarg) {
@@ -53,10 +53,10 @@ void l_class_OC_EchoIndicationOutput::run()
 void l_class_OC_EchoIndicationOutput::commit()
 {
 }
-void l_class_OC_EchoIndicationInput__enq(void *thisarg, l_struct_OC_EchoIndication_data enq_v) {
+void l_class_OC_EchoIndicationInput__enq(void *thisarg, l_struct_OC_EchoIndication_data pipe$enq_v) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
-        if ((enq_v.tag) == 1)
-            thisp->indication->heard(enq_v.data.heard.meth, enq_v.data.heard.v);
+        if ((pipe$enq_v.tag) == 1)
+            thisp->indication->heard(pipe$enq_v.data.heard.meth, pipe$enq_v.data.heard.v);
 }
 bool l_class_OC_EchoIndicationInput__enq__RDY(void *thisarg) {
         l_class_OC_EchoIndicationInput * thisp = (l_class_OC_EchoIndicationInput *)thisarg;
@@ -69,9 +69,9 @@ void l_class_OC_EchoIndicationInput::run()
 void l_class_OC_EchoIndicationInput::commit()
 {
 }
-void l_class_OC_Echo__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
+void l_class_OC_Echo__say(void *thisarg, unsigned int request$say_meth, unsigned int request$say_v) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
-        thisp->indication->heard(say_meth, say_v);
+        thisp->indication->heard(request$say_meth, request$say_v);
 }
 bool l_class_OC_Echo__say__RDY(void *thisarg) {
         l_class_OC_Echo * thisp = (l_class_OC_Echo *)thisarg;
@@ -84,7 +84,7 @@ void l_class_OC_Echo::run()
 void l_class_OC_Echo::commit()
 {
 }
-void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
+void l_class_OC_foo__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v) {
         l_class_OC_foo * thisp = (l_class_OC_foo *)thisarg;
 }
 bool l_class_OC_foo__heard__RDY(void *thisarg) {

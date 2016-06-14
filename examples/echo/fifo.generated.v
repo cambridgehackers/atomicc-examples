@@ -33,7 +33,7 @@ module l_class_OC_Fifo1 (
             full <= 0;
         end; // End of out$deq__ENA
         if (in$enq__ENA_internal) begin
-            element <= enq_v;
+            element <= in$enq_v;
             full <= 1;
         end; // End of in$enq__ENA
       end

@@ -10,7 +10,7 @@
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoRequestInput
 //METAEXTERNAL; request; l_class_OC_EchoRequest;
-//METAINVOKE; pipe$enq; enq_v$tag == 1:request$say;enq_v$tag == 2:request$say2;
+//METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;pipe$enq_v$tag == 2:request$say2;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
 //METAEXTERNAL; pipe; l_class_OC_PipeIn_OC_0;

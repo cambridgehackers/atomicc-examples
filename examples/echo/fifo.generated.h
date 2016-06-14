@@ -37,7 +37,7 @@ public:
 class l_class_OC_Fifo1;
 extern void l_class_OC_Fifo1__deq(void *thisarg);
 extern bool l_class_OC_Fifo1__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v);
+extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v);
 extern bool l_class_OC_Fifo1__enq__RDY(void *thisarg);
 extern unsigned int l_class_OC_Fifo1__first(void *thisarg);
 extern bool l_class_OC_Fifo1__first__RDY(void *thisarg);

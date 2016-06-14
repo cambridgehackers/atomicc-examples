@@ -23,8 +23,8 @@ module l_class_OC_EchoRequestOutput (
       end // nRST
       else begin
         if (request$say__ENA_internal) begin
-            ind$data$say$meth <= say_meth;
-            ind$data$say$v <= say_v;
+            ind$data$say$meth <= request$say_meth;
+            ind$data$say$v <= request$say_v;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)
@@ -44,9 +44,9 @@ module l_class_OC_EchoRequestInput (
     wire pipe$enq__ENA_internal = pipe$enq__ENA && pipe$enq__RDY_internal;
     assign pipe$enq__RDY = pipe$enq__RDY_internal;
     assign pipe$enq__RDY_internal = request$say__RDY;
-    assign request$say__ENA = pipe$enq__ENA_internal & enq_v$tag == 1;
-    assign request$say_meth = enq_v$data$say$meth;
-    assign request$say_v = enq_v$data$say$v;
+    assign request$say__ENA = pipe$enq__ENA_internal & pipe$enq_v$tag == 1;
+    assign request$say_meth = pipe$enq_v$data$say$meth;
+    assign request$say_v = pipe$enq_v$data$say$v;
 endmodule 
 
 module l_class_OC_EchoIndicationOutput (
@@ -72,8 +72,8 @@ module l_class_OC_EchoIndicationOutput (
       end // nRST
       else begin
         if (indication$heard__ENA_internal) begin
-            ind$data$heard$meth <= heard_meth;
-            ind$data$heard$v <= heard_v;
+            ind$data$heard$meth <= indication$heard_meth;
+            ind$data$heard$v <= indication$heard_v;
         end; // End of indication$heard__ENA
       end
     end // always @ (posedge CLK)
@@ -91,9 +91,9 @@ module l_class_OC_EchoIndicationInput (
     input indication$heard__RDY);
     wire pipe$enq__RDY_internal;
     wire pipe$enq__ENA_internal = pipe$enq__ENA && pipe$enq__RDY_internal;
-    assign indication$heard__ENA = pipe$enq__ENA_internal & enq_v$tag == 1;
-    assign indication$heard_meth = enq_v$data$heard$meth;
-    assign indication$heard_v = enq_v$data$heard$v;
+    assign indication$heard__ENA = pipe$enq__ENA_internal & pipe$enq_v$tag == 1;
+    assign indication$heard_meth = pipe$enq_v$data$heard$meth;
+    assign indication$heard_v = pipe$enq_v$data$heard$v;
     assign pipe$enq__RDY = pipe$enq__RDY_internal;
     assign pipe$enq__RDY_internal = indication$heard__RDY;
 endmodule 
@@ -112,8 +112,8 @@ module l_class_OC_Echo (
     wire request$say__RDY_internal;
     wire request$say__ENA_internal = request$say__ENA && request$say__RDY_internal;
     assign indication$heard__ENA = request$say__ENA_internal;
-    assign indication$heard_meth = say_meth;
-    assign indication$heard_v = say_v;
+    assign indication$heard_meth = request$say_meth;
+    assign indication$heard_v = request$say_v;
     assign request$say__RDY = request$say__RDY_internal;
     assign request$say__RDY_internal = indication$heard__RDY;
 endmodule 

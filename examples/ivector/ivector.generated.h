@@ -37,7 +37,7 @@ public:
 class l_class_OC_Fifo1;
 extern void l_class_OC_Fifo1__deq(void *thisarg);
 extern bool l_class_OC_Fifo1__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v);
+extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v);
 extern bool l_class_OC_Fifo1__enq__RDY(void *thisarg);
 extern unsigned int l_class_OC_Fifo1__first(void *thisarg);
 extern bool l_class_OC_Fifo1__first__RDY(void *thisarg);
@@ -97,7 +97,7 @@ public:
 class l_class_OC_Fifo1_OC_3;
 extern void l_class_OC_Fifo1_OC_3__deq(void *thisarg);
 extern bool l_class_OC_Fifo1_OC_3__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1_OC_3__enq(void *thisarg, l_struct_OC_ValuePair enq_v);
+extern void l_class_OC_Fifo1_OC_3__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
 extern bool l_class_OC_Fifo1_OC_3__enq__RDY(void *thisarg);
 extern l_struct_OC_ValuePair l_class_OC_Fifo1_OC_3__first(void *thisarg);
 extern bool l_class_OC_Fifo1_OC_3__first__RDY(void *thisarg);
@@ -118,7 +118,7 @@ public:
 class l_class_OC_FifoPong;
 extern void l_class_OC_FifoPong__deq(void *thisarg);
 extern bool l_class_OC_FifoPong__deq__RDY(void *thisarg);
-extern void l_class_OC_FifoPong__enq(void *thisarg, l_struct_OC_ValuePair enq_v);
+extern void l_class_OC_FifoPong__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
 extern bool l_class_OC_FifoPong__enq__RDY(void *thisarg);
 extern l_struct_OC_ValuePair l_class_OC_FifoPong__first(void *thisarg);
 extern bool l_class_OC_FifoPong__first__RDY(void *thisarg);

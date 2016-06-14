@@ -37,7 +37,7 @@ public:
 class l_class_OC_Fifo1;
 extern void l_class_OC_Fifo1__deq(void *thisarg);
 extern bool l_class_OC_Fifo1__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v);
+extern void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v);
 extern bool l_class_OC_Fifo1__enq__RDY(void *thisarg);
 extern unsigned int l_class_OC_Fifo1__first(void *thisarg);
 extern bool l_class_OC_Fifo1__first__RDY(void *thisarg);
@@ -133,7 +133,7 @@ public:
 class l_class_OC_Fifo1_OC_0;
 extern void l_class_OC_Fifo1_OC_0__deq(void *thisarg);
 extern bool l_class_OC_Fifo1_OC_0__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1_OC_0__enq(void *thisarg, l_struct_OC_ValuePair enq_v);
+extern void l_class_OC_Fifo1_OC_0__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
 extern bool l_class_OC_Fifo1_OC_0__enq__RDY(void *thisarg);
 extern l_struct_OC_ValuePair l_class_OC_Fifo1_OC_0__first(void *thisarg);
 extern bool l_class_OC_Fifo1_OC_0__first__RDY(void *thisarg);
@@ -154,7 +154,7 @@ public:
 class l_class_OC_Fifo2;
 extern void l_class_OC_Fifo2__deq(void *thisarg);
 extern bool l_class_OC_Fifo2__deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo2__enq(void *thisarg, l_struct_OC_ValuePair enq_v);
+extern void l_class_OC_Fifo2__enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
 extern bool l_class_OC_Fifo2__enq__RDY(void *thisarg);
 extern l_struct_OC_ValuePair l_class_OC_Fifo2__first(void *thisarg);
 extern bool l_class_OC_Fifo2__first__RDY(void *thisarg);
@@ -224,7 +224,7 @@ public:
   void setindication(l_class_OC_LpmIndication *v) { indication = v; }
 };
 class l_class_OC_foo;
-extern void l_class_OC_foo__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v);
+extern void l_class_OC_foo__heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
 extern bool l_class_OC_foo__heard__READY(void *thisarg);
 class l_class_OC_foo {
 public:

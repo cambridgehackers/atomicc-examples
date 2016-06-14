@@ -8,9 +8,9 @@ bool l_class_OC_Fifo1__deq__RDY(void *thisarg) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
         return thisp->full;
 }
-void l_class_OC_Fifo1__enq(void *thisarg, unsigned int enq_v) {
+void l_class_OC_Fifo1__enq(void *thisarg, unsigned int in$enq_v) {
         l_class_OC_Fifo1 * thisp = (l_class_OC_Fifo1 *)thisarg;
-        thisp->element_shadow = enq_v;
+        thisp->element_shadow = in$enq_v;
         thisp->element_valid = 1;
         thisp->full_shadow = 1;
         thisp->full_valid = 1;
