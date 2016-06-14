@@ -107,10 +107,8 @@ void l_class_OC_IVector__respond(void *thisarg) {
         l_struct_OC_ValueType temp;
         temp.a = thisp->fifo.out.first().a;
         temp.b = thisp->fifo.out.first().b;
-        thisp->gcounter = (thisp->gcounter) + 1;
         thisp->fifo.out.deq();
         thisp->ind->heard(temp.a, temp.b);
-        ;
 }
 bool l_class_OC_IVector__respond__RDY(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
@@ -137,6 +135,10 @@ void l_class_OC_IVector::commit()
 {
     if (fcounter_valid) fcounter = fcounter_shadow;
     fcounter_valid = 0;
+    if (counter_valid) counter = counter_shadow;
+    counter_valid = 0;
+    if (gcounter_valid) gcounter = gcounter_shadow;
+    gcounter_valid = 0;
     fifo.commit();
 }
 void l_class_OC_IVectorTest::run()

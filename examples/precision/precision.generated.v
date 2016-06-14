@@ -106,9 +106,9 @@ module l_class_OC_IVector (
         say__RDY_internal,
         fifo$out$first,
         fifo$out$first__RDY);
-    reg[22:0] fcounter;
-    reg[1:0] counter;
-    reg[14:0] gcounter;
+    reg fcounter;
+    unsigned VERILOG_short counter;
+    unsigned VERILOG_short gcounter;
     assign ind$heard__ENA = respond__ENA_internal;
     assign ind$heard_heard_meth = say_meth;
     assign ind$heard_heard_v = say_v;
@@ -118,12 +118,9 @@ module l_class_OC_IVector (
     always @( posedge CLK) begin
       if (!nRST) begin
         fcounter <= 0;
+        counter <= 0;
+        gcounter <= 0;
       end // nRST
-      else begin
-        if (respond__ENA_internal) begin
-            gcounter <= gcounter + 1;
-        end; // End of respond__ENA
-      end
     end // always @ (posedge CLK)
 endmodule 
 

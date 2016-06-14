@@ -25,7 +25,7 @@
 //typedef FixedPoint<4> myint4;
 typedef int __attribute__(( atomicc_width(6) )) myint6;
 typedef int __attribute__(( atomicc_width(4) )) myint4;
-typedef int __attribute__(( atomicc_width(23) )) myint23;
+typedef int __attribute__(( atomicc_width(14 / 7 + 3 * 2) )) myint23;
 
 typedef struct {
     myint6 a;
