@@ -51,8 +51,10 @@ ValueType grumpy;
 class IVector : public Module, IVectorRequest {
     Fifo1<ValueType> fifo;
     myint23          fcounter;
-    FixedPointV      counter;    // the precision of these members is set by the constructor
-    FixedPointV      gcounter;
+    static int       intcWidth;
+    typedef int __attribute__(( atomicc_width(intcWidth) )) Myintc;
+    Myintc      counter;    // the precision of these members is set by the constructor
+    Myintc      gcounter;
     IVectorIndication *ind;
 public:
     METHOD(say, (myint6 meth, myint4 v), {return true; }) {
@@ -61,17 +63,19 @@ public:
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorIndication *aind) : ind(aind), counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
+    IVector(IVectorIndication *aind) : ind(aind)
+//, counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
     {
         RULE(IVector, "respond", true, {
             ValueType temp = fifo.out.first();
             fifo.out.deq();
             ind->heard(temp.a, temp.b);
-            fixedSet((void *)&gcounter, fixedGet((void *)&gcounter) + 1);
+            //fixedSet((void *)&gcounter, fixedGet((void *)&gcounter) + 1);
             });
     };
     ~IVector() {}
 };
+int IVector::intcWidth = 3;
 
 ////////////////////////////////////////////////////////////
 // Test Bench

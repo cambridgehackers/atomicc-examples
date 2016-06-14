@@ -99,9 +99,6 @@ class BitsClass {
     BitsClass() {}
     ~BitsClass() {}
     long unused_data_to_force_inheritance;
- //private:
-    //BitsClass(const BitsClass&) {}
-    //BitsClass& operator=(const BitsClass&) {}
 };
 
 typedef bool (*GUARDPTR)(void *);
@@ -194,21 +191,6 @@ static inline std::string utostr(uint64_t X) {
   }
   return std::string(BufPtr, Buffer+21);
 }
-
-extern "C" long fixedGet(void *);
-extern "C" void fixedSet(void *, long);
-
-class FixedPointV: public BitsClass {
-public:
-    long data;
-    unsigned long size;
-    FixedPointV(int precision_bits): size(precision_bits) { }
-    FixedPointV(int precision_bits, long val): size(precision_bits) { }
-    inline FixedPointV & operator=(const FixedPointV & arg) {
-        fixedSet((void *)this, fixedGet((void *)&arg));
-        return *this;
-    }
-};
 
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
