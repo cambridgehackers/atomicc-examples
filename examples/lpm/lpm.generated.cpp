@@ -192,8 +192,8 @@ bool l_class_OC_Lpm__enter__RDY(void *thisarg) {
 }
 void l_class_OC_Lpm__exit(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair mtemp;
         l_struct_OC_ValuePair temp;
+        l_struct_OC_ValuePair mtemp;
         temp.a = thisp->fifo.out.first().a;
         temp.b = thisp->fifo.out.first().b;
         temp.c = thisp->fifo.out.first().c;
@@ -210,8 +210,8 @@ bool l_class_OC_Lpm__exit__RDY(void *thisarg) {
 }
 void l_class_OC_Lpm__recirc(void *thisarg) {
         l_class_OC_Lpm * thisp = (l_class_OC_Lpm *)thisarg;
-        l_struct_OC_ValuePair mtemp;
         l_struct_OC_ValuePair temp;
+        l_struct_OC_ValuePair mtemp;
         temp.a = thisp->fifo.out.first().a;
         temp.b = thisp->fifo.out.first().b;
         temp.c = thisp->fifo.out.first().c;
