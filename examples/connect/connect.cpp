@@ -58,7 +58,7 @@ typedef struct {
 EchoIndication_data unusedEID;
 
 // Interface classes
-class EchoRequest: InterfaceClass {
+ainterface EchoRequest: InterfaceClass {
     void *p;
     GUARDPTR say__RDYp;
     void (*sayp)(void *p, int meth, int v);

@@ -26,7 +26,7 @@ typedef struct {
   unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
 }l_struct_OC_EchoIndication_data;
-class l_class_OC_EchoRequest {
+class l_ainterface_OC_EchoRequest {
 public:
   void *p;
   bool  (*say__RDYp) (void *);
@@ -34,7 +34,7 @@ public:
 public:
   void say(unsigned int meth, unsigned int v) { sayp(p, meth, v); }
   bool say__RDY(void) { return say__RDYp(p); }
-  l_class_OC_EchoRequest(decltype(p) ap, decltype(say__RDYp) asay__RDYp, decltype(sayp) asayp) {
+  l_ainterface_OC_EchoRequest(decltype(p) ap, decltype(say__RDYp) asay__RDYp, decltype(sayp) asayp) {
     p = ap;
     say__RDYp = asay__RDYp;
     sayp = asayp;
@@ -59,7 +59,7 @@ extern void l_class_OC_EchoRequestOutput__request$say(void *thisarg, unsigned in
 extern bool l_class_OC_EchoRequestOutput__request$say__RDY(void *thisarg);
 class l_class_OC_EchoRequestOutput {
 public:
-  l_class_OC_EchoRequest request;
+  l_ainterface_OC_EchoRequest request;
   l_class_OC_PipeIn *pipe;
 public:
   void run();
@@ -75,14 +75,14 @@ extern bool l_class_OC_EchoRequestInput__pipe$enq__RDY(void *thisarg);
 class l_class_OC_EchoRequestInput {
 public:
   l_class_OC_PipeIn pipe;
-  l_class_OC_EchoRequest *request;
+  l_ainterface_OC_EchoRequest *request;
 public:
   void run();
   void commit();
   l_class_OC_EchoRequestInput():
       pipe(this, l_class_OC_EchoRequestInput__pipe$enq__RDY, l_class_OC_EchoRequestInput__pipe$enq) {
   }
-  void setrequest(l_class_OC_EchoRequest *v) { request = v; }
+  void setrequest(l_ainterface_OC_EchoRequest *v) { request = v; }
 };
 class l_class_OC_EchoIndication {
 public:
@@ -147,7 +147,7 @@ extern void l_class_OC_Echo__request$say(void *thisarg, unsigned int request$say
 extern bool l_class_OC_Echo__request$say__RDY(void *thisarg);
 class l_class_OC_Echo {
 public:
-  l_class_OC_EchoRequest request;
+  l_ainterface_OC_EchoRequest request;
   l_class_OC_EchoIndication *indication;
 public:
   void run();

@@ -6,7 +6,7 @@
 //METAINVOKE; request$say; :pipe$enq;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoRequestInput
-//METAEXTERNAL; request; l_class_OC_EchoRequest;
+//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
