@@ -45,9 +45,7 @@ extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, 
  * vtable, which makes them visible to the atomicc code generation phase.
  */
 #define METHODATTR [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
-//__pascal
 #define METHOD(A,B,C) \
-    void A ## __bogus(void){} \
     METHODATTR bool A ## __RDY(void) C \
     METHODATTR void A B
 #define VMETHOD(A,B,C) \
