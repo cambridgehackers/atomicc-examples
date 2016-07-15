@@ -68,8 +68,8 @@ ainterface EchoRequest: InterfaceClass {
         p = ap;
         ASSIGNIFCPTR(say);
     }
-    EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
-    }
+    //EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
+    //}
 };
 EchoRequest unusedER;
 

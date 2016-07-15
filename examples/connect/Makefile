@@ -6,9 +6,9 @@ LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 CPPFLAGS += -fno-diagnostics-color
 
+#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o connect.ll connect.cpp
+#$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.bc connect.cpp
 all:
-	#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o connect.ll connect.cpp
-	#$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.bc connect.cpp
 	$(CPP) -S -c $(CPPFLAGS) $(LLVMFLAGS) connect.cpp
 
 run:
