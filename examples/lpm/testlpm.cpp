@@ -41,7 +41,7 @@ bool respheard__RDY(void *thisp) { return true;}
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    zLpm.setindication(new l_class_OC_LpmIndication(NULL, respheard__RDY, respheard));
+    zLpm.setindication(new l_ainterface_OC_LpmIndication(NULL, respheard__RDY, respheard));
     testCount++; testCount++; testCount++;
     zLpm.run(); while(!zLpm.say__READY()) zLpm.run(); zLpm.say(1, 44 * 1);
     zLpm.run(); while(!zLpm.say__READY()) zLpm.run(); zLpm.say(2, 44 * 2);

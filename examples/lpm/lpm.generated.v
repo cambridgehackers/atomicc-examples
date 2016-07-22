@@ -182,7 +182,7 @@ module l_class_OC_Lpm (
     input [31:0]say_meth,
     input [31:0]say_v,
     output say__READY,
-    output indication$heard__VALID,
+    output indication$heard,
     output [31:0]indication$heard_meth,
     output [31:0]indication$heard_v,
     input indication$heard__READY);
@@ -253,7 +253,7 @@ module l_class_OC_Lpm (
     reg[31:0] doneCount;
     assign enter__RDY_internal = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
     assign exit__RDY_internal = (((fifo$out$first__RDY & mem$resValue__RDY) & mem$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-    assign indication$heard__VALID = respond__ENA_internal;
+    assign indication$heard = respond__ENA_internal;
     assign indication$heard_meth = say_meth;
     assign indication$heard_v = say_v;
     assign mem$req_req_v.coerce0 = enter__ENA_internal ? temp$a : temp$a;

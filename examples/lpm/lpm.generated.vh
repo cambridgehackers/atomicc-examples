@@ -33,7 +33,7 @@
 //METAINTERNAL; fifo; l_class_OC_Fifo2;
 //METAINTERNAL; outQ; l_class_OC_Fifo1_OC_0;
 //METAINTERNAL; mem; l_class_OC_LpmMemory;
-//METAEXTERNAL; indication; l_class_OC_LpmIndication;
+//METAEXTERNAL; indication; l_ainterface_OC_LpmIndication;
 //METAINVOKE; enter; :fifo$in$enq;:inQ$out$deq;:inQ$out$first;:mem$req;
 //METAEXCLUSIVE; enter; recirc
 //METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;

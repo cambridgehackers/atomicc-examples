@@ -175,7 +175,7 @@ public:
       out(this, l_class_OC_Fifo2__out$deq__RDY, l_class_OC_Fifo2__out$deq, l_class_OC_Fifo2__out$first__RDY, l_class_OC_Fifo2__out$first) {
   }
 };
-class l_class_OC_LpmIndication {
+class l_ainterface_OC_LpmIndication {
 public:
   void *p;
   bool  (*heard__READYp) (void *);
@@ -183,7 +183,7 @@ public:
 public:
   void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
   bool heard__READY(void) { return heard__READYp(p); }
-  l_class_OC_LpmIndication(decltype(p) ap, decltype(heard__READYp) aheard__READYp, decltype(heardp) aheardp) {
+  l_ainterface_OC_LpmIndication(decltype(p) ap, decltype(heard__READYp) aheard__READYp, decltype(heardp) aheardp) {
     p = ap;
     heard__READYp = aheard__READYp;
     heardp = aheardp;
@@ -207,7 +207,7 @@ public:
   l_class_OC_Fifo1_OC_0 outQ;
   l_class_OC_LpmMemory mem;
   unsigned int doneCount, doneCount_shadow; bool doneCount_valid;
-  l_class_OC_LpmIndication *indication;
+  l_ainterface_OC_LpmIndication *indication;
 public:
   void run();
   void commit();
@@ -221,14 +221,14 @@ public:
   bool respond__RDY(void) { return l_class_OC_Lpm__respond__RDY(this); }
   void say(unsigned int say_meth, unsigned int say_v) { l_class_OC_Lpm__say(this, say_meth, say_v); }
   bool say__READY(void) { return l_class_OC_Lpm__say__READY(this); }
-  void setindication(l_class_OC_LpmIndication *v) { indication = v; }
+  void setindication(l_ainterface_OC_LpmIndication *v) { indication = v; }
 };
 class l_class_OC_foo;
 extern void l_class_OC_foo__indication$heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
 extern bool l_class_OC_foo__indication$heard__READY(void *thisarg);
 class l_class_OC_foo {
 public:
-  l_class_OC_LpmIndication indication;
+  l_ainterface_OC_LpmIndication indication;
 public:
   void run();
   void commit();

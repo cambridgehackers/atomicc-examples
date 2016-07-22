@@ -54,17 +54,9 @@ typedef struct {
     int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
-class LpmIndication: InterfaceClass {
-    void *p;
-    GUARDPTR heard__READYp;
-    void (*heardp)(void *p, int meth, int v);
- public:
-    VMETHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    void init(const char *name, void *ap, unsigned long aheard__READYp, unsigned long aheardp) {
-        p = ap;
-        ASSIGNVIFCPTR(heard);
-    }
-    LpmIndication(): p(NULL), heard__READYp(NULL), heardp(NULL) { }
+ainterface LpmIndication: InterfaceClass {
+    void VMETHODDECL(void);
+    void heard(int meth, int v);
 };
 
 class LpmRequest {
