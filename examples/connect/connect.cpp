@@ -59,13 +59,7 @@ EchoIndication_data unusedEID;
 
 // Interface classes
 ainterface EchoRequest: InterfaceClass {
-    void *p;
- public:
-    bool say__RDY(void) { return true; }
-    void say(int meth, int v) {}
-    void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
-        p = ap;
-    }
+    void say(int meth, int v);
 };
 EchoRequest unusedER;
 
