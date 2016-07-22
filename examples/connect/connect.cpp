@@ -63,18 +63,8 @@ ainterface EchoRequest: InterfaceClass {
 };
 EchoRequest unusedER;
 
-class EchoIndication: InterfaceClass {
-    void *p;
-    GUARDPTR heard__RDYp;
-    void (*heardp)(void *p, int meth, int v);
- public:
-    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
-        p = ap;
-        ASSIGNIFCPTR(heard);
-    }
-    EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) {
-    }
+ainterface EchoIndication: InterfaceClass {
+    void heard(int meth, int v);
 };
 EchoIndication unusedEI;
 

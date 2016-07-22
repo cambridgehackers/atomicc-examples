@@ -14,11 +14,11 @@
 //METAINVOKE; indication$heard; :pipe$enq;
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoIndicationInput
-//METAEXTERNAL; indication; l_class_OC_EchoIndication;
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:indication$heard;
 //METAGUARD; pipe$enq; indication$heard__RDY;
 //METASTART; l_class_OC_Echo
-//METAEXTERNAL; indication; l_class_OC_EchoIndication;
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; request$say; :indication$heard;
 //METAGUARD; request$say; indication$heard__RDY;
 //METASTART; l_class_OC_foo

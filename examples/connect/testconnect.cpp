@@ -64,7 +64,7 @@ int main(int argc, const char *argv[])
 
     zConnect.lEchoRequestOutput_test.setpipe(&zConnect.lEchoRequestInput);
 #endif
-    l_class_OC_EchoIndication zConnectresp(NULL, &respheard__RDY, &respheard);
+    l_ainterface_OC_EchoIndication zConnectresp(NULL, &respheard__RDY, &respheard);
     zConnect.lEII_test.setindication(&zConnectresp);
 
     zConnect.lERO_test.request.say(1, 44 * 1); testCount++;
