@@ -60,16 +60,12 @@ EchoIndication_data unusedEID;
 // Interface classes
 ainterface EchoRequest: InterfaceClass {
     void *p;
-    GUARDPTR say__RDYp;
-    void (*sayp)(void *p, int meth, int v);
  public:
-    METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
+    bool say__RDY(void) { return true; }
+    void say(int meth, int v) {}
     void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp) {
         p = ap;
-        ASSIGNIFCPTR(say);
     }
-    //EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
-    //}
 };
 EchoRequest unusedER;
 
