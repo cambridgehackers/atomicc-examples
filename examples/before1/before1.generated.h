@@ -32,7 +32,7 @@ typedef struct {
   unsigned int tag;
   l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
 }l_struct_OC_EchoIndication_data;
-class l_class_OC_EchoRequest {
+class l_ainterface_OC_EchoRequest {
 public:
   void *p;
   bool  (*say__RDYp) (void *);
@@ -44,7 +44,7 @@ public:
   void say2(unsigned int meth, unsigned int v) { say2p(p, meth, v); }
   bool say2__RDY(void) { return say2__RDYp(p); }
   bool say__RDY(void) { return say__RDYp(p); }
-  l_class_OC_EchoRequest(decltype(p) ap, decltype(say__RDYp) asay__RDYp, decltype(sayp) asayp, decltype(say2__RDYp) asay2__RDYp, decltype(say2p) asay2p) {
+  l_ainterface_OC_EchoRequest(decltype(p) ap, decltype(say__RDYp) asay__RDYp, decltype(sayp) asayp, decltype(say2__RDYp) asay2__RDYp, decltype(say2p) asay2p) {
     p = ap;
     say__RDYp = asay__RDYp;
     sayp = asayp;
@@ -73,7 +73,7 @@ extern bool l_class_OC_EchoRequestOutput__request$say2__RDY(void *thisarg);
 extern bool l_class_OC_EchoRequestOutput__request$say__RDY(void *thisarg);
 class l_class_OC_EchoRequestOutput {
 public:
-  l_class_OC_EchoRequest request;
+  l_ainterface_OC_EchoRequest request;
   l_class_OC_PipeIn *pipe;
 public:
   void run();
@@ -89,16 +89,16 @@ extern bool l_class_OC_EchoRequestInput__pipe$enq__RDY(void *thisarg);
 class l_class_OC_EchoRequestInput {
 public:
   l_class_OC_PipeIn pipe;
-  l_class_OC_EchoRequest *request;
+  l_ainterface_OC_EchoRequest *request;
 public:
   void run();
   void commit();
   l_class_OC_EchoRequestInput():
       pipe(this, l_class_OC_EchoRequestInput__pipe$enq__RDY, l_class_OC_EchoRequestInput__pipe$enq) {
   }
-  void setrequest(l_class_OC_EchoRequest *v) { request = v; }
+  void setrequest(l_ainterface_OC_EchoRequest *v) { request = v; }
 };
-class l_class_OC_EchoIndication {
+class l_ainterface_OC_EchoIndication {
 public:
   void *p;
   bool  (*heard__RDYp) (void *);
@@ -106,7 +106,7 @@ public:
 public:
   void heard(unsigned int meth, unsigned int v) { heardp(p, meth, v); }
   bool heard__RDY(void) { return heard__RDYp(p); }
-  l_class_OC_EchoIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
+  l_ainterface_OC_EchoIndication(decltype(p) ap, decltype(heard__RDYp) aheard__RDYp, decltype(heardp) aheardp) {
     p = ap;
     heard__RDYp = aheard__RDYp;
     heardp = aheardp;
@@ -135,7 +135,7 @@ extern void l_class_OC_EchoIndicationOutput__output_ruleo(void *thisarg);
 extern bool l_class_OC_EchoIndicationOutput__output_ruleo__RDY(void *thisarg);
 class l_class_OC_EchoIndicationOutput {
 public:
-  l_class_OC_EchoIndication indication;
+  l_ainterface_OC_EchoIndication indication;
   l_class_OC_PipeIn_OC_0 *pipe;
   l_struct_OC_EchoIndication_data ind0;
   l_struct_OC_EchoIndication_data ind1;
@@ -161,7 +161,7 @@ extern bool l_class_OC_EchoIndicationInput__input_rule__RDY(void *thisarg);
 class l_class_OC_EchoIndicationInput {
 public:
   l_class_OC_PipeIn_OC_0 pipe;
-  l_class_OC_EchoIndication *indication;
+  l_ainterface_OC_EchoIndication *indication;
   unsigned int busy_delay, busy_delay_shadow; bool busy_delay_valid;
   unsigned int meth_delay, meth_delay_shadow; bool meth_delay_valid;
   unsigned int v_delay, v_delay_shadow; bool v_delay_valid;
@@ -173,7 +173,7 @@ public:
   }
   void input_rule(void) { l_class_OC_EchoIndicationInput__input_rule(this); }
   bool input_rule__RDY(void) { return l_class_OC_EchoIndicationInput__input_rule__RDY(this); }
-  void setindication(l_class_OC_EchoIndication *v) { indication = v; }
+  void setindication(l_ainterface_OC_EchoIndication *v) { indication = v; }
 };
 class l_class_OC_Echo;
 extern void l_class_OC_Echo__delay_rule(void *thisarg);
@@ -192,7 +192,7 @@ extern void l_class_OC_Echo__y2xnull(void *thisarg);
 extern bool l_class_OC_Echo__y2xnull__RDY(void *thisarg);
 class l_class_OC_Echo {
 public:
-  l_class_OC_EchoRequest request;
+  l_ainterface_OC_EchoRequest request;
   unsigned int busy, busy_shadow; bool busy_valid;
   unsigned int meth_temp, meth_temp_shadow; bool meth_temp_valid;
   unsigned int v_temp, v_temp_shadow; bool v_temp_valid;
@@ -201,7 +201,7 @@ public:
   unsigned int v_delay, v_delay_shadow; bool v_delay_valid;
   unsigned int x, x_shadow; bool x_valid;
   unsigned int y, y_shadow; bool y_valid;
-  l_class_OC_EchoIndication *indication;
+  l_ainterface_OC_EchoIndication *indication;
 public:
   void run();
   void commit();
@@ -218,14 +218,14 @@ public:
   bool y2x__RDY(void) { return l_class_OC_Echo__y2x__RDY(this); }
   void y2xnull(void) { l_class_OC_Echo__y2xnull(this); }
   bool y2xnull__RDY(void) { return l_class_OC_Echo__y2xnull__RDY(this); }
-  void setindication(l_class_OC_EchoIndication *v) { indication = v; }
+  void setindication(l_ainterface_OC_EchoIndication *v) { indication = v; }
 };
 class l_class_OC_foo;
 extern void l_class_OC_foo__indication$heard(void *thisarg, unsigned int indication$heard_meth, unsigned int indication$heard_v);
 extern bool l_class_OC_foo__indication$heard__RDY(void *thisarg);
 class l_class_OC_foo {
 public:
-  l_class_OC_EchoIndication indication;
+  l_ainterface_OC_EchoIndication indication;
 public:
   void run();
   void commit();

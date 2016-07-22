@@ -9,7 +9,7 @@
 //METAGUARD; request$say2; pipe$enq__RDY;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoRequestInput
-//METAEXTERNAL; request; l_class_OC_EchoRequest;
+//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;pipe$enq_v$tag == 2:request$say2;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
@@ -23,7 +23,7 @@
 //METAGUARD; output_ruleo; (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_class_OC_EchoIndicationInput
-//METAEXTERNAL; indication; l_class_OC_EchoIndication;
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; pipe$enq; input_rule
 //METAGUARD; pipe$enq; (busy_delay != 0) ^ 1;
 //METAINVOKE; input_rule; :indication$heard;
@@ -31,7 +31,7 @@
 //METAGUARD; input_rule; (busy_delay != 0) & indication$heard__RDY;
 //METARULES; input_rule
 //METASTART; l_class_OC_Echo
-//METAEXTERNAL; indication; l_class_OC_EchoIndication;
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule; request$say; request$say2; respond_rule
 //METABEFORE; delay_rule; :request$say; :request$say2
 //METAGUARD; delay_rule; ((busy != 0) & (busy_delay == 0)) != 0;
