@@ -64,37 +64,14 @@ typedef struct {
 EchoIndication_data unusedEID;
 
 // Interface classes
-class EchoRequest: InterfaceClass {
-    void *p;
-    GUARDPTR say__RDYp;
-    void (*sayp)(void *p, int meth, int v);
-    GUARDPTR say2__RDYp;
-    void (*say2p)(void *p, int meth, int v, int v2);
- public:
-    METHOD(say, (int meth, int v), {return true; } ) { sayp(p, meth, v); }
-    METHOD(say2, (int meth, int v, int v2), {return true; } ) { say2p(p, meth, v, v2); }
-    void init(const char *name, void *ap, unsigned long asay__RDYp, unsigned long asayp, unsigned long asay2__RDYp, unsigned long asay2p) {
-        p = ap;
-        ASSIGNIFCPTR(say);
-        ASSIGNIFCPTR(say2);
-    }
-    EchoRequest(): p(NULL), say__RDYp(NULL), sayp(NULL) {
-    }
+ainterface EchoRequest: InterfaceClass {
+    void say(int meth, int v);
+    void say2(int meth, int v, int v2);
 };
 EchoRequest unusedER;
 
-class EchoIndication: InterfaceClass {
-    void *p;
-    GUARDPTR heard__RDYp;
-    void (*heardp)(void *p, int meth, int v);
- public:
-    METHOD(heard, (int meth, int v), {return true; } ) { heardp(p, meth, v); }
-    void init(const char *name, void *ap, unsigned long aheard__RDYp, unsigned long aheardp) {
-        p = ap;
-        ASSIGNIFCPTR(heard);
-    }
-    EchoIndication(): p(NULL), heard__RDYp(NULL), heardp(NULL) {
-    }
+ainterface EchoIndication: InterfaceClass {
+    void heard(int meth, int v);
 };
 EchoIndication unusedEI;
 

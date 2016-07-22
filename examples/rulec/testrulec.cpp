@@ -44,7 +44,7 @@ bool respheard__RDY(void *thisp) { return true;}
 int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    zConnect.lEII_test.setindication(new l_class_OC_EchoIndication(NULL, respheard__RDY, respheard));
+    zConnect.lEII_test.setindication(new l_ainterface_OC_EchoIndication(NULL, respheard__RDY, respheard));
     while(!zConnect.lERO_test.request.say__RDY()) {}; zConnect.lERO_test.request.say(1, 44 * 1); testCount++; testCount++; testCount++;
     zConnect.run(); zConnect.run(); while(!zConnect.lERO_test.request.say__RDY()) {}; zConnect.lERO_test.request.say(2, 44 * 2);
     zConnect.run(); zConnect.run(); while(!zConnect.lERO_test.request.say__RDY()) {}; zConnect.lERO_test.request.say(3, 44 * 3);
