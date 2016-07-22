@@ -102,37 +102,14 @@ typedef bool (*GUARDPTR)(void *);
          A ## __READYp = (decltype(A ## __READYp))a ## A ## __READYp; \
          A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
-class PipeIn: InterfaceClass {
- public:
-    void *p;
-    GUARDPTR enq__RDYp;
-    void (*enqp)(void *p, const T &v);
- public:
-    METHOD(enq, (const T &v), {return enq__RDYp(p); }) { enqp(p, v); }
-    PipeIn(): p(NULL), enq__RDYp(NULL), enqp(NULL) { }
-    void init(const char *name, void *ap, unsigned long aenq__RDYp, unsigned long aenqp) {
-        p = ap;
-        ASSIGNIFCPTR(enq);
-    }
+ainterface PipeIn: InterfaceClass {
+    void enq(const T &v);
 };
 
 template<class T>
-class PipeOut: InterfaceClass {
- public:
-    void *p;
-    GUARDPTR deq__RDYp;
-    void (*deqp)(void *p);
-    GUARDPTR first__RDYp;
-    T (*firstp)(void *p);
- public:
-    METHOD(deq, (void), {return deq__RDYp(p); }) { deqp(p); }
-    GVALUE(first, T, {return first__RDYp(p); }) { return firstp(p); }
-    PipeOut(): p(NULL), deq__RDYp(NULL), deqp(NULL), first__RDYp(NULL), firstp(NULL) { }
-    void init(const char *name, void *ap, unsigned long adeq__RDYp, unsigned long adeqp, unsigned long afirst__RDYp, unsigned long afirstp) {
-        p = ap;
-        ASSIGNIFCPTR(deq);
-        ASSIGNIFCPTR(first);
-        }
+ainterface PipeOut: InterfaceClass {
+    void deq(void);
+    T first(void);
 };
 
 #define RULE(moduletype,name, guardExpr, bodybody) \
