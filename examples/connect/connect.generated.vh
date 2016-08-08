@@ -2,7 +2,7 @@
 `define __connect_GENERATED__VH__
 
 //METASTART; l_class_OC_EchoRequestOutput
-//METAEXTERNAL; pipe; l_class_OC_PipeIn;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say; :pipe$enq;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoRequestInput
@@ -10,7 +10,7 @@
 //METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_class_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAINVOKE; indication$heard; :pipe$enq;
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; l_class_OC_EchoIndicationInput
