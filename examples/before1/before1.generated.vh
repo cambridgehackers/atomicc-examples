@@ -2,7 +2,7 @@
 `define __before1_GENERATED__VH__
 
 //METASTART; l_class_OC_EchoRequestOutput
-//METAEXTERNAL; pipe; l_class_OC_PipeIn;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say; :pipe$enq;
 //METAEXCLUSIVE; request$say; request$say2
 //METAINVOKE; request$say2; :pipe$enq;
@@ -13,7 +13,7 @@
 //METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;pipe$enq_v$tag == 2:request$say2;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; l_class_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_class_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAEXCLUSIVE; indication$heard; output_rulee; output_ruleo
 //METAGUARD; indication$heard; (ind_busy != 0) ^ 1;
 //METAINVOKE; output_rulee; :pipe$enq;
