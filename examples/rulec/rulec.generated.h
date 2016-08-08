@@ -52,7 +52,7 @@ public:
     say2p = asay2p;
   }
 };
-class l_class_OC_PipeIn {
+class l_ainterface_OC_PipeIn {
 public:
   void *p;
   bool  (*enq__RDYp) (void *);
@@ -60,7 +60,7 @@ public:
 public:
   void enq(l_struct_OC_EchoRequest_data v) { enqp(p, v); }
   bool enq__RDY(void) { return enq__RDYp(p); }
-  l_class_OC_PipeIn(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
+  l_ainterface_OC_PipeIn(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
     p = ap;
     enq__RDYp = aenq__RDYp;
     enqp = aenqp;
@@ -74,21 +74,21 @@ extern bool l_class_OC_EchoRequestOutput__request$say__RDY(void *thisarg);
 class l_class_OC_EchoRequestOutput {
 public:
   l_ainterface_OC_EchoRequest request;
-  l_class_OC_PipeIn *pipe;
+  l_ainterface_OC_PipeIn *pipe;
 public:
   void run();
   void commit();
   l_class_OC_EchoRequestOutput():
       request(this, l_class_OC_EchoRequestOutput__request$say__RDY, l_class_OC_EchoRequestOutput__request$say, l_class_OC_EchoRequestOutput__request$say2__RDY, l_class_OC_EchoRequestOutput__request$say2) {
   }
-  void setpipe(l_class_OC_PipeIn *v) { pipe = v; }
+  void setpipe(l_ainterface_OC_PipeIn *v) { pipe = v; }
 };
 class l_class_OC_EchoRequestInput;
 extern void l_class_OC_EchoRequestInput__pipe$enq(void *thisarg, l_struct_OC_EchoRequest_data pipe$enq_v);
 extern bool l_class_OC_EchoRequestInput__pipe$enq__RDY(void *thisarg);
 class l_class_OC_EchoRequestInput {
 public:
-  l_class_OC_PipeIn pipe;
+  l_ainterface_OC_PipeIn pipe;
   l_ainterface_OC_EchoRequest *request;
 public:
   void run();
@@ -112,7 +112,7 @@ public:
     heardp = aheardp;
   }
 };
-class l_class_OC_PipeIn_OC_0 {
+class l_ainterface_OC_PipeIn_OC_0 {
 public:
   void *p;
   bool  (*enq__RDYp) (void *);
@@ -120,7 +120,7 @@ public:
 public:
   void enq(l_struct_OC_EchoIndication_data v) { enqp(p, v); }
   bool enq__RDY(void) { return enq__RDYp(p); }
-  l_class_OC_PipeIn_OC_0(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
+  l_ainterface_OC_PipeIn_OC_0(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
     p = ap;
     enq__RDYp = aenq__RDYp;
     enqp = aenqp;
@@ -136,7 +136,7 @@ extern bool l_class_OC_EchoIndicationOutput__output_ruleo__RDY(void *thisarg);
 class l_class_OC_EchoIndicationOutput {
 public:
   l_ainterface_OC_EchoIndication indication;
-  l_class_OC_PipeIn_OC_0 *pipe;
+  l_ainterface_OC_PipeIn_OC_0 *pipe;
   l_struct_OC_EchoIndication_data ind0;
   l_struct_OC_EchoIndication_data ind1;
   unsigned int ind_busy, ind_busy_shadow; bool ind_busy_valid;
@@ -151,7 +151,7 @@ public:
   bool output_rulee__RDY(void) { return l_class_OC_EchoIndicationOutput__output_rulee__RDY(this); }
   void output_ruleo(void) { l_class_OC_EchoIndicationOutput__output_ruleo(this); }
   bool output_ruleo__RDY(void) { return l_class_OC_EchoIndicationOutput__output_ruleo__RDY(this); }
-  void setpipe(l_class_OC_PipeIn_OC_0 *v) { pipe = v; }
+  void setpipe(l_ainterface_OC_PipeIn_OC_0 *v) { pipe = v; }
 };
 class l_class_OC_EchoIndicationInput;
 extern void l_class_OC_EchoIndicationInput__pipe$enq(void *thisarg, l_struct_OC_EchoIndication_data pipe$enq_v);
@@ -160,7 +160,7 @@ extern void l_class_OC_EchoIndicationInput__input_rule(void *thisarg);
 extern bool l_class_OC_EchoIndicationInput__input_rule__RDY(void *thisarg);
 class l_class_OC_EchoIndicationInput {
 public:
-  l_class_OC_PipeIn_OC_0 pipe;
+  l_ainterface_OC_PipeIn_OC_0 pipe;
   l_ainterface_OC_EchoIndication *indication;
   unsigned int busy_delay, busy_delay_shadow; bool busy_delay_valid;
   unsigned int meth_delay, meth_delay_shadow; bool meth_delay_valid;
