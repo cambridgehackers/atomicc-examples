@@ -1,6 +1,6 @@
 #ifndef __precision_GENERATED__H__
 #define __precision_GENERATED__H__
-class l_class_OC_PipeIn {
+class l_ainterface_OC_PipeIn {
 public:
   void *p;
   bool  (*enq__RDYp) (void *);
@@ -8,13 +8,13 @@ public:
 public:
   void enq(unsigned int v) { enqp(p, v); }
   bool enq__RDY(void) { return enq__RDYp(p); }
-  l_class_OC_PipeIn(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
+  l_ainterface_OC_PipeIn(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
     p = ap;
     enq__RDYp = aenq__RDYp;
     enqp = aenqp;
   }
 };
-class l_class_OC_PipeOut {
+class l_ainterface_OC_PipeOut {
 public:
   void *p;
   bool  (*deq__RDYp) (void *);
@@ -26,7 +26,7 @@ public:
   bool deq__RDY(void) { return deq__RDYp(p); }
   unsigned int first(void) { return firstp(p); }
   bool first__RDY(void) { return first__RDYp(p); }
-  l_class_OC_PipeOut(decltype(p) ap, decltype(deq__RDYp) adeq__RDYp, decltype(deqp) adeqp, decltype(first__RDYp) afirst__RDYp, decltype(firstp) afirstp) {
+  l_ainterface_OC_PipeOut(decltype(p) ap, decltype(deq__RDYp) adeq__RDYp, decltype(deqp) adeqp, decltype(first__RDYp) afirst__RDYp, decltype(firstp) afirstp) {
     p = ap;
     deq__RDYp = adeq__RDYp;
     deqp = adeqp;
@@ -43,8 +43,8 @@ extern unsigned int l_class_OC_Fifo1__out$first(void *thisarg);
 extern bool l_class_OC_Fifo1__out$first__RDY(void *thisarg);
 class l_class_OC_Fifo1 {
 public:
-  l_class_OC_PipeIn in;
-  l_class_OC_PipeOut out;
+  l_ainterface_OC_PipeIn in;
+  l_ainterface_OC_PipeOut out;
   unsigned int element, element_shadow; bool element_valid;
   bool full, full_shadow; bool full_valid;
 public:
@@ -81,7 +81,7 @@ typedef struct {
   bool a;
   bool b;
 }l_struct_OC_ValueType;
-class l_class_OC_PipeIn_OC_2 {
+class l_ainterface_OC_PipeIn_OC_2 {
 public:
   void *p;
   bool  (*enq__RDYp) (void *);
@@ -89,13 +89,13 @@ public:
 public:
   void enq(l_struct_OC_ValueType v) { enqp(p, v); }
   bool enq__RDY(void) { return enq__RDYp(p); }
-  l_class_OC_PipeIn_OC_2(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
+  l_ainterface_OC_PipeIn_OC_2(decltype(p) ap, decltype(enq__RDYp) aenq__RDYp, decltype(enqp) aenqp) {
     p = ap;
     enq__RDYp = aenq__RDYp;
     enqp = aenqp;
   }
 };
-class l_class_OC_PipeOut_OC_3 {
+class l_ainterface_OC_PipeOut_OC_3 {
 public:
   void *p;
   bool  (*deq__RDYp) (void *);
@@ -107,7 +107,7 @@ public:
   bool deq__RDY(void) { return deq__RDYp(p); }
   l_struct_OC_ValueType first(void) { return firstp(p); }
   bool first__RDY(void) { return first__RDYp(p); }
-  l_class_OC_PipeOut_OC_3(decltype(p) ap, decltype(deq__RDYp) adeq__RDYp, decltype(deqp) adeqp, decltype(first__RDYp) afirst__RDYp, decltype(firstp) afirstp) {
+  l_ainterface_OC_PipeOut_OC_3(decltype(p) ap, decltype(deq__RDYp) adeq__RDYp, decltype(deqp) adeqp, decltype(first__RDYp) afirst__RDYp, decltype(firstp) afirstp) {
     p = ap;
     deq__RDYp = adeq__RDYp;
     deqp = adeqp;
@@ -124,8 +124,8 @@ extern l_struct_OC_ValueType l_class_OC_Fifo1_OC_0__out$first(void *thisarg);
 extern bool l_class_OC_Fifo1_OC_0__out$first__RDY(void *thisarg);
 class l_class_OC_Fifo1_OC_0 {
 public:
-  l_class_OC_PipeIn_OC_2 in;
-  l_class_OC_PipeOut_OC_3 out;
+  l_ainterface_OC_PipeIn_OC_2 in;
+  l_ainterface_OC_PipeOut_OC_3 out;
   l_struct_OC_ValueType element;
   bool full, full_shadow; bool full_valid;
 public:
