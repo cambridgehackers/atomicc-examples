@@ -98,6 +98,8 @@ public:
   }
   void setrequest(l_ainterface_OC_EchoRequest *v) { request = v; }
 };
+typedef struct {
+}l_struct_OC___block_descriptor;
 class l_ainterface_OC_EchoIndication {
 public:
   void *p;
@@ -237,6 +239,4 @@ public:
     lERI.request = &lEcho.request;
   }
 };
-typedef struct {
-}l_struct_OC___block_descriptor;
 #endif  // __rulec_GENERATED__H__
