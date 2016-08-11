@@ -109,8 +109,7 @@ ainterface PipeIn: InterfaceClass {
 template<class T>
 ainterface PipeOut: InterfaceClass {
     void deq(void);
-    __vectorcall T first(void);
-    //T first(void);
+    T first(void);
 };
 
 #define RULE(moduletype,name, guardExpr, bodybody) \
