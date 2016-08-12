@@ -149,16 +149,16 @@ endmodule
 module l_class_OC_IVector (
     input CLK,
     input nRST,
-    input say__ENA,
-    input [31:0]say_meth,
-    input [31:0]say_v,
-    output say__RDY,
+    input in$say__ENA,
+    input [31:0]in$say_meth,
+    input [31:0]in$say_v,
+    output in$say__RDY,
     output ind$heard__ENA,
     output [31:0]ind$heard_heard_meth,
     output [31:0]ind$heard_heard_v,
     input ind$heard__RDY);
-    wire say__RDY_internal;
-    wire say__ENA_internal = say__ENA && say__RDY_internal;
+    wire in$say__RDY_internal;
+    wire in$say__ENA_internal = in$say__ENA && in$say__RDY_internal;
     wire fifo0$out$deq__RDY;
     wire fifo0$in$enq__ENA;
     wire [95:0]fifo0$in$enq_v;
@@ -337,8 +337,10 @@ module l_class_OC_IVector (
         fifo10$out$first,
         fifo10$out$first__RDY);
     reg[31:0] vsize;
-    assign (say_meth == 0 ? &fifo0:say_meth == 1 ? &fifo1:say_meth == 2 ? &fifo2:say_meth == 3 ? &fifo3:say_meth == 4 ? &fifo4:say_meth == 5 ? &fifo5:say_meth == 6 ? &fifo6:say_meth == 7 ? &fifo7:say_meth == 8 ? &fifo8:&fifo9)$in$enq__ENA = say__ENA_internal;
-    assign (say_meth == 0 ? &fifo0:say_meth == 1 ? &fifo1:say_meth == 2 ? &fifo2:say_meth == 3 ? &fifo3:say_meth == 4 ? &fifo4:say_meth == 5 ? &fifo5:say_meth == 6 ? &fifo6:say_meth == 7 ? &fifo7:say_meth == 8 ? &fifo8:&fifo9)$in$enq_v = temp;
+    assign (in$say_meth == 0 ? &fifo0:in$say_meth == 1 ? &fifo1:in$say_meth == 2 ? &fifo2:in$say_meth == 3 ? &fifo3:in$say_meth == 4 ? &fifo4:in$say_meth == 5 ? &fifo5:in$say_meth == 6 ? &fifo6:in$say_meth == 7 ? &fifo7:in$say_meth == 8 ? &fifo8:&fifo9)$in$enq__ENA = in$say__ENA_internal;
+    assign (in$say_meth == 0 ? &fifo0:in$say_meth == 1 ? &fifo1:in$say_meth == 2 ? &fifo2:in$say_meth == 3 ? &fifo3:in$say_meth == 4 ? &fifo4:in$say_meth == 5 ? &fifo5:in$say_meth == 6 ? &fifo6:in$say_meth == 7 ? &fifo7:in$say_meth == 8 ? &fifo8:&fifo9)$in$enq_v = temp;
+    assign in$say__RDY = in$say__RDY_internal;
+    assign in$say__RDY_internal = ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
     assign ind$heard__ENA = respond0__ENA_internal || respond1__ENA_internal || respond2__ENA_internal || respond3__ENA_internal || respond4__ENA_internal || respond5__ENA_internal || respond6__ENA_internal || respond7__ENA_internal || respond8__ENA_internal || respond9__ENA_internal;
     assign ind$heard_heard_meth = respond0__ENA_internal ? 0 : respond1__ENA_internal ? 1 : respond2__ENA_internal ? 2 : respond3__ENA_internal ? 3 : respond4__ENA_internal ? 4 : respond5__ENA_internal ? 5 : respond6__ENA_internal ? 6 : respond7__ENA_internal ? 7 : respond8__ENA_internal ? 8 : 9;
     assign ind$heard_heard_v = respond0__ENA_internal ? temp$b : respond1__ENA_internal ? temp$b : respond2__ENA_internal ? temp$b : respond3__ENA_internal ? temp$b : respond4__ENA_internal ? temp$b : respond5__ENA_internal ? temp$b : respond6__ENA_internal ? temp$b : respond7__ENA_internal ? temp$b : respond8__ENA_internal ? temp$b : temp$b;
@@ -352,10 +354,8 @@ module l_class_OC_IVector (
     assign respond7__RDY_internal = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & ind$heard__RDY;
     assign respond8__RDY_internal = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & ind$heard__RDY;
     assign respond9__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
-    assign say__RDY = say__RDY_internal;
-    assign say__RDY_internal = ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
     assign temp$a = fifo9$out$first.a;
-    assign temp$b = say_v;
+    assign temp$b = in$say_v;
     assign temp$c = fifo9$out$first.c;
 
     always @( posedge CLK) begin

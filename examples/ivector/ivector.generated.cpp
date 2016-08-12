@@ -156,20 +156,6 @@ void l_class_OC_IVectorIndication::run()
 void l_class_OC_IVectorIndication::commit()
 {
 }
-void l_class_OC_IVectorRequest__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
-        l_class_OC_IVectorRequest * thisp = (l_class_OC_IVectorRequest *)thisarg;
-}
-bool l_class_OC_IVectorRequest__say__RDY(void *thisarg) {
-        l_class_OC_IVectorRequest * thisp = (l_class_OC_IVectorRequest *)thisarg;
-        return 1;
-}
-void l_class_OC_IVectorRequest::run()
-{
-    commit();
-}
-void l_class_OC_IVectorRequest::commit()
-{
-}
 void l_class_OC_IVector__respond0(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         l_struct_OC_ValuePair temp;
@@ -300,13 +286,13 @@ bool l_class_OC_IVector__respond9__RDY(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         return ((thisp->fifo9.out.first__RDY()) & (thisp->fifo9.out.deq__RDY())) & (thisp->ind->heard__RDY());
 }
-void l_class_OC_IVector__say(void *thisarg, unsigned int say_meth, unsigned int say_v) {
+void l_class_OC_IVector__in$say(void *thisarg, unsigned int in$say_meth, unsigned int in$say_v) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         l_struct_OC_ValuePair temp;
-        temp.b = say_v;
-        (say_meth == 0 ? &thisp->fifo0:say_meth == 1 ? &thisp->fifo1:say_meth == 2 ? &thisp->fifo2:say_meth == 3 ? &thisp->fifo3:say_meth == 4 ? &thisp->fifo4:say_meth == 5 ? &thisp->fifo5:say_meth == 6 ? &thisp->fifo6:say_meth == 7 ? &thisp->fifo7:say_meth == 8 ? &thisp->fifo8:&thisp->fifo9)->in.enq(temp);
+        temp.b = in$say_v;
+        (in$say_meth == 0 ? &thisp->fifo0:in$say_meth == 1 ? &thisp->fifo1:in$say_meth == 2 ? &thisp->fifo2:in$say_meth == 3 ? &thisp->fifo3:in$say_meth == 4 ? &thisp->fifo4:in$say_meth == 5 ? &thisp->fifo5:in$say_meth == 6 ? &thisp->fifo6:in$say_meth == 7 ? &thisp->fifo7:in$say_meth == 8 ? &thisp->fifo8:&thisp->fifo9)->in.enq(temp);
 }
-bool l_class_OC_IVector__say__RDY(void *thisarg) {
+bool l_class_OC_IVector__in$say__RDY(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         return (((((((((thisp->fifo0.in.enq__RDY()) & (thisp->fifo1.in.enq__RDY())) & (thisp->fifo2.in.enq__RDY())) & (thisp->fifo3.in.enq__RDY())) & (thisp->fifo4.in.enq__RDY())) & (thisp->fifo5.in.enq__RDY())) & (thisp->fifo6.in.enq__RDY())) & (thisp->fifo7.in.enq__RDY())) & (thisp->fifo8.in.enq__RDY())) & (thisp->fifo9.in.enq__RDY());
 }

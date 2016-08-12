@@ -64,7 +64,7 @@
 //METAGUARD; respond8; (fifo8$out$first__RDY & fifo8$out$deq__RDY) & ind$heard__RDY;
 //METAINVOKE; respond9; :fifo9$out$deq;:fifo9$out$first;:ind$heard;
 //METAGUARD; respond9; (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
-//METAINVOKE; say; :(say_meth == 0 ? &fifo0:say_meth == 1 ? &fifo1:say_meth == 2 ? &fifo2:say_meth == 3 ? &fifo3:say_meth == 4 ? &fifo4:say_meth == 5 ? &fifo5:say_meth == 6 ? &fifo6:say_meth == 7 ? &fifo7:say_meth == 8 ? &fifo8:&fifo9)$in$enq;
-//METAGUARD; say; ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
+//METAINVOKE; in$say; :(in$say_meth == 0 ? &fifo0:in$say_meth == 1 ? &fifo1:in$say_meth == 2 ? &fifo2:in$say_meth == 3 ? &fifo3:in$say_meth == 4 ? &fifo4:in$say_meth == 5 ? &fifo5:in$say_meth == 6 ? &fifo6:in$say_meth == 7 ? &fifo7:in$say_meth == 8 ? &fifo8:&fifo9)$in$enq;
+//METAGUARD; in$say; ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
 //METARULES; respond0; respond1; respond2; respond3; respond4; respond5; respond6; respond7; respond8; respond9
 `endif

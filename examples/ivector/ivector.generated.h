@@ -148,16 +148,19 @@ public:
   void heard(unsigned int heard_meth, unsigned int heard_v) { l_class_OC_IVectorIndication__heard(this, heard_meth, heard_v); }
   bool heard__RDY(void) { return l_class_OC_IVectorIndication__heard__RDY(this); }
 };
-class l_class_OC_IVectorRequest;
-extern void l_class_OC_IVectorRequest__say(void *thisarg, unsigned int say_meth, unsigned int say_v);
-extern bool l_class_OC_IVectorRequest__say__RDY(void *thisarg);
-class l_class_OC_IVectorRequest {
+class l_ainterface_OC_IVectorRequest {
 public:
+  void *p;
+  bool  (*say__RDYp) (void *);
+  void  (*sayp) (void *, unsigned int , unsigned int );
 public:
-  void run();
-  void commit();
-  void say(unsigned int say_meth, unsigned int say_v) { l_class_OC_IVectorRequest__say(this, say_meth, say_v); }
-  bool say__RDY(void) { return l_class_OC_IVectorRequest__say__RDY(this); }
+  void say(unsigned int meth, unsigned int v) { sayp(p, meth, v); }
+  bool say__RDY(void) { return say__RDYp(p); }
+  l_ainterface_OC_IVectorRequest(decltype(p) ap, decltype(say__RDYp) asay__RDYp, decltype(sayp) asayp) {
+    p = ap;
+    say__RDYp = asay__RDYp;
+    sayp = asayp;
+  }
 };
 class l_class_OC_IVector;
 extern void l_class_OC_IVector__respond0(void *thisarg);
@@ -180,8 +183,8 @@ extern void l_class_OC_IVector__respond8(void *thisarg);
 extern bool l_class_OC_IVector__respond8__RDY(void *thisarg);
 extern void l_class_OC_IVector__respond9(void *thisarg);
 extern bool l_class_OC_IVector__respond9__RDY(void *thisarg);
-extern void l_class_OC_IVector__say(void *thisarg, unsigned int say_meth, unsigned int say_v);
-extern bool l_class_OC_IVector__say__RDY(void *thisarg);
+extern void l_class_OC_IVector__in$say(void *thisarg, unsigned int in$say_meth, unsigned int in$say_v);
+extern bool l_class_OC_IVector__in$say__RDY(void *thisarg);
 class l_class_OC_IVector {
 public:
   l_class_OC_FifoPong fifo0;
@@ -197,9 +200,13 @@ public:
   l_class_OC_FifoPong fifo10;
   l_class_OC_IVectorIndication *ind;
   unsigned int vsize, vsize_shadow; bool vsize_valid;
+  l_ainterface_OC_IVectorRequest in;
 public:
   void run();
   void commit();
+  l_class_OC_IVector():
+      in(this, l_class_OC_IVector__in$say__RDY, l_class_OC_IVector__in$say) {
+  }
   void respond0(void) { l_class_OC_IVector__respond0(this); }
   bool respond0__RDY(void) { return l_class_OC_IVector__respond0__RDY(this); }
   void respond1(void) { l_class_OC_IVector__respond1(this); }
@@ -220,8 +227,6 @@ public:
   bool respond8__RDY(void) { return l_class_OC_IVector__respond8__RDY(this); }
   void respond9(void) { l_class_OC_IVector__respond9(this); }
   bool respond9__RDY(void) { return l_class_OC_IVector__respond9__RDY(this); }
-  void say(unsigned int say_meth, unsigned int say_v) { l_class_OC_IVector__say(this, say_meth, say_v); }
-  bool say__RDY(void) { return l_class_OC_IVector__say__RDY(this); }
   void setind(l_class_OC_IVectorIndication *v) { ind = v; }
 };
 class l_class_OC_IVectorTest;

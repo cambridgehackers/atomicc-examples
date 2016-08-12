@@ -36,7 +36,7 @@ int main(int argc, const char *argv[])
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     zIVector.setind(&zIVectorIndication);
     for (int i = 0; i < 10; i++) {
-        zIVector.say(i, 44 * i); testCount++;
+        zIVector.in.say(i, 44 * i); testCount++;
     }
     while (!stop_main_program) {
         zIVector.run();

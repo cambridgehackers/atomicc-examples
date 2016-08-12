@@ -63,18 +63,16 @@ public:
     }
 };
 
-class IVectorRequest {
-public:
-    METHOD(say, (int meth, int v), {return true; }){}
-    IVectorRequest() {
-    }
+ainterface IVectorRequest : InterfaceClass {
+    void say(int meth, int v);
 };
 
-class IVector : public Module, IVectorRequest {
+class IVector : public Module {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
     int vsize;
 public:
+    IVectorRequest in;
     METHOD(say, (int meth, int v), {return true; }) {
         UTYPE temp;
         temp.b = v;
@@ -109,6 +107,7 @@ public:
 #endif
     }
     IVector(IVectorIndication *aind, int size) : ind(aind), vsize(size) {
+        in.init("in", this, IFC(IVector, say));
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = new FifoPong<UTYPE>[vsize];
@@ -129,7 +128,6 @@ public:
 ////////////////////////////////////////////////////////////
 int testCount;
 unsigned int stop_main_program;
-
 void IVectorIndication::heard(int meth, int v)
 {
     printf("Heard an ivector: %d %d tcount %d\n", meth, v, testCount);
