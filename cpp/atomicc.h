@@ -81,17 +81,6 @@ class ModuleExternal {
     ModuleExternal(const ModuleExternal&); // no implementation
     ModuleExternal& operator=(const ModuleExternal&);
 };
-// This is a marker for classes that are exported interfaces from a containing class
-class InterfaceClass {
- public:
-    InterfaceClass() {}
-    ~InterfaceClass() {}
-    long unused_data_to_force_inheritance;
- private:
-    // copy ops are private to prevent copying
-    InterfaceClass(const InterfaceClass&); // no implementation
-    InterfaceClass& operator=(const InterfaceClass&);
-};
 
 typedef bool (*GUARDPTR)(void *);
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
@@ -103,12 +92,12 @@ typedef bool (*GUARDPTR)(void *);
          A ## __READYp = (decltype(A ## __READYp))a ## A ## __READYp; \
          A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
-ainterface PipeIn: InterfaceClass {
+ainterface PipeIn {
     void enq(const T &v);
 };
 
 template<class T>
-ainterface PipeOut: InterfaceClass {
+ainterface PipeOut {
     void deq(void);
     T first(void);
 };

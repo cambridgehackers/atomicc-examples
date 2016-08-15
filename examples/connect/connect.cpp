@@ -58,12 +58,12 @@ typedef struct {
 EchoIndication_data unusedEID;
 
 // Interface classes
-ainterface EchoRequest: InterfaceClass {
+ainterface EchoRequest {
     void say(int meth, int v);
 };
 EchoRequest unusedER;
 
-ainterface EchoIndication: InterfaceClass {
+ainterface EchoIndication {
     void heard(int meth, int v);
 };
 EchoIndication unusedEI;

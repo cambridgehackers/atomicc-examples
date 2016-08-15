@@ -63,7 +63,7 @@ public:
     }
 };
 
-ainterface IVectorRequest : InterfaceClass {
+ainterface IVectorRequest {
     void say(int meth, int v);
 };
 
