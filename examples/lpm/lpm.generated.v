@@ -1,16 +1,92 @@
 `include "lpm.generated.vh"
 
-module l_class_OC_foo (
+module l_class_OC_Fifo1 (
     input CLK,
     input nRST,
-    input indication$heard__VALID,
-    input [31:0]indication$heard_meth,
-    input [31:0]indication$heard_v,
-    output indication$heard__READY);
-    wire indication$heard__READY_internal;
-    wire indication$heard__VALID_internal = indication$heard__VALID && indication$heard__READY_internal;
-    assign indication$heard__READY = indication$heard__READY_internal;
-    assign indication$heard__READY_internal = 1;
+    input out$deq__ENA,
+    output out$deq__RDY,
+    input in$enq__ENA,
+    input [31:0]in$enq_v,
+    output in$enq__RDY,
+    output [31:0]out$first,
+    output out$first__RDY);
+    wire out$deq__RDY_internal;
+    wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
+    wire in$enq__RDY_internal;
+    wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
+    reg[31:0] element;
+    reg full;
+    assign in$enq__RDY = in$enq__RDY_internal;
+    assign in$enq__RDY_internal = full ^ 1;
+    assign out$deq__RDY = out$deq__RDY_internal;
+    assign out$deq__RDY_internal = full;
+    assign out$first = element;
+    assign out$first__RDY_internal = full;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        element <= 0;
+        full <= 0;
+      end // nRST
+      else begin
+        if (out$deq__ENA_internal) begin
+            full <= 0;
+        end; // End of out$deq__ENA
+        if (in$enq__ENA_internal) begin
+            element <= in$enq_v;
+            full <= 1;
+        end; // End of in$enq__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_class_OC_LpmMemory (
+    input CLK,
+    input nRST,
+    input req__ENA,
+    input [31:0]req_v.coerce0,
+    input [31:0]req_v.coerce1,
+    input [31:0]req_v.coerce2,
+    output req__RDY,
+    input resAccept__ENA,
+    output resAccept__RDY,
+    output [95:0]resValue,
+    output resValue__RDY);
+    wire req__RDY_internal;
+    wire req__ENA_internal = req__ENA && req__RDY_internal;
+    wire resAccept__RDY_internal;
+    wire resAccept__ENA_internal = resAccept__ENA && resAccept__RDY_internal;
+    reg[31:0] delayCount;
+    reg[95:0] saved;
+    assign memdelay__RDY_internal = delayCount > 1;
+    assign req__RDY = req__RDY_internal;
+    assign req__RDY_internal = delayCount == 0;
+    assign resAccept__RDY = resAccept__RDY_internal;
+    assign resAccept__RDY_internal = delayCount == 1;
+    assign resValue = saved;
+    assign resValue__RDY_internal = delayCount == 1;
+    assign v$a = req_v_2e_coerce0;
+    assign v$b = req_v_2e_coerce1;
+    assign v$c = req_v_2e_coerce2;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        delayCount <= 0;
+        saved <= 0;
+      end // nRST
+      else begin
+        if (memdelay__ENA_internal) begin
+            delayCount <= delayCount - 1;
+        end; // End of memdelay__ENA
+        if (req__ENA_internal) begin
+            delayCount <= 4;
+            saved <= v;
+        end; // End of req__ENA
+        if (resAccept__ENA_internal) begin
+            delayCount <= 0;
+        end; // End of resAccept__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_class_OC_Fifo1_OC_0 (
@@ -95,55 +171,6 @@ module l_class_OC_Fifo2 (
             *(windex == 0 ? &element0:&element1) <= in$enq_v;
             windex <= (windex + 1) % 2;
         end; // End of in$enq__ENA
-      end
-    end // always @ (posedge CLK)
-endmodule 
-
-module l_class_OC_LpmMemory (
-    input CLK,
-    input nRST,
-    input req__ENA,
-    input [31:0]req_v.coerce0,
-    input [31:0]req_v.coerce1,
-    input [31:0]req_v.coerce2,
-    output req__RDY,
-    input resAccept__ENA,
-    output resAccept__RDY,
-    output [95:0]resValue,
-    output resValue__RDY);
-    wire req__RDY_internal;
-    wire req__ENA_internal = req__ENA && req__RDY_internal;
-    wire resAccept__RDY_internal;
-    wire resAccept__ENA_internal = resAccept__ENA && resAccept__RDY_internal;
-    reg[31:0] delayCount;
-    reg[95:0] saved;
-    assign memdelay__RDY_internal = delayCount > 1;
-    assign req__RDY = req__RDY_internal;
-    assign req__RDY_internal = delayCount == 0;
-    assign resAccept__RDY = resAccept__RDY_internal;
-    assign resAccept__RDY_internal = delayCount == 1;
-    assign resValue = saved;
-    assign resValue__RDY_internal = delayCount == 1;
-    assign v$a = req_v_2e_coerce0;
-    assign v$b = req_v_2e_coerce1;
-    assign v$c = req_v_2e_coerce2;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        delayCount <= 0;
-        saved <= 0;
-      end // nRST
-      else begin
-        if (memdelay__ENA_internal) begin
-            delayCount <= delayCount - 1;
-        end; // End of memdelay__ENA
-        if (req__ENA_internal) begin
-            delayCount <= 4;
-            saved <= v;
-        end; // End of req__ENA
-        if (resAccept__ENA_internal) begin
-            delayCount <= 0;
-        end; // End of resAccept__ENA
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -247,43 +274,16 @@ module l_class_OC_Lpm (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Fifo1 (
+module l_class_OC_foo (
     input CLK,
     input nRST,
-    input out$deq__ENA,
-    output out$deq__RDY,
-    input in$enq__ENA,
-    input [31:0]in$enq_v,
-    output in$enq__RDY,
-    output [31:0]out$first,
-    output out$first__RDY);
-    wire out$deq__RDY_internal;
-    wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
-    wire in$enq__RDY_internal;
-    wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
-    reg[31:0] element;
-    reg full;
-    assign in$enq__RDY = in$enq__RDY_internal;
-    assign in$enq__RDY_internal = full ^ 1;
-    assign out$deq__RDY = out$deq__RDY_internal;
-    assign out$deq__RDY_internal = full;
-    assign out$first = element;
-    assign out$first__RDY_internal = full;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        element <= 0;
-        full <= 0;
-      end // nRST
-      else begin
-        if (out$deq__ENA_internal) begin
-            full <= 0;
-        end; // End of out$deq__ENA
-        if (in$enq__ENA_internal) begin
-            element <= in$enq_v;
-            full <= 1;
-        end; // End of in$enq__ENA
-      end
-    end // always @ (posedge CLK)
+    input indication$heard__VALID,
+    input [31:0]indication$heard_meth,
+    input [31:0]indication$heard_v,
+    output indication$heard__READY);
+    wire indication$heard__READY_internal;
+    wire indication$heard__VALID_internal = indication$heard__VALID && indication$heard__READY_internal;
+    assign indication$heard__READY = indication$heard__READY_internal;
+    assign indication$heard__READY_internal = 1;
 endmodule 
 
