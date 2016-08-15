@@ -27,6 +27,26 @@
 
 unsigned int stop_main_program;
 int testCount;
+extern void l_class_OC_IVectorIndication__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v);
+extern bool l_class_OC_IVectorIndication__heard__RDY(void *thisarg);
+class l_class_OC_IVectorIndication {
+public:
+  void heard(unsigned int heard_meth, unsigned int heard_v) { l_class_OC_IVectorIndication__heard(this, heard_meth, heard_v); }
+  bool heard__RDY(void) { return l_class_OC_IVectorIndication__heard__RDY(this); }
+};
+void l_class_OC_IVectorIndication__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
+        l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;
+        testCount = testCount + (-1);
+        if ((testCount + (-1)) <= 0) {
+            stop_main_program = 1;
+        }
+    }
+bool l_class_OC_IVectorIndication__heard__RDY(void *thisarg) {
+        l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;
+        return 1;
+}
+
+
 #include "ivector.generated.cpp"
 class l_class_OC_IVectorIndication zIVectorIndication;
 class l_class_OC_IVector zIVector;

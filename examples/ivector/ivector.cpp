@@ -56,12 +56,17 @@ public:
 };
 
 static FifoPong<UTYPE> bozouseless;
-class IVectorIndication {
+#if 0
+ainterface IVectorIndication {
+    void heard(int meth, int v);
+};
+#else
+class IVectorIndication : public ModuleExternal {
 public:
     INDICATION(heard, (int meth, int v), { return true; });
-    IVectorIndication() {
-    }
+    IVectorIndication() {}
 };
+#endif
 
 ainterface IVectorRequest {
     void say(int meth, int v);
@@ -123,20 +128,6 @@ public:
     ~IVector() {}
 };
 
-////////////////////////////////////////////////////////////
-// Test Bench
-////////////////////////////////////////////////////////////
-int testCount;
-unsigned int stop_main_program;
-void IVectorIndication::heard(int meth, int v)
-{
-    printf("Heard an ivector: %d %d tcount %d\n", meth, v, testCount);
-    //stop_main_program = 1;
-        if (--testCount <= 0)
-            stop_main_program = 1;
-
-}
-
 class IVectorTest {
 public:
     IVector *ivector;
@@ -148,16 +139,3 @@ public:
 };
 
 IVectorTest ivectorTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!ivectorTest.ivector->say__RDY())
-        ;
-    ivectorTest.ivector->say(2, 44);
-    if (argc != 1)
-        run_main_program();
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
-#endif
