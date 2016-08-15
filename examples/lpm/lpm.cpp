@@ -54,16 +54,14 @@ typedef struct {
     int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
-ainterface LpmIndication: InterfaceClass {
-    void VMETHODDECL(void);
+ainterface LpmIndication {
+    void VMETHODDECL(void); // READY/VALID signalling marker
     void heard(int meth, int v);
 };
 
-class LpmRequest {
-public:
-    VMETHOD(say, (int meth, int v), {return true; }){}
-    LpmRequest() {
-    }
+ainterface LpmRequest {
+    void VMETHODDECL(void); // READY/VALID signalling marker
+    void say(int meth, int v);
 };
 
 class LpmMemory : public Module {
@@ -78,7 +76,7 @@ public:
     }
 };
 
-class Lpm : public Module, LpmRequest {
+class Lpm : public Module {
     Fifo1<ValuePair> inQ;
     Fifo2<ValuePair> fifo;
     Fifo1<ValuePair> outQ;
@@ -86,6 +84,7 @@ class Lpm : public Module, LpmRequest {
     int doneCount;
 public:
     LpmIndication *indication;
+    LpmRequest request;
     VMETHOD(say, (int meth, int v), {return true; }) {
 printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
@@ -98,6 +97,7 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         return !(doneCount % 5);
     }
     Lpm() {
+        request.init("req", this, VIFC(LpmRequest, say));
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
             RULE(Lpm, "recirc", true, {
                 ValuePair temp = fifo.out.first();

@@ -43,9 +43,9 @@ int main(int argc, const char *argv[])
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
     zLpm.setindication(new l_ainterface_OC_LpmIndication(NULL, respheard__RDY, respheard));
     testCount++; testCount++; testCount++;
-    zLpm.run(); while(!zLpm.say__READY()) zLpm.run(); zLpm.say(1, 44 * 1);
-    zLpm.run(); while(!zLpm.say__READY()) zLpm.run(); zLpm.say(2, 44 * 2);
-    zLpm.run(); while(!zLpm.say__READY()) zLpm.run(); zLpm.say(3, 44 * 3);
+    zLpm.run(); while(!zLpm.request.say__READY()) zLpm.run(); zLpm.request.say(1, 44 * 1);
+    zLpm.run(); while(!zLpm.request.say__READY()) zLpm.run(); zLpm.request.say(2, 44 * 2);
+    zLpm.run(); while(!zLpm.request.say__READY()) zLpm.run(); zLpm.request.say(3, 44 * 3);
     while (!stop_main_program) {
         zLpm.run();
     }
