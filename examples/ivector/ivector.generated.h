@@ -1,5 +1,7 @@
 #ifndef __ivector_GENERATED__H__
 #define __ivector_GENERATED__H__
+typedef struct {
+}l_struct_OC___block_descriptor;
 class l_ainterface_OC_PipeIn {
 public:
   void *p;
@@ -137,17 +139,6 @@ public:
       out(this, l_class_OC_FifoPong__out$deq__RDY, l_class_OC_FifoPong__out$deq, l_class_OC_FifoPong__out$first__RDY, l_class_OC_FifoPong__out$first) {
   }
 };
-class l_class_OC_IVectorIndication;
-extern void l_class_OC_IVectorIndication__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v);
-extern bool l_class_OC_IVectorIndication__heard__RDY(void *thisarg);
-class l_class_OC_IVectorIndication {
-public:
-public:
-  void run();
-  void commit();
-  void heard(unsigned int heard_meth, unsigned int heard_v) { l_class_OC_IVectorIndication__heard(this, heard_meth, heard_v); }
-  bool heard__RDY(void) { return l_class_OC_IVectorIndication__heard__RDY(this); }
-};
 class l_ainterface_OC_IVectorRequest {
 public:
   void *p;
@@ -237,6 +228,4 @@ public:
   void run();
   void commit();
 };
-typedef struct {
-}l_struct_OC___block_descriptor;
 #endif  // __ivector_GENERATED__H__

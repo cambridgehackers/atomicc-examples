@@ -138,24 +138,6 @@ void l_class_OC_FifoPong::commit()
     element1.commit();
     element2.commit();
 }
-void l_class_OC_IVectorIndication__heard(void *thisarg, unsigned int heard_meth, unsigned int heard_v) {
-        l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;
-        testCount = testCount + (-1);
-        if ((testCount + (-1)) <= 0) {
-            stop_main_program = 1;
-        }
-    }
-bool l_class_OC_IVectorIndication__heard__RDY(void *thisarg) {
-        l_class_OC_IVectorIndication * thisp = (l_class_OC_IVectorIndication *)thisarg;
-        return 1;
-}
-void l_class_OC_IVectorIndication::run()
-{
-    commit();
-}
-void l_class_OC_IVectorIndication::commit()
-{
-}
 void l_class_OC_IVector__respond0(void *thisarg) {
         l_class_OC_IVector * thisp = (l_class_OC_IVector *)thisarg;
         l_struct_OC_ValuePair temp;
