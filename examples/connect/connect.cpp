@@ -83,7 +83,9 @@ public:
         pipe->enq(ind);
     }
     void init() {
-        request.init("request", this, IFC(EchoRequestOutput, say));
+        //request.init("request", this, IFC(EchoRequestOutput, say));
+        //request.say = ^ (int meth, int v) { say(meth, v); }; //__vectorcall
+        request.say = say;
     }
 };
 
