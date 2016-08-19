@@ -18,6 +18,20 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+class AB {
+public:
+    int meth(int A, int B) { return 0; }
+//};
+typedef int (AB::*FOO) (int A, int B);
+typedef int (*FOOF) (int A, int B);
+//class CD {
+    FOO vitem;
+    FOOF vv;
+    void BBBB(void) {
+        vv = reinterpret_cast<FOOF>(reinterpret_cast<__int128>(&AB::meth));
+        //vitem = &AB::meth;
+        }
+};
 #include <atomicc.h>
 
 typedef struct {
@@ -85,7 +99,7 @@ public:
     void init() {
         //request.init("request", this, IFC(EchoRequestOutput, say));
         //request.say = ^ (int meth, int v) { say(meth, v); }; //__vectorcall
-        request.say = say;
+        (&request)->say = &EchoRequestOutput::say;
     }
 };
 
@@ -197,3 +211,8 @@ public:
 };
 
 Connect connectTest;
+AB sss;
+void jca()
+{
+sss.BBBB();
+}
