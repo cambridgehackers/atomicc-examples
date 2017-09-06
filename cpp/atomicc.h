@@ -28,6 +28,8 @@
 #include <string>
 #include <stddef.h> // offsetof
 
+#define __interface ainterface  __attribute__(( atomicc_interface ))
+
 extern "C" void addBaseRule(void *, const char *name, bool (^ __vectorcall RDY)(void), void (^ __vectorcall ENA)(void));
 class Module;
 typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
@@ -92,12 +94,12 @@ typedef bool (*GUARDPTR)(void *);
          A ## __READYp = (decltype(A ## __READYp))a ## A ## __READYp; \
          A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
-ainterface PipeIn {
+__interface PipeIn {
     void enq(const T &v);
 };
 
 template<class T>
-ainterface PipeOut {
+__interface PipeOut {
     void deq(void);
     T first(void);
 };

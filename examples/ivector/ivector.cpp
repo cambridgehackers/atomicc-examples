@@ -57,7 +57,7 @@ public:
 
 static FifoPong<UTYPE> bozouseless;
 #if 0
-ainterface IVectorIndication {
+__interface IVectorIndication {
     void heard(int meth, int v);
 };
 #else
@@ -68,7 +68,7 @@ public:
 };
 #endif
 
-ainterface IVectorRequest {
+__interface IVectorRequest {
     void say(int meth, int v);
 };
 

@@ -54,12 +54,12 @@ typedef struct {
     int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
-ainterface LpmIndication {
+__interface LpmIndication {
     void VMETHODDECL(void); // READY/VALID signalling marker
     void heard(int meth, int v);
 };
 
-ainterface LpmRequest {
+__interface LpmRequest {
     void VMETHODDECL(void); // READY/VALID signalling marker
     void say(int meth, int v);
 };

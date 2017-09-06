@@ -64,13 +64,13 @@ typedef struct {
 EchoIndication_data unusedEID;
 
 // Interface classes
-ainterface EchoRequest {
+__interface EchoRequest {
     void say(int meth, int v);
     void say2(int meth, int v, int v2);
 };
 EchoRequest unusedER;
 
-ainterface EchoIndication {
+__interface EchoIndication {
     void heard(int meth, int v);
 };
 EchoIndication unusedEI;
