@@ -28,7 +28,7 @@
 #include <string>
 #include <stddef.h> // offsetof
 
-#define __interface ainterface  __attribute__(( atomicc_interface ))
+#define __interface class __attribute__(( atomicc_interface ))
 
 extern "C" void addBaseRule(void *, const char *name, bool (^ __vectorcall RDY)(void), void (^ __vectorcall ENA)(void));
 class Module;
@@ -36,7 +36,7 @@ typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
 #define METH(A) methodToFunction((METHPTR)(A))
 extern "C" unsigned long methodToFunction(METHPTR v);
 extern "C" void connectInterface(void *classp, void **target, void *source);
-extern "C" void atomiccSchedulePriority(const char *rule, const char *priority, unsigned long classPtr);
+extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 /*
  * Note: The 'virtual' attribute is needed on guarded interfaces so that
  * references to them are preserved by clang, even if they are not
