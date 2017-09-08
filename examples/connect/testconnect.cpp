@@ -26,20 +26,20 @@
 #include <stdint.h>
 #include "runtime.h"
 
-//#define l_class_OC_PipeIn l_class_OC_EchoRequestInput 
-//#define l_class_OC_PipeIn_OC_0 l_class_OC_EchoIndicationInput 
-//#define l_class_OC_foo l_class_OC_EchoIndication
+//#define l_module_OC_PipeIn l_module_OC_EchoRequestInput 
+//#define l_module_OC_PipeIn_OC_0 l_module_OC_EchoIndicationInput 
+//#define l_module_OC_foo l_module_OC_EchoIndication
 #define request0 request
 #include "connect.generated.cpp"
-//#include "l_class_OC_Echo.cpp"
-//#include "l_class_OC_EchoIndicationOutput.cpp"
-//#include "l_class_OC_EchoRequestInput.cpp"
-//#include "l_class_OC_EchoRequestOutput.cpp"
-//#include "l_class_OC_EchoIndicationInput.cpp"
+//#include "l_module_OC_Echo.cpp"
+//#include "l_module_OC_EchoIndicationOutput.cpp"
+//#include "l_module_OC_EchoRequestInput.cpp"
+//#include "l_module_OC_EchoRequestOutput.cpp"
+//#include "l_module_OC_EchoIndicationInput.cpp"
 
 unsigned int stop_main_program;
 int testCount;
-l_class_OC_Connect zConnect;
+l_module_OC_Connect zConnect;
 
 void respheard(void *thisp, unsigned int heard_meth, unsigned int heard_v) {
     printf("Heard an echo: %d %d\n", heard_meth, heard_v);
@@ -52,13 +52,13 @@ int main(int argc, const char *argv[])
 {
     printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
 #if 0
-    l_class_OC_EchoRequest er(&zConnect.lEcho,
-        (unsigned long)&l_class_OC_Echo__say__RDY,
-        (unsigned long)&l_class_OC_Echo__say);
+    l_module_OC_EchoRequest er(&zConnect.lEcho,
+        (unsigned long)&l_module_OC_Echo__say__RDY,
+        (unsigned long)&l_module_OC_Echo__say);
     zConnect.lEchoRequestInput.setrequest(&er);
-    l_class_OC_EchoIndication ei(&zConnect.lEchoIndicationOutput,
-        (unsigned long)&l_class_OC_EchoIndicationOutput__heard__RDY,
-        (unsigned long)&l_class_OC_EchoIndicationOutput__heard);
+    l_module_OC_EchoIndication ei(&zConnect.lEchoIndicationOutput,
+        (unsigned long)&l_module_OC_EchoIndicationOutput__heard__RDY,
+        (unsigned long)&l_module_OC_EchoIndicationOutput__heard);
     zConnect.lEcho.setindication(&ei);
     zConnect.lEchoIndicationOutput.setpipe(&zConnect.lEchoIndicationInput_test);
 

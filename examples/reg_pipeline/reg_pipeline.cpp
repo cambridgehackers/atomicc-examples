@@ -3,7 +3,7 @@
 
 #include <atomicc.h>
 
-class Pipe : public Module {
+__module Pipe : public Module {
   Reg<int> x1;
   Reg<int> x2;
   Reg<int> x3;

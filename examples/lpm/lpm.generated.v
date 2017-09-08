@@ -1,6 +1,6 @@
 `include "lpm.generated.vh"
 
-module l_class_OC_Fifo1 (
+module l_module_OC_Fifo1 (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -40,7 +40,7 @@ module l_class_OC_Fifo1 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_LpmMemory (
+module l_module_OC_LpmMemory (
     input CLK,
     input nRST,
     input req__ENA,
@@ -89,7 +89,7 @@ module l_class_OC_LpmMemory (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Fifo1_OC_0 (
+module l_module_OC_Fifo1_OC_0 (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -129,7 +129,7 @@ module l_class_OC_Fifo1_OC_0 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Fifo2 (
+module l_module_OC_Fifo2 (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -175,7 +175,7 @@ module l_class_OC_Fifo2 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Lpm (
+module l_module_OC_Lpm (
     input CLK,
     input nRST,
     input request$say__VALID,
@@ -191,7 +191,7 @@ module l_class_OC_Lpm (
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
-    l_class_OC_Fifo1_OC_0 inQ (
+    l_module_OC_Fifo1_OC_0 inQ (
         CLK,
         nRST,
         enter__ENA_internal,
@@ -205,7 +205,7 @@ module l_class_OC_Lpm (
     wire fifo$in$enq__RDY;
     wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
-    l_class_OC_Fifo2 fifo (
+    l_module_OC_Fifo2 fifo (
         CLK,
         nRST,
         exit__ENA_internal || recirc__ENA_internal,
@@ -219,7 +219,7 @@ module l_class_OC_Lpm (
     wire outQ$in$enq__RDY;
     wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
-    l_class_OC_Fifo1_OC_0 outQ (
+    l_module_OC_Fifo1_OC_0 outQ (
         CLK,
         nRST,
         respond__ENA_internal,
@@ -238,7 +238,7 @@ module l_class_OC_Lpm (
     wire mem$resAccept__RDY;
     wire [95:0]mem$resValue;
     wire mem$resValue__RDY;
-    l_class_OC_LpmMemory mem (
+    l_module_OC_LpmMemory mem (
         CLK,
         nRST,
         enter__ENA_internal || recirc__ENA_internal,
@@ -274,7 +274,7 @@ module l_class_OC_Lpm (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_foo (
+module l_module_OC_foo (
     input CLK,
     input nRST,
     input indication$heard__VALID,

@@ -1,6 +1,6 @@
 `include "ivector.generated.vh"
 
-module l_class_OC_Fifo1 (
+module l_module_OC_Fifo1 (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -40,7 +40,7 @@ module l_class_OC_Fifo1 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Fifo1_OC_3 (
+module l_module_OC_Fifo1_OC_3 (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -80,7 +80,7 @@ module l_class_OC_Fifo1_OC_3 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_FifoPong (
+module l_module_OC_FifoPong (
     input CLK,
     input nRST,
     input out$deq__ENA,
@@ -98,7 +98,7 @@ module l_class_OC_FifoPong (
     wire element1$in$enq__RDY;
     wire [95:0]element1$out$first;
     wire element1$out$first__RDY;
-    l_class_OC_Fifo1_OC_3 element1 (
+    l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
         out$deq__ENA_internal & pong ^ 1,
@@ -113,7 +113,7 @@ module l_class_OC_FifoPong (
     wire element2$in$enq__RDY;
     wire [95:0]element2$out$first;
     wire element2$out$first__RDY;
-    l_class_OC_Fifo1_OC_3 element2 (
+    l_module_OC_Fifo1_OC_3 element2 (
         CLK,
         nRST,
         out$deq__ENA_internal & pong,
@@ -146,7 +146,7 @@ module l_class_OC_FifoPong (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_IVector (
+module l_module_OC_IVector (
     input CLK,
     input nRST,
     input in$say__ENA,
@@ -165,7 +165,7 @@ module l_class_OC_IVector (
     wire fifo0$in$enq__RDY;
     wire [95:0]fifo0$out$first;
     wire fifo0$out$first__RDY;
-    l_class_OC_FifoPong fifo0 (
+    l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
         respond0__ENA_internal,
@@ -181,7 +181,7 @@ module l_class_OC_IVector (
     wire fifo1$in$enq__RDY;
     wire [95:0]fifo1$out$first;
     wire fifo1$out$first__RDY;
-    l_class_OC_FifoPong fifo1 (
+    l_module_OC_FifoPong fifo1 (
         CLK,
         nRST,
         respond1__ENA_internal,
@@ -197,7 +197,7 @@ module l_class_OC_IVector (
     wire fifo2$in$enq__RDY;
     wire [95:0]fifo2$out$first;
     wire fifo2$out$first__RDY;
-    l_class_OC_FifoPong fifo2 (
+    l_module_OC_FifoPong fifo2 (
         CLK,
         nRST,
         respond2__ENA_internal,
@@ -213,7 +213,7 @@ module l_class_OC_IVector (
     wire fifo3$in$enq__RDY;
     wire [95:0]fifo3$out$first;
     wire fifo3$out$first__RDY;
-    l_class_OC_FifoPong fifo3 (
+    l_module_OC_FifoPong fifo3 (
         CLK,
         nRST,
         respond3__ENA_internal,
@@ -229,7 +229,7 @@ module l_class_OC_IVector (
     wire fifo4$in$enq__RDY;
     wire [95:0]fifo4$out$first;
     wire fifo4$out$first__RDY;
-    l_class_OC_FifoPong fifo4 (
+    l_module_OC_FifoPong fifo4 (
         CLK,
         nRST,
         respond4__ENA_internal,
@@ -245,7 +245,7 @@ module l_class_OC_IVector (
     wire fifo5$in$enq__RDY;
     wire [95:0]fifo5$out$first;
     wire fifo5$out$first__RDY;
-    l_class_OC_FifoPong fifo5 (
+    l_module_OC_FifoPong fifo5 (
         CLK,
         nRST,
         respond5__ENA_internal,
@@ -261,7 +261,7 @@ module l_class_OC_IVector (
     wire fifo6$in$enq__RDY;
     wire [95:0]fifo6$out$first;
     wire fifo6$out$first__RDY;
-    l_class_OC_FifoPong fifo6 (
+    l_module_OC_FifoPong fifo6 (
         CLK,
         nRST,
         respond6__ENA_internal,
@@ -277,7 +277,7 @@ module l_class_OC_IVector (
     wire fifo7$in$enq__RDY;
     wire [95:0]fifo7$out$first;
     wire fifo7$out$first__RDY;
-    l_class_OC_FifoPong fifo7 (
+    l_module_OC_FifoPong fifo7 (
         CLK,
         nRST,
         respond7__ENA_internal,
@@ -293,7 +293,7 @@ module l_class_OC_IVector (
     wire fifo8$in$enq__RDY;
     wire [95:0]fifo8$out$first;
     wire fifo8$out$first__RDY;
-    l_class_OC_FifoPong fifo8 (
+    l_module_OC_FifoPong fifo8 (
         CLK,
         nRST,
         respond8__ENA_internal,
@@ -309,7 +309,7 @@ module l_class_OC_IVector (
     wire fifo9$in$enq__RDY;
     wire [95:0]fifo9$out$first;
     wire fifo9$out$first__RDY;
-    l_class_OC_FifoPong fifo9 (
+    l_module_OC_FifoPong fifo9 (
         CLK,
         nRST,
         respond9__ENA_internal,
@@ -326,7 +326,7 @@ module l_class_OC_IVector (
     wire fifo10$in$enq__RDY;
     wire [95:0]fifo10$out$first;
     wire fifo10$out$first__RDY;
-    l_class_OC_FifoPong fifo10 (
+    l_module_OC_FifoPong fifo10 (
         CLK,
         nRST,
         fifo10$out$deq__ENA,

@@ -48,7 +48,7 @@ public:
 
 ValueType grumpy;
 
-class IVector : public Module, IVectorRequest {
+__module IVector : public Module, IVectorRequest {
     Fifo1<ValueType> fifo;
     myint23          fcounter;
     static int       intcWidth;

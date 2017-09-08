@@ -27,7 +27,7 @@
     Fifo<T>(this, IFC(A, enq), IFC(A, deq), IFC(A, first))
 
 template<class T>
-class Fifo : public ModuleExternal
+__module Fifo : public ModuleExternal
 {
  public:
     PipeIn<T> in;
@@ -57,7 +57,7 @@ class Fifo : public ModuleExternal
 #endif
 
 template<class T>
-class Fifo1 : public Fifo<T> , public FIFODEFINE
+__module Fifo1 : public Fifo<T> , public FIFODEFINE
 {
     FIFODATA
     METHOD(enq, (const T &v), BODYGUARD) BODYACTION

@@ -34,14 +34,14 @@ public:
     firstp = afirstp;
   }
 };
-class l_class_OC_Fifo1;
-extern void l_class_OC_Fifo1__out$deq(void *thisarg);
-extern bool l_class_OC_Fifo1__out$deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1__in$enq(void *thisarg, unsigned int in$enq_v);
-extern bool l_class_OC_Fifo1__in$enq__RDY(void *thisarg);
-extern unsigned int l_class_OC_Fifo1__out$first(void *thisarg);
-extern bool l_class_OC_Fifo1__out$first__RDY(void *thisarg);
-class l_class_OC_Fifo1 {
+class l_module_OC_Fifo1;
+extern void l_module_OC_Fifo1__out$deq(void *thisarg);
+extern bool l_module_OC_Fifo1__out$deq__RDY(void *thisarg);
+extern void l_module_OC_Fifo1__in$enq(void *thisarg, unsigned int in$enq_v);
+extern bool l_module_OC_Fifo1__in$enq__RDY(void *thisarg);
+extern unsigned int l_module_OC_Fifo1__out$first(void *thisarg);
+extern bool l_module_OC_Fifo1__out$first__RDY(void *thisarg);
+class l_module_OC_Fifo1 {
 public:
   l_ainterface_OC_PipeIn in;
   l_ainterface_OC_PipeOut out;
@@ -50,9 +50,9 @@ public:
 public:
   void run();
   void commit();
-  l_class_OC_Fifo1():
-      in(this, l_class_OC_Fifo1__in$enq__RDY, l_class_OC_Fifo1__in$enq),
-      out(this, l_class_OC_Fifo1__out$deq__RDY, l_class_OC_Fifo1__out$deq, l_class_OC_Fifo1__out$first__RDY, l_class_OC_Fifo1__out$first) {
+  l_module_OC_Fifo1():
+      in(this, l_module_OC_Fifo1__in$enq__RDY, l_module_OC_Fifo1__in$enq),
+      out(this, l_module_OC_Fifo1__out$deq__RDY, l_module_OC_Fifo1__out$deq, l_module_OC_Fifo1__out$first__RDY, l_module_OC_Fifo1__out$first) {
   }
 };
 typedef struct {
@@ -94,14 +94,14 @@ public:
     firstp = afirstp;
   }
 };
-class l_class_OC_Fifo1_OC_3;
-extern void l_class_OC_Fifo1_OC_3__out$deq(void *thisarg);
-extern bool l_class_OC_Fifo1_OC_3__out$deq__RDY(void *thisarg);
-extern void l_class_OC_Fifo1_OC_3__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
-extern bool l_class_OC_Fifo1_OC_3__in$enq__RDY(void *thisarg);
-extern l_struct_OC_ValuePair l_class_OC_Fifo1_OC_3__out$first(void *thisarg);
-extern bool l_class_OC_Fifo1_OC_3__out$first__RDY(void *thisarg);
-class l_class_OC_Fifo1_OC_3 {
+class l_module_OC_Fifo1_OC_3;
+extern void l_module_OC_Fifo1_OC_3__out$deq(void *thisarg);
+extern bool l_module_OC_Fifo1_OC_3__out$deq__RDY(void *thisarg);
+extern void l_module_OC_Fifo1_OC_3__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
+extern bool l_module_OC_Fifo1_OC_3__in$enq__RDY(void *thisarg);
+extern l_struct_OC_ValuePair l_module_OC_Fifo1_OC_3__out$first(void *thisarg);
+extern bool l_module_OC_Fifo1_OC_3__out$first__RDY(void *thisarg);
+class l_module_OC_Fifo1_OC_3 {
 public:
   l_ainterface_OC_PipeIn_OC_1 in;
   l_ainterface_OC_PipeOut_OC_2 out;
@@ -110,31 +110,31 @@ public:
 public:
   void run();
   void commit();
-  l_class_OC_Fifo1_OC_3():
-      in(this, l_class_OC_Fifo1_OC_3__in$enq__RDY, l_class_OC_Fifo1_OC_3__in$enq),
-      out(this, l_class_OC_Fifo1_OC_3__out$deq__RDY, l_class_OC_Fifo1_OC_3__out$deq, l_class_OC_Fifo1_OC_3__out$first__RDY, l_class_OC_Fifo1_OC_3__out$first) {
+  l_module_OC_Fifo1_OC_3():
+      in(this, l_module_OC_Fifo1_OC_3__in$enq__RDY, l_module_OC_Fifo1_OC_3__in$enq),
+      out(this, l_module_OC_Fifo1_OC_3__out$deq__RDY, l_module_OC_Fifo1_OC_3__out$deq, l_module_OC_Fifo1_OC_3__out$first__RDY, l_module_OC_Fifo1_OC_3__out$first) {
   }
 };
-class l_class_OC_FifoPong;
-extern void l_class_OC_FifoPong__out$deq(void *thisarg);
-extern bool l_class_OC_FifoPong__out$deq__RDY(void *thisarg);
-extern void l_class_OC_FifoPong__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
-extern bool l_class_OC_FifoPong__in$enq__RDY(void *thisarg);
-extern l_struct_OC_ValuePair l_class_OC_FifoPong__out$first(void *thisarg);
-extern bool l_class_OC_FifoPong__out$first__RDY(void *thisarg);
-class l_class_OC_FifoPong {
+class l_module_OC_FifoPong;
+extern void l_module_OC_FifoPong__out$deq(void *thisarg);
+extern bool l_module_OC_FifoPong__out$deq__RDY(void *thisarg);
+extern void l_module_OC_FifoPong__in$enq(void *thisarg, l_struct_OC_ValuePair in$enq_v);
+extern bool l_module_OC_FifoPong__in$enq__RDY(void *thisarg);
+extern l_struct_OC_ValuePair l_module_OC_FifoPong__out$first(void *thisarg);
+extern bool l_module_OC_FifoPong__out$first__RDY(void *thisarg);
+class l_module_OC_FifoPong {
 public:
   l_ainterface_OC_PipeIn_OC_1 in;
   l_ainterface_OC_PipeOut_OC_2 out;
-  l_class_OC_Fifo1_OC_3 element1;
-  l_class_OC_Fifo1_OC_3 element2;
+  l_module_OC_Fifo1_OC_3 element1;
+  l_module_OC_Fifo1_OC_3 element2;
   bool pong, pong_shadow; bool pong_valid;
 public:
   void run();
   void commit();
-  l_class_OC_FifoPong():
-      in(this, l_class_OC_FifoPong__in$enq__RDY, l_class_OC_FifoPong__in$enq),
-      out(this, l_class_OC_FifoPong__out$deq__RDY, l_class_OC_FifoPong__out$deq, l_class_OC_FifoPong__out$first__RDY, l_class_OC_FifoPong__out$first) {
+  l_module_OC_FifoPong():
+      in(this, l_module_OC_FifoPong__in$enq__RDY, l_module_OC_FifoPong__in$enq),
+      out(this, l_module_OC_FifoPong__out$deq__RDY, l_module_OC_FifoPong__out$deq, l_module_OC_FifoPong__out$first__RDY, l_module_OC_FifoPong__out$first) {
   }
 };
 class l_ainterface_OC_IVectorRequest {
@@ -151,77 +151,77 @@ public:
     sayp = asayp;
   }
 };
-class l_class_OC_IVector;
-extern void l_class_OC_IVector__respond0(void *thisarg);
-extern bool l_class_OC_IVector__respond0__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond1(void *thisarg);
-extern bool l_class_OC_IVector__respond1__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond2(void *thisarg);
-extern bool l_class_OC_IVector__respond2__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond3(void *thisarg);
-extern bool l_class_OC_IVector__respond3__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond4(void *thisarg);
-extern bool l_class_OC_IVector__respond4__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond5(void *thisarg);
-extern bool l_class_OC_IVector__respond5__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond6(void *thisarg);
-extern bool l_class_OC_IVector__respond6__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond7(void *thisarg);
-extern bool l_class_OC_IVector__respond7__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond8(void *thisarg);
-extern bool l_class_OC_IVector__respond8__RDY(void *thisarg);
-extern void l_class_OC_IVector__respond9(void *thisarg);
-extern bool l_class_OC_IVector__respond9__RDY(void *thisarg);
-extern void l_class_OC_IVector__in$say(void *thisarg, unsigned int in$say_meth, unsigned int in$say_v);
-extern bool l_class_OC_IVector__in$say__RDY(void *thisarg);
-class l_class_OC_IVector {
+class l_module_OC_IVector;
+extern void l_module_OC_IVector__respond0(void *thisarg);
+extern bool l_module_OC_IVector__respond0__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond1(void *thisarg);
+extern bool l_module_OC_IVector__respond1__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond2(void *thisarg);
+extern bool l_module_OC_IVector__respond2__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond3(void *thisarg);
+extern bool l_module_OC_IVector__respond3__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond4(void *thisarg);
+extern bool l_module_OC_IVector__respond4__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond5(void *thisarg);
+extern bool l_module_OC_IVector__respond5__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond6(void *thisarg);
+extern bool l_module_OC_IVector__respond6__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond7(void *thisarg);
+extern bool l_module_OC_IVector__respond7__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond8(void *thisarg);
+extern bool l_module_OC_IVector__respond8__RDY(void *thisarg);
+extern void l_module_OC_IVector__respond9(void *thisarg);
+extern bool l_module_OC_IVector__respond9__RDY(void *thisarg);
+extern void l_module_OC_IVector__in$say(void *thisarg, unsigned int in$say_meth, unsigned int in$say_v);
+extern bool l_module_OC_IVector__in$say__RDY(void *thisarg);
+class l_module_OC_IVector {
 public:
-  l_class_OC_FifoPong fifo0;
-  l_class_OC_FifoPong fifo1;
-  l_class_OC_FifoPong fifo2;
-  l_class_OC_FifoPong fifo3;
-  l_class_OC_FifoPong fifo4;
-  l_class_OC_FifoPong fifo5;
-  l_class_OC_FifoPong fifo6;
-  l_class_OC_FifoPong fifo7;
-  l_class_OC_FifoPong fifo8;
-  l_class_OC_FifoPong fifo9;
-  l_class_OC_FifoPong fifo10;
-  l_class_OC_IVectorIndication *ind;
+  l_module_OC_FifoPong fifo0;
+  l_module_OC_FifoPong fifo1;
+  l_module_OC_FifoPong fifo2;
+  l_module_OC_FifoPong fifo3;
+  l_module_OC_FifoPong fifo4;
+  l_module_OC_FifoPong fifo5;
+  l_module_OC_FifoPong fifo6;
+  l_module_OC_FifoPong fifo7;
+  l_module_OC_FifoPong fifo8;
+  l_module_OC_FifoPong fifo9;
+  l_module_OC_FifoPong fifo10;
+  l_module_OC_IVectorIndication *ind;
   unsigned int vsize, vsize_shadow; bool vsize_valid;
   l_ainterface_OC_IVectorRequest in;
 public:
   void run();
   void commit();
-  l_class_OC_IVector():
-      in(this, l_class_OC_IVector__in$say__RDY, l_class_OC_IVector__in$say) {
+  l_module_OC_IVector():
+      in(this, l_module_OC_IVector__in$say__RDY, l_module_OC_IVector__in$say) {
   }
-  void respond0(void) { l_class_OC_IVector__respond0(this); }
-  bool respond0__RDY(void) { return l_class_OC_IVector__respond0__RDY(this); }
-  void respond1(void) { l_class_OC_IVector__respond1(this); }
-  bool respond1__RDY(void) { return l_class_OC_IVector__respond1__RDY(this); }
-  void respond2(void) { l_class_OC_IVector__respond2(this); }
-  bool respond2__RDY(void) { return l_class_OC_IVector__respond2__RDY(this); }
-  void respond3(void) { l_class_OC_IVector__respond3(this); }
-  bool respond3__RDY(void) { return l_class_OC_IVector__respond3__RDY(this); }
-  void respond4(void) { l_class_OC_IVector__respond4(this); }
-  bool respond4__RDY(void) { return l_class_OC_IVector__respond4__RDY(this); }
-  void respond5(void) { l_class_OC_IVector__respond5(this); }
-  bool respond5__RDY(void) { return l_class_OC_IVector__respond5__RDY(this); }
-  void respond6(void) { l_class_OC_IVector__respond6(this); }
-  bool respond6__RDY(void) { return l_class_OC_IVector__respond6__RDY(this); }
-  void respond7(void) { l_class_OC_IVector__respond7(this); }
-  bool respond7__RDY(void) { return l_class_OC_IVector__respond7__RDY(this); }
-  void respond8(void) { l_class_OC_IVector__respond8(this); }
-  bool respond8__RDY(void) { return l_class_OC_IVector__respond8__RDY(this); }
-  void respond9(void) { l_class_OC_IVector__respond9(this); }
-  bool respond9__RDY(void) { return l_class_OC_IVector__respond9__RDY(this); }
-  void setind(l_class_OC_IVectorIndication *v) { ind = v; }
+  void respond0(void) { l_module_OC_IVector__respond0(this); }
+  bool respond0__RDY(void) { return l_module_OC_IVector__respond0__RDY(this); }
+  void respond1(void) { l_module_OC_IVector__respond1(this); }
+  bool respond1__RDY(void) { return l_module_OC_IVector__respond1__RDY(this); }
+  void respond2(void) { l_module_OC_IVector__respond2(this); }
+  bool respond2__RDY(void) { return l_module_OC_IVector__respond2__RDY(this); }
+  void respond3(void) { l_module_OC_IVector__respond3(this); }
+  bool respond3__RDY(void) { return l_module_OC_IVector__respond3__RDY(this); }
+  void respond4(void) { l_module_OC_IVector__respond4(this); }
+  bool respond4__RDY(void) { return l_module_OC_IVector__respond4__RDY(this); }
+  void respond5(void) { l_module_OC_IVector__respond5(this); }
+  bool respond5__RDY(void) { return l_module_OC_IVector__respond5__RDY(this); }
+  void respond6(void) { l_module_OC_IVector__respond6(this); }
+  bool respond6__RDY(void) { return l_module_OC_IVector__respond6__RDY(this); }
+  void respond7(void) { l_module_OC_IVector__respond7(this); }
+  bool respond7__RDY(void) { return l_module_OC_IVector__respond7__RDY(this); }
+  void respond8(void) { l_module_OC_IVector__respond8(this); }
+  bool respond8__RDY(void) { return l_module_OC_IVector__respond8__RDY(this); }
+  void respond9(void) { l_module_OC_IVector__respond9(this); }
+  bool respond9__RDY(void) { return l_module_OC_IVector__respond9__RDY(this); }
+  void setind(l_module_OC_IVectorIndication *v) { ind = v; }
 };
 class l_class_OC_IVectorTest;
 class l_class_OC_IVectorTest {
 public:
-  l_class_OC_IVector ivector;
+  l_module_OC_IVector ivector;
 public:
   void run();
   void commit();

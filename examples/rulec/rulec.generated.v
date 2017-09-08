@@ -1,6 +1,6 @@
 `include "rulec.generated.vh"
 
-module l_class_OC_EchoRequestOutput (
+module l_module_OC_EchoRequestOutput (
     input CLK,
     input nRST,
     input request$say__ENA,
@@ -44,7 +44,7 @@ module l_class_OC_EchoRequestOutput (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_EchoRequestInput (
+module l_module_OC_EchoRequestInput (
     input CLK,
     input nRST,
     input pipe$enq__ENA,
@@ -72,7 +72,7 @@ module l_class_OC_EchoRequestInput (
     assign request$say_v = pipe$enq_v$data$say$v;
 endmodule 
 
-module l_class_OC_EchoIndicationOutput (
+module l_module_OC_EchoIndicationOutput (
     input CLK,
     input nRST,
     input indication$heard__ENA,
@@ -129,7 +129,7 @@ module l_class_OC_EchoIndicationOutput (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_EchoIndicationInput (
+module l_module_OC_EchoIndicationInput (
     input CLK,
     input nRST,
     input pipe$enq__ENA,
@@ -173,7 +173,7 @@ module l_class_OC_EchoIndicationInput (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_Echo (
+module l_module_OC_Echo (
     input CLK,
     input nRST,
     input request$say__ENA,
@@ -242,7 +242,7 @@ module l_class_OC_Echo (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_class_OC_foo (
+module l_module_OC_foo (
     input CLK,
     input nRST,
     input indication$heard__ENA,
@@ -255,7 +255,7 @@ module l_class_OC_foo (
     assign indication$heard__RDY_internal = 1;
 endmodule 
 
-module l_class_OC_Connect (
+module l_module_OC_Connect (
     input CLK,
     input nRST);
     wire lEIO$indication$heard__ENA;
@@ -266,7 +266,7 @@ module l_class_OC_Connect (
     wire lEIO$output_rulee__RDY;
     wire lEIO$output_ruleo__ENA;
     wire lEIO$output_ruleo__RDY;
-    l_class_OC_EchoIndicationOutput lEIO (
+    l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
         lEIO$indication$heard__ENA,
@@ -279,7 +279,7 @@ module l_class_OC_Connect (
     wire lERI$pipe$enq__ENA;
     wire [191:0]lERI$pipe$enq_v;
     wire lERI$pipe$enq__RDY;
-    l_class_OC_EchoRequestInput lERI (
+    l_module_OC_EchoRequestInput lERI (
         CLK,
         nRST,
         lERI$pipe$enq__ENA,
@@ -307,7 +307,7 @@ module l_class_OC_Connect (
     wire [31:0]lEcho$request$say2_v2;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
-    l_class_OC_Echo lEcho (
+    l_module_OC_Echo lEcho (
         CLK,
         nRST,
         lEcho$request$say__ENA,
@@ -332,7 +332,7 @@ module l_class_OC_Connect (
     wire [31:0]lERO_test$request$say2_v2;
     wire lERO_test$request$say2__RDY;
     wire lERO_test$request$say__RDY;
-    l_class_OC_EchoRequestOutput lERO_test (
+    l_module_OC_EchoRequestOutput lERO_test (
         CLK,
         nRST,
         lERO_test$request$say__ENA,
@@ -352,7 +352,7 @@ module l_class_OC_Connect (
     wire lEII_test$pipe$enq__RDY;
     wire lEII_test$input_rule__ENA;
     wire lEII_test$input_rule__RDY;
-    l_class_OC_EchoIndicationInput lEII_test (
+    l_module_OC_EchoIndicationInput lEII_test (
         CLK,
         nRST,
         lEII_test$pipe$enq__ENA,

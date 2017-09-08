@@ -25,7 +25,7 @@
 #include <stdlib.h>
 
 unsigned int stop_main_program;
-class l_class_OC_EchoIndication {
+class l_module_OC_EchoIndication {
 public:
   void heard(unsigned int v) {
         printf((("Heard an echo: %d\n")), v);
@@ -37,8 +37,8 @@ public:
 #include "echo.generated.cpp"
 
 
-class l_class_OC_EchoIndication zEchoIndication;
-class l_class_OC_Echo zEcho;
+class l_module_OC_EchoIndication zEchoIndication;
+class l_module_OC_Echo zEcho;
 
 int main(int argc, const char *argv[])
 {

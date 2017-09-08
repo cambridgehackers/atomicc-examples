@@ -84,7 +84,7 @@ EchoIndication unusedEI;
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 EchoRequestPipe unusedERP;
-class EchoRequestOutput : public Module { // method -> pipe
+__module EchoRequestOutput : public Module { // method -> pipe
 public:
     EchoRequest request;
     EchoRequestPipe *pipe;
@@ -103,7 +103,7 @@ public:
     }
 };
 
-class EchoRequestInput : public Module { // pipe -> method
+__module EchoRequestInput : public Module { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
@@ -122,7 +122,7 @@ public:
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 EchoIndicationPipe unusedEIP;
-class EchoIndicationOutput : public Module { // method -> pipe
+__module EchoIndicationOutput : public Module { // method -> pipe
 public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
@@ -138,7 +138,7 @@ public:
     }
 };
 
-class EchoIndicationInput : public Module { // pipe -> method
+__module EchoIndicationInput : public Module { // pipe -> method
 public:
     EchoIndicationPipe pipe;
     EchoIndication *indication;
@@ -154,7 +154,7 @@ public:
     }
 };
 
-class Echo : public Module {
+__module Echo : public Module {
 public:
     EchoRequest request;
     EchoIndication *indication;
@@ -166,7 +166,7 @@ public:
     }
 };
 
-class foo : public Module { // method -> pipe
+__module foo : public Module { // method -> pipe
 public:
     EchoIndication indication;
     METHOD(heard, (int meth, int v), { return true; }) {
@@ -179,7 +179,7 @@ public:
 };
 class foo zConnectresp;
 
-class Connect : public Module {
+__module Connect : public Module {
 public:
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;

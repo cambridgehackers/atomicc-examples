@@ -38,7 +38,7 @@ unsigned int stop_main_program;
 
 int testCount;
 class l_class_OC_IVectorIndication zIVectorIndication;
-class l_class_OC_IVector zIVector;
+class l_module_OC_IVector zIVector;
 
 int main(int argc, const char *argv[])
 {

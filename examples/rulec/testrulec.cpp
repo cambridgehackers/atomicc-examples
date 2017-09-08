@@ -32,7 +32,7 @@
 
 unsigned int stop_main_program;
 int testCount;
-l_class_OC_Connect zConnect;
+l_module_OC_Connect zConnect;
 
 void respheard(void *thisp, unsigned int heard_meth, unsigned int heard_v) {
     printf("Heard an echo: %d %d\n", heard_meth, heard_v);

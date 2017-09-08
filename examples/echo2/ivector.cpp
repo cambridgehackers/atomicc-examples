@@ -30,7 +30,7 @@ typedef struct {
 //#define UTYPE int
 
 template<class T>
-class FifoPong : public Fifo<T>, public Module
+__module FifoPong : public Fifo<T>, public Module
 {
     Fifo1<T> element1;
     Fifo1<T> element2;
@@ -72,7 +72,7 @@ public:
     }
 };
 
-class IVector : public Module, IVectorRequest {
+__module IVector : public Module, IVectorRequest {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
 public:

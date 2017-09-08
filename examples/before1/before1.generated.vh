@@ -1,7 +1,28 @@
 `ifndef __before1_GENERATED__VH__
 `define __before1_GENERATED__VH__
 
-//METASTART; l_class_OC_EchoIndicationInput
+//METASTART; l_module_OC_EchoRequestOutput
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
+//METAINVOKE; request$say; :pipe$enq;
+//METAEXCLUSIVE; request$say; request$say2
+//METAINVOKE; request$say2; :pipe$enq;
+//METAGUARD; request$say2; pipe$enq__RDY;
+//METAGUARD; request$say; pipe$enq__RDY;
+//METASTART; l_module_OC_EchoRequestInput
+//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
+//METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;pipe$enq_v$tag == 2:request$say2;
+//METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
+//METASTART; l_module_OC_EchoIndicationOutput
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXCLUSIVE; indication$heard; output_rulee; output_ruleo
+//METAGUARD; indication$heard; (ind_busy != 0) ^ 1;
+//METAINVOKE; output_rulee; :pipe$enq;
+//METAEXCLUSIVE; output_rulee; output_ruleo
+//METAGUARD; output_rulee; (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
+//METAINVOKE; output_ruleo; :pipe$enq;
+//METAGUARD; output_ruleo; (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
+//METARULES; output_rulee; output_ruleo
+//METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; pipe$enq; input_rule
 //METAGUARD; pipe$enq; (busy_delay != 0) ^ 1;
@@ -9,7 +30,7 @@
 //METABEFORE; input_rule; :pipe$enq
 //METAGUARD; input_rule; (busy_delay != 0) & indication$heard__RDY;
 //METARULES; input_rule
-//METASTART; l_class_OC_Echo
+//METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule; request$say; request$say2; respond_rule
 //METABEFORE; delay_rule; :request$say; :request$say2
@@ -26,35 +47,14 @@
 //METAGUARD; y2x; 1;
 //METAGUARD; y2xnull; 1;
 //METARULES; delay_rule; respond_rule
-//METASTART; l_class_OC_foo
+//METASTART; l_module_OC_foo
 //METAGUARD; indication$heard; 1;
-//METASTART; l_class_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
-//METAEXCLUSIVE; indication$heard; output_rulee; output_ruleo
-//METAGUARD; indication$heard; (ind_busy != 0) ^ 1;
-//METAINVOKE; output_rulee; :pipe$enq;
-//METAEXCLUSIVE; output_rulee; output_ruleo
-//METAGUARD; output_rulee; (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
-//METAINVOKE; output_ruleo; :pipe$enq;
-//METAGUARD; output_ruleo; (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
-//METARULES; output_rulee; output_ruleo
-//METASTART; l_class_OC_EchoRequestInput
-//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq; pipe$enq_v$tag == 1:request$say;pipe$enq_v$tag == 2:request$say2;
-//METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
-//METASTART; l_class_OC_EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
-//METAINVOKE; request$say; :pipe$enq;
-//METAEXCLUSIVE; request$say; request$say2
-//METAINVOKE; request$say2; :pipe$enq;
-//METAGUARD; request$say2; pipe$enq__RDY;
-//METAGUARD; request$say; pipe$enq__RDY;
-//METASTART; l_class_OC_Connect
-//METAINTERNAL; lEIO; l_class_OC_EchoIndicationOutput;
-//METAINTERNAL; lERI; l_class_OC_EchoRequestInput;
-//METAINTERNAL; lEcho; l_class_OC_Echo;
-//METAINTERNAL; lERO_test; l_class_OC_EchoRequestOutput;
-//METAINTERNAL; lEII_test; l_class_OC_EchoIndicationInput;
+//METASTART; l_module_OC_Connect
+//METAINTERNAL; lEIO; l_module_OC_EchoIndicationOutput;
+//METAINTERNAL; lERI; l_module_OC_EchoRequestInput;
+//METAINTERNAL; lEcho; l_module_OC_Echo;
+//METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
+//METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
 //METAINVOKE; swap2_rule; :lEcho$y2xnull;
 //METAGUARD; swap2_rule; lEcho$y2xnull__RDY;
 //METAINVOKE; swap_rule; :lEcho$x2y;:lEcho$y2x;

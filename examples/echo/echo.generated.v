@@ -1,6 +1,6 @@
 `include "echo.generated.vh"
 
-module l_class_OC_Echo (
+module l_module_OC_Echo (
     input CLK,
     input nRST,
     input say__ENA,
@@ -13,7 +13,7 @@ module l_class_OC_Echo (
     wire say__ENA_internal = say__ENA && say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
-    l_class_OC_Fifo1 fifo (
+    l_module_OC_Fifo1 fifo (
         CLK,
         nRST,
         respond_rule__ENA_internal,

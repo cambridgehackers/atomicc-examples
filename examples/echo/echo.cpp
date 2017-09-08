@@ -29,7 +29,7 @@
 #elif 1
 #define ECHO_FIFO FifoPong
 template<class T>
-class FifoPong : public Fifo<T>, public Module
+__module FifoPong : public Fifo<T>, public Module
 {
     T element1;
     T element2;
@@ -57,7 +57,7 @@ public:
 #else
 #define ECHO_FIFO FifoPong
 template<class T>
-class FifoPong : public Fifo<T>, public Module
+__module FifoPong : public Fifo<T>, public Module
 {
     Fifo1<T> element1;
     Fifo1<T> element2;
@@ -90,7 +90,7 @@ public:
 #endif
 
 static ECHO_FIFO<int> bozouseless;
-class EchoIndication : public ModuleExternal {
+__module EchoIndication : public ModuleExternal {
 public:
   INDICATION(heard, (int v), { return true; });
   EchoIndication() {
@@ -104,7 +104,7 @@ public:
   }
 };
 
-class Echo : public Module, EchoRequest {
+__module Echo : public Module, EchoRequest {
   Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
