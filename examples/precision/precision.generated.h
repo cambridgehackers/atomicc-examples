@@ -1,5 +1,7 @@
 #ifndef __precision_GENERATED__H__
 #define __precision_GENERATED__H__
+typedef struct {
+}l_struct_OC___block_descriptor;
 class l_ainterface_OC_PipeIn {
 public:
   void *p;
@@ -165,6 +167,4 @@ public:
   void run();
   void commit();
 };
-typedef struct {
-}l_struct_OC___block_descriptor;
 #endif  // __precision_GENERATED__H__
