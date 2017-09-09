@@ -29,7 +29,9 @@
 #include <stddef.h> // offsetof
 
 #define __interface class __attribute__(( atomicc_interface ))
+//#define __module __attribute__(( atomicc_module )) class
 #define __module class __attribute__(( atomicc_module ))
+#define __emodule class __attribute__(( atomicc_emodule ))
 
 extern "C" void addBaseRule(void *, const char *name, bool (^ __vectorcall RDY)(void), void (^ __vectorcall ENA)(void));
 class Module;

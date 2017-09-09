@@ -27,7 +27,7 @@
     Fifo<T>(this, IFC(A, enq), IFC(A, deq), IFC(A, first))
 
 template<class T>
-__module Fifo : public ModuleExternal
+__emodule Fifo : public ModuleExternal
 {
  public:
     PipeIn<T> in;
