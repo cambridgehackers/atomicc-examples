@@ -63,29 +63,6 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
     METHODATTR bool NAME ## __RDY(void) RDYEXPRESSION \
     METHODATTR void NAME TYPE
 
-// This is a marker for classes that should be synthesized in hardware
-class Module {
- public:
-    Module() {}
-    ~Module() {}
-    long unused_data_to_force_inheritance;
- private:
-    // copy ops are private to prevent copying
-    Module(const Module&); // no implementation
-    Module& operator=(const Module&);
-};
-// This is a marker for classes that should not be generated (they are separately compiled)
-class ModuleExternal {
- public:
-    ModuleExternal() {}
-    ~ModuleExternal() {}
-    long unused_data_to_force_inheritance;
- private:
-    // copy ops are private to prevent copying
-    ModuleExternal(const ModuleExternal&); // no implementation
-    ModuleExternal& operator=(const ModuleExternal&);
-};
-
 typedef bool (*GUARDPTR)(void *);
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
 #define VIFC(cname,mname) METH(&cname::mname ## __READY), METH(&cname::mname)

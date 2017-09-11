@@ -35,7 +35,7 @@ public:
   ~EchoNIndication() {}
 };
 
-__module EchoN : public Module {
+__module EchoN {
   Fifo<int> *fifo;
   EchoNIndication *ind;
   int response;
@@ -72,7 +72,7 @@ public:
   }
 };
 
-__module EchoNTest : public Module {
+__module EchoNTest {
 public:
   EchoN *echoN;
   RULE(EchoNTest,drive,

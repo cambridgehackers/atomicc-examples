@@ -30,8 +30,7 @@ typedef struct {
 //#define UTYPE int
 
 template<class T>
-__module FifoPong : public Fifo<T>, public Module
-{
+__module FifoPong : public Fifo<T> {
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
@@ -61,7 +60,7 @@ __interface IVectorIndication {
     void heard(int meth, int v);
 };
 #else
-__module IVectorIndication : public ModuleExternal {
+__emodule IVectorIndication {
 public:
     INDICATION(heard, (int meth, int v), { return true; });
     IVectorIndication() {}
@@ -72,7 +71,7 @@ __interface IVectorRequest {
     void say(int meth, int v);
 };
 
-__module IVector : public Module {
+__module IVector {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
     int vsize;

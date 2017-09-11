@@ -26,8 +26,7 @@
 
 #define MAX_COUNT 2
 template<class T>
-__module Fifo2 : public Fifo<T> , public Module
-{
+__module Fifo2 : public Fifo<T> {
     T *element;
     int rindex;
     int windex;
@@ -64,7 +63,7 @@ __interface LpmRequest {
     void say(int meth, int v);
 };
 
-__module LpmMemory : public Module {
+__module LpmMemory {
     int delayCount;
     ValuePair saved;
 public:
@@ -76,7 +75,7 @@ public:
     }
 };
 
-__module Lpm : public Module {
+__module Lpm {
     Fifo1<ValuePair> inQ;
     Fifo2<ValuePair> fifo;
     Fifo1<ValuePair> outQ;
@@ -134,7 +133,7 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
     ~Lpm() {}
 };
 
-__module foo : public Module { // method -> pipe
+__module foo { // method -> pipe
 public:
     LpmIndication indication;
     VMETHOD(heard, (int meth, int v), { return true; }) {

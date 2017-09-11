@@ -27,8 +27,7 @@
     Fifo<T>(this, IFC(A, enq), IFC(A, deq), IFC(A, first))
 
 template<class T>
-__emodule Fifo : public ModuleExternal
-{
+__emodule Fifo {
  public:
     PipeIn<T> in;
     PipeOut<T> out;
@@ -40,12 +39,15 @@ __emodule Fifo : public ModuleExternal
 };
 
 #ifndef FIFODEFINE
-#define FIFODEFINE ModuleExternal
+#define FIFODEFINE __emodule
+//ModuleExternal
 #define BODYGUARD {return true;}
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
 #define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
 #else
+#undef FIFODEFINE
+#define FIFODEFINE __module
 #define BODYGUARD ;
 #define BODYACTION ;
 #define BODYVALUE ;
@@ -57,7 +59,7 @@ __emodule Fifo : public ModuleExternal
 #endif
 
 template<class T>
-__module Fifo1 : public Fifo<T> , public FIFODEFINE
+FIFODEFINE Fifo1 : public Fifo<T>
 {
     FIFODATA
     METHOD(enq, (const T &v), BODYGUARD) BODYACTION

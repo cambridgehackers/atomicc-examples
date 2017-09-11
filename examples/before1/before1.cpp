@@ -77,7 +77,7 @@ EchoIndication unusedEI;
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 EchoRequestPipe unusedERP;
-__module EchoRequestOutput : public Module { // method -> pipe
+__module EchoRequestOutput { // method -> pipe
 public:
     EchoRequest request;
     EchoRequestPipe *pipe;
@@ -102,7 +102,7 @@ public:
     }
 };
 
-__module EchoRequestInput : public Module { // pipe -> method
+__module EchoRequestInput { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
@@ -124,7 +124,7 @@ public:
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 EchoIndicationPipe unusedEIP;
-__module EchoIndicationOutput : public Module { // method -> pipe
+__module EchoIndicationOutput { // method -> pipe
 public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
@@ -162,7 +162,7 @@ printf("output_ruleo: EchoIndicationOutput tag %d\n", ind1.tag);
     }
 };
 
-__module EchoIndicationInput : public Module { // pipe -> method
+__module EchoIndicationInput { // pipe -> method
 public:
     EchoIndicationPipe pipe;
     EchoIndication *indication;
@@ -189,7 +189,7 @@ printf("input_rule: EchoIndicationInput\n");
     }
 };
 
-__module Echo : public Module {
+__module Echo {
 public:
     EchoRequest request;
     int busy;
@@ -242,7 +242,7 @@ printf("respond_rule: Echo\n");
     }
 };
 
-__module foo : public Module { // method -> pipe
+__module foo { // method -> pipe
 public:
     EchoIndication indication;
     METHOD(heard, (int meth, int v), { return true; }) {
@@ -255,7 +255,7 @@ public:
 };
 class foo zConnectresp;
 
-__module Connect : public Module {
+__module Connect {
 public:
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <atomicc.h>
 
-__module Count : public Module {
+__module Count {
 protected:
   Reg<int> x;
   int new_x;
