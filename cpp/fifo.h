@@ -46,8 +46,6 @@ __emodule Fifo {
 #define BODYACTION {}
 #define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
 #else
-#undef FIFODEFINE
-#define FIFODEFINE __module
 #define BODYGUARD ;
 #define BODYACTION ;
 #define BODYVALUE ;

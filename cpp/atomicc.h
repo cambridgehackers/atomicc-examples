@@ -48,20 +48,19 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
  * The 'virtual' attribute forces all the function names to appear in the
  * vtable, which makes them visible to the atomicc code generation phase.
  */
-#define METHODATTR [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
-//#define METHODATTR
+#define __method [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
 #define METHOD(A,B,C) \
-    METHODATTR bool A ## __RDY(void) C \
-    METHODATTR void A B
+    __method bool A ## __RDY(void) C \
+    __method void A B
 #define VMETHOD(A,B,C) \
-    METHODATTR bool A ## __READY(void) C \
-    METHODATTR void A B
+    __method bool A ## __READY(void) C \
+    __method void A B
 #define GVALUE(A,B,C) \
-    METHODATTR bool A ## __RDY(void) C \
-    METHODATTR B A(void)
+    __method bool A ## __RDY(void) C \
+    __method B A(void)
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    METHODATTR bool NAME ## __RDY(void) RDYEXPRESSION \
-    METHODATTR void NAME TYPE
+    __method bool NAME ## __RDY(void) RDYEXPRESSION \
+    __method void NAME TYPE
 
 typedef bool (*GUARDPTR)(void *);
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)

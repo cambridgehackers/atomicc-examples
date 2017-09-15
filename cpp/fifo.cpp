@@ -20,7 +20,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#define FIFODEFINE Module
+#define FIFODEFINE __module
 #define FIFODATA \
   T element;     \
   bool full;
