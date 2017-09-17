@@ -49,9 +49,14 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
  * vtable, which makes them visible to the atomicc code generation phase.
  */
 #define __method [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
+#if 0
 #define METHOD(A,B,C) \
     __method bool A ## __RDY(void) C \
     __method void A B
+#else
+#define METHOD(A,B,C) \
+    __method void A B C
+#endif
 #define VMETHOD(A,B,C) \
     __method bool A ## __READY(void) C \
     __method void A B

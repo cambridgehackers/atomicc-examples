@@ -41,12 +41,15 @@ __emodule Fifo {
 #ifndef FIFODEFINE
 #define FIFODEFINE __emodule
 //ModuleExternal
-#define BODYGUARD {return true;}
+#define BODYGUARD1 {return true;}
+#define BODYGUARD if (true)
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
+//#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
+#define FIFOCONSTRUCTOR(A) ;
 #else
-#define BODYGUARD ;
+#define BODYGUARD1 ;
+#define BODYGUARD 
 #define BODYACTION ;
 #define BODYVALUE ;
 #define FIFOCONSTRUCTOR(A) ;
@@ -62,9 +65,9 @@ FIFODEFINE Fifo1 : public Fifo<T>
     FIFODATA
     METHOD(enq, (const T &v), BODYGUARD) BODYACTION
     METHOD(deq, (void), BODYGUARD) BODYACTION
-    GVALUE(first, T, BODYGUARD) BODYVALUE
-    bool notEmpty() const BODYGUARD
-    bool notFull() const BODYGUARD
+    GVALUE(first, T, BODYGUARD1) BODYVALUE
+    bool notEmpty() const BODYGUARD1
+    bool notFull() const BODYGUARD1
 public:
     Fifo1() FIFOCONSTRUCTOR(Fifo1)
 };
