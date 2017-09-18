@@ -28,32 +28,21 @@
 #include <fifo.h>
 
 template<class T>
-bool Fifo1<T>::enq__RDY(void) {
-    return notFull();
-};
-template<class T>
-void Fifo1<T>::enq(const T &v) {
+void Fifo1<T>::enq(const T &v) if (notFull()) {
     element = v;
     full = true;
 };
 template<class T>
-bool Fifo1<T>::deq__RDY(void) {
-    return notEmpty();
-};
-template<class T>
-void Fifo1<T>::deq(void) {
+void Fifo1<T>::deq(void) if (notEmpty()) {
     full = false;
 };
 template<class T>
-bool Fifo1<T>::first__RDY(void) {
-    return notEmpty();
-};
-template<class T>
-T Fifo1<T>::first(void) {
+T Fifo1<T>::first(void) if (notEmpty()) {
     return element;
 };
 template<class T>
-Fifo1<T>::Fifo1(): FIFOBASECONSTRUCTOR(Fifo1<T>), full(false)
+Fifo1<T>::Fifo1(): //FIFOBASECONSTRUCTOR(Fifo1<T>), 
+full(false)
 {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
 };
