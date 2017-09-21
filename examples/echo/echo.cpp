@@ -46,7 +46,7 @@ public:
         full = true;
     }
     METHOD(deq, (void), if (notEmpty())) { full = false; pong = !pong; }
-    GVALUE(first, T, { return notEmpty(); }) { return pong ? element2 : element1; }
+    GVALUE(first, T, if (return notEmpty();) ) { return pong ? element2 : element1; }
     FifoPong(): Fifo<T>(), full(false), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -79,7 +79,7 @@ public:
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
+    GVALUE(first, T, if (return true;) ) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
