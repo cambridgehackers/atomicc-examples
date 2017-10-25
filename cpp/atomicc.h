@@ -52,19 +52,12 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
 #define METHOD(A,B,C) \
     __method void A B C
 #define VMETHOD(A,B,C) \
-    __method bool A ## __READY(void) C \
-    __method void A B
-#if 0
-#define GVALUE(A,B,C) \
-    __method bool A ## __RDY(void) C \
-    __method B A(void)
-#else
+    __method void A B C
+    //__method bool A ## __READY(void) C __method void A B
 #define GVALUE(A,B,C) \
     __method B A(void) C
-#endif
 #define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    __method bool NAME ## __RDY(void) RDYEXPRESSION \
-    __method void NAME TYPE
+    __method void NAME TYPE RDYEXPRESSION
 
 typedef bool (*GUARDPTR)(void *);
 #define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)

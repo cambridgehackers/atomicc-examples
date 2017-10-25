@@ -23,29 +23,20 @@
 #define _FIFO_H_
 #include <atomicc.h>
 
-#define FIFOBASECONSTRUCTOR(A) \
-    Fifo<T>(this, IFC(A, enq), IFC(A, deq), IFC(A, first))
-
 template<class T>
 __emodule Fifo {
  public:
     PipeIn<T> in;
     PipeOut<T> out;
     Fifo() { }
-    Fifo(void *p, unsigned long aenq__RDY, unsigned long aenq, unsigned long adeq__RDY, unsigned long adeq, unsigned long afirst__RDY, unsigned long afirst) {
-        in.init("in", p, aenq__RDY, aenq);
-        out.init("out", p, adeq__RDY, adeq, afirst__RDY, afirst);
-    }
 };
 
 #ifndef FIFODEFINE
 #define FIFODEFINE __emodule
-//ModuleExternal
 #define BODYGUARD1 {return true;}
 #define BODYGUARD if (true)
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-//#define FIFOCONSTRUCTOR(A) : FIFOBASECONSTRUCTOR(A) { }
 #define FIFOCONSTRUCTOR(A) {}
 #else
 #define BODYGUARD1 ;

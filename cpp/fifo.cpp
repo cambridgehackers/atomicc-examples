@@ -41,10 +41,12 @@ T Fifo1<T>::first(void) if (notEmpty()) {
     return element;
 };
 template<class T>
-Fifo1<T>::Fifo1(): //FIFOBASECONSTRUCTOR(Fifo1<T>), 
-full(false)
+Fifo1<T>::Fifo1(): full(false)
 {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
+    this->in.enq = enq;
+    this->out.deq = deq;
+    this->out.first = first;
 };
 template<class T>
 bool Fifo1<T>::notEmpty() const {

@@ -30,18 +30,19 @@ __module Fifo2 : public Fifo<T> {
     T *element;
     int rindex;
     int windex;
-    METHOD(enq, (const T &v), { return notFull(); }) {
+    METHOD(enq, (const T &v), if ( notFull()) ) {
         element[windex] = v;
         windex = (windex + 1) % MAX_COUNT;
     }
-    METHOD(deq, (void), { return notEmpty(); }) {
+    METHOD(deq, (void), if (notEmpty()) ) {
         rindex = (rindex + 1) % MAX_COUNT;
     }
-    GVALUE(first, T, { return notEmpty(); }) { return element[rindex]; }
+    GVALUE(first, T, if (notEmpty()) ) { return element[rindex]; }
     bool notEmpty() const { return rindex != windex; }
     bool notFull() const { return ((windex + 1) % MAX_COUNT) != rindex; }
 public:
-    Fifo2(): FIFOBASECONSTRUCTOR(Fifo2<T>), rindex(0), windex(0) {
+    Fifo2(): //FIFOBASECONSTRUCTOR(Fifo2<T>), 
+rindex(0), windex(0) {
         element = new T[MAX_COUNT];
         printf("Fifo2: addr %p size 0x%lx\n", this, sizeof(*this));
     }
@@ -67,9 +68,9 @@ __module LpmMemory {
     int delayCount;
     ValuePair saved;
 public:
-    METHOD(req, (ValuePair v), {return delayCount == 0; }){ delayCount = 4; saved = v; }
-    METHOD(resAccept, (void), {return delayCount == 1; }){ delayCount = 0;}
-    GVALUE(resValue, ValuePair, {return delayCount == 1; }) { return saved; }
+    METHOD(req, (ValuePair v), if (delayCount == 0) ){ delayCount = 4; saved = v; }
+    METHOD(resAccept, (void), if (delayCount == 1) ){ delayCount = 0;}
+    GVALUE(resValue, ValuePair, if (delayCount == 1) ) { return saved; }
     LpmMemory() {
         RULE(Lpm, "memdelay", delayCount > 1, { delayCount = delayCount - 1; });
     }
@@ -84,7 +85,7 @@ __module Lpm {
 public:
     LpmIndication *indication;
     LpmRequest request;
-    VMETHOD(say, (int meth, int v), {return true; }) {
+    VMETHOD(say, (int meth, int v), if (true) ) {
 printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
@@ -96,7 +97,7 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         return !(doneCount % 5);
     }
     Lpm() {
-        request.init("req", this, VIFC(LpmRequest, say));
+        //request.init("req", this, VIFC(LpmRequest, say));
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
             RULE(Lpm, "recirc", true, {
                 ValuePair temp = fifo.out.first();
@@ -136,12 +137,12 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
 __module foo { // method -> pipe
 public:
     LpmIndication indication;
-    VMETHOD(heard, (int meth, int v), { return true; }) {
+    VMETHOD(heard, (int meth, int v), if (true) ) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
     void init() {
-        indication.init("indication", this, VIFC(foo, heard));
+        //indication.init("indication", this, VIFC(foo, heard));
     }
 };
 class foo zConnectresp;

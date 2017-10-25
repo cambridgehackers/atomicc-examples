@@ -92,7 +92,7 @@ public:
 static ECHO_FIFO<int> bozouseless;
 __emodule EchoIndication {
 public:
-  INDICATION(heard, (int v), { return true; });
+  METHOD(heard, (int v), );
   EchoIndication() {
   }
 };
