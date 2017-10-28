@@ -33,17 +33,11 @@ __emodule Fifo {
 
 #ifndef FIFODEFINE
 #define FIFODEFINE __emodule
-#define BODYGUARD1 {return true;}
-#define BODYGUARD if (true)
 #define BODYVALUE { return (T) 0; }
 #define BODYACTION {}
-#define FIFOCONSTRUCTOR(A) {}
 #else
-#define BODYGUARD1 ;
-#define BODYGUARD 
 #define BODYACTION ;
 #define BODYVALUE ;
-#define FIFOCONSTRUCTOR(A) ;
 #endif
 
 #ifndef FIFODATA
@@ -54,12 +48,12 @@ template<class T>
 FIFODEFINE Fifo1 : public Fifo<T>
 {
     FIFODATA
-    void enq(const T &v) BODYGUARD BODYACTION
-    void deq(void) BODYGUARD BODYACTION
-    T first(void) BODYGUARD BODYVALUE
-    bool notEmpty() const BODYGUARD1
-    bool notFull() const BODYGUARD1
+    void enq(const T &v) BODYACTION
+    void deq(void) BODYACTION
+    T first(void) BODYVALUE
+    bool notEmpty() const;
+    bool notFull() const;
 public:
-    Fifo1() FIFOCONSTRUCTOR(Fifo1)
+    Fifo1() BODYACTION
 };
 #endif
