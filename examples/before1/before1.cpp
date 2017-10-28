@@ -81,7 +81,7 @@ __module EchoRequestOutput { // method -> pipe
 public:
     EchoRequest request;
     EchoRequestPipe *pipe;
-    METHOD(say, (int meth, int v), { return true; }) {
+    void say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -89,7 +89,7 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    METHOD(say2, (int meth, int v), { return true; }) {
+    void say2(int meth, int v) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -97,16 +97,13 @@ public:
         ind.data.say2.v = v;
         pipe->enq(ind);
     }
-    void init() {
-        request.init("request", this, IFC(EchoRequestOutput, say), IFC(EchoRequestOutput, say2));
-    }
 };
 
 __module EchoRequestInput { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
-    METHOD(enq, (const EchoRequest_data &v), {return true; }) {
+    void enq(const EchoRequest_data &v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -116,9 +113,6 @@ public:
             request->say2(v.data.say2.meth, v.data.say2.v);
             break;
         }
-    }
-    void init() {
-        pipe.init("pipe", this, IFC(EchoRequestInput, enq));
     }
 };
 
@@ -132,7 +126,7 @@ public:
     EchoIndication_data ind1;
     int ind_busy;
     int even;
-    METHOD(heard, (int meth, int v), { return !ind_busy; }) {
+    void heard(int meth, int v) if (!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
         ind1.tag = EchoIndication_tag_heard;
@@ -148,7 +142,6 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         even = !even;
     }
     void init() {
-        indication.init("indication", this, IFC(EchoIndicationOutput, heard));
         RULE(Echo,"output_rulee", ((ind_busy != 0) & (even != 0)) != 0, {
 printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
              ind_busy = 0;
@@ -169,7 +162,7 @@ public:
     int busy_delay;
     int meth_delay;
     int v_delay;
-    METHOD(enq, (const EchoIndication_data &v), {return !busy_delay; }) {
+    void enq(const EchoIndication_data &v) if(!busy_delay) {
 printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -180,7 +173,6 @@ printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         }
     }
     void init() {
-        pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
         RULE(Echo,"input_rule", busy_delay != 0, {
 printf("input_rule: EchoIndicationInput\n");
              busy_delay = 0;
@@ -201,32 +193,31 @@ public:
     int x;
     int y;
     EchoIndication *indication;
-    METHOD(say, (int meth, int v), { return !busy; }) {
+    void say(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
     }
-    METHOD(say2, (int meth, int v), { return !busy; }) {
+    void say2(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
     }
-    METHOD(y2x, (void), { return true; }) {
+    void y2x(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         x = y;
     }
-    METHOD(y2xnull, (void), { return true; }) {
+    void y2xnull(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         //x = y;
     }
-    METHOD(x2y, (void), { return true; }) {
+    void x2y(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         y = x;
     }
     void init() {
-        request.init("request", this, IFC(Echo, say), IFC(Echo, say2));
         RULE(Echo,"delay_rule", (busy != 0 & busy_delay == 0) != 0, {
 printf("delay_rule: Echo\n");
              busy = 0;
@@ -245,12 +236,9 @@ printf("respond_rule: Echo\n");
 __module foo { // method -> pipe
 public:
     EchoIndication indication;
-    METHOD(heard, (int meth, int v), { return true; }) {
+    void heard(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
-    }
-    void init() {
-        indication.init("indication", this, IFC(foo, heard));
     }
 };
 class foo zConnectresp;
@@ -269,10 +257,10 @@ public:
         connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
         connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
 
-        lERI.init();
+        //lERI.init();
         lEIO.init();
         lEcho.init();
-        lERO_test.init();
+        //lERO_test.init();
 
         lEII_test.indication = &zConnectresp.indication; // user indication
         lEII_test.init();

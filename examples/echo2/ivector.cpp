@@ -35,23 +35,24 @@ __module FifoPong : public Fifo<T> {
     Fifo1<T> element2;
     bool pong;
 public:
-    PipeIn<T> in;
-    PipeOut<T> out;
-    METHOD(enq, (T v), { return true; }) {
+    //PipeIn<T> in;
+    //PipeOut<T> out;
+    void enq(T v) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), { return true; }) {
+    void deq(void) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false), FIFOBASECONSTRUCTOR(FifoPong<T>) {
+    T first(void) { return pong ? element2.out.first() : element1.out.first(); }
+    FifoPong(): Fifo<T>(), pong(false)//, FIFOBASECONSTRUCTOR(FifoPong<T>) 
+{
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
@@ -59,14 +60,14 @@ public:
 static FifoPong<UTYPE> bozouseless;
 class IVectorIndication {
 public:
-    INDICATION(heard, (UTYPE v), { return true; });
+    void heard(UTYPE v);
     IVectorIndication() {
     }
 };
 
 class IVectorRequest {
 public:
-    METHOD(say, (UTYPE v), {return true; }){}
+    void say(UTYPE v) {}
     IVectorRequest() {
     }
 };
@@ -75,12 +76,12 @@ __module IVector : public IVectorRequest {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
 public:
-    METHOD(say, (UTYPE v), {return true; }) {
+    void say(UTYPE v) {
         fifo->in.enq(v);
     }
     IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
-        RULE(IVector,respond, { 
+        RULE(IVector, "respond", (true), { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	    this->fifo->out.deq();
 	    this->ind->heard(this->fifo->out.first());
@@ -102,7 +103,7 @@ void IVectorIndication::heard(UTYPE v)
 .a, v.b
 #endif
 );
-    stop_main_program = 1;
+    //stop_main_program = 1;
 }
 
 class IVectorTest {

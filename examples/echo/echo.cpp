@@ -38,15 +38,15 @@ __module FifoPong : public Fifo<T>
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    METHOD(enq, (const T &v), if (notFull())) {
+    void enq(const T &v) if (notFull()) {
         if (pong)
             element2 = v;
         else
             element1 = v;
         full = true;
     }
-    METHOD(deq, (void), if (notEmpty())) { full = false; pong = !pong; }
-    GVALUE(first, T, if (return notEmpty();) ) { return pong ? element2 : element1; }
+    void deq(void) if (notEmpty()) { full = false; pong = !pong; }
+    T first(void) if (notEmpty()) { return pong ? element2 : element1; }
     FifoPong(): Fifo<T>(), full(false), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -65,21 +65,21 @@ __module FifoPong : public Fifo<T>
 public:
     PipeIn<T> in;
     PipeOut<T> out;
-    //bad version for testing METHOD(enq, (T v), { return true; }) {
-    METHOD(enq, (const T &v), if (true)) {
+    //bad version for testing void enq(T v) if (true) {
+    void enq(const T &v) if (true) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), if (true)) {
+    void deq(void) if (true) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, if (return true;) ) { return pong ? element2.out.first() : element1.out.first(); }
+    T first(void) if (true) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -92,14 +92,14 @@ public:
 static ECHO_FIFO<int> bozouseless;
 __emodule EchoIndication {
 public:
-  METHOD(heard, (int v), );
+  void heard(int v);
   EchoIndication() {
   }
 };
 
 class EchoRequest {
 public:
-  METHOD(say, (const int &v), if (true) ){}
+  void say(const int &v) if (true) {}
   EchoRequest() {
   }
 };
@@ -109,7 +109,7 @@ __module Echo : public EchoRequest {
   EchoIndication *ind;
   int pipetemp;
 public:
-  METHOD(say, (const int &v), if (true) ) {
+  void say(const int &v) if (true) {
       fifo->in.enq(v);
   }
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {

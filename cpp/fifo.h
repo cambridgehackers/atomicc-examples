@@ -54,9 +54,9 @@ template<class T>
 FIFODEFINE Fifo1 : public Fifo<T>
 {
     FIFODATA
-    METHOD(enq, (const T &v), BODYGUARD) BODYACTION
-    METHOD(deq, (void), BODYGUARD) BODYACTION
-    GVALUE(first, T, BODYGUARD) BODYVALUE
+    void enq(const T &v) BODYGUARD BODYACTION
+    void deq(void) BODYGUARD BODYACTION
+    T first(void) BODYGUARD BODYVALUE
     bool notEmpty() const BODYGUARD1
     bool notFull() const BODYGUARD1
 public:

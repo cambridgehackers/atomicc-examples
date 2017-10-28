@@ -88,7 +88,7 @@ __module EchoRequestOutput { // method -> pipe
 public:
     EchoRequest request;
     EchoRequestPipe *pipe;
-    METHOD(say, (int meth, int v), { return true; }) {
+    void say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -97,9 +97,8 @@ public:
         pipe->enq(ind);
     }
     void init() {
-        //request.init("request", this, IFC(EchoRequestOutput, say));
         //request.say = ^ (int meth, int v) { say(meth, v); }; //__vectorcall
-        (&request)->say = &EchoRequestOutput::say;
+        //(&request)->say = &EchoRequestOutput::say;
     }
 };
 
@@ -107,16 +106,13 @@ __module EchoRequestInput { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
-    METHOD(enq, (const EchoRequest_data &v), {return true; }) {
+    void enq(const EchoRequest_data &v) {
         printf("entered EchoRequestInput::enq\n");
         switch (v.tag) {
         case EchoRequest_tag_say:
             request->say(v.data.say.meth, v.data.say.v);
             break;
         }
-    }
-    void init() {
-        pipe.init("pipe", this, IFC(EchoRequestInput, enq));
     }
 };
 
@@ -126,15 +122,12 @@ __module EchoIndicationOutput { // method -> pipe
 public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
-    METHOD(heard, (int meth, int v), { return true; }) {
+    void heard(int meth, int v) {
         EchoIndication_data ind;
         ind.tag = EchoIndication_tag_heard;
         ind.data.heard.meth = meth;
         ind.data.heard.v = v;
         pipe->enq(ind);
-    }
-    void init() {
-        indication.init("indication", this, IFC(EchoIndicationOutput, heard));
     }
 };
 
@@ -142,15 +135,12 @@ __module EchoIndicationInput { // pipe -> method
 public:
     EchoIndicationPipe pipe;
     EchoIndication *indication;
-    METHOD(enq, (const EchoIndication_data &v), {return true; }) {
+    void enq(const EchoIndication_data &v) {
         switch (v.tag) {
         case EchoIndication_tag_heard:
             indication->heard(v.data.heard.meth, v.data.heard.v);
             break;
         }
-    }
-    void init() {
-        pipe.init("pipe", this, IFC(EchoIndicationInput, enq));
     }
 };
 
@@ -158,23 +148,17 @@ __module Echo {
 public:
     EchoRequest request;
     EchoIndication *indication;
-    METHOD(say, (int meth, int v), { return true; }) {
+    void say(int meth, int v) {
         indication->heard(meth, v);
-    }
-    void init() {
-        request.init("request", this, IFC(Echo, say));
     }
 };
 
 __module foo { // method -> pipe
 public:
     EchoIndication indication;
-    METHOD(heard, (int meth, int v), { return true; }) {
+    void heard(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
-    }
-    void init() {
-        indication.init("indication", this, IFC(foo, heard));
     }
 };
 class foo zConnectresp;
@@ -199,13 +183,13 @@ public:
         connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
         connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
 
-        lERI.init();
-        lEIO.init();
-        lEcho.init();
+        //lERI.init();
+        //lEIO.init();
+        //lEcho.init();
         lERO_test.init();
 
         lEII_test.indication = &zConnectresp.indication; // user indication
-        lEII_test.init();
+        //lEII_test.init();
 
     };
 };

@@ -34,14 +34,14 @@ typedef struct {
 
 class IVectorIndication {
 public:
-    INDICATION(heard, (myint6 meth, myint4 v), { return true; });
+    void heard(myint6 meth, myint4 v);
     IVectorIndication() {
     }
 };
 
 class IVectorRequest {
 public:
-    METHOD(say, (myint6 meth, myint4 v), {return true; }){}
+    void say(myint6 meth, myint4 v) if (true) {}
     IVectorRequest() {
     }
 };
@@ -57,7 +57,7 @@ __module IVector : IVectorRequest {
     Myintc      gcounter;
     IVectorIndication *ind;
 public:
-    METHOD(say, (myint6 meth, myint4 v), {return true; }) {
+    void say(myint6 meth, myint4 v) if(true) {
         ValueType temp;
         temp.a = meth;
         temp.b = v;
@@ -82,6 +82,7 @@ int IVector::intcWidth = 3;
 ////////////////////////////////////////////////////////////
 
 void IVectorIndication::heard(myint6 meth, myint4 v)
+if (true)
 {
     //printf("Heard an ivector: %d %d\n", meth, v);
     printf("Heard an ivector: %d %d\n", 0, 0);

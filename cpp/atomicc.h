@@ -33,41 +33,9 @@
 #define __emodule class __attribute__(( atomicc_emodule ))
 
 extern "C" void addBaseRule(void *, const char *name, bool (^ __vectorcall RDY)(void), void (^ __vectorcall ENA)(void));
-class Module;
-typedef bool (Module::*METHPTR)(void); // MemberFunctionPointer
-#define METH(A) methodToFunction((METHPTR)(A))
-extern "C" unsigned long methodToFunction(METHPTR v);
 extern "C" void connectInterface(void *classp, void **target, void *source);
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
-/*
- * Note: The 'virtual' attribute is needed on guarded interfaces so that
- * references to them are preserved by clang, even if they are not
- * referenced in the original C++ code.  During guard hoisting operations,
- * many new references to '__RDY' methods are created and propagated.
- *
- * The 'virtual' attribute forces all the function names to appear in the
- * vtable, which makes them visible to the atomicc code generation phase.
- */
-#define __method [[ gnu::target("atomicc_method") ]] [[ gnu::used ]] __vectorcall
-#define METHOD(A,B,C) \
-    __method void A B C
-#define VMETHOD(A,B,C) \
-    __method void A B C
-    //__method bool A ## __READY(void) C __method void A B
-#define GVALUE(A,B,C) \
-    __method B A(void) C
-#define INDICATION(NAME, TYPE, RDYEXPRESSION) \
-    __method void NAME TYPE RDYEXPRESSION
 
-typedef bool (*GUARDPTR)(void *);
-#define IFC(cname,mname) METH(&cname::mname ## __RDY), METH(&cname::mname)
-#define VIFC(cname,mname) METH(&cname::mname ## __READY), METH(&cname::mname)
-#define ASSIGNIFCPTR(A) { \
-         A ## __RDYp = (decltype(A ## __RDYp))a ## A ## __RDYp; \
-         A ## p = (decltype(A ## p))a ## A ## p; }
-#define ASSIGNVIFCPTR(A) { \
-         A ## __READYp = (decltype(A ## __READYp))a ## A ## __READYp; \
-         A ## p = (decltype(A ## p))a ## A ## p; }
 template<class T>
 __interface PipeIn {
     void enq(const T &v);

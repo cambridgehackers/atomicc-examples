@@ -35,21 +35,21 @@ __module FifoPong : public Fifo<T> {
     Fifo1<T> element2;
     bool pong;
 public:
-    METHOD(enq, (const T &v), { return true; }) {
+    void enq(const T &v) if(true) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    METHOD(deq, (void), { return true; }) {
+    void deq(void) if(true) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    GVALUE(first, T, { return true; }) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): FIFOBASECONSTRUCTOR(FifoPong<T>), pong(false) {
+    T first(void) if (true) { return pong ? element2.out.first() : element1.out.first(); }
+    FifoPong(): pong(false) {
         //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
@@ -62,7 +62,7 @@ __interface IVectorIndication {
 #else
 __emodule IVectorIndication {
 public:
-    INDICATION(heard, (int meth, int v), { return true; });
+    void heard(int meth, int v);
     IVectorIndication() {}
 };
 #endif
@@ -77,7 +77,7 @@ __module IVector {
     int vsize;
 public:
     IVectorRequest in;
-    METHOD(say, (int meth, int v), {return true; }) {
+    void say(int meth, int v) if(true) {
         UTYPE temp;
         temp.b = v;
 #if 1
@@ -111,10 +111,9 @@ public:
 #endif
     }
     IVector(IVectorIndication *aind, int size) : ind(aind), vsize(size) {
-        in.init("in", this, IFC(IVector, say));
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
-        fifo = new FifoPong<UTYPE>[vsize];
+        fifo = (Fifo<ValuePair> *)new FifoPong<UTYPE>[vsize];
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
         for (int i = 0; i < vsize; i++) {
             RULE(IVector,("respond" + utostr(i)).c_str(), true, {
