@@ -72,14 +72,14 @@ public:
         else
             element1.in.enq(v);
     }
-    void deq(void) if (true) {
+    void deq(void) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    T first(void) if (true) { return pong ? element2.out.first() : element1.out.first(); }
+    T first(void) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false) {
         FIFOBASECONSTRUCTOR(FifoPong<T>);
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -89,17 +89,26 @@ public:
 };
 #endif
 
+__interface hifc {
+  void heard(int v);
+};
 static ECHO_FIFO<int> bozouseless;
 __emodule EchoIndication {
 public:
+  hifc out;
   void heard(int v);
   EchoIndication() {
+      //meaningless out.heard = heard;
   }
 };
 
+__interface sifc {
+  void say(const int v);
+};
 class EchoRequest {
 public:
-  void say(const int &v) if (true) {}
+  sifc out;
+  void say(const int v);
   EchoRequest() {
   }
 };
@@ -109,16 +118,17 @@ __module Echo : public EchoRequest {
   EchoIndication *ind;
   int pipetemp;
 public:
-  void say(const int &v) if (true) {
+  void say(const int v) {
       fifo->in.enq(v);
   }
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
+    out.say = say;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	 int temp = fifo->out.first();
 	 fifo->out.deq();
-	 ind->heard(temp);
+	 ind->out.heard(temp);
        });
   };
   ~Echo() {}
