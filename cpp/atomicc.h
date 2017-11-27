@@ -38,7 +38,7 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
 
 template<class T>
 __interface PipeIn {
-    void enq(const T &v);
+    void enq(const T v);
 };
 
 template<class T>

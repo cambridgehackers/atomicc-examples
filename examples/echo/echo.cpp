@@ -93,12 +93,12 @@ __interface hifc {
   void heard(int v);
 };
 static ECHO_FIFO<int> bozouseless;
-__emodule EchoIndication {
+__module EchoIndication {
 public:
   hifc out;
-  void heard(int v);
+  void heardactual(int v);
   EchoIndication() {
-      //meaningless out.heard = heard;
+      out.heard = heardactual;
   }
 };
 
@@ -108,7 +108,7 @@ __interface sifc {
 class EchoRequest {
 public:
   sifc out;
-  void say(const int v);
+  void sayactual(const int v);
   EchoRequest() {
   }
 };
@@ -118,11 +118,11 @@ __module Echo : public EchoRequest {
   EchoIndication *ind;
   int pipetemp;
 public:
-  void say(const int v) {
+  void sayactual(const int v) {
       fifo->in.enq(v);
   }
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
-    out.say = say;
+    out.say = sayactual;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
@@ -138,7 +138,7 @@ public:
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void EchoIndication::heard(int v)
+void EchoIndication::heardactual(int v)
 {
     printf("Heard an echo: %d\n", v);
     //stop_main_program = 1;
