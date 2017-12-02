@@ -93,7 +93,7 @@ __interface hifc {
   void heard(int v);
 };
 static ECHO_FIFO<int> bozouseless;
-__module EchoIndication {
+__emodule EchoIndication {
 public:
   hifc out;
   void heardactual(int v);
