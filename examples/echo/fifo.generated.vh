@@ -2,9 +2,9 @@
 `define __fifo_GENERATED__VH__
 
 //METASTART; l_module_OC_Fifo1
-//METAEXCLUSIVE; out$deq; in$enq
-//METAGUARD; out$deq; full;
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
+//METAGUARD; out$deq; full;
+//METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 `endif
