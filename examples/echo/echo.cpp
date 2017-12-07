@@ -124,12 +124,18 @@ public:
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
     out.say = sayactual;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
+#if 1
+    __rule respond_rule if (true) {
+        fifo->out.deq();
+	ind->out.heard(fifo->out.first());
+    }
+#else
     RULE(Echo,"respond_rule", true, { 
 	 //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
-	 int temp = fifo->out.first();
 	 fifo->out.deq();
-	 ind->out.heard(temp);
+	 ind->out.heard(fifo->out.first());
        });
+#endif
   };
   ~Echo() {}
 };
