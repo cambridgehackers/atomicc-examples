@@ -33,7 +33,7 @@ __emodule Fifo {
 
 #ifndef FIFODEFINE
 #define FIFODEFINE __emodule
-#define BODYVALUE { return (T) 0; }
+#define BODYVALUE { return {}; }
 #define BODYACTION {}
 #else
 #define BODYACTION ;
