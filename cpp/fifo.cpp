@@ -23,7 +23,14 @@
 #define FIFODEFINE __module
 #define FIFODATA \
   T element;     \
-  bool full;
+  bool full;    \
+  void enqactual(const T v) ; \
+  void deqactual(void) ; \
+  T firstactual(void) ; \
+  bool notEmpty() const; \
+  bool notFull() const; \
+  Fifo1();
+  
 
 #include <fifo.h>
 

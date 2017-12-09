@@ -25,35 +25,18 @@
 
 template<class T>
 __emodule Fifo {
- public:
     PipeIn<T> in;
     PipeOut<T> out;
-    Fifo() { }
 };
 
 #ifndef FIFODEFINE
 #define FIFODEFINE __emodule
-#define BODYVALUE { return {}; }
-#define BODYACTION {}
-#else
-#define BODYACTION ;
-#define BODYVALUE ;
-#endif
-
-#ifndef FIFODATA
-#define FIFODATA
 #endif
 
 template<class T>
-FIFODEFINE Fifo1 : public Fifo<T>
-{
+FIFODEFINE Fifo1 : public Fifo<T> {
+#ifdef FIFODATA
     FIFODATA
-    void enqactual(const T v) BODYACTION
-    void deqactual(void) BODYACTION
-    T firstactual(void) BODYVALUE
-    bool notEmpty() const;
-    bool notFull() const;
-public:
-    Fifo1() BODYACTION
+#endif
 };
 #endif
