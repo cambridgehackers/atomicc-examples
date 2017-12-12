@@ -1,53 +1,48 @@
 `ifndef __lpm_GENERATED__VH__
 `define __lpm_GENERATED__VH__
 
-//METASTART; l_module_OC_Fifo1
-//METAEXCLUSIVE; out$deq; in$enq
-//METAGUARD; out$deq; full;
-//METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
-//METAGUARD; out$first; full;
 //METASTART; l_module_OC_LpmMemory
-//METAEXCLUSIVE; memdelay; req; resAccept
-//METABEFORE; memdelay; :req; :resAccept
-//METAGUARD; memdelay; delayCount > 1;
-//METAEXCLUSIVE; req; resAccept
-//METAGUARD; req; delayCount == 0;
-//METAGUARD; resAccept; delayCount == 1;
-//METABEFORE; resValue; :req
-//METAGUARD; resValue; delayCount == 1;
-//METARULES; memdelay
-//METASTART; l_module_OC_Fifo1_OC_0
-//METAEXCLUSIVE; out$deq; in$enq
-//METAGUARD; out$deq; full;
-//METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
-//METAGUARD; out$first; full;
+//METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
+//METAGUARD; ifc$req; delayCount == 0;
+//METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
+//METAGUARD; ifc$resAccept; delayCount == 1;
+//METABEFORE; ifc$resValue; :ifc$req__ENA
+//METAGUARD; ifc$resValue; delayCount == 1;
+//METABEFORE; memdelay_rule__ENA; :ifc$req__ENA; :ifc$resAccept__ENA
+//METAGUARD; memdelay_rule; delayCount > 1;
+//METARULES; memdelay_rule
 //METASTART; l_module_OC_Fifo2
-//METAGUARD; out$deq; rindex != windex;
-//METAGUARD; in$enq; ((windex + 1) % 2) != rindex;
-//METABEFORE; out$first; :out$deq
-//METAGUARD; out$first; rindex != windex;
+//METAGUARD; in$enq; 1;
+//METAGUARD; out$deq; 1;
+//METABEFORE; out$first; :out$deq__ENA
+//METAGUARD; out$first; 1;
 //METASTART; l_module_OC_Lpm
-//METAINTERNAL; inQ; l_module_OC_Fifo1_OC_0;
+//METAINTERNAL; inQ; l_module_OC_Fifo1;
 //METAINTERNAL; fifo; l_module_OC_Fifo2;
-//METAINTERNAL; outQ; l_module_OC_Fifo1_OC_0;
+//METAINTERNAL; outQ; l_module_OC_Fifo1;
 //METAINTERNAL; mem; l_module_OC_LpmMemory;
-//METAEXTERNAL; indication; l_ainterface_OC_LpmIndication;
-//METAINVOKE; enter; :fifo$in$enq;:inQ$out$deq;:inQ$out$first;:mem$req;
-//METAEXCLUSIVE; enter; recirc
-//METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
-//METAINVOKE; exit; :fifo$out$deq;:fifo$out$first;:mem$resAccept;:mem$resValue;:outQ$in$enq;
-//METAEXCLUSIVE; exit; recirc
-//METAGUARD; exit; (((fifo$out$first__RDY & mem$resValue__RDY) & mem$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-//METAINVOKE; recirc; :fifo$in$enq;:fifo$out$deq;:fifo$out$first;:mem$req;:mem$resAccept;:mem$resValue;
-//METAGUARD; recirc; ((((fifo$out$first__RDY & mem$resValue__RDY) & mem$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$req__RDY;
-//METAINVOKE; respond; :indication$heard;:outQ$out$deq;:outQ$out$first;
-//METAGUARD; respond; (outQ$out$first__RDY & outQ$out$deq__RDY) & indication$heard__READY;
-//METAINVOKE; request$say; :inQ$in$enq;
-//METAGUARDV; request$say; inQ$in$enq__RDY;
-//METARULES; enter; exit; recirc; respond
+//METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
+//METAINVOKE; enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
+//METAEXCLUSIVE; enter__ENA; mem$ifc$req__ENA; recirc__ENA
+//METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
+//METAINVOKE; exit_rule__ENA; :fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;:outQ$in$enq__ENA;
+//METAEXCLUSIVE; exit_rule__ENA; mem$ifc$resAccept__ENA; mem$ifc$resValue; recirc__ENA
+//METAGUARD; exit_rule; (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
+//METAINVOKE; mem$ifc$req__ENA; :mem$ifc$req__ENA;
+//METAEXCLUSIVE; mem$ifc$req__ENA; recirc__ENA
+//METAGUARD; mem$ifc$req; mem$ifc$req__RDY;
+//METAINVOKE; mem$ifc$resAccept__ENA; :mem$ifc$resAccept__ENA;
+//METAEXCLUSIVE; mem$ifc$resAccept__ENA; recirc__ENA
+//METAGUARD; mem$ifc$resAccept; mem$ifc$resAccept__RDY;
+//METAINVOKE; mem$ifc$resValue; :mem$ifc$resValue;
+//METAEXCLUSIVE; mem$ifc$resValue; recirc__ENA
+//METAGUARD; mem$ifc$resValue; mem$ifc$resValue__RDY;
+//METAINVOKE; recirc__ENA; :fifo$in$enq__ENA;:fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$req__ENA;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;
+//METAGUARD; recirc; ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
+//METAINVOKE; request$say__ENA; :inQ$in$enq__ENA;
+//METAGUARD; request$say; inQ$in$enq__RDY;
+//METAINVOKE; respond__ENA; :ind$heard__ENA;:outQ$out$deq__ENA;:outQ$out$first;
+//METAGUARD; respond; (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
+//METARULES; enter; exit_rule; recirc; respond
 //METAPRIORITY; recirc; enter;exit
-//METASTART; l_module_OC_foo
-//METAGUARDV; indication$heard; 1;
 `endif
