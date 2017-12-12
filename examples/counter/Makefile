@@ -6,6 +6,7 @@ LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-cxa-atexit
 CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
 CPPFLAGS += -I/usr/include/c++/4.2.1
+CPPFLAGS += -fno-diagnostics-color
 LLVMFLAGS = -emit-llvm
 
 all:
