@@ -81,7 +81,7 @@ __module EchoRequestOutput { // method -> pipe
 public:
     EchoRequest request;
     EchoRequestPipe *pipe;
-    void say(int meth, int v) {
+    void sayactual(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -89,7 +89,7 @@ public:
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void say2(int meth, int v) {
+    void say2actual(int meth, int v) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -97,13 +97,17 @@ public:
         ind.data.say2.v = v;
         pipe->enq(ind);
     }
+    EchoRequestOutput() {
+        request.say = sayactual;
+        request.say2 = say2actual;
+    }
 };
 
 __module EchoRequestInput { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void enq(const EchoRequest_data &v) {
+    void enqactual(const EchoRequest_data &v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -113,6 +117,9 @@ public:
             request->say2(v.data.say2.meth, v.data.say2.v);
             break;
         }
+    }
+    EchoRequestInput() {
+        pipe.enq = enqactual;
     }
 };
 
@@ -126,7 +133,7 @@ public:
     EchoIndication_data ind1;
     int ind_busy;
     int even;
-    void heard(int meth, int v) if (!ind_busy) {
+    void heardactual(int meth, int v) if (!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
         ind1.tag = EchoIndication_tag_heard;
@@ -141,17 +148,18 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         ind_busy = 1;
         even = !even;
     }
-    void init() {
-        RULE(Echo,"output_rulee", ((ind_busy != 0) & (even != 0)) != 0, {
+    EchoIndicationOutput() {
+       indication.heard = heardactual;
+        __rule output_rulee if (((ind_busy != 0) & (even != 0)) != 0) {
 printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
              ind_busy = 0;
              pipe->enq(ind0);
-           });
-        RULE(Echo,"output_ruleo", ((ind_busy != 0) & (even == 0)) != 0, {
+           };
+        __rule output_ruleo if (((ind_busy != 0) & (even == 0)) != 0) {
 printf("output_ruleo: EchoIndicationOutput tag %d\n", ind1.tag);
              ind_busy = 0;
              pipe->enq(ind1);
-           });
+           };
     }
 };
 
@@ -162,7 +170,7 @@ public:
     int busy_delay;
     int meth_delay;
     int v_delay;
-    void enq(const EchoIndication_data &v) if(!busy_delay) {
+    void enqactual(const EchoIndication_data &v) if(!busy_delay) {
 printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -172,12 +180,13 @@ printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
             break;
         }
     }
-    void init() {
-        RULE(Echo,"input_rule", busy_delay != 0, {
+    EchoIndicationInput() {
+        pipe.enq = enqactual;
+        __rule input_rule if (busy_delay != 0) {
 printf("input_rule: EchoIndicationInput\n");
              busy_delay = 0;
              indication->heard(meth_delay, v_delay);
-           });
+           };
     }
 };
 
@@ -193,13 +202,13 @@ public:
     int x;
     int y;
     EchoIndication *indication;
-    void say(int meth, int v) if(!busy) {
+    void sayactual(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
     }
-    void say2(int meth, int v) if(!busy) {
+    void say2actual(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
@@ -217,19 +226,21 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         y = x;
     }
-    void init() {
-        RULE(Echo,"delay_rule", (busy != 0 & busy_delay == 0) != 0, {
+    Echo() {
+        request.say = sayactual;
+        request.say2 = say2actual;
+        __rule delay_rule if ((busy != 0 & busy_delay == 0) != 0) {
 printf("delay_rule: Echo\n");
              busy = 0;
              busy_delay = 1;
              meth_delay = meth_temp;
              v_delay = v_temp;
-           });
-        RULE(Echo,"respond_rule", busy_delay != 0, {
+           };
+        __rule respond_rule if (busy_delay != 0) {
 printf("respond_rule: Echo\n");
              busy_delay = 0;
              indication->heard(meth_delay, v_delay);
-           });
+           };
     }
 };
 
@@ -256,23 +267,17 @@ public:
         connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
         connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
         connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
-
-        //lERI.init();
-        lEIO.init();
-        lEcho.init();
-        //lERO_test.init();
-
         lEII_test.indication = &zConnectresp.indication; // user indication
-        lEII_test.init();
-        RULE(Connect,"swap_rule", true, {
+
+        __rule swap_rule {
 printf("swap_rule:Connect\n");
              lEcho.x2y();
              lEcho.y2x();
-           });
-        RULE(Connect,"swap2_rule", true, {
+           };
+        __rule swap2_rule {
 printf("swap2_rule:Connect\n");
              lEcho.y2xnull();
-           });
+           };
     };
 };
 
