@@ -57,13 +57,11 @@ typedef struct {
     int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
-__interface LpmIndication {
-    void VMETHODDECL(void); // READY/VALID signalling marker
+__interface __ready_valid LpmIndication {
     void heard(int meth, int v);
 };
 
-__interface LpmRequest {
-    void VMETHODDECL(void); // READY/VALID signalling marker
+__interface __ready_valid LpmRequest {
     void say(int meth, int v);
 };
 
@@ -147,7 +145,7 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
     ~Lpm() {}
 };
 
-__module foo { // method -> pipe
+__emodule foo { // method -> pipe
     void heardactual(int meth, int v) if (true) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;

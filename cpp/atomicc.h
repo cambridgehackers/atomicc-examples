@@ -31,6 +31,7 @@
 #define __interface class __attribute__(( atomicc_interface ))
 #define __module class __attribute__(( atomicc_module ))
 #define __emodule class __attribute__(( atomicc_emodule ))
+#define __ready_valid __attribute__(( atomicc_ready_valid ))
 
 extern "C" void connectInterface(void *classp, void **target, void *source);
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
