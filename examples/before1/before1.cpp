@@ -107,7 +107,7 @@ __module EchoRequestInput { // pipe -> method
 public:
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void enqactual(const EchoRequest_data &v) {
+    void enqactualreq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -119,7 +119,7 @@ public:
         }
     }
     EchoRequestInput() {
-        pipe.enq = enqactual;
+        pipe.enq = enqactualreq;
     }
 };
 
@@ -170,7 +170,7 @@ public:
     int busy_delay;
     int meth_delay;
     int v_delay;
-    void enqactual(const EchoIndication_data &v) if(!busy_delay) {
+    void enqactualind(const EchoIndication_data v) if(!busy_delay) {
 printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -181,7 +181,7 @@ printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         }
     }
     EchoIndicationInput() {
-        pipe.enq = enqactual;
+        pipe.enq = enqactualind;
         __rule input_rule if (busy_delay != 0) {
 printf("input_rule: EchoIndicationInput\n");
              busy_delay = 0;
@@ -263,10 +263,18 @@ public:
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
     Connect() {
+#if 1
         connectInterface(this, (void **)&lERI.request, &lEcho.request);
         connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
         connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
         connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
+#else
+        lERI.request = &lEcho.request;
+        lEIO.pipe = &lEII_test.pipe;
+        lEcho.indication = &lEIO.indication;
+        lERO_test.pipe = &lERI.pipe;
+#endif
+
         lEII_test.indication = &zConnectresp.indication; // user indication
 
         __rule swap_rule {
