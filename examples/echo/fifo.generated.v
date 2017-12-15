@@ -11,9 +11,7 @@ module l_module_OC_Fifo1 (
     output [31:0]out$first,
     output out$first__RDY);
     wire in$enq__RDY_internal;
-    wire in$enq__ENA_internal = in$enq__ENA && in$enq__RDY_internal;
     wire out$deq__RDY_internal;
-    wire out$deq__ENA_internal = out$deq__ENA && out$deq__RDY_internal;
     reg[31:0] element;
     reg full;
     assign in$enq__RDY = in$enq__RDY_internal;
@@ -29,11 +27,11 @@ module l_module_OC_Fifo1 (
         full <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA_internal) begin
+        if (in$enq__ENA) begin
             element <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA_internal) begin
+        if (out$deq__ENA) begin
             full <= 0;
         end; // End of out$deq__ENA
       end

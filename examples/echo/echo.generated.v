@@ -12,7 +12,6 @@ module l_module_OC_Echo (
     output [31:0]heard$v,
     input out$heard__RDY);
     wire out$say__RDY_internal;
-    wire out$say__ENA_internal = out$say__ENA && out$say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1 fifo (
