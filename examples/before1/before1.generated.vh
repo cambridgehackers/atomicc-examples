@@ -1,21 +1,6 @@
 `ifndef __before1_GENERATED__VH__
 `define __before1_GENERATED__VH__
 
-//METASTART; l_module_OC_Echo
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
-//METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
-//METABEFORE; delay_rule__ENA; :request$say2__ENA; :request$say__ENA
-//METAGUARD; delay_rule; ((busy != 0) & (busy_delay == 0)) != 0;
-//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
-//METAGUARD; request$say2; (busy != 0) ^ 1;
-//METAGUARD; request$say; (busy != 0) ^ 1;
-//METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
-//METABEFORE; respond_rule__ENA; :delay_rule__ENA
-//METAGUARD; respond_rule; (busy_delay != 0) & indication$heard__RDY;
-//METARULES; delay_rule; respond_rule
-//METASTART; l_module_OC_foo
-//METAINVOKE; indication$heard__ENA; :indication$heard__ENA;
-//METAGUARD; indication$heard; indication$heard__RDY;
 //METASTART; l_module_OC_EchoIndicationOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAEXCLUSIVE; indication$heard__ENA; output_rulee__ENA; output_ruleo__ENA
@@ -30,6 +15,18 @@
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq__ENA; v_2e_addr_2e_ifoosuff_2e_2$tag == 2:request$say2__ENA;v_2e_addr_2e_ifoosuff$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; (request$say__RDY | ((v_2e_addr_2e_ifoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addr_2e_ifoosuff_2e_2foosuff$tag == 2) ^ 1));
+//METASTART; l_module_OC_Echo
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
+//METABEFORE; delay_rule__ENA; :request$say2__ENA; :request$say__ENA
+//METAGUARD; delay_rule; ((busy != 0) & (busy_delay == 0)) != 0;
+//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
+//METAGUARD; request$say2; (busy != 0) ^ 1;
+//METAGUARD; request$say; (busy != 0) ^ 1;
+//METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
+//METABEFORE; respond_rule__ENA; :delay_rule__ENA
+//METAGUARD; respond_rule; (busy_delay != 0) & indication$heard__RDY;
+//METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
@@ -66,4 +63,7 @@
 //METAINVOKE; swap_rule__ENA; :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR];:lEcho$[ERROR__ZN4Echo3y2xEv_ERROR];
 //METAGUARD; swap_rule; 1;
 //METARULES; swap2_rule; swap_rule
+//METASTART; l_module_OC_foo
+//METAINVOKE; indication$heard__ENA; :indication$heard__ENA;
+//METAGUARD; indication$heard; indication$heard__RDY;
 `endif

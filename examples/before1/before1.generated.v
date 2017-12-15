@@ -1,86 +1,5 @@
 `include "before1.generated.vh"
 
-module l_module_OC_Echo (
-    input CLK,
-    input nRST,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    output request$say__RDY);
-    wire request$say2__RDY_internal;
-    wire request$say__RDY_internal;
-    reg[31:0] busy;
-    reg[31:0] meth_temp;
-    reg[31:0] v_temp;
-    reg[31:0] busy_delay;
-    reg[31:0] meth_delay;
-    reg[31:0] v_delay;
-    reg[31:0] x;
-    reg[31:0] y;
-    assign delay_rule__RDY_internal = ((busy != 0) & (busy_delay == 0)) != 0;
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = respond_rule__ENA_internal;
-    assign request$say2__RDY = request$say2__RDY_internal;
-    assign request$say2__RDY_internal = (busy != 0) ^ 1;
-    assign request$say__RDY = request$say__RDY_internal;
-    assign request$say__RDY_internal = (busy != 0) ^ 1;
-    assign respond_rule__RDY_internal = (busy_delay != 0) & indication$heard__RDY;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        busy <= 0;
-        meth_temp <= 0;
-        v_temp <= 0;
-        busy_delay <= 0;
-        meth_delay <= 0;
-        v_delay <= 0;
-        x <= 0;
-        y <= 0;
-      end // nRST
-      else begin
-        if (delay_rule__ENA) begin
-            busy <= 0;
-            busy_delay <= 1;
-            meth_delay <= meth_temp;
-            v_delay <= v_temp;
-        end; // End of delay_rule__ENA
-        if (request$say2__ENA) begin
-            meth_temp <= request$say2$meth;
-            v_temp <= request$say2$v;
-            busy <= 1;
-        end; // End of request$say2__ENA
-        if (request$say__ENA) begin
-            meth_temp <= request$say$meth;
-            v_temp <= request$say$v;
-            busy <= 1;
-        end; // End of request$say__ENA
-        if (respond_rule__ENA) begin
-            busy_delay <= 0;
-        end; // End of respond_rule__ENA
-      end
-    end // always @ (posedge CLK)
-endmodule 
-
-module l_module_OC_foo (
-    input CLK,
-    input nRST,
-    input indication$heard__ENA,
-    input [31:0]indication$heard$meth,
-    input [31:0]indication$heard$v,
-    output indication$heard__RDY);
-    wire indication$heard__RDY_internal;
-    assign indication$heard$meth = indication$heard$meth;
-    assign indication$heard$v = indication$heard$v;
-    assign indication$heard__ENA = indication$heard__ENA_internal;
-    assign indication$heard__RDY = indication$heard__RDY_internal;
-    assign indication$heard__RDY_internal = indication$heard__RDY;
-endmodule 
-
 module l_module_OC_EchoIndicationOutput (
     input CLK,
     input nRST,
@@ -150,6 +69,72 @@ module l_module_OC_EchoRequestInput (
     assign request$say2__ENA = pipe$enq__ENA_internal & v_2e_addr_2e_ifoosuff_2e_2$tag == 2;
     assign request$say__ENA = pipe$enq__ENA_internal & v_2e_addr_2e_ifoosuff$tag == 1;
     assign v_2e_addr_2e_i = pipe$enq$v;
+endmodule 
+
+module l_module_OC_Echo (
+    input CLK,
+    input nRST,
+    input request$say2__ENA,
+    input [31:0]request$say2$meth,
+    input [31:0]request$say2$v,
+    output request$say2__RDY,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
+    output request$say__RDY);
+    wire request$say2__RDY_internal;
+    wire request$say__RDY_internal;
+    reg[31:0] busy;
+    reg[31:0] meth_temp;
+    reg[31:0] v_temp;
+    reg[31:0] busy_delay;
+    reg[31:0] meth_delay;
+    reg[31:0] v_delay;
+    reg[31:0] x;
+    reg[31:0] y;
+    assign delay_rule__RDY_internal = ((busy != 0) & (busy_delay == 0)) != 0;
+    assign indication$heard$meth = meth_delay;
+    assign indication$heard$v = v_delay;
+    assign indication$heard__ENA = respond_rule__ENA_internal;
+    assign request$say2__RDY = request$say2__RDY_internal;
+    assign request$say2__RDY_internal = (busy != 0) ^ 1;
+    assign request$say__RDY = request$say__RDY_internal;
+    assign request$say__RDY_internal = (busy != 0) ^ 1;
+    assign respond_rule__RDY_internal = (busy_delay != 0) & indication$heard__RDY;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        busy <= 0;
+        meth_temp <= 0;
+        v_temp <= 0;
+        busy_delay <= 0;
+        meth_delay <= 0;
+        v_delay <= 0;
+        x <= 0;
+        y <= 0;
+      end // nRST
+      else begin
+        if (delay_rule__ENA) begin
+            busy <= 0;
+            busy_delay <= 1;
+            meth_delay <= meth_temp;
+            v_delay <= v_temp;
+        end; // End of delay_rule__ENA
+        if (request$say2__ENA) begin
+            meth_temp <= request$say2$meth;
+            v_temp <= request$say2$v;
+            busy <= 1;
+        end; // End of request$say2__ENA
+        if (request$say__ENA) begin
+            meth_temp <= request$say$meth;
+            v_temp <= request$say$v;
+            busy <= 1;
+        end; // End of request$say__ENA
+        if (respond_rule__ENA) begin
+            busy_delay <= 0;
+        end; // End of respond_rule__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -324,5 +309,20 @@ module l_module_OC_Connect (
     assign lEcho$request$say__RDY_internal = lEcho$request$say__RDY;
     assign swap2_rule__RDY_internal = 1;
     assign swap_rule__RDY_internal = 1;
+endmodule 
+
+module l_module_OC_foo (
+    input CLK,
+    input nRST,
+    input indication$heard__ENA,
+    input [31:0]indication$heard$meth,
+    input [31:0]indication$heard$v,
+    output indication$heard__RDY);
+    wire indication$heard__RDY_internal;
+    assign indication$heard$meth = indication$heard$meth;
+    assign indication$heard$v = indication$heard$v;
+    assign indication$heard__ENA = indication$heard__ENA_internal;
+    assign indication$heard__RDY = indication$heard__RDY_internal;
+    assign indication$heard__RDY_internal = indication$heard__RDY;
 endmodule 
 
