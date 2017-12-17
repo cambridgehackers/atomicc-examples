@@ -23,14 +23,7 @@
 typedef struct {
     int a;
     int b;
-//char fooo[200];
 } ValueType;
-
-ValueType haha;
-ValueType bozoreturnfunc(int a)
-{
-    return haha;
-}
 
 // Serialization structures
 typedef struct {
@@ -49,7 +42,6 @@ typedef struct {
         } say2;
     } data;
 } EchoRequest_data;
-EchoRequest_data unusedERD;
 
 typedef struct {
     int tag;
@@ -61,22 +53,18 @@ typedef struct {
         } heard;
     } data;
 } EchoIndication_data;
-EchoIndication_data unusedEID;
 
 // Interface classes
 __interface EchoRequest {
     void say(int meth, int v);
     void say2(int meth, int v);
 };
-EchoRequest unusedER;
 
 __interface EchoIndication {
     void heard(int meth, int v);
 };
-EchoIndication unusedEI;
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
-EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
@@ -122,7 +110,6 @@ __module EchoRequestInput { // pipe -> method
 };
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
-EchoIndicationPipe unusedEIP;
 __module EchoIndicationOutput { // method -> pipe
     EchoIndication indication;
     EchoIndicationPipe *pipe;
