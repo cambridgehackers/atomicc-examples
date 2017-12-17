@@ -12,6 +12,11 @@
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; (busy_delay != 0) & indication$heard__RDY;
+//METABEFORE; x2y__ENA; :y2x__ENA
+//METAGUARD; x2y; 1;
+//METABEFORE; y2x__ENA; :x2y__ENA
+//METAGUARD; y2x; 1;
+//METAGUARD; y2xnull; 1;
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
@@ -58,12 +63,11 @@
 //METAGUARD; lEcho$request$say2; lEcho$request$say2__RDY;
 //METAINVOKE; lEcho$request$say__ENA; :lEcho$request$say__ENA;
 //METAGUARD; lEcho$request$say; lEcho$request$say__RDY;
-//METAINVOKE; swap2_rule__ENA; :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR];
-//METAGUARD; swap2_rule; 1;
-//METAINVOKE; swap_rule__ENA; :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR];:lEcho$[ERROR__ZN4Echo3y2xEv_ERROR];
-//METAGUARD; swap_rule; 1;
+//METAINVOKE; swap2_rule__ENA; :lEcho$y2xnull__ENA;
+//METAGUARD; swap2_rule; lEcho$y2xnull__RDY;
+//METAINVOKE; swap_rule__ENA; :lEcho$x2y__ENA;:lEcho$y2x__ENA;
+//METAGUARD; swap_rule; lEcho$x2y__RDY & lEcho$y2x__RDY;
 //METARULES; swap2_rule; swap_rule
 //METASTART; l_module_OC_foo
-//METAINVOKE; indication$heard__ENA; :indication$heard__ENA;
-//METAGUARD; indication$heard; indication$heard__RDY;
+//METAGUARD; indication$heard; 1;
 `endif
