@@ -263,10 +263,6 @@ module l_module_OC_Connect (
     wire lERO_test$request$say__RDY_internal;
     wire lEcho$request$say2__RDY_internal;
     wire lEcho$request$say__RDY_internal;
-    wire lEIO$output_rulee__ENA;
-    wire lEIO$output_rulee__RDY;
-    wire lEIO$output_ruleo__ENA;
-    wire lEIO$output_ruleo__RDY;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
@@ -283,10 +279,6 @@ module l_module_OC_Connect (
         lERI$pipe$enq__ENA,
         lERI$pipe$enq$v,
         lERI$pipe$enq__RDY);
-    wire lEcho$delay_rule__ENA;
-    wire lEcho$delay_rule__RDY;
-    wire lEcho$respond_rule__ENA;
-    wire lEcho$respond_rule__RDY;
     wire lEcho$x2y__RDY;
     wire lEcho$y2x__RDY;
     l_module_OC_Echo lEcho (
@@ -317,8 +309,6 @@ module l_module_OC_Connect (
         lERO_test$request$say$meth,
         lERO_test$request$say$v,
         lERO_test$request$say__RDY_internal);
-    wire lEII_test$input_rule__ENA;
-    wire lEII_test$input_rule__RDY;
     wire lEII_test$pipe$enq__ENA;
     wire [95:0]lEII_test$pipe$enq$v;
     wire lEII_test$pipe$enq__RDY;
