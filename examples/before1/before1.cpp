@@ -78,7 +78,6 @@ EchoIndication unusedEI;
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
-public:
     EchoRequest request;
     EchoRequestPipe *pipe;
     void sayactual(int meth, int v) {
@@ -104,7 +103,6 @@ public:
 };
 
 __module EchoRequestInput { // pipe -> method
-public:
     EchoRequestPipe pipe;
     EchoRequest *request;
     void enqactualreq(EchoRequest_data v) {
@@ -126,7 +124,6 @@ public:
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 EchoIndicationPipe unusedEIP;
 __module EchoIndicationOutput { // method -> pipe
-public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
     EchoIndication_data ind0;
@@ -164,7 +161,6 @@ printf("output_ruleo: EchoIndicationOutput tag %d\n", ind1.tag);
 };
 
 __module EchoIndicationInput { // pipe -> method
-public:
     EchoIndicationPipe pipe;
     EchoIndication *indication;
     int busy_delay;
@@ -191,7 +187,6 @@ printf("input_rule: EchoIndicationInput\n");
 };
 
 __module Echo {
-public:
     EchoRequest request;
     int busy;
     int meth_temp;
@@ -214,6 +209,7 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
+public:
     void y2x(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         x = y;
@@ -245,17 +241,18 @@ printf("respond_rule: Echo\n");
 };
 
 __module foo { // method -> pipe
-public:
     EchoIndication indication;
-    void heard(int meth, int v) {
+    void heardactual(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
+    }
+    foo() {
+        indication.heard = heardactual;
     }
 };
 class foo zConnectresp;
 
 __module Connect {
-public:
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
