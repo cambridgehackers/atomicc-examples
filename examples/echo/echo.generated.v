@@ -6,8 +6,6 @@ module l_module_OC_Echo (
     input out$say__ENA,
     input [31:0]out$say$v,
     output out$say__RDY,
-    output out$heard,
-    output [31:0]heard$v,
     output out$heard__ENA,
     output [31:0]heard$v,
     input out$heard__RDY);

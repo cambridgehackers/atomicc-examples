@@ -35,7 +35,6 @@ __module FifoPong : public Fifo<T>
     T element2;
     bool pong;
     bool full;
-public:
     PipeIn<T> in;
     PipeOut<T> out;
     void enq(const T &v) if (notFull()) {
@@ -62,7 +61,6 @@ __module FifoPong : public Fifo<T>
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
-public:
     PipeIn<T> in;
     PipeOut<T> out;
     //bad version for testing void enq(T v) if (true) {
@@ -94,7 +92,6 @@ __interface hifc {
 };
 static ECHO_FIFO<int> bozouseless;
 __emodule EchoIndication {
-public:
   hifc out;
   void heardactual(int v);
   EchoIndication() {
@@ -108,16 +105,12 @@ __interface sifc {
 class EchoRequest {
 public:
   sifc out;
-  void sayactual(const int v);
-  EchoRequest() {
-  }
 };
 
 __module Echo : public EchoRequest {
   Fifo<int> *fifo;
   EchoIndication *ind;
   int pipetemp;
-public:
   void sayactual(const int v) {
       fifo->in.enq(v);
   }
@@ -143,7 +136,6 @@ void EchoIndication::heardactual(int v)
 }
 
 class EchoTest {
-public:
   Echo *echo;
   int x;
 public:
