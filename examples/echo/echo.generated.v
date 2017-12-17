@@ -6,9 +6,9 @@ module l_module_OC_Echo (
     input sout$say__ENA,
     input [31:0]sout$say$v,
     output sout$say__RDY,
-    output hout$heard__ENA,
-    output [31:0]heard$v,
-    input hout$heard__RDY);
+    output ind$hout$heard__ENA,
+    output [31:0]ind$hout$heard$v,
+    input ind$hout$heard__RDY);
     wire sout$say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
@@ -22,15 +22,8 @@ module l_module_OC_Echo (
         fifo$out$deq__RDY,
         ind$hout$heard$v,
         fifo$out$first__RDY);
-    reg[31:0] pipetemp;
     assign ind$hout$heard__ENA = respond_rule__ENA_internal;
     assign respond_rule__RDY_internal = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$hout$heard__RDY;
     assign sout$say__RDY = sout$say__RDY_internal;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        pipetemp <= 0;
-      end // nRST
-    end // always @ (posedge CLK)
 endmodule 
 

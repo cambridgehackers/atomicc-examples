@@ -110,7 +110,6 @@ public:
 __module Echo : public EchoRequest {
   Fifo<int> *fifo;
   EchoIndication *ind;
-  int pipetemp;
   void sayactual(const int v) {
       fifo->in.enq(v);
   }
