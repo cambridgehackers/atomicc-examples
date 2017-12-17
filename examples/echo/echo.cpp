@@ -92,10 +92,10 @@ __interface hifc {
 };
 static ECHO_FIFO<int> bozouseless;
 __emodule EchoIndication {
-  hifc out;
+  hifc hout;
   void heardactual(int v);
   EchoIndication() {
-      out.heard = heardactual;
+      hout.heard = heardactual;
   }
 };
 
@@ -104,7 +104,7 @@ __interface sifc {
 };
 class EchoRequest {
 public:
-  sifc out;
+  sifc sout;
 };
 
 __module Echo : public EchoRequest {
@@ -115,11 +115,11 @@ __module Echo : public EchoRequest {
       fifo->in.enq(v);
   }
   Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
-    out.say = sayactual;
+    sout.say = sayactual;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     __rule respond_rule if (true) {
         fifo->out.deq();
-	ind->out.heard(fifo->out.first());
+	ind->hout.heard(fifo->out.first());
     }
   };
   ~Echo() {}

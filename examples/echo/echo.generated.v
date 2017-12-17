@@ -3,29 +3,29 @@
 module l_module_OC_Echo (
     input CLK,
     input nRST,
-    input out$say__ENA,
-    input [31:0]out$say$v,
-    output out$say__RDY,
-    output out$heard__ENA,
+    input sout$say__ENA,
+    input [31:0]sout$say$v,
+    output sout$say__RDY,
+    output hout$heard__ENA,
     output [31:0]heard$v,
-    input out$heard__RDY);
-    wire out$say__RDY_internal;
+    input hout$heard__RDY);
+    wire sout$say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1 fifo (
         CLK,
         nRST,
-        out$say__ENA_internal,
-        out$say$v,
-        out$say__RDY_internal,
+        sout$say__ENA_internal,
+        sout$say$v,
+        sout$say__RDY_internal,
         respond_rule__ENA_internal,
         fifo$out$deq__RDY,
-        ind$out$heard$v,
+        ind$hout$heard$v,
         fifo$out$first__RDY);
     reg[31:0] pipetemp;
-    assign ind$out$heard__ENA = respond_rule__ENA_internal;
-    assign out$say__RDY = out$say__RDY_internal;
-    assign respond_rule__RDY_internal = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$out$heard__RDY;
+    assign ind$hout$heard__ENA = respond_rule__ENA_internal;
+    assign respond_rule__RDY_internal = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$hout$heard__RDY;
+    assign sout$say__RDY = sout$say__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin
