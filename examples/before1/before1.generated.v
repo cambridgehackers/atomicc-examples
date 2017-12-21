@@ -187,12 +187,12 @@ module l_module_OC_EchoRequestInput (
     input [191:0]pipe$enq$v,
     output pipe$enq__RDY);
     wire pipe$enq__RDY_internal;
-    assign pipe$enq__RDY_internal = (request$say__RDY | ((v_2e_addr_2e_ifoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addr_2e_ifoosuff_2e_2foosuff$tag == 2) ^ 1));
+    assign pipe$enq__RDY_internal = (request$say__RDY | ((v_2e_addr_2e_ifoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addr_2e_ifoosuff2foosuff$tag == 2) ^ 1));
     assign request$say$meth = v_2e_addr_2e_i$data$say$meth;
     assign request$say$v = v_2e_addr_2e_i$data$say$v;
     assign request$say2$meth = v_2e_addr_2e_i$data$say2$meth;
     assign request$say2$v = v_2e_addr_2e_i$data$say2$v;
-    assign request$say2__ENA = pipe$enq__ENA_internal & v_2e_addr_2e_ifoosuff_2e_2$tag == 2;
+    assign request$say2__ENA = pipe$enq__ENA_internal & v_2e_addr_2e_ifoosuff2$tag == 2;
     assign request$say__ENA = pipe$enq__ENA_internal & v_2e_addr_2e_ifoosuff$tag == 1;
     assign v_2e_addr_2e_i = pipe$enq$v;
     assign pipe$enq__RDY = pipe$enq__RDY_internal;
