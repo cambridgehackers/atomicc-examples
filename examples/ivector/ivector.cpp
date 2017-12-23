@@ -116,11 +116,11 @@ public:
         fifo = (Fifo<ValuePair> *)new FifoPong<UTYPE>[vsize];
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx vsize %d\n", this, sizeof(*this), fifo, sizeof(IVector), vsize);
         for (int i = 0; i < vsize; i++) {
-            RULE(IVector,("respond" + utostr(i)).c_str(), true, {
+            __rule respond_rule /*+ utostr(i)*/ {
                 UTYPE temp = fifo[i].out.first();
 	        fifo[i].out.deq();
 	        ind->heard(i, temp.b);
-                });
+                };
         }
     };
     ~IVector() {}

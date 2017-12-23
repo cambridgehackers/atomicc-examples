@@ -6,6 +6,7 @@ LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 CPPFLAGS += -fno-diagnostics-color
 CPPFLAGS += -I/usr/include/c++/4.2.1
+CPPFLAGS += -Xclang -disable-lifetime-markers
 #   catch signal SIGSEGV
 #   set follow-fork-mode child
 
