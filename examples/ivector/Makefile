@@ -7,6 +7,7 @@ CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-
 CPPFLAGS += -fno-diagnostics-color
 CPPFLAGS += -I/usr/include/c++/4.2.1
 CPPFLAGS += -Xclang -disable-lifetime-markers
+#CPPFLAGS += -emit-llvm
 #   catch signal SIGSEGV
 #   set follow-fork-mode child
 
