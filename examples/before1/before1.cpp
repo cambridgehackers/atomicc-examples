@@ -248,18 +248,20 @@ __module Connect {
     EchoIndicationInput lEII_test;
     Connect() {
 #if 1
-        connectInterface(this, (void **)&lERI.request, &lEcho.request);
-        connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
-        connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
-        connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
+        connectInterface((void **)&lERI.request, &lEcho.request, 0);
+        connectInterface((void **)&lEIO.pipe, &lEII_test.pipe, 0);
+        connectInterface((void **)&lEcho.indication, &lEIO.indication, 0);
+        connectInterface((void **)&lERO_test.pipe, &lERI.pipe, 0);
+        connectInterface((void **)&lEII_test.indication, &zConnectresp.indication, 0); // user indication
 #else
         lERI.request = &lEcho.request;
+    //void say(int meth, int v);
+    //void say2(int meth, int v);
         lEIO.pipe = &lEII_test.pipe;
         lEcho.indication = &lEIO.indication;
         lERO_test.pipe = &lERI.pipe;
-#endif
-
         lEII_test.indication = &zConnectresp.indication; // user indication
+#endif
 
         __rule swap_rule {
 printf("swap_rule:Connect\n");
