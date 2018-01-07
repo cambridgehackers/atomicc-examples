@@ -178,10 +178,10 @@ public:
 
         //lERO_test.init(&lERI.pipe);
         //lEII_test.init(&zConnectresp);
-        connectInterface(this, (void **)&lERI.request, &lEcho.request);
-        connectInterface(this, (void **)&lEIO.pipe, &lEII_test.pipe);
-        connectInterface(this, (void **)&lEcho.indication, &lEIO.indication);
-        connectInterface(this, (void **)&lERO_test.pipe, &lERI.pipe);
+        connectInterface((void **)&lERI.request, &lEcho.request, 0);
+        connectInterface((void **)&lEIO.pipe, &lEII_test.pipe, 0);
+        connectInterface((void **)&lEcho.indication, &lEIO.indication, 0);
+        connectInterface((void **)&lERO_test.pipe, &lERI.pipe, 0);
 
         //lERI.init();
         //lEIO.init();

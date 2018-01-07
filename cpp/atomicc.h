@@ -33,7 +33,7 @@
 #define __emodule class __attribute__(( atomicc_emodule ))
 #define __ready_valid __attribute__(( atomicc_ready_valid ))
 
-extern "C" void connectInterface(void *classp, void **target, void *source);
+extern "C" void connectInterface(void **target, void *source, void *classp);
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
 template<class T>
