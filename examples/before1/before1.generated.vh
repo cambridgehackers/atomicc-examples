@@ -53,16 +53,6 @@
 //METAINTERNAL; lEcho; l_module_OC_Echo;
 //METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
 //METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
-//METAINVOKE; lEIO$indication$heard__ENA; :lEIO$indication$heard__ENA;
-//METAGUARD; lEIO$indication$heard; lEIO$indication$heard__RDY;
-//METAINVOKE; lERO_test$request$say2__ENA; :lERO_test$request$say2__ENA;
-//METAGUARD; lERO_test$request$say2; lERO_test$request$say2__RDY;
-//METAINVOKE; lERO_test$request$say__ENA; :lERO_test$request$say__ENA;
-//METAGUARD; lERO_test$request$say; lERO_test$request$say__RDY;
-//METAINVOKE; lEcho$request$say2__ENA; :lEcho$request$say2__ENA;
-//METAGUARD; lEcho$request$say2; lEcho$request$say2__RDY;
-//METAINVOKE; lEcho$request$say__ENA; :lEcho$request$say__ENA;
-//METAGUARD; lEcho$request$say; lEcho$request$say__RDY;
 //METAINVOKE; swap2_rule__ENA; :lEcho$y2xnull__ENA;
 //METAGUARD; swap2_rule; lEcho$y2xnull__RDY;
 //METAINVOKE; swap_rule__ENA; :lEcho$x2y__ENA;:lEcho$y2x__ENA;

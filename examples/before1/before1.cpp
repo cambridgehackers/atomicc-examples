@@ -247,7 +247,7 @@ __module Connect {
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
     Connect() {
-#if 1
+#if 0
         connectInterface((void **)&lERI.request, &lEcho.request, 0);
         connectInterface((void **)&lEIO.pipe, &lEII_test.pipe, 0);
         connectInterface((void **)&lEcho.indication, &lEIO.indication, 0);
