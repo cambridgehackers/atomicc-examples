@@ -227,17 +227,18 @@ printf("respond_rule: Echo\n");
     }
 };
 
-__module foo { // method -> pipe
+class foo { // method -> pipe
     EchoIndication indication;
     void heardactual(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
+public:
     foo() {
         indication.heard = heardactual;
     }
 };
-class foo zConnectresp;
+foo zConnectresp;
 
 __module Connect {
     EchoIndicationOutput lEIO;

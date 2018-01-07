@@ -58,6 +58,4 @@
 //METAINVOKE; swap_rule__ENA; :lEcho$x2y__ENA;:lEcho$y2x__ENA;
 //METAGUARD; swap_rule; lEcho$x2y__RDY & lEcho$y2x__RDY;
 //METARULES; swap2_rule; swap_rule
-//METASTART; l_module_OC_foo
-//METAGUARD; indication$heard; 1;
 `endif
