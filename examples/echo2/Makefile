@@ -11,8 +11,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o ivector.ll ivector.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
+	#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
 
 clean:
 	rm -f *.bc *.o *.ll *.s ivector.exe.* ivector.tmp
