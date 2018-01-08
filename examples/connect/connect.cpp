@@ -43,7 +43,6 @@ typedef struct {
         } say;
     } data;
 } EchoRequest_data;
-EchoRequest_data unusedERD;
 
 typedef struct {
     int tag;
@@ -55,21 +54,17 @@ typedef struct {
         } heard;
     } data;
 } EchoIndication_data;
-EchoIndication_data unusedEID;
 
 // Interface classes
 __interface EchoRequest {
     void say(int meth, int v);
 };
-EchoRequest unusedER;
 
 __interface EchoIndication {
     void heard(int meth, int v);
 };
-EchoIndication unusedEI;
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
-EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
@@ -83,8 +78,6 @@ __module EchoRequestOutput { // method -> pipe
     }
     EchoRequestOutput() {
         request.say = sayactual;
-        //request.say = ^ (int meth, int v) { say(meth, v); }; //__vectorcall
-        //(&request)->say = &EchoRequestOutput::say;
     }
 };
 
@@ -105,7 +98,6 @@ __module EchoRequestInput { // pipe -> method
 };
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
-EchoIndicationPipe unusedEIP;
 __module EchoIndicationOutput { // method -> pipe
     EchoIndication indication;
     EchoIndicationPipe *pipe;
