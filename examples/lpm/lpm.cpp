@@ -145,18 +145,18 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
     ~Lpm() {}
 };
 
-__emodule foo { // method -> pipe
+class foo { // method -> pipe
+    LpmIndication indication;
     void heardactual(int meth, int v) if (true) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
 public:
-    LpmIndication indication;
     foo() {
         indication.heard = heardactual;
     }
 };
-class foo zConnectresp;
+foo zConnectresp;
 
 
 class LpmTest {

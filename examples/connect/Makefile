@@ -7,6 +7,8 @@ CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-
 #needed on Mac to find <string>
 CPPFLAGS += -I/usr/include/c++/4.2.1
 CPPFLAGS += -fno-diagnostics-color
+CPPFLAGS += -Xclang -disable-lifetime-markers
+#CPPFLAGS += -emit-llvm
 
 #$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o connect.ll connect.cpp
 #$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.bc connect.cpp

@@ -75,17 +75,16 @@ public:
 __module IVector : public IVectorRequest {
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
-public:
     void say(UTYPE v) {
         fifo->in.enq(v);
     }
     IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
-        RULE(IVector, "respond", (true), { 
+        __rule respond { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	    this->fifo->out.deq();
 	    this->ind->heard(this->fifo->out.first());
-            });
+            };
     };
     ~IVector() {}
 };

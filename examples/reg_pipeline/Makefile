@@ -4,6 +4,8 @@ LLC = /scratch/android-ndk-r9d/toolchains/llvm-3.3/prebuilt/linux-x86_64/bin/llc
 CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables
 CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
 CPPFLAGS += -fno-diagnostics-color
+CPPFLAGS += -Xclang -disable-lifetime-markers
+#CPPFLAGS += -emit-llvm
 LLVMFLAGS = -S
 # -stdlib=libc++
 

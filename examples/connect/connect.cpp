@@ -18,20 +18,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-class AB {
-public:
-    int meth(int A, int B) { return 0; }
-//};
-typedef int (AB::*FOO) (int A, int B);
-typedef int (*FOOF) (int A, int B);
-//class CD {
-    FOO vitem;
-    FOOF vv;
-    void BBBB(void) {
-        vv = reinterpret_cast<FOOF>(reinterpret_cast<__int128>(&AB::meth));
-        //vitem = &AB::meth;
-        }
-};
 #include <atomicc.h>
 
 typedef struct {
@@ -153,7 +139,7 @@ public:
     }
 };
 
-__module foo { // method -> pipe
+class foo { // method -> pipe
 public:
     EchoIndication indication;
     void heard(int meth, int v) {
@@ -161,36 +147,22 @@ public:
             //stop_main_program = 1;
     }
 };
-class foo zConnectresp;
+foo zConnectresp;
 
 __module Connect {
 public:
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
-
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
+
     Connect() {
-        //lERI.init(&lEcho.request);
-        //lEIO.init(&lEII_test.pipe);
-        //lEcho.init(&lEIO.indication);
-
-        //lERO_test.init(&lERI.pipe);
-        //lEII_test.init(&zConnectresp);
-        connectInterface((void **)&lERI.request, &lEcho.request, 0);
-        connectInterface((void **)&lEIO.pipe, &lEII_test.pipe, 0);
-        connectInterface((void **)&lEcho.indication, &lEIO.indication, 0);
-        connectInterface((void **)&lERO_test.pipe, &lERI.pipe, 0);
-
-        //lERI.init();
-        //lEIO.init();
-        //lEcho.init();
-        lERO_test.init();
-
+        lERI.request = &lEcho.request;
+        lEIO.pipe = &lEII_test.pipe;
+        lEcho.indication = &lEIO.indication;
+        lERO_test.pipe = &lERI.pipe;
         lEII_test.indication = &zConnectresp.indication; // user indication
-        //lEII_test.init();
-
     };
 };
 

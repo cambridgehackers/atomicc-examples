@@ -26,10 +26,15 @@ typedef struct {
 //char fooo[200];
 } ValueType;
 
-ValueType haha;
-ValueType bozoreturnfunc(int a)
+//ValueType haha;
+//ValueType bozoreturnfunc(int a)
+//{
+//    return haha;
+//}
+void BOZO(long *);
+void LALALA(void)
 {
-    return haha;
+BOZO(0);
 }
 
 // Serialization structures
@@ -78,7 +83,6 @@ EchoIndication unusedEI;
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
-public:
     EchoRequest request;
     EchoRequestPipe *pipe;
     void say(int meth, int v) if (true) {
@@ -101,7 +105,6 @@ public:
 };
 
 __module EchoRequestInput { // pipe -> method
-public:
     EchoRequestPipe pipe;
     EchoRequest *request;
     void enq(const EchoRequest_data &v) if (true) {
@@ -120,7 +123,6 @@ public:
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 EchoIndicationPipe unusedEIP;
 __module EchoIndicationOutput { // method -> pipe
-public:
     EchoIndication indication;
     EchoIndicationPipe *pipe;
     EchoIndication_data ind0;
@@ -142,22 +144,21 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         ind_busy = 1;
         even = !even;
     }
-    void init() {
-        RULE(Echo,"output_rulee", ((ind_busy != 0) & (even != 0)) != 0, {
+    EchoIndicationOutput() {
+        __rule output_rulee if(((ind_busy != 0) & (even != 0)) != 0) {
 printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, ind0.tag);
              ind_busy = 0;
              pipe->enq(ind0);
-           });
-        RULE(Echo,"output_ruleo", ((ind_busy != 0) & (even == 0)) != 0, {
+           };
+        __rule output_ruleo if(((ind_busy != 0) & (even == 0)) != 0) {
 printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, ind1.tag);
              ind_busy = 0;
              pipe->enq(ind1);
-           });
+           };
     }
 };
 
 __module EchoIndicationInput { // pipe -> method
-public:
     EchoIndicationPipe pipe;
     EchoIndication *indication;
     int busy_delay;
@@ -173,17 +174,16 @@ printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
             break;
         }
     }
-    void init() {
-        RULE(Echo,"input_rule", busy_delay != 0, {
+    EchoIndicationInput() {
+        __rule input_rule if(busy_delay != 0) {
 printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
              busy_delay = 0;
              indication->heard(meth_delay, v_delay);
-           });
+           };
     }
 };
 
 __module Echo {
-public:
     EchoRequest request;
     int busy;
     int meth_temp;
@@ -204,34 +204,32 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
-    void init() {
-        RULE(Echo,"delay_rule", (busy != 0 & busy_delay == 0) != 0, {
+    Echo() {
+        __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
 printf("[delay_rule:%d]Echo\n", __LINE__);
              busy = 0;
              busy_delay = 1;
              meth_delay = meth_temp;
              v_delay = v_temp;
-           });
-        RULE(Echo,"respond_rule", busy_delay != 0, {
+           };
+        __rule respond_rule if(busy_delay != 0) {
 printf("[respond_rule:%d]Echo\n", __LINE__);
              busy_delay = 0;
              indication->heard(meth_delay, v_delay);
-           });
+           };
     }
 };
 
-__module foo { // method -> pipe
-public:
+class foo { // method -> pipe
     EchoIndication indication;
     void heard(int meth, int v) if(true) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
 };
-class foo zConnectresp;
+foo zConnectresp;
 
 __module Connect {
-public:
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
@@ -239,18 +237,11 @@ public:
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
     Connect() {
-        connectInterface((void **)&lERI.request, &lEcho.request, 0);
-        connectInterface((void **)&lEIO.pipe, &lEII_test.pipe, 0);
-        connectInterface((void **)&lEcho.indication, &lEIO.indication, 0);
-        connectInterface((void **)&lERO_test.pipe, &lERI.pipe, 0);
-
-        //lERI.init();
-        lEIO.init();
-        lEcho.init();
-        //lERO_test.init();
-
+        lERI.request = &lEcho.request;
+        lEIO.pipe = &lEII_test.pipe;
+        lEcho.indication = &lEIO.indication;
+        lERO_test.pipe = &lERI.pipe;
         lEII_test.indication = &zConnectresp.indication; // user indication
-        lEII_test.init();
     };
 };
 

@@ -5,6 +5,8 @@ CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-
 #CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
 CPPFLAGS += -fno-diagnostics-color
 LLVMFLAGS = -S
+CPPFLAGS += -Xclang -disable-lifetime-markers
+#CPPFLAGS += -emit-llvm
 
 all:
 	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o echoN.ll echoN.cpp

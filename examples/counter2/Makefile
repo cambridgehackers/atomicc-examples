@@ -8,6 +8,8 @@ CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables
 CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior
 CPPFLAGS += -fno-diagnostics-color
 LLVMFLAGS = -S -emit-llvm
+CPPFLAGS += -Xclang -disable-lifetime-markers
+#CPPFLAGS += -emit-llvm
 # -stdlib=libc++
 
 all:

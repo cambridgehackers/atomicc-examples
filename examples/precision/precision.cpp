@@ -32,23 +32,18 @@ typedef struct {
     myint4 b;
 } ValueType;
 
-class IVectorIndication {
-public:
+__interface IVectorIndication {
     void heard(myint6 meth, myint4 v);
-    IVectorIndication() {
-    }
 };
 
-class IVectorRequest {
-public:
+__interface IVectorRequest {
     void say(myint6 meth, myint4 v) if (true) {}
-    IVectorRequest() {
-    }
 };
 
 ValueType grumpy;
 
 __module IVector : IVectorRequest {
+    IVectorRequest request;
     Fifo1<ValueType> fifo;
     myint23          fcounter;
     static int       intcWidth;
@@ -56,8 +51,7 @@ __module IVector : IVectorRequest {
     Myintc      counter;    // the precision of these members is set by the constructor
     Myintc      gcounter;
     IVectorIndication *ind;
-public:
-    void say(myint6 meth, myint4 v) if(true) {
+    void sayactual(myint6 meth, myint4 v) if(true) {
         ValueType temp;
         temp.a = meth;
         temp.b = v;
@@ -66,12 +60,13 @@ public:
     IVector(IVectorIndication *aind) : ind(aind)
 //, counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
     {
-        RULE(IVector, "respond", true, {
+        request.say = sayactual;
+        __rule respond {
             ValueType temp = fifo.out.first();
             fifo.out.deq();
             ind->heard(temp.a, temp.b);
             //fixedSet((void *)&gcounter, fixedGet((void *)&gcounter) + 1);
-            });
+            };
     };
     ~IVector() {}
 };
@@ -82,7 +77,6 @@ int IVector::intcWidth = 3;
 ////////////////////////////////////////////////////////////
 
 void IVectorIndication::heard(myint6 meth, myint4 v)
-if (true)
 {
     //printf("Heard an ivector: %d %d\n", meth, v);
     printf("Heard an ivector: %d %d\n", 0, 0);
@@ -91,7 +85,6 @@ if (true)
 class IVectorTest {
 public:
     IVector *ivector;
-public:
     IVectorTest(): ivector(new IVector(new IVectorIndication())) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }

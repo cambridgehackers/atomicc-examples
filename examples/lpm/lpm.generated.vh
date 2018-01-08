@@ -1,6 +1,11 @@
 `ifndef __lpm_GENERATED__VH__
 `define __lpm_GENERATED__VH__
 
+//METASTART; l_module_OC_Fifo2
+//METAGUARD; in$enq; ((windex + 1) % 2) != rindex;
+//METAGUARD; out$deq; rindex != windex;
+//METABEFORE; out$first; :out$deq__ENA
+//METAGUARD; out$first; rindex != windex;
 //METASTART; l_module_OC_LpmMemory
 //METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
 //METAGUARD; ifc$req; delayCount == 0;
@@ -11,11 +16,6 @@
 //METABEFORE; memdelay_rule__ENA; :ifc$req__ENA; :ifc$resAccept__ENA
 //METAGUARD; memdelay_rule; delayCount > 1;
 //METARULES; memdelay_rule
-//METASTART; l_module_OC_Fifo2
-//METAGUARD; in$enq; 1;
-//METAGUARD; out$deq; 1;
-//METABEFORE; out$first; :out$deq__ENA
-//METAGUARD; out$first; 1;
 //METASTART; l_module_OC_Lpm
 //METAINTERNAL; inQ; l_module_OC_Fifo1;
 //METAINTERNAL; fifo; l_module_OC_Fifo2;
@@ -23,20 +23,11 @@
 //METAINTERNAL; mem; l_module_OC_LpmMemory;
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINVOKE; enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
-//METAEXCLUSIVE; enter__ENA; mem$ifc$req__ENA; recirc__ENA
+//METAEXCLUSIVE; enter__ENA; recirc__ENA
 //METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
 //METAINVOKE; exit_rule__ENA; :fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;:outQ$in$enq__ENA;
-//METAEXCLUSIVE; exit_rule__ENA; mem$ifc$resAccept__ENA; mem$ifc$resValue; recirc__ENA
+//METAEXCLUSIVE; exit_rule__ENA; recirc__ENA
 //METAGUARD; exit_rule; (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-//METAINVOKE; mem$ifc$req__ENA; :mem$ifc$req__ENA;
-//METAEXCLUSIVE; mem$ifc$req__ENA; recirc__ENA
-//METAGUARD; mem$ifc$req; mem$ifc$req__RDY;
-//METAINVOKE; mem$ifc$resAccept__ENA; :mem$ifc$resAccept__ENA;
-//METAEXCLUSIVE; mem$ifc$resAccept__ENA; recirc__ENA
-//METAGUARD; mem$ifc$resAccept; mem$ifc$resAccept__RDY;
-//METAINVOKE; mem$ifc$resValue; :mem$ifc$resValue;
-//METAEXCLUSIVE; mem$ifc$resValue; recirc__ENA
-//METAGUARD; mem$ifc$resValue; mem$ifc$resValue__RDY;
 //METAINVOKE; recirc__ENA; :fifo$in$enq__ENA;:fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$req__ENA;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;
 //METAGUARD; recirc; ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
 //METAINVOKE; request$say__ENA; :inQ$in$enq__ENA;
