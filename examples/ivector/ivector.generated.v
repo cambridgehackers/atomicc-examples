@@ -138,7 +138,6 @@ module l_module_OC_IVector (
     wire fifo0$in$enq__ENA;
     wire [95:0]fifo0$in$enq$v;
     wire fifo0$in$enq__RDY;
-    wire fifo0$out$deq__ENA;
     wire fifo0$out$deq__RDY;
     wire [95:0]fifo0$out$first;
     wire fifo0$out$first__RDY;
@@ -155,7 +154,7 @@ module l_module_OC_IVector (
         fifo0$in$enq__ENA,
         fifo0$in$enq$v,
         fifo0$in$enq__RDY,
-        fifo0$out$deq__ENA,
+        respond_rule_0__ENA_internal,
         fifo0$out$deq__RDY,
         fifo0$out$first,
         fifo0$out$first__RDY);
@@ -169,7 +168,6 @@ module l_module_OC_IVector (
     wire fifo1$in$enq__ENA;
     wire [95:0]fifo1$in$enq$v;
     wire fifo1$in$enq__RDY;
-    wire fifo1$out$deq__ENA;
     wire fifo1$out$deq__RDY;
     wire [95:0]fifo1$out$first;
     wire fifo1$out$first__RDY;
@@ -186,7 +184,7 @@ module l_module_OC_IVector (
         fifo1$in$enq__ENA,
         fifo1$in$enq$v,
         fifo1$in$enq__RDY,
-        fifo1$out$deq__ENA,
+        respond_rule_1__ENA_internal,
         fifo1$out$deq__RDY,
         fifo1$out$first,
         fifo1$out$first__RDY);
@@ -200,7 +198,6 @@ module l_module_OC_IVector (
     wire fifo2$in$enq__ENA;
     wire [95:0]fifo2$in$enq$v;
     wire fifo2$in$enq__RDY;
-    wire fifo2$out$deq__ENA;
     wire fifo2$out$deq__RDY;
     wire [95:0]fifo2$out$first;
     wire fifo2$out$first__RDY;
@@ -217,7 +214,7 @@ module l_module_OC_IVector (
         fifo2$in$enq__ENA,
         fifo2$in$enq$v,
         fifo2$in$enq__RDY,
-        fifo2$out$deq__ENA,
+        respond_rule_2__ENA_internal,
         fifo2$out$deq__RDY,
         fifo2$out$first,
         fifo2$out$first__RDY);
@@ -231,7 +228,6 @@ module l_module_OC_IVector (
     wire fifo3$in$enq__ENA;
     wire [95:0]fifo3$in$enq$v;
     wire fifo3$in$enq__RDY;
-    wire fifo3$out$deq__ENA;
     wire fifo3$out$deq__RDY;
     wire [95:0]fifo3$out$first;
     wire fifo3$out$first__RDY;
@@ -248,7 +244,7 @@ module l_module_OC_IVector (
         fifo3$in$enq__ENA,
         fifo3$in$enq$v,
         fifo3$in$enq__RDY,
-        fifo3$out$deq__ENA,
+        respond_rule_3__ENA_internal,
         fifo3$out$deq__RDY,
         fifo3$out$first,
         fifo3$out$first__RDY);
@@ -262,7 +258,6 @@ module l_module_OC_IVector (
     wire fifo4$in$enq__ENA;
     wire [95:0]fifo4$in$enq$v;
     wire fifo4$in$enq__RDY;
-    wire fifo4$out$deq__ENA;
     wire fifo4$out$deq__RDY;
     wire [95:0]fifo4$out$first;
     wire fifo4$out$first__RDY;
@@ -279,7 +274,7 @@ module l_module_OC_IVector (
         fifo4$in$enq__ENA,
         fifo4$in$enq$v,
         fifo4$in$enq__RDY,
-        fifo4$out$deq__ENA,
+        respond_rule_4__ENA_internal,
         fifo4$out$deq__RDY,
         fifo4$out$first,
         fifo4$out$first__RDY);
@@ -293,7 +288,6 @@ module l_module_OC_IVector (
     wire fifo5$in$enq__ENA;
     wire [95:0]fifo5$in$enq$v;
     wire fifo5$in$enq__RDY;
-    wire fifo5$out$deq__ENA;
     wire fifo5$out$deq__RDY;
     wire [95:0]fifo5$out$first;
     wire fifo5$out$first__RDY;
@@ -310,7 +304,7 @@ module l_module_OC_IVector (
         fifo5$in$enq__ENA,
         fifo5$in$enq$v,
         fifo5$in$enq__RDY,
-        fifo5$out$deq__ENA,
+        respond_rule_5__ENA_internal,
         fifo5$out$deq__RDY,
         fifo5$out$first,
         fifo5$out$first__RDY);
@@ -324,7 +318,6 @@ module l_module_OC_IVector (
     wire fifo6$in$enq__ENA;
     wire [95:0]fifo6$in$enq$v;
     wire fifo6$in$enq__RDY;
-    wire fifo6$out$deq__ENA;
     wire fifo6$out$deq__RDY;
     wire [95:0]fifo6$out$first;
     wire fifo6$out$first__RDY;
@@ -341,7 +334,7 @@ module l_module_OC_IVector (
         fifo6$in$enq__ENA,
         fifo6$in$enq$v,
         fifo6$in$enq__RDY,
-        fifo6$out$deq__ENA,
+        respond_rule_6__ENA_internal,
         fifo6$out$deq__RDY,
         fifo6$out$first,
         fifo6$out$first__RDY);
@@ -355,7 +348,6 @@ module l_module_OC_IVector (
     wire fifo7$in$enq__ENA;
     wire [95:0]fifo7$in$enq$v;
     wire fifo7$in$enq__RDY;
-    wire fifo7$out$deq__ENA;
     wire fifo7$out$deq__RDY;
     wire [95:0]fifo7$out$first;
     wire fifo7$out$first__RDY;
@@ -372,7 +364,7 @@ module l_module_OC_IVector (
         fifo7$in$enq__ENA,
         fifo7$in$enq$v,
         fifo7$in$enq__RDY,
-        fifo7$out$deq__ENA,
+        respond_rule_7__ENA_internal,
         fifo7$out$deq__RDY,
         fifo7$out$first,
         fifo7$out$first__RDY);
@@ -386,7 +378,6 @@ module l_module_OC_IVector (
     wire fifo8$in$enq__ENA;
     wire [95:0]fifo8$in$enq$v;
     wire fifo8$in$enq__RDY;
-    wire fifo8$out$deq__ENA;
     wire fifo8$out$deq__RDY;
     wire [95:0]fifo8$out$first;
     wire fifo8$out$first__RDY;
@@ -403,7 +394,7 @@ module l_module_OC_IVector (
         fifo8$in$enq__ENA,
         fifo8$in$enq$v,
         fifo8$in$enq__RDY,
-        fifo8$out$deq__ENA,
+        respond_rule_8__ENA_internal,
         fifo8$out$deq__RDY,
         fifo8$out$first,
         fifo8$out$first__RDY);
@@ -432,7 +423,7 @@ module l_module_OC_IVector (
         fifo9$in$enq__ENA,
         fifo9$in$enq$v,
         fifo9$in$enq__RDY,
-        respond_rule__ENA_internal,
+        respond_rule_9__ENA_internal,
         fifo9$out$deq__RDY,
         fifometh$in$enq$v,
         fifo9$out$first__RDY);
@@ -473,11 +464,21 @@ module l_module_OC_IVector (
     assign in$say$v = in$say$v;
     assign in$say__ENA = in$say__ENA_internal;
     assign in$say__RDY_internal = in$say__RDY;
-    assign ind$heard__ENA = respond_rule__ENA_internal;
-    assign ind$meth = 9;
-    assign ind$v = v;
-    assign respond_rule__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
+    assign ind$heard__ENA = respond_rule_0__ENA_internal || respond_rule_1__ENA_internal || respond_rule_2__ENA_internal || respond_rule_3__ENA_internal || respond_rule_4__ENA_internal || respond_rule_5__ENA_internal || respond_rule_6__ENA_internal || respond_rule_7__ENA_internal || respond_rule_8__ENA_internal || respond_rule_9__ENA_internal;
+    assign ind$meth = respond_rule_0__ENA_internal ? 0 : respond_rule_1__ENA_internal ? 1 : respond_rule_2__ENA_internal ? 2 : respond_rule_3__ENA_internal ? 3 : respond_rule_4__ENA_internal ? 4 : respond_rule_5__ENA_internal ? 5 : respond_rule_6__ENA_internal ? 6 : respond_rule_7__ENA_internal ? 7 : respond_rule_8__ENA_internal ? 8 : 9;
+    assign ind$v = respond_rule_0__ENA_internal ? temp$b : respond_rule_1__ENA_internal ? temp$b : respond_rule_2__ENA_internal ? temp$b : respond_rule_3__ENA_internal ? temp$b : respond_rule_4__ENA_internal ? temp$b : respond_rule_5__ENA_internal ? temp$b : respond_rule_6__ENA_internal ? temp$b : respond_rule_7__ENA_internal ? temp$b : respond_rule_8__ENA_internal ? temp$b : temp$b;
+    assign respond_rule_0__RDY_internal = (fifo0$out$first__RDY & fifo0$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_1__RDY_internal = (fifo1$out$first__RDY & fifo1$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_2__RDY_internal = (fifo2$out$first__RDY & fifo2$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_3__RDY_internal = (fifo3$out$first__RDY & fifo3$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_4__RDY_internal = (fifo4$out$first__RDY & fifo4$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_5__RDY_internal = (fifo5$out$first__RDY & fifo5$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_6__RDY_internal = (fifo6$out$first__RDY & fifo6$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_7__RDY_internal = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_8__RDY_internal = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & ind$heard__RDY;
+    assign respond_rule_9__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
     assign say__RDY_internal = 1;
+    assign temp$b = v;
     assign in$say__RDY = in$say__RDY_internal;
     assign say__RDY = say__RDY_internal;
 
