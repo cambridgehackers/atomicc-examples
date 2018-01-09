@@ -92,7 +92,11 @@ module l_module_OC_Lpm (
     input request$say__ENA,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
-    output request$say__RDY);
+    output request$say__RDY,
+    output ind$heard__ENA,
+    output [31:0]ind$heard$meth,
+    output [31:0]ind$heard$v,
+    input ind$heard__RDY);
     wire request$say__RDY_internal;
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;

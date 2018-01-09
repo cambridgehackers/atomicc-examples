@@ -1,24 +1,28 @@
 `ifndef __precision_GENERATED__VH__
 `define __precision_GENERATED__VH__
 
-//METASTART; l_module_OC_Fifo1
-//METAEXCLUSIVE; out$deq; in$enq
-//METAGUARD; out$deq; full;
+//METASTART; l_module_OC_Fifo1_OC_3
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
-//METAGUARD; out$first; full;
-//METASTART; l_module_OC_Fifo1_OC_0
-//METAEXCLUSIVE; out$deq; in$enq
 //METAGUARD; out$deq; full;
-//METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
+//METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 //METASTART; l_module_OC_IVector
-//METAINTERNAL; fifo; l_module_OC_Fifo1_OC_0;
-//METAEXTERNAL; ind; l_class_OC_IVectorIndication;
-//METAINVOKE; respond; :fifo$out$deq;:fifo$out$first;:ind$heard;
+//METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;
+//METAINTERNAL; fifo; l_module_OC_Fifo1_OC_3;
+//METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
+//METAGUARD; request$say; fifo$in$enq__RDY;
+//METAINVOKE; respond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
 //METAGUARD; respond; (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
-//METAINVOKE; say; :fifo$in$enq;
-//METAGUARD; say; fifo$in$enq__RDY;
+//METAINVOKE; say__ENA; :say__ENA;
+//METAGUARD; say; say__RDY;
 //METARULES; respond
+//METASTART; l_module_OC_Fifo1
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; full ^ 1;
+//METAGUARD; out$deq; full;
+//METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
+//METASTART; l_module_OC_IVectorInd
+//METAGUARD; ind$heard; 1;
 `endif

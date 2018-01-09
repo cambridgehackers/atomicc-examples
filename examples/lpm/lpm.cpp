@@ -41,7 +41,6 @@ __module Fifo2 : public Fifo<T> {
     T firstactual2(void) if (notEmpty()) { return element[rindex]; }
     bool notEmpty() const { return rindex != windex; }
     bool notFull() const { return ((windex + 1) % MAX_COUNT) != rindex; }
-public:
     Fifo2(): rindex(0), windex(0) {
         this->in.enq = enqactual2;
         this->out.deq = deqactual2;
@@ -77,7 +76,6 @@ __module LpmMemory {
     void reqactual(ValuePair v) if (delayCount == 0) { delayCount = 4; saved = v; }
     void resAcceptactual(void) if (delayCount == 1) { delayCount = 0;}
     ValuePair resValueactual(void) if (delayCount == 1) { return saved; }
-public:
     LpmMem ifc;
     LpmMemory() {
         ifc.req = reqactual;
@@ -104,7 +102,6 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         doneCount++;
         return !(doneCount % 5);
     }
-public:
     LpmIndication *ind;
     LpmRequest request;
     Lpm() {
@@ -160,7 +157,6 @@ foo zConnectresp;
 
 
 class LpmTest {
-public:
     Lpm *lpm;
 public:
     LpmTest(): lpm(new Lpm()) {
@@ -178,8 +174,6 @@ int main(int argc, const char *argv[])
     while (!lpmTest.lpm->request.say__RDY())
         ;
     lpmTest.lpm->request.say(2, 44);
-    if (argc != 1)
-        run_main_program();
     printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
     return 0;
 }

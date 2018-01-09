@@ -122,12 +122,11 @@ module l_module_OC_IVector (
     input [31:0]in$say$meth,
     input [31:0]in$say$v,
     output in$say__RDY,
-    input say__ENA,
-    input [31:0]meth,
-    input [31:0]v,
-    output say__RDY);
+    output out$heard__ENA,
+    output [31:0]out$heard$meth,
+    output [31:0]out$heard$v,
+    input out$heard__RDY);
     wire in$say__RDY_internal;
-    wire say__RDY_internal;
     wire fifo0$deq__ENA;
     wire fifo0$deq__RDY;
     wire fifo0$enq__ENA;
@@ -425,7 +424,7 @@ module l_module_OC_IVector (
         fifo9$in$enq__RDY,
         respond_rule_9__ENA_internal,
         fifo9$out$deq__RDY,
-        fifometh$in$enq$v,
+        temp,
         fifo9$out$first__RDY);
     wire fifo10$deq__ENA;
     wire fifo10$deq__RDY;
@@ -459,28 +458,24 @@ module l_module_OC_IVector (
         fifo10$out$first,
         fifo10$out$first__RDY);
     reg[31:0] vsize;
-    assign fifometh$in$enq__ENA = say__ENA_internal;
-    assign in$say$meth = in$say$meth;
-    assign in$say$v = in$say$v;
-    assign in$say__ENA = in$say__ENA_internal;
-    assign in$say__RDY_internal = in$say__RDY;
-    assign ind$heard__ENA = respond_rule_0__ENA_internal || respond_rule_1__ENA_internal || respond_rule_2__ENA_internal || respond_rule_3__ENA_internal || respond_rule_4__ENA_internal || respond_rule_5__ENA_internal || respond_rule_6__ENA_internal || respond_rule_7__ENA_internal || respond_rule_8__ENA_internal || respond_rule_9__ENA_internal;
-    assign ind$meth = respond_rule_0__ENA_internal ? 0 : respond_rule_1__ENA_internal ? 1 : respond_rule_2__ENA_internal ? 2 : respond_rule_3__ENA_internal ? 3 : respond_rule_4__ENA_internal ? 4 : respond_rule_5__ENA_internal ? 5 : respond_rule_6__ENA_internal ? 6 : respond_rule_7__ENA_internal ? 7 : respond_rule_8__ENA_internal ? 8 : 9;
-    assign ind$v = respond_rule_0__ENA_internal ? temp$b : respond_rule_1__ENA_internal ? temp$b : respond_rule_2__ENA_internal ? temp$b : respond_rule_3__ENA_internal ? temp$b : respond_rule_4__ENA_internal ? temp$b : respond_rule_5__ENA_internal ? temp$b : respond_rule_6__ENA_internal ? temp$b : respond_rule_7__ENA_internal ? temp$b : respond_rule_8__ENA_internal ? temp$b : temp$b;
-    assign respond_rule_0__RDY_internal = (fifo0$out$first__RDY & fifo0$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_1__RDY_internal = (fifo1$out$first__RDY & fifo1$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_2__RDY_internal = (fifo2$out$first__RDY & fifo2$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_3__RDY_internal = (fifo3$out$first__RDY & fifo3$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_4__RDY_internal = (fifo4$out$first__RDY & fifo4$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_5__RDY_internal = (fifo5$out$first__RDY & fifo5$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_6__RDY_internal = (fifo6$out$first__RDY & fifo6$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_7__RDY_internal = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_8__RDY_internal = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & ind$heard__RDY;
-    assign respond_rule_9__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & ind$heard__RDY;
-    assign say__RDY_internal = 1;
-    assign temp$b = v;
+    assign (in$say$meth == 0 ? fifo0:&fifo1)$in$enq$v = temp_2e_i;
+    assign (in$say$meth == 0 ? fifo0:&fifo1)$in$enq__ENA = in$say__ENA_internal;
+    assign in$say__RDY_internal = fifo0$in$enq__RDY & fifo1$in$enq__RDY;
+    assign out$heard$meth = respond_rule_0__ENA_internal ? 0 : respond_rule_1__ENA_internal ? 1 : respond_rule_2__ENA_internal ? 2 : respond_rule_3__ENA_internal ? 3 : respond_rule_4__ENA_internal ? 4 : respond_rule_5__ENA_internal ? 5 : respond_rule_6__ENA_internal ? 6 : respond_rule_7__ENA_internal ? 7 : respond_rule_8__ENA_internal ? 8 : 9;
+    assign out$heard$v = respond_rule_0__ENA_internal ? temp$b : respond_rule_1__ENA_internal ? temp$b : respond_rule_2__ENA_internal ? temp$b : respond_rule_3__ENA_internal ? temp$b : respond_rule_4__ENA_internal ? temp$b : respond_rule_5__ENA_internal ? temp$b : respond_rule_6__ENA_internal ? temp$b : respond_rule_7__ENA_internal ? temp$b : respond_rule_8__ENA_internal ? temp$b : temp$b;
+    assign out$heard__ENA = respond_rule_0__ENA_internal || respond_rule_1__ENA_internal || respond_rule_2__ENA_internal || respond_rule_3__ENA_internal || respond_rule_4__ENA_internal || respond_rule_5__ENA_internal || respond_rule_6__ENA_internal || respond_rule_7__ENA_internal || respond_rule_8__ENA_internal || respond_rule_9__ENA_internal;
+    assign respond_rule_0__RDY_internal = (fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_1__RDY_internal = (fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_2__RDY_internal = (fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_3__RDY_internal = (fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_4__RDY_internal = (fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_5__RDY_internal = (fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_6__RDY_internal = (fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_7__RDY_internal = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_8__RDY_internal = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY;
+    assign respond_rule_9__RDY_internal = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY;
+    assign temp_2e_i$b = in$say$v;
     assign in$say__RDY = in$say__RDY_internal;
-    assign say__RDY = say__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -16,7 +16,11 @@ module l_module_OC_Echo (
     input y2x__ENA,
     output y2x__RDY,
     input y2xnull__ENA,
-    output y2xnull__RDY);
+    output y2xnull__RDY,
+    output indication$heard__ENA,
+    output [31:0]indication$heard$meth,
+    output [31:0]indication$heard$v,
+    input indication$heard__RDY);
     wire request$say2__RDY_internal;
     wire request$say__RDY_internal;
     wire x2y__RDY_internal;
@@ -92,7 +96,11 @@ module l_module_OC_EchoIndicationInput (
     input nRST,
     input pipe$enq__ENA,
     input [95:0]pipe$enq$v,
-    output pipe$enq__RDY);
+    output pipe$enq__RDY,
+    output indication$heard__ENA,
+    output [31:0]indication$heard$meth,
+    output [31:0]indication$heard$v,
+    input indication$heard__RDY);
     wire pipe$enq__RDY_internal;
     reg[31:0] busy_delay;
     reg[31:0] meth_delay;
@@ -133,7 +141,10 @@ module l_module_OC_EchoIndicationOutput (
     input indication$heard__ENA,
     input [31:0]indication$heard$meth,
     input [31:0]indication$heard$v,
-    output indication$heard__RDY);
+    output indication$heard__RDY,
+    output pipe$enq__ENA,
+    output [95:0]pipe$enq$v,
+    input pipe$enq__RDY);
     wire indication$heard__RDY_internal;
     reg[95:0] ind0;
     reg[95:0] ind1;
@@ -185,7 +196,15 @@ module l_module_OC_EchoRequestInput (
     input nRST,
     input pipe$enq__ENA,
     input [191:0]pipe$enq$v,
-    output pipe$enq__RDY);
+    output pipe$enq__RDY,
+    output request$say2__ENA,
+    output [31:0]request$say2$meth,
+    output [31:0]request$say2$v,
+    input request$say2__RDY,
+    output request$say__ENA,
+    output [31:0]request$say$meth,
+    output [31:0]request$say$v,
+    input request$say__RDY);
     wire pipe$enq__RDY_internal;
     assign pipe$enq__RDY_internal = (request$say__RDY | ((v_2e_addr_2e_ifoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addr_2e_ifoosuff2foosuff$tag == 2) ^ 1));
     assign request$say$meth = v_2e_addr_2e_i$data$say$meth;
@@ -208,7 +227,10 @@ module l_module_OC_EchoRequestOutput (
     input request$say__ENA,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
-    output request$say__RDY);
+    output request$say__RDY,
+    output pipe$enq__ENA,
+    output [191:0]pipe$enq$v,
+    input pipe$enq__RDY);
     wire request$say2__RDY_internal;
     wire request$say__RDY_internal;
     assign ind_2e_i$tag = 1;
@@ -246,14 +268,25 @@ module l_module_OC_Connect (
         lEcho$indication$heard__ENA,
         lEIO$indication$heard$meth,
         lEIO$indication$heard$v,
-        lEcho$indication$heard__RDY);
+        lEcho$indication$heard__RDY,
+        lEIO$pipe$enq__ENA,
+        lEIO$pipe$enq$v,
+        lEIO$pipe$enq__RDY);
     wire [191:0]lERI$pipe$enq$v;
     l_module_OC_EchoRequestInput lERI (
         CLK,
         nRST,
         lERO_test$pipe$enq__ENA,
         lERI$pipe$enq$v,
-        lERO_test$pipe$enq__RDY);
+        lERO_test$pipe$enq__RDY,
+        lERI$request$say2__ENA,
+        lERI$request$say2$meth,
+        lERI$request$say2$v,
+        lERI$request$say2__RDY,
+        lERI$request$say__ENA,
+        lERI$request$say$meth,
+        lERI$request$say$v,
+        lERI$request$say__RDY);
     wire [31:0]lEcho$request$say2$meth;
     wire [31:0]lEcho$request$say2$v;
     wire [31:0]lEcho$request$say$meth;
@@ -276,7 +309,11 @@ module l_module_OC_Connect (
         swap_rule__ENA_internal,
         lEcho$y2x__RDY,
         swap2_rule__ENA_internal,
-        swap2_rule__RDY_internal);
+        swap2_rule__RDY_internal,
+        lEcho$indication$heard__ENA,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
+        lEcho$indication$heard__RDY);
     wire lERO_test$request$say2__ENA;
     wire [31:0]lERO_test$request$say2$meth;
     wire [31:0]lERO_test$request$say2$v;
@@ -295,14 +332,21 @@ module l_module_OC_Connect (
         lERO_test$request$say__ENA,
         lERO_test$request$say$meth,
         lERO_test$request$say$v,
-        lERO_test$request$say__RDY);
+        lERO_test$request$say__RDY,
+        lERO_test$pipe$enq__ENA,
+        lERO_test$pipe$enq$v,
+        lERO_test$pipe$enq__RDY);
     wire [95:0]lEII_test$pipe$enq$v;
     l_module_OC_EchoIndicationInput lEII_test (
         CLK,
         nRST,
         lEIO$pipe$enq__ENA,
         lEII_test$pipe$enq$v,
-        lEIO$pipe$enq__RDY);
+        lEIO$pipe$enq__RDY,
+        lEII_test$indication$heard__ENA,
+        lEII_test$indication$heard$meth,
+        lEII_test$indication$heard$v,
+        lEII_test$indication$heard__RDY);
     assign swap_rule__RDY_internal = lEcho$x2y__RDY & lEcho$y2x__RDY;
 endmodule 
 

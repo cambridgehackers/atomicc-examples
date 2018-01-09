@@ -55,17 +55,16 @@ public:
 };
 
 static FifoPong<UTYPE> bozouseless;
-#if 0
 __interface IVectorIndication {
     void heard(int meth, int v);
 };
-#else
-__emodule IVectorIndication {
-public:
-    void heard(int meth, int v);
-    IVectorIndication() {}
+__emodule IVectorInd{
+    IVectorIndication ind;
+    void heardactual(int meth, int v);
+    IVectorInd() {
+        ind.heard = heardactual;
+    }
 };
-#endif
 
 __interface IVectorRequest {
     void say(int meth, int v);
@@ -73,11 +72,10 @@ __interface IVectorRequest {
 
 __module IVector {
     Fifo<UTYPE> *fifo;
-    IVectorIndication *ind;
+    IVectorIndication *out;
     int vsize;
-public:
     IVectorRequest in;
-    void say(int meth, int v) if(true) {
+    void sayactual(int meth, int v) if(true) {
         UTYPE temp;
         temp.b = v;
 #if 1
@@ -110,7 +108,8 @@ public:
          tfifo->in.enq(temp);
 #endif
     }
-    IVector(IVectorIndication *aind, int size) : ind(aind), vsize(size) {
+    IVector(IVectorInd *aind, int size) : out(&aind->ind), vsize(size) {
+        in.say = sayactual;
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = (Fifo<ValuePair> *)new FifoPong<UTYPE>[vsize];
@@ -119,7 +118,7 @@ public:
             __rule respond_rule {
                 UTYPE temp = fifo[i].out.first();
 	        fifo[i].out.deq();
-	        ind->heard(i, temp.b);
+	        out->heard(i, temp.b);
                 };
         }
     };
@@ -130,7 +129,7 @@ class IVectorTest {
 public:
     IVector *ivector;
 public:
-    IVectorTest(): ivector(new IVector(new IVectorIndication(), 10)) {
+    IVectorTest(): ivector(new IVector(new IVectorInd(), 10)) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }
     ~IVectorTest() {}

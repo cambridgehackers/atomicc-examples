@@ -20,105 +20,35 @@
  */
 #include <fifo.h>
 
-////////////////////////////////////////////////////////////
-// Echo
-////////////////////////////////////////////////////////////
-
-#if 1
-#define ECHO_FIFO Fifo1
-#elif 1
-#define ECHO_FIFO FifoPong
-template<class T>
-__module FifoPong : public Fifo<T>
-{
-    T element1;
-    T element2;
-    bool pong;
-    bool full;
-    PipeIn<T> in;
-    PipeOut<T> out;
-    void enq(const T &v) if (notFull()) {
-        if (pong)
-            element2 = v;
-        else
-            element1 = v;
-        full = true;
-    }
-    void deq(void) if (notEmpty()) { full = false; pong = !pong; }
-    T first(void) if (notEmpty()) { return pong ? element2 : element1; }
-    FifoPong(): Fifo<T>(), full(false), pong(false) {
-        FIFOBASECONSTRUCTOR(FifoPong<T>);
-        printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
-    };
-    bool notEmpty() const { return full; }
-    bool notFull() const { return !full; }
-};
-#else
-#define ECHO_FIFO FifoPong
-template<class T>
-__module FifoPong : public Fifo<T>
-{
-    Fifo1<T> element1;
-    Fifo1<T> element2;
-    bool pong;
-    PipeIn<T> in;
-    PipeOut<T> out;
-    //bad version for testing void enq(T v) if (true) {
-    void enq(const T &v) if (true) {
-        if (pong)
-            element2.in.enq(v);
-        else
-            element1.in.enq(v);
-    }
-    void deq(void) {
-        if (pong)
-            element2.out.deq();
-        else
-            element1.out.deq();
-        pong = !pong;
-    }
-    T first(void) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false) {
-        FIFOBASECONSTRUCTOR(FifoPong<T>);
-        printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
-        printf("in.enq %p in.enq__RDY %p out.deq %p out.deq__RDY %p\n",
-           in.enqp, in.enq__RDYp, out.deqp, out.deq__RDYp);
-    };
-};
-#endif
-
-__interface hifc {
-  void heard(int v);
-};
-static ECHO_FIFO<int> bozouseless;
-__emodule EchoIndication {
-  hifc hout;
-  void heardactual(int v);
-  EchoIndication() {
-      hout.heard = heardactual;
-  }
-};
-
-__interface sifc {
+__interface EchoRequest {
   void say(const int v);
 };
-class EchoRequest {
-public:
-  sifc sout;
+
+__interface EchoIndication {
+  void heard(int v);
 };
 
-__module Echo : public EchoRequest {
-  Fifo<int> *fifo;
+__emodule EchoInd {
+  EchoIndication hout;
+  //void heardactual(int v);
+  //EchoInd() {
+      //hout.heard = heardactual;
+  //}
+};
+
+__module Echo {
+  EchoRequest sout;
   EchoIndication *ind;
+  Fifo<int> *fifo;
   void sayactual(const int v) {
       fifo->in.enq(v);
   }
-  Echo(EchoIndication *aind) : fifo(new ECHO_FIFO<int>()), ind(aind) {
+  Echo(EchoInd *aind) : fifo(new Fifo1<int>()), ind(&aind->hout) {
     sout.say = sayactual;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    __rule respond_rule if (true) {
+    __rule respond_rule {
         fifo->out.deq();
-	ind->hout.heard(fifo->out.first());
+	ind->heard(fifo->out.first());
     }
   };
   ~Echo() {}
@@ -128,17 +58,16 @@ __module Echo : public EchoRequest {
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void EchoIndication::heardactual(int v)
-{
-    printf("Heard an echo: %d\n", v);
-    //stop_main_program = 1;
-}
+//void EchoInd::heardactual(int v)
+//{
+    //printf("Heard an echo: %d\n", v);
+//}
 
 class EchoTest {
   Echo *echo;
   int x;
 public:
-  EchoTest(): echo(new Echo(new EchoIndication())), x(7) {
+  EchoTest(): echo(new Echo(new EchoInd())), x(7) {
       printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
   }
   ~EchoTest() {}

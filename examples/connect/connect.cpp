@@ -153,6 +153,8 @@ public:
 foo zConnectresp;
 
 __module Connect {
+    EchoRequest request;
+    EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
@@ -164,7 +166,9 @@ __module Connect {
         lEIO.pipe = &lEII_test.pipe;
         lEcho.indication = &lEIO.indication;
         lERO_test.pipe = &lERI.pipe;
-        lEII_test.indication = &zConnectresp.indication; // user indication
+        //lEII_test.indication = &zConnectresp.indication; // user indication
+        lEII_test.indication = indication; // user indication
+        request = lERO_test.request; // user request
     };
 };
 
