@@ -37,8 +37,8 @@ __emodule EchoInd {
 };
 
 __module Echo {
-  EchoRequest sout;
-  EchoIndication *ind;
+  __software EchoRequest sout;
+  __software EchoIndication *ind;
   Fifo<int> *fifo;
   void sayactual(const int v) {
       fifo->in.enq(v);

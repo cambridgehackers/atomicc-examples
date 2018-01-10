@@ -32,6 +32,7 @@
 #define __module class __attribute__(( atomicc_module ))
 #define __emodule class __attribute__(( atomicc_emodule ))
 #define __ready_valid __attribute__(( atomicc_ready_valid ))
+#define __software __attribute__(( atomicc_software ))
 
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
