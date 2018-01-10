@@ -1,0 +1,12 @@
+#
+set -ex
+make
+cd ../echo2 ;make
+cd ../rulec ;make
+cd ../echo ;make
+cd ../rulec ;make
+cd ../before1 ;make
+cd ../ivector ;make
+cd ../lpm ;make
+cd ../connect ;make
+cd ../precision ;make
