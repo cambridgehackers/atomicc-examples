@@ -13,8 +13,10 @@
 //METAINVOKE; deq__ENA; :element1$out$deq__ENA;:element2$out$deq__ENA;
 //METAGUARD; deq; 1;
 //METAINVOKE; enq__ENA; :element1$in$enq__ENA;:element2$in$enq__ENA;
+//METABEFORE; enq__ENA; :deq__ENA
 //METAGUARD; enq; 1;
 //METAINVOKE; first; :element1$out$first;:element2$out$first;
+//METABEFORE; first; :deq__ENA
 //METAGUARD; first; 1;
 //METAINVOKE; in$enq__ENA; :in$enq__ENA;
 //METAGUARD; in$enq; in$enq__RDY;

@@ -9,6 +9,8 @@ module l_module_OC_Echo (
     output ind$heard__ENA,
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
+// software: ind
+// software: sout
     wire sout$say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;

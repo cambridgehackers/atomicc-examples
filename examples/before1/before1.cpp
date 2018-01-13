@@ -135,12 +135,12 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
     EchoIndicationOutput() {
        indication.heard = heardactual;
         __rule output_rulee if (((ind_busy != 0) & (even != 0)) != 0) {
-printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
+//printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
              ind_busy = 0;
              pipe->enq(ind0);
            };
         __rule output_ruleo if (((ind_busy != 0) & (even == 0)) != 0) {
-printf("output_ruleo: EchoIndicationOutput tag %d\n", ind1.tag);
+//printf("output_ruleo: EchoIndicationOutput tag %d\n", ind1.tag);
              ind_busy = 0;
              pipe->enq(ind1);
            };
