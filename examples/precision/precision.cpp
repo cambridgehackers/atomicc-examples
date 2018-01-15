@@ -37,10 +37,7 @@ __interface IVectorIndication {
 };
 __module IVectorInd {
     IVectorIndication ind;
-    void heardactual(myint6 meth, myint4 v);
-    IVectorInd() {
-        ind.heard = heardactual;
-    }
+    void ind.heard(myint6 meth, myint4 v);
 };
 
 __interface IVectorRequest {
@@ -58,7 +55,7 @@ __module IVector : IVectorRequest {
     typedef int __attribute__(( atomicc_width(intcWidth) )) Myintc;
     Myintc      counter;    // the precision of these members is set by the constructor
     Myintc      gcounter;
-    void sayactual(myint6 meth, myint4 v) if(true) {
+    void request.say(myint6 meth, myint4 v) if(true) {
         ValueType temp;
         temp.a = meth;
         temp.b = v;
@@ -67,7 +64,6 @@ __module IVector : IVectorRequest {
     IVector(IVectorInd *aind) : ind(&aind->ind)
 //, counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
     {
-        request.say = sayactual;
         __rule respond {
             ValueType temp = fifo.out.first();
             fifo.out.deq();
@@ -83,7 +79,7 @@ int IVector::intcWidth = 3;
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorInd::heardactual(myint6 meth, myint4 v)
+void IVectorInd::ind.heard(myint6 meth, myint4 v)
 {
     //printf("Heard an ivector: %d %d\n", meth, v);
     printf("Heard an ivector: %d %d\n", 0, 0);

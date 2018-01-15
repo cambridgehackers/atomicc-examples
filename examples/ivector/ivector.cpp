@@ -60,10 +60,7 @@ __interface IVectorIndication {
 };
 __emodule IVectorInd{
     IVectorIndication ind;
-    void heardactual(int meth, int v);
-    IVectorInd() {
-        ind.heard = heardactual;
-    }
+    void ind.heard(int meth, int v);
 };
 
 __interface IVectorRequest {
@@ -75,7 +72,7 @@ __module IVector {
     IVectorIndication *out;
     int vsize;
     IVectorRequest in;
-    void sayactual(int meth, int v) {
+    void in.say(int meth, int v) {
         UTYPE temp;
         temp.b = v;
 #if 1
@@ -109,7 +106,6 @@ __module IVector {
 #endif
     }
     IVector(IVectorInd *aind, int size) : out(&aind->ind), vsize(size) {
-        in.say = sayactual;
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = (Fifo<ValuePair> *)new FifoPong<UTYPE>[vsize];

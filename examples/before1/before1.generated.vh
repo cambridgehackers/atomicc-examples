@@ -12,11 +12,6 @@
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; (busy_delay != 0) & indication$heard__RDY;
-//METABEFORE; x2y__ENA; :y2x__ENA
-//METAGUARD; x2y; 1;
-//METABEFORE; y2x__ENA; :x2y__ENA
-//METAGUARD; y2x; 1;
-//METAGUARD; y2xnull; 1;
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
@@ -38,8 +33,8 @@
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; v_2e_addr_2e_ifoosuff2$tag == 2:request$say2__ENA;v_2e_addr_2e_ifoosuff$tag == 1:request$say__ENA;
-//METAGUARD; pipe$enq; (request$say__RDY | ((v_2e_addr_2e_ifoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addr_2e_ifoosuff2foosuff$tag == 2) ^ 1));
+//METAINVOKE; pipe$enq__ENA; v_2e_addrfoosuff13$tag == 2:request$say2__ENA;v_2e_addrfoosuff$tag == 1:request$say__ENA;
+//METAGUARD; pipe$enq; (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1));
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
@@ -53,9 +48,9 @@
 //METAINTERNAL; lEcho; l_module_OC_Echo;
 //METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
 //METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
-//METAINVOKE; swap2_rule__ENA; :lEcho$y2xnull__ENA;
-//METAGUARD; swap2_rule; lEcho$y2xnull__RDY;
-//METAINVOKE; swap_rule__ENA; :lEcho$x2y__ENA;:lEcho$y2x__ENA;
-//METAGUARD; swap_rule; lEcho$x2y__RDY & lEcho$y2x__RDY;
+//METAINVOKE; swap2_rule__ENA; :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR];
+//METAGUARD; swap2_rule; 1;
+//METAINVOKE; swap_rule__ENA; :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR];:lEcho$[ERROR__ZN4Echo3y2xEv_ERROR];
+//METAGUARD; swap_rule; 1;
 //METARULES; swap2_rule; swap_rule
 `endif

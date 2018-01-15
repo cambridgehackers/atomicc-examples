@@ -31,20 +31,17 @@ __module Fifo2 : public Fifo<T> {
     T *element;
     int rindex;
     int windex;
-    void enqactual2(const T v) if ( notFull()) {
+    void in.enq(const T v) if ( notFull()) {
         element[windex] = v;
         windex = (windex + 1) % MAX_COUNT;
     }
-    void deqactual2(void) if (notEmpty()) {
+    void out.deq(void) if (notEmpty()) {
         rindex = (rindex + 1) % MAX_COUNT;
     }
-    T firstactual2(void) if (notEmpty()) { return element[rindex]; }
+    T out.first(void) if (notEmpty()) { return element[rindex]; }
     bool notEmpty() const { return rindex != windex; }
     bool notFull() const { return ((windex + 1) % MAX_COUNT) != rindex; }
     Fifo2(): rindex(0), windex(0) {
-        this->in.enq = enqactual2;
-        this->out.deq = deqactual2;
-        this->out.first = firstactual2;
         element = new T[MAX_COUNT];
         printf("Fifo2: addr %p size 0x%lx\n", this, sizeof(*this));
     }
@@ -73,14 +70,11 @@ __interface LpmMem {
 __module LpmMemory {
     int delayCount;
     ValuePair saved;
-    void reqactual(ValuePair v) if (delayCount == 0) { delayCount = 4; saved = v; }
-    void resAcceptactual(void) if (delayCount == 1) { delayCount = 0;}
-    ValuePair resValueactual(void) if (delayCount == 1) { return saved; }
+    void ifc.req(ValuePair v) if (delayCount == 0) { delayCount = 4; saved = v; }
+    void ifc.resAccept(void) if (delayCount == 1) { delayCount = 0;}
+    ValuePair ifc.resValue(void) if (delayCount == 1) { return saved; }
     LpmMem ifc;
     LpmMemory() {
-        ifc.req = reqactual;
-        ifc.resAccept = resAcceptactual;
-        ifc.resValue = resValueactual;
         __rule memdelay_rule if (delayCount > 1) { delayCount = delayCount - 1; };
     }
 };
@@ -91,7 +85,7 @@ __module Lpm {
     Fifo1<ValuePair> outQ;
     LpmMemory        mem;
     int doneCount;
-    void sayactual(int meth, int v) if (true) {
+    void request.say(int meth, int v) if (true) {
 printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
@@ -105,7 +99,6 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
     LpmIndication *ind;
     LpmRequest request;
     Lpm() {
-        request.say = sayactual;
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
             __rule recirc if(true) {
                 ValuePair temp = fifo.out.first();
@@ -144,13 +137,9 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
 
 class foo { // method -> pipe
     LpmIndication indication;
-    void heardactual(int meth, int v) if (true) {
+    void indication.heard(int meth, int v) if (true) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;
-    }
-public:
-    foo() {
-        indication.heard = heardactual;
     }
 };
 foo zConnectresp;

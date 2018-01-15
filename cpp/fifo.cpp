@@ -24,9 +24,9 @@
 #define FIFODATA \
   T element;     \
   bool full;    \
-  void enqactual(const T v) ; \
-  void deqactual(void) ; \
-  T firstactual(void) ; \
+  void in.enq(const T v) ; \
+  void out.deq(void) ; \
+  T out.first(void) ; \
   bool notEmpty() const; \
   bool notFull() const; \
   Fifo1();
@@ -35,25 +35,22 @@
 #include <fifo.h>
 
 template<class T>
-void Fifo1<T>::enqactual(const T v) if (notFull()) {
+void Fifo1<T>::in.enq(const T v) if (notFull()) {
     element = v;
     full = true;
 };
 template<class T>
-void Fifo1<T>::deqactual(void) if (notEmpty()) {
+void Fifo1<T>::out.deq(void) if (notEmpty()) {
     full = false;
 };
 template<class T>
-T Fifo1<T>::firstactual(void) if (notEmpty()) {
+T Fifo1<T>::out.first(void) if (notEmpty()) {
     return element;
 };
 template<class T>
 Fifo1<T>::Fifo1(): full(false)
 {
     printf("Fifo1: addr %p size 0x%lx\n", this, sizeof(*this));
-    this->in.enq = enqactual;
-    this->out.deq = deqactual;
-    this->out.first = firstactual;
 };
 template<class T>
 bool Fifo1<T>::notEmpty() const {

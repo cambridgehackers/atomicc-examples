@@ -68,7 +68,7 @@ typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
-    void sayactual(int meth, int v) {
+    void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -76,7 +76,7 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void say2actual(int meth, int v) {
+    void request.say2(int meth, int v) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -84,16 +84,12 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say2.v = v;
         pipe->enq(ind);
     }
-    EchoRequestOutput() {
-        request.say = sayactual;
-        request.say2 = say2actual;
-    }
 };
 
 __module EchoRequestInput { // pipe -> method
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void enqactualreq(EchoRequest_data v) {
+    void pipe.enq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -103,9 +99,6 @@ __module EchoRequestInput { // pipe -> method
             request->say2(v.data.say2.meth, v.data.say2.v);
             break;
         }
-    }
-    EchoRequestInput() {
-        pipe.enq = enqactualreq;
     }
 };
 
@@ -117,7 +110,7 @@ __module EchoIndicationOutput { // method -> pipe
     EchoIndication_data ind1;
     int ind_busy;
     int even;
-    void heardactual(int meth, int v) if (!ind_busy) {
+    void indication.heard(int meth, int v) if (!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
         ind1.tag = EchoIndication_tag_heard;
@@ -133,7 +126,6 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         even = !even;
     }
     EchoIndicationOutput() {
-       indication.heard = heardactual;
         __rule output_rulee if (((ind_busy != 0) & (even != 0)) != 0) {
 //printf("output_rulee: EchoIndicationOutput tag %d\n", ind0.tag);
              ind_busy = 0;
@@ -153,7 +145,7 @@ __module EchoIndicationInput { // pipe -> method
     int busy_delay;
     int meth_delay;
     int v_delay;
-    void enqactualind(const EchoIndication_data v) if(!busy_delay) {
+    void pipe.enq(const EchoIndication_data v) if(!busy_delay) {
 printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -164,7 +156,6 @@ printf("%s: EchoIndicationInput tag %d\n", __FUNCTION__, v.tag);
         }
     }
     EchoIndicationInput() {
-        pipe.enq = enqactualind;
         __rule input_rule if (busy_delay != 0) {
 printf("input_rule: EchoIndicationInput\n");
              busy_delay = 0;
@@ -184,13 +175,13 @@ __module Echo {
     int x;
     int y;
     EchoIndication *indication;
-    void sayactual(int meth, int v) if(!busy) {
+    void request.say(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
     }
-    void say2actual(int meth, int v) if(!busy) {
+    void request.say2(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
@@ -210,8 +201,6 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         y = x;
     }
     Echo() {
-        request.say = sayactual;
-        request.say2 = say2actual;
         __rule delay_rule if ((busy != 0 & busy_delay == 0) != 0) {
 printf("delay_rule: Echo\n");
              busy = 0;
@@ -229,13 +218,9 @@ printf("respond_rule: Echo\n");
 
 class foo { // method -> pipe
     EchoIndication indication;
-    void heardactual(int meth, int v) {
+    void indication.heard(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
-    }
-public:
-    foo() {
-        indication.heard = heardactual;
     }
 };
 foo zConnectresp;

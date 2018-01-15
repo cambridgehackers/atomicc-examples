@@ -68,7 +68,7 @@ typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
-    void sayactual(int meth, int v) {
+    void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -76,15 +76,12 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    EchoRequestOutput() {
-        request.say = sayactual;
-    }
 };
 
 __module EchoRequestInput { // pipe -> method
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void enqactual(EchoRequest_data v) {
+    void pipe.enq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq\n");
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -92,62 +89,46 @@ __module EchoRequestInput { // pipe -> method
             break;
         }
     }
-    EchoRequestInput() {
-        pipe.enq = enqactual;
-    }
 };
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 __module EchoIndicationOutput { // method -> pipe
     EchoIndication indication;
     EchoIndicationPipe *pipe;
-    void heardactual(int meth, int v) {
+    void indication.heard(int meth, int v) {
         EchoIndication_data ind;
         ind.tag = EchoIndication_tag_heard;
         ind.data.heard.meth = meth;
         ind.data.heard.v = v;
         pipe->enq(ind);
     }
-    EchoIndicationOutput() {
-        indication.heard = heardactual;
-    }
 };
 
 __module EchoIndicationInput { // pipe -> method
     EchoIndicationPipe pipe;
     EchoIndication *indication;
-    void enqactual(EchoIndication_data v) {
+    void pipe.enq(EchoIndication_data v) {
         switch (v.tag) {
         case EchoIndication_tag_heard:
             indication->heard(v.data.heard.meth, v.data.heard.v);
             break;
         }
     }
-    EchoIndicationInput() {
-        pipe.enq = enqactual;
-    }
 };
 
 __module Echo {
     EchoRequest request;
     EchoIndication *indication;
-    void sayactual(int meth, int v) {
+    void request.say(int meth, int v) {
         indication->heard(meth, v);
-    }
-    Echo() {
-        request.say = sayactual;
     }
 };
 
 class foo { // method -> pipe
     EchoIndication indication;
-    void heardactual(int meth, int v) {
+    void indication.heard(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
-    }
-public:
-    foo() {
-        indication.heard = heardactual;
     }
 };
 foo zConnectresp;

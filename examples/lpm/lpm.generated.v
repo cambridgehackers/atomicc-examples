@@ -105,7 +105,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         request$say__ENA_internal,
-        temp_2e_i,
+        outQ$out$first,
         request$say__RDY_internal,
         enter__ENA_internal,
         inQ$out$deq__RDY,
@@ -133,7 +133,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         exit_rule__ENA_internal,
-        outQ$out$first,
+        temp,
         outQ$in$enq__RDY,
         respond__ENA_internal,
         outQ$out$deq__RDY,
@@ -157,14 +157,12 @@ module l_module_OC_Lpm (
     reg[31:0] doneCount;
     assign enter__RDY_internal = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign exit_rule__RDY_internal = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-    assign ind$heard$meth = temp$a;
-    assign ind$heard$v = temp$b;
+    assign ind$heard$meth = request$say$meth;
+    assign ind$heard$v = request$say$v;
     assign ind$heard__ENA = respond__ENA_internal;
     assign mtemp = mtemp;
     assign recirc__RDY_internal = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign respond__RDY_internal = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
-    assign temp_2e_i$a = request$say$meth;
-    assign temp_2e_i$b = request$say$v;
     assign request$say__RDY = request$say__RDY_internal;
 
     always @( posedge CLK) begin

@@ -30,21 +30,17 @@ __interface EchoIndication {
 
 __emodule EchoInd {
   EchoIndication hout;
-  //void heardactual(int v);
-  //EchoInd() {
-      //hout.heard = heardactual;
-  //}
+  //void hout.heard(int v);
 };
 
 __module Echo {
   __software EchoRequest sout;
   __software EchoIndication *ind;
   Fifo<int> *fifo;
-  void sayactual(const int v) {
+  void sout.say(const int v) {
       fifo->in.enq(v);
   }
   Echo(EchoInd *aind) : fifo(new Fifo1<int>()), ind(&aind->hout) {
-    sout.say = sayactual;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     __rule respond_rule {
         fifo->out.deq();
@@ -58,7 +54,7 @@ __module Echo {
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-//void EchoInd::heardactual(int v)
+//void EchoInd::hout.heard(int v)
 //{
     //printf("Heard an echo: %d\n", v);
 //}

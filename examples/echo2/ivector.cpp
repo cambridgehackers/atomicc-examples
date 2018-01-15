@@ -67,7 +67,7 @@ __interface IndIF {
 };
 __module IVectorIndication {
     IndIF ind;
-    void heardactual(UTYPE v);
+    void heard(UTYPE v);
 };
 
 __interface IVectorRequest {
@@ -78,12 +78,11 @@ __module IVector {
     IVectorRequest request;
     Fifo<UTYPE> *fifo;
     IVectorIndication *ind;
-    void sayactual(UTYPE v) {
+    void request.say(UTYPE v) {
         fifo->in.enq(v);
     }
     IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
-        request.say = sayactual;
         __rule respond { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	    this->fifo->out.deq();
@@ -97,7 +96,7 @@ __module IVector {
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorIndication::heardactual(UTYPE v)
+void IVectorIndication::heard(UTYPE v)
 {
     printf("Heard an ivector: %d %d\n", v
 #ifdef USE_STRUCT
