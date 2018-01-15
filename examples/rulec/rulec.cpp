@@ -85,7 +85,7 @@ EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
-    void say(int meth, int v) if (true) {
+    void request.say(int meth, int v) if (true) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -93,7 +93,7 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void say2(int meth, int v, int v2) if(true) {
+    void request.say2(int meth, int v, int v2) if(true) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -107,7 +107,7 @@ __module EchoRequestOutput { // method -> pipe
 __module EchoRequestInput { // pipe -> method
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void enq(const EchoRequest_data &v) if (true) {
+    void pipe.enq(const EchoRequest_data &v) if (true) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -129,7 +129,7 @@ __module EchoIndicationOutput { // method -> pipe
     EchoIndication_data ind1;
     int ind_busy;
     int even;
-    void heard(int meth, int v) if(!ind_busy) {
+    void indication.heard(int meth, int v) if(!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
         ind1.tag = EchoIndication_tag_heard;
@@ -164,7 +164,7 @@ __module EchoIndicationInput { // pipe -> method
     int busy_delay;
     int meth_delay;
     int v_delay;
-    void enq(const EchoIndication_data &v) if(!busy_delay) {
+    void pipe.enq(const EchoIndication_data &v) if(!busy_delay) {
 printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -192,13 +192,13 @@ __module Echo {
     int meth_delay;
     int v_delay;
     EchoIndication *indication;
-    void say(int meth, int v) if(!busy) {
+    void request.say(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
         busy = 1;
     }
-    void say2(int meth, int v, int v2) if(!busy) {
+    void request.say2(int meth, int v, int v2) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
         v_temp = v;
@@ -222,7 +222,7 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
 
 class foo { // method -> pipe
     EchoIndication indication;
-    void heard(int meth, int v) if(true) {
+    void indication.heard(int meth, int v) if(true) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
