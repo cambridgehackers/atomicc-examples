@@ -10,20 +10,14 @@
 //METASTART; l_module_OC_FifoPong
 //METAINTERNAL; element1; l_module_OC_Fifo1_OC_3;
 //METAINTERNAL; element2; l_module_OC_Fifo1_OC_3;
-//METAINVOKE; deq__ENA; :element1$out$deq__ENA;:element2$out$deq__ENA;
-//METAGUARD; deq; 1;
-//METAINVOKE; enq__ENA; :element1$in$enq__ENA;:element2$in$enq__ENA;
-//METABEFORE; enq__ENA; :deq__ENA
-//METAGUARD; enq; 1;
-//METAINVOKE; first; :element1$out$first;:element2$out$first;
-//METABEFORE; first; :deq__ENA
-//METAGUARD; first; 1;
-//METAINVOKE; in$enq__ENA; :in$enq__ENA;
-//METAGUARD; in$enq; in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :out$deq__ENA;
-//METAGUARD; out$deq; out$deq__RDY;
-//METAINVOKE; out$first; :out$first;
-//METAGUARD; out$first; out$first__RDY;
+//METAINVOKE; in$enq__ENA; pong ^ 1:element1$in$enq__ENA;pong:element2$in$enq__ENA;
+//METABEFORE; in$enq__ENA; :out$deq__ENA
+//METAGUARD; in$enq; (element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong);
+//METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;
+//METAGUARD; out$deq; (element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong);
+//METAINVOKE; out$first; pong ^ 1:element1$out$first;pong:element2$out$first;
+//METABEFORE; out$first; :out$deq__ENA
+//METAGUARD; out$first; (element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong);
 //METASTART; l_module_OC_IVector
 //METAINTERNAL; fifo0; l_module_OC_FifoPong;
 //METAINTERNAL; fifo1; l_module_OC_FifoPong;

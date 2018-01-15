@@ -35,20 +35,20 @@ __module FifoPong : public Fifo<T> {
     Fifo1<T> element2;
     bool pong;
 public:
-    void enq(const T &v) {
+    void in.enq(const T &v) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    void deq(void) {
+    void out.deq(void) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    T first(void) { return pong ? element2.out.first() : element1.out.first(); }
+    T out.first(void) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): pong(false) {
         //printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
