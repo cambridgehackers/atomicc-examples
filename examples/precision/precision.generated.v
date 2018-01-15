@@ -45,43 +45,32 @@ module l_module_OC_IVector (
     input [5:0]request$say$meth,
     input [3:0]request$say$v,
     output request$say__RDY,
-    input say__ENA,
-    input [5:0]say$meth,
-    input [3:0]say$v,
-    output say__RDY,
     output ind$heard__ENA,
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
     wire request$say__RDY_internal;
-    wire say__RDY_internal;
     wire fifo$out$deq__RDY;
+    wire [9:0]fifo$out$first;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1_OC_3 fifo (
         CLK,
         nRST,
         request$say__ENA_internal,
-        temp_2e_i,
+        fifo$out$first,
         request$say__RDY_internal,
         respond__ENA_internal,
         fifo$out$deq__RDY,
-        temp,
+        fifo$out$first,
         fifo$out$first__RDY);
     reg fcounter;
     unsigned VERILOG_short counter;
     unsigned VERILOG_short gcounter;
-    assign ind$heard$meth = temp$a;
-    assign ind$heard$v = temp$b;
+    assign ind$heard$meth = request$say$meth;
+    assign ind$heard$v = request$say$v;
     assign ind$heard__ENA = respond__ENA_internal;
     assign respond__RDY_internal = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
-    assign say$meth = say$meth;
-    assign say$v = say$v;
-    assign say__ENA = say__ENA_internal;
-    assign say__RDY_internal = say__RDY;
-    assign temp_2e_i$a = request$say$meth;
-    assign temp_2e_i$b = request$say$v;
     assign request$say__RDY = request$say__RDY_internal;
-    assign say__RDY = say__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin

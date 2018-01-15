@@ -46,7 +46,7 @@ __interface IVectorRequest {
 
 ValueType grumpy;
 
-__module IVector : IVectorRequest {
+__module IVector {
     IVectorRequest request;
     IVectorIndication *ind;
     Fifo1<ValueType> fifo;
