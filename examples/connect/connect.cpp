@@ -134,13 +134,14 @@ class foo { // method -> pipe
 foo zConnectresp;
 
 __module Connect {
-    EchoRequest request;
-    EchoIndication *indication;
+    __software EchoRequest request;
+    __software EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
+    void request.say(int meth, int v) { lERO_test.request.say(meth, v); }
 
     Connect() {
         lERI.request = &lEcho.request;
