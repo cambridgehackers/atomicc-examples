@@ -34,8 +34,7 @@ __module FifoPong : public Fifo<T> {
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
-public:
-    void in.enq(const T &v) {
+    void in.enq(const T v) {
         if (pong)
             element2.in.enq(v);
         else
@@ -124,7 +123,6 @@ __module IVector {
 class IVectorTest {
 public:
     IVector *ivector;
-public:
     IVectorTest(): ivector(new IVector(new IVectorInd(), 10)) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }

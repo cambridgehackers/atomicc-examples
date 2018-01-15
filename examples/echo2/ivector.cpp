@@ -41,20 +41,20 @@ __module FifoPong : public Fifo<T> {
 public:
     //PipeIn<T> in;
     //PipeOut<T> out;
-    void enq(T v) {
+    void in.enq(T v) {
         if (pong)
             element2.in.enq(v);
         else
             element1.in.enq(v);
     }
-    void deq(void) {
+    void out.deq(void) {
         if (pong)
             element2.out.deq();
         else
             element1.out.deq();
         pong = !pong;
     }
-    T first(void) { return pong ? element2.out.first() : element1.out.first(); }
+    T out.first(void) { return pong ? element2.out.first() : element1.out.first(); }
     FifoPong(): Fifo<T>(), pong(false)//, FIFOBASECONSTRUCTOR(FifoPong<T>) 
 {
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
@@ -67,7 +67,7 @@ __interface IndIF {
 };
 __module IVectorIndication {
     IndIF ind;
-    void heard(UTYPE v);
+    void ind.heard(UTYPE v);
 };
 
 __interface IVectorRequest {
@@ -96,7 +96,7 @@ __module IVector {
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorIndication::heard(UTYPE v)
+void IVectorIndication::ind.heard(UTYPE v)
 {
     printf("Heard an ivector: %d %d\n", v
 #ifdef USE_STRUCT
