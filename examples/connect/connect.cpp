@@ -143,15 +143,12 @@ __module Connect {
     EchoIndicationInput lEII_test;
     void request.say(int meth, int v) { lERO_test.request.say(meth, v); }
 
-    Connect() {
-        lERI.request = &lEcho.request;
-        lEIO.pipe = &lEII_test.pipe;
-        lEcho.indication = &lEIO.indication;
-        lERO_test.pipe = &lERI.pipe;
-        //lEII_test.indication = &zConnectresp.indication; // user indication
-        lEII_test.indication = indication; // user indication
-        request = lERO_test.request; // user request
-    };
+    __connect lERI.request = lEcho.request;
+    __connect lEIO.pipe = lEII_test.pipe;
+    __connect lEcho.indication = lEIO.indication;
+    __connect lERO_test.pipe = lERI.pipe;
+    __connect lEII_test.indication = indication; // user indication
+    __connect request = lERO_test.request; // user request
 };
 
 Connect connectTest;

@@ -232,13 +232,13 @@ __module Connect {
 
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
-    Connect() {
-        lERI.request = &lEcho.request;
-        lEIO.pipe = &lEII_test.pipe;
-        lEcho.indication = &lEIO.indication;
-        lERO_test.pipe = &lERI.pipe;
-        lEII_test.indication = &zConnectresp.indication; // user indication
+    __connect lERI.request = lEcho.request;
+    __connect lEIO.pipe = lEII_test.pipe;
+    __connect lEcho.indication = lEIO.indication;
+    __connect lERO_test.pipe = lERI.pipe;
+    __connect lEII_test.indication = zConnectresp.indication; // user indication
 
+    Connect() {
         __rule swap_rule {
 printf("swap_rule:Connect\n");
              lEcho.x2y();
