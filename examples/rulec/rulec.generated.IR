@@ -1,156 +1,136 @@
 MODULE l_ainterface_OC_EchoIndication = 9 (
-    METHOD heard__ENA 1  = (
+    METHOD Action heard__ENA  (
         PARAM heard$meth [31:0]
         PARAM heard$v [31:0]
     )
-    METHOD heard__RDY 0  = 1(
-    )
+    METHOD heard__RDY 
 )
 MODULE l_ainterface_OC_EchoRequest = 8 (
-    METHOD say2__ENA 1  = (
+    METHOD Action say2__ENA  (
         PARAM say2$meth [31:0]
         PARAM say2$v [31:0]
         PARAM say2$v2 [31:0]
     )
-    METHOD say2__RDY 0  = 1(
-    )
-    METHOD say__ENA 1  = (
+    METHOD say2__RDY 
+    METHOD Action say__ENA  (
         PARAM say$meth [31:0]
         PARAM say$v [31:0]
     )
-    METHOD say__RDY 0  = 1(
-    )
+    METHOD say__RDY 
 )
 MODULE l_ainterface_OC_PipeIn = 10 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [191:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_ainterface_OC_PipeIn_OC_0 = 11 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [95:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_class_OC_foo = 12 (
-    FIELD indication VEC -1 RANGE  IR 9 PTR 0 TYPE 
+    FIELD 9:indication  FORMAT 
 )
 MODULE l_module_OC_Echo = 16 (
     OUTCALL indication = 9
     RULE delay_rule
     RULE respond_rule
-    FIELD request VEC -1 RANGE  IR 8 PTR 0 TYPE 
-    FIELD busy VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD meth_temp VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v_temp VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD busy_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD meth_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD indication VEC -1 RANGE  IR 9 PTR 1 TYPE 
-    METHOD delay_rule__ENA 1  = (
-        STORE busy, 0, 
-        STORE busy_delay, 1, 
-        STORE meth_delay, meth_temp, 
-        STORE v_delay, v_temp, 
+    FIELD 8:request  FORMAT 
+    FIELD busy  FORMAT reg[31:0] @
+    FIELD meth_temp  FORMAT reg[31:0] @
+    FIELD v_temp  FORMAT reg[31:0] @
+    FIELD busy_delay  FORMAT reg[31:0] @
+    FIELD meth_delay  FORMAT reg[31:0] @
+    FIELD v_delay  FORMAT reg[31:0] @
+    FIELD 9:indication PTR  FORMAT 
+    METHOD Action delay_rule__ENA  (
+        STORE :busy = 0
+        STORE :busy_delay = 1
+        STORE :meth_delay = meth_temp
+        STORE :v_delay = v_temp
         METAREAD meth_temp 
         METAREAD v_temp 
-        METAWRITE busy 
-        METAWRITE busy_delay 
-        METAWRITE meth_delay 
-        METAWRITE v_delay 
     )
-    METHOD delay_rule__RDY 0  = ((busy != 0) & (busy_delay == 0)) != 0(
+    METHOD delay_rule__RDY  = (((busy != 0) & (busy_delay == 0)) != 0) (
         METAREAD busy 
         METAREAD busy_delay 
     )
-    METHOD request$say2__ENA 1  = (
+    METHOD Action request$say2__ENA  (
         PARAM request$say2$meth [31:0]
         PARAM request$say2$v [31:0]
         PARAM request$say2$v2 [31:0]
-        STORE meth_temp, request$say2$meth, 
-        STORE v_temp, request$say2$v, 
-        STORE busy, 1, 
-        METAWRITE busy 
-        METAWRITE meth_temp 
-        METAWRITE v_temp 
+        STORE :meth_temp = request$say2$meth
+        STORE :v_temp = request$say2$v
+        STORE :busy = 1
     )
-    METHOD request$say2__RDY 0  = (busy != 0) ^ 1(
+    METHOD request$say2__RDY  = ((busy != 0) ^ 1) (
         METAREAD busy 
     )
-    METHOD request$say__ENA 1  = (
+    METHOD Action request$say__ENA  (
         PARAM request$say$meth [31:0]
         PARAM request$say$v [31:0]
-        STORE meth_temp, request$say$meth, 
-        STORE v_temp, request$say$v, 
-        STORE busy, 1, 
-        METAWRITE busy 
-        METAWRITE meth_temp 
-        METAWRITE v_temp 
+        STORE :meth_temp = request$say$meth
+        STORE :v_temp = request$say$v
+        STORE :busy = 1
     )
-    METHOD request$say__RDY 0  = (busy != 0) ^ 1(
+    METHOD request$say__RDY  = ((busy != 0) ^ 1) (
         METAREAD busy 
     )
-    METHOD respond_rule__ENA 1  = (
-        STORE busy_delay, 0, 
-        CALL indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}, , 1
+    METHOD Action respond_rule__ENA  (
+        STORE :busy_delay = 0
+        CALL Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
         METAREAD meth_delay 
         METAREAD v_delay 
-        METAWRITE busy_delay 
         METAINVOKE indication$heard__ENA 
     )
-    METHOD respond_rule__RDY 0  = (busy_delay != 0) & indication$heard__RDY(
+    METHOD respond_rule__RDY  = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 7 (
-    FIELD meth VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD meth  FORMAT reg[31:0] @
+    FIELD v  FORMAT reg[31:0] @
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 6 (
-    FIELD heard VEC -1 RANGE [63:0] IR 7 PTR 0 TYPE 
+    FIELD 7:heard  RANGE [63:0] FORMAT 
 )
 MODULE l_struct_OC_EchoIndication_data = 5 (
-    FIELD tag VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD data VEC -1 RANGE [63:0] IR 6 PTR 0 TYPE 
+    FIELD tag  FORMAT reg[31:0] @
+    FIELD 6:data  RANGE [63:0] FORMAT 
 )
 MODULE l_module_OC_EchoIndicationInput = 18 (
     OUTCALL indication = 9
     RULE input_rule
-    FIELD pipe VEC -1 RANGE  IR 11 PTR 0 TYPE 
-    FIELD indication VEC -1 RANGE  IR 9 PTR 1 TYPE 
-    FIELD busy_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD meth_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v_delay VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    METHOD input_rule__ENA 1  = (
-        STORE busy_delay, 0, 
-        CALL indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}, , 1
+    FIELD 11:pipe  FORMAT 
+    FIELD 9:indication PTR  FORMAT 
+    FIELD busy_delay  FORMAT reg[31:0] @
+    FIELD meth_delay  FORMAT reg[31:0] @
+    FIELD v_delay  FORMAT reg[31:0] @
+    METHOD Action input_rule__ENA  (
+        STORE :busy_delay = 0
+        CALL Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
         METAREAD meth_delay 
         METAREAD v_delay 
-        METAWRITE busy_delay 
         METAINVOKE indication$heard__ENA 
     )
-    METHOD input_rule__RDY 0  = (busy_delay != 0) & indication$heard__RDY(
+    METHOD input_rule__RDY  = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
-    METHOD pipe$enq__ENA 1  = (
+    METHOD Action pipe$enq__ENA  (
         PARAM pipe$enq$v [95:0]
-        STORE meth_delay, pipe$enq$v$data$heard$meth, pipe$enq$v$tag == 1
-        STORE v_delay, pipe$enq$v$data$heard$v, pipe$enq$v$tag == 1
-        STORE busy_delay, 1, pipe$enq$v$tag == 1
+        STORE pipe$enq$v$tag == 1:meth_delay = pipe$enq$v$data$heard$meth
+        STORE pipe$enq$v$tag == 1:v_delay = pipe$enq$v$data$heard$v
+        STORE pipe$enq$v$tag == 1:busy_delay = 1
         METAREAD pipe$enq$v$data$heard$meth pipe$enq$v$tag == 1
         METAREAD pipe$enq$v$data$heard$v pipe$enq$v$tag == 1
         METAREAD pipe$enq$v$tag 
         METAREAD pipe$enq$v$tag pipe$enq$v$tag == 1
-        METAWRITE busy_delay pipe$enq$v$tag == 1
-        METAWRITE meth_delay pipe$enq$v$tag == 1
-        METAWRITE v_delay pipe$enq$v$tag == 1
     )
-    METHOD pipe$enq__RDY 0  = (busy_delay != 0) ^ 1(
+    METHOD pipe$enq__RDY  = ((busy_delay != 0) ^ 1) (
         METAREAD busy_delay 
     )
 )
@@ -158,88 +138,78 @@ MODULE l_module_OC_EchoIndicationOutput = 14 (
     OUTCALL pipe = 11
     RULE output_rulee
     RULE output_ruleo
-    FIELD indication VEC -1 RANGE  IR 9 PTR 0 TYPE 
-    FIELD pipe VEC -1 RANGE  IR 11 PTR 1 TYPE 
-    FIELD ind0 VEC -1 RANGE [95:0] IR 5 PTR 0 TYPE 
-    FIELD ind1 VEC -1 RANGE [95:0] IR 5 PTR 0 TYPE 
-    FIELD ind_busy VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD even VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    METHOD indication$heard__ENA 1  = (
+    FIELD 9:indication  FORMAT 
+    FIELD 11:pipe PTR  FORMAT 
+    FIELD 5:ind0  RANGE [95:0] FORMAT 
+    FIELD 5:ind1  RANGE [95:0] FORMAT 
+    FIELD ind_busy  FORMAT reg[31:0] @
+    FIELD even  FORMAT reg[31:0] @
+    METHOD Action indication$heard__ENA  (
         PARAM indication$heard$meth [31:0]
         PARAM indication$heard$v [31:0]
-        STORE ind1$tag, 1, even != 0
-        STORE ind1$data$heard$meth, indication$heard$meth, even != 0
-        STORE ind1$data$heard$v, indication$heard$v, even != 0
-        STORE ind0$tag, 1, (even != 0) ^ 1
-        STORE ind0$data$heard$meth, indication$heard$meth, (even != 0) ^ 1
-        STORE ind0$data$heard$v, indication$heard$v, (even != 0) ^ 1
-        STORE ind_busy, 1, 
-        STORE even, (even != 0) ^ 1, 
+        STORE even != 0:ind1$tag = 1
+        STORE even != 0:ind1$data$heard$meth = indication$heard$meth
+        STORE even != 0:ind1$data$heard$v = indication$heard$v
+        STORE (even != 0) ^ 1:ind0$tag = 1
+        STORE (even != 0) ^ 1:ind0$data$heard$meth = indication$heard$meth
+        STORE (even != 0) ^ 1:ind0$data$heard$v = indication$heard$v
+        STORE :ind_busy = 1
+        STORE :even = (even != 0) ^ 1
         METAREAD even 
-        METAWRITE even 
-        METAWRITE ind0$data$heard$meth (even != 0) ^ 1
-        METAWRITE ind0$data$heard$v (even != 0) ^ 1
-        METAWRITE ind0$tag (even != 0) ^ 1
-        METAWRITE ind1$data$heard$meth even != 0
-        METAWRITE ind1$data$heard$v even != 0
-        METAWRITE ind1$tag even != 0
-        METAWRITE ind_busy 
     )
-    METHOD indication$heard__RDY 0  = (ind_busy != 0) ^ 1(
+    METHOD indication$heard__RDY  = ((ind_busy != 0) ^ 1) (
         METAREAD ind_busy 
     )
-    METHOD output_rulee__ENA 1  = (
-        STORE ind_busy, 0, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind0}, , 1
+    METHOD Action output_rulee__ENA  (
+        STORE :ind_busy = 0
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind0}
         METAREAD ind0 
         METAREAD ind0$tag 
-        METAWRITE ind_busy 
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD output_rulee__RDY 0  = (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY(
+    METHOD output_rulee__RDY  = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
         METAREAD even 
         METAREAD ind_busy 
         METAINVOKE pipe$enq__RDY 
     )
-    METHOD output_ruleo__ENA 1  = (
-        STORE ind_busy, 0, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind1}, , 1
+    METHOD Action output_ruleo__ENA  (
+        STORE :ind_busy = 0
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind1}
         METAREAD ind1 
         METAREAD ind1$tag 
-        METAWRITE ind_busy 
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD output_ruleo__RDY 0  = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY(
+    METHOD output_ruleo__RDY  = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
         METAREAD even 
         METAREAD ind_busy 
         METAINVOKE pipe$enq__RDY 
     )
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 3 (
-    FIELD meth VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD meth  FORMAT reg[31:0] @
+    FIELD v  FORMAT reg[31:0] @
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 = 4 (
-    FIELD meth VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v2 VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD meth  FORMAT reg[31:0] @
+    FIELD v  FORMAT reg[31:0] @
+    FIELD v2  FORMAT reg[31:0] @
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 2 (
-    FIELD say VEC -1 RANGE [63:0] IR 3 PTR 0 TYPE 
-    FIELD say2 VEC -1 RANGE [95:0] IR 4 PTR 0 TYPE 
+    FIELD 3:say  RANGE [63:0] FORMAT 
+    FIELD 4:say2  RANGE [95:0] FORMAT 
 )
 MODULE l_struct_OC_EchoRequest_data = 1 (
-    FIELD tag VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD data VEC -1 RANGE [159:0] IR 2 PTR 0 TYPE 
+    FIELD tag  FORMAT reg[31:0] @
+    FIELD 2:data  RANGE [159:0] FORMAT 
 )
 MODULE l_module_OC_EchoRequestInput = 15 (
     OUTCALL request = 8
-    FIELD pipe VEC -1 RANGE  IR 10 PTR 0 TYPE 
-    FIELD request VEC -1 RANGE  IR 8 PTR 1 TYPE 
-    METHOD pipe$enq__ENA 1  = (
+    FIELD 10:pipe  FORMAT 
+    FIELD 8:request PTR  FORMAT 
+    METHOD Action pipe$enq__ENA  (
         PARAM pipe$enq$v [191:0]
-        CALL request$say__ENA{request$say$meth;pipe$enq$v$data$say$meth,request$say$v;pipe$enq$v$data$say$v},  & pipe$enq$v$tag == 1, 1
-        CALL request$say2__ENA{request$say2$meth;pipe$enq$v$data$say2$meth,request$say2$v;pipe$enq$v$data$say2$v,request$say2$v2;pipe$enq$v$data$say2$v2},  & pipe$enq$v$tag == 2, 1
+        CALL Action pipe$enq$v$tag == 1:request$say__ENA{request$say$meth;pipe$enq$v$data$say$meth,request$say$v;pipe$enq$v$data$say$v}
+        CALL Action pipe$enq$v$tag == 2:request$say2__ENA{request$say2$meth;pipe$enq$v$data$say2$meth,request$say2$v;pipe$enq$v$data$say2$v,request$say2$v2;pipe$enq$v$data$say2$v2}
         METAREAD pipe$enq$v$data$say$meth pipe$enq$v$tag == 1
         METAREAD pipe$enq$v$data$say$v pipe$enq$v$tag == 1
         METAREAD pipe$enq$v$data$say2$meth pipe$enq$v$tag == 2
@@ -251,44 +221,39 @@ MODULE l_module_OC_EchoRequestInput = 15 (
         METAINVOKE request$say2__ENA pipe$enq$v$tag == 2
         METAINVOKE request$say__ENA pipe$enq$v$tag == 1
     )
-    METHOD pipe$enq__RDY 0  = request$say__RDY & request$say2__RDY(
+    METHOD pipe$enq__RDY  = (request$say__RDY & request$say2__RDY) (
         METAINVOKE request$say2__RDY 
         METAINVOKE request$say__RDY 
     )
 )
 MODULE l_module_OC_EchoRequestOutput = 17 (
     OUTCALL pipe = 10
-    FIELD request VEC -1 RANGE  IR 8 PTR 0 TYPE 
-    FIELD pipe VEC -1 RANGE  IR 10 PTR 1 TYPE 
-    METHOD request$say2__ENA 1  = (
+    FIELD 8:request  FORMAT 
+    FIELD 10:pipe PTR  FORMAT 
+    METHOD Action request$say2__ENA  (
         PARAM request$say2$meth [31:0]
         PARAM request$say2$v [31:0]
         PARAM request$say2$v2 [31:0]
-        STORE ind$tag, 2, 
-        STORE ind$data$say2$meth, request$say2$meth, 
-        STORE ind$data$say2$v, request$say2$v, 
-        STORE ind$data$say2$v2, request$say2$v2, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind}, , 1
-        METAWRITE ind$data$say2$meth 
-        METAWRITE ind$data$say2$v 
-        METAWRITE ind$data$say2$v2 
+        STORE Alloca :ind$tag = 2
+        STORE :ind$data$say2$meth = request$say2$meth
+        STORE :ind$data$say2$v = request$say2$v
+        STORE :ind$data$say2$v2 = request$say2$v2
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say2__RDY 0  = pipe$enq__RDY(
+    METHOD request$say2__RDY  = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
-    METHOD request$say__ENA 1  = (
+    METHOD Action request$say__ENA  (
         PARAM request$say$meth [31:0]
         PARAM request$say$v [31:0]
-        STORE ind$tag, 1, 
-        STORE ind$data$say$meth, request$say$meth, 
-        STORE ind$data$say$v, request$say$v, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind}, , 1
-        METAWRITE ind$data$say$meth 
-        METAWRITE ind$data$say$v 
+        STORE Alloca :ind$tag = 1
+        STORE :ind$data$say$meth = request$say$meth
+        STORE :ind$data$say$v = request$say$v
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say__RDY 0  = pipe$enq__RDY(
+    METHOD request$say__RDY  = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
@@ -298,9 +263,9 @@ MODULE l_module_OC_Connect = 13 (
     SOFTWARE lERI$request:lEcho$request
     SOFTWARE lERO_test$pipe:lERI$pipe
     SOFTWARE lEcho$indication:lEIO$indication
-    FIELD lEIO VEC -1 RANGE [255:0] IR 14 PTR 0 TYPE 
-    FIELD lERI VEC -1 RANGE  IR 15 PTR 0 TYPE 
-    FIELD lEcho VEC -1 RANGE [191:0] IR 16 PTR 0 TYPE 
-    FIELD lERO_test VEC -1 RANGE  IR 17 PTR 0 TYPE 
-    FIELD lEII_test VEC -1 RANGE [95:0] IR 18 PTR 0 TYPE 
+    FIELD 14:lEIO  RANGE [255:0] FORMAT 
+    FIELD 15:lERI  FORMAT 
+    FIELD 16:lEcho  RANGE [191:0] FORMAT 
+    FIELD 17:lERO_test  FORMAT 
+    FIELD 18:lEII_test  RANGE [95:0] FORMAT 
 )

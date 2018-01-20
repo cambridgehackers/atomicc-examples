@@ -1,139 +1,131 @@
 MODULE l_ainterface_OC_EchoIndication = 3 (
-    METHOD heard__ENA 1  = (
+    METHOD Action heard__ENA  (
         PARAM heard$meth [31:0]
         PARAM heard$v [31:0]
     )
-    METHOD heard__RDY 0  = 1(
-    )
+    METHOD heard__RDY 
 )
 MODULE l_ainterface_OC_EchoRequest = 6 (
-    METHOD say__ENA 1  = (
+    METHOD Action say__ENA  (
         PARAM say$meth [31:0]
         PARAM say$v [31:0]
     )
-    METHOD say__RDY 0  = 1(
-    )
+    METHOD say__RDY 
 )
 MODULE l_ainterface_OC_PipeIn = 11 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [95:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_ainterface_OC_PipeIn_OC_0 = 8 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [95:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_class_OC_foo = 2 (
-    FIELD indication VEC -1 RANGE  IR 3 PTR 0 TYPE 
+    FIELD 3:indication  FORMAT 
 )
 MODULE l_module_OC_Echo = 9 (
     OUTCALL indication = 3
-    FIELD request VEC -1 RANGE  IR 6 PTR 0 TYPE 
-    FIELD indication VEC -1 RANGE  IR 3 PTR 1 TYPE 
-    METHOD request$say__ENA 1  = (
+    FIELD 6:request  FORMAT 
+    FIELD 3:indication PTR  FORMAT 
+    METHOD Action request$say__ENA  (
         PARAM request$say$meth [31:0]
         PARAM request$say$v [31:0]
-        CALL indication$heard__ENA{indication$heard$meth;request$say$meth,indication$heard$v;request$say$v}, , 1
+        CALL Action :indication$heard__ENA{indication$heard$meth;request$say$meth,indication$heard$v;request$say$v}
         METAINVOKE indication$heard__ENA 
     )
-    METHOD request$say__RDY 0  = indication$heard__RDY(
+    METHOD request$say__RDY  = (indication$heard__RDY) (
         METAINVOKE indication$heard__RDY 
     )
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 18 (
-    FIELD meth VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD meth  FORMAT reg[31:0] @
+    FIELD v  FORMAT reg[31:0] @
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 17 (
-    FIELD heard VEC -1 RANGE [63:0] IR 18 PTR 0 TYPE 
+    FIELD 18:heard  RANGE [63:0] FORMAT 
 )
 MODULE l_struct_OC_EchoIndication_data = 16 (
-    FIELD tag VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD data VEC -1 RANGE [63:0] IR 17 PTR 0 TYPE 
+    FIELD tag  FORMAT reg[31:0] @
+    FIELD 17:data  RANGE [63:0] FORMAT 
 )
 MODULE l_module_OC_EchoIndicationInput = 12 (
     OUTCALL indication = 3
-    FIELD pipe VEC -1 RANGE  IR 8 PTR 0 TYPE 
-    FIELD indication VEC -1 RANGE  IR 3 PTR 1 TYPE 
-    METHOD pipe$enq__ENA 1  = (
+    FIELD 8:pipe  FORMAT 
+    FIELD 3:indication PTR  FORMAT 
+    METHOD Action pipe$enq__ENA  (
         PARAM pipe$enq$v [95:0]
-        STORE v_2e_addr, pipe$enq$v, 
-        CALL indication$heard__ENA{indication$heard$meth;v_2e_addr$data$heard$meth,indication$heard$v;v_2e_addr$data$heard$v},  & v_2e_addrfoosuff$tag == 1, 1
+        STORE Alloca :v_2e_addr = pipe$enq$v
+        CALL Action v_2e_addrfoosuff$tag == 1:indication$heard__ENA{indication$heard$meth;v_2e_addr$data$heard$meth,indication$heard$v;v_2e_addr$data$heard$v}
         METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
         METAINVOKE indication$heard__ENA v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY 0  = indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)(
+    METHOD pipe$enq__RDY  = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE indication$heard__RDY 
     )
 )
 MODULE l_module_OC_EchoIndicationOutput = 7 (
     OUTCALL pipe = 8
-    FIELD indication VEC -1 RANGE  IR 3 PTR 0 TYPE 
-    FIELD pipe VEC -1 RANGE  IR 8 PTR 1 TYPE 
-    METHOD indication$heard__ENA 1  = (
+    FIELD 3:indication  FORMAT 
+    FIELD 8:pipe PTR  FORMAT 
+    METHOD Action indication$heard__ENA  (
         PARAM indication$heard$meth [31:0]
         PARAM indication$heard$v [31:0]
-        STORE ind$tag, 1, 
-        STORE ind$data$heard$meth, indication$heard$meth, 
-        STORE ind$data$heard$v, indication$heard$v, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind}, , 1
-        METAWRITE ind$data$heard$meth 
-        METAWRITE ind$data$heard$v 
+        STORE Alloca :ind$tag = 1
+        STORE :ind$data$heard$meth = indication$heard$meth
+        STORE :ind$data$heard$v = indication$heard$v
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD indication$heard__RDY 0  = pipe$enq__RDY(
+    METHOD indication$heard__RDY  = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 15 (
-    FIELD meth VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD v VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD meth  FORMAT reg[31:0] @
+    FIELD v  FORMAT reg[31:0] @
 )
 MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 14 (
-    FIELD say VEC -1 RANGE [63:0] IR 15 PTR 0 TYPE 
+    FIELD 15:say  RANGE [63:0] FORMAT 
 )
 MODULE l_struct_OC_EchoRequest_data = 13 (
-    FIELD tag VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD data VEC -1 RANGE [63:0] IR 14 PTR 0 TYPE 
+    FIELD tag  FORMAT reg[31:0] @
+    FIELD 14:data  RANGE [63:0] FORMAT 
 )
 MODULE l_module_OC_EchoRequestInput = 5 (
     OUTCALL request = 6
-    FIELD pipe VEC -1 RANGE  IR 11 PTR 0 TYPE 
-    FIELD request VEC -1 RANGE  IR 6 PTR 1 TYPE 
-    METHOD pipe$enq__ENA 1  = (
+    FIELD 11:pipe  FORMAT 
+    FIELD 6:request PTR  FORMAT 
+    METHOD Action pipe$enq__ENA  (
         PARAM pipe$enq$v [95:0]
-        STORE v_2e_addr, pipe$enq$v, 
-        CALL request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v},  & v_2e_addrfoosuff$tag == 1, 1
+        STORE Alloca :v_2e_addr = pipe$enq$v
+        CALL Action v_2e_addrfoosuff$tag == 1:request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
         METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY 0  = request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)(
+    METHOD pipe$enq__RDY  = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE request$say__RDY 
     )
 )
 MODULE l_module_OC_EchoRequestOutput = 10 (
     OUTCALL pipe = 11
-    FIELD request VEC -1 RANGE  IR 6 PTR 0 TYPE 
-    FIELD pipe VEC -1 RANGE  IR 11 PTR 1 TYPE 
-    METHOD request$say__ENA 1  = (
+    FIELD 6:request  FORMAT 
+    FIELD 11:pipe PTR  FORMAT 
+    METHOD Action request$say__ENA  (
         PARAM request$say$meth [31:0]
         PARAM request$say$v [31:0]
-        STORE ind$tag, 1, 
-        STORE ind$data$say$meth, request$say$meth, 
-        STORE ind$data$say$v, request$say$v, 
-        CALL pipe$enq__ENA{pipe$enq$v;ind}, , 1
-        METAWRITE ind$data$say$meth 
-        METAWRITE ind$data$say$v 
+        STORE Alloca :ind$tag = 1
+        STORE :ind$data$say$meth = request$say$meth
+        STORE :ind$data$say$v = request$say$v
+        CALL Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say__RDY 0  = pipe$enq__RDY(
+    METHOD request$say__RDY  = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
@@ -146,24 +138,24 @@ MODULE l_module_OC_Connect = 4 (
     INTERFACECONNECT lEcho$indication=lEIO$indication, IR=3
     INTERFACECONNECT lERO_test$pipe=lERI$pipe, IR=11
     INTERFACECONNECT lEII_test$indication=indication, IR=3
-    FIELD request VEC -1 RANGE  IR 6 PTR 0 TYPE 
-    FIELD indication VEC -1 RANGE  IR 3 PTR 1 TYPE 
-    FIELD lEIO VEC -1 RANGE  IR 7 PTR 0 TYPE 
-    FIELD lERI VEC -1 RANGE  IR 5 PTR 0 TYPE 
-    FIELD lEcho VEC -1 RANGE  IR 9 PTR 0 TYPE 
-    FIELD lERO_test VEC -1 RANGE  IR 10 PTR 0 TYPE 
-    FIELD lEII_test VEC -1 RANGE  IR 12 PTR 0 TYPE 
-    METHOD request$say__ENA 1  = (
+    FIELD 6:request  FORMAT 
+    FIELD 3:indication PTR  FORMAT 
+    FIELD 7:lEIO  FORMAT 
+    FIELD 5:lERI  FORMAT 
+    FIELD 9:lEcho  FORMAT 
+    FIELD 10:lERO_test  FORMAT 
+    FIELD 12:lEII_test  FORMAT 
+    METHOD Action request$say__ENA  (
         PARAM request$say$meth [31:0]
         PARAM request$say$v [31:0]
-        CALL lERO_test$request$say__ENA{lERO_test$request$say$meth;request$say$meth,lERO_test$request$say$v;request$say$v}, , 1
+        CALL Action :lERO_test$request$say__ENA{lERO_test$request$say$meth;request$say$meth,lERO_test$request$say$v;request$say$v}
         METAINVOKE lERO_test$request$say__ENA 
     )
-    METHOD request$say__RDY 0  = lERO_test$request$say__RDY(
+    METHOD request$say__RDY  = (lERO_test$request$say__RDY) (
         METAINVOKE lERO_test$request$say__RDY 
     )
 )
 MODULE l_struct_OC_ValueType = 1 (
-    FIELD a VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD b VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD a  FORMAT reg[31:0] @
+    FIELD b  FORMAT reg[31:0] @
 )

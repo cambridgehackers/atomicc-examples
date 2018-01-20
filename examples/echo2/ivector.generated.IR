@@ -1,143 +1,122 @@
 MODULE l_ainterface_OC_IVectorRequest = 13 (
-    METHOD say__ENA 1  = (
+    METHOD Action say__ENA  (
         PARAM say$v [703:0]
     )
-    METHOD say__RDY 0  = 1(
-    )
+    METHOD say__RDY 
 )
 MODULE l_ainterface_OC_IndIF = 15 (
-    METHOD heard__ENA 1  = (
+    METHOD Action heard__ENA  (
         PARAM heard$v [703:0]
     )
-    METHOD heard__RDY 0  = 1(
-    )
+    METHOD heard__RDY 
 )
 MODULE l_ainterface_OC_PipeIn = 5 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [31:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_ainterface_OC_PipeIn_OC_1 = 9 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [703:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_ainterface_OC_PipeOut = 6 (
-    METHOD deq__ENA 1  = (
-    )
-    METHOD deq__RDY 0  = 1(
-    )
-    METHOD first 0 [31:0] = retval(
-    )
-    METHOD first__RDY 0  = 1(
-    )
+    METHOD Action deq__ENA 
+    METHOD deq__RDY 
+    METHOD first RANGE [31:0]
+    METHOD first__RDY 
 )
 MODULE l_ainterface_OC_PipeOut_OC_2 = 10 (
-    METHOD deq__ENA 1  = (
-    )
-    METHOD deq__RDY 0  = 1(
-    )
-    METHOD first 0 [703:0] = retval(
-    )
-    METHOD first__RDY 0  = 1(
-    )
+    METHOD Action deq__ENA 
+    METHOD deq__RDY 
+    METHOD first RANGE [703:0]
+    METHOD first__RDY 
 )
 MODULE l_module_OC_Fifo_OC_0 = 8 (
-    FIELD in VEC -1 RANGE  IR 9 PTR 0 TYPE 
-    FIELD out VEC -1 RANGE  IR 10 PTR 0 TYPE 
-    METHOD in$enq__ENA 1  = (
+    FIELD 9:in  FORMAT 
+    FIELD 10:out  FORMAT 
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [703:0]
     )
-    METHOD in$enq__RDY 0  = retval(
-    )
-    METHOD out$deq__ENA 1  = (
-    )
-    METHOD out$deq__RDY 0  = retval(
-    )
-    METHOD out$first 0 [703:0] = retval(
-    )
-    METHOD out$first__RDY 0  = retval(
-    )
+    METHOD in$enq__RDY 
+    METHOD Action out$deq__ENA 
+    METHOD out$deq__RDY 
+    METHOD out$first RANGE [703:0]
+    METHOD out$first__RDY 
 )
 MODULE l_struct_OC_ValuePair = 12 (
-    FIELD a VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD b VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD c VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @[20]
+    FIELD a  FORMAT reg[31:0] @
+    FIELD b  FORMAT reg[31:0] @
+    FIELD c  FORMAT reg[31:0] @[20]
 )
 MODULE l_module_OC_Fifo1_OC_3 = 11 (
-    FIELD element VEC -1 RANGE [703:0] IR 12 PTR 0 TYPE 
-    FIELD full VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
-    METHOD in$enq__ENA 1  = (
+    FIELD 12:element  RANGE [703:0] FORMAT 
+    FIELD full  FORMAT reg @
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [703:0]
-        STORE element, in$enq$v, 
-        STORE full, 1, 
-        METAWRITE element 
-        METAWRITE full 
+        STORE :element = in$enq$v
+        STORE :full = 1
     )
-    METHOD in$enq__RDY 0  = full ^ 1(
+    METHOD in$enq__RDY  = (full ^ 1) (
         METAREAD full 
     )
-    METHOD out$deq__ENA 1  = (
-        STORE full, 0, 
-        METAWRITE full 
+    METHOD Action out$deq__ENA  (
+        STORE :full = 0
     )
-    METHOD out$deq__RDY 0  = full(
+    METHOD out$deq__RDY  = (full) (
         METAREAD full 
     )
-    METHOD out$first 0 [703:0] = element(
+    METHOD out$first RANGE [703:0] = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY 0  = full(
+    METHOD out$first__RDY  = (full) (
         METAREAD full 
     )
 )
 MODULE l_module_OC_FifoPong = 7 (
-    FIELD element1 VEC -1 RANGE [711:0] IR 11 PTR 0 TYPE 
-    FIELD element2 VEC -1 RANGE [711:0] IR 11 PTR 0 TYPE 
-    FIELD pong VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
-    METHOD in$enq__ENA 1  = (
+    FIELD 11:element1  RANGE [711:0] FORMAT 
+    FIELD 11:element2  RANGE [711:0] FORMAT 
+    FIELD pong  FORMAT reg @
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [703:0]
-        CALL element2$in$enq__ENA{element2$in$enq$v;in$enq$v},  & pong, 1
-        CALL element1$in$enq__ENA{element1$in$enq$v;in$enq$v},  & pong ^ 1, 1
+        CALL Action pong:element2$in$enq__ENA{element2$in$enq$v;in$enq$v}
+        CALL Action pong ^ 1:element1$in$enq__ENA{element1$in$enq$v;in$enq$v}
         METAREAD pong 
         METAREAD pong pong
         METAREAD pong pong ^ 1
         METAINVOKE element1$in$enq__ENA pong ^ 1
         METAINVOKE element2$in$enq__ENA pong
     )
-    METHOD in$enq__RDY 0  = (element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)(
+    METHOD in$enq__RDY  = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
         METAREAD pong 
         METAINVOKE element1$in$enq__RDY 
         METAINVOKE element2$in$enq__RDY 
     )
-    METHOD out$deq__ENA 1  = (
-        STORE pong, pong ^ 1, 
-        CALL element2$out$deq__ENA{},  & pong, 1
-        CALL element1$out$deq__ENA{},  & pong ^ 1, 1
+    METHOD Action out$deq__ENA  (
+        STORE :pong = pong ^ 1
+        CALL Action pong:element2$out$deq__ENA{}
+        CALL Action pong ^ 1:element1$out$deq__ENA{}
         METAREAD pong 
-        METAWRITE pong 
         METAINVOKE element1$out$deq__ENA pong ^ 1
         METAINVOKE element2$out$deq__ENA pong
     )
-    METHOD out$deq__RDY 0  = (element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)(
+    METHOD out$deq__RDY  = ((element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)) (
         METAREAD pong 
         METAINVOKE element1$out$deq__RDY 
         METAINVOKE element2$out$deq__RDY 
     )
-    METHOD out$first 0 [703:0] = retval(
-        STORE retval, element2$out$first{}, pong
-        STORE retval, element1$out$first{}, pong ^ 1
+    METHOD out$first RANGE [703:0] = (retval) (
+        STORE Alloca pong:retval = element2$out$first{}
+        STORE Alloca pong ^ 1:retval = element1$out$first{}
         METAREAD pong 
         METAREAD pong pong
         METAREAD pong pong ^ 1
         METAINVOKE element1$out$first pong ^ 1
         METAINVOKE element2$out$first pong
     )
-    METHOD out$first__RDY 0  = (element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)(
+    METHOD out$first__RDY  = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
         METAREAD pong 
         METAINVOKE element1$out$first__RDY 
         METAINVOKE element2$out$first__RDY 
@@ -145,84 +124,75 @@ MODULE l_module_OC_FifoPong = 7 (
 )
 MODULE l_module_OC_IVector = 1 (
     RULE respond
-    FIELD request VEC -1 RANGE  IR 13 PTR 0 TYPE 
-    FIELD fifo VEC -1 RANGE [1431:0] IR 7 PTR 0 TYPE 
-    FIELD ind VEC -1 RANGE  IR 14 PTR 1 TYPE 
-    METHOD request$say__ENA 1  = (
+    FIELD 13:request  FORMAT 
+    FIELD 7:fifo  RANGE [1431:0] FORMAT 
+    FIELD 14:ind PTR  FORMAT 
+    METHOD Action request$say__ENA  (
         PARAM request$say$v [703:0]
-        CALL fifo$in$enq__ENA{fifo$in$enq$v;request$say$v}, , 1
+        CALL Action :fifo$in$enq__ENA{fifo$in$enq$v;request$say$v}
         METAINVOKE fifo$in$enq__ENA 
     )
-    METHOD request$say__RDY 0  = fifo$in$enq__RDY(
+    METHOD request$say__RDY  = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
-    METHOD respond__ENA 1  = (
-        STORE agg_2e_tmp, fifo$out$first{}, 
-        CALL fifo$out$deq__ENA{}, , 1
-        CALL ind$ind$heard__ENA{ind$ind$heard$v;agg_2e_tmp}, , 1
+    METHOD Action respond__ENA  (
+        STORE Alloca :agg_2e_tmp = fifo$out$first{}
+        CALL Action :fifo$out$deq__ENA{}
+        CALL Action :ind$ind$heard__ENA{ind$ind$heard$v;agg_2e_tmp}
         METAINVOKE fifo$out$deq__ENA 
         METAINVOKE fifo$out$first 
         METAINVOKE ind$ind$heard__ENA 
     )
-    METHOD respond__RDY 0  = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$ind$heard__RDY(
+    METHOD respond__RDY  = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$ind$heard__RDY 
     )
 )
 MODULE l_class_OC_IVectorTest = 2 (
-    FIELD ivector VEC -1 RANGE  IR 1 PTR 0 TYPE 
+    FIELD 1:ivector  FORMAT 
 )
 MODULE l_module_OC_Fifo = 4 (
-    FIELD in VEC -1 RANGE  IR 5 PTR 0 TYPE 
-    FIELD out VEC -1 RANGE  IR 6 PTR 0 TYPE 
-    METHOD in$enq__ENA 1  = (
+    FIELD 5:in  FORMAT 
+    FIELD 6:out  FORMAT 
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [31:0]
     )
-    METHOD in$enq__RDY 0  = retval(
-    )
-    METHOD out$deq__ENA 1  = (
-    )
-    METHOD out$deq__RDY 0  = retval(
-    )
-    METHOD out$first 0 [31:0] = retval(
-    )
-    METHOD out$first__RDY 0  = retval(
-    )
+    METHOD in$enq__RDY 
+    METHOD Action out$deq__ENA 
+    METHOD out$deq__RDY 
+    METHOD out$first RANGE [31:0]
+    METHOD out$first__RDY 
 )
 MODULE l_module_OC_Fifo1 = 3 (
-    FIELD element VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
-    FIELD full VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
-    METHOD in$enq__ENA 1  = (
+    FIELD element  FORMAT reg[31:0] @
+    FIELD full  FORMAT reg @
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [31:0]
-        STORE element, in$enq$v, 
-        STORE full, 1, 
-        METAWRITE element 
-        METAWRITE full 
+        STORE :element = in$enq$v
+        STORE :full = 1
     )
-    METHOD in$enq__RDY 0  = full ^ 1(
+    METHOD in$enq__RDY  = (full ^ 1) (
         METAREAD full 
     )
-    METHOD out$deq__ENA 1  = (
-        STORE full, 0, 
-        METAWRITE full 
+    METHOD Action out$deq__ENA  (
+        STORE :full = 0
     )
-    METHOD out$deq__RDY 0  = full(
+    METHOD out$deq__RDY  = (full) (
         METAREAD full 
     )
-    METHOD out$first 0 [31:0] = element(
+    METHOD out$first RANGE [31:0] = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY 0  = full(
+    METHOD out$first__RDY  = (full) (
         METAREAD full 
     )
 )
 MODULE l_module_OC_IVectorIndication = 14 (
-    FIELD ind VEC -1 RANGE  IR 15 PTR 0 TYPE 
-    METHOD ind$heard__ENA 1  = (
+    FIELD 15:ind  FORMAT 
+    METHOD Action ind$heard__ENA  (
         PARAM ind$heard$v [703:0]
-        STORE v_2e_addr, ind$heard$v, 
+        STORE Alloca :v_2e_addr = ind$heard$v
     )
-    METHOD ind$heard__RDY 0  = 1(
-    )
+    METHOD ind$heard__RDY  = (1)
 )

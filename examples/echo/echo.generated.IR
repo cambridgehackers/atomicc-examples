@@ -1,79 +1,67 @@
 MODULE l_ainterface_OC_EchoIndication = 5 (
-    METHOD heard__ENA 1  = (
+    METHOD Action heard__ENA  (
         PARAM heard$v [31:0]
     )
-    METHOD heard__RDY 0  = 1(
-    )
+    METHOD heard__RDY 
 )
 MODULE l_ainterface_OC_EchoRequest = 4 (
-    METHOD say__ENA 1  = (
+    METHOD Action say__ENA  (
         PARAM say$v [31:0]
     )
-    METHOD say__RDY 0  = 1(
-    )
+    METHOD say__RDY 
 )
 MODULE l_ainterface_OC_PipeIn = 3 (
-    METHOD enq__ENA 1  = (
+    METHOD Action enq__ENA  (
         PARAM enq$v [31:0]
     )
-    METHOD enq__RDY 0  = 1(
-    )
+    METHOD enq__RDY 
 )
 MODULE l_ainterface_OC_PipeOut = 7 (
-    METHOD deq__ENA 1  = (
-    )
-    METHOD deq__RDY 0  = 1(
-    )
-    METHOD first 0 [31:0] = retval(
-    )
-    METHOD first__RDY 0  = 1(
-    )
+    METHOD Action deq__ENA 
+    METHOD deq__RDY 
+    METHOD first RANGE [31:0]
+    METHOD first__RDY 
 )
 MODULE l_module_OC_Fifo1 = 9 (
-    METHOD in$enq__ENA 1  = (
+    METHOD Action in$enq__ENA  (
         PARAM in$enq$v [31:0]
     )
-    METHOD in$enq__RDY 0  = retval(
-    )
-    METHOD out$deq__ENA 1  = (
-    )
-    METHOD out$deq__RDY 0  = retval(
-    )
-    METHOD out$first 0 [31:0] = retval(
-    )
-    METHOD out$first__RDY 0  = retval(
-    )
+    METHOD in$enq__RDY 
+    METHOD Action out$deq__ENA 
+    METHOD out$deq__RDY 
+    METHOD out$first RANGE [31:0]
+    METHOD out$first__RDY 
 )
 MODULE l_module_OC_Echo = 1 (
     SOFTWARE ind
     SOFTWARE sout
     OUTCALL ind = 5
     RULE respond_rule
-    FIELD sout VEC -1 RANGE  IR 4 PTR 0 TYPE 
-    FIELD ind VEC -1 RANGE  IR 5 PTR 1 TYPE 
-    FIELD fifo VEC -1 RANGE  IR 9 PTR 0 TYPE 
-    METHOD respond_rule__ENA 1  = (
-        CALL fifo$out$deq__ENA{}, , 1
-        CALL ind$heard__ENA{ind$heard$v;fifo$out$first{}}, , 1
+    FIELD 4:sout  FORMAT 
+    FIELD 5:ind PTR  FORMAT 
+    FIELD 9:fifo  FORMAT 
+    METHOD Action respond_rule__ENA  (
+        CALL Action :fifo$out$deq__ENA{}
+        CALL Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
         METAINVOKE fifo$out$deq__ENA 
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
     )
-    METHOD respond_rule__RDY 0  = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY(
+    METHOD respond_rule__RDY  = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
     )
-    METHOD sout$say__ENA 1  = (
+    METHOD Action sout$say__ENA  (
         PARAM sout$say$v [31:0]
-        CALL fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}, , 1
+        CALL Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
         METAINVOKE fifo$in$enq__ENA 
     )
-    METHOD sout$say__RDY 0  = fifo$in$enq__RDY(
+    METHOD sout$say__RDY  = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
 )
 MODULE l_class_OC_EchoTest = 2 (
-    FIELD echo VEC -1 RANGE  IR 1 PTR 0 TYPE 
-    FIELD x VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD 1:echo  FORMAT 
+    FIELD x  FORMAT reg[31:0] @
 )
