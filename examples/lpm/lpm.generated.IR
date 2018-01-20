@@ -1,0 +1,259 @@
+MODULE l_ainterface_OC_LpmIndication = 6 (
+    METHOD heard__ENA 1  = (
+        PARAM heard$meth [31:0]
+        PARAM heard$v [31:0]
+    )
+    METHOD heard__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_LpmMem = 12 (
+    METHOD req__ENA 1  = (
+        PARAM req$v [95:0]
+    )
+    METHOD req__RDY 0  = 1(
+    )
+    METHOD resAccept__ENA 1  = (
+    )
+    METHOD resAccept__RDY 0  = 1(
+    )
+    METHOD resValue 0 [95:0] = retval(
+    )
+    METHOD resValue__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_LpmRequest = 13 (
+    METHOD say__ENA 1  = (
+        PARAM say$meth [31:0]
+        PARAM say$v [31:0]
+    )
+    METHOD say__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeIn = 7 (
+    METHOD enq__ENA 1  = (
+        PARAM enq$v [95:0]
+    )
+    METHOD enq__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeOut = 8 (
+    METHOD deq__ENA 1  = (
+    )
+    METHOD deq__RDY 0  = 1(
+    )
+    METHOD first 0 [95:0] = retval(
+    )
+    METHOD first__RDY 0  = 1(
+    )
+)
+MODULE l_module_OC_Fifo1 = 10 (
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [95:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [95:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_module_OC_Fifo = 3 (
+    FIELD in VEC -1 RANGE  IR 7 PTR 0 TYPE 
+    FIELD out VEC -1 RANGE  IR 8 PTR 0 TYPE 
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [95:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [95:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_struct_OC_ValuePair = 9 (
+    FIELD a VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD b VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD c VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+)
+MODULE l_module_OC_Fifo2 = 2 (
+    FIELD element VEC 2 RANGE [95:0] IR 9 PTR 0 TYPE 
+    FIELD rindex VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD windex VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [95:0]
+        STORE *(windex == 0 ? element0:&element1), in$enq$v, 
+        STORE windex, (windex + 1) % 2, 
+        METAREAD windex 
+        METAWRITE *(windex == 0 ? element0:&element1) 
+        METAWRITE windex 
+    )
+    METHOD in$enq__RDY 0  = ((windex + 1) % 2) != rindex(
+        METAREAD rindex 
+        METAREAD windex 
+    )
+    METHOD out$deq__ENA 1  = (
+        STORE rindex, (rindex + 1) % 2, 
+        METAREAD rindex 
+        METAWRITE rindex 
+    )
+    METHOD out$deq__RDY 0  = rindex != windex(
+        METAREAD rindex 
+        METAREAD windex 
+    )
+    METHOD out$first 0 [95:0] = *(rindex == 0 ? element0:&element1)(
+        METAREAD *(rindex == 0 ? element0:&element1) 
+        METAREAD rindex 
+        METAREAD rindex rindex == 0
+    )
+    METHOD out$first__RDY 0  = rindex != windex(
+        METAREAD rindex 
+        METAREAD windex 
+    )
+)
+MODULE l_module_OC_LpmMemory = 11 (
+    RULE memdelay_rule
+    FIELD delayCount VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD saved VEC -1 RANGE [95:0] IR 9 PTR 0 TYPE 
+    FIELD ifc VEC -1 RANGE  IR 12 PTR 0 TYPE 
+    METHOD ifc$req__ENA 1  = (
+        PARAM ifc$req$v [95:0]
+        STORE delayCount, 4, 
+        STORE saved, ifc$req$v, 
+        METAWRITE delayCount 
+        METAWRITE saved 
+    )
+    METHOD ifc$req__RDY 0  = delayCount == 0(
+        METAREAD delayCount 
+    )
+    METHOD ifc$resAccept__ENA 1  = (
+        STORE delayCount, 0, 
+        METAWRITE delayCount 
+    )
+    METHOD ifc$resAccept__RDY 0  = delayCount == 1(
+        METAREAD delayCount 
+    )
+    METHOD ifc$resValue 0 [95:0] = saved(
+        METAREAD saved 
+    )
+    METHOD ifc$resValue__RDY 0  = delayCount == 1(
+        METAREAD delayCount 
+    )
+    METHOD memdelay_rule__ENA 1  = (
+        STORE delayCount, delayCount - 1, 
+        METAREAD delayCount 
+        METAWRITE delayCount 
+    )
+    METHOD memdelay_rule__RDY 0  = delayCount > 1(
+        METAREAD delayCount 
+    )
+)
+MODULE l_module_OC_Lpm = 4 (
+    OUTCALL ind = 6
+    RULE enter
+    RULE exit_rule
+    RULE recirc
+    RULE respond
+    PRIORITY recirc enter;exit
+    FIELD inQ VEC -1 RANGE  IR 10 PTR 0 TYPE 
+    FIELD fifo VEC -1 RANGE [159:0] IR 2 PTR 0 TYPE 
+    FIELD outQ VEC -1 RANGE  IR 10 PTR 0 TYPE 
+    FIELD mem VEC -1 RANGE [127:0] IR 11 PTR 0 TYPE 
+    FIELD doneCount VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD ind VEC -1 RANGE  IR 6 PTR 1 TYPE 
+    FIELD request VEC -1 RANGE  IR 13 PTR 0 TYPE 
+    METHOD enter__ENA 1  = (
+        STORE temp, inQ$out$first{}, 
+        CALL inQ$out$deq__ENA{}, , 1
+        CALL fifo$in$enq__ENA{fifo$in$enq$v;temp}, , 1
+        CALL mem$ifc$req__ENA{mem$ifc$req$v;temp}, , 1
+        METAINVOKE fifo$in$enq__ENA 
+        METAINVOKE inQ$out$deq__ENA 
+        METAINVOKE inQ$out$first 
+        METAINVOKE mem$ifc$req__ENA 
+    )
+    METHOD enter__RDY 0  = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY(
+        METAINVOKE fifo$in$enq__RDY 
+        METAINVOKE inQ$out$deq__RDY 
+        METAINVOKE inQ$out$first__RDY 
+        METAINVOKE mem$ifc$req__RDY 
+    )
+    METHOD exit_rule__ENA 1  = (
+        STORE temp, fifo$out$first{}, 
+        STORE mtemp, mem$ifc$resValue{}, 
+        CALL mem$ifc$resAccept__ENA{}, , 1
+        CALL fifo$out$deq__ENA{}, , 1
+        CALL outQ$in$enq__ENA{outQ$in$enq$v;temp}, , 1
+        METAINVOKE fifo$out$deq__ENA 
+        METAINVOKE fifo$out$first 
+        METAINVOKE mem$ifc$resAccept__ENA 
+        METAINVOKE mem$ifc$resValue 
+        METAINVOKE outQ$in$enq__ENA 
+    )
+    METHOD exit_rule__RDY 0  = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY(
+        METAINVOKE fifo$out$deq__RDY 
+        METAINVOKE fifo$out$first__RDY 
+        METAINVOKE mem$ifc$resAccept__RDY 
+        METAINVOKE mem$ifc$resValue__RDY 
+        METAINVOKE outQ$in$enq__RDY 
+    )
+    METHOD recirc__ENA 1  = (
+        STORE temp, fifo$out$first{}, 
+        STORE mtemp, mem$ifc$resValue{}, 
+        CALL mem$ifc$resAccept__ENA{}, , 1
+        CALL fifo$out$deq__ENA{}, , 1
+        CALL fifo$in$enq__ENA{fifo$in$enq$v;temp}, , 1
+        CALL mem$ifc$req__ENA{mem$ifc$req$v;temp}, , 1
+        METAINVOKE fifo$in$enq__ENA 
+        METAINVOKE fifo$out$deq__ENA 
+        METAINVOKE fifo$out$first 
+        METAINVOKE mem$ifc$req__ENA 
+        METAINVOKE mem$ifc$resAccept__ENA 
+        METAINVOKE mem$ifc$resValue 
+    )
+    METHOD recirc__RDY 0  = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY(
+        METAINVOKE fifo$in$enq__RDY 
+        METAINVOKE fifo$out$deq__RDY 
+        METAINVOKE fifo$out$first__RDY 
+        METAINVOKE mem$ifc$req__RDY 
+        METAINVOKE mem$ifc$resAccept__RDY 
+        METAINVOKE mem$ifc$resValue__RDY 
+    )
+    METHOD request$say__ENA 1  = (
+        PARAM request$say$meth [31:0]
+        PARAM request$say$v [31:0]
+        STORE temp$a, request$say$meth, 
+        STORE temp$b, request$say$v, 
+        CALL inQ$in$enq__ENA{inQ$in$enq$v;temp}, , 1
+        METAINVOKE inQ$in$enq__ENA 
+    )
+    METHOD request$say__RDY 0  = inQ$in$enq__RDY(
+        METAINVOKE inQ$in$enq__RDY 
+    )
+    METHOD respond__ENA 1  = (
+        STORE temp, outQ$out$first{}, 
+        CALL outQ$out$deq__ENA{}, , 1
+        CALL ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}, , 1
+        METAINVOKE ind$heard__ENA 
+        METAINVOKE outQ$out$deq__ENA 
+        METAINVOKE outQ$out$first 
+    )
+    METHOD respond__RDY 0  = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY(
+        METAINVOKE ind$heard__RDY 
+        METAINVOKE outQ$out$deq__RDY 
+        METAINVOKE outQ$out$first__RDY 
+    )
+)
+MODULE l_class_OC_LpmTest = 1 (
+    FIELD lpm VEC -1 RANGE [319:0] IR 4 PTR 0 TYPE 
+)
+MODULE l_class_OC_foo = 5 (
+    FIELD indication VEC -1 RANGE  IR 6 PTR 0 TYPE 
+)

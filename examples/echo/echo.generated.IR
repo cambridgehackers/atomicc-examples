@@ -1,0 +1,79 @@
+MODULE l_ainterface_OC_EchoIndication = 5 (
+    METHOD heard__ENA 1  = (
+        PARAM heard$v [31:0]
+    )
+    METHOD heard__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_EchoRequest = 4 (
+    METHOD say__ENA 1  = (
+        PARAM say$v [31:0]
+    )
+    METHOD say__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeIn = 3 (
+    METHOD enq__ENA 1  = (
+        PARAM enq$v [31:0]
+    )
+    METHOD enq__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeOut = 7 (
+    METHOD deq__ENA 1  = (
+    )
+    METHOD deq__RDY 0  = 1(
+    )
+    METHOD first 0 [31:0] = retval(
+    )
+    METHOD first__RDY 0  = 1(
+    )
+)
+MODULE l_module_OC_Fifo1 = 9 (
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [31:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [31:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_module_OC_Echo = 1 (
+    SOFTWARE ind
+    SOFTWARE sout
+    OUTCALL ind = 5
+    RULE respond_rule
+    FIELD sout VEC -1 RANGE  IR 4 PTR 0 TYPE 
+    FIELD ind VEC -1 RANGE  IR 5 PTR 1 TYPE 
+    FIELD fifo VEC -1 RANGE  IR 9 PTR 0 TYPE 
+    METHOD respond_rule__ENA 1  = (
+        CALL fifo$out$deq__ENA{}, , 1
+        CALL ind$heard__ENA{ind$heard$v;fifo$out$first{}}, , 1
+        METAINVOKE fifo$out$deq__ENA 
+        METAINVOKE fifo$out$first 
+        METAINVOKE ind$heard__ENA 
+    )
+    METHOD respond_rule__RDY 0  = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY(
+        METAINVOKE fifo$out$deq__RDY 
+        METAINVOKE fifo$out$first__RDY 
+        METAINVOKE ind$heard__RDY 
+    )
+    METHOD sout$say__ENA 1  = (
+        PARAM sout$say$v [31:0]
+        CALL fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}, , 1
+        METAINVOKE fifo$in$enq__ENA 
+    )
+    METHOD sout$say__RDY 0  = fifo$in$enq__RDY(
+        METAINVOKE fifo$in$enq__RDY 
+    )
+)
+MODULE l_class_OC_EchoTest = 2 (
+    FIELD echo VEC -1 RANGE  IR 1 PTR 0 TYPE 
+    FIELD x VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+)

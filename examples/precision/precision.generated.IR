@@ -1,0 +1,188 @@
+MODULE l_ainterface_OC_IVectorIndication = 10 (
+    METHOD heard__ENA 1  = (
+        PARAM heard$meth [5:0]
+        PARAM heard$v [3:0]
+    )
+    METHOD heard__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_IVectorRequest = 9 (
+    METHOD say__ENA 1  = (
+        PARAM say$meth [5:0]
+        PARAM say$v [3:0]
+    )
+    METHOD say__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeIn = 4 (
+    METHOD enq__ENA 1  = (
+        PARAM enq$v [31:0]
+    )
+    METHOD enq__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeIn_OC_1 = 8 (
+    METHOD enq__ENA 1  = (
+        PARAM enq$v [9:0]
+    )
+    METHOD enq__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeOut = 5 (
+    METHOD deq__ENA 1  = (
+    )
+    METHOD deq__RDY 0  = 1(
+    )
+    METHOD first 0 [31:0] = retval(
+    )
+    METHOD first__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeOut_OC_2 = 13 (
+    METHOD deq__ENA 1  = (
+    )
+    METHOD deq__RDY 0  = 1(
+    )
+    METHOD first 0 [9:0] = retval(
+    )
+    METHOD first__RDY 0  = 1(
+    )
+)
+MODULE l_module_OC_Fifo_OC_0 = 12 (
+    FIELD in VEC -1 RANGE  IR 8 PTR 0 TYPE 
+    FIELD out VEC -1 RANGE  IR 13 PTR 0 TYPE 
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [9:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [9:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_struct_OC_ValueType = 6 (
+    FIELD a VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+    FIELD b VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+)
+MODULE l_module_OC_Fifo1_OC_3 = 11 (
+    FIELD element VEC -1 RANGE [9:0] IR 6 PTR 0 TYPE 
+    FIELD full VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [9:0]
+        STORE element, in$enq$v, 
+        STORE full, 1, 
+        METAWRITE element 
+        METAWRITE full 
+    )
+    METHOD in$enq__RDY 0  = full ^ 1(
+        METAREAD full 
+    )
+    METHOD out$deq__ENA 1  = (
+        STORE full, 0, 
+        METAWRITE full 
+    )
+    METHOD out$deq__RDY 0  = full(
+        METAREAD full 
+    )
+    METHOD out$first 0 [9:0] = element(
+        METAREAD element 
+    )
+    METHOD out$first__RDY 0  = full(
+        METAREAD full 
+    )
+)
+MODULE l_module_OC_IVector = 7 (
+    OUTCALL ind = 10
+    RULE respond
+    FIELD request VEC -1 RANGE  IR 9 PTR 0 TYPE 
+    FIELD ind VEC -1 RANGE  IR 10 PTR 1 TYPE 
+    FIELD fifo VEC -1 RANGE [17:0] IR 11 PTR 0 TYPE 
+    FIELD fcounter VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+    FIELD counter VEC -1 RANGE  IR -1 PTR 0 TYPE unsigned VERILOG_short @
+    FIELD gcounter VEC -1 RANGE  IR -1 PTR 0 TYPE unsigned VERILOG_short @
+    METHOD request$say__ENA 1  = (
+        PARAM request$say$meth [5:0]
+        PARAM request$say$v [3:0]
+        STORE temp$a, request$say$meth, 
+        STORE temp$b, request$say$v, 
+        CALL fifo$in$enq__ENA{fifo$in$enq$v;temp}, , 1
+        METAINVOKE fifo$in$enq__ENA 
+    )
+    METHOD request$say__RDY 0  = fifo$in$enq__RDY(
+        METAINVOKE fifo$in$enq__RDY 
+    )
+    METHOD respond__ENA 1  = (
+        STORE temp, fifo$out$first{}, 
+        CALL fifo$out$deq__ENA{}, , 1
+        CALL ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}, , 1
+        METAINVOKE fifo$out$deq__ENA 
+        METAINVOKE fifo$out$first 
+        METAINVOKE ind$heard__ENA 
+    )
+    METHOD respond__RDY 0  = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY(
+        METAINVOKE fifo$out$deq__RDY 
+        METAINVOKE fifo$out$first__RDY 
+        METAINVOKE ind$heard__RDY 
+    )
+)
+MODULE l_class_OC_IVectorTest = 1 (
+    FIELD ivector VEC -1 RANGE [43:0] IR 7 PTR 0 TYPE 
+)
+MODULE l_module_OC_Fifo = 3 (
+    FIELD in VEC -1 RANGE  IR 4 PTR 0 TYPE 
+    FIELD out VEC -1 RANGE  IR 5 PTR 0 TYPE 
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [31:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [31:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_module_OC_Fifo1 = 2 (
+    FIELD element VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD full VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [31:0]
+        STORE element, in$enq$v, 
+        STORE full, 1, 
+        METAWRITE element 
+        METAWRITE full 
+    )
+    METHOD in$enq__RDY 0  = full ^ 1(
+        METAREAD full 
+    )
+    METHOD out$deq__ENA 1  = (
+        STORE full, 0, 
+        METAWRITE full 
+    )
+    METHOD out$deq__RDY 0  = full(
+        METAREAD full 
+    )
+    METHOD out$first 0 [31:0] = element(
+        METAREAD element 
+    )
+    METHOD out$first__RDY 0  = full(
+        METAREAD full 
+    )
+)
+MODULE l_module_OC_IVectorInd = 14 (
+    FIELD ind VEC -1 RANGE  IR 10 PTR 0 TYPE 
+    METHOD ind$heard__ENA 1  = (
+        PARAM ind$heard$meth [5:0]
+        PARAM ind$heard$v [3:0]
+    )
+    METHOD ind$heard__RDY 0  = 1(
+    )
+)

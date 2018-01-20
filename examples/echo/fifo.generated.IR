@@ -1,0 +1,61 @@
+MODULE l_ainterface_OC_PipeIn = 3 (
+    METHOD enq__ENA 1  = (
+        PARAM enq$v [31:0]
+    )
+    METHOD enq__RDY 0  = 1(
+    )
+)
+MODULE l_ainterface_OC_PipeOut = 4 (
+    METHOD deq__ENA 1  = (
+    )
+    METHOD deq__RDY 0  = 1(
+    )
+    METHOD first 0 [31:0] = retval(
+    )
+    METHOD first__RDY 0  = 1(
+    )
+)
+MODULE l_module_OC_Fifo = 2 (
+    FIELD in VEC -1 RANGE  IR 3 PTR 0 TYPE 
+    FIELD out VEC -1 RANGE  IR 4 PTR 0 TYPE 
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [31:0]
+    )
+    METHOD in$enq__RDY 0  = retval(
+    )
+    METHOD out$deq__ENA 1  = (
+    )
+    METHOD out$deq__RDY 0  = retval(
+    )
+    METHOD out$first 0 [31:0] = retval(
+    )
+    METHOD out$first__RDY 0  = retval(
+    )
+)
+MODULE l_module_OC_Fifo1 = 1 (
+    FIELD element VEC -1 RANGE  IR -1 PTR 0 TYPE reg[31:0] @
+    FIELD full VEC -1 RANGE  IR -1 PTR 0 TYPE reg @
+    METHOD in$enq__ENA 1  = (
+        PARAM in$enq$v [31:0]
+        STORE element, in$enq$v, 
+        STORE full, 1, 
+        METAWRITE element 
+        METAWRITE full 
+    )
+    METHOD in$enq__RDY 0  = full ^ 1(
+        METAREAD full 
+    )
+    METHOD out$deq__ENA 1  = (
+        STORE full, 0, 
+        METAWRITE full 
+    )
+    METHOD out$deq__RDY 0  = full(
+        METAREAD full 
+    )
+    METHOD out$first 0 [31:0] = element(
+        METAREAD element 
+    )
+    METHOD out$first__RDY 0  = full(
+        METAREAD full 
+    )
+)
