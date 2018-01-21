@@ -1,28 +1,28 @@
-MODULE l_ainterface_OC_EchoIndication = 5 (
+EMODULE l_ainterface_OC_EchoIndication = 5 (
     METHOD/Action heard__ENA (
         PARAM heard$v [31:0]
     )
     METHOD heard__RDY
 )
-MODULE l_ainterface_OC_EchoRequest = 4 (
+EMODULE l_ainterface_OC_EchoRequest = 4 (
     METHOD/Action say__ENA (
         PARAM say$v [31:0]
     )
     METHOD say__RDY
 )
-MODULE l_ainterface_OC_PipeIn = 3 (
+EMODULE l_ainterface_OC_PipeIn = 3 (
     METHOD/Action enq__ENA (
         PARAM enq$v [31:0]
     )
     METHOD enq__RDY
 )
-MODULE l_ainterface_OC_PipeOut = 7 (
+EMODULE l_ainterface_OC_PipeOut = 7 (
     METHOD/Action deq__ENA
     METHOD deq__RDY
     METHOD first RANGE [31:0]
     METHOD first__RDY
 )
-MODULE l_module_OC_Fifo1 = 9 (
+EMODULE l_module_OC_Fifo1 = 9 (
     METHOD/Action in$enq__ENA (
         PARAM in$enq$v [31:0]
     )
@@ -61,7 +61,7 @@ MODULE l_module_OC_Echo = 1 (
         METAINVOKE fifo$in$enq__RDY 
     )
 )
-MODULE l_class_OC_EchoTest = 2 (
+EMODULE l_class_OC_EchoTest = 2 (
     FIELD 1:echo
     FIELD x FORMAT reg[31:0] @
 )

@@ -1,11 +1,11 @@
-MODULE l_ainterface_OC_EchoIndication = 2 (
+EMODULE l_ainterface_OC_EchoIndication = 2 (
     METHOD/Action heard__ENA (
         PARAM heard$meth [31:0]
         PARAM heard$v [31:0]
     )
     METHOD heard__RDY
 )
-MODULE l_ainterface_OC_EchoRequest = 10 (
+EMODULE l_ainterface_OC_EchoRequest = 10 (
     METHOD/Action say2__ENA (
         PARAM say2$meth [31:0]
         PARAM say2$v [31:0]
@@ -17,19 +17,19 @@ MODULE l_ainterface_OC_EchoRequest = 10 (
     )
     METHOD say__RDY
 )
-MODULE l_ainterface_OC_PipeIn = 11 (
+EMODULE l_ainterface_OC_PipeIn = 11 (
     METHOD/Action enq__ENA (
         PARAM enq$v [191:0]
     )
     METHOD enq__RDY
 )
-MODULE l_ainterface_OC_PipeIn_OC_0 = 5 (
+EMODULE l_ainterface_OC_PipeIn_OC_0 = 5 (
     METHOD/Action enq__ENA (
         PARAM enq$v [95:0]
     )
     METHOD enq__RDY
 )
-MODULE l_class_OC_foo = 1 (
+EMODULE l_class_OC_foo = 1 (
     FIELD 2:indication
 )
 MODULE l_module_OC_Echo = 12 (
@@ -90,14 +90,14 @@ MODULE l_module_OC_Echo = 12 (
         METAINVOKE indication$heard__RDY 
     )
 )
-MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 8 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 8 (
     FIELD meth FORMAT reg[31:0] @
     FIELD v FORMAT reg[31:0] @
 )
-MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 7 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 7 (
     FIELD 8:heard RANGE [63:0]
 )
-MODULE l_struct_OC_EchoIndication_data = 6 (
+EMODULE l_struct_OC_EchoIndication_data = 6 (
     FIELD tag FORMAT reg[31:0] @
     FIELD 7:data RANGE [63:0]
 )
@@ -182,20 +182,20 @@ MODULE l_module_OC_EchoIndicationOutput = 4 (
         METAINVOKE pipe$enq__RDY 
     )
 )
-MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 17 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 17 (
     FIELD meth FORMAT reg[31:0] @
     FIELD v FORMAT reg[31:0] @
 )
-MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 = 18 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 = 18 (
     FIELD meth FORMAT reg[31:0] @
     FIELD v FORMAT reg[31:0] @
     FIELD v2 FORMAT reg[31:0] @
 )
-MODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 16 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 16 (
     FIELD 17:say RANGE [63:0]
     FIELD 18:say2 RANGE [95:0]
 )
-MODULE l_struct_OC_EchoRequest_data = 15 (
+EMODULE l_struct_OC_EchoRequest_data = 15 (
     FIELD tag FORMAT reg[31:0] @
     FIELD 16:data RANGE [159:0]
 )

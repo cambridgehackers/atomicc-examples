@@ -1,42 +1,42 @@
-MODULE l_ainterface_OC_IVectorIndication = 10 (
+EMODULE l_ainterface_OC_IVectorIndication = 10 (
     METHOD/Action heard__ENA (
         PARAM heard$meth [5:0]
         PARAM heard$v [3:0]
     )
     METHOD heard__RDY
 )
-MODULE l_ainterface_OC_IVectorRequest = 9 (
+EMODULE l_ainterface_OC_IVectorRequest = 9 (
     METHOD/Action say__ENA (
         PARAM say$meth [5:0]
         PARAM say$v [3:0]
     )
     METHOD say__RDY
 )
-MODULE l_ainterface_OC_PipeIn = 4 (
+EMODULE l_ainterface_OC_PipeIn = 4 (
     METHOD/Action enq__ENA (
         PARAM enq$v [31:0]
     )
     METHOD enq__RDY
 )
-MODULE l_ainterface_OC_PipeIn_OC_1 = 8 (
+EMODULE l_ainterface_OC_PipeIn_OC_1 = 8 (
     METHOD/Action enq__ENA (
         PARAM enq$v [9:0]
     )
     METHOD enq__RDY
 )
-MODULE l_ainterface_OC_PipeOut = 5 (
+EMODULE l_ainterface_OC_PipeOut = 5 (
     METHOD/Action deq__ENA
     METHOD deq__RDY
     METHOD first RANGE [31:0]
     METHOD first__RDY
 )
-MODULE l_ainterface_OC_PipeOut_OC_2 = 13 (
+EMODULE l_ainterface_OC_PipeOut_OC_2 = 13 (
     METHOD/Action deq__ENA
     METHOD deq__RDY
     METHOD first RANGE [9:0]
     METHOD first__RDY
 )
-MODULE l_module_OC_Fifo_OC_0 = 12 (
+EMODULE l_module_OC_Fifo_OC_0 = 12 (
     FIELD 8:in
     FIELD 13:out
     METHOD/Action in$enq__ENA (
@@ -48,7 +48,7 @@ MODULE l_module_OC_Fifo_OC_0 = 12 (
     METHOD out$first RANGE [9:0]
     METHOD out$first__RDY
 )
-MODULE l_struct_OC_ValueType = 6 (
+EMODULE l_struct_OC_ValueType = 6 (
     FIELD a FORMAT reg @
     FIELD b FORMAT reg @
 )
@@ -110,10 +110,10 @@ MODULE l_module_OC_IVector = 7 (
         METAINVOKE ind$heard__RDY 
     )
 )
-MODULE l_class_OC_IVectorTest = 1 (
+EMODULE l_class_OC_IVectorTest = 1 (
     FIELD 7:ivector RANGE [43:0]
 )
-MODULE l_module_OC_Fifo = 3 (
+EMODULE l_module_OC_Fifo = 3 (
     FIELD 4:in
     FIELD 5:out
     METHOD/Action in$enq__ENA (

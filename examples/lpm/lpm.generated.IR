@@ -1,11 +1,11 @@
-MODULE l_ainterface_OC_LpmIndication = 6 (
+EMODULE l_ainterface_OC_LpmIndication = 6 (
     METHOD/Action heard__ENA (
         PARAM heard$meth [31:0]
         PARAM heard$v [31:0]
     )
     METHOD heard__RDY
 )
-MODULE l_ainterface_OC_LpmMem = 12 (
+EMODULE l_ainterface_OC_LpmMem = 12 (
     METHOD/Action req__ENA (
         PARAM req$v [95:0]
     )
@@ -15,26 +15,26 @@ MODULE l_ainterface_OC_LpmMem = 12 (
     METHOD resValue RANGE [95:0]
     METHOD resValue__RDY
 )
-MODULE l_ainterface_OC_LpmRequest = 13 (
+EMODULE l_ainterface_OC_LpmRequest = 13 (
     METHOD/Action say__ENA (
         PARAM say$meth [31:0]
         PARAM say$v [31:0]
     )
     METHOD say__RDY
 )
-MODULE l_ainterface_OC_PipeIn = 7 (
+EMODULE l_ainterface_OC_PipeIn = 7 (
     METHOD/Action enq__ENA (
         PARAM enq$v [95:0]
     )
     METHOD enq__RDY
 )
-MODULE l_ainterface_OC_PipeOut = 8 (
+EMODULE l_ainterface_OC_PipeOut = 8 (
     METHOD/Action deq__ENA
     METHOD deq__RDY
     METHOD first RANGE [95:0]
     METHOD first__RDY
 )
-MODULE l_module_OC_Fifo1 = 10 (
+EMODULE l_module_OC_Fifo1 = 10 (
     METHOD/Action in$enq__ENA (
         PARAM in$enq$v [95:0]
     )
@@ -44,7 +44,7 @@ MODULE l_module_OC_Fifo1 = 10 (
     METHOD out$first RANGE [95:0]
     METHOD out$first__RDY
 )
-MODULE l_module_OC_Fifo = 3 (
+EMODULE l_module_OC_Fifo = 3 (
     FIELD 7:in
     FIELD 8:out
     METHOD/Action in$enq__ENA (
@@ -56,7 +56,7 @@ MODULE l_module_OC_Fifo = 3 (
     METHOD out$first RANGE [95:0]
     METHOD out$first__RDY
 )
-MODULE l_struct_OC_ValuePair = 9 (
+EMODULE l_struct_OC_ValuePair = 9 (
     FIELD a FORMAT reg[31:0] @
     FIELD b FORMAT reg[31:0] @
     FIELD c FORMAT reg[31:0] @
@@ -222,9 +222,9 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE outQ$out$first__RDY 
     )
 )
-MODULE l_class_OC_LpmTest = 1 (
+EMODULE l_class_OC_LpmTest = 1 (
     FIELD 4:lpm RANGE [319:0]
 )
-MODULE l_class_OC_foo = 5 (
+EMODULE l_class_OC_foo = 5 (
     FIELD 6:indication
 )
