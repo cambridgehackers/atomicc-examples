@@ -1,159 +1,159 @@
 MODULE l_ainterface_OC_IVectorIndication = 10 (
-    METHOD Action heard__ENA  (
+    METHOD/Action heard__ENA (
         PARAM heard$meth [5:0]
         PARAM heard$v [3:0]
     )
-    METHOD heard__RDY 
+    METHOD heard__RDY
 )
 MODULE l_ainterface_OC_IVectorRequest = 9 (
-    METHOD Action say__ENA  (
+    METHOD/Action say__ENA (
         PARAM say$meth [5:0]
         PARAM say$v [3:0]
     )
-    METHOD say__RDY 
+    METHOD say__RDY
 )
 MODULE l_ainterface_OC_PipeIn = 4 (
-    METHOD Action enq__ENA  (
+    METHOD/Action enq__ENA (
         PARAM enq$v [31:0]
     )
-    METHOD enq__RDY 
+    METHOD enq__RDY
 )
 MODULE l_ainterface_OC_PipeIn_OC_1 = 8 (
-    METHOD Action enq__ENA  (
+    METHOD/Action enq__ENA (
         PARAM enq$v [9:0]
     )
-    METHOD enq__RDY 
+    METHOD enq__RDY
 )
 MODULE l_ainterface_OC_PipeOut = 5 (
-    METHOD Action deq__ENA 
-    METHOD deq__RDY 
+    METHOD/Action deq__ENA
+    METHOD deq__RDY
     METHOD first RANGE [31:0]
-    METHOD first__RDY 
+    METHOD first__RDY
 )
 MODULE l_ainterface_OC_PipeOut_OC_2 = 13 (
-    METHOD Action deq__ENA 
-    METHOD deq__RDY 
+    METHOD/Action deq__ENA
+    METHOD deq__RDY
     METHOD first RANGE [9:0]
-    METHOD first__RDY 
+    METHOD first__RDY
 )
 MODULE l_module_OC_Fifo_OC_0 = 12 (
-    FIELD 8:in  FORMAT 
-    FIELD 13:out  FORMAT 
-    METHOD Action in$enq__ENA  (
+    FIELD 8:in
+    FIELD 13:out
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [9:0]
     )
-    METHOD in$enq__RDY 
-    METHOD Action out$deq__ENA 
-    METHOD out$deq__RDY 
+    METHOD in$enq__RDY
+    METHOD/Action out$deq__ENA
+    METHOD out$deq__RDY
     METHOD out$first RANGE [9:0]
-    METHOD out$first__RDY 
+    METHOD out$first__RDY
 )
 MODULE l_struct_OC_ValueType = 6 (
-    FIELD a  FORMAT reg @
-    FIELD b  FORMAT reg @
+    FIELD a FORMAT reg @
+    FIELD b FORMAT reg @
 )
 MODULE l_module_OC_Fifo1_OC_3 = 11 (
-    FIELD 6:element  RANGE [9:0] FORMAT 
-    FIELD full  FORMAT reg @
-    METHOD Action in$enq__ENA  (
+    FIELD 6:element RANGE [9:0]
+    FIELD full FORMAT reg @
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [9:0]
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY  = (full ^ 1) (
+    METHOD in$enq__RDY = (full ^ 1) (
         METAREAD full 
     )
-    METHOD Action out$deq__ENA  (
+    METHOD/Action out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY  = (full) (
+    METHOD out$deq__RDY = (full) (
         METAREAD full 
     )
     METHOD out$first RANGE [9:0] = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY  = (full) (
+    METHOD out$first__RDY = (full) (
         METAREAD full 
     )
 )
 MODULE l_module_OC_IVector = 7 (
     OUTCALL ind = 10
     RULE respond
-    FIELD 9:request  FORMAT 
-    FIELD 10:ind PTR  FORMAT 
-    FIELD 11:fifo  RANGE [17:0] FORMAT 
-    FIELD fcounter  FORMAT reg @
-    FIELD counter  FORMAT unsigned VERILOG_short @
-    FIELD gcounter  FORMAT unsigned VERILOG_short @
-    METHOD Action request$say__ENA  (
+    FIELD 9:request
+    FIELD/PTR  10:ind
+    FIELD 11:fifo RANGE [17:0]
+    FIELD fcounter FORMAT reg @
+    FIELD counter FORMAT unsigned VERILOG_short @
+    FIELD gcounter FORMAT unsigned VERILOG_short @
+    METHOD/Action request$say__ENA (
         PARAM request$say$meth [5:0]
         PARAM request$say$v [3:0]
-        STORE Alloca :temp$a = request$say$meth
-        STORE Alloca :temp$b = request$say$v
-        CALL Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
+        STORE/Alloca :temp$a = request$say$meth
+        STORE/Alloca :temp$b = request$say$v
+        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
         METAINVOKE fifo$in$enq__ENA 
     )
-    METHOD request$say__RDY  = (fifo$in$enq__RDY) (
+    METHOD request$say__RDY = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
-    METHOD Action respond__ENA  (
-        STORE Alloca :temp = fifo$out$first{}
-        CALL Action :fifo$out$deq__ENA{}
-        CALL Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
+    METHOD/Action respond__ENA (
+        STORE/Alloca :temp = fifo$out$first{}
+        CALL/Action :fifo$out$deq__ENA{}
+        CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
         METAINVOKE fifo$out$deq__ENA 
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
     )
-    METHOD respond__RDY  = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
+    METHOD respond__RDY = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
     )
 )
 MODULE l_class_OC_IVectorTest = 1 (
-    FIELD 7:ivector  RANGE [43:0] FORMAT 
+    FIELD 7:ivector RANGE [43:0]
 )
 MODULE l_module_OC_Fifo = 3 (
-    FIELD 4:in  FORMAT 
-    FIELD 5:out  FORMAT 
-    METHOD Action in$enq__ENA  (
+    FIELD 4:in
+    FIELD 5:out
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [31:0]
     )
-    METHOD in$enq__RDY 
-    METHOD Action out$deq__ENA 
-    METHOD out$deq__RDY 
+    METHOD in$enq__RDY
+    METHOD/Action out$deq__ENA
+    METHOD out$deq__RDY
     METHOD out$first RANGE [31:0]
-    METHOD out$first__RDY 
+    METHOD out$first__RDY
 )
 MODULE l_module_OC_Fifo1 = 2 (
-    FIELD element  FORMAT reg[31:0] @
-    FIELD full  FORMAT reg @
-    METHOD Action in$enq__ENA  (
+    FIELD element FORMAT reg[31:0] @
+    FIELD full FORMAT reg @
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [31:0]
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY  = (full ^ 1) (
+    METHOD in$enq__RDY = (full ^ 1) (
         METAREAD full 
     )
-    METHOD Action out$deq__ENA  (
+    METHOD/Action out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY  = (full) (
+    METHOD out$deq__RDY = (full) (
         METAREAD full 
     )
     METHOD out$first RANGE [31:0] = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY  = (full) (
+    METHOD out$first__RDY = (full) (
         METAREAD full 
     )
 )
 MODULE l_module_OC_IVectorInd = 14 (
-    FIELD 10:ind  FORMAT 
-    METHOD Action ind$heard__ENA  (
+    FIELD 10:ind
+    METHOD/Action ind$heard__ENA (
         PARAM ind$heard$meth [5:0]
         PARAM ind$heard$v [3:0]
     )
-    METHOD ind$heard__RDY  = (1)
+    METHOD ind$heard__RDY = (1)
 )

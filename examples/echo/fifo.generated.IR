@@ -1,48 +1,48 @@
 MODULE l_ainterface_OC_PipeIn = 3 (
-    METHOD Action enq__ENA  (
+    METHOD/Action enq__ENA (
         PARAM enq$v [31:0]
     )
-    METHOD enq__RDY 
+    METHOD enq__RDY
 )
 MODULE l_ainterface_OC_PipeOut = 4 (
-    METHOD Action deq__ENA 
-    METHOD deq__RDY 
+    METHOD/Action deq__ENA
+    METHOD deq__RDY
     METHOD first RANGE [31:0]
-    METHOD first__RDY 
+    METHOD first__RDY
 )
 MODULE l_module_OC_Fifo = 2 (
-    FIELD 3:in  FORMAT 
-    FIELD 4:out  FORMAT 
-    METHOD Action in$enq__ENA  (
+    FIELD 3:in
+    FIELD 4:out
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [31:0]
     )
-    METHOD in$enq__RDY 
-    METHOD Action out$deq__ENA 
-    METHOD out$deq__RDY 
+    METHOD in$enq__RDY
+    METHOD/Action out$deq__ENA
+    METHOD out$deq__RDY
     METHOD out$first RANGE [31:0]
-    METHOD out$first__RDY 
+    METHOD out$first__RDY
 )
 MODULE l_module_OC_Fifo1 = 1 (
-    FIELD element  FORMAT reg[31:0] @
-    FIELD full  FORMAT reg @
-    METHOD Action in$enq__ENA  (
+    FIELD element FORMAT reg[31:0] @
+    FIELD full FORMAT reg @
+    METHOD/Action in$enq__ENA (
         PARAM in$enq$v [31:0]
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY  = (full ^ 1) (
+    METHOD in$enq__RDY = (full ^ 1) (
         METAREAD full 
     )
-    METHOD Action out$deq__ENA  (
+    METHOD/Action out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY  = (full) (
+    METHOD out$deq__RDY = (full) (
         METAREAD full 
     )
     METHOD out$first RANGE [31:0] = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY  = (full) (
+    METHOD out$first__RDY = (full) (
         METAREAD full 
     )
 )
