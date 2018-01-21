@@ -77,16 +77,16 @@ __interface IVectorRequest {
 __module IVector {
     IVectorRequest request;
     Fifo<UTYPE> *fifo;
-    IVectorIndication *ind;
+    IndIF *ind;
     void request.say(UTYPE v) {
         fifo->in.enq(v);
     }
-    IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(ind) {
+    IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(&ind->ind) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
         __rule respond { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
 	    this->fifo->out.deq();
-	    this->ind->ind.heard(this->fifo->out.first());
+	    this->ind->heard(this->fifo->out.first());
             };
     };
     //~IVector() {}

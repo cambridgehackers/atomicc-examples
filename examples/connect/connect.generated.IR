@@ -133,11 +133,11 @@ MODULE l_module_OC_Connect = 4 (
     SOFTWARE indication
     SOFTWARE request
     OUTCALL indication = 3
-    INTERFACECONNECT lERI$request=lEcho$request, IR=6
-    INTERFACECONNECT lEIO$pipe=lEII_test$pipe, IR=8
-    INTERFACECONNECT lEcho$indication=lEIO$indication, IR=3
-    INTERFACECONNECT lERO_test$pipe=lERI$pipe, IR=11
-    INTERFACECONNECT lEII_test$indication=indication, IR=3
+    INTERFACECONNECT lERI$request lEcho$request 6
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe 8
+    INTERFACECONNECT lEcho$indication lEIO$indication 3
+    INTERFACECONNECT lERO_test$pipe lERI$pipe 11
+    INTERFACECONNECT lEII_test$indication indication 3
     FIELD 6:request
     FIELD/PTR  3:indication
     FIELD 7:lEIO

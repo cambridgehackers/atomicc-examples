@@ -4,7 +4,7 @@ EMODULE l_ainterface_OC_IVectorRequest = 13 (
     )
     METHOD say__RDY
 )
-EMODULE l_ainterface_OC_IndIF = 15 (
+EMODULE l_ainterface_OC_IndIF = 14 (
     METHOD/Action heard__ENA (
         PARAM heard$v [703:0]
     )
@@ -123,6 +123,7 @@ MODULE l_module_OC_FifoPong = 7 (
     )
 )
 MODULE l_module_OC_IVector = 1 (
+    OUTCALL ind = 14
     RULE respond
     FIELD 13:request
     FIELD 7:fifo RANGE [1431:0]
@@ -138,15 +139,15 @@ MODULE l_module_OC_IVector = 1 (
     METHOD/Action respond__ENA (
         STORE/Alloca :agg_2e_tmp = fifo$out$first{}
         CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$ind$heard__ENA{ind$ind$heard$v;agg_2e_tmp}
+        CALL/Action :ind$heard__ENA{ind$heard$v;agg_2e_tmp}
         METAINVOKE fifo$out$deq__ENA 
         METAINVOKE fifo$out$first 
-        METAINVOKE ind$ind$heard__ENA 
+        METAINVOKE ind$heard__ENA 
     )
-    METHOD respond__RDY = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$ind$heard__RDY) (
+    METHOD respond__RDY = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
-        METAINVOKE ind$ind$heard__RDY 
+        METAINVOKE ind$heard__RDY 
     )
 )
 EMODULE l_class_OC_IVectorTest = 2 (
@@ -188,8 +189,8 @@ MODULE l_module_OC_Fifo1 = 3 (
         METAREAD full 
     )
 )
-MODULE l_module_OC_IVectorIndication = 14 (
-    FIELD 15:ind
+MODULE l_module_OC_IVectorIndication = 15 (
+    FIELD 14:ind
     METHOD/Action ind$heard__ENA (
         PARAM ind$heard$v [703:0]
         STORE/Alloca :v_2e_addr = ind$heard$v
