@@ -1,33 +1,33 @@
 EMODULE l_ainterface_OC_EchoIndication = 5 (
-    METHOD/Action heard__ENA (
+    METHOD heard__ENA (
         PARAM heard$v SIZE 32
     )
     METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_EchoRequest = 4 (
-    METHOD/Action say__ENA (
+    METHOD say__ENA (
         PARAM say$v SIZE 32
     )
     METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 3 (
-    METHOD/Action enq__ENA (
+    METHOD enq__ENA (
         PARAM enq$v SIZE 32
     )
     METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut = 7 (
-    METHOD/Action deq__ENA
+    METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 32
     METHOD first__RDY SIZE 1
 )
 EMODULE l_module_OC_Fifo1 = 9 (
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 32
     METHOD out$first__RDY SIZE 1
@@ -35,27 +35,27 @@ EMODULE l_module_OC_Fifo1 = 9 (
 MODULE l_module_OC_Echo = 1 (
     SOFTWARE ind
     SOFTWARE sout
-    OUTCALL ind = 5
     RULE respond_rule
     FIELD 4:sout
+    OUTCALL ind = 5
     FIELD/PTR  5:ind
     FIELD 9:fifo
-    METHOD/Action respond_rule__ENA (
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
+    METHOD respond_rule__ENA (
         METAINVOKE fifo$out$deq__ENA 
+        CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
+        CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
     )
     METHOD respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
     )
-    METHOD/Action sout$say__ENA (
+    METHOD sout$say__ENA (
         PARAM sout$say$v SIZE 32
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
         METAINVOKE fifo$in$enq__ENA 
+        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
     )
     METHOD sout$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 

@@ -1,35 +1,35 @@
 EMODULE l_ainterface_OC_IVectorRequest = 13 (
-    METHOD/Action say__ENA (
+    METHOD say__ENA (
         PARAM say$v SIZE 704
     )
     METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_IndIF = 14 (
-    METHOD/Action heard__ENA (
+    METHOD heard__ENA (
         PARAM heard$v SIZE 704
     )
     METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 5 (
-    METHOD/Action enq__ENA (
+    METHOD enq__ENA (
         PARAM enq$v SIZE 32
     )
     METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn_OC_1 = 9 (
-    METHOD/Action enq__ENA (
+    METHOD enq__ENA (
         PARAM enq$v SIZE 704
     )
     METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut = 6 (
-    METHOD/Action deq__ENA
+    METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 32
     METHOD first__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut_OC_2 = 10 (
-    METHOD/Action deq__ENA
+    METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 704
     METHOD first__RDY SIZE 1
@@ -37,11 +37,11 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 = 10 (
 EMODULE l_module_OC_Fifo_OC_0 = 8 (
     FIELD 9:in
     FIELD 10:out
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 704
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 704
     METHOD out$first__RDY SIZE 1
@@ -54,7 +54,7 @@ EMODULE l_struct_OC_ValuePair = 12 (
 MODULE l_module_OC_Fifo1_OC_3 = 11 (
     FIELD 12:element SIZE 704
     FIELD full SIZE 8
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 704
         STORE :element = in$enq$v
         STORE :full = 1
@@ -62,7 +62,7 @@ MODULE l_module_OC_Fifo1_OC_3 = 11 (
     METHOD in$enq__RDY SIZE 1 = (full ^ 1) (
         METAREAD full 
     )
-    METHOD/Action out$deq__ENA (
+    METHOD out$deq__ENA (
         STORE :full = 0
     )
     METHOD out$deq__RDY SIZE 1 = (full) (
@@ -79,70 +79,76 @@ MODULE l_module_OC_FifoPong = 7 (
     FIELD 11:element1 SIZE 712
     FIELD 11:element2 SIZE 712
     FIELD pong SIZE 8
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 704
-        CALL/Action pong:element2$in$enq__ENA{element2$in$enq$v;in$enq$v}
-        CALL/Action pong ^ 1:element1$in$enq__ENA{element1$in$enq$v;in$enq$v}
         METAREAD pong 
-        METAREAD pong pong
-        METAREAD pong pong ^ 1
-        METAINVOKE element1$in$enq__ENA pong ^ 1
         METAINVOKE element2$in$enq__ENA pong
+        CALL/Action (pong):element2$in$enq__ENA{element2$in$enq$v;in$enq$v}
+        METAREAD pong pong
+        METAINVOKE element1$in$enq__ENA pong ^ 1
+        CALL/Action (pong ^ 1):element1$in$enq__ENA{element1$in$enq$v;in$enq$v}
+        METAREAD pong pong ^ 1
     )
     METHOD in$enq__RDY SIZE 1 = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
+        METAINVOKE element2$in$enq__RDY 
         METAREAD pong 
         METAINVOKE element1$in$enq__RDY 
-        METAINVOKE element2$in$enq__RDY 
-    )
-    METHOD/Action out$deq__ENA (
-        STORE :pong = pong ^ 1
-        CALL/Action pong:element2$out$deq__ENA{}
-        CALL/Action pong ^ 1:element1$out$deq__ENA{}
         METAREAD pong 
-        METAINVOKE element1$out$deq__ENA pong ^ 1
+    )
+    METHOD out$deq__ENA (
+        METAREAD pong 
         METAINVOKE element2$out$deq__ENA pong
+        CALL/Action (pong):element2$out$deq__ENA{}
+        METAREAD pong pong
+        METAINVOKE element1$out$deq__ENA pong ^ 1
+        CALL/Action (pong ^ 1):element1$out$deq__ENA{}
+        METAREAD pong pong ^ 1
+        METAREAD pong 
+        STORE :pong = pong ^ 1
     )
     METHOD out$deq__RDY SIZE 1 = ((element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)) (
+        METAINVOKE element2$out$deq__RDY 
         METAREAD pong 
         METAINVOKE element1$out$deq__RDY 
-        METAINVOKE element2$out$deq__RDY 
+        METAREAD pong 
     )
     METHOD out$first SIZE 704 = (retval) (
-        STORE/Alloca pong:retval = element2$out$first{}
-        STORE/Alloca pong ^ 1:retval = element1$out$first{}
         METAREAD pong 
-        METAREAD pong pong
-        METAREAD pong pong ^ 1
-        METAINVOKE element1$out$first pong ^ 1
         METAINVOKE element2$out$first pong
+        STORE/Alloca (pong):retval = element2$out$first{}
+        METAREAD pong pong
+        METAINVOKE element1$out$first pong ^ 1
+        STORE/Alloca (pong ^ 1):retval = element1$out$first{}
+        METAREAD pong pong ^ 1
     )
     METHOD out$first__RDY SIZE 1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
+        METAINVOKE element2$out$first__RDY 
         METAREAD pong 
         METAINVOKE element1$out$first__RDY 
-        METAINVOKE element2$out$first__RDY 
+        METAREAD pong 
     )
 )
 MODULE l_module_OC_IVector = 1 (
-    OUTCALL ind = 14
     RULE respond
     FIELD 13:request
     FIELD 7:fifo SIZE 1432
+    OUTCALL ind = 14
     FIELD/PTR  14:ind
-    METHOD/Action request$say__ENA (
+    METHOD request$say__ENA (
         PARAM request$say$v SIZE 704
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;request$say$v}
         METAINVOKE fifo$in$enq__ENA 
+        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;request$say$v}
     )
     METHOD request$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
-    METHOD/Action respond__ENA (
-        STORE/Alloca :agg_2e_tmp = fifo$out$first{}
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{ind$heard$v;agg_2e_tmp}
+    METHOD respond__ENA (
         METAINVOKE fifo$out$deq__ENA 
+        CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
+        STORE/Alloca :agg_2e_tmp = fifo$out$first{}
         METAINVOKE ind$heard__ENA 
+        CALL/Action :ind$heard__ENA{ind$heard$v;agg_2e_tmp}
     )
     METHOD respond__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
@@ -156,11 +162,11 @@ EMODULE l_class_OC_IVectorTest = 2 (
 EMODULE l_module_OC_Fifo = 4 (
     FIELD 5:in
     FIELD 6:out
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 32
     METHOD out$first__RDY SIZE 1
@@ -168,7 +174,7 @@ EMODULE l_module_OC_Fifo = 4 (
 MODULE l_module_OC_Fifo1 = 3 (
     FIELD element SIZE 32
     FIELD full SIZE 8
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
         STORE :element = in$enq$v
         STORE :full = 1
@@ -176,7 +182,7 @@ MODULE l_module_OC_Fifo1 = 3 (
     METHOD in$enq__RDY SIZE 1 = (full ^ 1) (
         METAREAD full 
     )
-    METHOD/Action out$deq__ENA (
+    METHOD out$deq__ENA (
         STORE :full = 0
     )
     METHOD out$deq__RDY SIZE 1 = (full) (
@@ -191,7 +197,7 @@ MODULE l_module_OC_Fifo1 = 3 (
 )
 MODULE l_module_OC_IVectorIndication = 15 (
     FIELD 14:ind
-    METHOD/Action ind$heard__ENA (
+    METHOD ind$heard__ENA (
         PARAM ind$heard$v SIZE 704
         STORE/Alloca :v_2e_addr = ind$heard$v
     )

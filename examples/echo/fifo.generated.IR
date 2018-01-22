@@ -1,11 +1,11 @@
 EMODULE l_ainterface_OC_PipeIn = 3 (
-    METHOD/Action enq__ENA (
+    METHOD enq__ENA (
         PARAM enq$v SIZE 32
     )
     METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut = 4 (
-    METHOD/Action deq__ENA
+    METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 32
     METHOD first__RDY SIZE 1
@@ -13,11 +13,11 @@ EMODULE l_ainterface_OC_PipeOut = 4 (
 EMODULE l_module_OC_Fifo = 2 (
     FIELD 3:in
     FIELD 4:out
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 32
     METHOD out$first__RDY SIZE 1
@@ -25,7 +25,7 @@ EMODULE l_module_OC_Fifo = 2 (
 MODULE l_module_OC_Fifo1 = 1 (
     FIELD element SIZE 32
     FIELD full SIZE 8
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
         STORE :element = in$enq$v
         STORE :full = 1
@@ -33,7 +33,7 @@ MODULE l_module_OC_Fifo1 = 1 (
     METHOD in$enq__RDY SIZE 1 = (full ^ 1) (
         METAREAD full 
     )
-    METHOD/Action out$deq__ENA (
+    METHOD out$deq__ENA (
         STORE :full = 0
     )
     METHOD out$deq__RDY SIZE 1 = (full) (

@@ -1,45 +1,45 @@
 EMODULE l_ainterface_OC_LpmIndication = 6 (
-    METHOD/Action heard__ENA (
+    METHOD heard__ENA (
         PARAM heard$meth SIZE 32
         PARAM heard$v SIZE 32
     )
     METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_LpmMem = 12 (
-    METHOD/Action req__ENA (
+    METHOD req__ENA (
         PARAM req$v SIZE 96
     )
     METHOD req__RDY SIZE 1
-    METHOD/Action resAccept__ENA
+    METHOD resAccept__ENA
     METHOD resAccept__RDY SIZE 1
     METHOD resValue SIZE 96
     METHOD resValue__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_LpmRequest = 13 (
-    METHOD/Action say__ENA (
+    METHOD say__ENA (
         PARAM say$meth SIZE 32
         PARAM say$v SIZE 32
     )
     METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 7 (
-    METHOD/Action enq__ENA (
+    METHOD enq__ENA (
         PARAM enq$v SIZE 96
     )
     METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut = 8 (
-    METHOD/Action deq__ENA
+    METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 96
     METHOD first__RDY SIZE 1
 )
 EMODULE l_module_OC_Fifo1 = 10 (
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 96
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 96
     METHOD out$first__RDY SIZE 1
@@ -47,11 +47,11 @@ EMODULE l_module_OC_Fifo1 = 10 (
 EMODULE l_module_OC_Fifo = 3 (
     FIELD 7:in
     FIELD 8:out
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 96
     )
     METHOD in$enq__RDY SIZE 1
-    METHOD/Action out$deq__ENA
+    METHOD out$deq__ENA
     METHOD out$deq__RDY SIZE 1
     METHOD out$first SIZE 96
     METHOD out$first__RDY SIZE 1
@@ -65,28 +65,34 @@ MODULE l_module_OC_Fifo2 = 2 (
     FIELD 9:element COUNT 2 SIZE 96
     FIELD rindex SIZE 32
     FIELD windex SIZE 32
-    METHOD/Action in$enq__ENA (
+    METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 96
-        STORE :*(windex == 0 ? element0:&element1) = in$enq$v
-        STORE :windex = (windex + 1) % 2
         METAREAD windex 
+        METAREAD windex 
+        METAREAD windex windex == 0
+        METAREAD windex windex == 0
+        STORE :*(windex == 0 ? element0:&element1) = in$enq$v
+        METAREAD windex 
+        STORE :windex = (windex + 1) % 2
     )
     METHOD in$enq__RDY SIZE 1 = (((windex + 1) % 2) != rindex) (
-        METAREAD rindex 
         METAREAD windex 
-    )
-    METHOD/Action out$deq__ENA (
-        STORE :rindex = (rindex + 1) % 2
         METAREAD rindex 
+    )
+    METHOD out$deq__ENA (
+        METAREAD rindex 
+        STORE :rindex = (rindex + 1) % 2
     )
     METHOD out$deq__RDY SIZE 1 = (rindex != windex) (
         METAREAD rindex 
         METAREAD windex 
     )
     METHOD out$first SIZE 96 = (*(rindex == 0 ? element0:&element1)) (
-        METAREAD *(rindex == 0 ? element0:&element1) 
+        METAREAD rindex 
         METAREAD rindex 
         METAREAD rindex rindex == 0
+        METAREAD rindex rindex == 0
+        METAREAD *(rindex == 0 ? element0:&element1) 
     )
     METHOD out$first__RDY SIZE 1 = (rindex != windex) (
         METAREAD rindex 
@@ -98,7 +104,7 @@ MODULE l_module_OC_LpmMemory = 11 (
     FIELD delayCount SIZE 32
     FIELD 9:saved SIZE 96
     FIELD 12:ifc
-    METHOD/Action ifc$req__ENA (
+    METHOD ifc$req__ENA (
         PARAM ifc$req$v SIZE 96
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
@@ -106,7 +112,7 @@ MODULE l_module_OC_LpmMemory = 11 (
     METHOD ifc$req__RDY SIZE 1 = (delayCount == 0) (
         METAREAD delayCount 
     )
-    METHOD/Action ifc$resAccept__ENA (
+    METHOD ifc$resAccept__ENA (
         STORE :delayCount = 0
     )
     METHOD ifc$resAccept__RDY SIZE 1 = (delayCount == 1) (
@@ -118,16 +124,15 @@ MODULE l_module_OC_LpmMemory = 11 (
     METHOD ifc$resValue__RDY SIZE 1 = (delayCount == 1) (
         METAREAD delayCount 
     )
-    METHOD/Action memdelay_rule__ENA (
-        STORE :delayCount = delayCount - 1
+    METHOD memdelay_rule__ENA (
         METAREAD delayCount 
+        STORE :delayCount = delayCount - 1
     )
     METHOD memdelay_rule__RDY SIZE 1 = (delayCount > 1) (
         METAREAD delayCount 
     )
 )
 MODULE l_module_OC_Lpm = 4 (
-    OUTCALL ind = 6
     RULE enter
     RULE exit_rule
     RULE recirc
@@ -138,88 +143,89 @@ MODULE l_module_OC_Lpm = 4 (
     FIELD 10:outQ
     FIELD 11:mem SIZE 128
     FIELD doneCount SIZE 32
+    OUTCALL ind = 6
     FIELD/PTR  6:ind
     FIELD 13:request
-    METHOD/Action enter__ENA (
-        STORE/Alloca :temp = inQ$out$first{}
-        CALL/Action :inQ$out$deq__ENA{}
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
-        CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
-        METAINVOKE fifo$in$enq__ENA 
-        METAINVOKE inQ$out$deq__ENA 
+    METHOD enter__ENA (
         METAINVOKE inQ$out$first 
+        STORE/Alloca :temp = inQ$out$first{}
+        METAINVOKE inQ$out$deq__ENA 
+        CALL/Action :inQ$out$deq__ENA{}
+        METAINVOKE fifo$in$enq__ENA 
+        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
         METAINVOKE mem$ifc$req__ENA 
+        CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
     METHOD enter__RDY SIZE 1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        METAINVOKE fifo$in$enq__RDY 
-        METAINVOKE inQ$out$deq__RDY 
         METAINVOKE inQ$out$first__RDY 
+        METAINVOKE inQ$out$deq__RDY 
+        METAINVOKE fifo$in$enq__RDY 
         METAINVOKE mem$ifc$req__RDY 
     )
-    METHOD/Action exit_rule__ENA (
-        STORE/Alloca :temp = fifo$out$first{}
-        STORE/Alloca :mtemp = mem$ifc$resValue{}
-        CALL/Action :mem$ifc$resAccept__ENA{}
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :outQ$in$enq__ENA{outQ$in$enq$v;temp}
-        METAINVOKE fifo$out$deq__ENA 
+    METHOD exit_rule__ENA (
         METAINVOKE fifo$out$first 
-        METAINVOKE mem$ifc$resAccept__ENA 
+        STORE/Alloca :temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
+        STORE/Alloca :mtemp = mem$ifc$resValue{}
+        METAINVOKE mem$ifc$resAccept__ENA 
+        CALL/Action :mem$ifc$resAccept__ENA{}
+        METAINVOKE fifo$out$deq__ENA 
+        CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE outQ$in$enq__ENA 
+        CALL/Action :outQ$in$enq__ENA{outQ$in$enq$v;temp}
     )
     METHOD exit_rule__RDY SIZE 1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
-        METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
-        METAINVOKE mem$ifc$resAccept__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
+        METAINVOKE mem$ifc$resAccept__RDY 
+        METAINVOKE fifo$out$deq__RDY 
         METAINVOKE outQ$in$enq__RDY 
     )
-    METHOD/Action recirc__ENA (
-        STORE/Alloca :temp = fifo$out$first{}
-        STORE/Alloca :mtemp = mem$ifc$resValue{}
-        CALL/Action :mem$ifc$resAccept__ENA{}
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
-        CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
-        METAINVOKE fifo$in$enq__ENA 
-        METAINVOKE fifo$out$deq__ENA 
+    METHOD recirc__ENA (
         METAINVOKE fifo$out$first 
-        METAINVOKE mem$ifc$req__ENA 
-        METAINVOKE mem$ifc$resAccept__ENA 
+        STORE/Alloca :temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
+        STORE/Alloca :mtemp = mem$ifc$resValue{}
+        METAINVOKE mem$ifc$resAccept__ENA 
+        CALL/Action :mem$ifc$resAccept__ENA{}
+        METAINVOKE fifo$out$deq__ENA 
+        CALL/Action :fifo$out$deq__ENA{}
+        METAINVOKE fifo$in$enq__ENA 
+        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
+        METAINVOKE mem$ifc$req__ENA 
+        CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
     METHOD recirc__RDY SIZE 1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        METAINVOKE fifo$in$enq__RDY 
-        METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
-        METAINVOKE mem$ifc$req__RDY 
-        METAINVOKE mem$ifc$resAccept__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
+        METAINVOKE mem$ifc$resAccept__RDY 
+        METAINVOKE fifo$out$deq__RDY 
+        METAINVOKE fifo$in$enq__RDY 
+        METAINVOKE mem$ifc$req__RDY 
     )
-    METHOD/Action request$say__ENA (
+    METHOD request$say__ENA (
         PARAM request$say$meth SIZE 32
         PARAM request$say$v SIZE 32
         STORE/Alloca :temp$a = request$say$meth
         STORE/Alloca :temp$b = request$say$v
-        CALL/Action :inQ$in$enq__ENA{inQ$in$enq$v;temp}
         METAINVOKE inQ$in$enq__ENA 
+        CALL/Action :inQ$in$enq__ENA{inQ$in$enq$v;temp}
     )
     METHOD request$say__RDY SIZE 1 = (inQ$in$enq__RDY) (
         METAINVOKE inQ$in$enq__RDY 
     )
-    METHOD/Action respond__ENA (
-        STORE/Alloca :temp = outQ$out$first{}
-        CALL/Action :outQ$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
-        METAINVOKE ind$heard__ENA 
-        METAINVOKE outQ$out$deq__ENA 
+    METHOD respond__ENA (
         METAINVOKE outQ$out$first 
+        STORE/Alloca :temp = outQ$out$first{}
+        METAINVOKE outQ$out$deq__ENA 
+        CALL/Action :outQ$out$deq__ENA{}
+        METAINVOKE ind$heard__ENA 
+        CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
     )
     METHOD respond__RDY SIZE 1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
-        METAINVOKE ind$heard__RDY 
-        METAINVOKE outQ$out$deq__RDY 
         METAINVOKE outQ$out$first__RDY 
+        METAINVOKE outQ$out$deq__RDY 
+        METAINVOKE ind$heard__RDY 
     )
 )
 EMODULE l_class_OC_LpmTest = 1 (
