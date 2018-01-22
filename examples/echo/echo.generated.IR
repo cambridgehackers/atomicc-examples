@@ -1,36 +1,36 @@
 EMODULE l_ainterface_OC_EchoIndication = 5 (
     METHOD/Action heard__ENA (
-        PARAM heard$v [31:0]
+        PARAM heard$v SIZE 32
     )
-    METHOD heard__RDY
+    METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_EchoRequest = 4 (
     METHOD/Action say__ENA (
-        PARAM say$v [31:0]
+        PARAM say$v SIZE 32
     )
-    METHOD say__RDY
+    METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 3 (
     METHOD/Action enq__ENA (
-        PARAM enq$v [31:0]
+        PARAM enq$v SIZE 32
     )
-    METHOD enq__RDY
+    METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeOut = 7 (
     METHOD/Action deq__ENA
-    METHOD deq__RDY
-    METHOD first RANGE [31:0]
-    METHOD first__RDY
+    METHOD deq__RDY SIZE 1
+    METHOD first SIZE 32
+    METHOD first__RDY SIZE 1
 )
 EMODULE l_module_OC_Fifo1 = 9 (
     METHOD/Action in$enq__ENA (
-        PARAM in$enq$v [31:0]
+        PARAM in$enq$v SIZE 32
     )
-    METHOD in$enq__RDY
+    METHOD in$enq__RDY SIZE 1
     METHOD/Action out$deq__ENA
-    METHOD out$deq__RDY
-    METHOD out$first RANGE [31:0]
-    METHOD out$first__RDY
+    METHOD out$deq__RDY SIZE 1
+    METHOD out$first SIZE 32
+    METHOD out$first__RDY SIZE 1
 )
 MODULE l_module_OC_Echo = 1 (
     SOFTWARE ind
@@ -47,21 +47,21 @@ MODULE l_module_OC_Echo = 1 (
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
     )
-    METHOD respond_rule__RDY = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
+    METHOD respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
     )
     METHOD/Action sout$say__ENA (
-        PARAM sout$say$v [31:0]
+        PARAM sout$say$v SIZE 32
         CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
         METAINVOKE fifo$in$enq__ENA 
     )
-    METHOD sout$say__RDY = (fifo$in$enq__RDY) (
+    METHOD sout$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
 )
 EMODULE l_class_OC_EchoTest = 2 (
     FIELD 1:echo
-    FIELD x FORMAT reg[31:0] @
+    FIELD x SIZE 32
 )

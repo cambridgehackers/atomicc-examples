@@ -1,28 +1,28 @@
 EMODULE l_ainterface_OC_EchoIndication = 3 (
     METHOD/Action heard__ENA (
-        PARAM heard$meth [31:0]
-        PARAM heard$v [31:0]
+        PARAM heard$meth SIZE 32
+        PARAM heard$v SIZE 32
     )
-    METHOD heard__RDY
+    METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_EchoRequest = 6 (
     METHOD/Action say__ENA (
-        PARAM say$meth [31:0]
-        PARAM say$v [31:0]
+        PARAM say$meth SIZE 32
+        PARAM say$v SIZE 32
     )
-    METHOD say__RDY
+    METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 11 (
     METHOD/Action enq__ENA (
-        PARAM enq$v [95:0]
+        PARAM enq$v SIZE 96
     )
-    METHOD enq__RDY
+    METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 = 8 (
     METHOD/Action enq__ENA (
-        PARAM enq$v [95:0]
+        PARAM enq$v SIZE 96
     )
-    METHOD enq__RDY
+    METHOD enq__RDY SIZE 1
 )
 EMODULE l_class_OC_foo = 2 (
     FIELD 3:indication
@@ -32,39 +32,39 @@ MODULE l_module_OC_Echo = 9 (
     FIELD 6:request
     FIELD/PTR  3:indication
     METHOD/Action request$say__ENA (
-        PARAM request$say$meth [31:0]
-        PARAM request$say$v [31:0]
+        PARAM request$say$meth SIZE 32
+        PARAM request$say$v SIZE 32
         CALL/Action :indication$heard__ENA{indication$heard$meth;request$say$meth,indication$heard$v;request$say$v}
         METAINVOKE indication$heard__ENA 
     )
-    METHOD request$say__RDY = (indication$heard__RDY) (
+    METHOD request$say__RDY SIZE 1 = (indication$heard__RDY) (
         METAINVOKE indication$heard__RDY 
     )
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 18 (
-    FIELD meth FORMAT reg[31:0] @
-    FIELD v FORMAT reg[31:0] @
+    FIELD meth SIZE 32
+    FIELD v SIZE 32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 17 (
-    FIELD 18:heard RANGE [63:0]
+    FIELD 18:heard SIZE 64
 )
 EMODULE l_struct_OC_EchoIndication_data = 16 (
-    FIELD tag FORMAT reg[31:0] @
-    FIELD 17:data RANGE [63:0]
+    FIELD tag SIZE 32
+    FIELD 17:data SIZE 64
 )
 MODULE l_module_OC_EchoIndicationInput = 12 (
     OUTCALL indication = 3
     FIELD 8:pipe
     FIELD/PTR  3:indication
     METHOD/Action pipe$enq__ENA (
-        PARAM pipe$enq$v [95:0]
+        PARAM pipe$enq$v SIZE 96
         STORE/Alloca :v_2e_addr = pipe$enq$v
         CALL/Action v_2e_addrfoosuff$tag == 1:indication$heard__ENA{indication$heard$meth;v_2e_addr$data$heard$meth,indication$heard$v;v_2e_addr$data$heard$v}
         METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
         METAINVOKE indication$heard__ENA v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
+    METHOD pipe$enq__RDY SIZE 1 = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE indication$heard__RDY 
     )
 )
@@ -73,42 +73,42 @@ MODULE l_module_OC_EchoIndicationOutput = 7 (
     FIELD 3:indication
     FIELD/PTR  8:pipe
     METHOD/Action indication$heard__ENA (
-        PARAM indication$heard$meth [31:0]
-        PARAM indication$heard$v [31:0]
+        PARAM indication$heard$meth SIZE 32
+        PARAM indication$heard$v SIZE 32
         STORE/Alloca :ind$tag = 1
         STORE :ind$data$heard$meth = indication$heard$meth
         STORE :ind$data$heard$v = indication$heard$v
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD indication$heard__RDY = (pipe$enq__RDY) (
+    METHOD indication$heard__RDY SIZE 1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 15 (
-    FIELD meth FORMAT reg[31:0] @
-    FIELD v FORMAT reg[31:0] @
+    FIELD meth SIZE 32
+    FIELD v SIZE 32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 14 (
-    FIELD 15:say RANGE [63:0]
+    FIELD 15:say SIZE 64
 )
 EMODULE l_struct_OC_EchoRequest_data = 13 (
-    FIELD tag FORMAT reg[31:0] @
-    FIELD 14:data RANGE [63:0]
+    FIELD tag SIZE 32
+    FIELD 14:data SIZE 64
 )
 MODULE l_module_OC_EchoRequestInput = 5 (
     OUTCALL request = 6
     FIELD 11:pipe
     FIELD/PTR  6:request
     METHOD/Action pipe$enq__ENA (
-        PARAM pipe$enq$v [95:0]
+        PARAM pipe$enq$v SIZE 96
         STORE/Alloca :v_2e_addr = pipe$enq$v
         CALL/Action v_2e_addrfoosuff$tag == 1:request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
         METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
+    METHOD pipe$enq__RDY SIZE 1 = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE request$say__RDY 
     )
 )
@@ -117,15 +117,15 @@ MODULE l_module_OC_EchoRequestOutput = 10 (
     FIELD 6:request
     FIELD/PTR  11:pipe
     METHOD/Action request$say__ENA (
-        PARAM request$say$meth [31:0]
-        PARAM request$say$v [31:0]
+        PARAM request$say$meth SIZE 32
+        PARAM request$say$v SIZE 32
         STORE/Alloca :ind$tag = 1
         STORE :ind$data$say$meth = request$say$meth
         STORE :ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say__RDY = (pipe$enq__RDY) (
+    METHOD request$say__RDY SIZE 1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
@@ -146,16 +146,16 @@ MODULE l_module_OC_Connect = 4 (
     FIELD 10:lERO_test
     FIELD 12:lEII_test
     METHOD/Action request$say__ENA (
-        PARAM request$say$meth [31:0]
-        PARAM request$say$v [31:0]
+        PARAM request$say$meth SIZE 32
+        PARAM request$say$v SIZE 32
         CALL/Action :lERO_test$request$say__ENA{lERO_test$request$say$meth;request$say$meth,lERO_test$request$say$v;request$say$v}
         METAINVOKE lERO_test$request$say__ENA 
     )
-    METHOD request$say__RDY = (lERO_test$request$say__RDY) (
+    METHOD request$say__RDY SIZE 1 = (lERO_test$request$say__RDY) (
         METAINVOKE lERO_test$request$say__RDY 
     )
 )
 EMODULE l_struct_OC_ValueType = 1 (
-    FIELD a FORMAT reg[31:0] @
-    FIELD b FORMAT reg[31:0] @
+    FIELD a SIZE 32
+    FIELD b SIZE 32
 )

@@ -1,33 +1,33 @@
 EMODULE l_ainterface_OC_EchoIndication = 2 (
     METHOD/Action heard__ENA (
-        PARAM heard$meth [31:0]
-        PARAM heard$v [31:0]
+        PARAM heard$meth SIZE 32
+        PARAM heard$v SIZE 32
     )
-    METHOD heard__RDY
+    METHOD heard__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_EchoRequest = 10 (
     METHOD/Action say2__ENA (
-        PARAM say2$meth [31:0]
-        PARAM say2$v [31:0]
+        PARAM say2$meth SIZE 32
+        PARAM say2$v SIZE 32
     )
-    METHOD say2__RDY
+    METHOD say2__RDY SIZE 1
     METHOD/Action say__ENA (
-        PARAM say$meth [31:0]
-        PARAM say$v [31:0]
+        PARAM say$meth SIZE 32
+        PARAM say$v SIZE 32
     )
-    METHOD say__RDY
+    METHOD say__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn = 11 (
     METHOD/Action enq__ENA (
-        PARAM enq$v [191:0]
+        PARAM enq$v SIZE 192
     )
-    METHOD enq__RDY
+    METHOD enq__RDY SIZE 1
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 = 5 (
     METHOD/Action enq__ENA (
-        PARAM enq$v [95:0]
+        PARAM enq$v SIZE 96
     )
-    METHOD enq__RDY
+    METHOD enq__RDY SIZE 1
 )
 EMODULE l_class_OC_foo = 1 (
     FIELD 2:indication
@@ -37,14 +37,14 @@ MODULE l_module_OC_Echo = 12 (
     RULE delay_rule
     RULE respond_rule
     FIELD 10:request
-    FIELD busy FORMAT reg[31:0] @
-    FIELD meth_temp FORMAT reg[31:0] @
-    FIELD v_temp FORMAT reg[31:0] @
-    FIELD busy_delay FORMAT reg[31:0] @
-    FIELD meth_delay FORMAT reg[31:0] @
-    FIELD v_delay FORMAT reg[31:0] @
-    FIELD x FORMAT reg[31:0] @
-    FIELD y FORMAT reg[31:0] @
+    FIELD busy SIZE 32
+    FIELD meth_temp SIZE 32
+    FIELD v_temp SIZE 32
+    FIELD busy_delay SIZE 32
+    FIELD meth_delay SIZE 32
+    FIELD v_delay SIZE 32
+    FIELD x SIZE 32
+    FIELD y SIZE 32
     FIELD/PTR  2:indication
     METHOD/Action delay_rule__ENA (
         STORE :busy = 0
@@ -54,28 +54,28 @@ MODULE l_module_OC_Echo = 12 (
         METAREAD meth_temp 
         METAREAD v_temp 
     )
-    METHOD delay_rule__RDY = (((busy != 0) & (busy_delay == 0)) != 0) (
+    METHOD delay_rule__RDY SIZE 1 = (((busy != 0) & (busy_delay == 0)) != 0) (
         METAREAD busy 
         METAREAD busy_delay 
     )
     METHOD/Action request$say2__ENA (
-        PARAM request$say2$meth [31:0]
-        PARAM request$say2$v [31:0]
+        PARAM request$say2$meth SIZE 32
+        PARAM request$say2$v SIZE 32
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     )
-    METHOD request$say2__RDY = ((busy != 0) ^ 1) (
+    METHOD request$say2__RDY SIZE 1 = ((busy != 0) ^ 1) (
         METAREAD busy 
     )
     METHOD/Action request$say__ENA (
-        PARAM request$say$meth [31:0]
-        PARAM request$say$v [31:0]
+        PARAM request$say$meth SIZE 32
+        PARAM request$say$v SIZE 32
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
     )
-    METHOD request$say__RDY = ((busy != 0) ^ 1) (
+    METHOD request$say__RDY SIZE 1 = ((busy != 0) ^ 1) (
         METAREAD busy 
     )
     METHOD/Action respond_rule__ENA (
@@ -85,30 +85,30 @@ MODULE l_module_OC_Echo = 12 (
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
     )
-    METHOD respond_rule__RDY = ((busy_delay != 0) & indication$heard__RDY) (
+    METHOD respond_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 8 (
-    FIELD meth FORMAT reg[31:0] @
-    FIELD v FORMAT reg[31:0] @
+    FIELD meth SIZE 32
+    FIELD v SIZE 32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 7 (
-    FIELD 8:heard RANGE [63:0]
+    FIELD 8:heard SIZE 64
 )
 EMODULE l_struct_OC_EchoIndication_data = 6 (
-    FIELD tag FORMAT reg[31:0] @
-    FIELD 7:data RANGE [63:0]
+    FIELD tag SIZE 32
+    FIELD 7:data SIZE 64
 )
 MODULE l_module_OC_EchoIndicationInput = 14 (
     OUTCALL indication = 2
     RULE input_rule
     FIELD 5:pipe
     FIELD/PTR  2:indication
-    FIELD busy_delay FORMAT reg[31:0] @
-    FIELD meth_delay FORMAT reg[31:0] @
-    FIELD v_delay FORMAT reg[31:0] @
+    FIELD busy_delay SIZE 32
+    FIELD meth_delay SIZE 32
+    FIELD v_delay SIZE 32
     METHOD/Action input_rule__ENA (
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
@@ -116,12 +116,12 @@ MODULE l_module_OC_EchoIndicationInput = 14 (
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
     )
-    METHOD input_rule__RDY = ((busy_delay != 0) & indication$heard__RDY) (
+    METHOD input_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
     METHOD/Action pipe$enq__ENA (
-        PARAM pipe$enq$v [95:0]
+        PARAM pipe$enq$v SIZE 96
         STORE/Alloca :v_2e_addr = pipe$enq$v
         STORE v_2e_addrfoosuff$tag == 1:meth_delay = v_2e_addr$data$heard$meth
         STORE v_2e_addrfoosuff$tag == 1:v_delay = v_2e_addr$data$heard$v
@@ -129,7 +129,7 @@ MODULE l_module_OC_EchoIndicationInput = 14 (
         METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY = ((busy_delay != 0) ^ 1) (
+    METHOD pipe$enq__RDY SIZE 1 = ((busy_delay != 0) ^ 1) (
         METAREAD busy_delay 
     )
 )
@@ -139,13 +139,13 @@ MODULE l_module_OC_EchoIndicationOutput = 4 (
     RULE output_ruleo
     FIELD 2:indication
     FIELD/PTR  5:pipe
-    FIELD 6:ind0 RANGE [95:0]
-    FIELD 6:ind1 RANGE [95:0]
-    FIELD ind_busy FORMAT reg[31:0] @
-    FIELD even FORMAT reg[31:0] @
+    FIELD 6:ind0 SIZE 96
+    FIELD 6:ind1 SIZE 96
+    FIELD ind_busy SIZE 32
+    FIELD even SIZE 32
     METHOD/Action indication$heard__ENA (
-        PARAM indication$heard$meth [31:0]
-        PARAM indication$heard$v [31:0]
+        PARAM indication$heard$meth SIZE 32
+        PARAM indication$heard$v SIZE 32
         STORE even != 0:ind1$tag = 1
         STORE even != 0:ind1$data$heard$meth = indication$heard$meth
         STORE even != 0:ind1$data$heard$v = indication$heard$v
@@ -156,7 +156,7 @@ MODULE l_module_OC_EchoIndicationOutput = 4 (
         STORE :even = (even != 0) ^ 1
         METAREAD even 
     )
-    METHOD indication$heard__RDY = ((ind_busy != 0) ^ 1) (
+    METHOD indication$heard__RDY SIZE 1 = ((ind_busy != 0) ^ 1) (
         METAREAD ind_busy 
     )
     METHOD/Action output_rulee__ENA (
@@ -165,7 +165,7 @@ MODULE l_module_OC_EchoIndicationOutput = 4 (
         METAREAD ind0 
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD output_rulee__RDY = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
+    METHOD output_rulee__RDY SIZE 1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
         METAREAD even 
         METAREAD ind_busy 
         METAINVOKE pipe$enq__RDY 
@@ -176,35 +176,35 @@ MODULE l_module_OC_EchoIndicationOutput = 4 (
         METAREAD ind1 
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD output_ruleo__RDY = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
+    METHOD output_ruleo__RDY SIZE 1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
         METAREAD even 
         METAREAD ind_busy 
         METAINVOKE pipe$enq__RDY 
     )
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 17 (
-    FIELD meth FORMAT reg[31:0] @
-    FIELD v FORMAT reg[31:0] @
+    FIELD meth SIZE 32
+    FIELD v SIZE 32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 = 18 (
-    FIELD meth FORMAT reg[31:0] @
-    FIELD v FORMAT reg[31:0] @
-    FIELD v2 FORMAT reg[31:0] @
+    FIELD meth SIZE 32
+    FIELD v SIZE 32
+    FIELD v2 SIZE 32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 16 (
-    FIELD 17:say RANGE [63:0]
-    FIELD 18:say2 RANGE [95:0]
+    FIELD 17:say SIZE 64
+    FIELD 18:say2 SIZE 96
 )
 EMODULE l_struct_OC_EchoRequest_data = 15 (
-    FIELD tag FORMAT reg[31:0] @
-    FIELD 16:data RANGE [159:0]
+    FIELD tag SIZE 32
+    FIELD 16:data SIZE 160
 )
 MODULE l_module_OC_EchoRequestInput = 9 (
     OUTCALL request = 10
     FIELD 11:pipe
     FIELD/PTR  10:request
     METHOD/Action pipe$enq__ENA (
-        PARAM pipe$enq$v [191:0]
+        PARAM pipe$enq$v SIZE 192
         STORE/Alloca :v_2e_addr = pipe$enq$v
         CALL/Action v_2e_addrfoosuff$tag == 1:request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
         CALL/Action v_2e_addrfoosuff13$tag == 2:request$say2__ENA{request$say2$meth;v_2e_addr$data$say2$meth,request$say2$v;v_2e_addr$data$say2$v}
@@ -215,7 +215,7 @@ MODULE l_module_OC_EchoRequestInput = 9 (
         METAINVOKE request$say2__ENA v_2e_addrfoosuff13$tag == 2
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
     )
-    METHOD pipe$enq__RDY = ((request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
+    METHOD pipe$enq__RDY SIZE 1 = ((request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
         METAINVOKE request$say2__RDY 
         METAINVOKE request$say__RDY 
     )
@@ -225,27 +225,27 @@ MODULE l_module_OC_EchoRequestOutput = 13 (
     FIELD 10:request
     FIELD/PTR  11:pipe
     METHOD/Action request$say2__ENA (
-        PARAM request$say2$meth [31:0]
-        PARAM request$say2$v [31:0]
+        PARAM request$say2$meth SIZE 32
+        PARAM request$say2$v SIZE 32
         STORE/Alloca :ind$tag = 2
         STORE :ind$data$say2$meth = request$say2$meth
         STORE :ind$data$say2$v = request$say2$v
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say2__RDY = (pipe$enq__RDY) (
+    METHOD request$say2__RDY SIZE 1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
     METHOD/Action request$say__ENA (
-        PARAM request$say$meth [31:0]
-        PARAM request$say$v [31:0]
+        PARAM request$say$meth SIZE 32
+        PARAM request$say$v SIZE 32
         STORE/Alloca :ind$tag = 1
         STORE :ind$data$say$meth = request$say$meth
         STORE :ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
         METAINVOKE pipe$enq__ENA 
     )
-    METHOD request$say__RDY = (pipe$enq__RDY) (
+    METHOD request$say__RDY SIZE 1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
@@ -257,21 +257,21 @@ MODULE l_module_OC_Connect = 3 (
     SOFTWARE lEcho$indication:lEIO$indication
     RULE swap2_rule
     RULE swap_rule
-    FIELD 4:lEIO RANGE [255:0]
+    FIELD 4:lEIO SIZE 256
     FIELD 9:lERI
-    FIELD 12:lEcho RANGE [255:0]
+    FIELD 12:lEcho SIZE 256
     FIELD 13:lERO_test
-    FIELD 14:lEII_test RANGE [95:0]
+    FIELD 14:lEII_test SIZE 96
     METHOD/Action swap2_rule__ENA (
         CALL/Action :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR]{}
         METAINVOKE lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR] 
     )
-    METHOD swap2_rule__RDY = (1)
+    METHOD swap2_rule__RDY SIZE 1 = (1)
     METHOD/Action swap_rule__ENA (
         CALL/Action :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR]{}
         CALL/Action :lEcho$[ERROR__ZN4Echo3y2xEv_ERROR]{}
         METAINVOKE lEcho$[ERROR__ZN4Echo3x2yEv_ERROR] 
         METAINVOKE lEcho$[ERROR__ZN4Echo3y2xEv_ERROR] 
     )
-    METHOD swap_rule__RDY = (1)
+    METHOD swap_rule__RDY SIZE 1 = (1)
 )

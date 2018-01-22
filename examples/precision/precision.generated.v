@@ -64,8 +64,8 @@ module l_module_OC_IVector (
         fifo$out$first,
         fifo$out$first__RDY);
     reg fcounter;
-    unsigned VERILOG_short counter;
-    unsigned VERILOG_short gcounter;
+    reg[8:0] counter;
+    reg[8:0] gcounter;
     assign ind$heard$meth = request$say$meth;
     assign ind$heard$v = request$say$v;
     assign ind$heard__ENA = respond__ENA_internal;
