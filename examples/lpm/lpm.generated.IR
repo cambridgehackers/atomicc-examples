@@ -100,7 +100,6 @@ MODULE l_module_OC_Fifo2 = 2 (
     )
 )
 MODULE l_module_OC_LpmMemory = 11 (
-    RULE memdelay_rule
     FIELD delayCount SIZE 32
     FIELD 9:saved SIZE 96
     FIELD 12:ifc
@@ -124,19 +123,15 @@ MODULE l_module_OC_LpmMemory = 11 (
     METHOD ifc$resValue__RDY SIZE 1 = (delayCount == 1) (
         METAREAD delayCount 
     )
-    METHOD memdelay_rule__ENA (
+    METHOD /RULE memdelay_rule__ENA (
         METAREAD delayCount 
         STORE :delayCount = delayCount - 1
     )
-    METHOD memdelay_rule__RDY SIZE 1 = (delayCount > 1) (
+    METHOD /RULE memdelay_rule__RDY SIZE 1 = (delayCount > 1) (
         METAREAD delayCount 
     )
 )
 MODULE l_module_OC_Lpm = 4 (
-    RULE enter
-    RULE exit_rule
-    RULE recirc
-    RULE respond
     PRIORITY recirc enter;exit
     FIELD 10:inQ
     FIELD 2:fifo SIZE 160
@@ -146,7 +141,7 @@ MODULE l_module_OC_Lpm = 4 (
     OUTCALL ind = 6
     FIELD/PTR  6:ind
     FIELD 13:request
-    METHOD enter__ENA (
+    METHOD /RULE enter__ENA (
         METAINVOKE inQ$out$first 
         STORE/Alloca :temp = inQ$out$first{}
         METAINVOKE inQ$out$deq__ENA 
@@ -156,13 +151,13 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
-    METHOD enter__RDY SIZE 1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
+    METHOD /RULE enter__RDY SIZE 1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE inQ$out$first__RDY 
         METAINVOKE inQ$out$deq__RDY 
         METAINVOKE fifo$in$enq__RDY 
         METAINVOKE mem$ifc$req__RDY 
     )
-    METHOD exit_rule__ENA (
+    METHOD /RULE exit_rule__ENA (
         METAINVOKE fifo$out$first 
         STORE/Alloca :temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
@@ -174,14 +169,14 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE outQ$in$enq__ENA 
         CALL/Action :outQ$in$enq__ENA{outQ$in$enq$v;temp}
     )
-    METHOD exit_rule__RDY SIZE 1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
+    METHOD /RULE exit_rule__RDY SIZE 1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
         METAINVOKE mem$ifc$resAccept__RDY 
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE outQ$in$enq__RDY 
     )
-    METHOD recirc__ENA (
+    METHOD /RULE recirc__ENA (
         METAINVOKE fifo$out$first 
         STORE/Alloca :temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
@@ -195,7 +190,7 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
-    METHOD recirc__RDY SIZE 1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
+    METHOD /RULE recirc__RDY SIZE 1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
         METAINVOKE mem$ifc$resAccept__RDY 
@@ -214,7 +209,7 @@ MODULE l_module_OC_Lpm = 4 (
     METHOD request$say__RDY SIZE 1 = (inQ$in$enq__RDY) (
         METAINVOKE inQ$in$enq__RDY 
     )
-    METHOD respond__ENA (
+    METHOD /RULE respond__ENA (
         METAINVOKE outQ$out$first 
         STORE/Alloca :temp = outQ$out$first{}
         METAINVOKE outQ$out$deq__ENA 
@@ -222,7 +217,7 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
     )
-    METHOD respond__RDY SIZE 1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
+    METHOD /RULE respond__RDY SIZE 1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE outQ$out$first__RDY 
         METAINVOKE outQ$out$deq__RDY 
         METAINVOKE ind$heard__RDY 

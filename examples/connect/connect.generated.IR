@@ -130,8 +130,8 @@ MODULE l_module_OC_EchoRequestOutput = 10 (
     )
 )
 MODULE l_module_OC_Connect = 4 (
-    SOFTWARE indication
     SOFTWARE request
+    SOFTWARE indication
     INTERFACECONNECT lERI$request lEcho$request 6
     INTERFACECONNECT lEIO$pipe lEII_test$pipe 8
     INTERFACECONNECT lEcho$indication lEIO$indication 3

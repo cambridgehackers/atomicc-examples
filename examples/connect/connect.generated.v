@@ -126,8 +126,8 @@ module l_module_OC_Connect (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-// software: indication
 // software: request
+// software: indication
     wire request$say__RDY_internal;
     wire [31:0]lEIO$indication$heard$meth;
     wire [31:0]lEIO$indication$heard$v;

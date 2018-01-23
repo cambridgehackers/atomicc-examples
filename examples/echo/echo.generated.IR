@@ -33,21 +33,20 @@ EMODULE l_module_OC_Fifo1 = 9 (
     METHOD out$first__RDY SIZE 1
 )
 MODULE l_module_OC_Echo = 1 (
-    SOFTWARE ind
     SOFTWARE sout
-    RULE respond_rule
+    SOFTWARE ind
     FIELD 4:sout
     OUTCALL ind = 5
     FIELD/PTR  5:ind
     FIELD 9:fifo
-    METHOD respond_rule__ENA (
+    METHOD /RULE respond_rule__ENA (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
     )
-    METHOD respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
+    METHOD /RULE respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 

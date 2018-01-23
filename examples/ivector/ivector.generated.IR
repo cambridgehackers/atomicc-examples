@@ -131,16 +131,6 @@ MODULE l_module_OC_FifoPong = 7 (
     )
 )
 MODULE l_module_OC_IVector = 2 (
-    RULE respond_rule_0
-    RULE respond_rule_1
-    RULE respond_rule_2
-    RULE respond_rule_3
-    RULE respond_rule_4
-    RULE respond_rule_5
-    RULE respond_rule_6
-    RULE respond_rule_7
-    RULE respond_rule_8
-    RULE respond_rule_9
     FIELD 7:fifo COUNT 10 SIZE 216
     OUTCALL out = 13
     FIELD/PTR  13:out
@@ -157,7 +147,7 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE fifo0$in$enq__RDY 
         METAINVOKE fifo1$in$enq__RDY 
     )
-    METHOD respond_rule_0__ENA (
+    METHOD /RULE respond_rule_0__ENA (
         METAINVOKE fifo0$out$first 
         STORE/Alloca :temp = fifo0$out$first{}
         METAINVOKE fifo0$out$deq__ENA 
@@ -165,12 +155,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;0,out$heard$v;temp$b}
     )
-    METHOD respond_rule_0__RDY SIZE 1 = ((fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_0__RDY SIZE 1 = ((fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo0$out$first__RDY 
         METAINVOKE fifo0$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_1__ENA (
+    METHOD /RULE respond_rule_1__ENA (
         METAINVOKE fifo1$out$first 
         STORE/Alloca :temp = fifo1$out$first{}
         METAINVOKE fifo1$out$deq__ENA 
@@ -178,12 +168,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;1,out$heard$v;temp$b}
     )
-    METHOD respond_rule_1__RDY SIZE 1 = ((fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_1__RDY SIZE 1 = ((fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo1$out$first__RDY 
         METAINVOKE fifo1$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_2__ENA (
+    METHOD /RULE respond_rule_2__ENA (
         METAINVOKE fifo2$out$first 
         STORE/Alloca :temp = fifo2$out$first{}
         METAINVOKE fifo2$out$deq__ENA 
@@ -191,12 +181,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;2,out$heard$v;temp$b}
     )
-    METHOD respond_rule_2__RDY SIZE 1 = ((fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_2__RDY SIZE 1 = ((fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo2$out$first__RDY 
         METAINVOKE fifo2$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_3__ENA (
+    METHOD /RULE respond_rule_3__ENA (
         METAINVOKE fifo3$out$first 
         STORE/Alloca :temp = fifo3$out$first{}
         METAINVOKE fifo3$out$deq__ENA 
@@ -204,12 +194,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;3,out$heard$v;temp$b}
     )
-    METHOD respond_rule_3__RDY SIZE 1 = ((fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_3__RDY SIZE 1 = ((fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo3$out$first__RDY 
         METAINVOKE fifo3$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_4__ENA (
+    METHOD /RULE respond_rule_4__ENA (
         METAINVOKE fifo4$out$first 
         STORE/Alloca :temp = fifo4$out$first{}
         METAINVOKE fifo4$out$deq__ENA 
@@ -217,12 +207,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;4,out$heard$v;temp$b}
     )
-    METHOD respond_rule_4__RDY SIZE 1 = ((fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_4__RDY SIZE 1 = ((fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo4$out$first__RDY 
         METAINVOKE fifo4$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_5__ENA (
+    METHOD /RULE respond_rule_5__ENA (
         METAINVOKE fifo5$out$first 
         STORE/Alloca :temp = fifo5$out$first{}
         METAINVOKE fifo5$out$deq__ENA 
@@ -230,12 +220,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;5,out$heard$v;temp$b}
     )
-    METHOD respond_rule_5__RDY SIZE 1 = ((fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_5__RDY SIZE 1 = ((fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo5$out$first__RDY 
         METAINVOKE fifo5$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_6__ENA (
+    METHOD /RULE respond_rule_6__ENA (
         METAINVOKE fifo6$out$first 
         STORE/Alloca :temp = fifo6$out$first{}
         METAINVOKE fifo6$out$deq__ENA 
@@ -243,12 +233,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;6,out$heard$v;temp$b}
     )
-    METHOD respond_rule_6__RDY SIZE 1 = ((fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_6__RDY SIZE 1 = ((fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo6$out$first__RDY 
         METAINVOKE fifo6$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_7__ENA (
+    METHOD /RULE respond_rule_7__ENA (
         METAINVOKE fifo7$out$first 
         STORE/Alloca :temp = fifo7$out$first{}
         METAINVOKE fifo7$out$deq__ENA 
@@ -256,12 +246,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;7,out$heard$v;temp$b}
     )
-    METHOD respond_rule_7__RDY SIZE 1 = ((fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_7__RDY SIZE 1 = ((fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo7$out$first__RDY 
         METAINVOKE fifo7$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_8__ENA (
+    METHOD /RULE respond_rule_8__ENA (
         METAINVOKE fifo8$out$first 
         STORE/Alloca :temp = fifo8$out$first{}
         METAINVOKE fifo8$out$deq__ENA 
@@ -269,12 +259,12 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;8,out$heard$v;temp$b}
     )
-    METHOD respond_rule_8__RDY SIZE 1 = ((fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_8__RDY SIZE 1 = ((fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo8$out$first__RDY 
         METAINVOKE fifo8$out$deq__RDY 
         METAINVOKE out$heard__RDY 
     )
-    METHOD respond_rule_9__ENA (
+    METHOD /RULE respond_rule_9__ENA (
         METAINVOKE fifo9$out$first 
         STORE/Alloca :temp = fifo9$out$first{}
         METAINVOKE fifo9$out$deq__ENA 
@@ -282,7 +272,7 @@ MODULE l_module_OC_IVector = 2 (
         METAINVOKE out$heard__ENA 
         CALL/Action :out$heard__ENA{out$heard$meth;9,out$heard$v;temp$b}
     )
-    METHOD respond_rule_9__RDY SIZE 1 = ((fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY) (
+    METHOD /RULE respond_rule_9__RDY SIZE 1 = ((fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo9$out$first__RDY 
         METAINVOKE fifo9$out$deq__RDY 
         METAINVOKE out$heard__RDY 

@@ -53,4 +53,16 @@
 //METAINVOKE; swap_rule__ENA; :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR];:lEcho$[ERROR__ZN4Echo3y2xEv_ERROR];
 //METAGUARD; swap_rule; 1;
 //METARULES; swap2_rule; swap_rule
+//METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
+//METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
+//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
+//METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
+//METACONNECT; lEIO$pipe$enq__ENA; lEII_test$pipe$enq__ENA
+//METACONNECT; lEIO$pipe$enq__RDY; lEII_test$pipe$enq__RDY
+//METACONNECT; lEcho$indication$heard__ENA; lEIO$indication$heard__ENA
+//METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
+//METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
+//METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
+//METACONNECT; lEII_test$indication$heard__ENA; indication$heard__ENA
+//METACONNECT; lEII_test$indication$heard__RDY; indication$heard__RDY
 `endif

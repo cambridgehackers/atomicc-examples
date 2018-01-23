@@ -129,7 +129,6 @@ MODULE l_module_OC_FifoPong = 7 (
     )
 )
 MODULE l_module_OC_IVector = 1 (
-    RULE respond
     FIELD 13:request
     FIELD 7:fifo SIZE 1432
     OUTCALL ind = 14
@@ -142,7 +141,7 @@ MODULE l_module_OC_IVector = 1 (
     METHOD request$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
-    METHOD respond__ENA (
+    METHOD /RULE respond__ENA (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
@@ -150,7 +149,7 @@ MODULE l_module_OC_IVector = 1 (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$v;agg_2e_tmp}
     )
-    METHOD respond__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
+    METHOD /RULE respond__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
