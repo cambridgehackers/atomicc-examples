@@ -1,38 +1,50 @@
-EMODULE l_ainterface_OC_EchoIndication (
+EMODULE l_ainterface_OC_EchoIndication 0 (
     METHOD heard__ENA (
-        PARAM heard$v SIZE 32
+        PARAM heard$v TYPE INTEGER_32
     )
-    METHOD heard__RDY SIZE 1
+    METHOD heard__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_EchoRequest (
+EMODULE l_ainterface_OC_EchoRequest 0 (
     METHOD say__ENA (
-        PARAM say$v SIZE 32
+        PARAM say$v TYPE INTEGER_32
     )
-    METHOD say__RDY SIZE 1
+    METHOD say__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn (
+EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
-        PARAM enq$v SIZE 32
+        PARAM enq$v TYPE INTEGER_32
     )
-    METHOD enq__RDY SIZE 1
+    METHOD enq__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut (
+EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD deq__ENA
-    METHOD deq__RDY SIZE 1
-    METHOD first SIZE 32
-    METHOD first__RDY SIZE 1
+    METHOD deq__RDY TYPE INTEGER_1
+    METHOD first TYPE INTEGER_32
+    METHOD first__RDY TYPE INTEGER_1
 )
-EMODULE l_module_OC_Fifo1 (
+EMODULE l_module_OC_Fifo 0 (
+    FIELD l_ainterface_OC_PipeIn:in
+    FIELD l_ainterface_OC_PipeOut:out
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 32
+        PARAM in$enq$v TYPE INTEGER_32
     )
-    METHOD in$enq__RDY SIZE 1
+    METHOD in$enq__RDY TYPE INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY SIZE 1
-    METHOD out$first SIZE 32
-    METHOD out$first__RDY SIZE 1
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE INTEGER_32
+    METHOD out$first__RDY TYPE INTEGER_1
 )
-MODULE l_module_OC_Echo (
+EMODULE l_module_OC_Fifo1 0 (
+    METHOD in$enq__ENA (
+        PARAM in$enq$v TYPE INTEGER_32
+    )
+    METHOD in$enq__RDY TYPE INTEGER_1
+    METHOD out$deq__ENA
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE INTEGER_32
+    METHOD out$first__RDY TYPE INTEGER_1
+)
+MODULE l_module_OC_Echo 0 (
     SOFTWARE sout
     SOFTWARE ind
     FIELD l_ainterface_OC_EchoRequest:sout
@@ -46,21 +58,28 @@ MODULE l_module_OC_Echo (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
     )
-    METHOD/Rule respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
+    METHOD/Rule respond_rule__RDY TYPE INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 
     )
     METHOD sout$say__ENA (
-        PARAM sout$say$v SIZE 32
+        PARAM sout$say$v TYPE INTEGER_32
         METAINVOKE fifo$in$enq__ENA 
         CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
     )
-    METHOD sout$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
+    METHOD sout$say__RDY TYPE INTEGER_1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
 )
-EMODULE l_class_OC_EchoTest (
+EMODULE l_class_OC_EchoTest 32 (
     FIELD l_module_OC_Echo:echo
-    FIELD x SIZE 32
+    FIELD x TYPE INTEGER_32
+)
+EMODULE l_module_OC_EchoInd 0 (
+    FIELD l_ainterface_OC_EchoIndication:hout
+    METHOD hout$heard__ENA (
+        PARAM hout$heard$v TYPE INTEGER_32
+    )
+    METHOD hout$heard__RDY TYPE INTEGER_1
 )

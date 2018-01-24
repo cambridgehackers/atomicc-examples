@@ -1,98 +1,98 @@
-EMODULE l_ainterface_OC_IVectorIndication (
+EMODULE l_ainterface_OC_IVectorIndication 0 (
     METHOD heard__ENA (
-        PARAM heard$meth SIZE 6
-        PARAM heard$v SIZE 4
+        PARAM heard$meth TYPE INTEGER_6
+        PARAM heard$v TYPE INTEGER_4
     )
-    METHOD heard__RDY SIZE 1
+    METHOD heard__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_IVectorRequest (
+EMODULE l_ainterface_OC_IVectorRequest 0 (
     METHOD say__ENA (
-        PARAM say$meth SIZE 6
-        PARAM say$v SIZE 4
+        PARAM say$meth TYPE INTEGER_6
+        PARAM say$v TYPE INTEGER_4
     )
-    METHOD say__RDY SIZE 1
+    METHOD say__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn (
+EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
-        PARAM enq$v SIZE 32
+        PARAM enq$v TYPE INTEGER_32
     )
-    METHOD enq__RDY SIZE 1
+    METHOD enq__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn_OC_1 (
+EMODULE l_struct_OC_ValueType 10 (
+    FIELD a TYPE INTEGER_6
+    FIELD b TYPE INTEGER_4
+)
+EMODULE l_ainterface_OC_PipeIn_OC_1 0 (
     METHOD enq__ENA (
-        PARAM enq$v SIZE 10
+        PARAM enq$v TYPE l_struct_OC_ValueType
     )
-    METHOD enq__RDY SIZE 1
+    METHOD enq__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut (
+EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD deq__ENA
-    METHOD deq__RDY SIZE 1
-    METHOD first SIZE 32
-    METHOD first__RDY SIZE 1
+    METHOD deq__RDY TYPE INTEGER_1
+    METHOD first TYPE INTEGER_32
+    METHOD first__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut_OC_2 (
+EMODULE l_ainterface_OC_PipeOut_OC_2 0 (
     METHOD deq__ENA
-    METHOD deq__RDY SIZE 1
-    METHOD first SIZE 10
-    METHOD first__RDY SIZE 1
+    METHOD deq__RDY TYPE INTEGER_1
+    METHOD first TYPE l_struct_OC_ValueType
+    METHOD first__RDY TYPE INTEGER_1
 )
-EMODULE l_module_OC_Fifo_OC_0 (
+EMODULE l_module_OC_Fifo_OC_0 0 (
     FIELD l_ainterface_OC_PipeIn_OC_1:in
     FIELD l_ainterface_OC_PipeOut_OC_2:out
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 10
+        PARAM in$enq$v TYPE l_struct_OC_ValueType
     )
-    METHOD in$enq__RDY SIZE 1
+    METHOD in$enq__RDY TYPE INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY SIZE 1
-    METHOD out$first SIZE 10
-    METHOD out$first__RDY SIZE 1
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE l_struct_OC_ValueType
+    METHOD out$first__RDY TYPE INTEGER_1
 )
-EMODULE l_struct_OC_ValueType (
-    FIELD a SIZE 6
-    FIELD b SIZE 4
-)
-MODULE l_module_OC_Fifo1_OC_3 (
-    FIELD l_struct_OC_ValueType:element SIZE 10
-    FIELD full SIZE 8
+MODULE l_module_OC_Fifo1_OC_3 18 (
+    FIELD l_struct_OC_ValueType:element TYPE l_struct_OC_ValueType
+    FIELD full TYPE INTEGER_8
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 10
+        PARAM in$enq$v TYPE l_struct_OC_ValueType
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY SIZE 1 = (full ^ 1) (
+    METHOD in$enq__RDY TYPE INTEGER_1 = (full ^ 1) (
         METAREAD full 
     )
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY SIZE 1 = (full) (
+    METHOD out$deq__RDY TYPE INTEGER_1 = (full) (
         METAREAD full 
     )
-    METHOD out$first SIZE 10 = (element) (
+    METHOD out$first TYPE l_struct_OC_ValueType = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY SIZE 1 = (full) (
+    METHOD out$first__RDY TYPE INTEGER_1 = (full) (
         METAREAD full 
     )
 )
-MODULE l_module_OC_IVector (
+MODULE l_module_OC_IVector 44 (
     FIELD l_ainterface_OC_IVectorRequest:request
     OUTCALL ind = l_ainterface_OC_IVectorIndication
     FIELD/PTR  l_ainterface_OC_IVectorIndication:ind
-    FIELD l_module_OC_Fifo1_OC_3:fifo SIZE 18
-    FIELD fcounter SIZE 8
-    FIELD counter SIZE 9
-    FIELD gcounter SIZE 9
+    FIELD l_module_OC_Fifo1_OC_3:fifo TYPE l_module_OC_Fifo1_OC_3
+    FIELD fcounter TYPE INTEGER_8
+    FIELD counter TYPE INTEGER_9
+    FIELD gcounter TYPE INTEGER_9
     METHOD request$say__ENA (
-        PARAM request$say$meth SIZE 6
-        PARAM request$say$v SIZE 4
+        PARAM request$say$meth TYPE INTEGER_6
+        PARAM request$say$v TYPE INTEGER_4
         STORE/Alloca :temp$a = request$say$meth
         STORE/Alloca :temp$b = request$say$v
         METAINVOKE fifo$in$enq__ENA 
         CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
     )
-    METHOD request$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
+    METHOD request$say__RDY TYPE INTEGER_1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
     METHOD/Rule respond__ENA (
@@ -103,56 +103,56 @@ MODULE l_module_OC_IVector (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
     )
-    METHOD/Rule respond__RDY SIZE 1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
+    METHOD/Rule respond__RDY TYPE INTEGER_1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE ind$heard__RDY 
     )
 )
-EMODULE l_class_OC_IVectorTest (
-    FIELD l_module_OC_IVector:ivector SIZE 44
+EMODULE l_class_OC_IVectorTest 44 (
+    FIELD l_module_OC_IVector:ivector TYPE l_module_OC_IVector
 )
-EMODULE l_module_OC_Fifo (
+EMODULE l_module_OC_Fifo 0 (
     FIELD l_ainterface_OC_PipeIn:in
     FIELD l_ainterface_OC_PipeOut:out
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 32
+        PARAM in$enq$v TYPE INTEGER_32
     )
-    METHOD in$enq__RDY SIZE 1
+    METHOD in$enq__RDY TYPE INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY SIZE 1
-    METHOD out$first SIZE 32
-    METHOD out$first__RDY SIZE 1
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE INTEGER_32
+    METHOD out$first__RDY TYPE INTEGER_1
 )
-MODULE l_module_OC_Fifo1 (
-    FIELD element SIZE 32
-    FIELD full SIZE 8
+MODULE l_module_OC_Fifo1 40 (
+    FIELD element TYPE INTEGER_32
+    FIELD full TYPE INTEGER_8
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 32
+        PARAM in$enq$v TYPE INTEGER_32
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY SIZE 1 = (full ^ 1) (
+    METHOD in$enq__RDY TYPE INTEGER_1 = (full ^ 1) (
         METAREAD full 
     )
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY SIZE 1 = (full) (
+    METHOD out$deq__RDY TYPE INTEGER_1 = (full) (
         METAREAD full 
     )
-    METHOD out$first SIZE 32 = (element) (
+    METHOD out$first TYPE INTEGER_32 = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY SIZE 1 = (full) (
+    METHOD out$first__RDY TYPE INTEGER_1 = (full) (
         METAREAD full 
     )
 )
-MODULE l_module_OC_IVectorInd (
+MODULE l_module_OC_IVectorInd 0 (
     FIELD l_ainterface_OC_IVectorIndication:ind
     METHOD ind$heard__ENA (
-        PARAM ind$heard$meth SIZE 6
-        PARAM ind$heard$v SIZE 4
+        PARAM ind$heard$meth TYPE INTEGER_6
+        PARAM ind$heard$v TYPE INTEGER_4
     )
-    METHOD ind$heard__RDY SIZE 1 = (1)
+    METHOD ind$heard__RDY TYPE INTEGER_1 = (1)
 )

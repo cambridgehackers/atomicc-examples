@@ -1,72 +1,72 @@
-EMODULE l_ainterface_OC_LpmIndication (
+EMODULE l_ainterface_OC_LpmIndication 0 (
     METHOD heard__ENA (
-        PARAM heard$meth SIZE 32
-        PARAM heard$v SIZE 32
+        PARAM heard$meth TYPE INTEGER_32
+        PARAM heard$v TYPE INTEGER_32
     )
-    METHOD heard__RDY SIZE 1
+    METHOD heard__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_LpmMem (
+EMODULE l_struct_OC_ValuePair 96 (
+    FIELD a TYPE INTEGER_32
+    FIELD b TYPE INTEGER_32
+    FIELD c TYPE INTEGER_32
+)
+EMODULE l_ainterface_OC_LpmMem 0 (
     METHOD req__ENA (
-        PARAM req$v SIZE 96
+        PARAM req$v TYPE l_struct_OC_ValuePair
     )
-    METHOD req__RDY SIZE 1
+    METHOD req__RDY TYPE INTEGER_1
     METHOD resAccept__ENA
-    METHOD resAccept__RDY SIZE 1
-    METHOD resValue SIZE 96
-    METHOD resValue__RDY SIZE 1
+    METHOD resAccept__RDY TYPE INTEGER_1
+    METHOD resValue TYPE l_struct_OC_ValuePair
+    METHOD resValue__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_LpmRequest (
+EMODULE l_ainterface_OC_LpmRequest 0 (
     METHOD say__ENA (
-        PARAM say$meth SIZE 32
-        PARAM say$v SIZE 32
+        PARAM say$meth TYPE INTEGER_32
+        PARAM say$v TYPE INTEGER_32
     )
-    METHOD say__RDY SIZE 1
+    METHOD say__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn (
+EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
-        PARAM enq$v SIZE 96
+        PARAM enq$v TYPE l_struct_OC_ValuePair
     )
-    METHOD enq__RDY SIZE 1
+    METHOD enq__RDY TYPE INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut (
+EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD deq__ENA
-    METHOD deq__RDY SIZE 1
-    METHOD first SIZE 96
-    METHOD first__RDY SIZE 1
+    METHOD deq__RDY TYPE INTEGER_1
+    METHOD first TYPE l_struct_OC_ValuePair
+    METHOD first__RDY TYPE INTEGER_1
 )
-EMODULE l_module_OC_Fifo1 (
-    METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 96
-    )
-    METHOD in$enq__RDY SIZE 1
-    METHOD out$deq__ENA
-    METHOD out$deq__RDY SIZE 1
-    METHOD out$first SIZE 96
-    METHOD out$first__RDY SIZE 1
-)
-EMODULE l_module_OC_Fifo (
+EMODULE l_module_OC_Fifo 0 (
     FIELD l_ainterface_OC_PipeIn:in
     FIELD l_ainterface_OC_PipeOut:out
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 96
+        PARAM in$enq$v TYPE l_struct_OC_ValuePair
     )
-    METHOD in$enq__RDY SIZE 1
+    METHOD in$enq__RDY TYPE INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY SIZE 1
-    METHOD out$first SIZE 96
-    METHOD out$first__RDY SIZE 1
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE l_struct_OC_ValuePair
+    METHOD out$first__RDY TYPE INTEGER_1
 )
-EMODULE l_struct_OC_ValuePair (
-    FIELD a SIZE 32
-    FIELD b SIZE 32
-    FIELD c SIZE 32
-)
-MODULE l_module_OC_Fifo2 (
-    FIELD l_struct_OC_ValuePair:element COUNT 2 SIZE 96
-    FIELD rindex SIZE 32
-    FIELD windex SIZE 32
+EMODULE l_module_OC_Fifo1 0 (
     METHOD in$enq__ENA (
-        PARAM in$enq$v SIZE 96
+        PARAM in$enq$v TYPE l_struct_OC_ValuePair
+    )
+    METHOD in$enq__RDY TYPE INTEGER_1
+    METHOD out$deq__ENA
+    METHOD out$deq__RDY TYPE INTEGER_1
+    METHOD out$first TYPE l_struct_OC_ValuePair
+    METHOD out$first__RDY TYPE INTEGER_1
+)
+MODULE l_module_OC_Fifo2 160 (
+    FIELD l_struct_OC_ValuePair:element COUNT 2 TYPE l_struct_OC_ValuePair
+    FIELD rindex TYPE INTEGER_32
+    FIELD windex TYPE INTEGER_32
+    METHOD in$enq__ENA (
+        PARAM in$enq$v TYPE l_struct_OC_ValuePair
         METAREAD windex 
         METAREAD windex 
         METAREAD windex windex == 0
@@ -75,7 +75,7 @@ MODULE l_module_OC_Fifo2 (
         METAREAD windex 
         STORE :windex = (windex + 1) % 2
     )
-    METHOD in$enq__RDY SIZE 1 = (((windex + 1) % 2) != rindex) (
+    METHOD in$enq__RDY TYPE INTEGER_1 = (((windex + 1) % 2) != rindex) (
         METAREAD windex 
         METAREAD rindex 
     )
@@ -83,61 +83,61 @@ MODULE l_module_OC_Fifo2 (
         METAREAD rindex 
         STORE :rindex = (rindex + 1) % 2
     )
-    METHOD out$deq__RDY SIZE 1 = (rindex != windex) (
+    METHOD out$deq__RDY TYPE INTEGER_1 = (rindex != windex) (
         METAREAD rindex 
         METAREAD windex 
     )
-    METHOD out$first SIZE 96 = (*(rindex == 0 ? element0:&element1)) (
+    METHOD out$first TYPE l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1)) (
         METAREAD rindex 
         METAREAD rindex 
         METAREAD rindex rindex == 0
         METAREAD rindex rindex == 0
         METAREAD *(rindex == 0 ? element0:&element1) 
     )
-    METHOD out$first__RDY SIZE 1 = (rindex != windex) (
+    METHOD out$first__RDY TYPE INTEGER_1 = (rindex != windex) (
         METAREAD rindex 
         METAREAD windex 
     )
 )
-MODULE l_module_OC_LpmMemory (
-    FIELD delayCount SIZE 32
-    FIELD l_struct_OC_ValuePair:saved SIZE 96
+MODULE l_module_OC_LpmMemory 128 (
+    FIELD delayCount TYPE INTEGER_32
+    FIELD l_struct_OC_ValuePair:saved TYPE l_struct_OC_ValuePair
     FIELD l_ainterface_OC_LpmMem:ifc
     METHOD ifc$req__ENA (
-        PARAM ifc$req$v SIZE 96
+        PARAM ifc$req$v TYPE l_struct_OC_ValuePair
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
     )
-    METHOD ifc$req__RDY SIZE 1 = (delayCount == 0) (
+    METHOD ifc$req__RDY TYPE INTEGER_1 = (delayCount == 0) (
         METAREAD delayCount 
     )
     METHOD ifc$resAccept__ENA (
         STORE :delayCount = 0
     )
-    METHOD ifc$resAccept__RDY SIZE 1 = (delayCount == 1) (
+    METHOD ifc$resAccept__RDY TYPE INTEGER_1 = (delayCount == 1) (
         METAREAD delayCount 
     )
-    METHOD ifc$resValue SIZE 96 = (saved) (
+    METHOD ifc$resValue TYPE l_struct_OC_ValuePair = (saved) (
         METAREAD saved 
     )
-    METHOD ifc$resValue__RDY SIZE 1 = (delayCount == 1) (
+    METHOD ifc$resValue__RDY TYPE INTEGER_1 = (delayCount == 1) (
         METAREAD delayCount 
     )
     METHOD/Rule memdelay_rule__ENA (
         METAREAD delayCount 
         STORE :delayCount = delayCount - 1
     )
-    METHOD/Rule memdelay_rule__RDY SIZE 1 = (delayCount > 1) (
+    METHOD/Rule memdelay_rule__RDY TYPE INTEGER_1 = (delayCount > 1) (
         METAREAD delayCount 
     )
 )
-MODULE l_module_OC_Lpm (
+MODULE l_module_OC_Lpm 320 (
     PRIORITY recirc enter;exit
     FIELD l_module_OC_Fifo1:inQ
-    FIELD l_module_OC_Fifo2:fifo SIZE 160
+    FIELD l_module_OC_Fifo2:fifo TYPE l_module_OC_Fifo2
     FIELD l_module_OC_Fifo1:outQ
-    FIELD l_module_OC_LpmMemory:mem SIZE 128
-    FIELD doneCount SIZE 32
+    FIELD l_module_OC_LpmMemory:mem TYPE l_module_OC_LpmMemory
+    FIELD doneCount TYPE INTEGER_32
     OUTCALL ind = l_ainterface_OC_LpmIndication
     FIELD/PTR  l_ainterface_OC_LpmIndication:ind
     FIELD l_ainterface_OC_LpmRequest:request
@@ -151,7 +151,7 @@ MODULE l_module_OC_Lpm (
         METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
-    METHOD/Rule enter__RDY SIZE 1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
+    METHOD/Rule enter__RDY TYPE INTEGER_1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE inQ$out$first__RDY 
         METAINVOKE inQ$out$deq__RDY 
         METAINVOKE fifo$in$enq__RDY 
@@ -169,7 +169,7 @@ MODULE l_module_OC_Lpm (
         METAINVOKE outQ$in$enq__ENA 
         CALL/Action :outQ$in$enq__ENA{outQ$in$enq$v;temp}
     )
-    METHOD/Rule exit_rule__RDY SIZE 1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
+    METHOD/Rule exit_rule__RDY TYPE INTEGER_1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
         METAINVOKE mem$ifc$resAccept__RDY 
@@ -190,7 +190,7 @@ MODULE l_module_OC_Lpm (
         METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{mem$ifc$req$v;temp}
     )
-    METHOD/Rule recirc__RDY SIZE 1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
+    METHOD/Rule recirc__RDY TYPE INTEGER_1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE mem$ifc$resValue__RDY 
         METAINVOKE mem$ifc$resAccept__RDY 
@@ -199,14 +199,14 @@ MODULE l_module_OC_Lpm (
         METAINVOKE mem$ifc$req__RDY 
     )
     METHOD request$say__ENA (
-        PARAM request$say$meth SIZE 32
-        PARAM request$say$v SIZE 32
+        PARAM request$say$meth TYPE INTEGER_32
+        PARAM request$say$v TYPE INTEGER_32
         STORE/Alloca :temp$a = request$say$meth
         STORE/Alloca :temp$b = request$say$v
         METAINVOKE inQ$in$enq__ENA 
         CALL/Action :inQ$in$enq__ENA{inQ$in$enq$v;temp}
     )
-    METHOD request$say__RDY SIZE 1 = (inQ$in$enq__RDY) (
+    METHOD request$say__RDY TYPE INTEGER_1 = (inQ$in$enq__RDY) (
         METAINVOKE inQ$in$enq__RDY 
     )
     METHOD/Rule respond__ENA (
@@ -217,15 +217,15 @@ MODULE l_module_OC_Lpm (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
     )
-    METHOD/Rule respond__RDY SIZE 1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
+    METHOD/Rule respond__RDY TYPE INTEGER_1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE outQ$out$first__RDY 
         METAINVOKE outQ$out$deq__RDY 
         METAINVOKE ind$heard__RDY 
     )
 )
-EMODULE l_class_OC_LpmTest (
-    FIELD l_module_OC_Lpm:lpm SIZE 320
+EMODULE l_class_OC_LpmTest 320 (
+    FIELD l_module_OC_Lpm:lpm TYPE l_module_OC_Lpm
 )
-EMODULE l_class_OC_foo (
+EMODULE l_class_OC_foo 0 (
     FIELD l_ainterface_OC_LpmIndication:indication
 )
