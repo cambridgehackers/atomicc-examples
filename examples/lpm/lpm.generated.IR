@@ -1,11 +1,11 @@
-EMODULE l_ainterface_OC_LpmIndication = 6 (
+EMODULE l_ainterface_OC_LpmIndication (
     METHOD heard__ENA (
         PARAM heard$meth SIZE 32
         PARAM heard$v SIZE 32
     )
     METHOD heard__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_LpmMem = 12 (
+EMODULE l_ainterface_OC_LpmMem (
     METHOD req__ENA (
         PARAM req$v SIZE 96
     )
@@ -15,26 +15,26 @@ EMODULE l_ainterface_OC_LpmMem = 12 (
     METHOD resValue SIZE 96
     METHOD resValue__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_LpmRequest = 13 (
+EMODULE l_ainterface_OC_LpmRequest (
     METHOD say__ENA (
         PARAM say$meth SIZE 32
         PARAM say$v SIZE 32
     )
     METHOD say__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeIn = 7 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM enq$v SIZE 96
     )
     METHOD enq__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeOut = 8 (
+EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 96
     METHOD first__RDY SIZE 1
 )
-EMODULE l_module_OC_Fifo1 = 10 (
+EMODULE l_module_OC_Fifo1 (
     METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 96
     )
@@ -44,9 +44,9 @@ EMODULE l_module_OC_Fifo1 = 10 (
     METHOD out$first SIZE 96
     METHOD out$first__RDY SIZE 1
 )
-EMODULE l_module_OC_Fifo = 3 (
-    FIELD 7:in
-    FIELD 8:out
+EMODULE l_module_OC_Fifo (
+    FIELD l_ainterface_OC_PipeIn:in
+    FIELD l_ainterface_OC_PipeOut:out
     METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 96
     )
@@ -56,13 +56,13 @@ EMODULE l_module_OC_Fifo = 3 (
     METHOD out$first SIZE 96
     METHOD out$first__RDY SIZE 1
 )
-EMODULE l_struct_OC_ValuePair = 9 (
+EMODULE l_struct_OC_ValuePair (
     FIELD a SIZE 32
     FIELD b SIZE 32
     FIELD c SIZE 32
 )
-MODULE l_module_OC_Fifo2 = 2 (
-    FIELD 9:element COUNT 2 SIZE 96
+MODULE l_module_OC_Fifo2 (
+    FIELD l_struct_OC_ValuePair:element COUNT 2 SIZE 96
     FIELD rindex SIZE 32
     FIELD windex SIZE 32
     METHOD in$enq__ENA (
@@ -99,10 +99,10 @@ MODULE l_module_OC_Fifo2 = 2 (
         METAREAD windex 
     )
 )
-MODULE l_module_OC_LpmMemory = 11 (
+MODULE l_module_OC_LpmMemory (
     FIELD delayCount SIZE 32
-    FIELD 9:saved SIZE 96
-    FIELD 12:ifc
+    FIELD l_struct_OC_ValuePair:saved SIZE 96
+    FIELD l_ainterface_OC_LpmMem:ifc
     METHOD ifc$req__ENA (
         PARAM ifc$req$v SIZE 96
         STORE :delayCount = 4
@@ -131,16 +131,16 @@ MODULE l_module_OC_LpmMemory = 11 (
         METAREAD delayCount 
     )
 )
-MODULE l_module_OC_Lpm = 4 (
+MODULE l_module_OC_Lpm (
     PRIORITY recirc enter;exit
-    FIELD 10:inQ
-    FIELD 2:fifo SIZE 160
-    FIELD 10:outQ
-    FIELD 11:mem SIZE 128
+    FIELD l_module_OC_Fifo1:inQ
+    FIELD l_module_OC_Fifo2:fifo SIZE 160
+    FIELD l_module_OC_Fifo1:outQ
+    FIELD l_module_OC_LpmMemory:mem SIZE 128
     FIELD doneCount SIZE 32
-    OUTCALL ind = 6
-    FIELD/PTR  6:ind
-    FIELD 13:request
+    OUTCALL ind = l_ainterface_OC_LpmIndication
+    FIELD/PTR  l_ainterface_OC_LpmIndication:ind
+    FIELD l_ainterface_OC_LpmRequest:request
     METHOD /RULE enter__ENA (
         METAINVOKE inQ$out$first 
         STORE/Alloca :temp = inQ$out$first{}
@@ -223,9 +223,9 @@ MODULE l_module_OC_Lpm = 4 (
         METAINVOKE ind$heard__RDY 
     )
 )
-EMODULE l_class_OC_LpmTest = 1 (
-    FIELD 4:lpm SIZE 320
+EMODULE l_class_OC_LpmTest (
+    FIELD l_module_OC_Lpm:lpm SIZE 320
 )
-EMODULE l_class_OC_foo = 5 (
-    FIELD 6:indication
+EMODULE l_class_OC_foo (
+    FIELD l_ainterface_OC_LpmIndication:indication
 )

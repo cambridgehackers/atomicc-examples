@@ -1,11 +1,11 @@
-EMODULE l_ainterface_OC_EchoIndication = 2 (
+EMODULE l_ainterface_OC_EchoIndication (
     METHOD heard__ENA (
         PARAM heard$meth SIZE 32
         PARAM heard$v SIZE 32
     )
     METHOD heard__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_EchoRequest = 5 (
+EMODULE l_ainterface_OC_EchoRequest (
     METHOD say2__ENA (
         PARAM say2$meth SIZE 32
         PARAM say2$v SIZE 32
@@ -17,23 +17,23 @@ EMODULE l_ainterface_OC_EchoRequest = 5 (
     )
     METHOD say__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeIn = 10 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM enq$v SIZE 192
     )
     METHOD enq__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeIn_OC_0 = 7 (
+EMODULE l_ainterface_OC_PipeIn_OC_0 (
     METHOD enq__ENA (
         PARAM enq$v SIZE 96
     )
     METHOD enq__RDY SIZE 1
 )
-EMODULE l_class_OC_foo = 1 (
-    FIELD 2:indication
+EMODULE l_class_OC_foo (
+    FIELD l_ainterface_OC_EchoIndication:indication
 )
-MODULE l_module_OC_Echo = 8 (
-    FIELD 5:request
+MODULE l_module_OC_Echo (
+    FIELD l_ainterface_OC_EchoRequest:request
     FIELD busy SIZE 32
     FIELD meth_temp SIZE 32
     FIELD v_temp SIZE 32
@@ -42,8 +42,8 @@ MODULE l_module_OC_Echo = 8 (
     FIELD v_delay SIZE 32
     FIELD x SIZE 32
     FIELD y SIZE 32
-    OUTCALL indication = 2
-    FIELD/PTR  2:indication
+    OUTCALL indication = l_ainterface_OC_EchoIndication
+    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
     METHOD /RULE delay_rule__ENA (
         STORE :busy = 0
         STORE :busy_delay = 1
@@ -88,21 +88,21 @@ MODULE l_module_OC_Echo = 8 (
         METAINVOKE indication$heard__RDY 
     )
 )
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard = 14 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard (
     FIELD meth SIZE 32
     FIELD v SIZE 32
 )
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union = 13 (
-    FIELD 14:heard SIZE 64
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union (
+    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard:heard SIZE 64
 )
-EMODULE l_struct_OC_EchoIndication_data = 12 (
+EMODULE l_struct_OC_EchoIndication_data (
     FIELD tag SIZE 32
-    FIELD 13:data SIZE 64
+    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union:data SIZE 64
 )
-MODULE l_module_OC_EchoIndicationInput = 11 (
-    FIELD 7:pipe
-    OUTCALL indication = 2
-    FIELD/PTR  2:indication
+MODULE l_module_OC_EchoIndicationInput (
+    FIELD l_ainterface_OC_PipeIn_OC_0:pipe
+    OUTCALL indication = l_ainterface_OC_EchoIndication
+    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
     FIELD busy_delay SIZE 32
     FIELD meth_delay SIZE 32
     FIELD v_delay SIZE 32
@@ -130,12 +130,12 @@ MODULE l_module_OC_EchoIndicationInput = 11 (
         METAREAD busy_delay 
     )
 )
-MODULE l_module_OC_EchoIndicationOutput = 6 (
-    FIELD 2:indication
-    OUTCALL pipe = 7
-    FIELD/PTR  7:pipe
-    FIELD 12:ind0 SIZE 96
-    FIELD 12:ind1 SIZE 96
+MODULE l_module_OC_EchoIndicationOutput (
+    FIELD l_ainterface_OC_EchoIndication:indication
+    OUTCALL pipe = l_ainterface_OC_PipeIn_OC_0
+    FIELD/PTR  l_ainterface_OC_PipeIn_OC_0:pipe
+    FIELD l_struct_OC_EchoIndication_data:ind0 SIZE 96
+    FIELD l_struct_OC_EchoIndication_data:ind1 SIZE 96
     FIELD ind_busy SIZE 32
     FIELD even SIZE 32
     METHOD indication$heard__ENA (
@@ -180,27 +180,27 @@ MODULE l_module_OC_EchoIndicationOutput = 6 (
         METAINVOKE pipe$enq__RDY 
     )
 )
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say = 17 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say (
     FIELD meth SIZE 32
     FIELD v SIZE 32
 )
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 = 18 (
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 (
     FIELD meth SIZE 32
     FIELD v SIZE 32
     FIELD v2 SIZE 32
 )
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union = 16 (
-    FIELD 17:say SIZE 64
-    FIELD 18:say2 SIZE 96
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union (
+    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say:say SIZE 64
+    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2:say2 SIZE 96
 )
-EMODULE l_struct_OC_EchoRequest_data = 15 (
+EMODULE l_struct_OC_EchoRequest_data (
     FIELD tag SIZE 32
-    FIELD 16:data SIZE 160
+    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union:data SIZE 160
 )
-MODULE l_module_OC_EchoRequestInput = 4 (
-    FIELD 10:pipe
-    OUTCALL request = 5
-    FIELD/PTR  5:request
+MODULE l_module_OC_EchoRequestInput (
+    FIELD l_ainterface_OC_PipeIn:pipe
+    OUTCALL request = l_ainterface_OC_EchoRequest
+    FIELD/PTR  l_ainterface_OC_EchoRequest:request
     METHOD pipe$enq__ENA (
         PARAM pipe$enq$v SIZE 192
         STORE/Alloca :v_2e_addr = pipe$enq$v
@@ -218,10 +218,10 @@ MODULE l_module_OC_EchoRequestInput = 4 (
         METAINVOKE request$say2__RDY 
     )
 )
-MODULE l_module_OC_EchoRequestOutput = 9 (
-    FIELD 5:request
-    OUTCALL pipe = 10
-    FIELD/PTR  10:pipe
+MODULE l_module_OC_EchoRequestOutput (
+    FIELD l_ainterface_OC_EchoRequest:request
+    OUTCALL pipe = l_ainterface_OC_PipeIn
+    FIELD/PTR  l_ainterface_OC_PipeIn:pipe
     METHOD request$say2__ENA (
         PARAM request$say2$meth SIZE 32
         PARAM request$say2$v SIZE 32
@@ -247,17 +247,17 @@ MODULE l_module_OC_EchoRequestOutput = 9 (
         METAINVOKE pipe$enq__RDY 
     )
 )
-MODULE l_module_OC_Connect = 3 (
-    INTERFACECONNECT lERI$request lEcho$request 5
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe 7
-    INTERFACECONNECT lEcho$indication lEIO$indication 2
-    INTERFACECONNECT lERO_test$pipe lERI$pipe 10
-    INTERFACECONNECT lEII_test$indication indication 2
-    FIELD 6:lEIO SIZE 256
-    FIELD 4:lERI
-    FIELD 8:lEcho SIZE 256
-    FIELD 9:lERO_test
-    FIELD 11:lEII_test SIZE 96
+MODULE l_module_OC_Connect (
+    INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
+    INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
+    INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
+    FIELD l_module_OC_EchoIndicationOutput:lEIO SIZE 256
+    FIELD l_module_OC_EchoRequestInput:lERI
+    FIELD l_module_OC_Echo:lEcho SIZE 256
+    FIELD l_module_OC_EchoRequestOutput:lERO_test
+    FIELD l_module_OC_EchoIndicationInput:lEII_test SIZE 96
     METHOD /RULE swap2_rule__ENA (
         METAINVOKE lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR] 
         CALL/Action :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR]{}

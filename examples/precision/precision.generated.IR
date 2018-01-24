@@ -1,44 +1,44 @@
-EMODULE l_ainterface_OC_IVectorIndication = 10 (
+EMODULE l_ainterface_OC_IVectorIndication (
     METHOD heard__ENA (
         PARAM heard$meth SIZE 6
         PARAM heard$v SIZE 4
     )
     METHOD heard__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_IVectorRequest = 9 (
+EMODULE l_ainterface_OC_IVectorRequest (
     METHOD say__ENA (
         PARAM say$meth SIZE 6
         PARAM say$v SIZE 4
     )
     METHOD say__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeIn = 4 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM enq$v SIZE 32
     )
     METHOD enq__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeIn_OC_1 = 8 (
+EMODULE l_ainterface_OC_PipeIn_OC_1 (
     METHOD enq__ENA (
         PARAM enq$v SIZE 10
     )
     METHOD enq__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeOut = 5 (
+EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 32
     METHOD first__RDY SIZE 1
 )
-EMODULE l_ainterface_OC_PipeOut_OC_2 = 13 (
+EMODULE l_ainterface_OC_PipeOut_OC_2 (
     METHOD deq__ENA
     METHOD deq__RDY SIZE 1
     METHOD first SIZE 10
     METHOD first__RDY SIZE 1
 )
-EMODULE l_module_OC_Fifo_OC_0 = 12 (
-    FIELD 8:in
-    FIELD 13:out
+EMODULE l_module_OC_Fifo_OC_0 (
+    FIELD l_ainterface_OC_PipeIn_OC_1:in
+    FIELD l_ainterface_OC_PipeOut_OC_2:out
     METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 10
     )
@@ -48,12 +48,12 @@ EMODULE l_module_OC_Fifo_OC_0 = 12 (
     METHOD out$first SIZE 10
     METHOD out$first__RDY SIZE 1
 )
-EMODULE l_struct_OC_ValueType = 6 (
+EMODULE l_struct_OC_ValueType (
     FIELD a SIZE 6
     FIELD b SIZE 4
 )
-MODULE l_module_OC_Fifo1_OC_3 = 11 (
-    FIELD 6:element SIZE 10
+MODULE l_module_OC_Fifo1_OC_3 (
+    FIELD l_struct_OC_ValueType:element SIZE 10
     FIELD full SIZE 8
     METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 10
@@ -76,11 +76,11 @@ MODULE l_module_OC_Fifo1_OC_3 = 11 (
         METAREAD full 
     )
 )
-MODULE l_module_OC_IVector = 7 (
-    FIELD 9:request
-    OUTCALL ind = 10
-    FIELD/PTR  10:ind
-    FIELD 11:fifo SIZE 18
+MODULE l_module_OC_IVector (
+    FIELD l_ainterface_OC_IVectorRequest:request
+    OUTCALL ind = l_ainterface_OC_IVectorIndication
+    FIELD/PTR  l_ainterface_OC_IVectorIndication:ind
+    FIELD l_module_OC_Fifo1_OC_3:fifo SIZE 18
     FIELD fcounter SIZE 8
     FIELD counter SIZE 9
     FIELD gcounter SIZE 9
@@ -109,12 +109,12 @@ MODULE l_module_OC_IVector = 7 (
         METAINVOKE ind$heard__RDY 
     )
 )
-EMODULE l_class_OC_IVectorTest = 1 (
-    FIELD 7:ivector SIZE 44
+EMODULE l_class_OC_IVectorTest (
+    FIELD l_module_OC_IVector:ivector SIZE 44
 )
-EMODULE l_module_OC_Fifo = 3 (
-    FIELD 4:in
-    FIELD 5:out
+EMODULE l_module_OC_Fifo (
+    FIELD l_ainterface_OC_PipeIn:in
+    FIELD l_ainterface_OC_PipeOut:out
     METHOD in$enq__ENA (
         PARAM in$enq$v SIZE 32
     )
@@ -124,7 +124,7 @@ EMODULE l_module_OC_Fifo = 3 (
     METHOD out$first SIZE 32
     METHOD out$first__RDY SIZE 1
 )
-MODULE l_module_OC_Fifo1 = 2 (
+MODULE l_module_OC_Fifo1 (
     FIELD element SIZE 32
     FIELD full SIZE 8
     METHOD in$enq__ENA (
@@ -148,8 +148,8 @@ MODULE l_module_OC_Fifo1 = 2 (
         METAREAD full 
     )
 )
-MODULE l_module_OC_IVectorInd = 14 (
-    FIELD 10:ind
+MODULE l_module_OC_IVectorInd (
+    FIELD l_ainterface_OC_IVectorIndication:ind
     METHOD ind$heard__ENA (
         PARAM ind$heard$meth SIZE 6
         PARAM ind$heard$v SIZE 4
