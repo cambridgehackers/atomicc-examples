@@ -23,8 +23,8 @@ EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD first__RDY TYPE INTEGER_1
 )
 EMODULE l_module_OC_Fifo 0 (
-    FIELD l_ainterface_OC_PipeIn:in
-    FIELD l_ainterface_OC_PipeOut:out
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE INTEGER_32
     )
@@ -47,10 +47,10 @@ EMODULE l_module_OC_Fifo1 0 (
 MODULE l_module_OC_Echo 0 (
     SOFTWARE sout
     SOFTWARE ind
-    FIELD l_ainterface_OC_EchoRequest:sout
+    FIELD sout l_ainterface_OC_EchoRequest
     OUTCALL ind = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:ind
-    FIELD l_module_OC_Fifo1:fifo
+    FIELD/Ptr  ind l_ainterface_OC_EchoIndication
+    FIELD fifo l_module_OC_Fifo1
     METHOD/Rule respond_rule__ENA (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
@@ -73,11 +73,11 @@ MODULE l_module_OC_Echo 0 (
     )
 )
 EMODULE l_class_OC_EchoTest 32 (
-    FIELD l_module_OC_Echo:echo
-    FIELD x TYPE INTEGER_32
+    FIELD echo l_module_OC_Echo
+    FIELD x INTEGER_32
 )
 EMODULE l_module_OC_EchoInd 0 (
-    FIELD l_ainterface_OC_EchoIndication:hout
+    FIELD hout l_ainterface_OC_EchoIndication
     METHOD hout$heard__ENA (
         PARAM hout$heard$v TYPE INTEGER_32
     )

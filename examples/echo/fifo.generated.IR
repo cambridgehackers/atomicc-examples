@@ -11,8 +11,8 @@ EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD first__RDY TYPE INTEGER_1
 )
 EMODULE l_module_OC_Fifo 0 (
-    FIELD l_ainterface_OC_PipeIn:in
-    FIELD l_ainterface_OC_PipeOut:out
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE INTEGER_32
     )
@@ -23,8 +23,8 @@ EMODULE l_module_OC_Fifo 0 (
     METHOD out$first__RDY TYPE INTEGER_1
 )
 MODULE l_module_OC_Fifo1 40 (
-    FIELD element TYPE INTEGER_32
-    FIELD full TYPE INTEGER_8
+    FIELD element INTEGER_32
+    FIELD full INTEGER_8
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE INTEGER_32
         STORE :element = in$enq$v

@@ -1,7 +1,7 @@
 EMODULE l_struct_OC_ValuePair 704 (
-    FIELD a TYPE INTEGER_32
-    FIELD b TYPE INTEGER_32
-    FIELD c TYPE INTEGER_32 ARRAY 20
+    FIELD a INTEGER_32
+    FIELD b INTEGER_32
+    FIELD/Array 20  c INTEGER_32
 )
 EMODULE l_ainterface_OC_IVectorRequest 0 (
     METHOD say__ENA (
@@ -40,8 +40,8 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 0 (
     METHOD first__RDY TYPE INTEGER_1
 )
 EMODULE l_module_OC_Fifo_OC_0 0 (
-    FIELD l_ainterface_OC_PipeIn_OC_1:in
-    FIELD l_ainterface_OC_PipeOut_OC_2:out
+    FIELD in l_ainterface_OC_PipeIn_OC_1
+    FIELD out l_ainterface_OC_PipeOut_OC_2
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE l_struct_OC_ValuePair
     )
@@ -52,8 +52,8 @@ EMODULE l_module_OC_Fifo_OC_0 0 (
     METHOD out$first__RDY TYPE INTEGER_1
 )
 MODULE l_module_OC_Fifo1_OC_3 712 (
-    FIELD l_struct_OC_ValuePair:element TYPE l_struct_OC_ValuePair
-    FIELD full TYPE INTEGER_8
+    FIELD element l_struct_OC_ValuePair
+    FIELD full INTEGER_8
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE l_struct_OC_ValuePair
         STORE :element = in$enq$v
@@ -76,9 +76,9 @@ MODULE l_module_OC_Fifo1_OC_3 712 (
     )
 )
 MODULE l_module_OC_FifoPong 1432 (
-    FIELD l_module_OC_Fifo1_OC_3:element1 TYPE l_module_OC_Fifo1_OC_3
-    FIELD l_module_OC_Fifo1_OC_3:element2 TYPE l_module_OC_Fifo1_OC_3
-    FIELD pong TYPE INTEGER_8
+    FIELD element1 l_module_OC_Fifo1_OC_3
+    FIELD element2 l_module_OC_Fifo1_OC_3
+    FIELD pong INTEGER_8
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE l_struct_OC_ValuePair
         METAREAD pong 
@@ -129,10 +129,10 @@ MODULE l_module_OC_FifoPong 1432 (
     )
 )
 MODULE l_module_OC_IVector 0 (
-    FIELD l_ainterface_OC_IVectorRequest:request
-    FIELD l_module_OC_FifoPong:fifo TYPE l_module_OC_FifoPong
+    FIELD request l_ainterface_OC_IVectorRequest
+    FIELD fifo l_module_OC_FifoPong
     OUTCALL ind = l_ainterface_OC_IndIF
-    FIELD/PTR  l_ainterface_OC_IndIF:ind
+    FIELD/Ptr  ind l_ainterface_OC_IndIF
     METHOD request$say__ENA (
         PARAM request$say$v TYPE l_struct_OC_ValuePair
         METAINVOKE fifo$in$enq__ENA 
@@ -156,11 +156,11 @@ MODULE l_module_OC_IVector 0 (
     )
 )
 EMODULE l_class_OC_IVectorTest 0 (
-    FIELD l_module_OC_IVector:ivector
+    FIELD ivector l_module_OC_IVector
 )
 EMODULE l_module_OC_Fifo 0 (
-    FIELD l_ainterface_OC_PipeIn:in
-    FIELD l_ainterface_OC_PipeOut:out
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE INTEGER_32
     )
@@ -171,8 +171,8 @@ EMODULE l_module_OC_Fifo 0 (
     METHOD out$first__RDY TYPE INTEGER_1
 )
 MODULE l_module_OC_Fifo1 40 (
-    FIELD element TYPE INTEGER_32
-    FIELD full TYPE INTEGER_8
+    FIELD element INTEGER_32
+    FIELD full INTEGER_8
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE INTEGER_32
         STORE :element = in$enq$v
@@ -195,7 +195,7 @@ MODULE l_module_OC_Fifo1 40 (
     )
 )
 MODULE l_module_OC_IVectorIndication 0 (
-    FIELD l_ainterface_OC_IndIF:ind
+    FIELD ind l_ainterface_OC_IndIF
     METHOD ind$heard__ENA (
         PARAM ind$heard$v TYPE l_struct_OC_ValuePair
         STORE/Alloca :v_2e_addr = ind$heard$v

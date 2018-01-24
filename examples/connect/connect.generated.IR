@@ -13,15 +13,15 @@ EMODULE l_ainterface_OC_EchoRequest 0 (
     METHOD say__RDY TYPE INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say 64 (
-    FIELD meth TYPE INTEGER_32
-    FIELD v TYPE INTEGER_32
+    FIELD meth INTEGER_32
+    FIELD v INTEGER_32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union 64 (
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say:say TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say
+    FIELD say l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say
 )
 EMODULE l_struct_OC_EchoRequest_data 96 (
-    FIELD tag TYPE INTEGER_32
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union:data TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union
+    FIELD tag INTEGER_32
+    FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union
 )
 EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
@@ -30,15 +30,15 @@ EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__RDY TYPE INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard 64 (
-    FIELD meth TYPE INTEGER_32
-    FIELD v TYPE INTEGER_32
+    FIELD meth INTEGER_32
+    FIELD v INTEGER_32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union 64 (
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard:heard TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard
+    FIELD heard l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard
 )
 EMODULE l_struct_OC_EchoIndication_data 96 (
-    FIELD tag TYPE INTEGER_32
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union:data TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union
+    FIELD tag INTEGER_32
+    FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     METHOD enq__ENA (
@@ -47,12 +47,12 @@ EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     METHOD enq__RDY TYPE INTEGER_1
 )
 EMODULE l_class_OC_foo 0 (
-    FIELD l_ainterface_OC_EchoIndication:indication
+    FIELD indication l_ainterface_OC_EchoIndication
 )
 MODULE l_module_OC_Echo 0 (
-    FIELD l_ainterface_OC_EchoRequest:request
+    FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
+    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
     METHOD request$say__ENA (
         PARAM request$say$meth TYPE INTEGER_32
         PARAM request$say$v TYPE INTEGER_32
@@ -64,9 +64,9 @@ MODULE l_module_OC_Echo 0 (
     )
 )
 MODULE l_module_OC_EchoIndicationInput 0 (
-    FIELD l_ainterface_OC_PipeIn_OC_0:pipe
+    FIELD pipe l_ainterface_OC_PipeIn_OC_0
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
+    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
     METHOD pipe$enq__ENA (
         PARAM pipe$enq$v TYPE l_struct_OC_EchoIndication_data
         STORE/Alloca :v_2e_addr = pipe$enq$v
@@ -80,9 +80,9 @@ MODULE l_module_OC_EchoIndicationInput 0 (
     )
 )
 MODULE l_module_OC_EchoIndicationOutput 0 (
-    FIELD l_ainterface_OC_EchoIndication:indication
+    FIELD indication l_ainterface_OC_EchoIndication
     OUTCALL pipe = l_ainterface_OC_PipeIn_OC_0
-    FIELD/PTR  l_ainterface_OC_PipeIn_OC_0:pipe
+    FIELD/Ptr  pipe l_ainterface_OC_PipeIn_OC_0
     METHOD indication$heard__ENA (
         PARAM indication$heard$meth TYPE INTEGER_32
         PARAM indication$heard$v TYPE INTEGER_32
@@ -97,9 +97,9 @@ MODULE l_module_OC_EchoIndicationOutput 0 (
     )
 )
 MODULE l_module_OC_EchoRequestInput 0 (
-    FIELD l_ainterface_OC_PipeIn:pipe
+    FIELD pipe l_ainterface_OC_PipeIn
     OUTCALL request = l_ainterface_OC_EchoRequest
-    FIELD/PTR  l_ainterface_OC_EchoRequest:request
+    FIELD/Ptr  request l_ainterface_OC_EchoRequest
     METHOD pipe$enq__ENA (
         PARAM pipe$enq$v TYPE l_struct_OC_EchoRequest_data
         STORE/Alloca :v_2e_addr = pipe$enq$v
@@ -113,9 +113,9 @@ MODULE l_module_OC_EchoRequestInput 0 (
     )
 )
 MODULE l_module_OC_EchoRequestOutput 0 (
-    FIELD l_ainterface_OC_EchoRequest:request
+    FIELD request l_ainterface_OC_EchoRequest
     OUTCALL pipe = l_ainterface_OC_PipeIn
-    FIELD/PTR  l_ainterface_OC_PipeIn:pipe
+    FIELD/Ptr  pipe l_ainterface_OC_PipeIn
     METHOD request$say__ENA (
         PARAM request$say$meth TYPE INTEGER_32
         PARAM request$say$v TYPE INTEGER_32
@@ -137,14 +137,14 @@ MODULE l_module_OC_Connect 0 (
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
-    FIELD l_ainterface_OC_EchoRequest:request
+    FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
-    FIELD l_module_OC_EchoIndicationOutput:lEIO
-    FIELD l_module_OC_EchoRequestInput:lERI
-    FIELD l_module_OC_Echo:lEcho
-    FIELD l_module_OC_EchoRequestOutput:lERO_test
-    FIELD l_module_OC_EchoIndicationInput:lEII_test
+    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
+    FIELD lEIO l_module_OC_EchoIndicationOutput
+    FIELD lERI l_module_OC_EchoRequestInput
+    FIELD lEcho l_module_OC_Echo
+    FIELD lERO_test l_module_OC_EchoRequestOutput
+    FIELD lEII_test l_module_OC_EchoIndicationInput
     METHOD request$say__ENA (
         PARAM request$say$meth TYPE INTEGER_32
         PARAM request$say$v TYPE INTEGER_32
@@ -156,6 +156,6 @@ MODULE l_module_OC_Connect 0 (
     )
 )
 EMODULE l_struct_OC_ValueType 64 (
-    FIELD a TYPE INTEGER_32
-    FIELD b TYPE INTEGER_32
+    FIELD a INTEGER_32
+    FIELD b INTEGER_32
 )

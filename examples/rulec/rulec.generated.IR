@@ -19,21 +19,21 @@ EMODULE l_ainterface_OC_EchoRequest 0 (
     METHOD say__RDY TYPE INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say 64 (
-    FIELD meth TYPE INTEGER_32
-    FIELD v TYPE INTEGER_32
+    FIELD meth INTEGER_32
+    FIELD v INTEGER_32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 96 (
-    FIELD meth TYPE INTEGER_32
-    FIELD v TYPE INTEGER_32
-    FIELD v2 TYPE INTEGER_32
+    FIELD meth INTEGER_32
+    FIELD v INTEGER_32
+    FIELD v2 INTEGER_32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union 160 (
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say:say TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2:say2 TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2
+    FIELD say l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say
+    FIELD say2 l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2
 )
 EMODULE l_struct_OC_EchoRequest_data 192 (
-    FIELD tag TYPE INTEGER_32
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union:data TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union
+    FIELD tag INTEGER_32
+    FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union
 )
 EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
@@ -42,15 +42,15 @@ EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__RDY TYPE INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard 64 (
-    FIELD meth TYPE INTEGER_32
-    FIELD v TYPE INTEGER_32
+    FIELD meth INTEGER_32
+    FIELD v INTEGER_32
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union 64 (
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard:heard TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard
+    FIELD heard l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard
 )
 EMODULE l_struct_OC_EchoIndication_data 96 (
-    FIELD tag TYPE INTEGER_32
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union:data TYPE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union
+    FIELD tag INTEGER_32
+    FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     METHOD enq__ENA (
@@ -59,18 +59,18 @@ EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     METHOD enq__RDY TYPE INTEGER_1
 )
 EMODULE l_class_OC_foo 0 (
-    FIELD l_ainterface_OC_EchoIndication:indication
+    FIELD indication l_ainterface_OC_EchoIndication
 )
 MODULE l_module_OC_Echo 192 (
-    FIELD l_ainterface_OC_EchoRequest:request
-    FIELD busy TYPE INTEGER_32
-    FIELD meth_temp TYPE INTEGER_32
-    FIELD v_temp TYPE INTEGER_32
-    FIELD busy_delay TYPE INTEGER_32
-    FIELD meth_delay TYPE INTEGER_32
-    FIELD v_delay TYPE INTEGER_32
+    FIELD request l_ainterface_OC_EchoRequest
+    FIELD busy INTEGER_32
+    FIELD meth_temp INTEGER_32
+    FIELD v_temp INTEGER_32
+    FIELD busy_delay INTEGER_32
+    FIELD meth_delay INTEGER_32
+    FIELD v_delay INTEGER_32
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
+    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
     METHOD/Rule delay_rule__ENA (
         STORE :busy = 0
         STORE :busy_delay = 1
@@ -117,12 +117,12 @@ MODULE l_module_OC_Echo 192 (
     )
 )
 MODULE l_module_OC_EchoIndicationInput 96 (
-    FIELD l_ainterface_OC_PipeIn_OC_0:pipe
+    FIELD pipe l_ainterface_OC_PipeIn_OC_0
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/PTR  l_ainterface_OC_EchoIndication:indication
-    FIELD busy_delay TYPE INTEGER_32
-    FIELD meth_delay TYPE INTEGER_32
-    FIELD v_delay TYPE INTEGER_32
+    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
+    FIELD busy_delay INTEGER_32
+    FIELD meth_delay INTEGER_32
+    FIELD v_delay INTEGER_32
     METHOD/Rule input_rule__ENA (
         STORE :busy_delay = 0
         METAREAD meth_delay 
@@ -135,7 +135,7 @@ MODULE l_module_OC_EchoIndicationInput 96 (
         METAINVOKE indication$heard__RDY 
     )
     METHOD pipe$enq__ENA (
-        PARAM pipe$enq$v TYPE POINTER_l_struct_OC_EchoIndication_data
+        PARAM pipe$enq$v TYPE l_struct_OC_EchoIndication_data
         METAREAD pipe$enq$v$tag 
         METAREAD pipe$enq$v$tag 
         METAREAD pipe$enq$v$data$heard$meth pipe$enq$v$tag == 1
@@ -150,13 +150,13 @@ MODULE l_module_OC_EchoIndicationInput 96 (
     )
 )
 MODULE l_module_OC_EchoIndicationOutput 256 (
-    FIELD l_ainterface_OC_EchoIndication:indication
+    FIELD indication l_ainterface_OC_EchoIndication
     OUTCALL pipe = l_ainterface_OC_PipeIn_OC_0
-    FIELD/PTR  l_ainterface_OC_PipeIn_OC_0:pipe
-    FIELD l_struct_OC_EchoIndication_data:ind0 TYPE l_struct_OC_EchoIndication_data
-    FIELD l_struct_OC_EchoIndication_data:ind1 TYPE l_struct_OC_EchoIndication_data
-    FIELD ind_busy TYPE INTEGER_32
-    FIELD even TYPE INTEGER_32
+    FIELD/Ptr  pipe l_ainterface_OC_PipeIn_OC_0
+    FIELD ind0 l_struct_OC_EchoIndication_data
+    FIELD ind1 l_struct_OC_EchoIndication_data
+    FIELD ind_busy INTEGER_32
+    FIELD even INTEGER_32
     METHOD indication$heard__ENA (
         PARAM indication$heard$meth TYPE INTEGER_32
         PARAM indication$heard$v TYPE INTEGER_32
@@ -202,11 +202,11 @@ MODULE l_module_OC_EchoIndicationOutput 256 (
     )
 )
 MODULE l_module_OC_EchoRequestInput 0 (
-    FIELD l_ainterface_OC_PipeIn:pipe
+    FIELD pipe l_ainterface_OC_PipeIn
     OUTCALL request = l_ainterface_OC_EchoRequest
-    FIELD/PTR  l_ainterface_OC_EchoRequest:request
+    FIELD/Ptr  request l_ainterface_OC_EchoRequest
     METHOD pipe$enq__ENA (
-        PARAM pipe$enq$v TYPE POINTER_l_struct_OC_EchoRequest_data
+        PARAM pipe$enq$v TYPE l_struct_OC_EchoRequest_data
         METAREAD pipe$enq$v$tag 
         METAREAD pipe$enq$v$tag 
         METAREAD pipe$enq$v$data$say$meth pipe$enq$v$tag == 1
@@ -227,9 +227,9 @@ MODULE l_module_OC_EchoRequestInput 0 (
     )
 )
 MODULE l_module_OC_EchoRequestOutput 0 (
-    FIELD l_ainterface_OC_EchoRequest:request
+    FIELD request l_ainterface_OC_EchoRequest
     OUTCALL pipe = l_ainterface_OC_PipeIn
-    FIELD/PTR  l_ainterface_OC_PipeIn:pipe
+    FIELD/Ptr  pipe l_ainterface_OC_PipeIn
     METHOD request$say2__ENA (
         PARAM request$say2$meth TYPE INTEGER_32
         PARAM request$say2$v TYPE INTEGER_32
@@ -263,9 +263,9 @@ MODULE l_module_OC_Connect 544 (
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
-    FIELD l_module_OC_EchoIndicationOutput:lEIO TYPE l_module_OC_EchoIndicationOutput
-    FIELD l_module_OC_EchoRequestInput:lERI
-    FIELD l_module_OC_Echo:lEcho TYPE l_module_OC_Echo
-    FIELD l_module_OC_EchoRequestOutput:lERO_test
-    FIELD l_module_OC_EchoIndicationInput:lEII_test TYPE l_module_OC_EchoIndicationInput
+    FIELD lEIO l_module_OC_EchoIndicationOutput
+    FIELD lERI l_module_OC_EchoRequestInput
+    FIELD lEcho l_module_OC_Echo
+    FIELD lERO_test l_module_OC_EchoRequestOutput
+    FIELD lEII_test l_module_OC_EchoIndicationInput
 )

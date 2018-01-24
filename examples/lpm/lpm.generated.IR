@@ -6,9 +6,9 @@ EMODULE l_ainterface_OC_LpmIndication 0 (
     METHOD heard__RDY TYPE INTEGER_1
 )
 EMODULE l_struct_OC_ValuePair 96 (
-    FIELD a TYPE INTEGER_32
-    FIELD b TYPE INTEGER_32
-    FIELD c TYPE INTEGER_32
+    FIELD a INTEGER_32
+    FIELD b INTEGER_32
+    FIELD c INTEGER_32
 )
 EMODULE l_ainterface_OC_LpmMem 0 (
     METHOD req__ENA (
@@ -40,8 +40,8 @@ EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD first__RDY TYPE INTEGER_1
 )
 EMODULE l_module_OC_Fifo 0 (
-    FIELD l_ainterface_OC_PipeIn:in
-    FIELD l_ainterface_OC_PipeOut:out
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE l_struct_OC_ValuePair
     )
@@ -62,9 +62,9 @@ EMODULE l_module_OC_Fifo1 0 (
     METHOD out$first__RDY TYPE INTEGER_1
 )
 MODULE l_module_OC_Fifo2 160 (
-    FIELD l_struct_OC_ValuePair:element COUNT 2 TYPE l_struct_OC_ValuePair
-    FIELD rindex TYPE INTEGER_32
-    FIELD windex TYPE INTEGER_32
+    FIELD/Count 2  element l_struct_OC_ValuePair
+    FIELD rindex INTEGER_32
+    FIELD windex INTEGER_32
     METHOD in$enq__ENA (
         PARAM in$enq$v TYPE l_struct_OC_ValuePair
         METAREAD windex 
@@ -100,9 +100,9 @@ MODULE l_module_OC_Fifo2 160 (
     )
 )
 MODULE l_module_OC_LpmMemory 128 (
-    FIELD delayCount TYPE INTEGER_32
-    FIELD l_struct_OC_ValuePair:saved TYPE l_struct_OC_ValuePair
-    FIELD l_ainterface_OC_LpmMem:ifc
+    FIELD delayCount INTEGER_32
+    FIELD saved l_struct_OC_ValuePair
+    FIELD ifc l_ainterface_OC_LpmMem
     METHOD ifc$req__ENA (
         PARAM ifc$req$v TYPE l_struct_OC_ValuePair
         STORE :delayCount = 4
@@ -133,14 +133,14 @@ MODULE l_module_OC_LpmMemory 128 (
 )
 MODULE l_module_OC_Lpm 320 (
     PRIORITY recirc enter;exit
-    FIELD l_module_OC_Fifo1:inQ
-    FIELD l_module_OC_Fifo2:fifo TYPE l_module_OC_Fifo2
-    FIELD l_module_OC_Fifo1:outQ
-    FIELD l_module_OC_LpmMemory:mem TYPE l_module_OC_LpmMemory
-    FIELD doneCount TYPE INTEGER_32
+    FIELD inQ l_module_OC_Fifo1
+    FIELD fifo l_module_OC_Fifo2
+    FIELD outQ l_module_OC_Fifo1
+    FIELD mem l_module_OC_LpmMemory
+    FIELD doneCount INTEGER_32
     OUTCALL ind = l_ainterface_OC_LpmIndication
-    FIELD/PTR  l_ainterface_OC_LpmIndication:ind
-    FIELD l_ainterface_OC_LpmRequest:request
+    FIELD/Ptr  ind l_ainterface_OC_LpmIndication
+    FIELD request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA (
         METAINVOKE inQ$out$first 
         STORE/Alloca :temp = inQ$out$first{}
@@ -224,8 +224,8 @@ MODULE l_module_OC_Lpm 320 (
     )
 )
 EMODULE l_class_OC_LpmTest 320 (
-    FIELD l_module_OC_Lpm:lpm TYPE l_module_OC_Lpm
+    FIELD lpm l_module_OC_Lpm
 )
 EMODULE l_class_OC_foo 0 (
-    FIELD l_ainterface_OC_LpmIndication:indication
+    FIELD indication l_ainterface_OC_LpmIndication
 )
