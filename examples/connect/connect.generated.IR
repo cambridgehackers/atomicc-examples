@@ -1,16 +1,16 @@
 EMODULE l_ainterface_OC_EchoIndication 0 (
     METHOD heard__ENA (
-        PARAM heard$meth TYPE INTEGER_32
-        PARAM heard$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
     )
-    METHOD heard__RDY TYPE INTEGER_1
+    METHOD heard__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_EchoRequest 0 (
     METHOD say__ENA (
-        PARAM say$meth TYPE INTEGER_32
-        PARAM say$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
     )
-    METHOD say__RDY TYPE INTEGER_1
+    METHOD say__RDY INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say 64 (
     FIELD meth INTEGER_32
@@ -25,9 +25,9 @@ EMODULE l_struct_OC_EchoRequest_data 96 (
 )
 EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
-        PARAM enq$v TYPE l_struct_OC_EchoRequest_data
+        PARAM v l_struct_OC_EchoRequest_data
     )
-    METHOD enq__RDY TYPE INTEGER_1
+    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard 64 (
     FIELD meth INTEGER_32
@@ -42,9 +42,9 @@ EMODULE l_struct_OC_EchoIndication_data 96 (
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     METHOD enq__ENA (
-        PARAM enq$v TYPE l_struct_OC_EchoIndication_data
+        PARAM v l_struct_OC_EchoIndication_data
     )
-    METHOD enq__RDY TYPE INTEGER_1
+    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_class_OC_foo 0 (
     FIELD indication l_ainterface_OC_EchoIndication
@@ -52,80 +52,80 @@ EMODULE l_class_OC_foo 0 (
 MODULE l_module_OC_Echo 0 (
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
+    FIELD/Ptr indication l_ainterface_OC_EchoIndication
     METHOD request$say__ENA (
-        PARAM request$say$meth TYPE INTEGER_32
-        PARAM request$say$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
         METAINVOKE indication$heard__ENA 
         CALL/Action :indication$heard__ENA{indication$heard$meth;request$say$meth,indication$heard$v;request$say$v}
     )
-    METHOD request$say__RDY TYPE INTEGER_1 = (indication$heard__RDY) (
+    METHOD request$say__RDY INTEGER_1 = (indication$heard__RDY) (
         METAINVOKE indication$heard__RDY 
     )
 )
 MODULE l_module_OC_EchoIndicationInput 0 (
     FIELD pipe l_ainterface_OC_PipeIn_OC_0
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
+    FIELD/Ptr indication l_ainterface_OC_EchoIndication
     METHOD pipe$enq__ENA (
-        PARAM pipe$enq$v TYPE l_struct_OC_EchoIndication_data
+        PARAM v l_struct_OC_EchoIndication_data
         STORE/Alloca :v_2e_addr = pipe$enq$v
         METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
         METAINVOKE indication$heard__ENA v_2e_addrfoosuff$tag == 1
         CALL/Action (v_2e_addrfoosuff$tag == 1):indication$heard__ENA{indication$heard$meth;v_2e_addr$data$heard$meth,indication$heard$v;v_2e_addr$data$heard$v}
     )
-    METHOD pipe$enq__RDY TYPE INTEGER_1 = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
+    METHOD pipe$enq__RDY INTEGER_1 = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE indication$heard__RDY 
     )
 )
 MODULE l_module_OC_EchoIndicationOutput 0 (
     FIELD indication l_ainterface_OC_EchoIndication
     OUTCALL pipe = l_ainterface_OC_PipeIn_OC_0
-    FIELD/Ptr  pipe l_ainterface_OC_PipeIn_OC_0
+    FIELD/Ptr pipe l_ainterface_OC_PipeIn_OC_0
     METHOD indication$heard__ENA (
-        PARAM indication$heard$meth TYPE INTEGER_32
-        PARAM indication$heard$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
         STORE/Alloca :ind$tag = 1
         STORE :ind$data$heard$meth = indication$heard$meth
         STORE :ind$data$heard$v = indication$heard$v
         METAINVOKE pipe$enq__ENA 
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
     )
-    METHOD indication$heard__RDY TYPE INTEGER_1 = (pipe$enq__RDY) (
+    METHOD indication$heard__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
 MODULE l_module_OC_EchoRequestInput 0 (
     FIELD pipe l_ainterface_OC_PipeIn
     OUTCALL request = l_ainterface_OC_EchoRequest
-    FIELD/Ptr  request l_ainterface_OC_EchoRequest
+    FIELD/Ptr request l_ainterface_OC_EchoRequest
     METHOD pipe$enq__ENA (
-        PARAM pipe$enq$v TYPE l_struct_OC_EchoRequest_data
+        PARAM v l_struct_OC_EchoRequest_data
         STORE/Alloca :v_2e_addr = pipe$enq$v
         METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
         CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
     )
-    METHOD pipe$enq__RDY TYPE INTEGER_1 = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
+    METHOD pipe$enq__RDY INTEGER_1 = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE request$say__RDY 
     )
 )
 MODULE l_module_OC_EchoRequestOutput 0 (
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL pipe = l_ainterface_OC_PipeIn
-    FIELD/Ptr  pipe l_ainterface_OC_PipeIn
+    FIELD/Ptr pipe l_ainterface_OC_PipeIn
     METHOD request$say__ENA (
-        PARAM request$say$meth TYPE INTEGER_32
-        PARAM request$say$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
         STORE/Alloca :ind$tag = 1
         STORE :ind$data$say$meth = request$say$meth
         STORE :ind$data$say$v = request$say$v
         METAINVOKE pipe$enq__ENA 
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
     )
-    METHOD request$say__RDY TYPE INTEGER_1 = (pipe$enq__RDY) (
+    METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
     )
 )
@@ -139,19 +139,19 @@ MODULE l_module_OC_Connect 0 (
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication = l_ainterface_OC_EchoIndication
-    FIELD/Ptr  indication l_ainterface_OC_EchoIndication
+    FIELD/Ptr indication l_ainterface_OC_EchoIndication
     FIELD lEIO l_module_OC_EchoIndicationOutput
     FIELD lERI l_module_OC_EchoRequestInput
     FIELD lEcho l_module_OC_Echo
     FIELD lERO_test l_module_OC_EchoRequestOutput
     FIELD lEII_test l_module_OC_EchoIndicationInput
     METHOD request$say__ENA (
-        PARAM request$say$meth TYPE INTEGER_32
-        PARAM request$say$v TYPE INTEGER_32
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
         METAINVOKE lERO_test$request$say__ENA 
         CALL/Action :lERO_test$request$say__ENA{lERO_test$request$say$meth;request$say$meth,lERO_test$request$say$v;request$say$v}
     )
-    METHOD request$say__RDY TYPE INTEGER_1 = (lERO_test$request$say__RDY) (
+    METHOD request$say__RDY INTEGER_1 = (lERO_test$request$say__RDY) (
         METAINVOKE lERO_test$request$say__RDY 
     )
 )

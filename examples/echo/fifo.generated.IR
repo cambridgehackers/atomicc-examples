@@ -1,48 +1,48 @@
 EMODULE l_ainterface_OC_PipeIn 0 (
     METHOD enq__ENA (
-        PARAM enq$v TYPE INTEGER_32
+        PARAM v INTEGER_32
     )
-    METHOD enq__RDY TYPE INTEGER_1
+    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut 0 (
     METHOD deq__ENA
-    METHOD deq__RDY TYPE INTEGER_1
-    METHOD first TYPE INTEGER_32
-    METHOD first__RDY TYPE INTEGER_1
+    METHOD deq__RDY INTEGER_1
+    METHOD first INTEGER_32
+    METHOD first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo 0 (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
-        PARAM in$enq$v TYPE INTEGER_32
+        PARAM v INTEGER_32
     )
-    METHOD in$enq__RDY TYPE INTEGER_1
+    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY TYPE INTEGER_1
-    METHOD out$first TYPE INTEGER_32
-    METHOD out$first__RDY TYPE INTEGER_1
+    METHOD out$deq__RDY INTEGER_1
+    METHOD out$first INTEGER_32
+    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo1 40 (
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
-        PARAM in$enq$v TYPE INTEGER_32
+        PARAM v INTEGER_32
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY TYPE INTEGER_1 = (full ^ 1) (
+    METHOD in$enq__RDY INTEGER_1 = (full ^ 1) (
         METAREAD full 
     )
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY TYPE INTEGER_1 = (full) (
+    METHOD out$deq__RDY INTEGER_1 = (full) (
         METAREAD full 
     )
-    METHOD out$first TYPE INTEGER_32 = (element) (
+    METHOD out$first INTEGER_32 = (element) (
         METAREAD element 
     )
-    METHOD out$first__RDY TYPE INTEGER_1 = (full) (
+    METHOD out$first__RDY INTEGER_1 = (full) (
         METAREAD full 
     )
 )
