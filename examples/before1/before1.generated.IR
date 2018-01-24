@@ -44,7 +44,7 @@ MODULE l_module_OC_Echo (
     FIELD y SIZE 32
     OUTCALL indication = l_ainterface_OC_EchoIndication
     FIELD/PTR  l_ainterface_OC_EchoIndication:indication
-    METHOD /RULE delay_rule__ENA (
+    METHOD/Rule delay_rule__ENA (
         STORE :busy = 0
         STORE :busy_delay = 1
         METAREAD meth_temp 
@@ -52,7 +52,7 @@ MODULE l_module_OC_Echo (
         METAREAD v_temp 
         STORE :v_delay = v_temp
     )
-    METHOD /RULE delay_rule__RDY SIZE 1 = (((busy != 0) & (busy_delay == 0)) != 0) (
+    METHOD/Rule delay_rule__RDY SIZE 1 = (((busy != 0) & (busy_delay == 0)) != 0) (
         METAREAD busy 
         METAREAD busy_delay 
     )
@@ -76,14 +76,14 @@ MODULE l_module_OC_Echo (
     METHOD request$say__RDY SIZE 1 = ((busy != 0) ^ 1) (
         METAREAD busy 
     )
-    METHOD /RULE respond_rule__ENA (
+    METHOD/Rule respond_rule__ENA (
         STORE :busy_delay = 0
         METAREAD meth_delay 
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
         CALL/Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
     )
-    METHOD /RULE respond_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
+    METHOD/Rule respond_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
@@ -106,14 +106,14 @@ MODULE l_module_OC_EchoIndicationInput (
     FIELD busy_delay SIZE 32
     FIELD meth_delay SIZE 32
     FIELD v_delay SIZE 32
-    METHOD /RULE input_rule__ENA (
+    METHOD/Rule input_rule__ENA (
         STORE :busy_delay = 0
         METAREAD meth_delay 
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
         CALL/Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
     )
-    METHOD /RULE input_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
+    METHOD/Rule input_rule__RDY SIZE 1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
@@ -157,24 +157,24 @@ MODULE l_module_OC_EchoIndicationOutput (
     METHOD indication$heard__RDY SIZE 1 = ((ind_busy != 0) ^ 1) (
         METAREAD ind_busy 
     )
-    METHOD /RULE output_rulee__ENA (
+    METHOD/Rule output_rulee__ENA (
         STORE :ind_busy = 0
         METAREAD ind0 
         METAINVOKE pipe$enq__ENA 
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind0}
     )
-    METHOD /RULE output_rulee__RDY SIZE 1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
+    METHOD/Rule output_rulee__RDY SIZE 1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
         METAREAD ind_busy 
         METAREAD even 
         METAINVOKE pipe$enq__RDY 
     )
-    METHOD /RULE output_ruleo__ENA (
+    METHOD/Rule output_ruleo__ENA (
         STORE :ind_busy = 0
         METAREAD ind1 
         METAINVOKE pipe$enq__ENA 
         CALL/Action :pipe$enq__ENA{pipe$enq$v;ind1}
     )
-    METHOD /RULE output_ruleo__RDY SIZE 1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
+    METHOD/Rule output_ruleo__RDY SIZE 1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
         METAREAD ind_busy 
         METAREAD even 
         METAINVOKE pipe$enq__RDY 
@@ -258,16 +258,16 @@ MODULE l_module_OC_Connect (
     FIELD l_module_OC_Echo:lEcho SIZE 256
     FIELD l_module_OC_EchoRequestOutput:lERO_test
     FIELD l_module_OC_EchoIndicationInput:lEII_test SIZE 96
-    METHOD /RULE swap2_rule__ENA (
+    METHOD/Rule swap2_rule__ENA (
         METAINVOKE lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR] 
         CALL/Action :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR]{}
     )
-    METHOD /RULE swap2_rule__RDY SIZE 1 = (1)
-    METHOD /RULE swap_rule__ENA (
+    METHOD/Rule swap2_rule__RDY SIZE 1 = (1)
+    METHOD/Rule swap_rule__ENA (
         METAINVOKE lEcho$[ERROR__ZN4Echo3x2yEv_ERROR] 
         CALL/Action :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR]{}
         METAINVOKE lEcho$[ERROR__ZN4Echo3y2xEv_ERROR] 
         CALL/Action :lEcho$[ERROR__ZN4Echo3y2xEv_ERROR]{}
     )
-    METHOD /RULE swap_rule__RDY SIZE 1 = (1)
+    METHOD/Rule swap_rule__RDY SIZE 1 = (1)
 )

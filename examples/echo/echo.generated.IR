@@ -39,14 +39,14 @@ MODULE l_module_OC_Echo (
     OUTCALL ind = l_ainterface_OC_EchoIndication
     FIELD/PTR  l_ainterface_OC_EchoIndication:ind
     FIELD l_module_OC_Fifo1:fifo
-    METHOD /RULE respond_rule__ENA (
+    METHOD/Rule respond_rule__ENA (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
     )
-    METHOD /RULE respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
+    METHOD/Rule respond_rule__RDY SIZE 1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE ind$heard__RDY 

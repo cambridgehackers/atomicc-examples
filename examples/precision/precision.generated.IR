@@ -95,7 +95,7 @@ MODULE l_module_OC_IVector (
     METHOD request$say__RDY SIZE 1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
     )
-    METHOD /RULE respond__ENA (
+    METHOD/Rule respond__ENA (
         METAINVOKE fifo$out$first 
         STORE/Alloca :temp = fifo$out$first{}
         METAINVOKE fifo$out$deq__ENA 
@@ -103,7 +103,7 @@ MODULE l_module_OC_IVector (
         METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
     )
-    METHOD /RULE respond__RDY SIZE 1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
+    METHOD/Rule respond__RDY SIZE 1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$first__RDY 
         METAINVOKE fifo$out$deq__RDY 
         METAINVOKE ind$heard__RDY 
