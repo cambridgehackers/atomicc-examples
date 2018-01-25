@@ -85,10 +85,10 @@ MODULE l_module_OC_FifoPong 216 (
         PARAM v l_struct_OC_ValuePair
         METAREAD pong 
         METAINVOKE element2$in$enq__ENA pong
-        CALL/Action (pong):element2$in$enq__ENA{element2$in$enq$v;in$enq$v}
+        CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         METAREAD pong pong
         METAINVOKE element1$in$enq__ENA pong ^ 1
-        CALL/Action (pong ^ 1):element1$in$enq__ENA{element1$in$enq$v;in$enq$v}
+        CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
         METAREAD pong pong ^ 1
     )
     METHOD in$enq__RDY INTEGER_1 = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
@@ -140,8 +140,10 @@ MODULE l_module_OC_IVector 32 (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
         STORE/Alloca :temp$b = in$say$v
-        METAINVOKE (in$say$meth == 0 ? fifo0:&fifo1)$in$enq__ENA 
-        CALL/Action :(in$say$meth == 0 ? fifo0:&fifo1)$in$enq__ENA{(in$say$meth == 0 ? fifo0:&fifo1)$in$enq$v;temp}
+        METAINVOKE fifo0$in$enq__ENA in$say$meth == 0
+        CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{temp}
+        METAINVOKE fifo1$in$enq__ENA in$say$meth == 1
+        CALL/Action (in$say$meth == 1):fifo1$in$enq__ENA{temp}
     )
     METHOD in$say__RDY INTEGER_1 = (fifo0$in$enq__RDY & fifo1$in$enq__RDY) (
         METAINVOKE fifo0$in$enq__RDY 
@@ -153,7 +155,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo0$out$deq__ENA 
         CALL/Action :fifo0$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;0,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{0,temp$b}
     )
     METHOD/Rule respond_rule_0__RDY INTEGER_1 = ((fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo0$out$first__RDY 
@@ -166,7 +168,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo1$out$deq__ENA 
         CALL/Action :fifo1$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;1,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{1,temp$b}
     )
     METHOD/Rule respond_rule_1__RDY INTEGER_1 = ((fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo1$out$first__RDY 
@@ -179,7 +181,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo2$out$deq__ENA 
         CALL/Action :fifo2$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;2,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{2,temp$b}
     )
     METHOD/Rule respond_rule_2__RDY INTEGER_1 = ((fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo2$out$first__RDY 
@@ -192,7 +194,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo3$out$deq__ENA 
         CALL/Action :fifo3$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;3,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{3,temp$b}
     )
     METHOD/Rule respond_rule_3__RDY INTEGER_1 = ((fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo3$out$first__RDY 
@@ -205,7 +207,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo4$out$deq__ENA 
         CALL/Action :fifo4$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;4,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{4,temp$b}
     )
     METHOD/Rule respond_rule_4__RDY INTEGER_1 = ((fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo4$out$first__RDY 
@@ -218,7 +220,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo5$out$deq__ENA 
         CALL/Action :fifo5$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;5,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{5,temp$b}
     )
     METHOD/Rule respond_rule_5__RDY INTEGER_1 = ((fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo5$out$first__RDY 
@@ -231,7 +233,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo6$out$deq__ENA 
         CALL/Action :fifo6$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;6,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{6,temp$b}
     )
     METHOD/Rule respond_rule_6__RDY INTEGER_1 = ((fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo6$out$first__RDY 
@@ -244,7 +246,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo7$out$deq__ENA 
         CALL/Action :fifo7$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;7,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{7,temp$b}
     )
     METHOD/Rule respond_rule_7__RDY INTEGER_1 = ((fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo7$out$first__RDY 
@@ -257,7 +259,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo8$out$deq__ENA 
         CALL/Action :fifo8$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;8,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{8,temp$b}
     )
     METHOD/Rule respond_rule_8__RDY INTEGER_1 = ((fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo8$out$first__RDY 
@@ -270,7 +272,7 @@ MODULE l_module_OC_IVector 32 (
         METAINVOKE fifo9$out$deq__ENA 
         CALL/Action :fifo9$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{out$heard$meth;9,out$heard$v;temp$b}
+        CALL/Action :out$heard__ENA{9,temp$b}
     )
     METHOD/Rule respond_rule_9__RDY INTEGER_1 = ((fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo9$out$first__RDY 
@@ -319,4 +321,9 @@ MODULE l_module_OC_Fifo1 40 (
 )
 EMODULE l_module_OC_IVectorInd 0 (
     FIELD ind l_ainterface_OC_IVectorIndication
+    METHOD ind$heard__ENA (
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
+    )
+    METHOD ind$heard__RDY INTEGER_1
 )

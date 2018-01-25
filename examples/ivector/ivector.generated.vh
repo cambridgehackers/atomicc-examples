@@ -31,7 +31,7 @@
 //METAINTERNAL; fifo9; l_module_OC_FifoPong;
 //METAINTERNAL; fifo10; l_module_OC_FifoPong;
 //METAEXTERNAL; out; l_ainterface_OC_IVectorIndication;
-//METAINVOKE; in$say__ENA; :(in$say$meth == 0 ? fifo0:&fifo1)$in$enq__ENA;
+//METAINVOKE; in$say__ENA; in$say$meth == 0:fifo0$in$enq__ENA;in$say$meth == 1:fifo1$in$enq__ENA;
 //METAGUARD; in$say; fifo0$in$enq__RDY & fifo1$in$enq__RDY;
 //METAINVOKE; respond_rule_0__ENA; :fifo0$out$deq__ENA;:fifo0$out$first;:out$heard__ENA;
 //METAEXCLUSIVE; respond_rule_0__ENA; respond_rule_1__ENA; respond_rule_2__ENA; respond_rule_3__ENA; respond_rule_4__ENA; respond_rule_5__ENA; respond_rule_6__ENA; respond_rule_7__ENA; respond_rule_8__ENA; respond_rule_9__ENA

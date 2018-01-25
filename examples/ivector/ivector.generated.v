@@ -109,8 +109,6 @@ module l_module_OC_IVector (
     output [31:0]out$heard$v,
     input out$heard__RDY);
     wire in$say__RDY_internal;
-    wire fifo0$in$enq__ENA;
-    wire [95:0]fifo0$in$enq$v;
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;
     wire [95:0]fifo0$out$first;
@@ -118,15 +116,13 @@ module l_module_OC_IVector (
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
-        fifo0$in$enq__ENA,
-        fifo0$in$enq$v,
+        in$say__ENA_internal & in$say$meth == 0,
+        fifo9$out$first,
         fifo0$in$enq__RDY,
         respond_rule_0__ENA_internal,
         fifo0$out$deq__RDY,
         fifo0$out$first,
         fifo0$out$first__RDY);
-    wire fifo1$in$enq__ENA;
-    wire [95:0]fifo1$in$enq$v;
     wire fifo1$in$enq__RDY;
     wire fifo1$out$deq__RDY;
     wire [95:0]fifo1$out$first;
@@ -134,8 +130,8 @@ module l_module_OC_IVector (
     l_module_OC_FifoPong fifo1 (
         CLK,
         nRST,
-        fifo1$in$enq__ENA,
-        fifo1$in$enq$v,
+        in$say__ENA_internal & in$say$meth == 1,
+        temp,
         fifo1$in$enq__RDY,
         respond_rule_1__ENA_internal,
         fifo1$out$deq__RDY,
@@ -257,6 +253,7 @@ module l_module_OC_IVector (
     wire [95:0]fifo9$in$enq$v;
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
+    wire [95:0]fifo9$out$first;
     wire fifo9$out$first__RDY;
     l_module_OC_FifoPong fifo9 (
         CLK,
@@ -266,7 +263,7 @@ module l_module_OC_IVector (
         fifo9$in$enq__RDY,
         respond_rule_9__ENA_internal,
         fifo9$out$deq__RDY,
-        (in$say$meth == 0 ? fifo0:&fifo1)$in$enq$v,
+        fifo9$out$first,
         fifo9$out$first__RDY);
     wire fifo10$in$enq__ENA;
     wire [95:0]fifo10$in$enq$v;
@@ -286,7 +283,6 @@ module l_module_OC_IVector (
         fifo10$out$first,
         fifo10$out$first__RDY);
     reg[31:0] vsize;
-    assign (in$say$meth == 0 ? fifo0:&fifo1)$in$enq__ENA = in$say__ENA_internal;
     assign in$say__RDY_internal = fifo0$in$enq__RDY & fifo1$in$enq__RDY;
     assign out$heard$meth = respond_rule_0__ENA_internal ? 0 : respond_rule_1__ENA_internal ? 1 : respond_rule_2__ENA_internal ? 2 : respond_rule_3__ENA_internal ? 3 : respond_rule_4__ENA_internal ? 4 : respond_rule_5__ENA_internal ? 5 : respond_rule_6__ENA_internal ? 6 : respond_rule_7__ENA_internal ? 7 : respond_rule_8__ENA_internal ? 8 : 9;
     assign out$heard$v = respond_rule_0__ENA_internal ? temp$b : respond_rule_1__ENA_internal ? temp$b : respond_rule_2__ENA_internal ? temp$b : respond_rule_3__ENA_internal ? temp$b : respond_rule_4__ENA_internal ? temp$b : respond_rule_5__ENA_internal ? temp$b : respond_rule_6__ENA_internal ? temp$b : respond_rule_7__ENA_internal ? temp$b : respond_rule_8__ENA_internal ? temp$b : temp$b;
