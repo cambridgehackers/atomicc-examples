@@ -56,7 +56,7 @@ MODULE l_module_OC_Echo 0 (
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$out$first 
         METAINVOKE ind$heard__ENA 
-        CALL/Action :ind$heard__ENA{ind$heard$v;fifo$out$first{}}
+        CALL/Action :ind$heard__ENA{fifo$out$first{}}
     )
     METHOD/Rule respond_rule__RDY INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$deq__RDY 
@@ -66,7 +66,7 @@ MODULE l_module_OC_Echo 0 (
     METHOD sout$say__ENA (
         PARAM v INTEGER_32
         METAINVOKE fifo$in$enq__ENA 
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;sout$say$v}
+        CALL/Action :fifo$in$enq__ENA{sout$say$v}
     )
     METHOD sout$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 

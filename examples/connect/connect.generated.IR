@@ -57,7 +57,7 @@ MODULE l_module_OC_Echo 0 (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
         METAINVOKE indication$heard__ENA 
-        CALL/Action :indication$heard__ENA{indication$heard$meth;request$say$meth,indication$heard$v;request$say$v}
+        CALL/Action :indication$heard__ENA{request$say$meth,request$say$v}
     )
     METHOD request$say__RDY INTEGER_1 = (indication$heard__RDY) (
         METAINVOKE indication$heard__RDY 
@@ -73,7 +73,7 @@ MODULE l_module_OC_EchoIndicationInput 0 (
         METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
         METAINVOKE indication$heard__ENA v_2e_addrfoosuff$tag == 1
-        CALL/Action (v_2e_addrfoosuff$tag == 1):indication$heard__ENA{indication$heard$meth;v_2e_addr$data$heard$meth,indication$heard$v;v_2e_addr$data$heard$v}
+        CALL/Action (v_2e_addrfoosuff$tag == 1):indication$heard__ENA{v_2e_addr$data$heard$meth,v_2e_addr$data$heard$v}
     )
     METHOD pipe$enq__RDY INTEGER_1 = (indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE indication$heard__RDY 
@@ -90,7 +90,7 @@ MODULE l_module_OC_EchoIndicationOutput 0 (
         STORE :ind$data$heard$meth = indication$heard$meth
         STORE :ind$data$heard$v = indication$heard$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
+        CALL/Action :pipe$enq__ENA{ind}
     )
     METHOD indication$heard__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -106,7 +106,7 @@ MODULE l_module_OC_EchoRequestInput 0 (
         METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
-        CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
+        CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{v_2e_addr$data$say$meth,v_2e_addr$data$say$v}
     )
     METHOD pipe$enq__RDY INTEGER_1 = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         METAINVOKE request$say__RDY 
@@ -123,7 +123,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :ind$data$say$meth = request$say$meth
         STORE :ind$data$say$v = request$say$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
+        CALL/Action :pipe$enq__ENA{ind}
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -149,7 +149,7 @@ MODULE l_module_OC_Connect 0 (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
         METAINVOKE lERO_test$request$say__ENA 
-        CALL/Action :lERO_test$request$say__ENA{lERO_test$request$say$meth;request$say$meth,lERO_test$request$say$v;request$say$v}
+        CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
     )
     METHOD request$say__RDY INTEGER_1 = (lERO_test$request$say__RDY) (
         METAINVOKE lERO_test$request$say__RDY 

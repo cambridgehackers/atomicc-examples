@@ -164,8 +164,15 @@ printf("input_rule: EchoIndicationInput\n");
     }
 };
 
+__interface Swap {
+    void y2x(void);
+    void y2xnull(void);
+    void x2y(void);
+};
+
 __module Echo {
     EchoRequest request;
+    Swap        swap;
     int busy;
     int meth_temp;
     int v_temp;
@@ -187,19 +194,19 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
         busy = 1;
     }
-public:
-    void y2x(void) {
+    void swap.y2x(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         x = y;
     }
-    void y2xnull(void) {
+    void swap.y2xnull(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         //x = y;
     }
-    void x2y(void) {
+    void swap.x2y(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         y = x;
     }
+public:
     Echo() {
         __rule delay_rule if ((busy != 0 & busy_delay == 0) != 0) {
 printf("delay_rule: Echo\n");
@@ -241,12 +248,12 @@ __module Connect {
     Connect() {
         __rule swap_rule {
 printf("swap_rule:Connect\n");
-             lEcho.x2y();
-             lEcho.y2x();
+             lEcho.swap.x2y();
+             lEcho.swap.y2x();
            };
         __rule swap2_rule {
 printf("swap2_rule:Connect\n");
-             lEcho.y2xnull();
+             lEcho.swap.y2xnull();
            };
     };
 };

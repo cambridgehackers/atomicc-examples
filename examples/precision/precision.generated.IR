@@ -90,7 +90,7 @@ MODULE l_module_OC_IVector 44 (
         STORE/Alloca :temp$a = request$say$meth
         STORE/Alloca :temp$b = request$say$v
         METAINVOKE fifo$in$enq__ENA 
-        CALL/Action :fifo$in$enq__ENA{fifo$in$enq$v;temp}
+        CALL/Action :fifo$in$enq__ENA{temp}
     )
     METHOD request$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
         METAINVOKE fifo$in$enq__RDY 
@@ -101,7 +101,7 @@ MODULE l_module_OC_IVector 44 (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE ind$heard__ENA 
-        CALL/Action :ind$heard__ENA{ind$heard$meth;temp$a,ind$heard$v;temp$b}
+        CALL/Action :ind$heard__ENA{temp$a,temp$b}
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE fifo$out$first__RDY 

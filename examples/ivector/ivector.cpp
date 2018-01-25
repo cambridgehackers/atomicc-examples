@@ -59,7 +59,7 @@ __interface IVectorIndication {
 };
 __emodule IVectorInd{
     IVectorIndication ind;
-    void ind.heard(int meth, int v);
+    void ind.heard(int meth, int v) {}
 };
 
 __interface IVectorRequest {
@@ -74,7 +74,28 @@ __module IVector {
     void in.say(int meth, int v) {
         UTYPE temp;
         temp.b = v;
-#if 1
+#if 1 // this is what it should expand to
+        if (meth == 0)
+        fifo[0].in.enq(temp);
+        else if (meth == 1)
+        fifo[1].in.enq(temp);
+        else if (meth == 2)
+        fifo[2].in.enq(temp);
+        else if (meth == 3)
+        fifo[3].in.enq(temp);
+        else if (meth == 4)
+        fifo[4].in.enq(temp);
+        else if (meth == 5)
+        fifo[5].in.enq(temp);
+        else if (meth == 6)
+        fifo[6].in.enq(temp);
+        else if (meth == 7)
+        fifo[7].in.enq(temp);
+        else if (meth == 8)
+        fifo[8].in.enq(temp);
+        else
+        fifo[9].in.enq(temp);
+#elif 1
         fifo[meth].in.enq(temp);
 #elif 1
         ((meth == 0) ? fifo[0] :

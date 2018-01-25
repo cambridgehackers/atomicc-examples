@@ -11,12 +11,21 @@ module l_module_OC_Echo (
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
     output request$say__RDY,
+    input swap$x2y__ENA,
+    output swap$x2y__RDY,
+    input swap$y2x__ENA,
+    output swap$y2x__RDY,
+    input swap$y2xnull__ENA,
+    output swap$y2xnull__RDY,
     output indication$heard__ENA,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
     wire request$say2__RDY_internal;
     wire request$say__RDY_internal;
+    wire swap$x2y__RDY_internal;
+    wire swap$y2x__RDY_internal;
+    wire swap$y2xnull__RDY_internal;
     reg[31:0] busy;
     reg[31:0] meth_temp;
     reg[31:0] v_temp;
@@ -32,8 +41,14 @@ module l_module_OC_Echo (
     assign request$say2__RDY_internal = (busy != 0) ^ 1;
     assign request$say__RDY_internal = (busy != 0) ^ 1;
     assign respond_rule__RDY_internal = (busy_delay != 0) & indication$heard__RDY;
+    assign swap$x2y__RDY_internal = 1;
+    assign swap$y2x__RDY_internal = 1;
+    assign swap$y2xnull__RDY_internal = 1;
     assign request$say2__RDY = request$say2__RDY_internal;
     assign request$say__RDY = request$say__RDY_internal;
+    assign swap$x2y__RDY = swap$x2y__RDY_internal;
+    assign swap$y2x__RDY = swap$y2x__RDY_internal;
+    assign swap$y2xnull__RDY = swap$y2xnull__RDY_internal;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -66,6 +81,12 @@ module l_module_OC_Echo (
         if (respond_rule__ENA) begin
             busy_delay <= 0;
         end; // End of respond_rule__ENA
+        if (swap$x2y__ENA) begin
+            y <= x;
+        end; // End of swap$x2y__ENA
+        if (swap$y2x__ENA) begin
+            x <= y;
+        end; // End of swap$y2x__ENA
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -270,6 +291,8 @@ module l_module_OC_Connect (
     wire [31:0]lEcho$request$say2$v;
     wire [31:0]lEcho$request$say$meth;
     wire [31:0]lEcho$request$say$v;
+    wire lEcho$swap$x2y__RDY;
+    wire lEcho$swap$y2x__RDY;
     l_module_OC_Echo lEcho (
         CLK,
         nRST,
@@ -281,6 +304,12 @@ module l_module_OC_Connect (
         lEcho$request$say$meth,
         lEcho$request$say$v,
         lERI$request$say__RDY,
+        swap_rule__ENA_internal,
+        lEcho$swap$x2y__RDY,
+        swap_rule__ENA_internal,
+        lEcho$swap$y2x__RDY,
+        swap2_rule__ENA_internal,
+        swap2_rule__RDY_internal,
         lEcho$indication$heard__ENA,
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
@@ -320,10 +349,6 @@ module l_module_OC_Connect (
         lEII_test$indication$heard__RDY);
     assign lEII_test$indication$heard__ENA = indication$heard__ENA;
     assign lEII_test$indication$heard__RDY = indication$heard__RDY;
-    assign lEcho$[ERROR__ZN4Echo3x2yEv_ERROR] = swap_rule__ENA_internal;
-    assign lEcho$[ERROR__ZN4Echo3y2xEv_ERROR] = swap_rule__ENA_internal;
-    assign lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR] = swap2_rule__ENA_internal;
-    assign swap2_rule__RDY_internal = 1;
-    assign swap_rule__RDY_internal = 1;
+    assign swap_rule__RDY_internal = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 endmodule 
 

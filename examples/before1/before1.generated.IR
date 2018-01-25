@@ -57,11 +57,20 @@ EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     )
     METHOD enq__RDY INTEGER_1
 )
+EMODULE l_ainterface_OC_Swap 0 (
+    METHOD x2y__ENA
+    METHOD x2y__RDY INTEGER_1
+    METHOD y2x__ENA
+    METHOD y2x__RDY INTEGER_1
+    METHOD y2xnull__ENA
+    METHOD y2xnull__RDY INTEGER_1
+)
 EMODULE l_class_OC_foo 0 (
     FIELD indication l_ainterface_OC_EchoIndication
 )
 MODULE l_module_OC_Echo 256 (
     FIELD request l_ainterface_OC_EchoRequest
+    FIELD swap l_ainterface_OC_Swap
     FIELD busy INTEGER_32
     FIELD meth_temp INTEGER_32
     FIELD v_temp INTEGER_32
@@ -109,12 +118,24 @@ MODULE l_module_OC_Echo 256 (
         METAREAD meth_delay 
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
-        CALL/Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
+        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
     METHOD/Rule respond_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
         METAINVOKE indication$heard__RDY 
     )
+    METHOD swap$x2y__ENA (
+        METAREAD x 
+        STORE :y = x
+    )
+    METHOD swap$x2y__RDY INTEGER_1 = (1)
+    METHOD swap$y2x__ENA (
+        METAREAD y 
+        STORE :x = y
+    )
+    METHOD swap$y2x__RDY INTEGER_1 = (1)
+    METHOD swap$y2xnull__ENA
+    METHOD swap$y2xnull__RDY INTEGER_1 = (1)
 )
 MODULE l_module_OC_EchoIndicationInput 96 (
     FIELD pipe l_ainterface_OC_PipeIn_OC_0
@@ -128,7 +149,7 @@ MODULE l_module_OC_EchoIndicationInput 96 (
         METAREAD meth_delay 
         METAREAD v_delay 
         METAINVOKE indication$heard__ENA 
-        CALL/Action :indication$heard__ENA{indication$heard$meth;meth_delay,indication$heard$v;v_delay}
+        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
     METHOD/Rule input_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
         METAREAD busy_delay 
@@ -178,7 +199,7 @@ MODULE l_module_OC_EchoIndicationOutput 256 (
         STORE :ind_busy = 0
         METAREAD ind0 
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind0}
+        CALL/Action :pipe$enq__ENA{ind0}
     )
     METHOD/Rule output_rulee__RDY INTEGER_1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
         METAREAD ind_busy 
@@ -189,7 +210,7 @@ MODULE l_module_OC_EchoIndicationOutput 256 (
         STORE :ind_busy = 0
         METAREAD ind1 
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind1}
+        CALL/Action :pipe$enq__ENA{ind1}
     )
     METHOD/Rule output_ruleo__RDY INTEGER_1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
         METAREAD ind_busy 
@@ -207,11 +228,11 @@ MODULE l_module_OC_EchoRequestInput 0 (
         METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
         METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
         METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
-        CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{request$say$meth;v_2e_addr$data$say$meth,request$say$v;v_2e_addr$data$say$v}
+        CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{v_2e_addr$data$say$meth,v_2e_addr$data$say$v}
         METAREAD v_2e_addr$data$say2$meth v_2e_addrfoosuff13$tag == 2
         METAREAD v_2e_addr$data$say2$v v_2e_addrfoosuff13$tag == 2
         METAINVOKE request$say2__ENA v_2e_addrfoosuff13$tag == 2
-        CALL/Action (v_2e_addrfoosuff13$tag == 2):request$say2__ENA{request$say2$meth;v_2e_addr$data$say2$meth,request$say2$v;v_2e_addr$data$say2$v}
+        CALL/Action (v_2e_addrfoosuff13$tag == 2):request$say2__ENA{v_2e_addr$data$say2$meth,v_2e_addr$data$say2$v}
     )
     METHOD pipe$enq__RDY INTEGER_1 = ((request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
         METAINVOKE request$say__RDY 
@@ -229,7 +250,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :ind$data$say2$meth = request$say2$meth
         STORE :ind$data$say2$v = request$say2$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
+        CALL/Action :pipe$enq__ENA{ind}
     )
     METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -241,7 +262,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :ind$data$say$meth = request$say$meth
         STORE :ind$data$say$v = request$say$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{pipe$enq$v;ind}
+        CALL/Action :pipe$enq__ENA{ind}
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -259,15 +280,20 @@ MODULE l_module_OC_Connect 608 (
     FIELD lERO_test l_module_OC_EchoRequestOutput
     FIELD lEII_test l_module_OC_EchoIndicationInput
     METHOD/Rule swap2_rule__ENA (
-        METAINVOKE lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR] 
-        CALL/Action :lEcho$[ERROR__ZN4Echo7y2xnullEv_ERROR]{}
+        METAINVOKE lEcho$swap$y2xnull__ENA 
+        CALL/Action :lEcho$swap$y2xnull__ENA{}
     )
-    METHOD/Rule swap2_rule__RDY INTEGER_1 = (1)
+    METHOD/Rule swap2_rule__RDY INTEGER_1 = (lEcho$swap$y2xnull__RDY) (
+        METAINVOKE lEcho$swap$y2xnull__RDY 
+    )
     METHOD/Rule swap_rule__ENA (
-        METAINVOKE lEcho$[ERROR__ZN4Echo3x2yEv_ERROR] 
-        CALL/Action :lEcho$[ERROR__ZN4Echo3x2yEv_ERROR]{}
-        METAINVOKE lEcho$[ERROR__ZN4Echo3y2xEv_ERROR] 
-        CALL/Action :lEcho$[ERROR__ZN4Echo3y2xEv_ERROR]{}
+        METAINVOKE lEcho$swap$x2y__ENA 
+        CALL/Action :lEcho$swap$x2y__ENA{}
+        METAINVOKE lEcho$swap$y2x__ENA 
+        CALL/Action :lEcho$swap$y2x__ENA{}
     )
-    METHOD/Rule swap_rule__RDY INTEGER_1 = (1)
+    METHOD/Rule swap_rule__RDY INTEGER_1 = (lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) (
+        METAINVOKE lEcho$swap$x2y__RDY 
+        METAINVOKE lEcho$swap$y2x__RDY 
+    )
 )
