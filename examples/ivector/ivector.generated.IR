@@ -142,8 +142,8 @@ MODULE l_module_OC_IVector 32 (
         STORE/Alloca :temp$b = in$say$v
         METAINVOKE fifo0$in$enq__ENA in$say$meth == 0
         CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{temp}
-        METAINVOKE fifo1$in$enq__ENA in$say$meth == 1
-        CALL/Action (in$say$meth == 1):fifo1$in$enq__ENA{temp}
+        METAINVOKE fifo1$in$enq__ENA (in$say$meth == 1) & ((in$say$meth == 0) ^ 1)
+        CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo1$in$enq__ENA{temp}
     )
     METHOD in$say__RDY INTEGER_1 = (fifo0$in$enq__RDY & fifo1$in$enq__RDY) (
         METAINVOKE fifo0$in$enq__RDY 

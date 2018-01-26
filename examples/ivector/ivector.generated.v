@@ -130,7 +130,7 @@ module l_module_OC_IVector (
     l_module_OC_FifoPong fifo1 (
         CLK,
         nRST,
-        in$say__ENA_internal & in$say$meth == 1,
+        in$say__ENA_internal & (in$say$meth == 1) & ((in$say$meth == 0) ^ 1),
         temp,
         fifo1$in$enq__RDY,
         respond_rule_1__ENA_internal,
