@@ -10,16 +10,12 @@ module l_module_OC_Fifo1 (
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
-    wire in$enq__RDY_internal;
-    wire out$deq__RDY_internal;
     reg[31:0] element;
     reg full;
-    assign in$enq__RDY_internal = full ^ 1;
-    assign out$deq__RDY_internal = full;
+    assign in$enq__RDY = full ^ 1;
+    assign out$deq__RDY = full;
     assign out$first = element;
-    assign out$first__RDY_internal = full;
-    assign in$enq__RDY = in$enq__RDY_internal;
-    assign out$deq__RDY = out$deq__RDY_internal;
+    assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin

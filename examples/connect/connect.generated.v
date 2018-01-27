@@ -11,12 +11,10 @@ module l_module_OC_Echo (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire request$say__RDY_internal;
     assign indication$heard$meth = request$say$meth;
     assign indication$heard$v = request$say$v;
-    assign indication$heard__ENA = request$say__ENA_internal;
-    assign request$say__RDY_internal = indication$heard__RDY;
-    assign request$say__RDY = request$say__RDY_internal;
+    assign indication$heard__ENA = request$say__ENA;
+    assign request$say__RDY = indication$heard__RDY;
 endmodule 
 
 module l_module_OC_EchoIndicationInput (
@@ -29,13 +27,11 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire pipe$enq__RDY_internal;
     assign indication$heard$meth = v_2e_addr$data$heard$meth;
     assign indication$heard$v = v_2e_addr$data$heard$v;
-    assign indication$heard__ENA = pipe$enq__ENA_internal & v_2e_addrfoosuff$tag == 1;
-    assign pipe$enq__RDY_internal = indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1);
+    assign indication$heard__ENA = pipe$enq__ENA & v_2e_addrfoosuff$tag == 1;
+    assign pipe$enq__RDY = indication$heard__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1);
     assign v_2e_addr = pipe$enq$v;
-    assign pipe$enq__RDY = pipe$enq__RDY_internal;
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -48,12 +44,10 @@ module l_module_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire indication$heard__RDY_internal;
     assign ind$tag = 1;
-    assign indication$heard__RDY_internal = pipe$enq__RDY;
+    assign indication$heard__RDY = pipe$enq__RDY;
     assign pipe$enq$v = ind;
-    assign pipe$enq__ENA = indication$heard__ENA_internal;
-    assign indication$heard__RDY = indication$heard__RDY_internal;
+    assign pipe$enq__ENA = indication$heard__ENA;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -77,13 +71,11 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire pipe$enq__RDY_internal;
-    assign pipe$enq__RDY_internal = request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1);
+    assign pipe$enq__RDY = request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1);
     assign request$say$meth = v_2e_addr$data$say$meth;
     assign request$say$v = v_2e_addr$data$say$v;
-    assign request$say__ENA = pipe$enq__ENA_internal & v_2e_addrfoosuff$tag == 1;
+    assign request$say__ENA = pipe$enq__ENA & v_2e_addrfoosuff$tag == 1;
     assign v_2e_addr = pipe$enq$v;
-    assign pipe$enq__RDY = pipe$enq__RDY_internal;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -96,12 +88,10 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire request$say__RDY_internal;
     assign ind$tag = 1;
     assign pipe$enq$v = ind;
-    assign pipe$enq__ENA = request$say__ENA_internal;
-    assign request$say__RDY_internal = pipe$enq__RDY;
-    assign request$say__RDY = request$say__RDY_internal;
+    assign pipe$enq__ENA = request$say__ENA;
+    assign request$say__RDY = pipe$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -128,7 +118,6 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
-    wire request$say__RDY_internal;
     wire [31:0]lEIO$indication$heard$meth;
     wire [31:0]lEIO$indication$heard$v;
     l_module_OC_EchoIndicationOutput lEIO (
@@ -168,10 +157,10 @@ module l_module_OC_Connect (
     l_module_OC_EchoRequestOutput lERO_test (
         CLK,
         nRST,
-        request$say__ENA_internal,
+        request$say__ENA,
         request$say$meth,
         request$say$v,
-        request$say__RDY_internal,
+        request$say__RDY,
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq$v,
         lERO_test$pipe$enq__RDY);
@@ -188,6 +177,5 @@ module l_module_OC_Connect (
         lEII_test$indication$heard__RDY);
     assign lEII_test$indication$heard__ENA = indication$heard__ENA;
     assign lEII_test$indication$heard__RDY = indication$heard__RDY;
-    assign request$say__RDY = request$say__RDY_internal;
 endmodule 
 

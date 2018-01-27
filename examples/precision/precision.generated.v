@@ -10,16 +10,12 @@ module l_module_OC_Fifo1_OC_3 (
     output out$deq__RDY,
     output [9:0]out$first,
     output out$first__RDY);
-    wire in$enq__RDY_internal;
-    wire out$deq__RDY_internal;
     reg[9:0] element;
     reg full;
-    assign in$enq__RDY_internal = full ^ 1;
-    assign out$deq__RDY_internal = full;
+    assign in$enq__RDY = full ^ 1;
+    assign out$deq__RDY = full;
     assign out$first = element;
-    assign out$first__RDY_internal = full;
-    assign in$enq__RDY = in$enq__RDY_internal;
-    assign out$deq__RDY = out$deq__RDY_internal;
+    assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -49,17 +45,16 @@ module l_module_OC_IVector (
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
-    wire request$say__RDY_internal;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1_OC_3 fifo (
         CLK,
         nRST,
-        request$say__ENA_internal,
+        request$say__ENA,
         fifo$out$first,
-        request$say__RDY_internal,
-        respond__ENA_internal,
+        request$say__RDY,
+        respond__ENA,
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
@@ -68,9 +63,8 @@ module l_module_OC_IVector (
     reg[8:0] gcounter;
     assign ind$heard$meth = request$say$meth;
     assign ind$heard$v = request$say$v;
-    assign ind$heard__ENA = respond__ENA_internal;
-    assign respond__RDY_internal = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
-    assign request$say__RDY = request$say__RDY_internal;
+    assign ind$heard__ENA = respond__ENA;
+    assign respond__RDY = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -91,16 +85,12 @@ module l_module_OC_Fifo1 (
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
-    wire in$enq__RDY_internal;
-    wire out$deq__RDY_internal;
     reg[31:0] element;
     reg full;
-    assign in$enq__RDY_internal = full ^ 1;
-    assign out$deq__RDY_internal = full;
+    assign in$enq__RDY = full ^ 1;
+    assign out$deq__RDY = full;
     assign out$first = element;
-    assign out$first__RDY_internal = full;
-    assign in$enq__RDY = in$enq__RDY_internal;
-    assign out$deq__RDY = out$deq__RDY_internal;
+    assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -126,8 +116,6 @@ module l_module_OC_IVectorInd (
     input [5:0]ind$heard$meth,
     input [3:0]ind$heard$v,
     output ind$heard__RDY);
-    wire ind$heard__RDY_internal;
-    assign ind$heard__RDY_internal = 1;
-    assign ind$heard__RDY = ind$heard__RDY_internal;
+    assign ind$heard__RDY = 1;
 endmodule 
 
