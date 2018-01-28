@@ -151,9 +151,10 @@ module l_module_OC_Lpm (
     assign ind$heard$meth = request$say$meth;
     assign ind$heard$v = request$say$v;
     assign ind$heard__ENA = respond__ENA;
-    assign mtemp = mtemp;
     assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign respond__RDY = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
+    // Extra assigments, not to output wires
+    assign mtemp = mtemp;
 
     always @( posedge CLK) begin
       if (!nRST) begin

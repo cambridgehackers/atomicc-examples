@@ -99,6 +99,7 @@ module l_module_OC_EchoIndicationInput (
     assign indication$heard__ENA = input_rule__ENA;
     assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__RDY = (busy_delay != 0) ^ 1;
+    // Extra assigments, not to output wires
     assign v_2e_addr = pipe$enq$v;
 
     always @( posedge CLK) begin
@@ -198,6 +199,7 @@ module l_module_OC_EchoRequestInput (
     assign request$say2$v = v_2e_addr$data$say2$v;
     assign request$say2__ENA = pipe$enq__ENA & v_2e_addrfoosuff13$tag == 2;
     assign request$say__ENA = pipe$enq__ENA & v_2e_addrfoosuff$tag == 1;
+    // Extra assigments, not to output wires
     assign v_2e_addr = pipe$enq$v;
 endmodule 
 
@@ -215,11 +217,12 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
-    assign ind$tag = 1;
     assign pipe$enq$v = request$say2__ENA ? ind : ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
+    // Extra assigments, not to output wires
+    assign ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -327,8 +330,9 @@ module l_module_OC_Connect (
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
         lEII_test$indication$heard__RDY);
+    assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
+    // Extra assigments, not to output wires
     assign lEII_test$indication$heard__ENA = indication$heard__ENA;
     assign lEII_test$indication$heard__RDY = indication$heard__RDY;
-    assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 endmodule 
 

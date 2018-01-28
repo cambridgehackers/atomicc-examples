@@ -198,11 +198,12 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
-    assign ind$tag = 1;
     assign pipe$enq$v = request$say2__ENA ? ind : ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
+    // Extra assigments, not to output wires
+    assign ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -308,6 +309,7 @@ module l_module_OC_Connect (
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
         lEII_test$indication$heard__RDY);
+    // Extra assigments, not to output wires
     assign lEII_test$indication$heard__ENA = indication$heard__ENA;
     assign lEII_test$indication$heard__RDY = indication$heard__RDY;
 endmodule 

@@ -288,6 +288,7 @@ module l_module_OC_IVector (
     assign respond_rule_7__RDY = (fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY;
     assign respond_rule_8__RDY = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY;
     assign respond_rule_9__RDY = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY;
+    // Extra assigments, not to output wires
     assign temp$b = in$say$v;
 
     always @( posedge CLK) begin
