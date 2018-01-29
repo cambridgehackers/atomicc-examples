@@ -90,17 +90,16 @@ module l_module_OC_Lpm (
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
     wire inQ$out$deq__RDY;
-    wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
         request$say__ENA,
-        outQ$out$first,
+        request$say__ENA$temp,
         request$say__RDY,
         enter__ENA,
         inQ$out$deq__RDY,
-        inQ$out$first,
+        enter__ENA$temp,
         inQ$out$first__RDY);
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
@@ -118,17 +117,16 @@ module l_module_OC_Lpm (
         fifo$out$first__RDY);
     wire outQ$in$enq__RDY;
     wire outQ$out$deq__RDY;
-    wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
     l_module_OC_Fifo1 outQ (
         CLK,
         nRST,
         exit_rule__ENA,
-        temp,
+        recirc__ENA$temp,
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
-        outQ$out$first,
+        respond__ENA$temp,
         outQ$out$first__RDY);
     wire [95:0]mem$ifc$req$v;
     wire mem$ifc$req__RDY;
@@ -148,13 +146,15 @@ module l_module_OC_Lpm (
     reg[31:0] doneCount;
     assign enter__RDY = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign exit_rule__RDY = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-    assign ind$heard$meth = request$say$meth;
-    assign ind$heard$v = request$say$v;
+    assign ind$heard$meth = respond__ENA$temp$a;
+    assign ind$heard$v = respond__ENA$temp$b;
     assign ind$heard__ENA = respond__ENA;
     assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign respond__RDY = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
     // Extra assigments, not to output wires
-    assign mtemp = mtemp;
+    assign recirc__ENA$mtemp = exit_rule__ENA$mtemp;
+    assign request$say__ENA$temp$a = request$say$meth;
+    assign request$say__ENA$temp$b = request$say$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin

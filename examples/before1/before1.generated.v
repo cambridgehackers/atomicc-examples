@@ -100,7 +100,7 @@ module l_module_OC_EchoIndicationInput (
     assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__RDY = (busy_delay != 0) ^ 1;
     // Extra assigments, not to output wires
-    assign v_2e_addr = pipe$enq$v;
+    assign pipe$enq__ENA$v_2e_addr = pipe$enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -113,11 +113,11 @@ module l_module_OC_EchoIndicationInput (
             busy_delay <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            if (v_2e_addrfoosuff$tag == 1)
-            meth_delay <= v_2e_addr$data$heard$meth;
-            if (v_2e_addrfoosuff$tag == 1)
-            v_delay <= v_2e_addr$data$heard$v;
-            if (v_2e_addrfoosuff$tag == 1)
+            if (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1)
+            meth_delay <= pipe$enq__ENA$v_2e_addr$data$heard$meth;
+            if (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1)
+            v_delay <= pipe$enq__ENA$v_2e_addr$data$heard$v;
+            if (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1)
             busy_delay <= 1;
         end; // End of pipe$enq__ENA
       end
@@ -192,15 +192,15 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = (request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1));
-    assign request$say$meth = v_2e_addr$data$say$meth;
-    assign request$say$v = v_2e_addr$data$say$v;
-    assign request$say2$meth = v_2e_addr$data$say2$meth;
-    assign request$say2$v = v_2e_addr$data$say2$v;
-    assign request$say2__ENA = pipe$enq__ENA & v_2e_addrfoosuff13$tag == 2;
-    assign request$say__ENA = pipe$enq__ENA & v_2e_addrfoosuff$tag == 1;
+    assign pipe$enq__RDY = (request$say__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((pipe$enq__RDY$v_2e_addrfoosuff13foosuff$tag == 2) ^ 1));
+    assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
+    assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
+    assign request$say2$meth = pipe$enq__ENA$v_2e_addr$data$say2$meth;
+    assign request$say2$v = pipe$enq__ENA$v_2e_addr$data$say2$v;
+    assign request$say2__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2;
+    assign request$say__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addrfoosuff$tag == 1;
     // Extra assigments, not to output wires
-    assign v_2e_addr = pipe$enq$v;
+    assign pipe$enq__ENA$v_2e_addr = pipe$enq$v;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -217,24 +217,25 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
-    assign pipe$enq$v = request$say2__ENA ? ind : ind;
+    assign pipe$enq$v = request$say2__ENA ? request$say2__ENA$ind : request$say__ENA$ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
     // Extra assigments, not to output wires
-    assign ind$tag = 1;
+    assign request$say2__ENA$ind$tag = 2;
+    assign request$say__ENA$ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (request$say2__ENA) begin
-            ind$data$say2$meth <= request$say2$meth;
-            ind$data$say2$v <= request$say2$v;
+            request$say2__ENA$ind$data$say2$meth <= request$say2$meth;
+            request$say2__ENA$ind$data$say2$v <= request$say2$v;
         end; // End of request$say2__ENA
         if (request$say__ENA) begin
-            ind$data$say$meth <= request$say$meth;
-            ind$data$say$v <= request$say$v;
+            request$say__ENA$ind$data$say$meth <= request$say$meth;
+            request$say__ENA$ind$data$say$v <= request$say$v;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)

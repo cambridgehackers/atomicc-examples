@@ -198,25 +198,26 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
-    assign pipe$enq$v = request$say2__ENA ? ind : ind;
+    assign pipe$enq$v = request$say2__ENA ? request$say2__ENA$ind : request$say__ENA$ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
     // Extra assigments, not to output wires
-    assign ind$tag = 1;
+    assign request$say2__ENA$ind$tag = 2;
+    assign request$say__ENA$ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (request$say2__ENA) begin
-            ind$data$say2$meth <= request$say2$meth;
-            ind$data$say2$v <= request$say2$v;
-            ind$data$say2$v2 <= request$say2$v2;
+            request$say2__ENA$ind$data$say2$meth <= request$say2$meth;
+            request$say2__ENA$ind$data$say2$v <= request$say2$v;
+            request$say2__ENA$ind$data$say2$v2 <= request$say2$v2;
         end; // End of request$say2__ENA
         if (request$say__ENA) begin
-            ind$data$say$meth <= request$say$meth;
-            ind$data$say$v <= request$say$v;
+            request$say__ENA$ind$data$say$meth <= request$say$meth;
+            request$say__ENA$ind$data$say$v <= request$say$v;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)

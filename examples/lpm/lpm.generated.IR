@@ -143,13 +143,13 @@ MODULE l_module_OC_Lpm 320 (
     FIELD request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA (
         METAINVOKE inQ$out$first 
-        STORE/Alloca :temp = inQ$out$first{}
+        STORE/Alloca :enter__ENA$temp = inQ$out$first{}
         METAINVOKE inQ$out$deq__ENA 
         CALL/Action :inQ$out$deq__ENA{}
         METAINVOKE fifo$in$enq__ENA 
-        CALL/Action :fifo$in$enq__ENA{temp}
+        CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         METAINVOKE mem$ifc$req__ENA 
-        CALL/Action :mem$ifc$req__ENA{temp}
+        CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
     )
     METHOD/Rule enter__RDY INTEGER_1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE inQ$out$first__RDY 
@@ -159,15 +159,15 @@ MODULE l_module_OC_Lpm 320 (
     )
     METHOD/Rule exit_rule__ENA (
         METAINVOKE fifo$out$first 
-        STORE/Alloca :temp = fifo$out$first{}
+        STORE/Alloca :exit_rule__ENA$temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
-        STORE/Alloca :mtemp = mem$ifc$resValue{}
+        STORE/Alloca :exit_rule__ENA$mtemp = mem$ifc$resValue{}
         METAINVOKE mem$ifc$resAccept__ENA 
         CALL/Action :mem$ifc$resAccept__ENA{}
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE outQ$in$enq__ENA 
-        CALL/Action :outQ$in$enq__ENA{temp}
+        CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
     )
     METHOD/Rule exit_rule__RDY INTEGER_1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
         METAINVOKE fifo$out$first__RDY 
@@ -178,17 +178,17 @@ MODULE l_module_OC_Lpm 320 (
     )
     METHOD/Rule recirc__ENA (
         METAINVOKE fifo$out$first 
-        STORE/Alloca :temp = fifo$out$first{}
+        STORE/Alloca :recirc__ENA$temp = fifo$out$first{}
         METAINVOKE mem$ifc$resValue 
-        STORE/Alloca :mtemp = mem$ifc$resValue{}
+        STORE/Alloca :recirc__ENA$mtemp = mem$ifc$resValue{}
         METAINVOKE mem$ifc$resAccept__ENA 
         CALL/Action :mem$ifc$resAccept__ENA{}
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$in$enq__ENA 
-        CALL/Action :fifo$in$enq__ENA{temp}
+        CALL/Action :fifo$in$enq__ENA{recirc__ENA$temp}
         METAINVOKE mem$ifc$req__ENA 
-        CALL/Action :mem$ifc$req__ENA{temp}
+        CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
     )
     METHOD/Rule recirc__RDY INTEGER_1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
         METAINVOKE fifo$out$first__RDY 
@@ -201,21 +201,21 @@ MODULE l_module_OC_Lpm 320 (
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :temp$a = request$say$meth
-        STORE/Alloca :temp$b = request$say$v
+        STORE/Alloca :request$say__ENA$temp$a = request$say$meth
+        STORE/Alloca :request$say__ENA$temp$b = request$say$v
         METAINVOKE inQ$in$enq__ENA 
-        CALL/Action :inQ$in$enq__ENA{temp}
+        CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
     )
     METHOD request$say__RDY INTEGER_1 = (inQ$in$enq__RDY) (
         METAINVOKE inQ$in$enq__RDY 
     )
     METHOD/Rule respond__ENA (
         METAINVOKE outQ$out$first 
-        STORE/Alloca :temp = outQ$out$first{}
+        STORE/Alloca :respond__ENA$temp = outQ$out$first{}
         METAINVOKE outQ$out$deq__ENA 
         CALL/Action :outQ$out$deq__ENA{}
         METAINVOKE ind$heard__ENA 
-        CALL/Action :ind$heard__ENA{temp$a,temp$b}
+        CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
         METAINVOKE outQ$out$first__RDY 

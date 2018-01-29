@@ -234,12 +234,12 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
         PARAM v2 INTEGER_32
-        STORE/Alloca :ind$tag = 2
-        STORE :ind$data$say2$meth = request$say2$meth
-        STORE :ind$data$say2$v = request$say2$v
-        STORE :ind$data$say2$v2 = request$say2$v2
+        STORE/Alloca :request$say2__ENA$ind$tag = 2
+        STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
+        STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
+        STORE :request$say2__ENA$ind$data$say2$v2 = request$say2$v2
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{ind}
+        CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
     )
     METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -247,11 +247,11 @@ MODULE l_module_OC_EchoRequestOutput 0 (
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :ind$tag = 1
-        STORE :ind$data$say$meth = request$say$meth
-        STORE :ind$data$say$v = request$say$v
+        STORE/Alloca :request$say__ENA$ind$tag = 1
+        STORE :request$say__ENA$ind$data$say$meth = request$say$meth
+        STORE :request$say__ENA$ind$data$say$v = request$say$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{ind}
+        CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 

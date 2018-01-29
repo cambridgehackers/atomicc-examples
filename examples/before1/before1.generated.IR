@@ -157,12 +157,12 @@ MODULE l_module_OC_EchoIndicationInput 96 (
     )
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoIndication_data
-        STORE/Alloca :v_2e_addr = pipe$enq$v
-        METAREAD v_2e_addr$data$heard$meth v_2e_addrfoosuff$tag == 1
-        STORE (v_2e_addrfoosuff$tag == 1):meth_delay = v_2e_addr$data$heard$meth
-        METAREAD v_2e_addr$data$heard$v v_2e_addrfoosuff$tag == 1
-        STORE (v_2e_addrfoosuff$tag == 1):v_delay = v_2e_addr$data$heard$v
-        STORE (v_2e_addrfoosuff$tag == 1):busy_delay = 1
+        STORE/Alloca :pipe$enq__ENA$v_2e_addr = pipe$enq$v
+        METAREAD pipe$enq__ENA$v_2e_addr$data$heard$meth pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
+        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
+        METAREAD pipe$enq__ENA$v_2e_addr$data$heard$v pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
+        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
+        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):busy_delay = 1
     )
     METHOD pipe$enq__RDY INTEGER_1 = ((busy_delay != 0) ^ 1) (
         METAREAD busy_delay 
@@ -224,17 +224,17 @@ MODULE l_module_OC_EchoRequestInput 0 (
     FIELD/Ptr request l_ainterface_OC_EchoRequest
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoRequest_data
-        STORE/Alloca :v_2e_addr = pipe$enq$v
-        METAREAD v_2e_addr$data$say$meth v_2e_addrfoosuff$tag == 1
-        METAREAD v_2e_addr$data$say$v v_2e_addrfoosuff$tag == 1
-        METAINVOKE request$say__ENA v_2e_addrfoosuff$tag == 1
-        CALL/Action (v_2e_addrfoosuff$tag == 1):request$say__ENA{v_2e_addr$data$say$meth,v_2e_addr$data$say$v}
-        METAREAD v_2e_addr$data$say2$meth v_2e_addrfoosuff13$tag == 2
-        METAREAD v_2e_addr$data$say2$v v_2e_addrfoosuff13$tag == 2
-        METAINVOKE request$say2__ENA v_2e_addrfoosuff13$tag == 2
-        CALL/Action (v_2e_addrfoosuff13$tag == 2):request$say2__ENA{v_2e_addr$data$say2$meth,v_2e_addr$data$say2$v}
+        STORE/Alloca :pipe$enq__ENA$v_2e_addr = pipe$enq$v
+        METAREAD pipe$enq__ENA$v_2e_addr$data$say$meth pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
+        METAREAD pipe$enq__ENA$v_2e_addr$data$say$v pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
+        METAINVOKE request$say__ENA pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
+        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        METAREAD pipe$enq__ENA$v_2e_addr$data$say2$meth pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2
+        METAREAD pipe$enq__ENA$v_2e_addr$data$say2$v pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2
+        METAINVOKE request$say2__ENA pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2
+        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
     )
-    METHOD pipe$enq__RDY INTEGER_1 = ((request$say__RDY | ((v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
+    METHOD pipe$enq__RDY INTEGER_1 = ((request$say__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((pipe$enq__RDY$v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
         METAINVOKE request$say__RDY 
         METAINVOKE request$say2__RDY 
     )
@@ -246,11 +246,11 @@ MODULE l_module_OC_EchoRequestOutput 0 (
     METHOD request$say2__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :ind$tag = 2
-        STORE :ind$data$say2$meth = request$say2$meth
-        STORE :ind$data$say2$v = request$say2$v
+        STORE/Alloca :request$say2__ENA$ind$tag = 2
+        STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
+        STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{ind}
+        CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
     )
     METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 
@@ -258,11 +258,11 @@ MODULE l_module_OC_EchoRequestOutput 0 (
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :ind$tag = 1
-        STORE :ind$data$say$meth = request$say$meth
-        STORE :ind$data$say$v = request$say$v
+        STORE/Alloca :request$say__ENA$ind$tag = 1
+        STORE :request$say__ENA$ind$data$say$meth = request$say$meth
+        STORE :request$say__ENA$ind$data$say$v = request$say$v
         METAINVOKE pipe$enq__ENA 
-        CALL/Action :pipe$enq__ENA{ind}
+        CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         METAINVOKE pipe$enq__RDY 

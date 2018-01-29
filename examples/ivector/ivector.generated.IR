@@ -114,13 +114,13 @@ MODULE l_module_OC_FifoPong 216 (
         METAINVOKE element1$out$deq__RDY 
         METAREAD pong 
     )
-    METHOD out$first l_struct_OC_ValuePair = (retval) (
+    METHOD out$first l_struct_OC_ValuePair = (out$first$retval) (
         METAREAD pong 
         METAINVOKE element2$out$first pong
-        STORE/Alloca (pong):retval = element2$out$first{}
+        STORE/Alloca (pong):out$first$retval = element2$out$first{}
         METAREAD pong pong
         METAINVOKE element1$out$first pong ^ 1
-        STORE/Alloca (pong ^ 1):retval = element1$out$first{}
+        STORE/Alloca (pong ^ 1):out$first$retval = element1$out$first{}
         METAREAD pong pong ^ 1
     )
     METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
@@ -139,11 +139,11 @@ MODULE l_module_OC_IVector 32 (
     METHOD in$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :temp$b = in$say$v
+        STORE/Alloca :in$say__ENA$temp$b = in$say$v
         METAINVOKE fifo0$in$enq__ENA in$say$meth == 0
-        CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{temp}
+        CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{in$say__ENA$temp}
         METAINVOKE fifo1$in$enq__ENA (in$say$meth == 1) & ((in$say$meth == 0) ^ 1)
-        CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo1$in$enq__ENA{temp}
+        CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo1$in$enq__ENA{in$say__ENA$temp}
     )
     METHOD in$say__RDY INTEGER_1 = (fifo0$in$enq__RDY & fifo1$in$enq__RDY) (
         METAINVOKE fifo0$in$enq__RDY 
@@ -151,11 +151,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_0__ENA (
         METAINVOKE fifo0$out$first 
-        STORE/Alloca :temp = fifo0$out$first{}
+        STORE/Alloca :respond_rule_0__ENA$temp = fifo0$out$first{}
         METAINVOKE fifo0$out$deq__ENA 
         CALL/Action :fifo0$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{0,temp$b}
+        CALL/Action :out$heard__ENA{0,respond_rule_0__ENA$temp$b}
     )
     METHOD/Rule respond_rule_0__RDY INTEGER_1 = ((fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo0$out$first__RDY 
@@ -164,11 +164,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_1__ENA (
         METAINVOKE fifo1$out$first 
-        STORE/Alloca :temp = fifo1$out$first{}
+        STORE/Alloca :respond_rule_1__ENA$temp = fifo1$out$first{}
         METAINVOKE fifo1$out$deq__ENA 
         CALL/Action :fifo1$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{1,temp$b}
+        CALL/Action :out$heard__ENA{1,respond_rule_1__ENA$temp$b}
     )
     METHOD/Rule respond_rule_1__RDY INTEGER_1 = ((fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo1$out$first__RDY 
@@ -177,11 +177,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_2__ENA (
         METAINVOKE fifo2$out$first 
-        STORE/Alloca :temp = fifo2$out$first{}
+        STORE/Alloca :respond_rule_2__ENA$temp = fifo2$out$first{}
         METAINVOKE fifo2$out$deq__ENA 
         CALL/Action :fifo2$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{2,temp$b}
+        CALL/Action :out$heard__ENA{2,respond_rule_2__ENA$temp$b}
     )
     METHOD/Rule respond_rule_2__RDY INTEGER_1 = ((fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo2$out$first__RDY 
@@ -190,11 +190,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_3__ENA (
         METAINVOKE fifo3$out$first 
-        STORE/Alloca :temp = fifo3$out$first{}
+        STORE/Alloca :respond_rule_3__ENA$temp = fifo3$out$first{}
         METAINVOKE fifo3$out$deq__ENA 
         CALL/Action :fifo3$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{3,temp$b}
+        CALL/Action :out$heard__ENA{3,respond_rule_3__ENA$temp$b}
     )
     METHOD/Rule respond_rule_3__RDY INTEGER_1 = ((fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo3$out$first__RDY 
@@ -203,11 +203,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_4__ENA (
         METAINVOKE fifo4$out$first 
-        STORE/Alloca :temp = fifo4$out$first{}
+        STORE/Alloca :respond_rule_4__ENA$temp = fifo4$out$first{}
         METAINVOKE fifo4$out$deq__ENA 
         CALL/Action :fifo4$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{4,temp$b}
+        CALL/Action :out$heard__ENA{4,respond_rule_4__ENA$temp$b}
     )
     METHOD/Rule respond_rule_4__RDY INTEGER_1 = ((fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo4$out$first__RDY 
@@ -216,11 +216,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_5__ENA (
         METAINVOKE fifo5$out$first 
-        STORE/Alloca :temp = fifo5$out$first{}
+        STORE/Alloca :respond_rule_5__ENA$temp = fifo5$out$first{}
         METAINVOKE fifo5$out$deq__ENA 
         CALL/Action :fifo5$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{5,temp$b}
+        CALL/Action :out$heard__ENA{5,respond_rule_5__ENA$temp$b}
     )
     METHOD/Rule respond_rule_5__RDY INTEGER_1 = ((fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo5$out$first__RDY 
@@ -229,11 +229,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_6__ENA (
         METAINVOKE fifo6$out$first 
-        STORE/Alloca :temp = fifo6$out$first{}
+        STORE/Alloca :respond_rule_6__ENA$temp = fifo6$out$first{}
         METAINVOKE fifo6$out$deq__ENA 
         CALL/Action :fifo6$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{6,temp$b}
+        CALL/Action :out$heard__ENA{6,respond_rule_6__ENA$temp$b}
     )
     METHOD/Rule respond_rule_6__RDY INTEGER_1 = ((fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo6$out$first__RDY 
@@ -242,11 +242,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_7__ENA (
         METAINVOKE fifo7$out$first 
-        STORE/Alloca :temp = fifo7$out$first{}
+        STORE/Alloca :respond_rule_7__ENA$temp = fifo7$out$first{}
         METAINVOKE fifo7$out$deq__ENA 
         CALL/Action :fifo7$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{7,temp$b}
+        CALL/Action :out$heard__ENA{7,respond_rule_7__ENA$temp$b}
     )
     METHOD/Rule respond_rule_7__RDY INTEGER_1 = ((fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo7$out$first__RDY 
@@ -255,11 +255,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_8__ENA (
         METAINVOKE fifo8$out$first 
-        STORE/Alloca :temp = fifo8$out$first{}
+        STORE/Alloca :respond_rule_8__ENA$temp = fifo8$out$first{}
         METAINVOKE fifo8$out$deq__ENA 
         CALL/Action :fifo8$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{8,temp$b}
+        CALL/Action :out$heard__ENA{8,respond_rule_8__ENA$temp$b}
     )
     METHOD/Rule respond_rule_8__RDY INTEGER_1 = ((fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo8$out$first__RDY 
@@ -268,11 +268,11 @@ MODULE l_module_OC_IVector 32 (
     )
     METHOD/Rule respond_rule_9__ENA (
         METAINVOKE fifo9$out$first 
-        STORE/Alloca :temp = fifo9$out$first{}
+        STORE/Alloca :respond_rule_9__ENA$temp = fifo9$out$first{}
         METAINVOKE fifo9$out$deq__ENA 
         CALL/Action :fifo9$out$deq__ENA{}
         METAINVOKE out$heard__ENA 
-        CALL/Action :out$heard__ENA{9,temp$b}
+        CALL/Action :out$heard__ENA{9,respond_rule_9__ENA$temp$b}
     )
     METHOD/Rule respond_rule_9__RDY INTEGER_1 = ((fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY) (
         METAINVOKE fifo9$out$first__RDY 

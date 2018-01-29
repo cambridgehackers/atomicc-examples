@@ -102,37 +102,35 @@ module l_module_OC_IVector (
     input out$heard__RDY);
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;
-    wire [95:0]fifo0$out$first;
     wire fifo0$out$first__RDY;
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
         in$say__ENA & in$say$meth == 0,
-        fifo9$out$first,
+        fifo1$in$enq$v,
         fifo0$in$enq__RDY,
         respond_rule_0__ENA,
         fifo0$out$deq__RDY,
-        fifo0$out$first,
+        respond_rule_0__ENA$temp,
         fifo0$out$first__RDY);
+    wire [95:0]fifo1$in$enq$v;
     wire fifo1$in$enq__RDY;
     wire fifo1$out$deq__RDY;
-    wire [95:0]fifo1$out$first;
     wire fifo1$out$first__RDY;
     l_module_OC_FifoPong fifo1 (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 1) & ((in$say$meth == 0) ^ 1),
-        temp,
+        fifo1$in$enq$v,
         fifo1$in$enq__RDY,
         respond_rule_1__ENA,
         fifo1$out$deq__RDY,
-        fifo1$out$first,
+        respond_rule_1__ENA$temp,
         fifo1$out$first__RDY);
     wire fifo2$in$enq__ENA;
     wire [95:0]fifo2$in$enq$v;
     wire fifo2$in$enq__RDY;
     wire fifo2$out$deq__RDY;
-    wire [95:0]fifo2$out$first;
     wire fifo2$out$first__RDY;
     l_module_OC_FifoPong fifo2 (
         CLK,
@@ -142,13 +140,12 @@ module l_module_OC_IVector (
         fifo2$in$enq__RDY,
         respond_rule_2__ENA,
         fifo2$out$deq__RDY,
-        fifo2$out$first,
+        respond_rule_2__ENA$temp,
         fifo2$out$first__RDY);
     wire fifo3$in$enq__ENA;
     wire [95:0]fifo3$in$enq$v;
     wire fifo3$in$enq__RDY;
     wire fifo3$out$deq__RDY;
-    wire [95:0]fifo3$out$first;
     wire fifo3$out$first__RDY;
     l_module_OC_FifoPong fifo3 (
         CLK,
@@ -158,13 +155,12 @@ module l_module_OC_IVector (
         fifo3$in$enq__RDY,
         respond_rule_3__ENA,
         fifo3$out$deq__RDY,
-        fifo3$out$first,
+        respond_rule_3__ENA$temp,
         fifo3$out$first__RDY);
     wire fifo4$in$enq__ENA;
     wire [95:0]fifo4$in$enq$v;
     wire fifo4$in$enq__RDY;
     wire fifo4$out$deq__RDY;
-    wire [95:0]fifo4$out$first;
     wire fifo4$out$first__RDY;
     l_module_OC_FifoPong fifo4 (
         CLK,
@@ -174,13 +170,12 @@ module l_module_OC_IVector (
         fifo4$in$enq__RDY,
         respond_rule_4__ENA,
         fifo4$out$deq__RDY,
-        fifo4$out$first,
+        respond_rule_4__ENA$temp,
         fifo4$out$first__RDY);
     wire fifo5$in$enq__ENA;
     wire [95:0]fifo5$in$enq$v;
     wire fifo5$in$enq__RDY;
     wire fifo5$out$deq__RDY;
-    wire [95:0]fifo5$out$first;
     wire fifo5$out$first__RDY;
     l_module_OC_FifoPong fifo5 (
         CLK,
@@ -190,13 +185,12 @@ module l_module_OC_IVector (
         fifo5$in$enq__RDY,
         respond_rule_5__ENA,
         fifo5$out$deq__RDY,
-        fifo5$out$first,
+        respond_rule_5__ENA$temp,
         fifo5$out$first__RDY);
     wire fifo6$in$enq__ENA;
     wire [95:0]fifo6$in$enq$v;
     wire fifo6$in$enq__RDY;
     wire fifo6$out$deq__RDY;
-    wire [95:0]fifo6$out$first;
     wire fifo6$out$first__RDY;
     l_module_OC_FifoPong fifo6 (
         CLK,
@@ -206,13 +200,12 @@ module l_module_OC_IVector (
         fifo6$in$enq__RDY,
         respond_rule_6__ENA,
         fifo6$out$deq__RDY,
-        fifo6$out$first,
+        respond_rule_6__ENA$temp,
         fifo6$out$first__RDY);
     wire fifo7$in$enq__ENA;
     wire [95:0]fifo7$in$enq$v;
     wire fifo7$in$enq__RDY;
     wire fifo7$out$deq__RDY;
-    wire [95:0]fifo7$out$first;
     wire fifo7$out$first__RDY;
     l_module_OC_FifoPong fifo7 (
         CLK,
@@ -222,13 +215,12 @@ module l_module_OC_IVector (
         fifo7$in$enq__RDY,
         respond_rule_7__ENA,
         fifo7$out$deq__RDY,
-        fifo7$out$first,
+        respond_rule_7__ENA$temp,
         fifo7$out$first__RDY);
     wire fifo8$in$enq__ENA;
     wire [95:0]fifo8$in$enq$v;
     wire fifo8$in$enq__RDY;
     wire fifo8$out$deq__RDY;
-    wire [95:0]fifo8$out$first;
     wire fifo8$out$first__RDY;
     l_module_OC_FifoPong fifo8 (
         CLK,
@@ -238,13 +230,12 @@ module l_module_OC_IVector (
         fifo8$in$enq__RDY,
         respond_rule_8__ENA,
         fifo8$out$deq__RDY,
-        fifo8$out$first,
+        respond_rule_8__ENA$temp,
         fifo8$out$first__RDY);
     wire fifo9$in$enq__ENA;
     wire [95:0]fifo9$in$enq$v;
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
-    wire [95:0]fifo9$out$first;
     wire fifo9$out$first__RDY;
     l_module_OC_FifoPong fifo9 (
         CLK,
@@ -254,7 +245,7 @@ module l_module_OC_IVector (
         fifo9$in$enq__RDY,
         respond_rule_9__ENA,
         fifo9$out$deq__RDY,
-        fifo9$out$first,
+        respond_rule_9__ENA$temp,
         fifo9$out$first__RDY);
     wire fifo10$in$enq__ENA;
     wire [95:0]fifo10$in$enq$v;
@@ -276,7 +267,7 @@ module l_module_OC_IVector (
     reg[31:0] vsize;
     assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY;
     assign out$heard$meth = respond_rule_0__ENA ? 0 : respond_rule_1__ENA ? 1 : respond_rule_2__ENA ? 2 : respond_rule_3__ENA ? 3 : respond_rule_4__ENA ? 4 : respond_rule_5__ENA ? 5 : respond_rule_6__ENA ? 6 : respond_rule_7__ENA ? 7 : respond_rule_8__ENA ? 8 : 9;
-    assign out$heard$v = respond_rule_0__ENA ? temp$b : respond_rule_1__ENA ? temp$b : respond_rule_2__ENA ? temp$b : respond_rule_3__ENA ? temp$b : respond_rule_4__ENA ? temp$b : respond_rule_5__ENA ? temp$b : respond_rule_6__ENA ? temp$b : respond_rule_7__ENA ? temp$b : respond_rule_8__ENA ? temp$b : temp$b;
+    assign out$heard$v = respond_rule_0__ENA ? respond_rule_0__ENA$temp$b : respond_rule_1__ENA ? respond_rule_1__ENA$temp$b : respond_rule_2__ENA ? respond_rule_2__ENA$temp$b : respond_rule_3__ENA ? respond_rule_3__ENA$temp$b : respond_rule_4__ENA ? respond_rule_4__ENA$temp$b : respond_rule_5__ENA ? respond_rule_5__ENA$temp$b : respond_rule_6__ENA ? respond_rule_6__ENA$temp$b : respond_rule_7__ENA ? respond_rule_7__ENA$temp$b : respond_rule_8__ENA ? respond_rule_8__ENA$temp$b : respond_rule_9__ENA$temp$b;
     assign out$heard__ENA = respond_rule_0__ENA || respond_rule_1__ENA || respond_rule_2__ENA || respond_rule_3__ENA || respond_rule_4__ENA || respond_rule_5__ENA || respond_rule_6__ENA || respond_rule_7__ENA || respond_rule_8__ENA || respond_rule_9__ENA;
     assign respond_rule_0__RDY = (fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY;
     assign respond_rule_1__RDY = (fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY;
@@ -289,7 +280,7 @@ module l_module_OC_IVector (
     assign respond_rule_8__RDY = (fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY;
     assign respond_rule_9__RDY = (fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY;
     // Extra assigments, not to output wires
-    assign temp$b = in$say$v;
+    assign in$say__ENA$temp$b = in$say$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin
