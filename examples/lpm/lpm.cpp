@@ -85,7 +85,7 @@ __module Lpm {
     Fifo1<ValuePair> outQ;
     LpmMemory        mem;
     int doneCount;
-    void request.say(int meth, int v) if (true) {
+    void request.say(int meth, int v) {
 printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
         ValuePair temp;
         temp.a = meth;
@@ -100,16 +100,16 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
     LpmRequest request;
     Lpm() {
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
-            __rule recirc if(true) {
+            __rule recirc {
                 ValuePair temp = fifo.out.first();
                 ValuePair mtemp = mem.ifc.resValue();
                 mem.ifc.resAccept();
 	        fifo.out.deq();
 printf("recirc: (%d, %d)\n", temp.a, temp.b);
-	        fifo.in.enq(temp);
+	        fifo.in.enq(mtemp);
 	        mem.ifc.req(temp);
                 };
-            __rule exit_rule if(true) {
+            __rule exit_rule {
                 ValuePair temp = fifo.out.first();
                 ValuePair mtemp = mem.ifc.resValue();
                 mem.ifc.resAccept();
@@ -117,14 +117,14 @@ printf("recirc: (%d, %d)\n", temp.a, temp.b);
 printf("exit: (%d, %d)\n", temp.a, temp.b);
 	        outQ.in.enq(temp);
                 };
-            __rule enter if(true) {
+            __rule enter {
                 ValuePair temp = inQ.out.first();
 printf("enter: (%d, %d)\n", temp.a, temp.b);
 	        inQ.out.deq();
 	        fifo.in.enq(temp);
 	        mem.ifc.req(temp);
                 };
-            __rule respond if(true) {
+            __rule respond {
                 ValuePair temp = outQ.out.first();
 	        outQ.out.deq();
 printf("respond: (%d, %d)\n", temp.a, temp.b);
@@ -137,7 +137,7 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
 
 class foo { // method -> pipe
     LpmIndication indication;
-    void indication.heard(int meth, int v) if (true) {
+    void indication.heard(int meth, int v) {
         printf("Heard an lpm: %d %d\n", meth, v);
             //stop_main_program = 1;
     }

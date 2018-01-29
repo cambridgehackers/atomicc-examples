@@ -186,7 +186,7 @@ MODULE l_module_OC_Lpm 320 (
         METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
         METAINVOKE fifo$in$enq__ENA 
-        CALL/Action :fifo$in$enq__ENA{recirc__ENA$temp}
+        CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
         METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
     )

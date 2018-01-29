@@ -109,7 +109,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        mem$ifc$req$v,
+        enter__ENA ? enter__ENA$temp : recirc__ENA$mtemp,
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
@@ -128,7 +128,6 @@ module l_module_OC_Lpm (
         outQ$out$deq__RDY,
         respond__ENA$temp,
         outQ$out$first__RDY);
-    wire [95:0]mem$ifc$req$v;
     wire mem$ifc$req__RDY;
     wire mem$ifc$resAccept__RDY;
     wire [95:0]mem$ifc$resValue;
@@ -137,7 +136,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        mem$ifc$req$v,
+        enter__ENA ? enter__ENA$temp : recirc__ENA$temp,
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,

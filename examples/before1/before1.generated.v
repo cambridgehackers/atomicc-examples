@@ -271,10 +271,10 @@ module l_module_OC_Connect (
         lERI$request$say$meth,
         lERI$request$say$v,
         lERI$request$say__RDY);
-    wire [31:0]lEcho$request$say2$meth;
-    wire [31:0]lEcho$request$say2$v;
     wire [31:0]lEcho$request$say$meth;
     wire [31:0]lEcho$request$say$v;
+    wire [31:0]lEcho$request$say2$meth;
+    wire [31:0]lEcho$request$say2$v;
     wire lEcho$swap$x2y__RDY;
     wire lEcho$swap$y2x__RDY;
     l_module_OC_Echo lEcho (
@@ -298,13 +298,11 @@ module l_module_OC_Connect (
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
         lEcho$indication$heard__RDY);
-    wire lERO_test$request$say2__ENA;
+    wire [31:0]lERO_test$request$say$meth;
+    wire [31:0]lERO_test$request$say$v;
     wire [31:0]lERO_test$request$say2$meth;
     wire [31:0]lERO_test$request$say2$v;
     wire lERO_test$request$say2__RDY;
-    wire lERO_test$request$say__ENA;
-    wire [31:0]lERO_test$request$say$meth;
-    wire [31:0]lERO_test$request$say$v;
     wire lERO_test$request$say__RDY;
     l_module_OC_EchoRequestOutput lERO_test (
         CLK,

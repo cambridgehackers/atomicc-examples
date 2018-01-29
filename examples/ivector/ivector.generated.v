@@ -127,7 +127,6 @@ module l_module_OC_IVector (
         fifo1$out$deq__RDY,
         respond_rule_1__ENA$temp,
         fifo1$out$first__RDY);
-    wire fifo2$in$enq__ENA;
     wire [95:0]fifo2$in$enq$v;
     wire fifo2$in$enq__RDY;
     wire fifo2$out$deq__RDY;
@@ -142,7 +141,6 @@ module l_module_OC_IVector (
         fifo2$out$deq__RDY,
         respond_rule_2__ENA$temp,
         fifo2$out$first__RDY);
-    wire fifo3$in$enq__ENA;
     wire [95:0]fifo3$in$enq$v;
     wire fifo3$in$enq__RDY;
     wire fifo3$out$deq__RDY;
@@ -157,7 +155,6 @@ module l_module_OC_IVector (
         fifo3$out$deq__RDY,
         respond_rule_3__ENA$temp,
         fifo3$out$first__RDY);
-    wire fifo4$in$enq__ENA;
     wire [95:0]fifo4$in$enq$v;
     wire fifo4$in$enq__RDY;
     wire fifo4$out$deq__RDY;
@@ -172,7 +169,6 @@ module l_module_OC_IVector (
         fifo4$out$deq__RDY,
         respond_rule_4__ENA$temp,
         fifo4$out$first__RDY);
-    wire fifo5$in$enq__ENA;
     wire [95:0]fifo5$in$enq$v;
     wire fifo5$in$enq__RDY;
     wire fifo5$out$deq__RDY;
@@ -187,7 +183,6 @@ module l_module_OC_IVector (
         fifo5$out$deq__RDY,
         respond_rule_5__ENA$temp,
         fifo5$out$first__RDY);
-    wire fifo6$in$enq__ENA;
     wire [95:0]fifo6$in$enq$v;
     wire fifo6$in$enq__RDY;
     wire fifo6$out$deq__RDY;
@@ -202,7 +197,6 @@ module l_module_OC_IVector (
         fifo6$out$deq__RDY,
         respond_rule_6__ENA$temp,
         fifo6$out$first__RDY);
-    wire fifo7$in$enq__ENA;
     wire [95:0]fifo7$in$enq$v;
     wire fifo7$in$enq__RDY;
     wire fifo7$out$deq__RDY;
@@ -217,7 +211,6 @@ module l_module_OC_IVector (
         fifo7$out$deq__RDY,
         respond_rule_7__ENA$temp,
         fifo7$out$first__RDY);
-    wire fifo8$in$enq__ENA;
     wire [95:0]fifo8$in$enq$v;
     wire fifo8$in$enq__RDY;
     wire fifo8$out$deq__RDY;
@@ -232,7 +225,6 @@ module l_module_OC_IVector (
         fifo8$out$deq__RDY,
         respond_rule_8__ENA$temp,
         fifo8$out$first__RDY);
-    wire fifo9$in$enq__ENA;
     wire [95:0]fifo9$in$enq$v;
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
@@ -247,10 +239,8 @@ module l_module_OC_IVector (
         fifo9$out$deq__RDY,
         respond_rule_9__ENA$temp,
         fifo9$out$first__RDY);
-    wire fifo10$in$enq__ENA;
     wire [95:0]fifo10$in$enq$v;
     wire fifo10$in$enq__RDY;
-    wire fifo10$out$deq__ENA;
     wire fifo10$out$deq__RDY;
     wire [95:0]fifo10$out$first;
     wire fifo10$out$first__RDY;
