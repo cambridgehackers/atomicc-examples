@@ -51,13 +51,12 @@ module l_module_OC_FifoPong (
         CLK,
         nRST,
         in$enq__ENA & pong ^ 1,
-        element2$in$enq$v,
+        in$enq$v,
         element1$in$enq__RDY,
         out$deq__ENA & pong ^ 1,
         element1$out$deq__RDY,
         out$first,
         element1$out$first__RDY);
-    wire [95:0]element2$in$enq$v;
     wire element2$in$enq__RDY;
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
@@ -66,7 +65,7 @@ module l_module_OC_FifoPong (
         CLK,
         nRST,
         in$enq__ENA & pong,
-        element2$in$enq$v,
+        in$enq$v,
         element2$in$enq__RDY,
         out$deq__ENA & pong,
         element2$out$deq__RDY,
@@ -107,13 +106,12 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & in$say$meth == 0,
-        fifo1$in$enq$v,
+        in$say__ENA$temp,
         fifo0$in$enq__RDY,
         respond_rule_0__ENA,
         fifo0$out$deq__RDY,
         respond_rule_0__ENA$temp,
         fifo0$out$first__RDY);
-    wire [95:0]fifo1$in$enq$v;
     wire fifo1$in$enq__RDY;
     wire fifo1$out$deq__RDY;
     wire fifo1$out$first__RDY;
@@ -121,7 +119,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 1) & ((in$say$meth == 0) ^ 1),
-        fifo1$in$enq$v,
+        in$say__ENA$temp,
         fifo1$in$enq__RDY,
         respond_rule_1__ENA,
         fifo1$out$deq__RDY,
