@@ -329,9 +329,9 @@ module l_module_OC_Connect (
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
         lEII_test$indication$heard__RDY);
+    assign indication$heard__RDY = lEII_test$indication$heard__RDY;
     assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
     // Extra assigments, not to output wires
     assign lEII_test$indication$heard__ENA = indication$heard__ENA;
-    assign lEII_test$indication$heard__RDY = indication$heard__RDY;
 endmodule 
 
