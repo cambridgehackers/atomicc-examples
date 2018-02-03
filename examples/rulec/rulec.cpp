@@ -85,7 +85,7 @@ EchoRequestPipe unusedERP;
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
-    void request.say(int meth, int v) if (true) {
+    void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -93,7 +93,7 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void request.say2(int meth, int v, int v2) if(true) {
+    void request.say2(int meth, int v, int v2) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -107,7 +107,7 @@ __module EchoRequestOutput { // method -> pipe
 __module EchoRequestInput { // pipe -> method
     EchoRequestPipe pipe;
     EchoRequest *request;
-    void pipe.enq(const EchoRequest_data &v) if (true) {
+    void pipe.enq(const EchoRequest_data &v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
@@ -222,7 +222,7 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
 
 class foo { // method -> pipe
     EchoIndication indication;
-    void indication.heard(int meth, int v) if(true) {
+    void indication.heard(int meth, int v) {
         printf("Heard an echo: %d %d\n", meth, v);
             //stop_main_program = 1;
     }
