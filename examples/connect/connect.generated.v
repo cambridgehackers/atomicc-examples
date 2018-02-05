@@ -122,37 +122,32 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
-    wire [31:0]lEIO$indication$heard$meth;
-    wire [31:0]lEIO$indication$heard$v;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
         lEcho$indication$heard__ENA,
-        lEIO$indication$heard$meth,
-        lEIO$indication$heard$v,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
         lEcho$indication$heard__RDY,
         lEIO$pipe$enq__ENA,
         lEIO$pipe$enq$v,
         lEIO$pipe$enq__RDY);
-    wire [95:0]lERI$pipe$enq$v;
     l_module_OC_EchoRequestInput lERI (
         CLK,
         nRST,
         lERO_test$pipe$enq__ENA,
-        lERI$pipe$enq$v,
+        lERO_test$pipe$enq$v,
         lERO_test$pipe$enq__RDY,
         lERI$request$say__ENA,
         lERI$request$say$meth,
         lERI$request$say$v,
         lERI$request$say__RDY);
-    wire [31:0]lEcho$request$say$meth;
-    wire [31:0]lEcho$request$say$v;
     l_module_OC_Echo lEcho (
         CLK,
         nRST,
         lERI$request$say__ENA,
-        lEcho$request$say$meth,
-        lEcho$request$say$v,
+        lERI$request$say$meth,
+        lERI$request$say$v,
         lERI$request$say__RDY,
         lEcho$indication$heard__ENA,
         lEcho$indication$heard$meth,
@@ -168,17 +163,18 @@ module l_module_OC_Connect (
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq$v,
         lERO_test$pipe$enq__RDY);
-    wire [95:0]lEII_test$pipe$enq$v;
     l_module_OC_EchoIndicationInput lEII_test (
         CLK,
         nRST,
         lEIO$pipe$enq__ENA,
-        lEII_test$pipe$enq$v,
+        lEIO$pipe$enq$v,
         lEIO$pipe$enq__RDY,
         lEII_test$indication$heard__ENA,
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
         lEII_test$indication$heard__RDY);
+    assign indication$heard$meth = lEII_test$indication$heard$meth;
+    assign indication$heard$v = lEII_test$indication$heard$v;
     assign indication$heard__ENA = lEII_test$indication$heard__ENA;
     assign indication$heard__RDY = lEII_test$indication$heard__RDY;
 endmodule 

@@ -243,25 +243,36 @@ endmodule
 
 module l_module_OC_Connect (
     input CLK,
-    input nRST);
-    wire [31:0]lEIO$indication$heard$meth;
-    wire [31:0]lEIO$indication$heard$v;
+    input nRST,
+    input request$say2__ENA,
+    input [31:0]request$say2$meth,
+    input [31:0]request$say2$v,
+    output request$say2__RDY,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
+    output request$say__RDY,
+    output indication$heard__ENA,
+    output [31:0]indication$heard$meth,
+    output [31:0]indication$heard$v,
+    input indication$heard__RDY);
+// software: request
+// software: indication
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
         lEcho$indication$heard__ENA,
-        lEIO$indication$heard$meth,
-        lEIO$indication$heard$v,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
         lEcho$indication$heard__RDY,
         lEIO$pipe$enq__ENA,
         lEIO$pipe$enq$v,
         lEIO$pipe$enq__RDY);
-    wire [191:0]lERI$pipe$enq$v;
     l_module_OC_EchoRequestInput lERI (
         CLK,
         nRST,
         lERO_test$pipe$enq__ENA,
-        lERI$pipe$enq$v,
+        lERO_test$pipe$enq$v,
         lERO_test$pipe$enq__RDY,
         lERI$request$say2__ENA,
         lERI$request$say2$meth,
@@ -271,22 +282,18 @@ module l_module_OC_Connect (
         lERI$request$say$meth,
         lERI$request$say$v,
         lERI$request$say__RDY);
-    wire [31:0]lEcho$request$say$meth;
-    wire [31:0]lEcho$request$say$v;
-    wire [31:0]lEcho$request$say2$meth;
-    wire [31:0]lEcho$request$say2$v;
     wire lEcho$swap$x2y__RDY;
     wire lEcho$swap$y2x__RDY;
     l_module_OC_Echo lEcho (
         CLK,
         nRST,
         lERI$request$say2__ENA,
-        lEcho$request$say2$meth,
-        lEcho$request$say2$v,
+        lERI$request$say2$meth,
+        lERI$request$say2$v,
         lERI$request$say2__RDY,
         lERI$request$say__ENA,
-        lEcho$request$say$meth,
-        lEcho$request$say$v,
+        lERI$request$say$meth,
+        lERI$request$say$v,
         lERI$request$say__RDY,
         swap_rule__ENA,
         lEcho$swap$x2y__RDY,
@@ -298,40 +305,34 @@ module l_module_OC_Connect (
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
         lEcho$indication$heard__RDY);
-    wire [31:0]lERO_test$request$say$meth;
-    wire [31:0]lERO_test$request$say$v;
-    wire [31:0]lERO_test$request$say2$meth;
-    wire [31:0]lERO_test$request$say2$v;
-    wire lERO_test$request$say2__RDY;
-    wire lERO_test$request$say__RDY;
     l_module_OC_EchoRequestOutput lERO_test (
         CLK,
         nRST,
-        lERO_test$request$say2__ENA,
-        lERO_test$request$say2$meth,
-        lERO_test$request$say2$v,
-        lERO_test$request$say2__RDY,
-        lERO_test$request$say__ENA,
-        lERO_test$request$say$meth,
-        lERO_test$request$say$v,
-        lERO_test$request$say__RDY,
+        request$say2__ENA,
+        request$say2$meth,
+        request$say2$v,
+        request$say2__RDY,
+        request$say__ENA,
+        request$say$meth,
+        request$say$v,
+        request$say__RDY,
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq$v,
         lERO_test$pipe$enq__RDY);
-    wire [95:0]lEII_test$pipe$enq$v;
     l_module_OC_EchoIndicationInput lEII_test (
         CLK,
         nRST,
         lEIO$pipe$enq__ENA,
-        lEII_test$pipe$enq$v,
+        lEIO$pipe$enq$v,
         lEIO$pipe$enq__RDY,
         lEII_test$indication$heard__ENA,
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
         lEII_test$indication$heard__RDY);
+    assign indication$heard$meth = lEII_test$indication$heard$meth;
+    assign indication$heard$v = lEII_test$indication$heard$v;
+    assign indication$heard__ENA = lEII_test$indication$heard__ENA;
     assign indication$heard__RDY = lEII_test$indication$heard__RDY;
     assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
-    // Extra assigments, not to output wires
-    assign lEII_test$indication$heard__ENA = indication$heard__ENA;
 endmodule 
 

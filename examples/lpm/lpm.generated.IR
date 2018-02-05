@@ -223,9 +223,3 @@ MODULE l_module_OC_Lpm 320 (
         METAINVOKE ind$heard__RDY 
     )
 )
-EMODULE l_class_OC_LpmTest 320 (
-    FIELD lpm l_module_OC_Lpm
-)
-EMODULE l_class_OC_foo 0 (
-    FIELD indication l_ainterface_OC_LpmIndication
-)

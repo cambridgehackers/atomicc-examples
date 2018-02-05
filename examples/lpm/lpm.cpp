@@ -98,6 +98,7 @@ printf("[%s:%d] (%d, %d)\n", __FUNCTION__, __LINE__, meth, v);
     }
     LpmIndication *ind;
     LpmRequest request;
+public:
     Lpm() {
         printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
             __rule recirc {
@@ -132,38 +133,27 @@ printf("respond: (%d, %d)\n", temp.a, temp.b);
                 };
             atomiccSchedulePriority("recirc", "enter;exit", 0);
     };
-    ~Lpm() {}
+    //~Lpm() {}
 };
 
-class foo { // method -> pipe
-    LpmIndication indication;
-    void indication.heard(int meth, int v) {
-        printf("Heard an lpm: %d %d\n", meth, v);
-            //stop_main_program = 1;
-    }
-};
-foo zConnectresp;
-
-
-class LpmTest {
-    Lpm *lpm;
-public:
-    LpmTest(): lpm(new Lpm()) {
-        lpm->ind = &zConnectresp.indication; // user indication
-        printf("LpmTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(LpmTest));
-    }
-    ~LpmTest() {}
-};
-
-LpmTest lpmTest;
-#if 0
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!lpmTest.lpm->request.say__RDY())
-        ;
-    lpmTest.lpm->request.say(2, 44);
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
-#endif
+Lpm lpmbase;
+//class LpmTest {
+//    Lpm *lpm;
+//public:
+//    LpmTest(): lpm(new Lpm()) {
+//        lpm->ind = &zConnectresp.indication; // user indication
+//        printf("LpmTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(LpmTest));
+//    }
+//    ~LpmTest() {}
+//};
+//
+//LpmTest lpmTest;
+//int main(int argc, const char *argv[])
+//{
+//    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+//    while (!lpmTest.lpm->request.say__RDY())
+//        ;
+//    lpmTest.lpm->request.say(2, 44);
+//    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
+//    return 0;
+//}

@@ -45,11 +45,16 @@
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; l_module_OC_Connect
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINTERNAL; lEIO; l_module_OC_EchoIndicationOutput;
 //METAINTERNAL; lERI; l_module_OC_EchoRequestInput;
 //METAINTERNAL; lEcho; l_module_OC_Echo;
 //METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
 //METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
+//METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
+//METAGUARD; request$say2; lERO_test$request$say2__RDY;
+//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
+//METAGUARD; request$say; lERO_test$request$say__RDY;
 //METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
 //METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
 //METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA

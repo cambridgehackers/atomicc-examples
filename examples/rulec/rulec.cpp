@@ -220,27 +220,29 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
-class foo { // method -> pipe
-    EchoIndication indication;
-    void indication.heard(int meth, int v) {
-        printf("Heard an echo: %d %d\n", meth, v);
-            //stop_main_program = 1;
-    }
-};
-foo zConnectresp;
-
 __module Connect {
+    __software EchoRequest request;
+    __software EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
 
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
+    void request.say(int meth, int v) {
+        lERO_test.request.say(meth, v);
+    }
+    void request.say2(int meth, int v, int v2) {
+        lERO_test.request.say2(meth, v, v2);
+    }
+    //void heard(int meth, int v) {
+        //indication.heard(meth, v);
+    //}
     __connect lERI.request = lEcho.request;
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    __connect lEII_test.indication = zConnectresp.indication; // user indication
+    __connect lEII_test.indication = indication; // user indication
 };
 
 Connect connectTest;

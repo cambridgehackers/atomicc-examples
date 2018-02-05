@@ -126,135 +126,112 @@ module l_module_OC_IVector (
         fifo1$out$deq__RDY,
         respond_rule_1__ENA$temp,
         fifo1$out$first__RDY);
-    wire [95:0]fifo2$in$enq$v;
     wire fifo2$in$enq__RDY;
     wire fifo2$out$deq__RDY;
     wire fifo2$out$first__RDY;
     l_module_OC_FifoPong fifo2 (
         CLK,
         nRST,
-        fifo2$in$enq__ENA,
-        fifo2$in$enq$v,
+        in$say__ENA & (in$say$meth == 2) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)),
+        in$say__ENA$temp,
         fifo2$in$enq__RDY,
         respond_rule_2__ENA,
         fifo2$out$deq__RDY,
         respond_rule_2__ENA$temp,
         fifo2$out$first__RDY);
-    wire [95:0]fifo3$in$enq$v;
     wire fifo3$in$enq__RDY;
     wire fifo3$out$deq__RDY;
     wire fifo3$out$first__RDY;
     l_module_OC_FifoPong fifo3 (
         CLK,
         nRST,
-        fifo3$in$enq__ENA,
-        fifo3$in$enq$v,
+        in$say__ENA & (in$say$meth == 3) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))),
+        in$say__ENA$temp,
         fifo3$in$enq__RDY,
         respond_rule_3__ENA,
         fifo3$out$deq__RDY,
         respond_rule_3__ENA$temp,
         fifo3$out$first__RDY);
-    wire [95:0]fifo4$in$enq$v;
     wire fifo4$in$enq__RDY;
     wire fifo4$out$deq__RDY;
     wire fifo4$out$first__RDY;
     l_module_OC_FifoPong fifo4 (
         CLK,
         nRST,
-        fifo4$in$enq__ENA,
-        fifo4$in$enq$v,
+        in$say__ENA & (in$say$meth == 4) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))),
+        in$say__ENA$temp,
         fifo4$in$enq__RDY,
         respond_rule_4__ENA,
         fifo4$out$deq__RDY,
         respond_rule_4__ENA$temp,
         fifo4$out$first__RDY);
-    wire [95:0]fifo5$in$enq$v;
     wire fifo5$in$enq__RDY;
     wire fifo5$out$deq__RDY;
     wire fifo5$out$first__RDY;
     l_module_OC_FifoPong fifo5 (
         CLK,
         nRST,
-        fifo5$in$enq__ENA,
-        fifo5$in$enq$v,
+        in$say__ENA & (in$say$meth == 5) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))),
+        in$say__ENA$temp,
         fifo5$in$enq__RDY,
         respond_rule_5__ENA,
         fifo5$out$deq__RDY,
         respond_rule_5__ENA$temp,
         fifo5$out$first__RDY);
-    wire [95:0]fifo6$in$enq$v;
     wire fifo6$in$enq__RDY;
     wire fifo6$out$deq__RDY;
     wire fifo6$out$first__RDY;
     l_module_OC_FifoPong fifo6 (
         CLK,
         nRST,
-        fifo6$in$enq__ENA,
-        fifo6$in$enq$v,
+        in$say__ENA & (in$say$meth == 6) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))),
+        in$say__ENA$temp,
         fifo6$in$enq__RDY,
         respond_rule_6__ENA,
         fifo6$out$deq__RDY,
         respond_rule_6__ENA$temp,
         fifo6$out$first__RDY);
-    wire [95:0]fifo7$in$enq$v;
     wire fifo7$in$enq__RDY;
     wire fifo7$out$deq__RDY;
     wire fifo7$out$first__RDY;
     l_module_OC_FifoPong fifo7 (
         CLK,
         nRST,
-        fifo7$in$enq__ENA,
-        fifo7$in$enq$v,
+        in$say__ENA & (in$say$meth == 7) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))),
+        in$say__ENA$temp,
         fifo7$in$enq__RDY,
         respond_rule_7__ENA,
         fifo7$out$deq__RDY,
         respond_rule_7__ENA$temp,
         fifo7$out$first__RDY);
-    wire [95:0]fifo8$in$enq$v;
     wire fifo8$in$enq__RDY;
     wire fifo8$out$deq__RDY;
     wire fifo8$out$first__RDY;
     l_module_OC_FifoPong fifo8 (
         CLK,
         nRST,
-        fifo8$in$enq__ENA,
-        fifo8$in$enq$v,
+        in$say__ENA & (in$say$meth == 8) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))),
+        in$say__ENA$temp,
         fifo8$in$enq__RDY,
         respond_rule_8__ENA,
         fifo8$out$deq__RDY,
         respond_rule_8__ENA$temp,
         fifo8$out$first__RDY);
-    wire [95:0]fifo9$in$enq$v;
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
     wire fifo9$out$first__RDY;
     l_module_OC_FifoPong fifo9 (
         CLK,
         nRST,
-        fifo9$in$enq__ENA,
-        fifo9$in$enq$v,
+        in$say__ENA & ((in$say$meth == 8) ^ 1) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))),
+        in$say__ENA$temp,
         fifo9$in$enq__RDY,
         respond_rule_9__ENA,
         fifo9$out$deq__RDY,
         respond_rule_9__ENA$temp,
         fifo9$out$first__RDY);
-    wire [95:0]fifo10$in$enq$v;
-    wire fifo10$in$enq__RDY;
-    wire fifo10$out$deq__RDY;
-    wire [95:0]fifo10$out$first;
-    wire fifo10$out$first__RDY;
-    l_module_OC_FifoPong fifo10 (
-        CLK,
-        nRST,
-        fifo10$in$enq__ENA,
-        fifo10$in$enq$v,
-        fifo10$in$enq__RDY,
-        fifo10$out$deq__ENA,
-        fifo10$out$deq__RDY,
-        fifo10$out$first,
-        fifo10$out$first__RDY);
     reg[31:0] vsize;
-    assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY;
+    assign in$say__RDY = ((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY;
     assign out$heard$meth = respond_rule_0__ENA ? 0 : respond_rule_1__ENA ? 1 : respond_rule_2__ENA ? 2 : respond_rule_3__ENA ? 3 : respond_rule_4__ENA ? 4 : respond_rule_5__ENA ? 5 : respond_rule_6__ENA ? 6 : respond_rule_7__ENA ? 7 : respond_rule_8__ENA ? 8 : 9;
     assign out$heard$v = respond_rule_0__ENA ? respond_rule_0__ENA$temp$b : respond_rule_1__ENA ? respond_rule_1__ENA$temp$b : respond_rule_2__ENA ? respond_rule_2__ENA$temp$b : respond_rule_3__ENA ? respond_rule_3__ENA$temp$b : respond_rule_4__ENA ? respond_rule_4__ENA$temp$b : respond_rule_5__ENA ? respond_rule_5__ENA$temp$b : respond_rule_6__ENA ? respond_rule_6__ENA$temp$b : respond_rule_7__ENA ? respond_rule_7__ENA$temp$b : respond_rule_8__ENA ? respond_rule_8__ENA$temp$b : respond_rule_9__ENA$temp$b;
     assign out$heard__ENA = respond_rule_0__ENA || respond_rule_1__ENA || respond_rule_2__ENA || respond_rule_3__ENA || respond_rule_4__ENA || respond_rule_5__ENA || respond_rule_6__ENA || respond_rule_7__ENA || respond_rule_8__ENA || respond_rule_9__ENA;

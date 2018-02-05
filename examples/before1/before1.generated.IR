@@ -65,9 +65,6 @@ EMODULE l_ainterface_OC_Swap 0 (
     METHOD y2xnull__ENA
     METHOD y2xnull__RDY INTEGER_1
 )
-EMODULE l_class_OC_foo 0 (
-    FIELD indication l_ainterface_OC_EchoIndication
-)
 MODULE l_module_OC_Echo 256 (
     FIELD request l_ainterface_OC_EchoRequest
     FIELD swap l_ainterface_OC_Swap
@@ -269,16 +266,39 @@ MODULE l_module_OC_EchoRequestOutput 0 (
     )
 )
 MODULE l_module_OC_Connect 608 (
+    SOFTWARE request
+    SOFTWARE indication
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
+    FIELD request l_ainterface_OC_EchoRequest
+    OUTCALL indication = l_ainterface_OC_EchoIndication
+    FIELD/Ptr indication l_ainterface_OC_EchoIndication
     FIELD lEIO l_module_OC_EchoIndicationOutput
     FIELD lERI l_module_OC_EchoRequestInput
     FIELD lEcho l_module_OC_Echo
     FIELD lERO_test l_module_OC_EchoRequestOutput
     FIELD lEII_test l_module_OC_EchoIndicationInput
+    METHOD request$say2__ENA (
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
+        METAINVOKE lERO_test$request$say2__ENA 
+        CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
+    )
+    METHOD request$say2__RDY INTEGER_1 = (lERO_test$request$say2__RDY) (
+        METAINVOKE lERO_test$request$say2__RDY 
+    )
+    METHOD request$say__ENA (
+        PARAM meth INTEGER_32
+        PARAM v INTEGER_32
+        METAINVOKE lERO_test$request$say__ENA 
+        CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
+    )
+    METHOD request$say__RDY INTEGER_1 = (lERO_test$request$say__RDY) (
+        METAINVOKE lERO_test$request$say__RDY 
+    )
     METHOD/Rule swap2_rule__ENA (
         METAINVOKE lEcho$swap$y2xnull__ENA 
         CALL/Action :lEcho$swap$y2xnull__ENA{}
