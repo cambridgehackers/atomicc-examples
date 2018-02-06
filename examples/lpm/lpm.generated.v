@@ -12,7 +12,6 @@ module l_module_OC_Fifo2 (
     output out$first__RDY);
     reg[95:0] element0;
     reg[95:0] element1;
-    reg[95:0] element2;
     reg[31:0] rindex;
     reg[31:0] windex;
     assign in$enq__RDY = ((windex + 1) % 2) != rindex;
@@ -24,7 +23,6 @@ module l_module_OC_Fifo2 (
       if (!nRST) begin
         element0 <= 0;
         element1 <= 0;
-        element2 <= 0;
         rindex <= 0;
         windex <= 0;
       end // nRST
