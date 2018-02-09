@@ -46,9 +46,6 @@ EMODULE l_ainterface_OC_PipeIn_OC_0 0 (
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_class_OC_foo 0 (
-    FIELD indication l_ainterface_OC_EchoIndication
-)
 MODULE l_module_OC_Echo 0 (
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication = l_ainterface_OC_EchoIndication

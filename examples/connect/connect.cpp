@@ -124,15 +124,6 @@ __module Echo {
     }
 };
 
-class foo { // method -> pipe
-    EchoIndication indication;
-    void indication.heard(int meth, int v) {
-        printf("Heard an echo: %d %d\n", meth, v);
-            //stop_main_program = 1;
-    }
-};
-foo zConnectresp;
-
 __module Connect {
     __software EchoRequest request;
     __software EchoIndication *indication;
