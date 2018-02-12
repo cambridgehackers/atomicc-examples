@@ -69,6 +69,7 @@ MODULE l_module_OC_EchoIndicationInput 0 (
         METAREAD pipe$enq__ENA$v_2e_addr$data$heard$meth pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
         METAREAD pipe$enq__ENA$v_2e_addr$data$heard$v pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
         CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):indication$heard__ENA{pipe$enq__ENA$v_2e_addr$data$heard$meth,pipe$enq__ENA$v_2e_addr$data$heard$v}
+        ALLOCA pipe$enq__ENA$pipe$enq__ENA$v_2e_addr l_struct_OC_EchoIndication_data
     )
     METHOD pipe$enq__RDY INTEGER_1 = (indication$heard__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         CALL :indication$heard__RDY{}
@@ -85,6 +86,7 @@ MODULE l_module_OC_EchoIndicationOutput 0 (
         STORE :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
         STORE :indication$heard__ENA$ind$data$heard$v = indication$heard$v
         CALL/Action :pipe$enq__ENA{indication$heard__ENA$ind}
+        ALLOCA indication$heard__ENA$indication$heard__ENA$ind l_struct_OC_EchoIndication_data
     )
     METHOD indication$heard__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}
@@ -100,6 +102,7 @@ MODULE l_module_OC_EchoRequestInput 0 (
         METAREAD pipe$enq__ENA$v_2e_addr$data$say$meth pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
         METAREAD pipe$enq__ENA$v_2e_addr$data$say$v pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
         CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        ALLOCA pipe$enq__ENA$pipe$enq__ENA$v_2e_addr l_struct_OC_EchoRequest_data
     )
     METHOD pipe$enq__RDY INTEGER_1 = (request$say__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) (
         CALL :request$say__RDY{}
@@ -116,6 +119,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
+        ALLOCA request$say__ENA$request$say__ENA$ind l_struct_OC_EchoRequest_data
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}

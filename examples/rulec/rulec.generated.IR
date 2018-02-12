@@ -230,6 +230,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
         STORE :request$say2__ENA$ind$data$say2$v2 = request$say2$v2
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
+        ALLOCA request$say2__ENA$request$say2__ENA$ind l_struct_OC_EchoRequest_data
     )
     METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}
@@ -241,6 +242,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
+        ALLOCA request$say__ENA$request$say__ENA$ind l_struct_OC_EchoRequest_data
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}

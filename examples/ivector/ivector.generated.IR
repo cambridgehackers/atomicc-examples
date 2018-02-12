@@ -118,6 +118,7 @@ MODULE l_module_OC_FifoPong 216 (
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
         METAREAD pong pong ^ 1
+        ALLOCA out$first$out$first$retval l_struct_OC_ValuePair
     )
     METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
         CALL :element2$out$first__RDY{}
@@ -146,6 +147,7 @@ MODULE l_module_OC_IVector 32 (
         CALL/Action ((in$say$meth == 7) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))):fifo7$in$enq__ENA{in$say__ENA$temp}
         CALL/Action ((in$say$meth == 8) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo8$in$enq__ENA{in$say__ENA$temp}
         CALL/Action (((in$say$meth == 8) ^ 1) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo9$in$enq__ENA{in$say__ENA$temp}
+        ALLOCA in$say__ENA$in$say__ENA$temp l_struct_OC_ValuePair
     )
     METHOD in$say__RDY INTEGER_1 = (((((((((fifo0$in$enq__RDY & fifo1$in$enq__RDY) & fifo2$in$enq__RDY) & fifo3$in$enq__RDY) & fifo4$in$enq__RDY) & fifo5$in$enq__RDY) & fifo6$in$enq__RDY) & fifo7$in$enq__RDY) & fifo8$in$enq__RDY) & fifo9$in$enq__RDY) (
         CALL :fifo0$in$enq__RDY{}
@@ -164,6 +166,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_0__ENA$temp = fifo0$out$first{}
         CALL/Action :fifo0$out$deq__ENA{}
         CALL/Action :out$heard__ENA{0,respond_rule_0__ENA$temp$b}
+        ALLOCA respond_rule_0__ENA$respond_rule_0__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_0__RDY INTEGER_1 = ((fifo0$out$first__RDY & fifo0$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo0$out$first__RDY{}
@@ -175,6 +178,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_1__ENA$temp = fifo1$out$first{}
         CALL/Action :fifo1$out$deq__ENA{}
         CALL/Action :out$heard__ENA{1,respond_rule_1__ENA$temp$b}
+        ALLOCA respond_rule_1__ENA$respond_rule_1__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_1__RDY INTEGER_1 = ((fifo1$out$first__RDY & fifo1$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo1$out$first__RDY{}
@@ -186,6 +190,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_2__ENA$temp = fifo2$out$first{}
         CALL/Action :fifo2$out$deq__ENA{}
         CALL/Action :out$heard__ENA{2,respond_rule_2__ENA$temp$b}
+        ALLOCA respond_rule_2__ENA$respond_rule_2__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_2__RDY INTEGER_1 = ((fifo2$out$first__RDY & fifo2$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo2$out$first__RDY{}
@@ -197,6 +202,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_3__ENA$temp = fifo3$out$first{}
         CALL/Action :fifo3$out$deq__ENA{}
         CALL/Action :out$heard__ENA{3,respond_rule_3__ENA$temp$b}
+        ALLOCA respond_rule_3__ENA$respond_rule_3__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_3__RDY INTEGER_1 = ((fifo3$out$first__RDY & fifo3$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo3$out$first__RDY{}
@@ -208,6 +214,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_4__ENA$temp = fifo4$out$first{}
         CALL/Action :fifo4$out$deq__ENA{}
         CALL/Action :out$heard__ENA{4,respond_rule_4__ENA$temp$b}
+        ALLOCA respond_rule_4__ENA$respond_rule_4__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_4__RDY INTEGER_1 = ((fifo4$out$first__RDY & fifo4$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo4$out$first__RDY{}
@@ -219,6 +226,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_5__ENA$temp = fifo5$out$first{}
         CALL/Action :fifo5$out$deq__ENA{}
         CALL/Action :out$heard__ENA{5,respond_rule_5__ENA$temp$b}
+        ALLOCA respond_rule_5__ENA$respond_rule_5__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_5__RDY INTEGER_1 = ((fifo5$out$first__RDY & fifo5$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo5$out$first__RDY{}
@@ -230,6 +238,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_6__ENA$temp = fifo6$out$first{}
         CALL/Action :fifo6$out$deq__ENA{}
         CALL/Action :out$heard__ENA{6,respond_rule_6__ENA$temp$b}
+        ALLOCA respond_rule_6__ENA$respond_rule_6__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_6__RDY INTEGER_1 = ((fifo6$out$first__RDY & fifo6$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo6$out$first__RDY{}
@@ -241,6 +250,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_7__ENA$temp = fifo7$out$first{}
         CALL/Action :fifo7$out$deq__ENA{}
         CALL/Action :out$heard__ENA{7,respond_rule_7__ENA$temp$b}
+        ALLOCA respond_rule_7__ENA$respond_rule_7__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_7__RDY INTEGER_1 = ((fifo7$out$first__RDY & fifo7$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo7$out$first__RDY{}
@@ -252,6 +262,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_8__ENA$temp = fifo8$out$first{}
         CALL/Action :fifo8$out$deq__ENA{}
         CALL/Action :out$heard__ENA{8,respond_rule_8__ENA$temp$b}
+        ALLOCA respond_rule_8__ENA$respond_rule_8__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_8__RDY INTEGER_1 = ((fifo8$out$first__RDY & fifo8$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo8$out$first__RDY{}
@@ -263,6 +274,7 @@ MODULE l_module_OC_IVector 32 (
         LET l_struct_OC_ValuePair :respond_rule_9__ENA$temp = fifo9$out$first{}
         CALL/Action :fifo9$out$deq__ENA{}
         CALL/Action :out$heard__ENA{9,respond_rule_9__ENA$temp$b}
+        ALLOCA respond_rule_9__ENA$respond_rule_9__ENA$temp l_struct_OC_ValuePair
     )
     METHOD/Rule respond_rule_9__RDY INTEGER_1 = ((fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY) (
         CALL :fifo9$out$first__RDY{}

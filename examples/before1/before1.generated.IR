@@ -158,6 +158,7 @@ MODULE l_module_OC_EchoIndicationInput 96 (
         METAREAD pipe$enq__ENA$v_2e_addr$data$heard$v pipe$enq__ENA$v_2e_addrfoosuff$tag == 1
         STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
         STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):busy_delay = 1
+        ALLOCA pipe$enq__ENA$pipe$enq__ENA$v_2e_addr l_struct_OC_EchoIndication_data
     )
     METHOD pipe$enq__RDY INTEGER_1 = ((busy_delay != 0) ^ 1) (
         METAREAD busy_delay 
@@ -224,6 +225,7 @@ MODULE l_module_OC_EchoRequestInput 0 (
         METAREAD pipe$enq__ENA$v_2e_addr$data$say2$meth pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2
         METAREAD pipe$enq__ENA$v_2e_addr$data$say2$v pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2
         CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
+        ALLOCA pipe$enq__ENA$pipe$enq__ENA$v_2e_addr l_struct_OC_EchoRequest_data
     )
     METHOD pipe$enq__RDY INTEGER_1 = ((request$say__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((pipe$enq__RDY$v_2e_addrfoosuff13foosuff$tag == 2) ^ 1))) (
         CALL :request$say__RDY{}
@@ -241,6 +243,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
         STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
+        ALLOCA request$say2__ENA$request$say2__ENA$ind l_struct_OC_EchoRequest_data
     )
     METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}
@@ -252,6 +255,7 @@ MODULE l_module_OC_EchoRequestOutput 0 (
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
+        ALLOCA request$say__ENA$request$say__ENA$ind l_struct_OC_EchoRequest_data
     )
     METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
         CALL :pipe$enq__RDY{}

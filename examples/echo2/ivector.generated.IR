@@ -116,6 +116,7 @@ MODULE l_module_OC_FifoPong 1432 (
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
         METAREAD pong pong ^ 1
+        ALLOCA out$first$out$first$retval l_struct_OC_ValuePair
     )
     METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
         CALL :element2$out$first__RDY{}
@@ -141,6 +142,7 @@ MODULE l_module_OC_IVector 0 (
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
+        ALLOCA respond__ENA$respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
         CALL :fifo$out$deq__RDY{}
@@ -192,6 +194,7 @@ MODULE l_module_OC_IVectorIndication 0 (
     METHOD ind$heard__ENA (
         PARAM v l_struct_OC_ValuePair
         LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
+        ALLOCA ind$heard__ENA$ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
     )
     METHOD ind$heard__RDY INTEGER_1 = (1)
 )
