@@ -12,9 +12,7 @@
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; (busy_delay != 0) & indication$heard__RDY;
-//METABEFORE; swap$x2y__ENA; :swap$y2x__ENA
 //METAGUARD; swap$x2y; 1;
-//METABEFORE; swap$y2x__ENA; :swap$x2y__ENA
 //METAGUARD; swap$y2x; 1;
 //METAGUARD; swap$y2xnull; 1;
 //METARULES; delay_rule; respond_rule

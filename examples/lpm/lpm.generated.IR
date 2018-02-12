@@ -67,37 +67,16 @@ MODULE l_module_OC_Fifo2 160 (
     FIELD windex INTEGER_32
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
-        METAREAD windex 
-        METAREAD windex 
-        METAREAD windex windex == 0
-        METAREAD windex windex == 0
         STORE :*(windex == 0 ? element0:&element1) = in$enq$v
-        METAREAD windex 
         STORE :windex = (windex + 1) % 2
     )
-    METHOD in$enq__RDY INTEGER_1 = (((windex + 1) % 2) != rindex) (
-        METAREAD windex 
-        METAREAD rindex 
-    )
+    METHOD in$enq__RDY INTEGER_1 = (((windex + 1) % 2) != rindex)
     METHOD out$deq__ENA (
-        METAREAD rindex 
         STORE :rindex = (rindex + 1) % 2
     )
-    METHOD out$deq__RDY INTEGER_1 = (rindex != windex) (
-        METAREAD rindex 
-        METAREAD windex 
-    )
-    METHOD out$first l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1)) (
-        METAREAD rindex 
-        METAREAD rindex 
-        METAREAD rindex rindex == 0
-        METAREAD rindex rindex == 0
-        METAREAD *(rindex == 0 ? element0:&element1) 
-    )
-    METHOD out$first__RDY INTEGER_1 = (rindex != windex) (
-        METAREAD rindex 
-        METAREAD windex 
-    )
+    METHOD out$deq__RDY INTEGER_1 = (rindex != windex)
+    METHOD out$first l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1))
+    METHOD out$first__RDY INTEGER_1 = (rindex != windex)
 )
 MODULE l_module_OC_LpmMemory 128 (
     FIELD delayCount INTEGER_32
@@ -108,28 +87,17 @@ MODULE l_module_OC_LpmMemory 128 (
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
     )
-    METHOD ifc$req__RDY INTEGER_1 = (delayCount == 0) (
-        METAREAD delayCount 
-    )
+    METHOD ifc$req__RDY INTEGER_1 = (delayCount == 0)
     METHOD ifc$resAccept__ENA (
         STORE :delayCount = 0
     )
-    METHOD ifc$resAccept__RDY INTEGER_1 = (delayCount == 1) (
-        METAREAD delayCount 
-    )
-    METHOD ifc$resValue l_struct_OC_ValuePair = (saved) (
-        METAREAD saved 
-    )
-    METHOD ifc$resValue__RDY INTEGER_1 = (delayCount == 1) (
-        METAREAD delayCount 
-    )
+    METHOD ifc$resAccept__RDY INTEGER_1 = (delayCount == 1)
+    METHOD ifc$resValue l_struct_OC_ValuePair = (saved)
+    METHOD ifc$resValue__RDY INTEGER_1 = (delayCount == 1)
     METHOD/Rule memdelay_rule__ENA (
-        METAREAD delayCount 
         STORE :delayCount = delayCount - 1
     )
-    METHOD/Rule memdelay_rule__RDY INTEGER_1 = (delayCount > 1) (
-        METAREAD delayCount 
-    )
+    METHOD/Rule memdelay_rule__RDY INTEGER_1 = (delayCount > 1)
 )
 MODULE l_module_OC_Lpm 320 (
     PRIORITY recirc enter;exit

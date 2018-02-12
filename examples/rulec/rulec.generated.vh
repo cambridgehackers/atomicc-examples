@@ -27,10 +27,8 @@
 //METAGUARD; indication$heard; (ind_busy != 0) ^ 1;
 //METAINVOKE; output_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; output_rulee__ENA; output_ruleo__ENA
-//METABEFORE; output_rulee__ENA; :indication$heard__ENA
 //METAGUARD; output_rulee; (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
 //METAINVOKE; output_ruleo__ENA; :pipe$enq__ENA;
-//METABEFORE; output_ruleo__ENA; :indication$heard__ENA
 //METAGUARD; output_ruleo; (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_module_OC_EchoRequestInput

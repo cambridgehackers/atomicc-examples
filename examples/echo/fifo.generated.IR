@@ -30,19 +30,11 @@ MODULE l_module_OC_Fifo1 40 (
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY INTEGER_1 = (full ^ 1) (
-        METAREAD full 
-    )
+    METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
-    METHOD out$first INTEGER_32 = (element) (
-        METAREAD element 
-    )
-    METHOD out$first__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
+    METHOD out$deq__RDY INTEGER_1 = (full)
+    METHOD out$first INTEGER_32 = (element)
+    METHOD out$first__RDY INTEGER_1 = (full)
 )

@@ -61,21 +61,13 @@ MODULE l_module_OC_Fifo1_OC_3 104 (
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY INTEGER_1 = (full ^ 1) (
-        METAREAD full 
-    )
+    METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
-    METHOD out$first l_struct_OC_ValuePair = (element) (
-        METAREAD element 
-    )
-    METHOD out$first__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
+    METHOD out$deq__RDY INTEGER_1 = (full)
+    METHOD out$first l_struct_OC_ValuePair = (element)
+    METHOD out$first__RDY INTEGER_1 = (full)
 )
 MODULE l_module_OC_FifoPong 216 (
     FIELD element1 l_module_OC_Fifo1_OC_3
@@ -83,48 +75,32 @@ MODULE l_module_OC_FifoPong 216 (
     FIELD pong INTEGER_8
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
-        METAREAD pong 
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
-        METAREAD pong pong
         CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
-        METAREAD pong pong ^ 1
     )
     METHOD in$enq__RDY INTEGER_1 = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
         CALL :element2$in$enq__RDY{}
-        METAREAD pong 
         CALL :element1$in$enq__RDY{}
-        METAREAD pong 
     )
     METHOD out$deq__ENA (
-        METAREAD pong 
         CALL/Action (pong):element2$out$deq__ENA{}
-        METAREAD pong pong
         CALL/Action (pong ^ 1):element1$out$deq__ENA{}
-        METAREAD pong pong ^ 1
-        METAREAD pong 
         STORE :pong = pong ^ 1
     )
     METHOD out$deq__RDY INTEGER_1 = ((element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)) (
         CALL :element2$out$deq__RDY{}
-        METAREAD pong 
         CALL :element1$out$deq__RDY{}
-        METAREAD pong 
     )
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) (
-        METAREAD pong 
         CALL (pong):element2$out$first{}
         LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
-        METAREAD pong pong
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
-        METAREAD pong pong ^ 1
         ALLOCA out$first$out$first$retval l_struct_OC_ValuePair
     )
     METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
         CALL :element2$out$first__RDY{}
-        METAREAD pong 
         CALL :element1$out$first__RDY{}
-        METAREAD pong 
     )
 )
 MODULE l_module_OC_IVector 32 (
@@ -305,21 +281,13 @@ MODULE l_module_OC_Fifo1 40 (
         STORE :element = in$enq$v
         STORE :full = 1
     )
-    METHOD in$enq__RDY INTEGER_1 = (full ^ 1) (
-        METAREAD full 
-    )
+    METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
     METHOD out$deq__ENA (
         STORE :full = 0
     )
-    METHOD out$deq__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
-    METHOD out$first INTEGER_32 = (element) (
-        METAREAD element 
-    )
-    METHOD out$first__RDY INTEGER_1 = (full) (
-        METAREAD full 
-    )
+    METHOD out$deq__RDY INTEGER_1 = (full)
+    METHOD out$first INTEGER_32 = (element)
+    METHOD out$first__RDY INTEGER_1 = (full)
 )
 EMODULE l_module_OC_IVectorInd 0 (
     FIELD ind l_ainterface_OC_IVectorIndication

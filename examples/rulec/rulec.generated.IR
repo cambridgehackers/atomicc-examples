@@ -71,15 +71,10 @@ MODULE l_module_OC_Echo 192 (
     METHOD/Rule delay_rule__ENA (
         STORE :busy = 0
         STORE :busy_delay = 1
-        METAREAD meth_temp 
         STORE :meth_delay = meth_temp
-        METAREAD v_temp 
         STORE :v_delay = v_temp
     )
-    METHOD/Rule delay_rule__RDY INTEGER_1 = (((busy != 0) & (busy_delay == 0)) != 0) (
-        METAREAD busy 
-        METAREAD busy_delay 
-    )
+    METHOD/Rule delay_rule__RDY INTEGER_1 = (((busy != 0) & (busy_delay == 0)) != 0)
     METHOD request$say2__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
@@ -88,9 +83,7 @@ MODULE l_module_OC_Echo 192 (
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     )
-    METHOD request$say2__RDY INTEGER_1 = ((busy != 0) ^ 1) (
-        METAREAD busy 
-    )
+    METHOD request$say2__RDY INTEGER_1 = ((busy != 0) ^ 1)
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
@@ -98,17 +91,12 @@ MODULE l_module_OC_Echo 192 (
         STORE :v_temp = request$say$v
         STORE :busy = 1
     )
-    METHOD request$say__RDY INTEGER_1 = ((busy != 0) ^ 1) (
-        METAREAD busy 
-    )
+    METHOD request$say__RDY INTEGER_1 = ((busy != 0) ^ 1)
     METHOD/Rule respond_rule__ENA (
         STORE :busy_delay = 0
-        METAREAD meth_delay 
-        METAREAD v_delay 
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
     METHOD/Rule respond_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
-        METAREAD busy_delay 
         CALL :indication$heard__RDY{}
     )
 )
@@ -121,28 +109,18 @@ MODULE l_module_OC_EchoIndicationInput 96 (
     FIELD v_delay INTEGER_32
     METHOD/Rule input_rule__ENA (
         STORE :busy_delay = 0
-        METAREAD meth_delay 
-        METAREAD v_delay 
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
     METHOD/Rule input_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
-        METAREAD busy_delay 
         CALL :indication$heard__RDY{}
     )
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoIndication_data
-        METAREAD pipe$enq$v$tag 
-        METAREAD pipe$enq$v$tag 
-        METAREAD pipe$enq$v$data$heard$meth pipe$enq$v$tag == 1
         STORE (pipe$enq$v$tag == 1):meth_delay = pipe$enq$v$data$heard$meth
-        METAREAD pipe$enq$v$data$heard$v pipe$enq$v$tag == 1
         STORE (pipe$enq$v$tag == 1):v_delay = pipe$enq$v$data$heard$v
         STORE (pipe$enq$v$tag == 1):busy_delay = 1
-        METAREAD pipe$enq$v$tag pipe$enq$v$tag == 1
     )
-    METHOD pipe$enq__RDY INTEGER_1 = ((busy_delay != 0) ^ 1) (
-        METAREAD busy_delay 
-    )
+    METHOD pipe$enq__RDY INTEGER_1 = ((busy_delay != 0) ^ 1)
 )
 MODULE l_module_OC_EchoIndicationOutput 256 (
     FIELD indication l_ainterface_OC_EchoIndication
@@ -155,42 +133,28 @@ MODULE l_module_OC_EchoIndicationOutput 256 (
     METHOD indication$heard__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        METAREAD even 
-        METAREAD even 
         STORE (even != 0):ind1$tag = 1
         STORE (even != 0):ind1$data$heard$meth = indication$heard$meth
         STORE (even != 0):ind1$data$heard$v = indication$heard$v
         STORE ((even != 0) ^ 1):ind0$tag = 1
         STORE ((even != 0) ^ 1):ind0$data$heard$meth = indication$heard$meth
         STORE ((even != 0) ^ 1):ind0$data$heard$v = indication$heard$v
-        METAREAD even (even != 0) ^ 1
         STORE :ind_busy = 1
-        METAREAD even 
         STORE :even = (even != 0) ^ 1
     )
-    METHOD indication$heard__RDY INTEGER_1 = ((ind_busy != 0) ^ 1) (
-        METAREAD ind_busy 
-    )
+    METHOD indication$heard__RDY INTEGER_1 = ((ind_busy != 0) ^ 1)
     METHOD/Rule output_rulee__ENA (
-        METAREAD ind0$tag 
         STORE :ind_busy = 0
-        METAREAD ind0 
         CALL/Action :pipe$enq__ENA{ind0}
     )
     METHOD/Rule output_rulee__RDY INTEGER_1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
-        METAREAD ind_busy 
-        METAREAD even 
         CALL :pipe$enq__RDY{}
     )
     METHOD/Rule output_ruleo__ENA (
-        METAREAD ind1$tag 
         STORE :ind_busy = 0
-        METAREAD ind1 
         CALL/Action :pipe$enq__ENA{ind1}
     )
     METHOD/Rule output_ruleo__RDY INTEGER_1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
-        METAREAD ind_busy 
-        METAREAD even 
         CALL :pipe$enq__RDY{}
     )
 )
@@ -200,17 +164,8 @@ MODULE l_module_OC_EchoRequestInput 0 (
     FIELD/Ptr request l_ainterface_OC_EchoRequest
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoRequest_data
-        METAREAD pipe$enq$v$tag 
-        METAREAD pipe$enq$v$tag 
-        METAREAD pipe$enq$v$data$say$meth pipe$enq$v$tag == 1
-        METAREAD pipe$enq$v$data$say$v pipe$enq$v$tag == 1
         CALL/Action (pipe$enq$v$tag == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
-        METAREAD pipe$enq$v$tag pipe$enq$v$tag == 1
-        METAREAD pipe$enq$v$data$say2$meth pipe$enq$v$tag == 2
-        METAREAD pipe$enq$v$data$say2$v pipe$enq$v$tag == 2
-        METAREAD pipe$enq$v$data$say2$v2 pipe$enq$v$tag == 2
         CALL/Action (pipe$enq$v$tag == 2):request$say2__ENA{pipe$enq$v$data$say2$meth,pipe$enq$v$data$say2$v,pipe$enq$v$data$say2$v2}
-        METAREAD pipe$enq$v$tag pipe$enq$v$tag == 2
     )
     METHOD pipe$enq__RDY INTEGER_1 = (request$say__RDY & request$say2__RDY) (
         CALL :request$say__RDY{}
