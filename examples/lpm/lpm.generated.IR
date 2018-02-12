@@ -142,84 +142,71 @@ MODULE l_module_OC_Lpm 320 (
     FIELD/Ptr ind l_ainterface_OC_LpmIndication
     FIELD request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA (
-        METAINVOKE inQ$out$first 
-        STORE/Alloca :enter__ENA$temp = inQ$out$first{}
-        METAINVOKE inQ$out$deq__ENA 
+        CALL :inQ$out$first{}
+        LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first{}
         CALL/Action :inQ$out$deq__ENA{}
-        METAINVOKE fifo$in$enq__ENA 
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
-        METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
     )
     METHOD/Rule enter__RDY INTEGER_1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        METAINVOKE inQ$out$first__RDY 
-        METAINVOKE inQ$out$deq__RDY 
-        METAINVOKE fifo$in$enq__RDY 
-        METAINVOKE mem$ifc$req__RDY 
+        CALL :inQ$out$first__RDY{}
+        CALL :inQ$out$deq__RDY{}
+        CALL :fifo$in$enq__RDY{}
+        CALL :mem$ifc$req__RDY{}
     )
     METHOD/Rule exit_rule__ENA (
-        METAINVOKE fifo$out$first 
-        STORE/Alloca :exit_rule__ENA$temp = fifo$out$first{}
-        METAINVOKE mem$ifc$resValue 
-        STORE/Alloca :exit_rule__ENA$mtemp = mem$ifc$resValue{}
-        METAINVOKE mem$ifc$resAccept__ENA 
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first{}
+        CALL :mem$ifc$resValue{}
+        LET l_struct_OC_ValuePair :exit_rule__ENA$mtemp = mem$ifc$resValue{}
         CALL/Action :mem$ifc$resAccept__ENA{}
-        METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
-        METAINVOKE outQ$in$enq__ENA 
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
     )
     METHOD/Rule exit_rule__RDY INTEGER_1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
-        METAINVOKE fifo$out$first__RDY 
-        METAINVOKE mem$ifc$resValue__RDY 
-        METAINVOKE mem$ifc$resAccept__RDY 
-        METAINVOKE fifo$out$deq__RDY 
-        METAINVOKE outQ$in$enq__RDY 
+        CALL :fifo$out$first__RDY{}
+        CALL :mem$ifc$resValue__RDY{}
+        CALL :mem$ifc$resAccept__RDY{}
+        CALL :fifo$out$deq__RDY{}
+        CALL :outQ$in$enq__RDY{}
     )
     METHOD/Rule recirc__ENA (
-        METAINVOKE fifo$out$first 
-        STORE/Alloca :recirc__ENA$temp = fifo$out$first{}
-        METAINVOKE mem$ifc$resValue 
-        STORE/Alloca :recirc__ENA$mtemp = mem$ifc$resValue{}
-        METAINVOKE mem$ifc$resAccept__ENA 
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ValuePair :recirc__ENA$temp = fifo$out$first{}
+        CALL :mem$ifc$resValue{}
+        LET l_struct_OC_ValuePair :recirc__ENA$mtemp = mem$ifc$resValue{}
         CALL/Action :mem$ifc$resAccept__ENA{}
-        METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
-        METAINVOKE fifo$in$enq__ENA 
         CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
-        METAINVOKE mem$ifc$req__ENA 
         CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
     )
     METHOD/Rule recirc__RDY INTEGER_1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        METAINVOKE fifo$out$first__RDY 
-        METAINVOKE mem$ifc$resValue__RDY 
-        METAINVOKE mem$ifc$resAccept__RDY 
-        METAINVOKE fifo$out$deq__RDY 
-        METAINVOKE fifo$in$enq__RDY 
-        METAINVOKE mem$ifc$req__RDY 
+        CALL :fifo$out$first__RDY{}
+        CALL :mem$ifc$resValue__RDY{}
+        CALL :mem$ifc$resAccept__RDY{}
+        CALL :fifo$out$deq__RDY{}
+        CALL :fifo$in$enq__RDY{}
+        CALL :mem$ifc$req__RDY{}
     )
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
-        STORE/Alloca :request$say__ENA$temp$a = request$say$meth
-        STORE/Alloca :request$say__ENA$temp$b = request$say$v
-        METAINVOKE inQ$in$enq__ENA 
+        LET INTEGER_32 :request$say__ENA$temp$a = request$say$meth
+        LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
     )
     METHOD request$say__RDY INTEGER_1 = (inQ$in$enq__RDY) (
-        METAINVOKE inQ$in$enq__RDY 
+        CALL :inQ$in$enq__RDY{}
     )
     METHOD/Rule respond__ENA (
-        METAINVOKE outQ$out$first 
-        STORE/Alloca :respond__ENA$temp = outQ$out$first{}
-        METAINVOKE outQ$out$deq__ENA 
+        CALL :outQ$out$first{}
+        LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first{}
         CALL/Action :outQ$out$deq__ENA{}
-        METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
-        METAINVOKE outQ$out$first__RDY 
-        METAINVOKE outQ$out$deq__RDY 
-        METAINVOKE ind$heard__RDY 
+        CALL :outQ$out$first__RDY{}
+        CALL :outQ$out$deq__RDY{}
+        CALL :ind$heard__RDY{}
     )
 )

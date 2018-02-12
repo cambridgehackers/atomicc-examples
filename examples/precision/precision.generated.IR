@@ -87,26 +87,23 @@ MODULE l_module_OC_IVector 44 (
     METHOD request$say__ENA (
         PARAM meth INTEGER_6
         PARAM v INTEGER_4
-        STORE/Alloca :request$say__ENA$temp$a = request$say$meth
-        STORE/Alloca :request$say__ENA$temp$b = request$say$v
-        METAINVOKE fifo$in$enq__ENA 
+        LET INTEGER_6 :request$say__ENA$temp$a = request$say$meth
+        LET INTEGER_4 :request$say__ENA$temp$b = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
     )
     METHOD request$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
-        METAINVOKE fifo$in$enq__RDY 
+        CALL :fifo$in$enq__RDY{}
     )
     METHOD/Rule respond__ENA (
-        METAINVOKE fifo$out$first 
-        STORE/Alloca :respond__ENA$temp = fifo$out$first{}
-        METAINVOKE fifo$out$deq__ENA 
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first{}
         CALL/Action :fifo$out$deq__ENA{}
-        METAINVOKE ind$heard__ENA 
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
-        METAINVOKE fifo$out$first__RDY 
-        METAINVOKE fifo$out$deq__RDY 
-        METAINVOKE ind$heard__RDY 
+        CALL :fifo$out$first__RDY{}
+        CALL :fifo$out$deq__RDY{}
+        CALL :ind$heard__RDY{}
     )
 )
 EMODULE l_class_OC_IVectorTest 44 (

@@ -82,49 +82,45 @@ MODULE l_module_OC_FifoPong 1432 (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
         METAREAD pong 
-        METAINVOKE element2$in$enq__ENA pong
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         METAREAD pong pong
-        METAINVOKE element1$in$enq__ENA pong ^ 1
         CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
         METAREAD pong pong ^ 1
     )
     METHOD in$enq__RDY INTEGER_1 = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
-        METAINVOKE element2$in$enq__RDY 
+        CALL :element2$in$enq__RDY{}
         METAREAD pong 
-        METAINVOKE element1$in$enq__RDY 
+        CALL :element1$in$enq__RDY{}
         METAREAD pong 
     )
     METHOD out$deq__ENA (
         METAREAD pong 
-        METAINVOKE element2$out$deq__ENA pong
         CALL/Action (pong):element2$out$deq__ENA{}
         METAREAD pong pong
-        METAINVOKE element1$out$deq__ENA pong ^ 1
         CALL/Action (pong ^ 1):element1$out$deq__ENA{}
         METAREAD pong pong ^ 1
         METAREAD pong 
         STORE :pong = pong ^ 1
     )
     METHOD out$deq__RDY INTEGER_1 = ((element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)) (
-        METAINVOKE element2$out$deq__RDY 
+        CALL :element2$out$deq__RDY{}
         METAREAD pong 
-        METAINVOKE element1$out$deq__RDY 
+        CALL :element1$out$deq__RDY{}
         METAREAD pong 
     )
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) (
         METAREAD pong 
-        METAINVOKE element2$out$first pong
-        STORE/Alloca (pong):out$first$retval = element2$out$first{}
+        CALL (pong):element2$out$first{}
+        LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
         METAREAD pong pong
-        METAINVOKE element1$out$first pong ^ 1
-        STORE/Alloca (pong ^ 1):out$first$retval = element1$out$first{}
+        CALL (pong ^ 1):element1$out$first{}
+        LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
         METAREAD pong pong ^ 1
     )
     METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
-        METAINVOKE element2$out$first__RDY 
+        CALL :element2$out$first__RDY{}
         METAREAD pong 
-        METAINVOKE element1$out$first__RDY 
+        CALL :element1$out$first__RDY{}
         METAREAD pong 
     )
 )
@@ -135,24 +131,21 @@ MODULE l_module_OC_IVector 0 (
     FIELD/Ptr ind l_ainterface_OC_IndIF
     METHOD request$say__ENA (
         PARAM v l_struct_OC_ValuePair
-        METAINVOKE fifo$in$enq__ENA 
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     )
     METHOD request$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
-        METAINVOKE fifo$in$enq__RDY 
+        CALL :fifo$in$enq__RDY{}
     )
     METHOD/Rule respond__ENA (
-        METAINVOKE fifo$out$deq__ENA 
         CALL/Action :fifo$out$deq__ENA{}
-        METAINVOKE fifo$out$first 
-        STORE/Alloca :respond__ENA$agg_2e_tmp = fifo$out$first{}
-        METAINVOKE ind$heard__ENA 
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
     )
     METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
-        METAINVOKE fifo$out$deq__RDY 
-        METAINVOKE fifo$out$first__RDY 
-        METAINVOKE ind$heard__RDY 
+        CALL :fifo$out$deq__RDY{}
+        CALL :fifo$out$first__RDY{}
+        CALL :ind$heard__RDY{}
     )
 )
 EMODULE l_class_OC_IVectorTest 0 (
@@ -198,7 +191,7 @@ MODULE l_module_OC_IVectorIndication 0 (
     FIELD ind l_ainterface_OC_IndIF
     METHOD ind$heard__ENA (
         PARAM v l_struct_OC_ValuePair
-        STORE/Alloca :ind$heard__ENA$v_2e_addr = ind$heard$v
+        LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
     )
     METHOD ind$heard__RDY INTEGER_1 = (1)
 )
