@@ -1,16 +1,16 @@
-EMODULE l_ainterface_OC_LpmIndication 0 (
+EMODULE l_ainterface_OC_LpmIndication (
     METHOD heard__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
     METHOD heard__RDY INTEGER_1
 )
-EMODULE l_struct_OC_ValuePair 96 (
+EMODULE l_struct_OC_ValuePair (
     FIELD a INTEGER_32
     FIELD b INTEGER_32
     FIELD c INTEGER_32
 )
-EMODULE l_ainterface_OC_LpmMem 0 (
+EMODULE l_ainterface_OC_LpmMem (
     METHOD req__ENA (
         PARAM v l_struct_OC_ValuePair
     )
@@ -20,26 +20,26 @@ EMODULE l_ainterface_OC_LpmMem 0 (
     METHOD resValue l_struct_OC_ValuePair
     METHOD resValue__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_LpmRequest 0 (
+EMODULE l_ainterface_OC_LpmRequest (
     METHOD say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
     METHOD say__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn 0 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut 0 (
+EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValuePair
     METHOD first__RDY INTEGER_1
 )
-EMODULE l_module_OC_Fifo 0 (
+EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
@@ -51,7 +51,7 @@ EMODULE l_module_OC_Fifo 0 (
     METHOD out$first l_struct_OC_ValuePair
     METHOD out$first__RDY INTEGER_1
 )
-EMODULE l_module_OC_Fifo1 0 (
+EMODULE l_module_OC_Fifo1 (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
@@ -61,7 +61,7 @@ EMODULE l_module_OC_Fifo1 0 (
     METHOD out$first l_struct_OC_ValuePair
     METHOD out$first__RDY INTEGER_1
 )
-MODULE l_module_OC_Fifo2 160 (
+MODULE l_module_OC_Fifo2 (
     FIELD/Count 2  element l_struct_OC_ValuePair
     FIELD rindex INTEGER_32
     FIELD windex INTEGER_32
@@ -78,7 +78,7 @@ MODULE l_module_OC_Fifo2 160 (
     METHOD out$first l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1))
     METHOD out$first__RDY INTEGER_1 = (rindex != windex)
 )
-MODULE l_module_OC_LpmMemory 128 (
+MODULE l_module_OC_LpmMemory (
     FIELD delayCount INTEGER_32
     FIELD saved l_struct_OC_ValuePair
     FIELD ifc l_ainterface_OC_LpmMem
@@ -99,7 +99,7 @@ MODULE l_module_OC_LpmMemory 128 (
     )
     METHOD/Rule memdelay_rule__RDY INTEGER_1 = (delayCount > 1)
 )
-MODULE l_module_OC_Lpm 320 (
+MODULE l_module_OC_Lpm (
     PRIORITY recirc enter;exit
     FIELD inQ l_module_OC_Fifo1
     FIELD fifo l_module_OC_Fifo2

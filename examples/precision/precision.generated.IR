@@ -1,46 +1,46 @@
-EMODULE l_ainterface_OC_IVectorIndication 0 (
+EMODULE l_ainterface_OC_IVectorIndication (
     METHOD heard__ENA (
         PARAM meth INTEGER_6
         PARAM v INTEGER_4
     )
     METHOD heard__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_IVectorRequest 0 (
+EMODULE l_ainterface_OC_IVectorRequest (
     METHOD say__ENA (
         PARAM meth INTEGER_6
         PARAM v INTEGER_4
     )
     METHOD say__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn 0 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v INTEGER_32
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_struct_OC_ValueType 10 (
+EMODULE l_struct_OC_ValueType (
     FIELD a INTEGER_6
     FIELD b INTEGER_4
 )
-EMODULE l_ainterface_OC_PipeIn_OC_1 0 (
+EMODULE l_ainterface_OC_PipeIn_OC_1 (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValueType
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut 0 (
+EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD deq__RDY INTEGER_1
     METHOD first INTEGER_32
     METHOD first__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut_OC_2 0 (
+EMODULE l_ainterface_OC_PipeOut_OC_2 (
     METHOD deq__ENA
     METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValueType
     METHOD first__RDY INTEGER_1
 )
-EMODULE l_module_OC_Fifo_OC_0 0 (
+EMODULE l_module_OC_Fifo_OC_0 (
     FIELD in l_ainterface_OC_PipeIn_OC_1
     FIELD out l_ainterface_OC_PipeOut_OC_2
     METHOD in$enq__ENA (
@@ -52,7 +52,7 @@ EMODULE l_module_OC_Fifo_OC_0 0 (
     METHOD out$first l_struct_OC_ValueType
     METHOD out$first__RDY INTEGER_1
 )
-MODULE l_module_OC_Fifo1_OC_3 18 (
+MODULE l_module_OC_Fifo1_OC_3 (
     FIELD element l_struct_OC_ValueType
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -68,7 +68,7 @@ MODULE l_module_OC_Fifo1_OC_3 18 (
     METHOD out$first l_struct_OC_ValueType = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
-MODULE l_module_OC_IVector 44 (
+MODULE l_module_OC_IVector (
     FIELD request l_ainterface_OC_IVectorRequest
     OUTCALL ind = l_ainterface_OC_IVectorIndication
     FIELD/Ptr ind l_ainterface_OC_IVectorIndication
@@ -100,10 +100,10 @@ MODULE l_module_OC_IVector 44 (
         CALL :ind$heard__RDY{}
     )
 )
-EMODULE l_class_OC_IVectorTest 44 (
+EMODULE l_class_OC_IVectorTest (
     FIELD ivector l_module_OC_IVector
 )
-EMODULE l_module_OC_Fifo 0 (
+EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
@@ -115,7 +115,7 @@ EMODULE l_module_OC_Fifo 0 (
     METHOD out$first INTEGER_32
     METHOD out$first__RDY INTEGER_1
 )
-MODULE l_module_OC_Fifo1 40 (
+MODULE l_module_OC_Fifo1 (
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -131,7 +131,7 @@ MODULE l_module_OC_Fifo1 40 (
     METHOD out$first INTEGER_32 = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
-MODULE l_module_OC_IVectorInd 0 (
+MODULE l_module_OC_IVectorInd (
     FIELD ind l_ainterface_OC_IVectorIndication
     METHOD ind$heard__ENA (
         PARAM meth INTEGER_6

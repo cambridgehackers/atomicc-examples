@@ -1,45 +1,45 @@
-EMODULE l_struct_OC_ValuePair 704 (
+EMODULE l_struct_OC_ValuePair (
     FIELD a INTEGER_32
     FIELD b INTEGER_32
     FIELD/Array 20  c INTEGER_32
 )
-EMODULE l_ainterface_OC_IVectorRequest 0 (
+EMODULE l_ainterface_OC_IVectorRequest (
     METHOD say__ENA (
         PARAM v l_struct_OC_ValuePair
     )
     METHOD say__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_IndIF 0 (
+EMODULE l_ainterface_OC_IndIF (
     METHOD heard__ENA (
         PARAM v l_struct_OC_ValuePair
     )
     METHOD heard__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn 0 (
+EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v INTEGER_32
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeIn_OC_1 0 (
+EMODULE l_ainterface_OC_PipeIn_OC_1 (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
     METHOD enq__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut 0 (
+EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD deq__RDY INTEGER_1
     METHOD first INTEGER_32
     METHOD first__RDY INTEGER_1
 )
-EMODULE l_ainterface_OC_PipeOut_OC_2 0 (
+EMODULE l_ainterface_OC_PipeOut_OC_2 (
     METHOD deq__ENA
     METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValuePair
     METHOD first__RDY INTEGER_1
 )
-EMODULE l_module_OC_Fifo_OC_0 0 (
+EMODULE l_module_OC_Fifo_OC_0 (
     FIELD in l_ainterface_OC_PipeIn_OC_1
     FIELD out l_ainterface_OC_PipeOut_OC_2
     METHOD in$enq__ENA (
@@ -51,7 +51,7 @@ EMODULE l_module_OC_Fifo_OC_0 0 (
     METHOD out$first l_struct_OC_ValuePair
     METHOD out$first__RDY INTEGER_1
 )
-MODULE l_module_OC_Fifo1_OC_3 712 (
+MODULE l_module_OC_Fifo1_OC_3 (
     FIELD element l_struct_OC_ValuePair
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -67,7 +67,7 @@ MODULE l_module_OC_Fifo1_OC_3 712 (
     METHOD out$first l_struct_OC_ValuePair = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
-MODULE l_module_OC_FifoPong 1432 (
+MODULE l_module_OC_FifoPong (
     FIELD element1 l_module_OC_Fifo1_OC_3
     FIELD element2 l_module_OC_Fifo1_OC_3
     FIELD pong INTEGER_8
@@ -101,7 +101,7 @@ MODULE l_module_OC_FifoPong 1432 (
         CALL :element1$out$first__RDY{}
     )
 )
-MODULE l_module_OC_IVector 0 (
+MODULE l_module_OC_IVector (
     FIELD request l_ainterface_OC_IVectorRequest
     FIELD fifo l_module_OC_FifoPong
     OUTCALL ind = l_ainterface_OC_IndIF
@@ -126,10 +126,10 @@ MODULE l_module_OC_IVector 0 (
         CALL :ind$heard__RDY{}
     )
 )
-EMODULE l_class_OC_IVectorTest 0 (
+EMODULE l_class_OC_IVectorTest (
     FIELD ivector l_module_OC_IVector
 )
-EMODULE l_module_OC_Fifo 0 (
+EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
     METHOD in$enq__ENA (
@@ -141,7 +141,7 @@ EMODULE l_module_OC_Fifo 0 (
     METHOD out$first INTEGER_32
     METHOD out$first__RDY INTEGER_1
 )
-MODULE l_module_OC_Fifo1 40 (
+MODULE l_module_OC_Fifo1 (
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -157,7 +157,7 @@ MODULE l_module_OC_Fifo1 40 (
     METHOD out$first INTEGER_32 = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
-MODULE l_module_OC_IVectorIndication 0 (
+MODULE l_module_OC_IVectorIndication (
     FIELD ind l_ainterface_OC_IndIF
     METHOD ind$heard__ENA (
         PARAM v l_struct_OC_ValuePair
