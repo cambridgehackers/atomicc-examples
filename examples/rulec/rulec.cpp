@@ -36,23 +36,26 @@ void LALALA(void)
 {
 BOZO(0);
 }
+typedef struct {
+    int meth;
+    int v;
+} EchoRequest_say;
+typedef struct {
+    int meth;
+    int v;
+    int v2;
+} EchoRequest_say2;
+typedef struct {
+    EchoRequest_say say;
+    EchoRequest_say2 say2;
+} EchoRequest_union;
 
 // Serialization structures
 typedef struct {
     int tag;
 #define EchoRequest_tag_say 1
 #define EchoRequest_tag_say2 2
-    struct EchoRequest_union {
-        struct EchoRequest_say {
-            int meth;
-            int v;
-        } say;
-        struct EchoRequest_say2 {
-            int meth;
-            int v;
-            int v2;
-        } say2;
-    } data;
+    EchoRequest_union data;
 } EchoRequest_data;
 EchoRequest_data unusedERD;
 
