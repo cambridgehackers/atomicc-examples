@@ -34,7 +34,7 @@
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:request$say2__ENA;pipe$enq$v$tag == 1:request$say__ENA;
-//METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
+//METAGUARD; pipe$enq; (request$say__RDY | (pipe$enq$v$tag != 1)) & (request$say2__RDY | (pipe$enq$v$tag != 2));
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;

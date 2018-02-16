@@ -117,12 +117,6 @@ MODULE l_module_OC_Lpm (
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
         ALLOCA enter__ENA$enter__ENA$temp l_struct_OC_ValuePair
     )
-    METHOD/Rule enter__RDY INTEGER_1 = (((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        CALL :inQ$out$first__RDY{}
-        CALL :inQ$out$deq__RDY{}
-        CALL :fifo$in$enq__RDY{}
-        CALL :mem$ifc$req__RDY{}
-    )
     METHOD/Rule exit_rule__ENA (
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first{}
@@ -133,13 +127,6 @@ MODULE l_module_OC_Lpm (
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
         ALLOCA exit_rule__ENA$exit_rule__ENA$mtemp l_struct_OC_ValuePair
         ALLOCA exit_rule__ENA$exit_rule__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule exit_rule__RDY INTEGER_1 = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY) (
-        CALL :fifo$out$first__RDY{}
-        CALL :mem$ifc$resValue__RDY{}
-        CALL :mem$ifc$resAccept__RDY{}
-        CALL :fifo$out$deq__RDY{}
-        CALL :outQ$in$enq__RDY{}
     )
     METHOD/Rule recirc__ENA (
         CALL :fifo$out$first{}
@@ -153,14 +140,6 @@ MODULE l_module_OC_Lpm (
         ALLOCA recirc__ENA$recirc__ENA$mtemp l_struct_OC_ValuePair
         ALLOCA recirc__ENA$recirc__ENA$temp l_struct_OC_ValuePair
     )
-    METHOD/Rule recirc__RDY INTEGER_1 = (((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY) (
-        CALL :fifo$out$first__RDY{}
-        CALL :mem$ifc$resValue__RDY{}
-        CALL :mem$ifc$resAccept__RDY{}
-        CALL :fifo$out$deq__RDY{}
-        CALL :fifo$in$enq__RDY{}
-        CALL :mem$ifc$req__RDY{}
-    )
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
@@ -169,19 +148,11 @@ MODULE l_module_OC_Lpm (
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
         ALLOCA request$say__ENA$request$say__ENA$temp l_struct_OC_ValuePair
     )
-    METHOD request$say__RDY INTEGER_1 = (inQ$in$enq__RDY) (
-        CALL :inQ$in$enq__RDY{}
-    )
     METHOD/Rule respond__ENA (
         CALL :outQ$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first{}
         CALL/Action :outQ$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
         ALLOCA respond__ENA$respond__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond__RDY INTEGER_1 = ((outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY) (
-        CALL :outQ$out$first__RDY{}
-        CALL :outQ$out$deq__RDY{}
-        CALL :ind$heard__RDY{}
     )
 )

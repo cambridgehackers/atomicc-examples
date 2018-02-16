@@ -76,18 +76,10 @@ MODULE l_module_OC_FifoPong (
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
     )
-    METHOD in$enq__RDY INTEGER_1 = ((element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong)) (
-        CALL :element2$in$enq__RDY{}
-        CALL :element1$in$enq__RDY{}
-    )
     METHOD out$deq__ENA (
         CALL/Action (pong):element2$out$deq__ENA{}
         CALL/Action (pong ^ 1):element1$out$deq__ENA{}
         STORE :pong = pong ^ 1
-    )
-    METHOD out$deq__RDY INTEGER_1 = ((element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong)) (
-        CALL :element2$out$deq__RDY{}
-        CALL :element1$out$deq__RDY{}
     )
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) (
         CALL (pong):element2$out$first{}
@@ -95,10 +87,6 @@ MODULE l_module_OC_FifoPong (
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
         ALLOCA out$first$out$first$retval l_struct_OC_ValuePair
-    )
-    METHOD out$first__RDY INTEGER_1 = ((element2$out$first__RDY | (pong ^ 1)) & (element1$out$first__RDY | pong)) (
-        CALL :element2$out$first__RDY{}
-        CALL :element1$out$first__RDY{}
     )
 )
 MODULE l_module_OC_IVector (
@@ -110,20 +98,12 @@ MODULE l_module_OC_IVector (
         PARAM v l_struct_OC_ValuePair
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     )
-    METHOD request$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
-        CALL :fifo$in$enq__RDY{}
-    )
     METHOD/Rule respond__ENA (
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
         ALLOCA respond__ENA$respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
-        CALL :fifo$out$deq__RDY{}
-        CALL :fifo$out$first__RDY{}
-        CALL :ind$heard__RDY{}
     )
 )
 EMODULE l_class_OC_IVectorTest (
@@ -164,5 +144,4 @@ MODULE l_module_OC_IVectorIndication (
         LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
         ALLOCA ind$heard__ENA$ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
     )
-    METHOD ind$heard__RDY INTEGER_1 = (1)
 )

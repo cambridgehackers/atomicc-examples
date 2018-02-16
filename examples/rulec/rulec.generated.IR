@@ -96,9 +96,7 @@ MODULE l_module_OC_Echo (
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
-    METHOD/Rule respond_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
-        CALL :indication$heard__RDY{}
-    )
+    METHOD/Rule respond_rule__RDY INTEGER_1 = (busy_delay != 0)
 )
 MODULE l_module_OC_EchoIndicationInput (
     FIELD pipe l_ainterface_OC_PipeIn_OC_0
@@ -111,9 +109,7 @@ MODULE l_module_OC_EchoIndicationInput (
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     )
-    METHOD/Rule input_rule__RDY INTEGER_1 = ((busy_delay != 0) & indication$heard__RDY) (
-        CALL :indication$heard__RDY{}
-    )
+    METHOD/Rule input_rule__RDY INTEGER_1 = (busy_delay != 0)
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoIndication_data
         STORE (pipe$enq$v$tag == 1):meth_delay = pipe$enq$v$data$heard$meth
@@ -147,16 +143,12 @@ MODULE l_module_OC_EchoIndicationOutput (
         STORE :ind_busy = 0
         CALL/Action :pipe$enq__ENA{ind0}
     )
-    METHOD/Rule output_rulee__RDY INTEGER_1 = ((((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY) (
-        CALL :pipe$enq__RDY{}
-    )
+    METHOD/Rule output_rulee__RDY INTEGER_1 = (((ind_busy != 0) & (even != 0)) != 0)
     METHOD/Rule output_ruleo__ENA (
         STORE :ind_busy = 0
         CALL/Action :pipe$enq__ENA{ind1}
     )
-    METHOD/Rule output_ruleo__RDY INTEGER_1 = ((((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY) (
-        CALL :pipe$enq__RDY{}
-    )
+    METHOD/Rule output_ruleo__RDY INTEGER_1 = (((ind_busy != 0) & (even == 0)) != 0)
 )
 MODULE l_module_OC_EchoRequestInput (
     FIELD pipe l_ainterface_OC_PipeIn
@@ -166,10 +158,6 @@ MODULE l_module_OC_EchoRequestInput (
         PARAM v l_struct_OC_EchoRequest_data
         CALL/Action (pipe$enq$v$tag == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
         CALL/Action (pipe$enq$v$tag == 2):request$say2__ENA{pipe$enq$v$data$say2$meth,pipe$enq$v$data$say2$v,pipe$enq$v$data$say2$v2}
-    )
-    METHOD pipe$enq__RDY INTEGER_1 = (request$say__RDY & request$say2__RDY) (
-        CALL :request$say__RDY{}
-        CALL :request$say2__RDY{}
     )
 )
 MODULE l_module_OC_EchoRequestOutput (
@@ -187,9 +175,6 @@ MODULE l_module_OC_EchoRequestOutput (
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
         ALLOCA request$say2__ENA$request$say2__ENA$ind l_struct_OC_EchoRequest_data
     )
-    METHOD request$say2__RDY INTEGER_1 = (pipe$enq__RDY) (
-        CALL :pipe$enq__RDY{}
-    )
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
@@ -198,9 +183,6 @@ MODULE l_module_OC_EchoRequestOutput (
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
         ALLOCA request$say__ENA$request$say__ENA$ind l_struct_OC_EchoRequest_data
-    )
-    METHOD request$say__RDY INTEGER_1 = (pipe$enq__RDY) (
-        CALL :pipe$enq__RDY{}
     )
 )
 MODULE l_module_OC_Connect (
@@ -225,15 +207,9 @@ MODULE l_module_OC_Connect (
         PARAM v2 INTEGER_32
         CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v,request$say2$v2}
     )
-    METHOD request$say2__RDY INTEGER_1 = (lERO_test$request$say2__RDY) (
-        CALL :lERO_test$request$say2__RDY{}
-    )
     METHOD request$say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
-    )
-    METHOD request$say__RDY INTEGER_1 = (lERO_test$request$say__RDY) (
-        CALL :lERO_test$request$say__RDY{}
     )
 )

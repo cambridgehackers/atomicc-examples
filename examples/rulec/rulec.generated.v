@@ -173,7 +173,7 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = request$say__RDY & request$say2__RDY;
+    assign pipe$enq__RDY = (request$say__RDY | (pipe$enq$v$tag != 1)) & (request$say2__RDY | (pipe$enq$v$tag != 2));
     assign request$say$meth = pipe$enq$v$data$say$meth;
     assign request$say$v = pipe$enq$v$data$say$v;
     assign request$say2$meth = pipe$enq$v$data$say2$meth;

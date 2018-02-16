@@ -84,20 +84,12 @@ MODULE l_module_OC_IVector (
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
         ALLOCA request$say__ENA$request$say__ENA$temp l_struct_OC_ValueType
     )
-    METHOD request$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
-        CALL :fifo$in$enq__RDY{}
-    )
     METHOD/Rule respond__ENA (
         CALL :fifo$out$first{}
         LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
         ALLOCA respond__ENA$respond__ENA$temp l_struct_OC_ValueType
-    )
-    METHOD/Rule respond__RDY INTEGER_1 = ((fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY) (
-        CALL :fifo$out$first__RDY{}
-        CALL :fifo$out$deq__RDY{}
-        CALL :ind$heard__RDY{}
     )
 )
 EMODULE l_class_OC_IVectorTest (
@@ -137,5 +129,4 @@ MODULE l_module_OC_IVectorInd (
         PARAM meth INTEGER_6
         PARAM v INTEGER_4
     )
-    METHOD ind$heard__RDY INTEGER_1 = (1)
 )

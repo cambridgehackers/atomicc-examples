@@ -192,7 +192,7 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = (request$say__RDY | ((pipe$enq__RDY$v_2e_addrfoosufffoosuff$tag == 1) ^ 1)) & (request$say2__RDY | ((pipe$enq__RDY$v_2e_addrfoosuff13foosuff$tag == 2) ^ 1));
+    assign pipe$enq__RDY = (request$say__RDY | (pipe$enq__ENA$v_2e_addrfoosuff$tag != 1)) & (request$say2__RDY | (pipe$enq__ENA$v_2e_addrfoosuff13$tag != 2));
     assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
     assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
     assign request$say2$meth = pipe$enq__ENA$v_2e_addr$data$say2$meth;

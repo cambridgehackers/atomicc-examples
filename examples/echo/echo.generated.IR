@@ -56,17 +56,9 @@ MODULE l_module_OC_Echo (
         CALL :fifo$out$first{}
         CALL/Action :ind$heard__ENA{fifo$out$first{}}
     )
-    METHOD/Rule respond_rule__RDY INTEGER_1 = ((fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY) (
-        CALL :fifo$out$deq__RDY{}
-        CALL :fifo$out$first__RDY{}
-        CALL :ind$heard__RDY{}
-    )
     METHOD sout$say__ENA (
         PARAM v INTEGER_32
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
-    )
-    METHOD sout$say__RDY INTEGER_1 = (fifo$in$enq__RDY) (
-        CALL :fifo$in$enq__RDY{}
     )
 )
 EMODULE l_class_OC_EchoTest (
