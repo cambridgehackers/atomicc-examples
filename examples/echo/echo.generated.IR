@@ -2,25 +2,20 @@ EMODULE l_ainterface_OC_EchoIndication (
     METHOD heard__ENA (
         PARAM v INTEGER_32
     )
-    METHOD heard__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_EchoRequest (
     METHOD say__ENA (
         PARAM v INTEGER_32
     )
-    METHOD say__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first INTEGER_32
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
@@ -28,28 +23,21 @@ EMODULE l_module_OC_Fifo (
     METHOD in$enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first INTEGER_32
-    METHOD out$first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo1 (
     METHOD in$enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first INTEGER_32
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Echo (
     SOFTWARE sout
     SOFTWARE ind
     FIELD sout l_ainterface_OC_EchoRequest
-    OUTCALL ind = l_ainterface_OC_EchoIndication
-    FIELD/Ptr ind l_ainterface_OC_EchoIndication
+    OUTCALL ind l_ainterface_OC_EchoIndication
     FIELD fifo l_module_OC_Fifo1
     METHOD/Rule respond_rule__ENA (
         CALL/Action :fifo$out$deq__ENA{}
@@ -70,5 +58,4 @@ EMODULE l_module_OC_EchoInd (
     METHOD hout$heard__ENA (
         PARAM v INTEGER_32
     )
-    METHOD hout$heard__RDY INTEGER_1
 )

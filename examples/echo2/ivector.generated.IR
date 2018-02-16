@@ -7,37 +7,29 @@ EMODULE l_ainterface_OC_IVectorRequest (
     METHOD say__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD say__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_IndIF (
     METHOD heard__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD heard__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeIn_OC_1 (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first INTEGER_32
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut_OC_2 (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValuePair
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo_OC_0 (
     FIELD in l_ainterface_OC_PipeIn_OC_1
@@ -45,11 +37,8 @@ EMODULE l_module_OC_Fifo_OC_0 (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first l_struct_OC_ValuePair
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo1_OC_3 (
     FIELD element l_struct_OC_ValuePair
@@ -92,8 +81,7 @@ MODULE l_module_OC_FifoPong (
 MODULE l_module_OC_IVector (
     FIELD request l_ainterface_OC_IVectorRequest
     FIELD fifo l_module_OC_FifoPong
-    OUTCALL ind = l_ainterface_OC_IndIF
-    FIELD/Ptr ind l_ainterface_OC_IndIF
+    OUTCALL ind l_ainterface_OC_IndIF
     METHOD request$say__ENA (
         PARAM v l_struct_OC_ValuePair
         CALL/Action :fifo$in$enq__ENA{request$say$v}
@@ -115,11 +103,8 @@ EMODULE l_module_OC_Fifo (
     METHOD in$enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first INTEGER_32
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo1 (
     FIELD element INTEGER_32

@@ -3,20 +3,17 @@ EMODULE l_ainterface_OC_IVectorIndication (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
-    METHOD heard__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_IVectorRequest (
     METHOD say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
-    METHOD say__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_struct_OC_ValuePair (
     FIELD a INTEGER_32
@@ -27,19 +24,14 @@ EMODULE l_ainterface_OC_PipeIn_OC_1 (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first INTEGER_32
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut_OC_2 (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValuePair
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo_OC_0 (
     FIELD in l_ainterface_OC_PipeIn_OC_1
@@ -47,11 +39,8 @@ EMODULE l_module_OC_Fifo_OC_0 (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first l_struct_OC_ValuePair
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo1_OC_3 (
     FIELD element l_struct_OC_ValuePair
@@ -93,8 +82,7 @@ MODULE l_module_OC_FifoPong (
 )
 MODULE l_module_OC_IVector (
     FIELD/Count 10  fifo l_module_OC_FifoPong
-    OUTCALL out = l_ainterface_OC_IVectorIndication
-    FIELD/Ptr out l_ainterface_OC_IVectorIndication
+    OUTCALL out l_ainterface_OC_IVectorIndication
     FIELD vsize INTEGER_32
     FIELD in l_ainterface_OC_IVectorRequest
     METHOD in$say__ENA (
@@ -193,11 +181,8 @@ EMODULE l_module_OC_Fifo (
     METHOD in$enq__ENA (
         PARAM v INTEGER_32
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first INTEGER_32
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo1 (
     FIELD element INTEGER_32
@@ -221,5 +206,4 @@ EMODULE l_module_OC_IVectorInd (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
-    METHOD ind$heard__RDY INTEGER_1
 )

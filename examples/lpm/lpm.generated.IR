@@ -3,7 +3,6 @@ EMODULE l_ainterface_OC_LpmIndication (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
-    METHOD heard__RDY INTEGER_1
 )
 EMODULE l_struct_OC_ValuePair (
     FIELD a INTEGER_32
@@ -14,30 +13,23 @@ EMODULE l_ainterface_OC_LpmMem (
     METHOD req__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD req__RDY INTEGER_1
     METHOD resAccept__ENA
-    METHOD resAccept__RDY INTEGER_1
     METHOD resValue l_struct_OC_ValuePair
-    METHOD resValue__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_LpmRequest (
     METHOD say__ENA (
         PARAM meth INTEGER_32
         PARAM v INTEGER_32
     )
-    METHOD say__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeIn (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD enq__RDY INTEGER_1
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
-    METHOD deq__RDY INTEGER_1
     METHOD first l_struct_OC_ValuePair
-    METHOD first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
@@ -45,21 +37,15 @@ EMODULE l_module_OC_Fifo (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first l_struct_OC_ValuePair
-    METHOD out$first__RDY INTEGER_1
 )
 EMODULE l_module_OC_Fifo1 (
     METHOD in$enq__ENA (
         PARAM v l_struct_OC_ValuePair
     )
-    METHOD in$enq__RDY INTEGER_1
     METHOD out$deq__ENA
-    METHOD out$deq__RDY INTEGER_1
     METHOD out$first l_struct_OC_ValuePair
-    METHOD out$first__RDY INTEGER_1
 )
 MODULE l_module_OC_Fifo2 (
     FIELD/Count 2  element l_struct_OC_ValuePair
@@ -106,8 +92,7 @@ MODULE l_module_OC_Lpm (
     FIELD outQ l_module_OC_Fifo1
     FIELD mem l_module_OC_LpmMemory
     FIELD doneCount INTEGER_32
-    OUTCALL ind = l_ainterface_OC_LpmIndication
-    FIELD/Ptr ind l_ainterface_OC_LpmIndication
+    OUTCALL ind l_ainterface_OC_LpmIndication
     FIELD request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA (
         CALL :inQ$out$first{}
