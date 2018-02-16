@@ -57,7 +57,7 @@ MODULE l_module_OC_EchoIndicationInput (
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoIndication_data
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):indication$heard__ENA{pipe$enq__ENA$v_2e_addr$data$heard$meth,pipe$enq__ENA$v_2e_addr$data$heard$v}
+        CALL/Action (pipe$enq__ENA$v_2e_addr5$tag == 1):indication$heard__ENA{pipe$enq__ENA$v_2e_addr$data$heard$meth,pipe$enq__ENA$v_2e_addr$data$heard$v}
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoIndication_data
     )
 )
@@ -80,7 +80,7 @@ MODULE l_module_OC_EchoRequestInput (
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoRequest_data
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        CALL/Action (pipe$enq__ENA$v_2e_addr5$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoRequest_data
     )
 )

@@ -119,9 +119,9 @@ MODULE l_module_OC_EchoIndicationInput (
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoIndication_data
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
-        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
-        STORE (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):busy_delay = 1
+        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
+        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
+        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):busy_delay = 1
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoIndication_data
     )
     METHOD pipe$enq__RDY INTEGER_1 = ((busy_delay != 0) ^ 1)
@@ -163,8 +163,8 @@ MODULE l_module_OC_EchoRequestInput (
     METHOD pipe$enq__ENA (
         PARAM v l_struct_OC_EchoRequest_data
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
-        CALL/Action (pipe$enq__ENA$v_2e_addrfoosuff13$tag == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
+        CALL/Action (pipe$enq__ENA$v_2e_addr13$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        CALL/Action (pipe$enq__ENA$v_2e_addr15$tag == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoRequest_data
     )
 )
