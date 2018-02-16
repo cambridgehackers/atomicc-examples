@@ -75,7 +75,7 @@ MODULE l_module_OC_FifoPong (
         LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
-        ALLOCA out$first$out$first$retval l_struct_OC_ValuePair
+        ALLOCA out$first$retval l_struct_OC_ValuePair
     )
 )
 MODULE l_module_OC_IVector (
@@ -91,7 +91,7 @@ MODULE l_module_OC_IVector (
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
-        ALLOCA respond__ENA$respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
+        ALLOCA respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
     )
 )
 EMODULE l_class_OC_IVectorTest (
@@ -127,6 +127,6 @@ MODULE l_module_OC_IVectorIndication (
     METHOD ind$heard__ENA (
         PARAM v l_struct_OC_ValuePair
         LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
-        ALLOCA ind$heard__ENA$ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
+        ALLOCA ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
     )
 )

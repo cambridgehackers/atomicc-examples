@@ -17,11 +17,11 @@
 //METAGUARD; memdelay_rule; delayCount > 1;
 //METARULES; memdelay_rule
 //METASTART; l_module_OC_Lpm
+//METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINTERNAL; inQ; l_module_OC_Fifo1;
 //METAINTERNAL; fifo; l_module_OC_Fifo2;
 //METAINTERNAL; outQ; l_module_OC_Fifo1;
 //METAINTERNAL; mem; l_module_OC_LpmMemory;
-//METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINVOKE; enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; enter__ENA; recirc__ENA
 //METAGUARD; enter; ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
