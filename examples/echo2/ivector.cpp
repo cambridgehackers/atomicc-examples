@@ -119,17 +119,17 @@ public:
 
 IVectorTest ivectorTest;
 
-int main(int argc, const char *argv[])
-{
-    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    while (!ivectorTest.ivector->request.say__RDY())
-        ;
-    ivectorTest.ivector->request.say(UTYPE{22
-#ifdef USE_STRUCT
-, 44
-#endif
-});
-    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
-    return 0;
-}
+//int main(int argc, const char *argv[])
+//{
+//    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
+//    while (!ivectorTest.ivector->request.say__RDY())
+//        ;
+//    ivectorTest.ivector->request.say(UTYPE{22
+//#ifdef USE_STRUCT
+//, 44
+//#endif
+//});
+//    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
+//    return 0;
+//}
 

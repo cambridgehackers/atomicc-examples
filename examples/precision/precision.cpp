@@ -41,7 +41,7 @@ __module IVectorInd {
 };
 
 __interface IVectorRequest {
-    void say(myint6 meth, myint4 v) if (true) {}
+    void say(myint6 meth, myint4 v);
 };
 
 ValueType grumpy;
