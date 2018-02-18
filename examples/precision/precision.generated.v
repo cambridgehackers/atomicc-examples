@@ -1,6 +1,6 @@
 `include "precision.generated.vh"
 
-module l_module_OC_Fifo1_OC_3 (
+module l_module_OC_Fifo1_OC_0 (
     input CLK,
     input nRST,
     input in$enq__ENA,
@@ -47,7 +47,7 @@ module l_module_OC_IVector (
     input ind$heard__RDY);
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
-    l_module_OC_Fifo1_OC_3 fifo (
+    l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
         request$say__ENA,

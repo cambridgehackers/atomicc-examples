@@ -34,20 +34,14 @@ EMODULE l_ainterface_OC_PipeOut (
 EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValuePair
-    )
-    METHOD out$deq__ENA
-    METHOD out$first l_struct_OC_ValuePair
 )
 EMODULE l_module_OC_Fifo1 (
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValuePair
-    )
-    METHOD out$deq__ENA
-    METHOD out$first l_struct_OC_ValuePair
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
 )
 MODULE l_module_OC_Fifo2 (
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     FIELD/Count 2  element l_struct_OC_ValuePair
     FIELD rindex INTEGER_32
     FIELD windex INTEGER_32

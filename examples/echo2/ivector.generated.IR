@@ -34,13 +34,10 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 (
 EMODULE l_module_OC_Fifo_OC_0 (
     FIELD in l_ainterface_OC_PipeIn_OC_1
     FIELD out l_ainterface_OC_PipeOut_OC_2
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValuePair
-    )
-    METHOD out$deq__ENA
-    METHOD out$first l_struct_OC_ValuePair
 )
 MODULE l_module_OC_Fifo1_OC_3 (
+    FIELD in l_ainterface_OC_PipeIn_OC_1
+    FIELD out l_ainterface_OC_PipeOut_OC_2
     FIELD element l_struct_OC_ValuePair
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -57,6 +54,8 @@ MODULE l_module_OC_Fifo1_OC_3 (
     METHOD out$first__RDY INTEGER_1 = (full)
 )
 MODULE l_module_OC_FifoPong (
+    FIELD in l_ainterface_OC_PipeIn_OC_1
+    FIELD out l_ainterface_OC_PipeOut_OC_2
     FIELD element1 l_module_OC_Fifo1_OC_3
     FIELD element2 l_module_OC_Fifo1_OC_3
     FIELD pong INTEGER_8
@@ -100,13 +99,10 @@ EMODULE l_class_OC_IVectorTest (
 EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
-    METHOD in$enq__ENA (
-        PARAM v INTEGER_32
-    )
-    METHOD out$deq__ENA
-    METHOD out$first INTEGER_32
 )
 MODULE l_module_OC_Fifo1 (
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA (

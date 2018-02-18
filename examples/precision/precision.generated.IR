@@ -19,7 +19,7 @@ EMODULE l_struct_OC_ValueType (
     FIELD a INTEGER_6
     FIELD b INTEGER_4
 )
-EMODULE l_ainterface_OC_PipeIn_OC_1 (
+EMODULE l_ainterface_OC_PipeIn_OC_2 (
     METHOD enq__ENA (
         PARAM v l_struct_OC_ValueType
     )
@@ -28,20 +28,17 @@ EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
     METHOD first INTEGER_32
 )
-EMODULE l_ainterface_OC_PipeOut_OC_2 (
+EMODULE l_ainterface_OC_PipeOut_OC_3 (
     METHOD deq__ENA
     METHOD first l_struct_OC_ValueType
 )
-EMODULE l_module_OC_Fifo_OC_0 (
-    FIELD in l_ainterface_OC_PipeIn_OC_1
-    FIELD out l_ainterface_OC_PipeOut_OC_2
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValueType
-    )
-    METHOD out$deq__ENA
-    METHOD out$first l_struct_OC_ValueType
+EMODULE l_module_OC_Fifo_OC_1 (
+    FIELD in l_ainterface_OC_PipeIn_OC_2
+    FIELD out l_ainterface_OC_PipeOut_OC_3
 )
-MODULE l_module_OC_Fifo1_OC_3 (
+MODULE l_module_OC_Fifo1_OC_0 (
+    FIELD in l_ainterface_OC_PipeIn_OC_2
+    FIELD out l_ainterface_OC_PipeOut_OC_3
     FIELD element l_struct_OC_ValueType
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
@@ -60,7 +57,7 @@ MODULE l_module_OC_Fifo1_OC_3 (
 MODULE l_module_OC_IVector (
     FIELD request l_ainterface_OC_IVectorRequest
     OUTCALL ind l_ainterface_OC_IVectorIndication
-    FIELD fifo l_module_OC_Fifo1_OC_3
+    FIELD fifo l_module_OC_Fifo1_OC_0
     FIELD fcounter INTEGER_8
     FIELD counter INTEGER_9
     FIELD gcounter INTEGER_9
@@ -86,13 +83,10 @@ EMODULE l_class_OC_IVectorTest (
 EMODULE l_module_OC_Fifo (
     FIELD in l_ainterface_OC_PipeIn
     FIELD out l_ainterface_OC_PipeOut
-    METHOD in$enq__ENA (
-        PARAM v INTEGER_32
-    )
-    METHOD out$deq__ENA
-    METHOD out$first INTEGER_32
 )
 MODULE l_module_OC_Fifo1 (
+    FIELD in l_ainterface_OC_PipeIn
+    FIELD out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA (
