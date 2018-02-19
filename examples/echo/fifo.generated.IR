@@ -1,7 +1,5 @@
 EMODULE l_ainterface_OC_PipeIn (
-    METHOD enq__ENA (
-        PARAM v INTEGER_32
-    )
+    METHOD enq__ENA ( INTEGER_32 v ) 
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
@@ -16,15 +14,14 @@ MODULE l_module_OC_Fifo1 (
     FIELD out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v INTEGER_32
+    METHOD in$enq__ENA ( INTEGER_32 v )  {
         STORE :element = in$enq$v
         STORE :full = 1
-    )
+    }
     METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
-    METHOD out$deq__ENA (
+    METHOD out$deq__ENA {
         STORE :full = 0
-    )
+    }
     METHOD out$deq__RDY INTEGER_1 = (full)
     METHOD out$first INTEGER_32 = (element)
     METHOD out$first__RDY INTEGER_1 = (full)

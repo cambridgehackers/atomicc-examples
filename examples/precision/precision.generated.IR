@@ -1,28 +1,18 @@
 EMODULE l_ainterface_OC_IVectorIndication (
-    METHOD heard__ENA (
-        PARAM meth INTEGER_6
-        PARAM v INTEGER_4
-    )
+    METHOD heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) 
 )
 EMODULE l_ainterface_OC_IVectorRequest (
-    METHOD say__ENA (
-        PARAM meth INTEGER_6
-        PARAM v INTEGER_4
-    )
+    METHOD say__ENA ( INTEGER_6 meth , INTEGER_4 v ) 
 )
 EMODULE l_ainterface_OC_PipeIn (
-    METHOD enq__ENA (
-        PARAM v INTEGER_32
-    )
+    METHOD enq__ENA ( INTEGER_32 v ) 
 )
 EMODULE l_struct_OC_ValueType (
     FIELD a INTEGER_6
     FIELD b INTEGER_4
 )
 EMODULE l_ainterface_OC_PipeIn_OC_2 (
-    METHOD enq__ENA (
-        PARAM v l_struct_OC_ValueType
-    )
+    METHOD enq__ENA ( l_struct_OC_ValueType v ) 
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
@@ -41,15 +31,14 @@ MODULE l_module_OC_Fifo1_OC_0 (
     FIELD out l_ainterface_OC_PipeOut_OC_3
     FIELD element l_struct_OC_ValueType
     FIELD full INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValueType
+    METHOD in$enq__ENA ( l_struct_OC_ValueType v )  {
         STORE :element = in$enq$v
         STORE :full = 1
-    )
+    }
     METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
-    METHOD out$deq__ENA (
+    METHOD out$deq__ENA {
         STORE :full = 0
-    )
+    }
     METHOD out$deq__RDY INTEGER_1 = (full)
     METHOD out$first l_struct_OC_ValueType = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
@@ -61,21 +50,19 @@ MODULE l_module_OC_IVector (
     FIELD fcounter INTEGER_8
     FIELD counter INTEGER_9
     FIELD gcounter INTEGER_9
-    METHOD request$say__ENA (
-        PARAM meth INTEGER_6
-        PARAM v INTEGER_4
+    METHOD request$say__ENA ( INTEGER_6 meth , INTEGER_4 v )  {
         LET INTEGER_6 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_4 :request$say__ENA$temp$b = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
         ALLOCA request$say__ENA$temp l_struct_OC_ValueType
-    )
-    METHOD/Rule respond__ENA (
+    }
+    METHOD/Rule respond__ENA {
         CALL :fifo$out$first{}
         LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
         ALLOCA respond__ENA$temp l_struct_OC_ValueType
-    )
+    }
 )
 EMODULE l_class_OC_IVectorTest (
     FIELD ivector l_module_OC_IVector
@@ -89,23 +76,19 @@ MODULE l_module_OC_Fifo1 (
     FIELD out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v INTEGER_32
+    METHOD in$enq__ENA ( INTEGER_32 v )  {
         STORE :element = in$enq$v
         STORE :full = 1
-    )
+    }
     METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
-    METHOD out$deq__ENA (
+    METHOD out$deq__ENA {
         STORE :full = 0
-    )
+    }
     METHOD out$deq__RDY INTEGER_1 = (full)
     METHOD out$first INTEGER_32 = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
 MODULE l_module_OC_IVectorInd (
     FIELD ind l_ainterface_OC_IVectorIndication
-    METHOD ind$heard__ENA (
-        PARAM meth INTEGER_6
-        PARAM v INTEGER_4
-    )
+    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) 
 )

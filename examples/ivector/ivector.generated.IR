@@ -1,19 +1,11 @@
 EMODULE l_ainterface_OC_IVectorIndication (
-    METHOD heard__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
-    )
+    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) 
 )
 EMODULE l_ainterface_OC_IVectorRequest (
-    METHOD say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
-    )
+    METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v ) 
 )
 EMODULE l_ainterface_OC_PipeIn (
-    METHOD enq__ENA (
-        PARAM v INTEGER_32
-    )
+    METHOD enq__ENA ( INTEGER_32 v ) 
 )
 EMODULE l_struct_OC_ValuePair (
     FIELD a INTEGER_32
@@ -21,9 +13,7 @@ EMODULE l_struct_OC_ValuePair (
     FIELD c INTEGER_32
 )
 EMODULE l_ainterface_OC_PipeIn_OC_1 (
-    METHOD enq__ENA (
-        PARAM v l_struct_OC_ValuePair
-    )
+    METHOD enq__ENA ( l_struct_OC_ValuePair v ) 
 )
 EMODULE l_ainterface_OC_PipeOut (
     METHOD deq__ENA
@@ -42,15 +32,14 @@ MODULE l_module_OC_Fifo1_OC_3 (
     FIELD out l_ainterface_OC_PipeOut_OC_2
     FIELD element l_struct_OC_ValuePair
     FIELD full INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValuePair
+    METHOD in$enq__ENA ( l_struct_OC_ValuePair v )  {
         STORE :element = in$enq$v
         STORE :full = 1
-    )
+    }
     METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
-    METHOD out$deq__ENA (
+    METHOD out$deq__ENA {
         STORE :full = 0
-    )
+    }
     METHOD out$deq__RDY INTEGER_1 = (full)
     METHOD out$first l_struct_OC_ValuePair = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
@@ -61,32 +50,29 @@ MODULE l_module_OC_FifoPong (
     FIELD element1 l_module_OC_Fifo1_OC_3
     FIELD element2 l_module_OC_Fifo1_OC_3
     FIELD pong INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v l_struct_OC_ValuePair
+    METHOD in$enq__ENA ( l_struct_OC_ValuePair v )  {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
-    )
-    METHOD out$deq__ENA (
+    }
+    METHOD out$deq__ENA {
         CALL/Action (pong):element2$out$deq__ENA{}
         CALL/Action (pong ^ 1):element1$out$deq__ENA{}
         STORE :pong = pong ^ 1
-    )
-    METHOD out$first l_struct_OC_ValuePair = (out$first$retval) (
+    }
+    METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
         CALL (pong):element2$out$first{}
         LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
         ALLOCA out$first$retval l_struct_OC_ValuePair
-    )
+    }
 )
 MODULE l_module_OC_IVector (
     FIELD/Count 10  fifo l_module_OC_FifoPong
     OUTCALL out l_ainterface_OC_IVectorIndication
     FIELD vsize INTEGER_32
     FIELD in l_ainterface_OC_IVectorRequest
-    METHOD in$say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
+    METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v )  {
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
         CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{in$say__ENA$temp}
         CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo1$in$enq__ENA{in$say__ENA$temp}
@@ -99,77 +85,77 @@ MODULE l_module_OC_IVector (
         CALL/Action ((in$say$meth == 8) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo8$in$enq__ENA{in$say__ENA$temp}
         CALL/Action (((in$say$meth == 8) ^ 1) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo9$in$enq__ENA{in$say__ENA$temp}
         ALLOCA in$say__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_0__ENA (
+    }
+    METHOD/Rule respond_rule_0__ENA {
         CALL :fifo0$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_0__ENA$temp = fifo0$out$first{}
         CALL/Action :fifo0$out$deq__ENA{}
         CALL/Action :out$heard__ENA{0,respond_rule_0__ENA$temp$b}
         ALLOCA respond_rule_0__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_1__ENA (
+    }
+    METHOD/Rule respond_rule_1__ENA {
         CALL :fifo1$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_1__ENA$temp = fifo1$out$first{}
         CALL/Action :fifo1$out$deq__ENA{}
         CALL/Action :out$heard__ENA{1,respond_rule_1__ENA$temp$b}
         ALLOCA respond_rule_1__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_2__ENA (
+    }
+    METHOD/Rule respond_rule_2__ENA {
         CALL :fifo2$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_2__ENA$temp = fifo2$out$first{}
         CALL/Action :fifo2$out$deq__ENA{}
         CALL/Action :out$heard__ENA{2,respond_rule_2__ENA$temp$b}
         ALLOCA respond_rule_2__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_3__ENA (
+    }
+    METHOD/Rule respond_rule_3__ENA {
         CALL :fifo3$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_3__ENA$temp = fifo3$out$first{}
         CALL/Action :fifo3$out$deq__ENA{}
         CALL/Action :out$heard__ENA{3,respond_rule_3__ENA$temp$b}
         ALLOCA respond_rule_3__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_4__ENA (
+    }
+    METHOD/Rule respond_rule_4__ENA {
         CALL :fifo4$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_4__ENA$temp = fifo4$out$first{}
         CALL/Action :fifo4$out$deq__ENA{}
         CALL/Action :out$heard__ENA{4,respond_rule_4__ENA$temp$b}
         ALLOCA respond_rule_4__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_5__ENA (
+    }
+    METHOD/Rule respond_rule_5__ENA {
         CALL :fifo5$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_5__ENA$temp = fifo5$out$first{}
         CALL/Action :fifo5$out$deq__ENA{}
         CALL/Action :out$heard__ENA{5,respond_rule_5__ENA$temp$b}
         ALLOCA respond_rule_5__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_6__ENA (
+    }
+    METHOD/Rule respond_rule_6__ENA {
         CALL :fifo6$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_6__ENA$temp = fifo6$out$first{}
         CALL/Action :fifo6$out$deq__ENA{}
         CALL/Action :out$heard__ENA{6,respond_rule_6__ENA$temp$b}
         ALLOCA respond_rule_6__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_7__ENA (
+    }
+    METHOD/Rule respond_rule_7__ENA {
         CALL :fifo7$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_7__ENA$temp = fifo7$out$first{}
         CALL/Action :fifo7$out$deq__ENA{}
         CALL/Action :out$heard__ENA{7,respond_rule_7__ENA$temp$b}
         ALLOCA respond_rule_7__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_8__ENA (
+    }
+    METHOD/Rule respond_rule_8__ENA {
         CALL :fifo8$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_8__ENA$temp = fifo8$out$first{}
         CALL/Action :fifo8$out$deq__ENA{}
         CALL/Action :out$heard__ENA{8,respond_rule_8__ENA$temp$b}
         ALLOCA respond_rule_8__ENA$temp l_struct_OC_ValuePair
-    )
-    METHOD/Rule respond_rule_9__ENA (
+    }
+    METHOD/Rule respond_rule_9__ENA {
         CALL :fifo9$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_9__ENA$temp = fifo9$out$first{}
         CALL/Action :fifo9$out$deq__ENA{}
         CALL/Action :out$heard__ENA{9,respond_rule_9__ENA$temp$b}
         ALLOCA respond_rule_9__ENA$temp l_struct_OC_ValuePair
-    )
+    }
 )
 EMODULE l_class_OC_IVectorTest (
     FIELD ivector l_module_OC_IVector
@@ -183,23 +169,19 @@ MODULE l_module_OC_Fifo1 (
     FIELD out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
-    METHOD in$enq__ENA (
-        PARAM v INTEGER_32
+    METHOD in$enq__ENA ( INTEGER_32 v )  {
         STORE :element = in$enq$v
         STORE :full = 1
-    )
+    }
     METHOD in$enq__RDY INTEGER_1 = (full ^ 1)
-    METHOD out$deq__ENA (
+    METHOD out$deq__ENA {
         STORE :full = 0
-    )
+    }
     METHOD out$deq__RDY INTEGER_1 = (full)
     METHOD out$first INTEGER_32 = (element)
     METHOD out$first__RDY INTEGER_1 = (full)
 )
 EMODULE l_module_OC_IVectorInd (
     FIELD ind l_ainterface_OC_IVectorIndication
-    METHOD ind$heard__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
-    )
+    METHOD ind$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) 
 )

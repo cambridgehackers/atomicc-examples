@@ -1,14 +1,8 @@
 EMODULE l_ainterface_OC_EchoIndication (
-    METHOD heard__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
-    )
+    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) 
 )
 EMODULE l_ainterface_OC_EchoRequest (
-    METHOD say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
-    )
+    METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v ) 
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say (
     FIELD meth INTEGER_32
@@ -22,9 +16,7 @@ EMODULE l_struct_OC_EchoRequest_data (
     FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union
 )
 EMODULE l_ainterface_OC_PipeIn (
-    METHOD enq__ENA (
-        PARAM v l_struct_OC_EchoRequest_data
-    )
+    METHOD enq__ENA ( l_struct_OC_EchoRequest_data v ) 
 )
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard (
     FIELD meth INTEGER_32
@@ -38,64 +30,54 @@ EMODULE l_struct_OC_EchoIndication_data (
     FIELD data l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union
 )
 EMODULE l_ainterface_OC_PipeIn_OC_0 (
-    METHOD enq__ENA (
-        PARAM v l_struct_OC_EchoIndication_data
-    )
+    METHOD enq__ENA ( l_struct_OC_EchoIndication_data v ) 
 )
 MODULE l_module_OC_Echo (
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL indication l_ainterface_OC_EchoIndication
-    METHOD request$say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
+    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v )  {
         CALL/Action :indication$heard__ENA{request$say$meth,request$say$v}
-    )
+    }
 )
 MODULE l_module_OC_EchoIndicationInput (
     FIELD pipe l_ainterface_OC_PipeIn_OC_0
     OUTCALL indication l_ainterface_OC_EchoIndication
-    METHOD pipe$enq__ENA (
-        PARAM v l_struct_OC_EchoIndication_data
+    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v )  {
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
         CALL/Action (pipe$enq__ENA$v_2e_addr5$tag == 1):indication$heard__ENA{pipe$enq__ENA$v_2e_addr$data$heard$meth,pipe$enq__ENA$v_2e_addr$data$heard$v}
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoIndication_data
-    )
+    }
 )
 MODULE l_module_OC_EchoIndicationOutput (
     FIELD indication l_ainterface_OC_EchoIndication
     OUTCALL pipe l_ainterface_OC_PipeIn_OC_0
-    METHOD indication$heard__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
+    METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v )  {
         LET INTEGER_32 :indication$heard__ENA$ind$tag = 1
         STORE :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
         STORE :indication$heard__ENA$ind$data$heard$v = indication$heard$v
         CALL/Action :pipe$enq__ENA{indication$heard__ENA$ind}
         ALLOCA indication$heard__ENA$ind l_struct_OC_EchoIndication_data
-    )
+    }
 )
 MODULE l_module_OC_EchoRequestInput (
     FIELD pipe l_ainterface_OC_PipeIn
     OUTCALL request l_ainterface_OC_EchoRequest
-    METHOD pipe$enq__ENA (
-        PARAM v l_struct_OC_EchoRequest_data
+    METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v )  {
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
         CALL/Action (pipe$enq__ENA$v_2e_addr5$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
         ALLOCA pipe$enq__ENA$v_2e_addr l_struct_OC_EchoRequest_data
-    )
+    }
 )
 MODULE l_module_OC_EchoRequestOutput (
     FIELD request l_ainterface_OC_EchoRequest
     OUTCALL pipe l_ainterface_OC_PipeIn
-    METHOD request$say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
+    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v )  {
         LET INTEGER_32 :request$say__ENA$ind$tag = 1
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
         ALLOCA request$say__ENA$ind l_struct_OC_EchoRequest_data
-    )
+    }
 )
 MODULE l_module_OC_Connect (
     SOFTWARE request
@@ -112,11 +94,9 @@ MODULE l_module_OC_Connect (
     FIELD lEcho l_module_OC_Echo
     FIELD lERO_test l_module_OC_EchoRequestOutput
     FIELD lEII_test l_module_OC_EchoIndicationInput
-    METHOD request$say__ENA (
-        PARAM meth INTEGER_32
-        PARAM v INTEGER_32
+    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v )  {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
-    )
+    }
 )
 EMODULE l_struct_OC_ValueType (
     FIELD a INTEGER_32
