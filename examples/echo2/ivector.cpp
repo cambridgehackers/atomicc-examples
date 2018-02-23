@@ -96,6 +96,7 @@ __module IVector {
 // Test Bench
 ////////////////////////////////////////////////////////////
 
+#if 0
 void IVectorIndication::ind.heard(UTYPE v)
 {
     printf("Heard an ivector: %d %d\n", v
@@ -107,6 +108,7 @@ void IVectorIndication::ind.heard(UTYPE v)
 );
     //stop_main_program = 1;
 }
+#endif
 
 class IVectorTest {
 public:

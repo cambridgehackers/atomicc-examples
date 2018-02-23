@@ -3,6 +3,9 @@ EMODULE l_struct_OC_ValuePair {
     FIELD b INTEGER_32
     FIELD c INTEGER_32
 }
+EMODULE l_class_OC_IVectorTest {
+    FIELD ivector l_module_OC_IVector
+}
 EMODULE l_ainterface_OC_IVectorIndication {
     METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
@@ -23,12 +26,17 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValuePair
 }
-EMODULE l_class_OC_IVectorTest {
-    FIELD ivector l_module_OC_IVector
-}
 EMODULE l_module_OC_Fifo {
     INTERFACE in l_ainterface_OC_PipeIn
     INTERFACE out l_ainterface_OC_PipeOut
+}
+EMODULE l_module_OC_Fifo_OC_0 {
+    INTERFACE in l_ainterface_OC_PipeIn_OC_1
+    INTERFACE out l_ainterface_OC_PipeOut_OC_2
+}
+EMODULE l_module_OC_IVectorInd {
+    INTERFACE ind l_ainterface_OC_IVectorIndication
+    METHOD ind$heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 MODULE l_module_OC_Fifo1 {
     INTERFACE in l_ainterface_OC_PipeIn
@@ -80,10 +88,6 @@ MODULE l_module_OC_FifoPong {
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
     }
-}
-EMODULE l_module_OC_Fifo_OC_0 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_1
-    INTERFACE out l_ainterface_OC_PipeOut_OC_2
 }
 MODULE l_module_OC_IVector {
     FIELD/Count 10  fifo l_module_OC_FifoPong
@@ -174,8 +178,4 @@ MODULE l_module_OC_IVector {
         CALL/Action :fifo9$out$deq__ENA{}
         CALL/Action :out$heard__ENA{9,respond_rule_9__ENA$temp$b}
     }
-}
-EMODULE l_module_OC_IVectorInd {
-    INTERFACE ind l_ainterface_OC_IVectorIndication
-    METHOD ind$heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }

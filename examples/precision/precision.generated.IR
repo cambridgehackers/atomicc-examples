@@ -2,6 +2,9 @@ EMODULE l_struct_OC_ValueType {
     FIELD a INTEGER_6
     FIELD b INTEGER_4
 }
+EMODULE l_class_OC_IVectorTest {
+    FIELD ivector l_module_OC_IVector
+}
 EMODULE l_ainterface_OC_IVectorIndication {
     METHOD heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
 }
@@ -22,12 +25,13 @@ EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValueType
 }
-EMODULE l_class_OC_IVectorTest {
-    FIELD ivector l_module_OC_IVector
-}
 EMODULE l_module_OC_Fifo {
     INTERFACE in l_ainterface_OC_PipeIn
     INTERFACE out l_ainterface_OC_PipeOut
+}
+EMODULE l_module_OC_Fifo_OC_1 {
+    INTERFACE in l_ainterface_OC_PipeIn_OC_2
+    INTERFACE out l_ainterface_OC_PipeOut_OC_3
 }
 MODULE l_module_OC_Fifo1 {
     INTERFACE in l_ainterface_OC_PipeIn
@@ -56,10 +60,6 @@ MODULE l_module_OC_Fifo1_OC_0 {
         STORE :full = 0
     }
     METHOD out$first l_struct_OC_ValueType = (element) if (full)
-}
-EMODULE l_module_OC_Fifo_OC_1 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_2
-    INTERFACE out l_ainterface_OC_PipeOut_OC_3
 }
 MODULE l_module_OC_IVector {
     INTERFACE request l_ainterface_OC_IVectorRequest
