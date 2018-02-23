@@ -148,14 +148,3 @@ module l_module_OC_IVector (
     assign respond__RDY = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY;
 endmodule 
 
-module l_module_OC_IVectorIndication (
-    input CLK,
-    input nRST,
-    input ind$heard__ENA,
-    input [95:0]ind$heard$v,
-    output ind$heard__RDY);
-    assign ind$heard__RDY = 1;
-    // Extra assigments, not to output wires
-    assign ind$heard__ENA$v_2e_addr = ind$heard$v;
-endmodule 
-

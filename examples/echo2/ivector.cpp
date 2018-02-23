@@ -65,7 +65,7 @@ static FifoPong<UTYPE> bozouseless;
 __interface IndIF {
     void heard(UTYPE v);
 };
-__module IVectorIndication {
+__emodule IVectorIndication {
     IndIF ind;
     void ind.heard(UTYPE v);
 };

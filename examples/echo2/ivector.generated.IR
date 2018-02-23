@@ -74,11 +74,11 @@ MODULE l_module_OC_FifoPong {
         STORE :pong = pong ^ 1
     }
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
+        ALLOCA out$first$retval l_struct_OC_ValuePair
         CALL (pong):element2$out$first{}
         LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
         CALL (pong ^ 1):element1$out$first{}
         LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
-        ALLOCA out$first$retval l_struct_OC_ValuePair
     }
 }
 EMODULE l_module_OC_Fifo_OC_0 {
@@ -93,17 +93,17 @@ MODULE l_module_OC_IVector {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }
     METHOD/Rule respond__ENA {
+        ALLOCA respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
-        ALLOCA respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
     }
 }
-MODULE l_module_OC_IVectorIndication {
+EMODULE l_module_OC_IVectorIndication {
     INTERFACE ind l_ainterface_OC_IndIF
     METHOD ind$heard__ENA ( l_struct_OC_ValuePair v ) {
-        LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
         ALLOCA ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
+        LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
     }
 }

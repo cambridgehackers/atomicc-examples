@@ -145,18 +145,18 @@ MODULE l_module_OC_EchoRequestOutput {
     INTERFACE request l_ainterface_OC_EchoRequest
     EINTERFACE pipe l_ainterface_OC_PipeIn
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
+        ALLOCA request$say2__ENA$ind l_struct_OC_EchoRequest_data
         LET INTEGER_32 :request$say2__ENA$ind$tag = 2
         STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
         STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
         STORE :request$say2__ENA$ind$data$say2$v2 = request$say2$v2
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
-        ALLOCA request$say2__ENA$ind l_struct_OC_EchoRequest_data
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+        ALLOCA request$say__ENA$ind l_struct_OC_EchoRequest_data
         LET INTEGER_32 :request$say__ENA$ind$tag = 1
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
-        ALLOCA request$say__ENA$ind l_struct_OC_EchoRequest_data
     }
 }

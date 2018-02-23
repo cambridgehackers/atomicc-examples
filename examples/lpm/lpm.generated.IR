@@ -54,14 +54,16 @@ MODULE l_module_OC_Lpm {
     EINTERFACE ind l_ainterface_OC_LpmIndication
     INTERFACE request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA {
+        ALLOCA enter__ENA$temp l_struct_OC_ValuePair
         CALL :inQ$out$first{}
         LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first{}
         CALL/Action :inQ$out$deq__ENA{}
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
-        ALLOCA enter__ENA$temp l_struct_OC_ValuePair
     }
     METHOD/Rule exit_rule__ENA {
+        ALLOCA exit_rule__ENA$mtemp l_struct_OC_ValuePair
+        ALLOCA exit_rule__ENA$temp l_struct_OC_ValuePair
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first{}
         CALL :mem$ifc$resValue{}
@@ -69,10 +71,10 @@ MODULE l_module_OC_Lpm {
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
-        ALLOCA exit_rule__ENA$mtemp l_struct_OC_ValuePair
-        ALLOCA exit_rule__ENA$temp l_struct_OC_ValuePair
     }
     METHOD/Rule recirc__ENA {
+        ALLOCA recirc__ENA$mtemp l_struct_OC_ValuePair
+        ALLOCA recirc__ENA$temp l_struct_OC_ValuePair
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :recirc__ENA$temp = fifo$out$first{}
         CALL :mem$ifc$resValue{}
@@ -81,21 +83,19 @@ MODULE l_module_OC_Lpm {
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
         CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
-        ALLOCA recirc__ENA$mtemp l_struct_OC_ValuePair
-        ALLOCA recirc__ENA$temp l_struct_OC_ValuePair
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+        ALLOCA request$say__ENA$temp l_struct_OC_ValuePair
         LET INTEGER_32 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
-        ALLOCA request$say__ENA$temp l_struct_OC_ValuePair
     }
     METHOD/Rule respond__ENA {
+        ALLOCA respond__ENA$temp l_struct_OC_ValuePair
         CALL :outQ$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first{}
         CALL/Action :outQ$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
-        ALLOCA respond__ENA$temp l_struct_OC_ValuePair
     }
 }
 MODULE l_module_OC_LpmMemory {
