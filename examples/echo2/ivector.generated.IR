@@ -23,9 +23,26 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValuePair
 }
-EMODULE l_module_OC_Fifo_OC_0 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_1
-    INTERFACE out l_ainterface_OC_PipeOut_OC_2
+EMODULE l_class_OC_IVectorTest {
+    FIELD ivector l_module_OC_IVector
+}
+EMODULE l_module_OC_Fifo {
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
+}
+MODULE l_module_OC_Fifo1 {
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
+    FIELD element INTEGER_32
+    FIELD full INTEGER_8
+    METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if (full) {
+        STORE :full = 0
+    }
+    METHOD out$first INTEGER_32 = (element) if (full)
 }
 MODULE l_module_OC_Fifo1_OC_3 {
     INTERFACE in l_ainterface_OC_PipeIn_OC_1
@@ -64,6 +81,10 @@ MODULE l_module_OC_FifoPong {
         ALLOCA out$first$retval l_struct_OC_ValuePair
     }
 }
+EMODULE l_module_OC_Fifo_OC_0 {
+    INTERFACE in l_ainterface_OC_PipeIn_OC_1
+    INTERFACE out l_ainterface_OC_PipeOut_OC_2
+}
 MODULE l_module_OC_IVector {
     INTERFACE request l_ainterface_OC_IVectorRequest
     FIELD fifo l_module_OC_FifoPong
@@ -78,27 +99,6 @@ MODULE l_module_OC_IVector {
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
         ALLOCA respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
     }
-}
-EMODULE l_class_OC_IVectorTest {
-    FIELD ivector l_module_OC_IVector
-}
-EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-}
-MODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-    FIELD element INTEGER_32
-    FIELD full INTEGER_8
-    METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
-        STORE :element = in$enq$v
-        STORE :full = 1
-    }
-    METHOD out$deq__ENA if (full) {
-        STORE :full = 0
-    }
-    METHOD out$first INTEGER_32 = (element) if (full)
 }
 MODULE l_module_OC_IVectorIndication {
     INTERFACE ind l_ainterface_OC_IndIF

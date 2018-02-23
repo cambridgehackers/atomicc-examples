@@ -11,13 +11,9 @@ EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first INTEGER_32
 }
-EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-}
-EMODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+EMODULE l_class_OC_EchoTest {
+    FIELD echo l_module_OC_Echo
+    FIELD x INTEGER_32
 }
 MODULE l_module_OC_Echo {
     SOFTWARE sout
@@ -34,10 +30,14 @@ MODULE l_module_OC_Echo {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
 }
-EMODULE l_class_OC_EchoTest {
-    FIELD echo l_module_OC_Echo
-    FIELD x INTEGER_32
-}
 EMODULE l_module_OC_EchoInd {
     INTERFACE hout l_ainterface_OC_EchoIndication
+}
+EMODULE l_module_OC_Fifo {
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
+}
+EMODULE l_module_OC_Fifo1 {
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
 }

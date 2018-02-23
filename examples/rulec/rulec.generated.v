@@ -1,5 +1,96 @@
 `include "rulec.generated.vh"
 
+module l_module_OC_Connect (
+    input CLK,
+    input nRST,
+    input request$say2__ENA,
+    input [31:0]request$say2$meth,
+    input [31:0]request$say2$v,
+    input [31:0]request$say2$v2,
+    output request$say2__RDY,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
+    output request$say__RDY,
+    output indication$heard__ENA,
+    output [31:0]indication$heard$meth,
+    output [31:0]indication$heard$v,
+    input indication$heard__RDY);
+// software: request
+// software: indication
+    l_module_OC_EchoIndicationOutput lEIO (
+        CLK,
+        nRST,
+        lEcho$indication$heard__ENA,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
+        lEcho$indication$heard__RDY,
+        lEIO$pipe$enq__ENA,
+        lEIO$pipe$enq$v,
+        lEIO$pipe$enq__RDY);
+    l_module_OC_EchoRequestInput lERI (
+        CLK,
+        nRST,
+        lERO_test$pipe$enq__ENA,
+        lERO_test$pipe$enq$v,
+        lERO_test$pipe$enq__RDY,
+        lERI$request$say2__ENA,
+        lERI$request$say2$meth,
+        lERI$request$say2$v,
+        lERI$request$say2$v2,
+        lERI$request$say2__RDY,
+        lERI$request$say__ENA,
+        lERI$request$say$meth,
+        lERI$request$say$v,
+        lERI$request$say__RDY);
+    l_module_OC_Echo lEcho (
+        CLK,
+        nRST,
+        lERI$request$say2__ENA,
+        lERI$request$say2$meth,
+        lERI$request$say2$v,
+        lERI$request$say2$v2,
+        lERI$request$say2__RDY,
+        lERI$request$say__ENA,
+        lERI$request$say$meth,
+        lERI$request$say$v,
+        lERI$request$say__RDY,
+        lEcho$indication$heard__ENA,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
+        lEcho$indication$heard__RDY);
+    l_module_OC_EchoRequestOutput lERO_test (
+        CLK,
+        nRST,
+        request$say2__ENA,
+        request$say2$meth,
+        request$say2$v,
+        request$say2$v2,
+        request$say2__RDY,
+        request$say__ENA,
+        request$say$meth,
+        request$say$v,
+        request$say__RDY,
+        lERO_test$pipe$enq__ENA,
+        lERO_test$pipe$enq$v,
+        lERO_test$pipe$enq__RDY);
+    l_module_OC_EchoIndicationInput lEII_test (
+        CLK,
+        nRST,
+        lEIO$pipe$enq__ENA,
+        lEIO$pipe$enq$v,
+        lEIO$pipe$enq__RDY,
+        lEII_test$indication$heard__ENA,
+        lEII_test$indication$heard$meth,
+        lEII_test$indication$heard$v,
+        lEII_test$indication$heard__RDY);
+    assign indication$heard$meth = lEII_test$indication$heard$meth;
+    assign indication$heard$v = lEII_test$indication$heard$v;
+    assign indication$heard__ENA = lEII_test$indication$heard__ENA;
+    assign indication$heard__RDY = lEII_test$indication$heard__RDY;
+    // assign pipe$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+endmodule 
+
 module l_module_OC_Echo (
     input CLK,
     input nRST,
@@ -221,95 +312,5 @@ module l_module_OC_EchoRequestOutput (
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
-
-module l_module_OC_Connect (
-    input CLK,
-    input nRST,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    input [31:0]request$say2$v2,
-    output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    output request$say__RDY,
-    output indication$heard__ENA,
-    output [31:0]indication$heard$meth,
-    output [31:0]indication$heard$v,
-    input indication$heard__RDY);
-// software: request
-// software: indication
-    l_module_OC_EchoIndicationOutput lEIO (
-        CLK,
-        nRST,
-        lEcho$indication$heard__ENA,
-        lEcho$indication$heard$meth,
-        lEcho$indication$heard$v,
-        lEcho$indication$heard__RDY,
-        lEIO$pipe$enq__ENA,
-        lEIO$pipe$enq$v,
-        lEIO$pipe$enq__RDY);
-    l_module_OC_EchoRequestInput lERI (
-        CLK,
-        nRST,
-        lERO_test$pipe$enq__ENA,
-        lERO_test$pipe$enq$v,
-        lERO_test$pipe$enq__RDY,
-        lERI$request$say2__ENA,
-        lERI$request$say2$meth,
-        lERI$request$say2$v,
-        lERI$request$say2$v2,
-        lERI$request$say2__RDY,
-        lERI$request$say__ENA,
-        lERI$request$say$meth,
-        lERI$request$say$v,
-        lERI$request$say__RDY);
-    l_module_OC_Echo lEcho (
-        CLK,
-        nRST,
-        lERI$request$say2__ENA,
-        lERI$request$say2$meth,
-        lERI$request$say2$v,
-        lERI$request$say2$v2,
-        lERI$request$say2__RDY,
-        lERI$request$say__ENA,
-        lERI$request$say$meth,
-        lERI$request$say$v,
-        lERI$request$say__RDY,
-        lEcho$indication$heard__ENA,
-        lEcho$indication$heard$meth,
-        lEcho$indication$heard$v,
-        lEcho$indication$heard__RDY);
-    l_module_OC_EchoRequestOutput lERO_test (
-        CLK,
-        nRST,
-        request$say2__ENA,
-        request$say2$meth,
-        request$say2$v,
-        request$say2$v2,
-        request$say2__RDY,
-        request$say__ENA,
-        request$say$meth,
-        request$say$v,
-        request$say__RDY,
-        lERO_test$pipe$enq__ENA,
-        lERO_test$pipe$enq$v,
-        lERO_test$pipe$enq__RDY);
-    l_module_OC_EchoIndicationInput lEII_test (
-        CLK,
-        nRST,
-        lEIO$pipe$enq__ENA,
-        lEIO$pipe$enq$v,
-        lEIO$pipe$enq__RDY,
-        lEII_test$indication$heard__ENA,
-        lEII_test$indication$heard$meth,
-        lEII_test$indication$heard$v,
-        lEII_test$indication$heard__RDY);
-    assign indication$heard$meth = lEII_test$indication$heard$meth;
-    assign indication$heard$v = lEII_test$indication$heard$v;
-    assign indication$heard__ENA = lEII_test$indication$heard__ENA;
-    assign indication$heard__RDY = lEII_test$indication$heard__RDY;
 endmodule 
 

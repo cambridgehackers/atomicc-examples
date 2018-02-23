@@ -38,44 +38,6 @@ module l_module_OC_Fifo2 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_LpmMemory (
-    input CLK,
-    input nRST,
-    input ifc$req__ENA,
-    input [95:0]ifc$req$v,
-    output ifc$req__RDY,
-    input ifc$resAccept__ENA,
-    output ifc$resAccept__RDY,
-    output [95:0]ifc$resValue,
-    output ifc$resValue__RDY);
-    reg[31:0] delayCount;
-    reg[95:0] saved;
-    assign ifc$req__RDY = delayCount == 0;
-    assign ifc$resAccept__RDY = delayCount == 1;
-    assign ifc$resValue = saved;
-    assign ifc$resValue__RDY = delayCount == 1;
-    assign memdelay_rule__RDY = delayCount > 1;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        delayCount <= 0;
-        saved <= 0;
-      end // nRST
-      else begin
-        if (ifc$req__ENA) begin
-            delayCount <= 4;
-            saved <= ifc$req$v;
-        end; // End of ifc$req__ENA
-        if (ifc$resAccept__ENA) begin
-            delayCount <= 0;
-        end; // End of ifc$resAccept__ENA
-        if (memdelay_rule__ENA) begin
-            delayCount <= delayCount - 1;
-        end; // End of memdelay_rule__ENA
-      end
-    end // always @ (posedge CLK)
-endmodule 
-
 module l_module_OC_Lpm (
     input CLK,
     input nRST,
@@ -157,6 +119,44 @@ module l_module_OC_Lpm (
       if (!nRST) begin
         doneCount <= 0;
       end // nRST
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_module_OC_LpmMemory (
+    input CLK,
+    input nRST,
+    input ifc$req__ENA,
+    input [95:0]ifc$req$v,
+    output ifc$req__RDY,
+    input ifc$resAccept__ENA,
+    output ifc$resAccept__RDY,
+    output [95:0]ifc$resValue,
+    output ifc$resValue__RDY);
+    reg[31:0] delayCount;
+    reg[95:0] saved;
+    assign ifc$req__RDY = delayCount == 0;
+    assign ifc$resAccept__RDY = delayCount == 1;
+    assign ifc$resValue = saved;
+    assign ifc$resValue__RDY = delayCount == 1;
+    assign memdelay_rule__RDY = delayCount > 1;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        delayCount <= 0;
+        saved <= 0;
+      end // nRST
+      else begin
+        if (ifc$req__ENA) begin
+            delayCount <= 4;
+            saved <= ifc$req$v;
+        end; // End of ifc$req__ENA
+        if (ifc$resAccept__ENA) begin
+            delayCount <= 0;
+        end; // End of ifc$resAccept__ENA
+        if (memdelay_rule__ENA) begin
+            delayCount <= delayCount - 1;
+        end; // End of memdelay_rule__ENA
+      end
     end // always @ (posedge CLK)
 endmodule 
 

@@ -1,6 +1,12 @@
 `ifndef __ivector_GENERATED__VH__
 `define __ivector_GENERATED__VH__
 
+//METASTART; l_module_OC_Fifo1
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; full ^ 1;
+//METAGUARD; out$deq; full;
+//METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; l_module_OC_Fifo1_OC_3
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
@@ -62,10 +68,4 @@
 //METAINVOKE; respond_rule_9__ENA; :fifo9$out$deq__ENA;:fifo9$out$first;:out$heard__ENA;
 //METAGUARD; respond_rule_9; (fifo9$out$first__RDY & fifo9$out$deq__RDY) & out$heard__RDY;
 //METARULES; respond_rule_0; respond_rule_1; respond_rule_2; respond_rule_3; respond_rule_4; respond_rule_5; respond_rule_6; respond_rule_7; respond_rule_8; respond_rule_9
-//METASTART; l_module_OC_Fifo1
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; full ^ 1;
-//METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; full;
 `endif

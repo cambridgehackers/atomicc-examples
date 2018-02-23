@@ -1,10 +1,10 @@
-EMODULE l_ainterface_OC_LpmIndication {
-    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
-}
 EMODULE l_struct_OC_ValuePair {
     FIELD a INTEGER_32
     FIELD b INTEGER_32
     FIELD c INTEGER_32
+}
+EMODULE l_ainterface_OC_LpmIndication {
+    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_LpmMem {
     METHOD req__ENA ( l_struct_OC_ValuePair v )
@@ -43,22 +43,6 @@ MODULE l_module_OC_Fifo2 {
         STORE :rindex = (rindex + 1) % 2
     }
     METHOD out$first l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1)) if (rindex != windex)
-}
-MODULE l_module_OC_LpmMemory {
-    FIELD delayCount INTEGER_32
-    FIELD saved l_struct_OC_ValuePair
-    INTERFACE ifc l_ainterface_OC_LpmMem
-    METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (delayCount == 0) {
-        STORE :delayCount = 4
-        STORE :saved = ifc$req$v
-    }
-    METHOD ifc$resAccept__ENA if (delayCount == 1) {
-        STORE :delayCount = 0
-    }
-    METHOD ifc$resValue l_struct_OC_ValuePair = (saved) if (delayCount == 1)
-    METHOD/Rule memdelay_rule__ENA if (delayCount > 1) {
-        STORE :delayCount = delayCount - 1
-    }
 }
 MODULE l_module_OC_Lpm {
     PRIORITY recirc enter;exit
@@ -112,5 +96,21 @@ MODULE l_module_OC_Lpm {
         CALL/Action :outQ$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
         ALLOCA respond__ENA$temp l_struct_OC_ValuePair
+    }
+}
+MODULE l_module_OC_LpmMemory {
+    FIELD delayCount INTEGER_32
+    FIELD saved l_struct_OC_ValuePair
+    INTERFACE ifc l_ainterface_OC_LpmMem
+    METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (delayCount == 0) {
+        STORE :delayCount = 4
+        STORE :saved = ifc$req$v
+    }
+    METHOD ifc$resAccept__ENA if (delayCount == 1) {
+        STORE :delayCount = 0
+    }
+    METHOD ifc$resValue l_struct_OC_ValuePair = (saved) if (delayCount == 1)
+    METHOD/Rule memdelay_rule__ENA if (delayCount > 1) {
+        STORE :delayCount = delayCount - 1
     }
 }

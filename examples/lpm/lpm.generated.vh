@@ -6,16 +6,6 @@
 //METAGUARD; out$deq; rindex != windex;
 //METABEFORE; out$first; :out$deq__ENA
 //METAGUARD; out$first; rindex != windex;
-//METASTART; l_module_OC_LpmMemory
-//METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
-//METAGUARD; ifc$req; delayCount == 0;
-//METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
-//METAGUARD; ifc$resAccept; delayCount == 1;
-//METABEFORE; ifc$resValue; :ifc$req__ENA
-//METAGUARD; ifc$resValue; delayCount == 1;
-//METABEFORE; memdelay_rule__ENA; :ifc$req__ENA; :ifc$resAccept__ENA
-//METAGUARD; memdelay_rule; delayCount > 1;
-//METARULES; memdelay_rule
 //METASTART; l_module_OC_Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINTERNAL; inQ; l_module_OC_Fifo1;
@@ -36,4 +26,14 @@
 //METAGUARD; respond; (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
 //METARULES; enter; exit_rule; recirc; respond
 //METAPRIORITY; recirc; enter;exit
+//METASTART; l_module_OC_LpmMemory
+//METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
+//METAGUARD; ifc$req; delayCount == 0;
+//METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
+//METAGUARD; ifc$resAccept; delayCount == 1;
+//METABEFORE; ifc$resValue; :ifc$req__ENA
+//METAGUARD; ifc$resValue; delayCount == 1;
+//METABEFORE; memdelay_rule__ENA; :ifc$req__ENA; :ifc$resAccept__ENA
+//METAGUARD; memdelay_rule; delayCount > 1;
+//METARULES; memdelay_rule
 `endif
