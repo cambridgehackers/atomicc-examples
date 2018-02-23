@@ -22,16 +22,16 @@ EMODULE l_ainterface_OC_PipeOut {
     METHOD first l_struct_OC_ValuePair
 }
 EMODULE l_module_OC_Fifo {
-    FIELD in l_ainterface_OC_PipeIn
-    FIELD out l_ainterface_OC_PipeOut
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
 }
 EMODULE l_module_OC_Fifo1 {
-    FIELD in l_ainterface_OC_PipeIn
-    FIELD out l_ainterface_OC_PipeOut
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
 }
 MODULE l_module_OC_Fifo2 {
-    FIELD in l_ainterface_OC_PipeIn
-    FIELD out l_ainterface_OC_PipeOut
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
     FIELD/Count 2  element l_struct_OC_ValuePair
     FIELD rindex INTEGER_32
     FIELD windex INTEGER_32
@@ -47,7 +47,7 @@ MODULE l_module_OC_Fifo2 {
 MODULE l_module_OC_LpmMemory {
     FIELD delayCount INTEGER_32
     FIELD saved l_struct_OC_ValuePair
-    FIELD ifc l_ainterface_OC_LpmMem
+    INTERFACE ifc l_ainterface_OC_LpmMem
     METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (delayCount == 0) {
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
@@ -67,8 +67,8 @@ MODULE l_module_OC_Lpm {
     FIELD outQ l_module_OC_Fifo1
     FIELD mem l_module_OC_LpmMemory
     FIELD doneCount INTEGER_32
-    OUTCALL ind l_ainterface_OC_LpmIndication
-    FIELD request l_ainterface_OC_LpmRequest
+    EINTERFACE ind l_ainterface_OC_LpmIndication
+    INTERFACE request l_ainterface_OC_LpmRequest
     METHOD/Rule enter__ENA {
         CALL :inQ$out$first{}
         LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first{}

@@ -24,12 +24,12 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD first l_struct_OC_ValuePair
 }
 EMODULE l_module_OC_Fifo_OC_0 {
-    FIELD in l_ainterface_OC_PipeIn_OC_1
-    FIELD out l_ainterface_OC_PipeOut_OC_2
+    INTERFACE in l_ainterface_OC_PipeIn_OC_1
+    INTERFACE out l_ainterface_OC_PipeOut_OC_2
 }
 MODULE l_module_OC_Fifo1_OC_3 {
-    FIELD in l_ainterface_OC_PipeIn_OC_1
-    FIELD out l_ainterface_OC_PipeOut_OC_2
+    INTERFACE in l_ainterface_OC_PipeIn_OC_1
+    INTERFACE out l_ainterface_OC_PipeOut_OC_2
     FIELD element l_struct_OC_ValuePair
     FIELD full INTEGER_8
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (full ^ 1) {
@@ -42,8 +42,8 @@ MODULE l_module_OC_Fifo1_OC_3 {
     METHOD out$first l_struct_OC_ValuePair = (element) if (full)
 }
 MODULE l_module_OC_FifoPong {
-    FIELD in l_ainterface_OC_PipeIn_OC_1
-    FIELD out l_ainterface_OC_PipeOut_OC_2
+    INTERFACE in l_ainterface_OC_PipeIn_OC_1
+    INTERFACE out l_ainterface_OC_PipeOut_OC_2
     FIELD element1 l_module_OC_Fifo1_OC_3
     FIELD element2 l_module_OC_Fifo1_OC_3
     FIELD pong INTEGER_8
@@ -65,9 +65,9 @@ MODULE l_module_OC_FifoPong {
     }
 }
 MODULE l_module_OC_IVector {
-    FIELD request l_ainterface_OC_IVectorRequest
+    INTERFACE request l_ainterface_OC_IVectorRequest
     FIELD fifo l_module_OC_FifoPong
-    OUTCALL ind l_ainterface_OC_IndIF
+    EINTERFACE ind l_ainterface_OC_IndIF
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }
@@ -83,12 +83,12 @@ EMODULE l_class_OC_IVectorTest {
     FIELD ivector l_module_OC_IVector
 }
 EMODULE l_module_OC_Fifo {
-    FIELD in l_ainterface_OC_PipeIn
-    FIELD out l_ainterface_OC_PipeOut
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
 }
 MODULE l_module_OC_Fifo1 {
-    FIELD in l_ainterface_OC_PipeIn
-    FIELD out l_ainterface_OC_PipeOut
+    INTERFACE in l_ainterface_OC_PipeIn
+    INTERFACE out l_ainterface_OC_PipeOut
     FIELD element INTEGER_32
     FIELD full INTEGER_8
     METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
@@ -101,7 +101,7 @@ MODULE l_module_OC_Fifo1 {
     METHOD out$first INTEGER_32 = (element) if (full)
 }
 MODULE l_module_OC_IVectorIndication {
-    FIELD ind l_ainterface_OC_IndIF
+    INTERFACE ind l_ainterface_OC_IndIF
     METHOD ind$heard__ENA ( l_struct_OC_ValuePair v ) {
         LET l_struct_OC_ValuePair :ind$heard__ENA$v_2e_addr = ind$heard$v
         ALLOCA ind$heard__ENA$v_2e_addr l_struct_OC_ValuePair
