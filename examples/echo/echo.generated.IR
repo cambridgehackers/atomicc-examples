@@ -1,6 +1,6 @@
 EMODULE l_class_OC_EchoTest {
-    FIELD echo l_module_OC_Echo
-    FIELD x INTEGER_32
+    FIELD l_module_OC_Echo echo
+    FIELD INTEGER_32 x
 }
 EMODULE l_ainterface_OC_EchoIndication {
     METHOD heard__ENA ( INTEGER_32 v )
@@ -16,22 +16,22 @@ EMODULE l_ainterface_OC_PipeOut {
     METHOD first INTEGER_32
 }
 EMODULE l_module_OC_EchoInd {
-    INTERFACE hout l_ainterface_OC_EchoIndication
+    INTERFACE l_ainterface_OC_EchoIndication hout
 }
 EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 EMODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 MODULE l_module_OC_Echo {
     SOFTWARE sout
     SOFTWARE ind
-    INTERFACE sout l_ainterface_OC_EchoRequest
-    EINTERFACE ind l_ainterface_OC_EchoIndication
-    FIELD fifo l_module_OC_Fifo1
+    INTERFACE l_ainterface_OC_EchoRequest sout
+    EINTERFACE l_ainterface_OC_EchoIndication ind
+    FIELD l_module_OC_Fifo1 fifo
     METHOD/Rule respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}

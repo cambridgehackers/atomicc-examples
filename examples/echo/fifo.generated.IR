@@ -6,14 +6,14 @@ EMODULE l_ainterface_OC_PipeOut {
     METHOD first INTEGER_32
 }
 EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 MODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-    FIELD element INTEGER_32
-    FIELD full INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD INTEGER_32 element
+    FIELD INTEGER_8 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
         STORE :element = in$enq$v
         STORE :full = 1

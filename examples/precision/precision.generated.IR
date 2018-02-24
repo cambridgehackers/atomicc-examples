@@ -1,9 +1,9 @@
 EMODULE l_struct_OC_ValueType {
-    FIELD a INTEGER_6
-    FIELD b INTEGER_4
+    FIELD INTEGER_6 a
+    FIELD INTEGER_4 b
 }
 EMODULE l_class_OC_IVectorTest {
-    FIELD ivector l_module_OC_IVector
+    FIELD l_module_OC_IVector ivector
 }
 EMODULE l_ainterface_OC_IVectorIndication {
     METHOD heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
@@ -26,18 +26,18 @@ EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD first l_struct_OC_ValueType
 }
 EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 EMODULE l_module_OC_Fifo_OC_1 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_2
-    INTERFACE out l_ainterface_OC_PipeOut_OC_3
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
 MODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-    FIELD element INTEGER_32
-    FIELD full INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD INTEGER_32 element
+    FIELD INTEGER_8 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -48,10 +48,10 @@ MODULE l_module_OC_Fifo1 {
     METHOD out$first INTEGER_32 = (element) if (full)
 }
 MODULE l_module_OC_Fifo1_OC_0 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_2
-    INTERFACE out l_ainterface_OC_PipeOut_OC_3
-    FIELD element l_struct_OC_ValueType
-    FIELD full INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
+    FIELD l_struct_OC_ValueType element
+    FIELD INTEGER_8 full
     METHOD in$enq__ENA ( l_struct_OC_ValueType v ) if (full ^ 1) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -62,20 +62,20 @@ MODULE l_module_OC_Fifo1_OC_0 {
     METHOD out$first l_struct_OC_ValueType = (element) if (full)
 }
 MODULE l_module_OC_IVector {
-    INTERFACE request l_ainterface_OC_IVectorRequest
-    EINTERFACE ind l_ainterface_OC_IVectorIndication
-    FIELD fifo l_module_OC_Fifo1_OC_0
-    FIELD fcounter INTEGER_8
-    FIELD counter INTEGER_9
-    FIELD gcounter INTEGER_9
+    INTERFACE l_ainterface_OC_IVectorRequest request
+    EINTERFACE l_ainterface_OC_IVectorIndication ind
+    FIELD l_module_OC_Fifo1_OC_0 fifo
+    FIELD INTEGER_8 fcounter
+    FIELD INTEGER_9 counter
+    FIELD INTEGER_9 gcounter
     METHOD request$say__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
-        ALLOCA request$say__ENA$temp l_struct_OC_ValueType
+        ALLOCA l_struct_OC_ValueType request$say__ENA$temp
         LET INTEGER_6 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_4 :request$say__ENA$temp$b = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
     }
     METHOD/Rule respond__ENA {
-        ALLOCA respond__ENA$temp l_struct_OC_ValueType
+        ALLOCA l_struct_OC_ValueType respond__ENA$temp
         CALL :fifo$out$first{}
         LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first{}
         CALL/Action :fifo$out$deq__ENA{}
@@ -83,6 +83,6 @@ MODULE l_module_OC_IVector {
     }
 }
 MODULE l_module_OC_IVectorInd {
-    INTERFACE ind l_ainterface_OC_IVectorIndication
+    INTERFACE l_ainterface_OC_IVectorIndication ind
     METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
 }

@@ -1,10 +1,10 @@
 EMODULE l_struct_OC_ValuePair {
-    FIELD a INTEGER_32
-    FIELD b INTEGER_32
-    FIELD/Array 20  c INTEGER_32
+    FIELD INTEGER_32 a
+    FIELD INTEGER_32 b
+    FIELD/Array 20  INTEGER_32 c
 }
 EMODULE l_class_OC_IVectorTest {
-    FIELD ivector l_module_OC_IVector
+    FIELD l_module_OC_IVector ivector
 }
 EMODULE l_ainterface_OC_IVectorRequest {
     METHOD say__ENA ( l_struct_OC_ValuePair v )
@@ -27,21 +27,21 @@ EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD first l_struct_OC_ValuePair
 }
 EMODULE l_module_OC_Fifo {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 EMODULE l_module_OC_Fifo_OC_0 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_1
-    INTERFACE out l_ainterface_OC_PipeOut_OC_2
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
 }
 EMODULE l_module_OC_IVectorIndication {
-    INTERFACE ind l_ainterface_OC_IndIF
+    INTERFACE l_ainterface_OC_IndIF ind
 }
 MODULE l_module_OC_Fifo1 {
-    INTERFACE in l_ainterface_OC_PipeIn
-    INTERFACE out l_ainterface_OC_PipeOut
-    FIELD element INTEGER_32
-    FIELD full INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD INTEGER_32 element
+    FIELD INTEGER_8 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -52,10 +52,10 @@ MODULE l_module_OC_Fifo1 {
     METHOD out$first INTEGER_32 = (element) if (full)
 }
 MODULE l_module_OC_Fifo1_OC_3 {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_1
-    INTERFACE out l_ainterface_OC_PipeOut_OC_2
-    FIELD element l_struct_OC_ValuePair
-    FIELD full INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+    FIELD l_struct_OC_ValuePair element
+    FIELD INTEGER_8 full
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (full ^ 1) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -66,11 +66,11 @@ MODULE l_module_OC_Fifo1_OC_3 {
     METHOD out$first l_struct_OC_ValuePair = (element) if (full)
 }
 MODULE l_module_OC_FifoPong {
-    INTERFACE in l_ainterface_OC_PipeIn_OC_1
-    INTERFACE out l_ainterface_OC_PipeOut_OC_2
-    FIELD element1 l_module_OC_Fifo1_OC_3
-    FIELD element2 l_module_OC_Fifo1_OC_3
-    FIELD pong INTEGER_8
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+    FIELD l_module_OC_Fifo1_OC_3 element1
+    FIELD l_module_OC_Fifo1_OC_3 element2
+    FIELD INTEGER_8 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
@@ -81,7 +81,7 @@ MODULE l_module_OC_FifoPong {
         STORE :pong = pong ^ 1
     }
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
-        ALLOCA out$first$retval l_struct_OC_ValuePair
+        ALLOCA l_struct_OC_ValuePair out$first$retval
         CALL (pong):element2$out$first{}
         LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
         CALL (pong ^ 1):element1$out$first{}
@@ -89,14 +89,14 @@ MODULE l_module_OC_FifoPong {
     }
 }
 MODULE l_module_OC_IVector {
-    INTERFACE request l_ainterface_OC_IVectorRequest
-    FIELD fifo l_module_OC_FifoPong
-    EINTERFACE ind l_ainterface_OC_IndIF
+    INTERFACE l_ainterface_OC_IVectorRequest request
+    FIELD l_module_OC_FifoPong fifo
+    EINTERFACE l_ainterface_OC_IndIF ind
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }
     METHOD/Rule respond__ENA {
-        ALLOCA respond__ENA$agg_2e_tmp l_struct_OC_ValuePair
+        ALLOCA l_struct_OC_ValuePair respond__ENA$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
