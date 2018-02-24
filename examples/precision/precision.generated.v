@@ -79,6 +79,8 @@ module l_module_OC_IVector (
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
+    wire [9:0]request$say__ENA$temp;
+    wire [9:0]respond__ENA$temp;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1_OC_0 fifo (
@@ -97,10 +99,10 @@ module l_module_OC_IVector (
     assign ind$heard$meth = respond__ENA$temp$a;
     assign ind$heard$v = respond__ENA$temp$b;
     assign ind$heard__ENA = respond__ENA;
-    assign respond__RDY = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
     // Extra assigments, not to output wires
     assign request$say__ENA$temp$a = request$say$meth;
     assign request$say__ENA$temp$b = request$say$v;
+    assign respond__RDY = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -49,6 +49,13 @@ module l_module_OC_Lpm (
     output [31:0]ind$heard$meth,
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
+    wire [95:0]enter__ENA$temp;
+    wire [95:0]exit_rule__ENA$mtemp;
+    wire [95:0]exit_rule__ENA$temp;
+    wire [95:0]recirc__ENA$mtemp;
+    wire [95:0]recirc__ENA$temp;
+    wire [95:0]request$say__ENA$temp;
+    wire [95:0]respond__ENA$temp;
     wire inQ$out$deq__RDY;
     wire inQ$out$first__RDY;
     l_module_OC_Fifo1 inQ (
@@ -82,7 +89,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         exit_rule__ENA,
-        recirc__ENA$temp,
+        fifo$out$first,
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
@@ -103,17 +110,18 @@ module l_module_OC_Lpm (
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
     reg[31:0] doneCount;
-    assign enter__RDY = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
-    assign exit_rule__RDY = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
     assign ind$heard$meth = respond__ENA$temp$a;
     assign ind$heard$v = respond__ENA$temp$b;
     assign ind$heard__ENA = respond__ENA;
-    assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
-    assign respond__RDY = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
     // Extra assigments, not to output wires
+    assign enter__RDY = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
+    assign exit_rule__RDY = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
     assign recirc__ENA$mtemp = exit_rule__ENA$mtemp;
+    assign recirc__ENA$temp = fifo$out$first;
+    assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign request$say__ENA$temp$a = request$say$meth;
     assign request$say__ENA$temp$b = request$say$v;
+    assign respond__RDY = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -138,6 +146,7 @@ module l_module_OC_LpmMemory (
     assign ifc$resAccept__RDY = delayCount == 1;
     assign ifc$resValue = saved;
     assign ifc$resValue__RDY = delayCount == 1;
+    // Extra assigments, not to output wires
     assign memdelay_rule__RDY = delayCount > 1;
 
     always @( posedge CLK) begin

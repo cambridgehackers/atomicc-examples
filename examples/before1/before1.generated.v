@@ -93,6 +93,7 @@ module l_module_OC_Connect (
     assign indication$heard__ENA = lEII_test$indication$heard__ENA;
     assign indication$heard__RDY = lEII_test$indication$heard__RDY;
     // assign pipe$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // Extra assigments, not to output wires
     assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 endmodule 
 
@@ -125,16 +126,17 @@ module l_module_OC_Echo (
     reg[31:0] v_delay;
     reg[31:0] x;
     reg[31:0] y;
-    assign delay_rule__RDY = ((busy != 0) & (busy_delay == 0)) != 0;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = respond_rule__ENA;
     assign request$say2__RDY = (busy != 0) ^ 1;
     assign request$say__RDY = (busy != 0) ^ 1;
-    assign respond_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
+    // Extra assigments, not to output wires
+    assign delay_rule__RDY = ((busy != 0) & (busy_delay == 0)) != 0;
+    assign respond_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -187,15 +189,16 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
+    wire [95:0]pipe$enq__ENA$v_2e_addr;
     reg[31:0] busy_delay;
     reg[31:0] meth_delay;
     reg[31:0] v_delay;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = input_rule__ENA;
-    assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__RDY = (busy_delay != 0) ^ 1;
     // Extra assigments, not to output wires
+    assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__ENA$v_2e_addr = pipe$enq$v;
 
     always @( posedge CLK) begin
@@ -235,10 +238,11 @@ module l_module_OC_EchoIndicationOutput (
     reg[31:0] ind_busy;
     reg[31:0] even;
     assign indication$heard__RDY = (ind_busy != 0) ^ 1;
-    assign output_rulee__RDY = (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
-    assign output_ruleo__RDY = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
     assign pipe$enq$v = output_rulee__ENA ? ind0 : ind1;
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
+    // Extra assigments, not to output wires
+    assign output_rulee__RDY = (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
+    assign output_ruleo__RDY = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -288,6 +292,7 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
+    wire [191:0]pipe$enq__ENA$v_2e_addr;
     assign pipe$enq__RDY = (request$say__RDY | (pipe$enq__ENA$v_2e_addr13$tag != 1)) & (request$say2__RDY | (pipe$enq__ENA$v_2e_addr15$tag != 2));
     assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
     assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
@@ -313,6 +318,8 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire [191:0]request$say2__ENA$ind;
+    wire [191:0]request$say__ENA$ind;
     assign pipe$enq$v = request$say2__ENA ? request$say2__ENA$ind : request$say__ENA$ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;

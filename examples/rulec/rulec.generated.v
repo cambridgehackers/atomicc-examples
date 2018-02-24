@@ -113,12 +113,13 @@ module l_module_OC_Echo (
     reg[31:0] busy_delay;
     reg[31:0] meth_delay;
     reg[31:0] v_delay;
-    assign delay_rule__RDY = ((busy != 0) & (busy_delay == 0)) != 0;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = respond_rule__ENA;
     assign request$say2__RDY = (busy != 0) ^ 1;
     assign request$say__RDY = (busy != 0) ^ 1;
+    // Extra assigments, not to output wires
+    assign delay_rule__RDY = ((busy != 0) & (busy_delay == 0)) != 0;
     assign respond_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
 
     always @( posedge CLK) begin
@@ -170,8 +171,9 @@ module l_module_OC_EchoIndicationInput (
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = input_rule__ENA;
-    assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
     assign pipe$enq__RDY = (busy_delay != 0) ^ 1;
+    // Extra assigments, not to output wires
+    assign input_rule__RDY = (busy_delay != 0) & indication$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -210,10 +212,11 @@ module l_module_OC_EchoIndicationOutput (
     reg[31:0] ind_busy;
     reg[31:0] even;
     assign indication$heard__RDY = (ind_busy != 0) ^ 1;
-    assign output_rulee__RDY = (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
-    assign output_ruleo__RDY = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
     assign pipe$enq$v = output_rulee__ENA ? ind0 : ind1;
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
+    // Extra assigments, not to output wires
+    assign output_rulee__RDY = (((ind_busy != 0) & (even != 0)) != 0) & pipe$enq__RDY;
+    assign output_ruleo__RDY = (((ind_busy != 0) & (even == 0)) != 0) & pipe$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -289,6 +292,8 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire [191:0]request$say2__ENA$ind;
+    wire [191:0]request$say__ENA$ind;
     assign pipe$enq$v = request$say2__ENA ? request$say2__ENA$ind : request$say__ENA$ind;
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;

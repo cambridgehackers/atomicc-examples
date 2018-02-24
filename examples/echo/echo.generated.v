@@ -19,11 +19,12 @@ module l_module_OC_Echo (
         sout$say__ENA,
         sout$say$v,
         sout$say__RDY,
-        fifo$out$deq__ENA,
+        respond_rule__ENA,
         fifo$out$deq__RDY,
         ind$heard$v,
         fifo$out$first__RDY);
-    assign ind$heard__ENA = fifo$out$deq__ENA;
+    assign ind$heard__ENA = respond_rule__ENA;
+    // Extra assigments, not to output wires
     assign respond_rule__RDY = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY;
 endmodule 
 
