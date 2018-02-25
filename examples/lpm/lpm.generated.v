@@ -88,7 +88,7 @@ module l_module_OC_Lpm (
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
-        fifo$out$first,
+        exit_rule__ENA$temp,
         fifo$out$first__RDY);
     l_module_OC_Fifo1 outQ (
         CLK,
@@ -108,7 +108,7 @@ module l_module_OC_Lpm (
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,
-        mem$ifc$resValue,
+        exit_rule__ENA$mtemp,
         mem$ifc$resValue__RDY);
     assign ind$heard$meth = respond__ENA$temp$a;
     assign ind$heard$v = respond__ENA$temp$b;
@@ -116,7 +116,7 @@ module l_module_OC_Lpm (
     // Extra assigments, not to output wires
     assign enter__RDY = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign exit_rule__RDY = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-    assign recirc__ENA$mtemp = exit_rule__ENA$mtemp;
+    assign recirc__ENA$mtemp = mem$ifc$resValue;
     assign recirc__ENA$temp = fifo$out$first;
     assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
     assign request$say__ENA$temp$a = request$say$meth;

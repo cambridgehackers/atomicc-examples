@@ -145,9 +145,8 @@ module l_module_OC_IVector (
         request$say__RDY,
         respond__ENA,
         fifo$out$deq__RDY,
-        respond__ENA$agg_2e_tmp,
+        ind$heard$v,
         fifo$out$first__RDY);
-    assign ind$heard$v = respond__ENA$agg_2e_tmp;
     assign ind$heard__ENA = respond__ENA;
     // Extra assigments, not to output wires
     assign respond__RDY = (fifo$out$deq__RDY & fifo$out$first__RDY) & ind$heard__RDY;
