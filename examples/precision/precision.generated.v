@@ -81,6 +81,9 @@ module l_module_OC_IVector (
     input ind$heard__RDY);
     wire [9:0]request$say__ENA$temp;
     wire [9:0]respond__ENA$temp;
+    reg fcounter;
+    reg[8:0] counter;
+    reg[8:0] gcounter;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     l_module_OC_Fifo1_OC_0 fifo (
@@ -93,9 +96,6 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         respond__ENA$temp,
         fifo$out$first__RDY);
-    reg fcounter;
-    reg[8:0] counter;
-    reg[8:0] gcounter;
     assign ind$heard$meth = respond__ENA$temp$a;
     assign ind$heard$v = respond__ENA$temp$b;
     assign ind$heard__ENA = respond__ENA;

@@ -79,6 +79,7 @@ module l_module_OC_FifoPong (
     output [95:0]out$first,
     output out$first__RDY);
     wire [95:0]out$first$retval;
+    reg pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;
@@ -107,7 +108,6 @@ module l_module_OC_FifoPong (
         element2$out$deq__RDY,
         element2$out$first,
         element2$out$first__RDY);
-    reg pong;
     assign in$enq__RDY = (element2$in$enq__RDY | (pong ^ 1)) & (element1$in$enq__RDY | pong);
     assign out$deq__RDY = (element2$out$deq__RDY | (pong ^ 1)) & (element1$out$deq__RDY | pong);
     assign out$first = pong ? element2$out$first : element1$out$first;

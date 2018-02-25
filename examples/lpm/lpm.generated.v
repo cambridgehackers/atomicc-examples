@@ -56,6 +56,7 @@ module l_module_OC_Lpm (
     wire [95:0]recirc__ENA$temp;
     wire [95:0]request$say__ENA$temp;
     wire [95:0]respond__ENA$temp;
+    reg[31:0] doneCount;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
@@ -109,7 +110,6 @@ module l_module_OC_Lpm (
         mem$ifc$resAccept__RDY,
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
-    reg[31:0] doneCount;
     assign ind$heard$meth = respond__ENA$temp$a;
     assign ind$heard$v = respond__ENA$temp$b;
     assign ind$heard__ENA = respond__ENA;
