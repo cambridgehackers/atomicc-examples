@@ -56,8 +56,19 @@ module l_module_OC_Lpm (
     wire [95:0]recirc__ENA$temp;
     wire [95:0]request$say__ENA$temp;
     wire [95:0]respond__ENA$temp;
+    wire fifo$in$enq__RDY;
+    wire fifo$out$deq__RDY;
+    wire [95:0]fifo$out$first;
+    wire fifo$out$first__RDY;
     wire inQ$out$deq__RDY;
     wire inQ$out$first__RDY;
+    wire mem$ifc$req__RDY;
+    wire mem$ifc$resAccept__RDY;
+    wire [95:0]mem$ifc$resValue;
+    wire mem$ifc$resValue__RDY;
+    wire outQ$in$enq__RDY;
+    wire outQ$out$deq__RDY;
+    wire outQ$out$first__RDY;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
@@ -68,10 +79,6 @@ module l_module_OC_Lpm (
         inQ$out$deq__RDY,
         enter__ENA$temp,
         inQ$out$first__RDY);
-    wire fifo$in$enq__RDY;
-    wire fifo$out$deq__RDY;
-    wire [95:0]fifo$out$first;
-    wire fifo$out$first__RDY;
     l_module_OC_Fifo2 fifo (
         CLK,
         nRST,
@@ -82,9 +89,6 @@ module l_module_OC_Lpm (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    wire outQ$in$enq__RDY;
-    wire outQ$out$deq__RDY;
-    wire outQ$out$first__RDY;
     l_module_OC_Fifo1 outQ (
         CLK,
         nRST,
@@ -95,10 +99,6 @@ module l_module_OC_Lpm (
         outQ$out$deq__RDY,
         respond__ENA$temp,
         outQ$out$first__RDY);
-    wire mem$ifc$req__RDY;
-    wire mem$ifc$resAccept__RDY;
-    wire [95:0]mem$ifc$resValue;
-    wire mem$ifc$resValue__RDY;
     l_module_OC_LpmMemory mem (
         CLK,
         nRST,

@@ -83,6 +83,10 @@ module l_module_OC_FifoPong (
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;
     wire element1$out$first__RDY;
+    wire element2$in$enq__RDY;
+    wire element2$out$deq__RDY;
+    wire [95:0]element2$out$first;
+    wire element2$out$first__RDY;
     l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
@@ -93,10 +97,6 @@ module l_module_OC_FifoPong (
         element1$out$deq__RDY,
         element1$out$first,
         element1$out$first__RDY);
-    wire element2$in$enq__RDY;
-    wire element2$out$deq__RDY;
-    wire [95:0]element2$out$first;
-    wire element2$out$first__RDY;
     l_module_OC_Fifo1_OC_3 element2 (
         CLK,
         nRST,

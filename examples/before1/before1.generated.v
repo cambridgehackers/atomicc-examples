@@ -17,6 +17,8 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
+    wire lEcho$swap$x2y__RDY;
+    wire lEcho$swap$y2x__RDY;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
@@ -41,8 +43,6 @@ module l_module_OC_Connect (
         lERI$request$say$meth,
         lERI$request$say$v,
         lERI$request$say__RDY);
-    wire lEcho$swap$x2y__RDY;
-    wire lEcho$swap$y2x__RDY;
     l_module_OC_Echo lEcho (
         CLK,
         nRST,

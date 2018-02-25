@@ -83,6 +83,10 @@ module l_module_OC_FifoPong (
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;
     wire element1$out$first__RDY;
+    wire element2$in$enq__RDY;
+    wire element2$out$deq__RDY;
+    wire [95:0]element2$out$first;
+    wire element2$out$first__RDY;
     l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
@@ -93,10 +97,6 @@ module l_module_OC_FifoPong (
         element1$out$deq__RDY,
         element1$out$first,
         element1$out$first__RDY);
-    wire element2$in$enq__RDY;
-    wire element2$out$deq__RDY;
-    wire [95:0]element2$out$first;
-    wire element2$out$first__RDY;
     l_module_OC_Fifo1_OC_3 element2 (
         CLK,
         nRST,
@@ -150,6 +150,33 @@ module l_module_OC_IVector (
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;
     wire fifo0$out$first__RDY;
+    wire fifo1$in$enq__RDY;
+    wire fifo1$out$deq__RDY;
+    wire fifo1$out$first__RDY;
+    wire fifo2$in$enq__RDY;
+    wire fifo2$out$deq__RDY;
+    wire fifo2$out$first__RDY;
+    wire fifo3$in$enq__RDY;
+    wire fifo3$out$deq__RDY;
+    wire fifo3$out$first__RDY;
+    wire fifo4$in$enq__RDY;
+    wire fifo4$out$deq__RDY;
+    wire fifo4$out$first__RDY;
+    wire fifo5$in$enq__RDY;
+    wire fifo5$out$deq__RDY;
+    wire fifo5$out$first__RDY;
+    wire fifo6$in$enq__RDY;
+    wire fifo6$out$deq__RDY;
+    wire fifo6$out$first__RDY;
+    wire fifo7$in$enq__RDY;
+    wire fifo7$out$deq__RDY;
+    wire fifo7$out$first__RDY;
+    wire fifo8$in$enq__RDY;
+    wire fifo8$out$deq__RDY;
+    wire fifo8$out$first__RDY;
+    wire fifo9$in$enq__RDY;
+    wire fifo9$out$deq__RDY;
+    wire fifo9$out$first__RDY;
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
@@ -160,9 +187,6 @@ module l_module_OC_IVector (
         fifo0$out$deq__RDY,
         respond_rule_0__ENA$temp,
         fifo0$out$first__RDY);
-    wire fifo1$in$enq__RDY;
-    wire fifo1$out$deq__RDY;
-    wire fifo1$out$first__RDY;
     l_module_OC_FifoPong fifo1 (
         CLK,
         nRST,
@@ -173,9 +197,6 @@ module l_module_OC_IVector (
         fifo1$out$deq__RDY,
         respond_rule_1__ENA$temp,
         fifo1$out$first__RDY);
-    wire fifo2$in$enq__RDY;
-    wire fifo2$out$deq__RDY;
-    wire fifo2$out$first__RDY;
     l_module_OC_FifoPong fifo2 (
         CLK,
         nRST,
@@ -186,9 +207,6 @@ module l_module_OC_IVector (
         fifo2$out$deq__RDY,
         respond_rule_2__ENA$temp,
         fifo2$out$first__RDY);
-    wire fifo3$in$enq__RDY;
-    wire fifo3$out$deq__RDY;
-    wire fifo3$out$first__RDY;
     l_module_OC_FifoPong fifo3 (
         CLK,
         nRST,
@@ -199,9 +217,6 @@ module l_module_OC_IVector (
         fifo3$out$deq__RDY,
         respond_rule_3__ENA$temp,
         fifo3$out$first__RDY);
-    wire fifo4$in$enq__RDY;
-    wire fifo4$out$deq__RDY;
-    wire fifo4$out$first__RDY;
     l_module_OC_FifoPong fifo4 (
         CLK,
         nRST,
@@ -212,9 +227,6 @@ module l_module_OC_IVector (
         fifo4$out$deq__RDY,
         respond_rule_4__ENA$temp,
         fifo4$out$first__RDY);
-    wire fifo5$in$enq__RDY;
-    wire fifo5$out$deq__RDY;
-    wire fifo5$out$first__RDY;
     l_module_OC_FifoPong fifo5 (
         CLK,
         nRST,
@@ -225,9 +237,6 @@ module l_module_OC_IVector (
         fifo5$out$deq__RDY,
         respond_rule_5__ENA$temp,
         fifo5$out$first__RDY);
-    wire fifo6$in$enq__RDY;
-    wire fifo6$out$deq__RDY;
-    wire fifo6$out$first__RDY;
     l_module_OC_FifoPong fifo6 (
         CLK,
         nRST,
@@ -238,9 +247,6 @@ module l_module_OC_IVector (
         fifo6$out$deq__RDY,
         respond_rule_6__ENA$temp,
         fifo6$out$first__RDY);
-    wire fifo7$in$enq__RDY;
-    wire fifo7$out$deq__RDY;
-    wire fifo7$out$first__RDY;
     l_module_OC_FifoPong fifo7 (
         CLK,
         nRST,
@@ -251,9 +257,6 @@ module l_module_OC_IVector (
         fifo7$out$deq__RDY,
         respond_rule_7__ENA$temp,
         fifo7$out$first__RDY);
-    wire fifo8$in$enq__RDY;
-    wire fifo8$out$deq__RDY;
-    wire fifo8$out$first__RDY;
     l_module_OC_FifoPong fifo8 (
         CLK,
         nRST,
@@ -264,9 +267,6 @@ module l_module_OC_IVector (
         fifo8$out$deq__RDY,
         respond_rule_8__ENA$temp,
         fifo8$out$first__RDY);
-    wire fifo9$in$enq__RDY;
-    wire fifo9$out$deq__RDY;
-    wire fifo9$out$first__RDY;
     l_module_OC_FifoPong fifo9 (
         CLK,
         nRST,
