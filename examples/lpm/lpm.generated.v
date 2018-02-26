@@ -49,13 +49,6 @@ module l_module_OC_Lpm (
     output [31:0]ind$heard$meth,
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
-    wire [95:0]enter__ENA$temp;
-    wire [95:0]exit_rule__ENA$mtemp;
-    wire [95:0]exit_rule__ENA$temp;
-    wire [95:0]recirc__ENA$mtemp;
-    wire [95:0]recirc__ENA$temp;
-    wire [95:0]request$say__ENA$temp;
-    wire [95:0]respond__ENA$temp;
     reg[31:0] doneCount;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
@@ -70,11 +63,16 @@ module l_module_OC_Lpm (
     wire outQ$in$enq__RDY;
     wire outQ$out$deq__RDY;
     wire outQ$out$first__RDY;
+    wire [31:0]request$say__ENA$temp$a;
+    wire [31:0]request$say__ENA$temp$b;
+    wire [31:0]request$say__ENA$temp$c;
+    wire [31:0]respond__ENA$temp$a;
+    wire [31:0]respond__ENA$temp$b;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
         request$say__ENA,
-        request$say__ENA$temp,
+        { request$say__ENA$temp$a , request$say__ENA$temp$b , request$say__ENA$temp$c },
         request$say__RDY,
         enter__ENA,
         inQ$out$deq__RDY,

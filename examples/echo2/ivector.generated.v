@@ -78,7 +78,6 @@ module l_module_OC_FifoPong (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    wire [95:0]out$first$retval;
     reg pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
@@ -134,7 +133,6 @@ module l_module_OC_IVector (
     output ind$heard__ENA,
     output [95:0]ind$heard$v,
     input ind$heard__RDY);
-    wire [95:0]respond__ENA$agg_2e_tmp;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     l_module_OC_FifoPong fifo (

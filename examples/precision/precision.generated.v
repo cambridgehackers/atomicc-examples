@@ -79,18 +79,20 @@ module l_module_OC_IVector (
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
-    wire [9:0]request$say__ENA$temp;
-    wire [9:0]respond__ENA$temp;
     reg fcounter;
     reg[8:0] counter;
     reg[8:0] gcounter;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
+    wire [5:0]request$say__ENA$temp$a;
+    wire [3:0]request$say__ENA$temp$b;
+    wire [5:0]respond__ENA$temp$a;
+    wire [3:0]respond__ENA$temp$b;
     l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
         request$say__ENA,
-        request$say__ENA$temp,
+        { request$say__ENA$temp$a , request$say__ENA$temp$b },
         request$say__RDY,
         respond__ENA,
         fifo$out$deq__RDY,

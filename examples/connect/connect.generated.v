@@ -104,7 +104,8 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire [95:0]pipe$enq__ENA$v_2e_addr;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$heard$meth;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$heard$v;
     assign indication$heard$meth = pipe$enq__ENA$v_2e_addr$data$heard$meth;
     assign indication$heard$v = pipe$enq__ENA$v_2e_addr$data$heard$v;
     assign indication$heard__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addr5$tag == 1;
@@ -123,9 +124,11 @@ module l_module_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire [95:0]indication$heard__ENA$ind;
+    wire [31:0]indication$heard__ENA$ind$data$heard$meth;
+    wire [31:0]indication$heard__ENA$ind$data$heard$v;
+    wire [31:0]indication$heard__ENA$ind$tag;
     assign indication$heard__RDY = pipe$enq__RDY;
-    assign pipe$enq$v = indication$heard__ENA$ind;
+    assign pipe$enq$v = { indication$heard__ENA$ind$tag , indication$heard__ENA$ind$data$heard$meth , indication$heard__ENA$ind$data$heard$v };
     assign pipe$enq__ENA = indication$heard__ENA;
     // Extra assigments, not to output wires
     assign indication$heard__ENA$ind$tag = 1;
@@ -152,7 +155,8 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire [95:0]pipe$enq__ENA$v_2e_addr;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$meth;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$v;
     assign pipe$enq__RDY = request$say__RDY | (pipe$enq__ENA$v_2e_addr5$tag != 1);
     assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
     assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
@@ -171,8 +175,10 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire [95:0]request$say__ENA$ind;
-    assign pipe$enq$v = request$say__ENA$ind;
+    wire [31:0]request$say__ENA$ind$data$say$meth;
+    wire [31:0]request$say__ENA$ind$data$say$v;
+    wire [31:0]request$say__ENA$ind$tag;
+    assign pipe$enq$v = { request$say__ENA$ind$tag , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v };
     assign pipe$enq__ENA = request$say__ENA;
     assign request$say__RDY = pipe$enq__RDY;
     // Extra assigments, not to output wires

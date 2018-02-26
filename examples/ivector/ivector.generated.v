@@ -78,7 +78,6 @@ module l_module_OC_FifoPong (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    wire [95:0]out$first$retval;
     reg pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
@@ -136,17 +135,6 @@ module l_module_OC_IVector (
     output [31:0]out$heard$meth,
     output [31:0]out$heard$v,
     input out$heard__RDY);
-    wire [95:0]in$say__ENA$temp;
-    wire [95:0]respond_rule_0__ENA$temp;
-    wire [95:0]respond_rule_1__ENA$temp;
-    wire [95:0]respond_rule_2__ENA$temp;
-    wire [95:0]respond_rule_3__ENA$temp;
-    wire [95:0]respond_rule_4__ENA$temp;
-    wire [95:0]respond_rule_5__ENA$temp;
-    wire [95:0]respond_rule_6__ENA$temp;
-    wire [95:0]respond_rule_7__ENA$temp;
-    wire [95:0]respond_rule_8__ENA$temp;
-    wire [95:0]respond_rule_9__ENA$temp;
     reg[31:0] vsize;
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;
@@ -178,11 +166,24 @@ module l_module_OC_IVector (
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
     wire fifo9$out$first__RDY;
+    wire [31:0]in$say__ENA$temp$a;
+    wire [31:0]in$say__ENA$temp$b;
+    wire [31:0]in$say__ENA$temp$c;
+    wire [31:0]respond_rule_0__ENA$temp$b;
+    wire [31:0]respond_rule_1__ENA$temp$b;
+    wire [31:0]respond_rule_2__ENA$temp$b;
+    wire [31:0]respond_rule_3__ENA$temp$b;
+    wire [31:0]respond_rule_4__ENA$temp$b;
+    wire [31:0]respond_rule_5__ENA$temp$b;
+    wire [31:0]respond_rule_6__ENA$temp$b;
+    wire [31:0]respond_rule_7__ENA$temp$b;
+    wire [31:0]respond_rule_8__ENA$temp$b;
+    wire [31:0]respond_rule_9__ENA$temp$b;
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
         in$say__ENA & in$say$meth == 0,
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo0$in$enq__RDY,
         respond_rule_0__ENA,
         fifo0$out$deq__RDY,
@@ -192,7 +193,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 1) & ((in$say$meth == 0) ^ 1),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo1$in$enq__RDY,
         respond_rule_1__ENA,
         fifo1$out$deq__RDY,
@@ -202,7 +203,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 2) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo2$in$enq__RDY,
         respond_rule_2__ENA,
         fifo2$out$deq__RDY,
@@ -212,7 +213,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 3) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo3$in$enq__RDY,
         respond_rule_3__ENA,
         fifo3$out$deq__RDY,
@@ -222,7 +223,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 4) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo4$in$enq__RDY,
         respond_rule_4__ENA,
         fifo4$out$deq__RDY,
@@ -232,7 +233,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 5) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo5$in$enq__RDY,
         respond_rule_5__ENA,
         fifo5$out$deq__RDY,
@@ -242,7 +243,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 6) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo6$in$enq__RDY,
         respond_rule_6__ENA,
         fifo6$out$deq__RDY,
@@ -252,7 +253,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 7) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo7$in$enq__RDY,
         respond_rule_7__ENA,
         fifo7$out$deq__RDY,
@@ -262,7 +263,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & (in$say$meth == 8) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo8$in$enq__RDY,
         respond_rule_8__ENA,
         fifo8$out$deq__RDY,
@@ -272,7 +273,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         in$say__ENA & ((in$say$meth == 8) ^ 1) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))),
-        in$say__ENA$temp,
+        { in$say__ENA$temp$a , in$say__ENA$temp$b , in$say__ENA$temp$c },
         fifo9$in$enq__RDY,
         respond_rule_9__ENA,
         fifo9$out$deq__RDY,
