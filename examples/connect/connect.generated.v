@@ -13,15 +13,10 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
-    wire [95:0]lEII_test$pipe$enq$v;
     wire lEII_test$pipe$enq__RDY;
-    wire [31:0]lEIO$indication$heard$meth;
-    wire [31:0]lEIO$indication$heard$v;
     wire lEIO$indication$heard__RDY;
-    wire [95:0]lERI$pipe$enq$v;
     wire lERI$pipe$enq__RDY;
-    wire [31:0]lEcho$request$say$meth;
-    wire [31:0]lEcho$request$say$v;
+    wire lERO_test$request$say__RDY;
     wire lEcho$request$say__RDY;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
@@ -29,52 +24,56 @@ module l_module_OC_Connect (
         lEcho$indication$heard__ENA,
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
-        lEcho$indication$heard__RDY,
-        lEII_test$pipe$enq__ENA,
-        lEII_test$pipe$enq$v,
-        lEII_test$pipe$enq__RDY);
+        lEIO$indication$heard__RDY,
+        lEIO$pipe$enq__ENA,
+        lEIO$pipe$enq$v,
+        lEIO$pipe$enq__RDY);
     l_module_OC_EchoRequestInput lERI (
         CLK,
         nRST,
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq$v,
-        lERO_test$pipe$enq__RDY,
-        lEcho$request$say__ENA,
-        lEcho$request$say$meth,
-        lEcho$request$say$v,
-        lEcho$request$say__RDY);
+        lERI$pipe$enq__RDY,
+        lERI$request$say__ENA,
+        lERI$request$say$meth,
+        lERI$request$say$v,
+        lERI$request$say__RDY);
     l_module_OC_Echo lEcho (
         CLK,
         nRST,
         lERI$request$say__ENA,
         lERI$request$say$meth,
         lERI$request$say$v,
-        lERI$request$say__RDY,
-        lEIO$indication$heard__ENA,
-        lEIO$indication$heard$meth,
-        lEIO$indication$heard$v,
-        lEIO$indication$heard__RDY);
+        lEcho$request$say__RDY,
+        lEcho$indication$heard__ENA,
+        lEcho$indication$heard$meth,
+        lEcho$indication$heard$v,
+        lEcho$indication$heard__RDY);
     l_module_OC_EchoRequestOutput lERO_test (
         CLK,
         nRST,
         request$say__ENA,
         request$say$meth,
         request$say$v,
-        request$say__RDY,
-        lERI$pipe$enq__ENA,
-        lERI$pipe$enq$v,
-        lERI$pipe$enq__RDY);
+        lERO_test$request$say__RDY,
+        lERO_test$pipe$enq__ENA,
+        lERO_test$pipe$enq$v,
+        lERO_test$pipe$enq__RDY);
     l_module_OC_EchoIndicationInput lEII_test (
         CLK,
         nRST,
         lEIO$pipe$enq__ENA,
         lEIO$pipe$enq$v,
-        lEIO$pipe$enq__RDY,
-        indication$heard__ENA,
-        indication$heard$meth,
-        indication$heard$v,
-        indication$heard__RDY);
+        lEII_test$pipe$enq__RDY,
+        lEII_test$indication$heard__ENA,
+        lEII_test$indication$heard$meth,
+        lEII_test$indication$heard$v,
+        lEII_test$indication$heard__RDY);
+    assign indication$heard$meth = lEII_test$indication$heard$meth;
+    assign indication$heard$v = lEII_test$indication$heard$v;
+    assign indication$heard__ENA = lEII_test$indication$heard__ENA;
     // assign pipe$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign request$say__RDY = lERO_test$request$say__RDY;
 endmodule 
 
 module l_module_OC_Echo (
@@ -104,14 +103,10 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire [31:0]pipe$enq__ENA$v_2e_addr$data$heard$meth;
-    wire [31:0]pipe$enq__ENA$v_2e_addr$data$heard$v;
-    assign indication$heard$meth = pipe$enq__ENA$v_2e_addr$data$heard$meth;
-    assign indication$heard$v = pipe$enq__ENA$v_2e_addr$data$heard$v;
+    assign indication$heard$meth = pipe$enq$v$data$heard$meth;
+    assign indication$heard$v = pipe$enq$v$data$heard$v;
     assign indication$heard__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addr5$tag == 1;
-    assign pipe$enq__RDY = indication$heard__RDY | (pipe$enq__ENA$v_2e_addr5$tag != 1);
-    // Extra assigments, not to output wires
-    assign pipe$enq__ENA$v_2e_addr = pipe$enq$v;
+    assign pipe$enq__RDY = indication$heard__RDY | ( pipe$enq__ENA$v_2e_addr5$tag != 1 );
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -126,12 +121,9 @@ module l_module_OC_EchoIndicationOutput (
     input pipe$enq__RDY);
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
-    wire [31:0]indication$heard__ENA$ind$tag;
     assign indication$heard__RDY = pipe$enq__RDY;
-    assign pipe$enq$v = { indication$heard__ENA$ind$tag , indication$heard__ENA$ind$data$heard$meth , indication$heard__ENA$ind$data$heard$v };
+    assign pipe$enq$v = { 1 , indication$heard__ENA$ind$data$heard$meth , indication$heard__ENA$ind$data$heard$v };
     assign pipe$enq__ENA = indication$heard__ENA;
-    // Extra assigments, not to output wires
-    assign indication$heard__ENA$ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -155,14 +147,10 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$meth;
-    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$v;
-    assign pipe$enq__RDY = request$say__RDY | (pipe$enq__ENA$v_2e_addr5$tag != 1);
-    assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
-    assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
+    assign pipe$enq__RDY = request$say__RDY | ( pipe$enq__ENA$v_2e_addr5$tag != 1 );
+    assign request$say$meth = pipe$enq$v$data$say$meth;
+    assign request$say$v = pipe$enq$v$data$say$v;
     assign request$say__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addr5$tag == 1;
-    // Extra assigments, not to output wires
-    assign pipe$enq__ENA$v_2e_addr = pipe$enq$v;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -177,12 +165,9 @@ module l_module_OC_EchoRequestOutput (
     input pipe$enq__RDY);
     wire [31:0]request$say__ENA$ind$data$say$meth;
     wire [31:0]request$say__ENA$ind$data$say$v;
-    wire [31:0]request$say__ENA$ind$tag;
-    assign pipe$enq$v = { request$say__ENA$ind$tag , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v };
+    assign pipe$enq$v = { 1 , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v };
     assign pipe$enq__ENA = request$say__ENA;
     assign request$say__RDY = pipe$enq__RDY;
-    // Extra assigments, not to output wires
-    assign request$say__ENA$ind$tag = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin

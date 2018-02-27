@@ -82,29 +82,26 @@ module l_module_OC_IVector (
     reg fcounter;
     reg[8:0] counter;
     reg[8:0] gcounter;
+    wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
+    wire [9:0]fifo$out$first;
     wire fifo$out$first__RDY;
-    wire [5:0]request$say__ENA$temp$a;
-    wire [3:0]request$say__ENA$temp$b;
-    wire [5:0]respond__ENA$temp$a;
-    wire [3:0]respond__ENA$temp$b;
     l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
         request$say__ENA,
-        { request$say__ENA$temp$a , request$say__ENA$temp$b },
-        request$say__RDY,
+        { request$say$meth , request$say$v },
+        fifo$in$enq__RDY,
         respond__ENA,
         fifo$out$deq__RDY,
-        respond__ENA$temp,
+        fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$meth = respond__ENA$temp$a;
-    assign ind$heard$v = respond__ENA$temp$b;
+    assign ind$heard$meth = fifo$out$first$a;
+    assign ind$heard$v = fifo$out$first$b;
     assign ind$heard__ENA = respond__ENA;
+    assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign request$say__ENA$temp$a = request$say$meth;
-    assign request$say__ENA$temp$b = request$say$v;
-    assign respond__RDY = (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
+    assign respond__RDY = ( fifo$out$first__RDY & fifo$out$deq__RDY ) & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

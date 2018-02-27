@@ -14,9 +14,9 @@ module l_module_OC_Fifo2 (
     reg[95:0] element1;
     reg[31:0] rindex;
     reg[31:0] windex;
-    assign in$enq__RDY = ((windex + 1) % 2) != rindex;
+    assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
-    assign out$first = *(rindex == 0 ? element0:&element1);
+    assign out$first = * ( rindex == 0 ? element0 : & element1 );
     assign out$first__RDY = rindex != windex;
 
     always @( posedge CLK) begin
@@ -29,10 +29,10 @@ module l_module_OC_Fifo2 (
       else begin
         if (in$enq__ENA) begin
             *(windex == 0 ? element0:&element1) <= in$enq$v;
-            windex <= (windex + 1) % 2;
+            windex <= ( windex + 1 ) % 2;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            rindex <= (rindex + 1) % 2;
+            rindex <= ( rindex + 1 ) % 2;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -54,7 +54,9 @@ module l_module_OC_Lpm (
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
+    wire inQ$in$enq__RDY;
     wire inQ$out$deq__RDY;
+    wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
     wire mem$ifc$req__RDY;
     wire mem$ifc$resAccept__RDY;
@@ -62,64 +64,58 @@ module l_module_OC_Lpm (
     wire mem$ifc$resValue__RDY;
     wire outQ$in$enq__RDY;
     wire outQ$out$deq__RDY;
+    wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
-    wire [31:0]request$say__ENA$temp$a;
-    wire [31:0]request$say__ENA$temp$b;
     wire [31:0]request$say__ENA$temp$c;
-    wire [31:0]respond__ENA$temp$a;
-    wire [31:0]respond__ENA$temp$b;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
         request$say__ENA,
-        { request$say__ENA$temp$a , request$say__ENA$temp$b , request$say__ENA$temp$c },
-        request$say__RDY,
+        { request$say$meth , request$say$v , request$say__ENA$temp$c },
+        inQ$in$enq__RDY,
         enter__ENA,
         inQ$out$deq__RDY,
-        enter__ENA$temp,
+        inQ$out$first,
         inQ$out$first__RDY);
     l_module_OC_Fifo2 fifo (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? enter__ENA$temp : recirc__ENA$mtemp,
+        enter__ENA ? { inQ$out$first$a , inQ$out$first$b , inQ$out$first$c } : { mem$ifc$resValue$a , mem$ifc$resValue$b , mem$ifc$resValue$c },
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
-        exit_rule__ENA$temp,
+        fifo$out$first,
         fifo$out$first__RDY);
     l_module_OC_Fifo1 outQ (
         CLK,
         nRST,
         exit_rule__ENA,
-        fifo$out$first,
+        { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c },
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
-        respond__ENA$temp,
+        outQ$out$first,
         outQ$out$first__RDY);
     l_module_OC_LpmMemory mem (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? enter__ENA$temp : recirc__ENA$temp,
+        enter__ENA ? { inQ$out$first$a , inQ$out$first$b , inQ$out$first$c } : { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c },
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,
-        exit_rule__ENA$mtemp,
+        mem$ifc$resValue,
         mem$ifc$resValue__RDY);
-    assign ind$heard$meth = respond__ENA$temp$a;
-    assign ind$heard$v = respond__ENA$temp$b;
+    assign ind$heard$meth = outQ$out$first$a;
+    assign ind$heard$v = outQ$out$first$b;
     assign ind$heard__ENA = respond__ENA;
+    assign request$say__RDY = inQ$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign enter__RDY = ((inQ$out$first__RDY & inQ$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
-    assign exit_rule__RDY = (((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & outQ$in$enq__RDY;
-    assign recirc__ENA$mtemp = mem$ifc$resValue;
-    assign recirc__ENA$temp = fifo$out$first;
-    assign recirc__RDY = ((((fifo$out$first__RDY & mem$ifc$resValue__RDY) & mem$ifc$resAccept__RDY) & fifo$out$deq__RDY) & fifo$in$enq__RDY) & mem$ifc$req__RDY;
-    assign request$say__ENA$temp$a = request$say$meth;
-    assign request$say__ENA$temp$b = request$say$v;
-    assign respond__RDY = (outQ$out$first__RDY & outQ$out$deq__RDY) & ind$heard__RDY;
+    assign enter__RDY = ( ( inQ$out$first__RDY & inQ$out$deq__RDY ) & fifo$in$enq__RDY ) & mem$ifc$req__RDY;
+    assign exit_rule__RDY = ( ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY ) & mem$ifc$resAccept__RDY ) & fifo$out$deq__RDY ) & outQ$in$enq__RDY;
+    assign recirc__RDY = ( ( ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY ) & mem$ifc$resAccept__RDY ) & fifo$out$deq__RDY ) & fifo$in$enq__RDY ) & mem$ifc$req__RDY;
+    assign respond__RDY = ( outQ$out$first__RDY & outQ$out$deq__RDY ) & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
