@@ -11,7 +11,7 @@ module l_module_OC_Fifo1 (
     output [31:0]out$first,
     output out$first__RDY);
     reg[31:0] element;
-    reg full;
+    reg[7:0] full;
     assign in$enq__RDY = full ^ 1;
     assign out$deq__RDY = full;
     assign out$first = element;
@@ -44,16 +44,20 @@ module l_module_OC_Fifo1_OC_3 (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    reg[95:0] element;
-    reg full;
+    reg[31:0] element$a;
+    reg[31:0] element$b;
+    reg[31:0] element$c;
+    reg[7:0] full;
     assign in$enq__RDY = full ^ 1;
     assign out$deq__RDY = full;
-    assign out$first = element;
+    assign out$first = { element$a , element$b , element$c };
     assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element <= 0;
+        element$a <= 0;
+        element$b <= 0;
+        element$c <= 0;
         full <= 0;
       end // nRST
       else begin
@@ -78,7 +82,7 @@ module l_module_OC_FifoPong (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    reg pong;
+    reg[7:0] pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;

@@ -10,19 +10,27 @@ module l_module_OC_Fifo2 (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    reg[95:0] element0;
-    reg[95:0] element1;
+    reg[31:0] element0$a;
+    reg[31:0] element0$b;
+    reg[31:0] element0$c;
+    reg[31:0] element1$a;
+    reg[31:0] element1$b;
+    reg[31:0] element1$c;
     reg[31:0] rindex;
     reg[31:0] windex;
     assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
-    assign out$first = * ( rindex == 0 ? element0 : & element1 );
+    assign out$first = * ( rindex == 0 ? { element0$a , element0$b , element0$c } : & { element1$a , element1$b , element1$c } );
     assign out$first__RDY = rindex != windex;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element0 <= 0;
-        element1 <= 0;
+        element0$a <= 0;
+        element0$b <= 0;
+        element0$c <= 0;
+        element1$a <= 0;
+        element1$b <= 0;
+        element1$c <= 0;
         rindex <= 0;
         windex <= 0;
       end // nRST
@@ -135,10 +143,12 @@ module l_module_OC_LpmMemory (
     output [95:0]ifc$resValue,
     output ifc$resValue__RDY);
     reg[31:0] delayCount;
-    reg[95:0] saved;
+    reg[31:0] saved$a;
+    reg[31:0] saved$b;
+    reg[31:0] saved$c;
     assign ifc$req__RDY = delayCount == 0;
     assign ifc$resAccept__RDY = delayCount == 1;
-    assign ifc$resValue = saved;
+    assign ifc$resValue = { saved$a , saved$b , saved$c };
     assign ifc$resValue__RDY = delayCount == 1;
     // Extra assigments, not to output wires
     assign memdelay_rule__RDY = delayCount > 1;
@@ -146,7 +156,9 @@ module l_module_OC_LpmMemory (
     always @( posedge CLK) begin
       if (!nRST) begin
         delayCount <= 0;
-        saved <= 0;
+        saved$a <= 0;
+        saved$b <= 0;
+        saved$c <= 0;
       end // nRST
       else begin
         if (ifc$req__ENA) begin

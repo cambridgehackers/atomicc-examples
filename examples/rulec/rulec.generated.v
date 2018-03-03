@@ -116,11 +116,11 @@ module l_module_OC_Echo (
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
     reg[31:0] busy;
-    reg[31:0] meth_temp;
-    reg[31:0] v_temp;
     reg[31:0] busy_delay;
     reg[31:0] meth_delay;
+    reg[31:0] meth_temp;
     reg[31:0] v_delay;
+    reg[31:0] v_temp;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = respond_rule__ENA;
@@ -133,11 +133,11 @@ module l_module_OC_Echo (
     always @( posedge CLK) begin
       if (!nRST) begin
         busy <= 0;
-        meth_temp <= 0;
-        v_temp <= 0;
         busy_delay <= 0;
         meth_delay <= 0;
+        meth_temp <= 0;
         v_delay <= 0;
+        v_temp <= 0;
       end // nRST
       else begin
         if (delay_rule__ENA) begin
@@ -215,12 +215,16 @@ module l_module_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    reg[95:0] ind0;
-    reg[95:0] ind1;
-    reg[31:0] ind_busy;
     reg[31:0] even;
+    reg[31:0] ind0$data$heard$meth;
+    reg[31:0] ind0$data$heard$v;
+    reg[31:0] ind0$tag;
+    reg[31:0] ind1$data$heard$meth;
+    reg[31:0] ind1$data$heard$v;
+    reg[31:0] ind1$tag;
+    reg[31:0] ind_busy;
     assign indication$heard__RDY = ( ind_busy != 0 ) ^ 1;
-    assign pipe$enq$v = output_rulee__ENA ? ind0 : ind1;
+    assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data$heard$meth , ind0$data$heard$v } : { ind1$tag , ind1$data$heard$meth , ind1$data$heard$v };
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
     // Extra assigments, not to output wires
     assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
@@ -228,10 +232,14 @@ module l_module_OC_EchoIndicationOutput (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        ind0 <= 0;
-        ind1 <= 0;
-        ind_busy <= 0;
         even <= 0;
+        ind0$data$heard$meth <= 0;
+        ind0$data$heard$v <= 0;
+        ind0$tag <= 0;
+        ind1$data$heard$meth <= 0;
+        ind1$data$heard$v <= 0;
+        ind1$tag <= 0;
+        ind_busy <= 0;
       end // nRST
       else begin
         if (indication$heard__ENA) begin
