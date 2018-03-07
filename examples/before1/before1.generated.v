@@ -17,11 +17,22 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
+    wire [31:0]lEII_test$indication$heard$meth;
+    wire [31:0]lEII_test$indication$heard$v;
+    wire lEII_test$indication$heard__RDY;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
+    wire [95:0]lEIO$pipe$enq$v;
     wire lERI$pipe$enq__RDY;
+    wire [31:0]lERI$request$say$meth;
+    wire [31:0]lERI$request$say$v;
+    wire [31:0]lERI$request$say2$meth;
+    wire [31:0]lERI$request$say2$v;
+    wire [191:0]lERO_test$pipe$enq$v;
     wire lERO_test$request$say2__RDY;
     wire lERO_test$request$say__RDY;
+    wire [31:0]lEcho$indication$heard$meth;
+    wire [31:0]lEcho$indication$heard$v;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
     wire lEcho$swap$x2y__RDY;
