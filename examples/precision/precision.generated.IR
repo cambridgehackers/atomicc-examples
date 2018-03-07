@@ -63,7 +63,7 @@ MODULE l_module_OC_Fifo1_OC_0 {
 }
 MODULE l_module_OC_IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
-    EINTERFACE l_ainterface_OC_IVectorIndication ind
+    INTERFACE/Ptr l_ainterface_OC_IVectorIndication ind
     FIELD l_module_OC_Fifo1_OC_0 fifo
     FIELD INTEGER_8 fcounter
     FIELD INTEGER_9 counter

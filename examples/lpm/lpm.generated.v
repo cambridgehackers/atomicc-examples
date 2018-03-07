@@ -49,14 +49,14 @@ endmodule
 module l_module_OC_Lpm (
     input CLK,
     input nRST,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    output request$say__RDY,
     output ind$heard__ENA,
     output [31:0]ind$heard$meth,
     output [31:0]ind$heard$v,
-    input ind$heard__RDY);
+    input ind$heard__RDY,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
+    output request$say__RDY);
     reg[31:0] doneCount;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;

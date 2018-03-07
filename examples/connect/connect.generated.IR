@@ -45,7 +45,7 @@ MODULE l_module_OC_Connect {
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
     INTERFACE l_ainterface_OC_EchoRequest request
-    EINTERFACE l_ainterface_OC_EchoIndication indication
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD l_module_OC_EchoIndicationOutput lEIO
     FIELD l_module_OC_EchoRequestInput lERI
     FIELD l_module_OC_Echo lEcho
@@ -57,14 +57,14 @@ MODULE l_module_OC_Connect {
 }
 MODULE l_module_OC_Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
-    EINTERFACE l_ainterface_OC_EchoIndication indication
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :indication$heard__ENA{request$say$meth,request$say$v}
     }
 }
 MODULE l_module_OC_EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
-    EINTERFACE l_ainterface_OC_EchoIndication indication
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
         ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v_2e_addr
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
@@ -73,7 +73,7 @@ MODULE l_module_OC_EchoIndicationInput {
 }
 MODULE l_module_OC_EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication indication
-    EINTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_EchoIndication_data indication$heard__ENA$ind
         LET INTEGER_32 :indication$heard__ENA$ind$tag = 1
@@ -84,7 +84,7 @@ MODULE l_module_OC_EchoIndicationOutput {
 }
 MODULE l_module_OC_EchoRequestInput {
     INTERFACE l_ainterface_OC_PipeIn pipe
-    EINTERFACE l_ainterface_OC_EchoRequest request
+    INTERFACE/Ptr l_ainterface_OC_EchoRequest request
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
         ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v_2e_addr
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
@@ -93,7 +93,7 @@ MODULE l_module_OC_EchoRequestInput {
 }
 MODULE l_module_OC_EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest request
-    EINTERFACE l_ainterface_OC_PipeIn pipe
+    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_EchoRequest_data request$say__ENA$ind
         LET INTEGER_32 :request$say__ENA$ind$tag = 1

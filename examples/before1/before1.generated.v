@@ -19,7 +19,6 @@ module l_module_OC_Connect (
 // software: indication
     wire [31:0]lEII_test$indication$heard$meth;
     wire [31:0]lEII_test$indication$heard$v;
-    wire lEII_test$indication$heard__RDY;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
@@ -106,11 +105,10 @@ module l_module_OC_Connect (
         lEII_test$indication$heard__ENA,
         lEII_test$indication$heard$meth,
         lEII_test$indication$heard$v,
-        lEII_test$indication$heard__RDY);
+        indication$heard__RDY);
     assign indication$heard$meth = lEII_test$indication$heard$meth;
     assign indication$heard$v = lEII_test$indication$heard$v;
     assign indication$heard__ENA = lEII_test$indication$heard__ENA;
-    // assign pipe$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign request$say2__RDY = lERO_test$request$say2__RDY;
     assign request$say__RDY = lERO_test$request$say__RDY;
     // Extra assigments, not to output wires

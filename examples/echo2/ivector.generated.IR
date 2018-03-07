@@ -91,7 +91,7 @@ MODULE l_module_OC_FifoPong {
 MODULE l_module_OC_IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
     FIELD l_module_OC_FifoPong fifo
-    EINTERFACE l_ainterface_OC_IndIF ind
+    INTERFACE/Ptr l_ainterface_OC_IndIF ind
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }

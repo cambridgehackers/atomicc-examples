@@ -131,14 +131,14 @@ endmodule
 module l_module_OC_IVector (
     input CLK,
     input nRST,
-    input in$say__ENA,
-    input [31:0]in$say$meth,
-    input [31:0]in$say$v,
-    output in$say__RDY,
     output out$heard__ENA,
     output [31:0]out$heard$meth,
     output [31:0]out$heard$v,
-    input out$heard__RDY);
+    input out$heard__RDY,
+    input in$say__ENA,
+    input [31:0]in$say$meth,
+    input [31:0]in$say$v,
+    output in$say__RDY);
     reg[31:0] vsize;
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;

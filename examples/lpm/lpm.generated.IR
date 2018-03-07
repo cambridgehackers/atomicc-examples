@@ -51,7 +51,7 @@ MODULE l_module_OC_Lpm {
     FIELD l_module_OC_Fifo1 outQ
     FIELD l_module_OC_LpmMemory mem
     FIELD INTEGER_32 doneCount
-    EINTERFACE l_ainterface_OC_LpmIndication ind
+    INTERFACE/Ptr l_ainterface_OC_LpmIndication ind
     INTERFACE l_ainterface_OC_LpmRequest request
     METHOD/Rule enter__ENA {
         ALLOCA l_struct_OC_ValuePair enter__ENA$temp

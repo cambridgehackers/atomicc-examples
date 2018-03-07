@@ -30,7 +30,7 @@ MODULE l_module_OC_Echo {
     SOFTWARE sout
     SOFTWARE ind
     INTERFACE l_ainterface_OC_EchoRequest sout
-    EINTERFACE l_ainterface_OC_EchoIndication ind
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
     FIELD l_module_OC_Fifo1 fifo
     METHOD/Rule respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}

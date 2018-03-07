@@ -91,7 +91,7 @@ MODULE l_module_OC_FifoPong {
 }
 MODULE l_module_OC_IVector {
     FIELD/Count 10  l_module_OC_FifoPong fifo
-    EINTERFACE l_ainterface_OC_IVectorIndication out
+    INTERFACE/Ptr l_ainterface_OC_IVectorIndication out
     FIELD INTEGER_32 vsize
     INTERFACE l_ainterface_OC_IVectorRequest in
     METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
