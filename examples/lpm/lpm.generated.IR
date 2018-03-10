@@ -36,13 +36,13 @@ MODULE l_module_OC_Fifo2 {
     FIELD INTEGER_32 rindex
     FIELD INTEGER_32 windex
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((windex + 1) % 2) != rindex) {
-        STORE :*(windex == 0 ? element0:&element1) = in$enq$v
+        STORE :element[windex] = in$enq$v
         STORE :windex = (windex + 1) % 2
     }
     METHOD out$deq__ENA if (rindex != windex) {
         STORE :rindex = (rindex + 1) % 2
     }
-    METHOD out$first l_struct_OC_ValuePair = (*(rindex == 0 ? element0:&element1)) if (rindex != windex)
+    METHOD out$first l_struct_OC_ValuePair = (element[rindex]) if (rindex != windex)
 }
 MODULE l_module_OC_Lpm {
     PRIORITY recirc enter;exit

@@ -2,7 +2,7 @@
 `define __lpm_GENERATED__VH__
 
 //METASTART; l_module_OC_Fifo2
-//METAGUARD; in$enq; ((windex + 1) % 2) != rindex;
+//METAGUARD; in$enq; ( ( windex + 1 ) % 2 ) != rindex;
 //METAGUARD; out$deq; rindex != windex;
 //METABEFORE; out$first; :out$deq__ENA
 //METAGUARD; out$first; rindex != windex;
