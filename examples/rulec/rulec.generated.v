@@ -29,7 +29,7 @@ module l_module_OC_Connect (
     wire [31:0]lERI$request$say2$meth;
     wire [31:0]lERI$request$say2$v;
     wire [31:0]lERI$request$say2$v2;
-    wire [191:0]lERO_test$pipe$enq$v;
+    wire [127:0]lERO_test$pipe$enq$v;
     wire lERO_test$request$say2__RDY;
     wire lERO_test$request$say__RDY;
     wire [31:0]lEcho$indication$heard$meth;
@@ -282,7 +282,7 @@ module l_module_OC_EchoRequestInput (
     input CLK,
     input nRST,
     input pipe$enq__ENA,
-    input [191:0]pipe$enq$v,
+    input [127:0]pipe$enq$v,
     output pipe$enq__RDY,
     output request$say2__ENA,
     output [31:0]request$say2$meth,
@@ -316,19 +316,11 @@ module l_module_OC_EchoRequestOutput (
     input [31:0]request$say$v,
     output request$say__RDY,
     output pipe$enq__ENA,
-    output [191:0]pipe$enq$v,
+    output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire [31:0]request$say2__ENA$ind$data$say$meth;
-    wire [31:0]request$say2__ENA$ind$data$say$v;
-    wire [31:0]request$say2__ENA$ind$data$say2$meth;
-    wire [31:0]request$say2__ENA$ind$data$say2$v;
-    wire [31:0]request$say2__ENA$ind$data$say2$v2;
-    wire [31:0]request$say__ENA$ind$data$say$meth;
-    wire [31:0]request$say__ENA$ind$data$say$v;
-    wire [31:0]request$say__ENA$ind$data$say2$meth;
-    wire [31:0]request$say__ENA$ind$data$say2$v;
-    wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = request$say2__ENA ? { 2 , request$say2__ENA$ind$data$say$meth , request$say2__ENA$ind$data$say$v , request$say2__ENA$ind$data$say2$meth , request$say2__ENA$ind$data$say2$v , request$say2__ENA$ind$data$say2$v2 } : { 1 , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v , request$say__ENA$ind$data$say2$meth , request$say__ENA$ind$data$say2$v , request$say__ENA$ind$data$say2$v2 };
+    wire [95:0]request$say2__ENA$ind$data;
+    wire [95:0]request$say__ENA$ind$data;
+    assign pipe$enq$v = request$say2__ENA ? { 2 , request$say2__ENA$ind$data } : { 1 , request$say__ENA$ind$data };
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;

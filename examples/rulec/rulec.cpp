@@ -45,7 +45,7 @@ typedef struct {
     int v;
     int v2;
 } EchoRequest_say2;
-typedef struct {
+typedef union {
     EchoRequest_say say;
     EchoRequest_say2 say2;
 } EchoRequest_union;

@@ -4,7 +4,7 @@ EMODULE l_struct_OC_EchoIndication_data {
 }
 EMODULE l_struct_OC_EchoRequest_data {
     FIELD INTEGER_32 tag
-    FIELD l_struct_OC_EchoRequest_union data
+    FIELD l_union_OC_EchoRequest_union data
 }
 EMODULE l_struct_OC_EchoRequest_say {
     FIELD INTEGER_32 meth
@@ -15,16 +15,17 @@ EMODULE l_struct_OC_EchoRequest_say2 {
     FIELD INTEGER_32 v
     FIELD INTEGER_32 v2
 }
-EMODULE l_struct_OC_EchoRequest_union {
-    FIELD l_struct_OC_EchoRequest_say say
-    FIELD l_struct_OC_EchoRequest_say2 say2
-}
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
     FIELD INTEGER_32 meth
     FIELD INTEGER_32 v
+}
+EMODULE l_union_OC_EchoRequest_union {
+    UNION l_struct_OC_EchoRequest_say say
+    UNION l_struct_OC_EchoRequest_say2 say2
+    FIELD INTEGER_96 DATA
 }
 EMODULE l_ainterface_OC_EchoIndication {
     METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
