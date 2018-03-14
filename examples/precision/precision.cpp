@@ -35,7 +35,7 @@ typedef struct {
 __interface IVectorIndication {
     void heard(myint6 meth, myint4 v);
 };
-__module IVectorInd {
+__emodule IVectorInd {
     IVectorIndication ind;
     void ind.heard(myint6 meth, myint4 v);
 };

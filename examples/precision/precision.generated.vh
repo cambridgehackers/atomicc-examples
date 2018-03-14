@@ -21,6 +21,4 @@
 //METAINVOKE; respond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
 //METAGUARD; respond; (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
 //METARULES; respond
-//METASTART; l_module_OC_IVectorInd
-//METAGUARD; ind$heard; 1;
 `endif

@@ -114,13 +114,3 @@ module l_module_OC_IVector (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_IVectorInd (
-    input CLK,
-    input nRST,
-    input ind$heard__ENA,
-    input [5:0]ind$heard$meth,
-    input [3:0]ind$heard$v,
-    output ind$heard__RDY);
-    assign ind$heard__RDY = 1;
-endmodule 
-

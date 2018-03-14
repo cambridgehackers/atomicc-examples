@@ -33,6 +33,10 @@ EMODULE l_module_OC_Fifo_OC_1 {
     INTERFACE l_ainterface_OC_PipeIn_OC_2 in
     INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
+EMODULE l_module_OC_IVectorInd {
+    INTERFACE l_ainterface_OC_IVectorIndication ind
+    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
+}
 MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
@@ -81,8 +85,4 @@ MODULE l_module_OC_IVector {
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     }
-}
-MODULE l_module_OC_IVectorInd {
-    INTERFACE l_ainterface_OC_IVectorIndication ind
-    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
 }
