@@ -13,7 +13,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o connect.ll connect.cpp
 #$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.bc connect.cpp
 all:
-	$(CPP) -S -c $(CPPFLAGS) $(LLVMFLAGS) connect.cpp
+	$(CPP) -S -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.ll connect.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testconnect.cpp
