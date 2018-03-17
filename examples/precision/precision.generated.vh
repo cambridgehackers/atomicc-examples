@@ -19,6 +19,6 @@
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY;
 //METAINVOKE; respond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
-//METAGUARD; respond; (fifo$out$first__RDY & fifo$out$deq__RDY) & ind$heard__RDY;
+//METAGUARD; respond; ( fifo$out$first__RDY & fifo$out$deq__RDY ) & ind$heard__RDY;
 //METARULES; respond
 `endif
