@@ -20,7 +20,7 @@ module l_module_OC_Fifo2 (
     reg[31:0] windex;
     assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
-    assign out$first = ( ( rindex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c } );
+    assign out$first = ( rindex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c };
     assign out$first__RDY = rindex != windex;
 
     always @( posedge CLK) begin
@@ -36,7 +36,7 @@ module l_module_OC_Fifo2 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            ( ( windex == 0 ) ? element0 : element1 ) <= in$enq$v;
+            ( windex == 0 ) ? element0 : element1 <= in$enq$v;
             windex <= ( windex + 1 ) % 2;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
