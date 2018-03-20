@@ -15,16 +15,21 @@ module l_module_OC_Connect (
 // software: indication
     wire [31:0]lEII_test$indication$heard$meth;
     wire [31:0]lEII_test$indication$heard$v;
+    wire lEII_test$indication$heard__ENA;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
+    wire lEIO$pipe$enq__ENA;
     wire lERI$pipe$enq__RDY;
     wire [31:0]lERI$request$say$meth;
     wire [31:0]lERI$request$say$v;
+    wire lERI$request$say__ENA;
     wire [95:0]lERO_test$pipe$enq$v;
+    wire lERO_test$pipe$enq__ENA;
     wire lERO_test$request$say__RDY;
     wire [31:0]lEcho$indication$heard$meth;
     wire [31:0]lEcho$indication$heard$v;
+    wire lEcho$indication$heard__ENA;
     wire lEcho$request$say__RDY;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
