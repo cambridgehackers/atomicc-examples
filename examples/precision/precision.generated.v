@@ -10,8 +10,8 @@ module l_module_OC_Fifo1 (
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
-    reg[31:0] element;
-    reg[7:0] full;
+    reg [31:0]element;
+    reg [7:0]full;
     assign in$enq__RDY = full ^ 1;
     assign out$deq__RDY = full;
     assign out$first = element;
@@ -44,9 +44,9 @@ module l_module_OC_Fifo1_OC_0 (
     output out$deq__RDY,
     output [9:0]out$first,
     output out$first__RDY);
-    reg[5:0] element$a;
-    reg[3:0] element$b;
-    reg[7:0] full;
+    reg [5:0]element$a;
+    reg [3:0]element$b;
+    reg [7:0]full;
     assign in$enq__RDY = full ^ 1;
     assign out$deq__RDY = full;
     assign out$first = { element$a , element$b };
@@ -81,9 +81,9 @@ module l_module_OC_IVector (
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
-    reg[8:0] counter;
-    reg[7:0] fcounter;
-    reg[8:0] gcounter;
+    reg [8:0]counter;
+    reg [7:0]fcounter;
+    reg [8:0]gcounter;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;

@@ -10,8 +10,8 @@ module l_module_OC_Fifo1 (
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
-    reg[31:0] element;
-    reg[7:0] full;
+    reg [31:0]element;
+    reg [7:0]full;
     assign in$enq__RDY = full ^ 1;
     assign out$deq__RDY = full;
     assign out$first = element;

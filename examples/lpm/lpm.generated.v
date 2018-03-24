@@ -10,14 +10,14 @@ module l_module_OC_Fifo2 (
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
-    reg[31:0] element0$a;
-    reg[31:0] element0$b;
-    reg[31:0] element0$c;
-    reg[31:0] element1$a;
-    reg[31:0] element1$b;
-    reg[31:0] element1$c;
-    reg[31:0] rindex;
-    reg[31:0] windex;
+    reg [31:0]element0$a;
+    reg [31:0]element0$b;
+    reg [31:0]element0$c;
+    reg [31:0]element1$a;
+    reg [31:0]element1$b;
+    reg [31:0]element1$c;
+    reg [31:0]rindex;
+    reg [31:0]windex;
     assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
     assign out$first = ( rindex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c };
@@ -57,7 +57,7 @@ module l_module_OC_Lpm (
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
     output request$say__RDY);
-    reg[31:0] doneCount;
+    reg [31:0]doneCount;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
@@ -142,10 +142,10 @@ module l_module_OC_LpmMemory (
     output ifc$resAccept__RDY,
     output [95:0]ifc$resValue,
     output ifc$resValue__RDY);
-    reg[31:0] delayCount;
-    reg[31:0] saved$a;
-    reg[31:0] saved$b;
-    reg[31:0] saved$c;
+    reg [31:0]delayCount;
+    reg [31:0]saved$a;
+    reg [31:0]saved$b;
+    reg [31:0]saved$c;
     assign ifc$req__RDY = delayCount == 0;
     assign ifc$resAccept__RDY = delayCount == 1;
     assign ifc$resValue = { saved$a , saved$b , saved$c };
