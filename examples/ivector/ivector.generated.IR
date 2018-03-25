@@ -97,7 +97,7 @@ MODULE l_module_OC_IVector {
     METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair in$say__ENA$temp
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
-        CALL/Action (in$say$meth == 0):fifo0$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action (in$say$meth == 0):fifo[0]$in$enq__ENA{in$say__ENA$temp}
         CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo[1]$in$enq__ENA{in$say__ENA$temp}
         CALL/Action ((in$say$meth == 2) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))):fifo[2]$in$enq__ENA{in$say__ENA$temp}
         CALL/Action ((in$say$meth == 3) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))):fifo[3]$in$enq__ENA{in$say__ENA$temp}
