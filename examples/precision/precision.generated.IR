@@ -81,7 +81,7 @@ MODULE l_module_OC_IVector {
     METHOD/Rule respond__ENA {
         ALLOCA l_struct_OC_ValueType respond__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first{}
+        LET l_struct_OC_ValueType :respond__ENA$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     }

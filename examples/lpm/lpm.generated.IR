@@ -56,7 +56,7 @@ MODULE l_module_OC_Lpm {
     METHOD/Rule enter__ENA {
         ALLOCA l_struct_OC_ValuePair enter__ENA$temp
         CALL :inQ$out$first{}
-        LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first{}
+        LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first
         CALL/Action :inQ$out$deq__ENA{}
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
@@ -65,9 +65,9 @@ MODULE l_module_OC_Lpm {
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first{}
+        LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_ValuePair :exit_rule__ENA$mtemp = mem$ifc$resValue{}
+        LET l_struct_OC_ValuePair :exit_rule__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
@@ -76,9 +76,9 @@ MODULE l_module_OC_Lpm {
         ALLOCA l_struct_OC_ValuePair recirc__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair recirc__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValuePair :recirc__ENA$temp = fifo$out$first{}
+        LET l_struct_OC_ValuePair :recirc__ENA$temp = fifo$out$first
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_ValuePair :recirc__ENA$mtemp = mem$ifc$resValue{}
+        LET l_struct_OC_ValuePair :recirc__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
@@ -93,7 +93,7 @@ MODULE l_module_OC_Lpm {
     METHOD/Rule respond__ENA {
         ALLOCA l_struct_OC_ValuePair respond__ENA$temp
         CALL :outQ$out$first{}
-        LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first{}
+        LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first
         CALL/Action :outQ$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     }

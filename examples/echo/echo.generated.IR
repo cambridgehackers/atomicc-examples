@@ -35,7 +35,7 @@ MODULE l_module_OC_Echo {
     METHOD/Rule respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
-        CALL/Action :ind$heard__ENA{fifo$out$first{}}
+        CALL/Action :ind$heard__ENA{fifo$out$first}
     }
     METHOD sout$say__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}

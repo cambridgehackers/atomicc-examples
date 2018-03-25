@@ -83,9 +83,9 @@ MODULE l_module_OC_FifoPong {
     METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
         ALLOCA l_struct_OC_ValuePair out$first$retval
         CALL (pong):element2$out$first{}
-        LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first{}
+        LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first
         CALL (pong ^ 1):element1$out$first{}
-        LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first{}
+        LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first
     }
 }
 MODULE l_module_OC_IVector {
@@ -99,7 +99,7 @@ MODULE l_module_OC_IVector {
         ALLOCA l_struct_OC_ValuePair respond__ENA$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first{}
+        LET l_struct_OC_ValuePair :respond__ENA$agg_2e_tmp = fifo$out$first
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
     }
 }
