@@ -43,28 +43,28 @@ MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD INTEGER_32 element
     FIELD INTEGER_8 full
-    METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
+    METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA if (full) {
+    METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first INTEGER_32 = (element) if (full)
+    METHOD out$first INTEGER_32 = ((element)) if ((full))
 }
 MODULE l_module_OC_Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
     FIELD l_struct_OC_ValuePair element
     FIELD INTEGER_8 full
-    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (full ^ 1) {
+    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA if (full) {
+    METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_ValuePair = (element) if (full)
+    METHOD out$first l_struct_OC_ValuePair = ((element)) if ((full))
 }
 MODULE l_module_OC_FifoPong {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
@@ -73,20 +73,20 @@ MODULE l_module_OC_FifoPong {
     FIELD l_module_OC_Fifo1_OC_3 element2
     FIELD INTEGER_8 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
-        CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
-        CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
+        CALL/Action ((pong)):element2$in$enq__ENA{in$enq$v}
+        CALL/Action (((pong) ^ (1))):element1$in$enq__ENA{in$enq$v}
     }
     METHOD out$deq__ENA {
-        CALL/Action (pong):element2$out$deq__ENA{}
-        CALL/Action (pong ^ 1):element1$out$deq__ENA{}
-        STORE :pong = pong ^ 1
+        CALL/Action ((pong)):element2$out$deq__ENA{}
+        CALL/Action (((pong) ^ (1))):element1$out$deq__ENA{}
+        STORE :pong = (pong) ^ (1)
     }
-    METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
+    METHOD out$first l_struct_OC_ValuePair = ((out$first$retval)) {
         ALLOCA l_struct_OC_ValuePair out$first$retval
-        CALL (pong):element2$out$first{}
-        LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first
-        CALL (pong ^ 1):element1$out$first{}
-        LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first
+        CALL ((pong)):element2$out$first{}
+        LET l_struct_OC_ValuePair ((pong)):out$first$retval = element2$out$first
+        CALL (((pong) ^ (1))):element1$out$first{}
+        LET l_struct_OC_ValuePair (((pong) ^ (1))):out$first$retval = element1$out$first
     }
 }
 MODULE l_module_OC_IVector {
@@ -97,81 +97,81 @@ MODULE l_module_OC_IVector {
     METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair in$say__ENA$temp
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
-        CALL/Action (in$say$meth == 0):fifo[0]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 1) & ((in$say$meth == 0) ^ 1)):fifo[1]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 2) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))):fifo[2]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 3) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))):fifo[3]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 4) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))):fifo[4]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 5) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))):fifo[5]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 6) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))):fifo[6]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 7) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1)))))))):fifo[7]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action ((in$say$meth == 8) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo[8]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth == 8) ^ 1) & (((in$say$meth == 7) ^ 1) & (((in$say$meth == 6) ^ 1) & (((in$say$meth == 5) ^ 1) & (((in$say$meth == 4) ^ 1) & (((in$say$meth == 3) ^ 1) & (((in$say$meth == 2) ^ 1) & (((in$say$meth == 1) ^ 1) & ((in$say$meth == 0) ^ 1))))))))):fifo[9]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action (((in$say$meth) == (0))):fifo[0]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (1)) & (((in$say$meth) == (0)) ^ (1)))):fifo[1]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (2)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1))))):fifo[2]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (3)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1)))))):fifo[3]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (4)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1))))))):fifo[4]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (5)) & ((((in$say$meth) == (4)) ^ (1)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1)))))))):fifo[5]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (6)) & ((((in$say$meth) == (5)) ^ (1)) & ((((in$say$meth) == (4)) ^ (1)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1))))))))):fifo[6]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (7)) & ((((in$say$meth) == (6)) ^ (1)) & ((((in$say$meth) == (5)) ^ (1)) & ((((in$say$meth) == (4)) ^ (1)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1)))))))))):fifo[7]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action ((((in$say$meth) == (8)) & ((((in$say$meth) == (7)) ^ (1)) & ((((in$say$meth) == (6)) ^ (1)) & ((((in$say$meth) == (5)) ^ (1)) & ((((in$say$meth) == (4)) ^ (1)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1))))))))))):fifo[8]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action (((((in$say$meth) == (8)) ^ (1)) & ((((in$say$meth) == (7)) ^ (1)) & ((((in$say$meth) == (6)) ^ (1)) & ((((in$say$meth) == (5)) ^ (1)) & ((((in$say$meth) == (4)) ^ (1)) & ((((in$say$meth) == (3)) ^ (1)) & ((((in$say$meth) == (2)) ^ (1)) & ((((in$say$meth) == (1)) ^ (1)) & (((in$say$meth) == (0)) ^ (1))))))))))):fifo[9]$in$enq__ENA{in$say__ENA$temp}
     }
-    METHOD/Rule respond_rule_0__ENA {
+    METHOD/Rule respond_rule_0__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_0__ENA$temp
         CALL :fifo[0]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_0__ENA$temp = fifo[0]$out$first
         CALL/Action :fifo[0]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{0,respond_rule_0__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_1__ENA {
+    METHOD/Rule respond_rule_1__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_1__ENA$temp
         CALL :fifo[1]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_1__ENA$temp = fifo[1]$out$first
         CALL/Action :fifo[1]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{1,respond_rule_1__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_2__ENA {
+    METHOD/Rule respond_rule_2__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_2__ENA$temp
         CALL :fifo[2]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_2__ENA$temp = fifo[2]$out$first
         CALL/Action :fifo[2]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{2,respond_rule_2__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_3__ENA {
+    METHOD/Rule respond_rule_3__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_3__ENA$temp
         CALL :fifo[3]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_3__ENA$temp = fifo[3]$out$first
         CALL/Action :fifo[3]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{3,respond_rule_3__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_4__ENA {
+    METHOD/Rule respond_rule_4__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_4__ENA$temp
         CALL :fifo[4]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_4__ENA$temp = fifo[4]$out$first
         CALL/Action :fifo[4]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{4,respond_rule_4__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_5__ENA {
+    METHOD/Rule respond_rule_5__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_5__ENA$temp
         CALL :fifo[5]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_5__ENA$temp = fifo[5]$out$first
         CALL/Action :fifo[5]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{5,respond_rule_5__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_6__ENA {
+    METHOD/Rule respond_rule_6__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_6__ENA$temp
         CALL :fifo[6]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_6__ENA$temp = fifo[6]$out$first
         CALL/Action :fifo[6]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{6,respond_rule_6__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_7__ENA {
+    METHOD/Rule respond_rule_7__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_7__ENA$temp
         CALL :fifo[7]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_7__ENA$temp = fifo[7]$out$first
         CALL/Action :fifo[7]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{7,respond_rule_7__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_8__ENA {
+    METHOD/Rule respond_rule_8__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_8__ENA$temp
         CALL :fifo[8]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_8__ENA$temp = fifo[8]$out$first
         CALL/Action :fifo[8]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{8,respond_rule_8__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_9__ENA {
+    METHOD/Rule respond_rule_9__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_9__ENA$temp
         CALL :fifo[9]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_9__ENA$temp = fifo[9]$out$first

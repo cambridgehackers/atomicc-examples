@@ -35,14 +35,14 @@ MODULE l_module_OC_Fifo2 {
     FIELD/Count 2  l_struct_OC_ValuePair element
     FIELD INTEGER_32 rindex
     FIELD INTEGER_32 windex
-    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((windex + 1) % 2) != rindex) {
+    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((((windex) + (1)) % (2)) != (rindex))) {
         STORE :element[windex] = in$enq$v
-        STORE :windex = (windex + 1) % 2
+        STORE :windex = ((windex) + (1)) % (2)
     }
-    METHOD out$deq__ENA if (rindex != windex) {
-        STORE :rindex = (rindex + 1) % 2
+    METHOD out$deq__ENA if (((rindex) != (windex))) {
+        STORE :rindex = ((rindex) + (1)) % (2)
     }
-    METHOD out$first l_struct_OC_ValuePair = (element[rindex]) if (rindex != windex)
+    METHOD out$first l_struct_OC_ValuePair = ((element[rindex])) if (((rindex) != (windex)))
 }
 MODULE l_module_OC_Lpm {
     PRIORITY recirc enter;exit
@@ -53,7 +53,7 @@ MODULE l_module_OC_Lpm {
     FIELD INTEGER_32 doneCount
     INTERFACE/Ptr l_ainterface_OC_LpmIndication ind
     INTERFACE l_ainterface_OC_LpmRequest request
-    METHOD/Rule enter__ENA {
+    METHOD/Rule enter__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair enter__ENA$temp
         CALL :inQ$out$first{}
         LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first
@@ -61,7 +61,7 @@ MODULE l_module_OC_Lpm {
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
     }
-    METHOD/Rule exit_rule__ENA {
+    METHOD/Rule exit_rule__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$temp
         CALL :fifo$out$first{}
@@ -72,7 +72,7 @@ MODULE l_module_OC_Lpm {
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
     }
-    METHOD/Rule recirc__ENA {
+    METHOD/Rule recirc__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair recirc__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair recirc__ENA$temp
         CALL :fifo$out$first{}
@@ -90,7 +90,7 @@ MODULE l_module_OC_Lpm {
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
     }
-    METHOD/Rule respond__ENA {
+    METHOD/Rule respond__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond__ENA$temp
         CALL :outQ$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first
@@ -102,15 +102,15 @@ MODULE l_module_OC_LpmMemory {
     FIELD INTEGER_32 delayCount
     FIELD l_struct_OC_ValuePair saved
     INTERFACE l_ainterface_OC_LpmMem ifc
-    METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (delayCount == 0) {
+    METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (((delayCount) == (0))) {
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
     }
-    METHOD ifc$resAccept__ENA if (delayCount == 1) {
+    METHOD ifc$resAccept__ENA if (((delayCount) == (1))) {
         STORE :delayCount = 0
     }
-    METHOD ifc$resValue l_struct_OC_ValuePair = (saved) if (delayCount == 1)
-    METHOD/Rule memdelay_rule__ENA if (delayCount > 1) {
-        STORE :delayCount = delayCount - 1
+    METHOD ifc$resValue l_struct_OC_ValuePair = ((saved)) if (((delayCount) == (1)))
+    METHOD/Rule memdelay_rule__ENA if (((delayCount) > (1))) {
+        STORE :delayCount = (delayCount) - (1)
     }
 }

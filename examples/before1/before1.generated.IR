@@ -65,10 +65,10 @@ MODULE l_module_OC_Connect {
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
     }
-    METHOD/Rule swap2_rule__ENA {
+    METHOD/Rule swap2_rule__ENA if ((1)) {
         CALL/Action :lEcho$swap$y2xnull__ENA{}
     }
-    METHOD/Rule swap_rule__ENA {
+    METHOD/Rule swap_rule__ENA if ((1)) {
         CALL/Action :lEcho$swap$x2y__ENA{}
         CALL/Action :lEcho$swap$y2x__ENA{}
     }
@@ -85,23 +85,23 @@ MODULE l_module_OC_Echo {
     FIELD INTEGER_32 x
     FIELD INTEGER_32 y
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD/Rule delay_rule__ENA if (((busy != 0) & (busy_delay == 0)) != 0) {
+    METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
     }
-    METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((busy != 0) ^ 1) {
+    METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     }
-    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((busy != 0) ^ 1) {
+    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
     }
-    METHOD/Rule respond_rule__ENA if (busy_delay != 0) {
+    METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
@@ -119,16 +119,16 @@ MODULE l_module_OC_EchoIndicationInput {
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
-    METHOD/Rule input_rule__ENA if (busy_delay != 0) {
+    METHOD/Rule input_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if ((busy_delay != 0) ^ 1) {
+    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if ((((busy_delay) != (0)) ^ (1))) {
         ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v_2e_addr
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
-        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
-        STORE (pipe$enq__ENA$v_2e_addr6$tag == 1):busy_delay = 1
+        STORE (((pipe$enq__ENA$v_2e_addr6$tag) == (1))):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
+        STORE (((pipe$enq__ENA$v_2e_addr6$tag) == (1))):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
+        STORE (((pipe$enq__ENA$v_2e_addr6$tag) == (1))):busy_delay = 1
     }
 }
 MODULE l_module_OC_EchoIndicationOutput {
@@ -138,21 +138,21 @@ MODULE l_module_OC_EchoIndicationOutput {
     FIELD l_struct_OC_EchoIndication_data ind1
     FIELD INTEGER_32 ind_busy
     FIELD INTEGER_32 even
-    METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((ind_busy != 0) ^ 1) {
-        STORE (even != 0):ind1$tag = 1
-        STORE (even != 0):ind1$data$heard$meth = indication$heard$meth
-        STORE (even != 0):ind1$data$heard$v = indication$heard$v
-        STORE ((even != 0) ^ 1):ind0$tag = 1
-        STORE ((even != 0) ^ 1):ind0$data$heard$meth = indication$heard$meth
-        STORE ((even != 0) ^ 1):ind0$data$heard$v = indication$heard$v
+    METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((ind_busy) != (0)) ^ (1))) {
+        STORE (((even) != (0))):ind1$tag = 1
+        STORE (((even) != (0))):ind1$data$heard$meth = indication$heard$meth
+        STORE (((even) != (0))):ind1$data$heard$v = indication$heard$v
+        STORE ((((even) != (0)) ^ (1))):ind0$tag = 1
+        STORE ((((even) != (0)) ^ (1))):ind0$data$heard$meth = indication$heard$meth
+        STORE ((((even) != (0)) ^ (1))):ind0$data$heard$v = indication$heard$v
         STORE :ind_busy = 1
-        STORE :even = (even != 0) ^ 1
+        STORE :even = ((even) != (0)) ^ (1)
     }
-    METHOD/Rule output_rulee__ENA if (((ind_busy != 0) & (even != 0)) != 0) {
+    METHOD/Rule output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
         STORE :ind_busy = 0
         CALL/Action :pipe$enq__ENA{ind0}
     }
-    METHOD/Rule output_ruleo__ENA if (((ind_busy != 0) & (even == 0)) != 0) {
+    METHOD/Rule output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
         STORE :ind_busy = 0
         CALL/Action :pipe$enq__ENA{ind1}
     }
@@ -163,8 +163,8 @@ MODULE l_module_OC_EchoRequestInput {
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
         ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v_2e_addr
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        CALL/Action (pipe$enq__ENA$v_2e_addr13$tag == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
-        CALL/Action (pipe$enq__ENA$v_2e_addr15$tag == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
+        CALL/Action (((pipe$enq__ENA$v_2e_addr13$tag) == (1))):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        CALL/Action (((pipe$enq__ENA$v_2e_addr15$tag) == (2))):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
     }
 }
 MODULE l_module_OC_EchoRequestOutput {

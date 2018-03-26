@@ -42,28 +42,28 @@ MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD INTEGER_32 element
     FIELD INTEGER_8 full
-    METHOD in$enq__ENA ( INTEGER_32 v ) if (full ^ 1) {
+    METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA if (full) {
+    METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first INTEGER_32 = (element) if (full)
+    METHOD out$first INTEGER_32 = ((element)) if ((full))
 }
 MODULE l_module_OC_Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
     FIELD l_struct_OC_ValuePair element
     FIELD INTEGER_8 full
-    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (full ^ 1) {
+    METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA if (full) {
+    METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_ValuePair = (element) if (full)
+    METHOD out$first l_struct_OC_ValuePair = ((element)) if ((full))
 }
 MODULE l_module_OC_FifoPong {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
@@ -72,20 +72,20 @@ MODULE l_module_OC_FifoPong {
     FIELD l_module_OC_Fifo1_OC_3 element2
     FIELD INTEGER_8 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
-        CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
-        CALL/Action (pong ^ 1):element1$in$enq__ENA{in$enq$v}
+        CALL/Action ((pong)):element2$in$enq__ENA{in$enq$v}
+        CALL/Action (((pong) ^ (1))):element1$in$enq__ENA{in$enq$v}
     }
     METHOD out$deq__ENA {
-        CALL/Action (pong):element2$out$deq__ENA{}
-        CALL/Action (pong ^ 1):element1$out$deq__ENA{}
-        STORE :pong = pong ^ 1
+        CALL/Action ((pong)):element2$out$deq__ENA{}
+        CALL/Action (((pong) ^ (1))):element1$out$deq__ENA{}
+        STORE :pong = (pong) ^ (1)
     }
-    METHOD out$first l_struct_OC_ValuePair = (out$first$retval) {
+    METHOD out$first l_struct_OC_ValuePair = ((out$first$retval)) {
         ALLOCA l_struct_OC_ValuePair out$first$retval
-        CALL (pong):element2$out$first{}
-        LET l_struct_OC_ValuePair (pong):out$first$retval = element2$out$first
-        CALL (pong ^ 1):element1$out$first{}
-        LET l_struct_OC_ValuePair (pong ^ 1):out$first$retval = element1$out$first
+        CALL ((pong)):element2$out$first{}
+        LET l_struct_OC_ValuePair ((pong)):out$first$retval = element2$out$first
+        CALL (((pong) ^ (1))):element1$out$first{}
+        LET l_struct_OC_ValuePair (((pong) ^ (1))):out$first$retval = element1$out$first
     }
 }
 MODULE l_module_OC_IVector {
@@ -95,7 +95,7 @@ MODULE l_module_OC_IVector {
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }
-    METHOD/Rule respond__ENA {
+    METHOD/Rule respond__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond__ENA$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
