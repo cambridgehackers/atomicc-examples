@@ -66,8 +66,8 @@
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr15$tag == 2:request$say2__ENA;pipe$enq__ENA$v_2e_addr13$tag == 1:request$say__ENA;
-//METAGUARD; pipe$enq; ( request$say__RDY | ( pipe$enq__ENA$v_2e_addr13$tag != 1 ) ) & ( request$say2__RDY | ( pipe$enq__ENA$v_2e_addr15$tag != 2 ) );
+//METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag == 2:request$say2__ENA;pipe$enq__ENA$v_2e_addr$tag == 1:request$say__ENA;
+//METAGUARD; pipe$enq; ( request$say__RDY | ( pipe$enq__ENA$v_2e_addr$tag != 1 ) ) & ( request$say2__RDY | ( pipe$enq__ENA$v_2e_addr$tag != 2 ) );
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;

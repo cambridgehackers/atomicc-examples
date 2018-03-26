@@ -235,11 +235,11 @@ module l_module_OC_EchoIndicationInput (
             busy_delay <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            if (pipe$enq__ENA$v_2e_addr6$tag == 1)
+            if (pipe$enq$v$tag == 1)
             meth_delay <= pipe$enq$v$data$heard$meth;
-            if (pipe$enq__ENA$v_2e_addr6$tag == 1)
+            if (pipe$enq$v$tag == 1)
             v_delay <= pipe$enq$v$data$heard$v;
-            if (pipe$enq__ENA$v_2e_addr6$tag == 1)
+            if (pipe$enq$v$tag == 1)
             busy_delay <= 1;
         end; // End of pipe$enq__ENA
       end
@@ -323,13 +323,13 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = ( request$say__RDY | ( pipe$enq__ENA$v_2e_addr13$tag != 1 ) ) & ( request$say2__RDY | ( pipe$enq__ENA$v_2e_addr15$tag != 2 ) );
+    assign pipe$enq__RDY = ( request$say__RDY | ( pipe$enq$v$tag != 1 ) ) & ( request$say2__RDY | ( pipe$enq$v$tag != 2 ) );
     assign request$say$meth = pipe$enq$v$data$say$meth;
     assign request$say$v = pipe$enq$v$data$say$v;
     assign request$say2$meth = pipe$enq$v$data$say2$meth;
     assign request$say2$v = pipe$enq$v$data$say2$v;
-    assign request$say2__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addr15$tag == 2;
-    assign request$say__ENA = pipe$enq__ENA & pipe$enq__ENA$v_2e_addr13$tag == 1;
+    assign request$say2__ENA = pipe$enq__ENA & pipe$enq$v$tag == 2;
+    assign request$say__ENA = pipe$enq__ENA & pipe$enq$v$tag == 1;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
