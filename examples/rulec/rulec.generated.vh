@@ -27,20 +27,17 @@
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
-//METABEFORE; delay_rule__ENA; :request$say2__ENA; :request$say__ENA
 //METAGUARD; delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAEXCLUSIVE; request$say2__ENA; request$say__ENA
 //METAGUARD; request$say2; ( busy != 0 ) ^ 1;
 //METAGUARD; request$say; ( busy != 0 ) ^ 1;
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
-//METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; ( busy_delay != 0 ) & indication$heard__RDY;
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; input_rule__ENA; :indication$heard__ENA;
 //METAEXCLUSIVE; input_rule__ENA; pipe$enq__ENA
-//METABEFORE; input_rule__ENA; :pipe$enq__ENA
 //METAGUARD; input_rule; ( busy_delay != 0 ) & indication$heard__RDY;
 //METAGUARD; pipe$enq; ( busy_delay != 0 ) ^ 1;
 //METARULES; input_rule

@@ -5,13 +5,11 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
 //METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 //METASTART; l_module_OC_Fifo1_OC_0
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
 //METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 //METASTART; l_module_OC_IVector
 //METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;

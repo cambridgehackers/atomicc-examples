@@ -5,6 +5,5 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; full ^ 1;
 //METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 `endif
