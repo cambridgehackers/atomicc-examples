@@ -94,20 +94,20 @@ module l_module_OC_FifoPong (
     l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
-        in$enq__ENA & ( pong ^ 1 ),
+        ( pong ^ 1 ) & in$enq__ENA,
         in$enq$v,
         element1$in$enq__RDY,
-        out$deq__ENA & ( pong ^ 1 ),
+        ( pong ^ 1 ) & out$deq__ENA,
         element1$out$deq__RDY,
         element1$out$first,
         element1$out$first__RDY);
     l_module_OC_Fifo1_OC_3 element2 (
         CLK,
         nRST,
-        in$enq__ENA & pong,
+        pong & in$enq__ENA,
         in$enq$v,
         element2$in$enq__RDY,
-        out$deq__ENA & pong,
+        pong & out$deq__ENA,
         element2$out$deq__RDY,
         element2$out$first,
         element2$out$first__RDY);

@@ -328,8 +328,8 @@ module l_module_OC_EchoRequestInput (
     assign request$say$v = pipe$enq$v$data$say$v;
     assign request$say2$meth = pipe$enq$v$data$say2$meth;
     assign request$say2$v = pipe$enq$v$data$say2$v;
-    assign request$say2__ENA = pipe$enq__ENA & ( pipe$enq$v$tag == 2 );
-    assign request$say__ENA = pipe$enq__ENA & ( pipe$enq$v$tag == 1 );
+    assign request$say2__ENA = ( pipe$enq$v$tag == 2 ) & pipe$enq__ENA;
+    assign request$say__ENA = ( pipe$enq$v$tag == 1 ) & pipe$enq__ENA;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
