@@ -275,14 +275,14 @@ module l_module_OC_IVector (
     l_module_OC_FifoPong fifo9 (
         CLK,
         nRST,
-        ( in$say$meth != 8 ) & ( in$say$meth != 7 ) & ( in$say$meth != 6 ) & ( in$say$meth != 5 ) & ( in$say$meth != 4 ) & ( in$say$meth != 3 ) & ( in$say$meth != 2 ) & ( in$say$meth != 1 ) & ( in$say$meth != 0 ) & in$say__ENA,
+        ( in$say$meth == 9 ) & in$say__ENA,
         { in$say__ENA$temp$a , in$say$v , in$say__ENA$temp$c },
         fifo9$in$enq__RDY,
         respond_rule_9__ENA,
         fifo9$out$deq__RDY,
         fifo9$out$first,
         fifo9$out$first__RDY);
-    assign in$say__RDY = ( ( in$say$meth != 0 ) | fifo0$in$enq__RDY ) & ( ( in$say$meth != 1 ) | fifo1$in$enq__RDY ) & ( ( in$say$meth != 2 ) | fifo2$in$enq__RDY ) & ( ( in$say$meth != 3 ) | fifo3$in$enq__RDY ) & ( ( in$say$meth != 4 ) | fifo4$in$enq__RDY ) & ( ( in$say$meth != 5 ) | fifo5$in$enq__RDY ) & ( ( in$say$meth != 6 ) | fifo6$in$enq__RDY ) & ( ( in$say$meth != 7 ) | fifo7$in$enq__RDY ) & ( ( in$say$meth != 8 ) | fifo8$in$enq__RDY ) & ( ( in$say$meth == 8 ) | ( in$say$meth == 7 ) | ( in$say$meth == 6 ) | ( in$say$meth == 5 ) | ( in$say$meth == 4 ) | ( in$say$meth == 3 ) | ( in$say$meth == 2 ) | ( in$say$meth == 1 ) | ( in$say$meth == 0 ) | fifo9$in$enq__RDY );
+    assign in$say__RDY = ( ( in$say$meth != 0 ) | fifo0$in$enq__RDY ) & ( ( in$say$meth != 1 ) | fifo1$in$enq__RDY ) & ( ( in$say$meth != 2 ) | fifo2$in$enq__RDY ) & ( ( in$say$meth != 3 ) | fifo3$in$enq__RDY ) & ( ( in$say$meth != 4 ) | fifo4$in$enq__RDY ) & ( ( in$say$meth != 5 ) | fifo5$in$enq__RDY ) & ( ( in$say$meth != 6 ) | fifo6$in$enq__RDY ) & ( ( in$say$meth != 7 ) | fifo7$in$enq__RDY ) & ( ( in$say$meth != 8 ) | fifo8$in$enq__RDY ) & ( ( in$say$meth != 9 ) | fifo9$in$enq__RDY );
     assign out$heard$meth = respond_rule_0__ENA ? 0 : respond_rule_1__ENA ? 1 : respond_rule_2__ENA ? 2 : respond_rule_3__ENA ? 3 : respond_rule_4__ENA ? 4 : respond_rule_5__ENA ? 5 : respond_rule_6__ENA ? 6 : respond_rule_7__ENA ? 7 : respond_rule_8__ENA ? 8 : 9;
     assign out$heard$v = respond_rule_0__ENA ? fifo0$out$first$b : respond_rule_1__ENA ? fifo1$out$first$b : respond_rule_2__ENA ? fifo2$out$first$b : respond_rule_3__ENA ? fifo3$out$first$b : respond_rule_4__ENA ? fifo4$out$first$b : respond_rule_5__ENA ? fifo5$out$first$b : respond_rule_6__ENA ? fifo6$out$first$b : respond_rule_7__ENA ? fifo7$out$first$b : respond_rule_8__ENA ? fifo8$out$first$b : fifo9$out$first$b;
     assign out$heard__ENA = respond_rule_0__ENA || respond_rule_1__ENA || respond_rule_2__ENA || respond_rule_3__ENA || respond_rule_4__ENA || respond_rule_5__ENA || respond_rule_6__ENA || respond_rule_7__ENA || respond_rule_8__ENA || respond_rule_9__ENA;

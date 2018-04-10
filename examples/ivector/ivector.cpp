@@ -93,7 +93,7 @@ __module IVector {
         fifo[7].in.enq(temp);
         else if (meth == 8)
         fifo[8].in.enq(temp);
-        else
+        else if (meth == 9)
         fifo[9].in.enq(temp);
 #elif 1
         fifo[meth].in.enq(temp);
