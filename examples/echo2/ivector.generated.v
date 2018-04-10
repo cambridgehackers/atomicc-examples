@@ -111,10 +111,10 @@ module l_module_OC_FifoPong (
         element2$out$deq__RDY,
         element2$out$first,
         element2$out$first__RDY);
-    assign in$enq__RDY = ( element2$in$enq__RDY | ( pong ^ 1 ) ) & ( element1$in$enq__RDY | pong );
-    assign out$deq__RDY = ( element2$out$deq__RDY | ( pong ^ 1 ) ) & ( element1$out$deq__RDY | pong );
+    assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
+    assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
     assign out$first = { pong ? element2$out$first$a : element1$out$first$a , pong ? element2$out$first$b : element1$out$first$b , pong ? element2$out$first$c : element1$out$first$c };
-    assign out$first__RDY = ( element2$out$first__RDY | ( pong ^ 1 ) ) & ( element1$out$first__RDY | pong );
+    assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -155,6 +155,6 @@ module l_module_OC_IVector (
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign respond__RDY = ( fifo$out$deq__RDY & fifo$out$first__RDY ) & ind$heard__RDY;
+    assign respond__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 endmodule 
 

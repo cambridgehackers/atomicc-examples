@@ -103,7 +103,7 @@ module l_module_OC_IVector (
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign respond__RDY = ( fifo$out$first__RDY & fifo$out$deq__RDY ) & ind$heard__RDY;
+    assign respond__RDY = fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

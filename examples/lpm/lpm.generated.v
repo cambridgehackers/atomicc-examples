@@ -120,10 +120,10 @@ module l_module_OC_Lpm (
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = inQ$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign enter__RDY = ( ( inQ$out$first__RDY & inQ$out$deq__RDY ) & fifo$in$enq__RDY ) & mem$ifc$req__RDY;
-    assign exit_rule__RDY = ( ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY ) & mem$ifc$resAccept__RDY ) & fifo$out$deq__RDY ) & outQ$in$enq__RDY;
-    assign recirc__RDY = ( ( ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY ) & mem$ifc$resAccept__RDY ) & fifo$out$deq__RDY ) & fifo$in$enq__RDY ) & mem$ifc$req__RDY;
-    assign respond__RDY = ( outQ$out$first__RDY & outQ$out$deq__RDY ) & ind$heard__RDY;
+    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+    assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign respond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
