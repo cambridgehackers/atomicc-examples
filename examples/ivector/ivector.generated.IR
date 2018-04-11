@@ -97,16 +97,7 @@ MODULE l_module_OC_IVector {
     METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair in$say__ENA$temp
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
-        CALL/Action ((in$say$meth) == (0)):fifo[0]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (1)) & (((in$say$meth) == (0)) ^ 1)):fifo[1]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (2)) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1))):fifo[2]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (3)) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1)))):fifo[3]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (4)) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1))))):fifo[4]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (5)) & ((((in$say$meth) == (4))^ 1) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1)))))):fifo[5]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (6)) & ((((in$say$meth) == (5))^ 1) & ((((in$say$meth) == (4))^ 1) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1))))))):fifo[6]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (7)) & ((((in$say$meth) == (6))^ 1) & ((((in$say$meth) == (5))^ 1) & ((((in$say$meth) == (4))^ 1) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1)))))))):fifo[7]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (8)) & ((((in$say$meth) == (7))^ 1) & ((((in$say$meth) == (6))^ 1) & ((((in$say$meth) == (5))^ 1) & ((((in$say$meth) == (4))^ 1) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1))))))))):fifo[8]$in$enq__ENA{in$say__ENA$temp}
-        CALL/Action (((in$say$meth) == (9)) & ((((in$say$meth) == (8))^ 1) & ((((in$say$meth) == (7))^ 1) & ((((in$say$meth) == (6))^ 1) & ((((in$say$meth) == (5))^ 1) & ((((in$say$meth) == (4))^ 1) & ((((in$say$meth) == (3))^ 1) & ((((in$say$meth) == (2))^ 1) & ((((in$say$meth) == (1))^ 1) & (((in$say$meth) == (0)) ^ 1)))))))))):fifo[9]$in$enq__ENA{in$say__ENA$temp}
+        CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say__ENA$temp}
     }
     METHOD/Rule respond_rule_0__ENA if ((1)) {
         ALLOCA l_struct_OC_ValuePair respond_rule_0__ENA$temp

@@ -74,7 +74,7 @@ __module IVector {
     void in.say(int meth, int v) {
         UTYPE temp;
         temp.b = v;
-#if 1 // this is what it should expand to
+#if 0 // this is what it should expand to
         if (meth == 0)
         fifo[0].in.enq(temp);
         else if (meth == 1)
