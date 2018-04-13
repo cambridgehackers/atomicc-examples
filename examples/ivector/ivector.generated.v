@@ -86,11 +86,24 @@ module l_module_OC_FifoPong (
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;
+    wire [31:0]element1$out$first$a;
+    wire [31:0]element1$out$first$b;
+    wire [31:0]element1$out$first$c;
     wire element1$out$first__RDY;
     wire element2$in$enq__RDY;
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
+    wire [31:0]element2$out$first$a;
+    wire [31:0]element2$out$first$b;
+    wire [31:0]element2$out$first$c;
     wire element2$out$first__RDY;
+    // Alias assigments for struct/union elements
+    assign element1$out$first$a = element1$out$first[0:31];
+    assign element1$out$first$b = element1$out$first[32:63];
+    assign element1$out$first$c = element1$out$first[64:95];
+    assign element2$out$first$a = element2$out$first[0:31];
+    assign element2$out$first$b = element2$out$first[32:63];
+    assign element2$out$first$c = element2$out$first[64:95];
     l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
@@ -143,45 +156,66 @@ module l_module_OC_IVector (
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;
     wire [95:0]fifo0$out$first;
+    wire [31:0]fifo0$out$first$b;
     wire fifo0$out$first__RDY;
     wire fifo1$in$enq__RDY;
     wire fifo1$out$deq__RDY;
     wire [95:0]fifo1$out$first;
+    wire [31:0]fifo1$out$first$b;
     wire fifo1$out$first__RDY;
     wire fifo2$in$enq__RDY;
     wire fifo2$out$deq__RDY;
     wire [95:0]fifo2$out$first;
+    wire [31:0]fifo2$out$first$b;
     wire fifo2$out$first__RDY;
     wire fifo3$in$enq__RDY;
     wire fifo3$out$deq__RDY;
     wire [95:0]fifo3$out$first;
+    wire [31:0]fifo3$out$first$b;
     wire fifo3$out$first__RDY;
     wire fifo4$in$enq__RDY;
     wire fifo4$out$deq__RDY;
     wire [95:0]fifo4$out$first;
+    wire [31:0]fifo4$out$first$b;
     wire fifo4$out$first__RDY;
     wire fifo5$in$enq__RDY;
     wire fifo5$out$deq__RDY;
     wire [95:0]fifo5$out$first;
+    wire [31:0]fifo5$out$first$b;
     wire fifo5$out$first__RDY;
     wire fifo6$in$enq__RDY;
     wire fifo6$out$deq__RDY;
     wire [95:0]fifo6$out$first;
+    wire [31:0]fifo6$out$first$b;
     wire fifo6$out$first__RDY;
     wire fifo7$in$enq__RDY;
     wire fifo7$out$deq__RDY;
     wire [95:0]fifo7$out$first;
+    wire [31:0]fifo7$out$first$b;
     wire fifo7$out$first__RDY;
     wire fifo8$in$enq__RDY;
     wire fifo8$out$deq__RDY;
     wire [95:0]fifo8$out$first;
+    wire [31:0]fifo8$out$first$b;
     wire fifo8$out$first__RDY;
     wire fifo9$in$enq__RDY;
     wire fifo9$out$deq__RDY;
     wire [95:0]fifo9$out$first;
+    wire [31:0]fifo9$out$first$b;
     wire fifo9$out$first__RDY;
     wire [31:0]in$say__ENA$temp$a;
     wire [31:0]in$say__ENA$temp$c;
+    // Alias assigments for struct/union elements
+    assign fifo0$out$first$b = fifo0$out$first[32:63];
+    assign fifo1$out$first$b = fifo1$out$first[32:63];
+    assign fifo2$out$first$b = fifo2$out$first[32:63];
+    assign fifo3$out$first$b = fifo3$out$first[32:63];
+    assign fifo4$out$first$b = fifo4$out$first[32:63];
+    assign fifo5$out$first$b = fifo5$out$first[32:63];
+    assign fifo6$out$first$b = fifo6$out$first[32:63];
+    assign fifo7$out$first$b = fifo7$out$first[32:63];
+    assign fifo8$out$first$b = fifo8$out$first[32:63];
+    assign fifo9$out$first$b = fifo9$out$first[32:63];
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,

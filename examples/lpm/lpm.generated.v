@@ -61,20 +61,43 @@ module l_module_OC_Lpm (
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
+    wire [31:0]fifo$out$first$a;
+    wire [31:0]fifo$out$first$b;
+    wire [31:0]fifo$out$first$c;
     wire fifo$out$first__RDY;
     wire inQ$in$enq__RDY;
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;
+    wire [31:0]inQ$out$first$a;
+    wire [31:0]inQ$out$first$b;
+    wire [31:0]inQ$out$first$c;
     wire inQ$out$first__RDY;
     wire mem$ifc$req__RDY;
     wire mem$ifc$resAccept__RDY;
     wire [95:0]mem$ifc$resValue;
+    wire [31:0]mem$ifc$resValue$a;
+    wire [31:0]mem$ifc$resValue$b;
+    wire [31:0]mem$ifc$resValue$c;
     wire mem$ifc$resValue__RDY;
     wire outQ$in$enq__RDY;
     wire outQ$out$deq__RDY;
     wire [95:0]outQ$out$first;
+    wire [31:0]outQ$out$first$a;
+    wire [31:0]outQ$out$first$b;
     wire outQ$out$first__RDY;
     wire [31:0]request$say__ENA$temp$c;
+    // Alias assigments for struct/union elements
+    assign fifo$out$first$a = fifo$out$first[0:31];
+    assign fifo$out$first$b = fifo$out$first[32:63];
+    assign fifo$out$first$c = fifo$out$first[64:95];
+    assign inQ$out$first$a = inQ$out$first[0:31];
+    assign inQ$out$first$b = inQ$out$first[32:63];
+    assign inQ$out$first$c = inQ$out$first[64:95];
+    assign mem$ifc$resValue$a = mem$ifc$resValue[0:31];
+    assign mem$ifc$resValue$b = mem$ifc$resValue[32:63];
+    assign mem$ifc$resValue$c = mem$ifc$resValue[64:95];
+    assign outQ$out$first$a = outQ$out$first[0:31];
+    assign outQ$out$first$b = outQ$out$first[32:63];
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,

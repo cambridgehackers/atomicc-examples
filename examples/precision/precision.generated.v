@@ -87,7 +87,12 @@ module l_module_OC_IVector (
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;
+    wire [5:0]fifo$out$first$a;
+    wire [3:0]fifo$out$first$b;
     wire fifo$out$first__RDY;
+    // Alias assigments for struct/union elements
+    assign fifo$out$first$a = fifo$out$first[0:5];
+    assign fifo$out$first$b = fifo$out$first[6:9];
     l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
