@@ -174,7 +174,7 @@ module l_module_OC_IVector (
     assign ind$heard$v = { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c };
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = fifo$in$enq__RDY;
-    // Extra assigments, not to output wires
+    // assign respond__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 endmodule 
 

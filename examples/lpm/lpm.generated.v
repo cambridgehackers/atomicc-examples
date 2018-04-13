@@ -138,14 +138,17 @@ module l_module_OC_Lpm (
         mem$ifc$resAccept__RDY,
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
+    // assign enter__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    // assign exit_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
     assign ind$heard$meth = outQ$out$first$a;
     assign ind$heard$v = outQ$out$first$b;
     assign ind$heard__ENA = respond__ENA;
-    assign request$say__RDY = inQ$in$enq__RDY;
-    // Extra assigments, not to output wires
-    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+    // assign recirc__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign request$say__RDY = inQ$in$enq__RDY;
+    // assign respond__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
 
     always @( posedge CLK) begin
@@ -173,7 +176,7 @@ module l_module_OC_LpmMemory (
     assign ifc$resAccept__RDY = delayCount == 1;
     assign ifc$resValue = { saved$a , saved$b , saved$c };
     assign ifc$resValue__RDY = delayCount == 1;
-    // Extra assigments, not to output wires
+    // assign memdelay_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign memdelay_rule__RDY = delayCount > 1;
 
     always @( posedge CLK) begin

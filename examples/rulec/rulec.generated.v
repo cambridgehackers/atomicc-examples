@@ -137,13 +137,14 @@ module l_module_OC_Echo (
     reg [31:0]meth_temp;
     reg [31:0]v_delay;
     reg [31:0]v_temp;
+    // assign delay_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign delay_rule__RDY = ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = respond_rule__ENA;
     assign request$say2__RDY = busy == 0;
     assign request$say__RDY = busy == 0;
-    // Extra assigments, not to output wires
-    assign delay_rule__RDY = ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
+    // assign respond_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
 
     always @( posedge CLK) begin
@@ -202,9 +203,9 @@ module l_module_OC_EchoIndicationInput (
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = input_rule__ENA;
-    assign pipe$enq__RDY = busy_delay == 0;
-    // Extra assigments, not to output wires
+    // assign input_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign input_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
+    assign pipe$enq__RDY = busy_delay == 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -247,11 +248,12 @@ module l_module_OC_EchoIndicationOutput (
     reg [31:0]ind1$tag;
     reg [31:0]ind_busy;
     assign indication$heard__RDY = ind_busy == 0;
+    // assign output_rulee__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
+    // assign output_ruleo__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
     assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data$heard$meth , ind0$data$heard$v } : { ind1$tag , ind1$data$heard$meth , ind1$data$heard$v };
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
-    // Extra assigments, not to output wires
-    assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

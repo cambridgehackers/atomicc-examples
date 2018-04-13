@@ -27,8 +27,8 @@ module l_module_OC_Echo (
         fifo$out$first__RDY);
     assign ind$heard$v = fifo$out$first;
     assign ind$heard__ENA = respond_rule__ENA;
-    assign sout$say__RDY = fifo$in$enq__RDY;
-    // Extra assigments, not to output wires
+    // assign respond_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
+    assign sout$say__RDY = fifo$in$enq__RDY;
 endmodule 
 

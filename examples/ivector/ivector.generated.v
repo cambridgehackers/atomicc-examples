@@ -320,16 +320,25 @@ module l_module_OC_IVector (
     assign out$heard$meth = respond_rule_0__ENA ? 0 : respond_rule_1__ENA ? 1 : respond_rule_2__ENA ? 2 : respond_rule_3__ENA ? 3 : respond_rule_4__ENA ? 4 : respond_rule_5__ENA ? 5 : respond_rule_6__ENA ? 6 : respond_rule_7__ENA ? 7 : respond_rule_8__ENA ? 8 : 9;
     assign out$heard$v = respond_rule_0__ENA ? fifo0$out$first$b : respond_rule_1__ENA ? fifo1$out$first$b : respond_rule_2__ENA ? fifo2$out$first$b : respond_rule_3__ENA ? fifo3$out$first$b : respond_rule_4__ENA ? fifo4$out$first$b : respond_rule_5__ENA ? fifo5$out$first$b : respond_rule_6__ENA ? fifo6$out$first$b : respond_rule_7__ENA ? fifo7$out$first$b : respond_rule_8__ENA ? fifo8$out$first$b : fifo9$out$first$b;
     assign out$heard__ENA = respond_rule_0__ENA || respond_rule_1__ENA || respond_rule_2__ENA || respond_rule_3__ENA || respond_rule_4__ENA || respond_rule_5__ENA || respond_rule_6__ENA || respond_rule_7__ENA || respond_rule_8__ENA || respond_rule_9__ENA;
-    // Extra assigments, not to output wires
+    // assign respond_rule_0__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_0__RDY = fifo0$out$first__RDY & fifo0$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_1__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_1__RDY = fifo1$out$first__RDY & fifo1$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_2__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_2__RDY = fifo2$out$first__RDY & fifo2$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_3__RDY = fifo3$out$first__RDY & fifo3$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_4__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_4__RDY = fifo4$out$first__RDY & fifo4$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_5__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_5__RDY = fifo5$out$first__RDY & fifo5$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_6__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_6__RDY = fifo6$out$first__RDY & fifo6$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_7__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_7__RDY = fifo7$out$first__RDY & fifo7$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_8__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_8__RDY = fifo8$out$first__RDY & fifo8$out$deq__RDY & out$heard__RDY;
+    // assign respond_rule_9__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign respond_rule_9__RDY = fifo9$out$first__RDY & fifo9$out$deq__RDY & out$heard__RDY;
 
     always @( posedge CLK) begin
