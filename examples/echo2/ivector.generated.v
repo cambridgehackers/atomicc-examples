@@ -62,7 +62,7 @@ module l_module_OC_Fifo1_OC_3 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            element <= in$enq$v;
+            { element$a , element$b , element$c } <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin

@@ -347,7 +347,18 @@ module l_module_OC_EchoRequestOutput (
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
     wire [95:0]request$say2__ENA$ind$data;
+    wire [31:0]request$say2__ENA$ind$data$say2$meth;
+    wire [31:0]request$say2__ENA$ind$data$say2$v;
+    wire [31:0]request$say2__ENA$ind$data$say2$v2;
     wire [95:0]request$say__ENA$ind$data;
+    wire [31:0]request$say__ENA$ind$data$say$meth;
+    wire [31:0]request$say__ENA$ind$data$say$v;
+    // Alias assigments for struct/union elements
+    assign request$say2__ENA$ind$data$say2$meth = request$say2__ENA$ind[32:63];
+    assign request$say2__ENA$ind$data$say2$v = request$say2__ENA$ind[64:95];
+    assign request$say2__ENA$ind$data$say2$v2 = request$say2__ENA$ind[96:127];
+    assign request$say__ENA$ind$data$say$meth = request$say__ENA$ind[32:63];
+    assign request$say__ENA$ind$data$say$v = request$say__ENA$ind[64:95];
     assign pipe$enq$v = request$say2__ENA ? { 2 , request$say2__ENA$ind$data } : { 1 , request$say__ENA$ind$data };
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;

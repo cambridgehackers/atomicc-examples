@@ -36,7 +36,7 @@ module l_module_OC_Fifo2 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            ( windex == 0 ) ? element0 : element1 <= in$enq$v;
+            ( windex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c } <= in$enq$v;
             windex <= ( windex + 1 ) % 2;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
@@ -189,7 +189,7 @@ module l_module_OC_LpmMemory (
       else begin
         if (ifc$req__ENA) begin
             delayCount <= 4;
-            saved <= ifc$req$v;
+            { saved$a , saved$b , saved$c } <= ifc$req$v;
         end; // End of ifc$req__ENA
         if (ifc$resAccept__ENA) begin
             delayCount <= 0;
