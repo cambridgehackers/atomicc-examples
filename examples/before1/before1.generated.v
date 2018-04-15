@@ -17,9 +17,6 @@ module l_module_OC_Connect (
     input indication$heard__RDY);
 // software: request
 // software: indication
-    wire [31:0]lEII_test$indication$heard$meth;
-    wire [31:0]lEII_test$indication$heard$v;
-    wire lEII_test$indication$heard__ENA;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
@@ -33,8 +30,6 @@ module l_module_OC_Connect (
     wire lERI$request$say__ENA;
     wire [191:0]lERO_test$pipe$enq$v;
     wire lERO_test$pipe$enq__ENA;
-    wire lERO_test$request$say2__RDY;
-    wire lERO_test$request$say__RDY;
     wire [31:0]lEcho$indication$heard$meth;
     wire [31:0]lEcho$indication$heard$v;
     wire lEcho$indication$heard__ENA;
@@ -102,11 +97,11 @@ module l_module_OC_Connect (
         request$say2__ENA,
         request$say2$meth,
         request$say2$v,
-        lERO_test$request$say2__RDY,
+        request$say2__RDY,
         request$say__ENA,
         request$say$meth,
         request$say$v,
-        lERO_test$request$say__RDY,
+        request$say__RDY,
         lERO_test$pipe$enq__ENA,
         lERO_test$pipe$enq$v,
         lERI$pipe$enq__RDY);
@@ -116,15 +111,10 @@ module l_module_OC_Connect (
         lEIO$pipe$enq__ENA,
         lEIO$pipe$enq$v,
         lEII_test$pipe$enq__RDY,
-        lEII_test$indication$heard__ENA,
-        lEII_test$indication$heard$meth,
-        lEII_test$indication$heard$v,
+        indication$heard__ENA,
+        indication$heard$meth,
+        indication$heard$v,
         indication$heard__RDY);
-    assign indication$heard$meth = lEII_test$indication$heard$meth;
-    assign indication$heard$v = lEII_test$indication$heard$v;
-    assign indication$heard__ENA = lEII_test$indication$heard__ENA;
-    assign request$say2__RDY = lERO_test$request$say2__RDY;
-    assign request$say__RDY = lERO_test$request$say__RDY;
 endmodule 
 
 module l_module_OC_Echo (

@@ -84,7 +84,6 @@ module l_module_OC_IVector (
     reg [8:0]counter;
     reg [7:0]fcounter;
     reg [8:0]gcounter;
-    wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;
     wire fifo$out$first__RDY;
@@ -97,7 +96,7 @@ module l_module_OC_IVector (
         nRST,
         request$say__ENA,
         { request$say$meth , request$say$v },
-        fifo$in$enq__RDY,
+        request$say__RDY,
         respond__ENA,
         fifo$out$deq__RDY,
         fifo$out$first,
@@ -105,7 +104,6 @@ module l_module_OC_IVector (
     assign ind$heard$meth = fifo$out$first[0:5];
     assign ind$heard$v = fifo$out$first[6:9];
     assign ind$heard__ENA = respond__ENA;
-    assign request$say__RDY = fifo$in$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

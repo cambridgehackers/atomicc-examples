@@ -66,7 +66,6 @@ module l_module_OC_Lpm (
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
-    wire inQ$in$enq__RDY;
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
@@ -96,7 +95,7 @@ module l_module_OC_Lpm (
         nRST,
         request$say__ENA,
         { request$say$meth , request$say$v , request$say__ENA$temp$c },
-        inQ$in$enq__RDY,
+        request$say__RDY,
         enter__ENA,
         inQ$out$deq__RDY,
         inQ$out$first,
@@ -134,7 +133,6 @@ module l_module_OC_Lpm (
     assign ind$heard$meth = outQ$out$first[0:31];
     assign ind$heard$v = outQ$out$first[32:63];
     assign ind$heard__ENA = respond__ENA;
-    assign request$say__RDY = inQ$in$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

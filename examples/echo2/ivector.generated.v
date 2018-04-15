@@ -137,7 +137,6 @@ module l_module_OC_IVector (
     output ind$heard__ENA,
     output [95:0]ind$heard$v,
     input ind$heard__RDY);
-    wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
@@ -150,13 +149,12 @@ module l_module_OC_IVector (
         nRST,
         request$say__ENA,
         request$say$v,
-        fifo$in$enq__RDY,
+        request$say__RDY,
         respond__ENA,
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
     assign ind$heard$v = { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] };
     assign ind$heard__ENA = respond__ENA;
-    assign request$say__RDY = fifo$in$enq__RDY;
 endmodule 
 

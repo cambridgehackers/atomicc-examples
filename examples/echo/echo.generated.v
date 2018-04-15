@@ -11,9 +11,7 @@ module l_module_OC_Echo (
     input ind$heard__RDY);
 // software: sout
 // software: ind
-    wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
-    wire [31:0]fifo$out$first;
     wire fifo$out$first__RDY;
     wire respond_rule__ENA;
     wire respond_rule__RDY;
@@ -24,13 +22,11 @@ module l_module_OC_Echo (
         nRST,
         sout$say__ENA,
         sout$say$v,
-        fifo$in$enq__RDY,
+        sout$say__RDY,
         respond_rule__ENA,
         fifo$out$deq__RDY,
-        fifo$out$first,
+        ind$heard$v,
         fifo$out$first__RDY);
-    assign ind$heard$v = fifo$out$first;
     assign ind$heard__ENA = respond_rule__ENA;
-    assign sout$say__RDY = fifo$in$enq__RDY;
 endmodule 
 
