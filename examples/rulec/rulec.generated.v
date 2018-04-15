@@ -211,12 +211,11 @@ module l_module_OC_EchoIndicationInput (
             busy_delay <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            if (pipe$enq$v[0:31] == 1)
+            if (pipe$enq$v[0:31] == 1) begin
             meth_delay <= pipe$enq$v[32:63];
-            if (pipe$enq$v[0:31] == 1)
             v_delay <= pipe$enq$v[64:95];
-            if (pipe$enq$v[0:31] == 1)
             busy_delay <= 1;
+            end;
         end; // End of pipe$enq__ENA
       end
     end // always @ (posedge CLK)
@@ -261,20 +260,18 @@ module l_module_OC_EchoIndicationOutput (
       end // nRST
       else begin
         if (indication$heard__ENA) begin
-            if (even != 0)
-            ind1$tag <= 1;
-            if (even != 0)
-            ind1$data$heard$meth <= indication$heard$meth;
-            if (even != 0)
-            ind1$data$heard$v <= indication$heard$v;
-            if (even == 0)
-            ind0$tag <= 1;
-            if (even == 0)
-            ind0$data$heard$meth <= indication$heard$meth;
-            if (even == 0)
-            ind0$data$heard$v <= indication$heard$v;
             ind_busy <= 1;
             even <= even == 0;
+            if (even != 0) begin
+            ind1$tag <= 1;
+            ind1$data$heard$meth <= indication$heard$meth;
+            ind1$data$heard$v <= indication$heard$v;
+            end;
+            if (even == 0) begin
+            ind0$tag <= 1;
+            ind0$data$heard$meth <= indication$heard$meth;
+            ind0$data$heard$v <= indication$heard$v;
+            end;
         end; // End of indication$heard__ENA
         if (output_rulee__ENA) begin
             ind_busy <= 0;
