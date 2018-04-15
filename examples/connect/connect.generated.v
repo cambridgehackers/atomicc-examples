@@ -115,17 +115,10 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire [31:0]pipe$enq$v$data$heard$meth;
-    wire [31:0]pipe$enq$v$data$heard$v;
-    wire [31:0]pipe$enq$v$tag;
-    // Alias assigments for struct/union elements
-    assign pipe$enq$v$data$heard$meth = pipe$enq$v[32:63];
-    assign pipe$enq$v$data$heard$v = pipe$enq$v[64:95];
-    assign pipe$enq$v$tag = pipe$enq$v[0:31];
-    assign indication$heard$meth = pipe$enq$v$data$heard$meth;
-    assign indication$heard$v = pipe$enq$v$data$heard$v;
-    assign indication$heard__ENA = ( pipe$enq$v$tag == 1 ) & pipe$enq__ENA;
-    assign pipe$enq__RDY = ( pipe$enq$v$tag != 1 ) | indication$heard__RDY;
+    assign indication$heard$meth = pipe$enq$v[32:63];
+    assign indication$heard$v = pipe$enq$v[64:95];
+    assign indication$heard__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = ( pipe$enq$v[0:31] != 1 ) | indication$heard__RDY;
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -166,17 +159,10 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire [31:0]pipe$enq$v$data$say$meth;
-    wire [31:0]pipe$enq$v$data$say$v;
-    wire [31:0]pipe$enq$v$tag;
-    // Alias assigments for struct/union elements
-    assign pipe$enq$v$data$say$meth = pipe$enq$v[32:63];
-    assign pipe$enq$v$data$say$v = pipe$enq$v[64:95];
-    assign pipe$enq$v$tag = pipe$enq$v[0:31];
-    assign pipe$enq__RDY = ( pipe$enq$v$tag != 1 ) | request$say__RDY;
-    assign request$say$meth = pipe$enq$v$data$say$meth;
-    assign request$say$v = pipe$enq$v$data$say$v;
-    assign request$say__ENA = ( pipe$enq$v$tag == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = ( pipe$enq$v[0:31] != 1 ) | request$say__RDY;
+    assign request$say$meth = pipe$enq$v[32:63];
+    assign request$say$v = pipe$enq$v[64:95];
+    assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (

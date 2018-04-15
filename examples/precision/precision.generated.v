@@ -87,12 +87,7 @@ module l_module_OC_IVector (
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;
-    wire [5:0]fifo$out$first$a;
-    wire [3:0]fifo$out$first$b;
     wire fifo$out$first__RDY;
-    // Alias assigments for struct/union elements
-    assign fifo$out$first$a = fifo$out$first[0:5];
-    assign fifo$out$first$b = fifo$out$first[6:9];
     l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
@@ -103,8 +98,8 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$meth = fifo$out$first$a;
-    assign ind$heard$v = fifo$out$first$b;
+    assign ind$heard$meth = fifo$out$first[0:5];
+    assign ind$heard$v = fifo$out$first[6:9];
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = fifo$in$enq__RDY;
     // assign respond__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;

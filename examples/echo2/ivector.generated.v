@@ -86,24 +86,11 @@ module l_module_OC_FifoPong (
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
     wire [95:0]element1$out$first;
-    wire [31:0]element1$out$first$a;
-    wire [31:0]element1$out$first$b;
-    wire [31:0]element1$out$first$c;
     wire element1$out$first__RDY;
     wire element2$in$enq__RDY;
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
-    wire [31:0]element2$out$first$a;
-    wire [31:0]element2$out$first$b;
-    wire [31:0]element2$out$first$c;
     wire element2$out$first__RDY;
-    // Alias assigments for struct/union elements
-    assign element1$out$first$a = element1$out$first[0:31];
-    assign element1$out$first$b = element1$out$first[32:63];
-    assign element1$out$first$c = element1$out$first[64:95];
-    assign element2$out$first$a = element2$out$first[0:31];
-    assign element2$out$first$b = element2$out$first[32:63];
-    assign element2$out$first$c = element2$out$first[64:95];
     l_module_OC_Fifo1_OC_3 element1 (
         CLK,
         nRST,
@@ -126,7 +113,7 @@ module l_module_OC_FifoPong (
         element2$out$first__RDY);
     assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
     assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
-    assign out$first = { pong ? element2$out$first$a : element1$out$first$a , pong ? element2$out$first$b : element1$out$first$b , pong ? element2$out$first$c : element1$out$first$c };
+    assign out$first = { pong ? element2$out$first[0:31] : element1$out$first[0:31] , pong ? element2$out$first[32:63] : element1$out$first[32:63] , pong ? element2$out$first[64:95] : element1$out$first[64:95] };
     assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
 
     always @( posedge CLK) begin
@@ -153,14 +140,7 @@ module l_module_OC_IVector (
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
-    wire [31:0]fifo$out$first$a;
-    wire [31:0]fifo$out$first$b;
-    wire [31:0]fifo$out$first$c;
     wire fifo$out$first__RDY;
-    // Alias assigments for struct/union elements
-    assign fifo$out$first$a = fifo$out$first[0:31];
-    assign fifo$out$first$b = fifo$out$first[32:63];
-    assign fifo$out$first$c = fifo$out$first[64:95];
     l_module_OC_FifoPong fifo (
         CLK,
         nRST,
@@ -171,7 +151,7 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$v = { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c };
+    assign ind$heard$v = { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] };
     assign ind$heard__ENA = respond__ENA;
     assign request$say__RDY = fifo$in$enq__RDY;
     // assign respond__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;

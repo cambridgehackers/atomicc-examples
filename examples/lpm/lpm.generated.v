@@ -61,43 +61,20 @@ module l_module_OC_Lpm (
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
-    wire [31:0]fifo$out$first$a;
-    wire [31:0]fifo$out$first$b;
-    wire [31:0]fifo$out$first$c;
     wire fifo$out$first__RDY;
     wire inQ$in$enq__RDY;
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;
-    wire [31:0]inQ$out$first$a;
-    wire [31:0]inQ$out$first$b;
-    wire [31:0]inQ$out$first$c;
     wire inQ$out$first__RDY;
     wire mem$ifc$req__RDY;
     wire mem$ifc$resAccept__RDY;
     wire [95:0]mem$ifc$resValue;
-    wire [31:0]mem$ifc$resValue$a;
-    wire [31:0]mem$ifc$resValue$b;
-    wire [31:0]mem$ifc$resValue$c;
     wire mem$ifc$resValue__RDY;
     wire outQ$in$enq__RDY;
     wire outQ$out$deq__RDY;
     wire [95:0]outQ$out$first;
-    wire [31:0]outQ$out$first$a;
-    wire [31:0]outQ$out$first$b;
     wire outQ$out$first__RDY;
     wire [31:0]request$say__ENA$temp$c;
-    // Alias assigments for struct/union elements
-    assign fifo$out$first$a = fifo$out$first[0:31];
-    assign fifo$out$first$b = fifo$out$first[32:63];
-    assign fifo$out$first$c = fifo$out$first[64:95];
-    assign inQ$out$first$a = inQ$out$first[0:31];
-    assign inQ$out$first$b = inQ$out$first[32:63];
-    assign inQ$out$first$c = inQ$out$first[64:95];
-    assign mem$ifc$resValue$a = mem$ifc$resValue[0:31];
-    assign mem$ifc$resValue$b = mem$ifc$resValue[32:63];
-    assign mem$ifc$resValue$c = mem$ifc$resValue[64:95];
-    assign outQ$out$first$a = outQ$out$first[0:31];
-    assign outQ$out$first$b = outQ$out$first[32:63];
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
@@ -112,7 +89,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first$a , inQ$out$first$b , inQ$out$first$c } : { mem$ifc$resValue$a , mem$ifc$resValue$b , mem$ifc$resValue$c },
+        enter__ENA ? { inQ$out$first[0:31] , inQ$out$first[32:63] , inQ$out$first[64:95] } : { mem$ifc$resValue[0:31] , mem$ifc$resValue[32:63] , mem$ifc$resValue[64:95] },
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
@@ -122,7 +99,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         exit_rule__ENA,
-        { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c },
+        { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] },
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
@@ -132,7 +109,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first$a , inQ$out$first$b , inQ$out$first$c } : { fifo$out$first$a , fifo$out$first$b , fifo$out$first$c },
+        enter__ENA ? { inQ$out$first[0:31] , inQ$out$first[32:63] , inQ$out$first[64:95] } : { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] },
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,
@@ -142,8 +119,8 @@ module l_module_OC_Lpm (
     assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
     // assign exit_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
-    assign ind$heard$meth = outQ$out$first$a;
-    assign ind$heard$v = outQ$out$first$b;
+    assign ind$heard$meth = outQ$out$first[0:31];
+    assign ind$heard$v = outQ$out$first[32:63];
     assign ind$heard__ENA = respond__ENA;
     // assign recirc__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;

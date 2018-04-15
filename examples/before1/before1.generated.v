@@ -219,13 +219,6 @@ module l_module_OC_EchoIndicationInput (
     reg [31:0]busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
-    wire [31:0]pipe$enq$v$data$heard$meth;
-    wire [31:0]pipe$enq$v$data$heard$v;
-    wire [31:0]pipe$enq$v$tag;
-    // Alias assigments for struct/union elements
-    assign pipe$enq$v$data$heard$meth = pipe$enq$v[32:63];
-    assign pipe$enq$v$data$heard$v = pipe$enq$v[64:95];
-    assign pipe$enq$v$tag = pipe$enq$v[0:31];
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = input_rule__ENA;
@@ -244,11 +237,11 @@ module l_module_OC_EchoIndicationInput (
             busy_delay <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            if (pipe$enq$v$tag == 1)
-            meth_delay <= pipe$enq$v$data$heard$meth;
-            if (pipe$enq$v$tag == 1)
-            v_delay <= pipe$enq$v$data$heard$v;
-            if (pipe$enq$v$tag == 1)
+            if (pipe$enq$v[0:31] == 1)
+            meth_delay <= pipe$enq$v[32:63];
+            if (pipe$enq$v[0:31] == 1)
+            v_delay <= pipe$enq$v[64:95];
+            if (pipe$enq$v[0:31] == 1)
             busy_delay <= 1;
         end; // End of pipe$enq__ENA
       end
@@ -333,24 +326,13 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire [31:0]pipe$enq$v$data$say$meth;
-    wire [31:0]pipe$enq$v$data$say$v;
-    wire [31:0]pipe$enq$v$data$say2$meth;
-    wire [31:0]pipe$enq$v$data$say2$v;
-    wire [31:0]pipe$enq$v$tag;
-    // Alias assigments for struct/union elements
-    assign pipe$enq$v$data$say$meth = pipe$enq$v[32:63];
-    assign pipe$enq$v$data$say$v = pipe$enq$v[64:95];
-    assign pipe$enq$v$data$say2$meth = pipe$enq$v[96:127];
-    assign pipe$enq$v$data$say2$v = pipe$enq$v[128:159];
-    assign pipe$enq$v$tag = pipe$enq$v[0:31];
-    assign pipe$enq__RDY = ( ( pipe$enq$v$tag != 1 ) | request$say__RDY ) & ( ( pipe$enq$v$tag != 2 ) | request$say2__RDY );
-    assign request$say$meth = pipe$enq$v$data$say$meth;
-    assign request$say$v = pipe$enq$v$data$say$v;
-    assign request$say2$meth = pipe$enq$v$data$say2$meth;
-    assign request$say2$v = pipe$enq$v$data$say2$v;
-    assign request$say2__ENA = ( pipe$enq$v$tag == 2 ) & pipe$enq__ENA;
-    assign request$say__ENA = ( pipe$enq$v$tag == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = ( ( pipe$enq$v[0:31] != 1 ) | request$say__RDY ) & ( ( pipe$enq$v[0:31] != 2 ) | request$say2__RDY );
+    assign request$say$meth = pipe$enq$v[32:63];
+    assign request$say$v = pipe$enq$v[64:95];
+    assign request$say2$meth = pipe$enq$v[96:127];
+    assign request$say2$v = pipe$enq$v[128:159];
+    assign request$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
+    assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
