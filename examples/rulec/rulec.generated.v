@@ -326,17 +326,9 @@ module l_module_OC_EchoRequestOutput (
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire [95:0]request$say2__ENA$ind$data;
-    wire [95:0]request$say__ENA$ind$data;
-    assign pipe$enq$v = request$say2__ENA ? { 2 , request$say2__ENA$ind$data } : { 1 , request$say__ENA$ind$data };
+    assign pipe$enq$v = request$say2__ENA ? { 2 , { request$say2$meth , request$say2$v , request$say2$v2 } } : { 1 , { request$say$meth , request$say$v , 32'd0 } };
     assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
-    // Extra assigments, not to output wires
-    assign request$say2__ENA$ind$data[0:31] = request$say2$meth;
-    assign request$say2__ENA$ind$data[32:63] = request$say2$v;
-    assign request$say2__ENA$ind$data[64:95] = request$say2$v2;
-    assign request$say__ENA$ind$data[0:31] = request$say$meth;
-    assign request$say__ENA$ind$data[32:63] = request$say$v;
 endmodule 
 
