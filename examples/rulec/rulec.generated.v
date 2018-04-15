@@ -301,17 +301,14 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire [95:0]pipe$enq$v$data;
     assign pipe$enq__RDY = ( ( pipe$enq$v[0:31] != 1 ) | request$say__RDY ) & ( ( pipe$enq$v[0:31] != 2 ) | request$say2__RDY );
-    assign request$say$meth = pipe$enq$v$data[0:31];
-    assign request$say$v = pipe$enq$v$data[32:63];
-    assign request$say2$meth = pipe$enq$v$data[0:31];
-    assign request$say2$v = pipe$enq$v$data[32:63];
-    assign request$say2$v2 = pipe$enq$v$data[64:95];
+    assign request$say$meth = pipe$enq$v[32:63];
+    assign request$say$v = pipe$enq$v[64:95];
+    assign request$say2$meth = pipe$enq$v[32:63];
+    assign request$say2$v = pipe$enq$v[64:95];
+    assign request$say2$v2 = pipe$enq$v[96:127];
     assign request$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
     assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
-    // Extra assigments, not to output wires
-    assign pipe$enq$v$data = pipe$enq$v[32:127];
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
