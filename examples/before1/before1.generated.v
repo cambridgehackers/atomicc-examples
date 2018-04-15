@@ -43,6 +43,14 @@ module l_module_OC_Connect (
     wire lEcho$swap$x2y__RDY;
     wire lEcho$swap$y2x__RDY;
     wire lEcho$swap$y2xnull__RDY;
+    wire swap2_rule__ENA;
+    wire swap2_rule__RDY;
+    wire swap_rule__ENA;
+    wire swap_rule__RDY;
+    assign swap2_rule__ENA = swap2_rule__RDY;
+    assign swap2_rule__RDY = lEcho$swap$y2xnull__RDY;
+    assign swap_rule__ENA = swap_rule__RDY;
+    assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
@@ -117,10 +125,6 @@ module l_module_OC_Connect (
     assign indication$heard__ENA = lEII_test$indication$heard__ENA;
     assign request$say2__RDY = lERO_test$request$say2__RDY;
     assign request$say__RDY = lERO_test$request$say__RDY;
-    // assign swap2_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign swap2_rule__RDY = lEcho$swap$y2xnull__RDY;
-    // assign swap_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 endmodule 
 
 module l_module_OC_Echo (
@@ -152,15 +156,19 @@ module l_module_OC_Echo (
     reg [31:0]v_temp;
     reg [31:0]x;
     reg [31:0]y;
-    // assign delay_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    wire delay_rule__ENA;
+    wire delay_rule__RDY;
+    wire respond_rule__ENA;
+    wire respond_rule__RDY;
+    assign delay_rule__ENA = delay_rule__RDY;
     assign delay_rule__RDY = ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
+    assign respond_rule__ENA = respond_rule__RDY;
+    assign respond_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = respond_rule__ENA;
     assign request$say2__RDY = busy == 0;
     assign request$say__RDY = busy == 0;
-    // assign respond_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign respond_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
@@ -219,11 +227,13 @@ module l_module_OC_EchoIndicationInput (
     reg [31:0]busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
+    wire input_rule__ENA;
+    wire input_rule__RDY;
+    assign input_rule__ENA = input_rule__RDY;
+    assign input_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = input_rule__ENA;
-    // assign input_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign input_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
     assign pipe$enq__RDY = busy_delay == 0;
 
     always @( posedge CLK) begin
@@ -265,11 +275,15 @@ module l_module_OC_EchoIndicationOutput (
     reg [31:0]ind1$data$heard$v;
     reg [31:0]ind1$tag;
     reg [31:0]ind_busy;
-    assign indication$heard__RDY = ind_busy == 0;
-    // assign output_rulee__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    wire output_rulee__ENA;
+    wire output_rulee__RDY;
+    wire output_ruleo__ENA;
+    wire output_ruleo__RDY;
+    assign output_rulee__ENA = output_rulee__RDY;
     assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
-    // assign output_ruleo__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign output_ruleo__ENA = output_ruleo__RDY;
     assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
+    assign indication$heard__RDY = ind_busy == 0;
     assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data$heard$meth , ind0$data$heard$v } : { ind1$tag , ind1$data$heard$meth , ind1$data$heard$v };
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
 

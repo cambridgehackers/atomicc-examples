@@ -15,6 +15,10 @@ module l_module_OC_Echo (
     wire fifo$out$deq__RDY;
     wire [31:0]fifo$out$first;
     wire fifo$out$first__RDY;
+    wire respond_rule__ENA;
+    wire respond_rule__RDY;
+    assign respond_rule__ENA = respond_rule__RDY;
+    assign respond_rule__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
     l_module_OC_Fifo1 fifo (
         CLK,
         nRST,
@@ -27,8 +31,6 @@ module l_module_OC_Echo (
         fifo$out$first__RDY);
     assign ind$heard$v = fifo$out$first;
     assign ind$heard__ENA = respond_rule__ENA;
-    // assign respond_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign respond_rule__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
     assign sout$say__RDY = fifo$in$enq__RDY;
 endmodule 
 

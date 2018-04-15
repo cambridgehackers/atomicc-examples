@@ -58,6 +58,10 @@ module l_module_OC_Lpm (
     input [31:0]request$say$v,
     output request$say__RDY);
     reg [31:0]doneCount;
+    wire enter__ENA;
+    wire enter__RDY;
+    wire exit_rule__ENA;
+    wire exit_rule__RDY;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
@@ -74,7 +78,19 @@ module l_module_OC_Lpm (
     wire outQ$out$deq__RDY;
     wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
+    wire recirc__ENA;
+    wire recirc__RDY;
     wire [31:0]request$say__ENA$temp$c;
+    wire respond__ENA;
+    wire respond__RDY;
+    assign enter__ENA = enter__RDY;
+    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign exit_rule__ENA = exit_rule__RDY;
+    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+    assign recirc__ENA = recirc__RDY;
+    assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign respond__ENA = respond__RDY;
+    assign respond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
@@ -115,18 +131,10 @@ module l_module_OC_Lpm (
         mem$ifc$resAccept__RDY,
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
-    // assign enter__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    // assign exit_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
     assign ind$heard$meth = outQ$out$first[0:31];
     assign ind$heard$v = outQ$out$first[32:63];
     assign ind$heard__ENA = respond__ENA;
-    // assign recirc__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
     assign request$say__RDY = inQ$in$enq__RDY;
-    // assign respond__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign respond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -149,12 +157,14 @@ module l_module_OC_LpmMemory (
     reg [31:0]saved$a;
     reg [31:0]saved$b;
     reg [31:0]saved$c;
+    wire memdelay_rule__ENA;
+    wire memdelay_rule__RDY;
+    assign memdelay_rule__ENA = memdelay_rule__RDY;
+    assign memdelay_rule__RDY = delayCount > 1;
     assign ifc$req__RDY = delayCount == 0;
     assign ifc$resAccept__RDY = delayCount == 1;
     assign ifc$resValue = { saved$a , saved$b , saved$c };
     assign ifc$resValue__RDY = delayCount == 1;
-    // assign memdelay_rule__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    assign memdelay_rule__RDY = delayCount > 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
