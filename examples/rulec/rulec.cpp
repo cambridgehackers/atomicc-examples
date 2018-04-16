@@ -52,6 +52,7 @@ typedef struct {
         } say2;
     } data;
 } EchoRequest_data;
+typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 
 typedef struct {
     int tag;
@@ -69,8 +70,9 @@ typedef struct {
         } heard2;
     } data;
 } EchoIndication_data;
+typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 
-typedef PipeIn<EchoRequest_data> EchoRequestPipe;
+#if 1 // software side classes
 __module EchoRequestOutput { // method -> pipe
     EchoRequest request;
     EchoRequestPipe *pipe;
@@ -93,6 +95,46 @@ __module EchoRequestOutput { // method -> pipe
     }
 };
 
+__module EchoIndicationInput { // pipe -> method
+    EchoIndicationPipe pipe;
+    EchoIndication *indication;
+    int busy_delay;
+    int meth_delay;
+    int v_delay;
+    int v2_delay;
+    int v_type;
+    void pipe.enq(const EchoIndication_data &v) if(!busy_delay) {
+printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
+        switch (v.tag) {
+        case EchoIndication_tag_heard:
+            meth_delay = v.data.heard.meth;
+            v_delay = v.data.heard.v;
+            busy_delay = 1;
+            v_type = 1;
+            break;
+        case EchoIndication_tag_heard2:
+            meth_delay = v.data.heard2.meth;
+            v_delay = v.data.heard2.v;
+            v2_delay = v.data.heard2.v2;
+            busy_delay = 1;
+            v_type = 2;
+            break;
+        }
+    }
+    EchoIndicationInput() {
+        __rule input_rule if(busy_delay != 0) {
+printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
+             busy_delay = 0;
+             if (v_type == 1)
+             indication->heard(meth_delay, v_delay);
+             else
+             indication->heard2(meth_delay, v_delay, v2_delay);
+           };
+    }
+};
+#endif
+
+// hardware side classes
 __module EchoRequestInput { // pipe -> method
     EchoRequestPipe pipe;
     EchoRequest *request;
@@ -109,8 +151,6 @@ __module EchoRequestInput { // pipe -> method
     }
 };
 
-typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
-EchoIndicationPipe unusedEIP;
 __module EchoIndicationOutput { // method -> pipe
     EchoIndication indication;
     EchoIndicationPipe *pipe;
@@ -151,44 +191,6 @@ printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, ind0.tag);
 printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, ind1.tag);
              ind_busy = 0;
              pipe->enq(ind1);
-           };
-    }
-};
-
-__module EchoIndicationInput { // pipe -> method
-    EchoIndicationPipe pipe;
-    EchoIndication *indication;
-    int busy_delay;
-    int meth_delay;
-    int v_delay;
-    int v2_delay;
-    int v_type;
-    void pipe.enq(const EchoIndication_data &v) if(!busy_delay) {
-printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
-        switch (v.tag) {
-        case EchoIndication_tag_heard:
-            meth_delay = v.data.heard.meth;
-            v_delay = v.data.heard.v;
-            busy_delay = 1;
-            v_type = 1;
-            break;
-        case EchoIndication_tag_heard2:
-            meth_delay = v.data.heard2.meth;
-            v_delay = v.data.heard2.v;
-            v2_delay = v.data.heard2.v2;
-            busy_delay = 1;
-            v_type = 2;
-            break;
-        }
-    }
-    EchoIndicationInput() {
-        __rule input_rule if(busy_delay != 0) {
-printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
-             busy_delay = 0;
-             if (v_type == 1)
-             indication->heard(meth_delay, v_delay);
-             else
-             indication->heard2(meth_delay, v_delay, v2_delay);
            };
     }
 };
