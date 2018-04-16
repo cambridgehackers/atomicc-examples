@@ -25,28 +25,33 @@ typedef struct {
     int b;
 } ValueType;
 
-typedef struct {
-    int meth;
-    int v;
-} EchoRequest_say;
-typedef struct {
-    int meth;
-    int v;
-    int v2;
-} EchoRequest_say2;
-typedef union {
-    EchoRequest_say say;
-    EchoRequest_say2 say2;
-} EchoRequest_union;
+__interface EchoRequest {
+    void say(int meth, int v);
+    void say2(int meth, int v, int v2);
+};
+
+__interface EchoIndication {
+    void heard(int meth, int v);
+    void heard2(int meth, int v, int v2);
+};
 
 // Serialization structures
 typedef struct {
     int tag;
 #define EchoRequest_tag_say 1
 #define EchoRequest_tag_say2 2
-    EchoRequest_union data;
+    union EchoRequest_union {
+        struct EchoRequest_say {
+            int meth;
+            int v;
+        } say;
+        struct EchoRequest_say2 {
+            int meth;
+            int v;
+            int v2;
+        } say2;
+    } data;
 } EchoRequest_data;
-EchoRequest_data unusedERD;
 
 typedef struct {
     int tag;
@@ -64,18 +69,6 @@ typedef struct {
         } heard2;
     } data;
 } EchoIndication_data;
-EchoIndication_data unusedEID;
-
-// Interface classes
-__interface EchoRequest {
-    void say(int meth, int v);
-    void say2(int meth, int v, int v2);
-};
-
-__interface EchoIndication {
-    void heard(int meth, int v);
-    void heard2(int meth, int v, int v2);
-};
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 __module EchoRequestOutput { // method -> pipe
