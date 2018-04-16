@@ -242,26 +242,58 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
-__module Connect {
-    __software EchoRequest request;
-    __software EchoIndication *indication;
-    EchoIndicationOutput lEIO;
-    EchoRequestInput lERI;
-    Echo lEcho;
-
-    EchoRequestOutput lERO_test;
-    EchoIndicationInput lEII_test;
+__module Software {
+    EchoRequestOutput          lERO_test;
+    EchoIndicationInput        lEII_test;
+    // interface functions for top of layer
+    EchoRequest     request;
+    EchoIndication *indication;
     void request.say(int meth, int v) {
         lERO_test.request.say(meth, v);
     }
     void request.say2(int meth, int v, int v2) {
         lERO_test.request.say2(meth, v, v2);
     }
+    __connect                  lEII_test.indication = indication; // user indication
+
+    // interface function for bottom of layer
+    EchoRequestPipe           *reqPipe;
+    EchoIndicationPipe         indPipe;
+    void indPipe.enq(const EchoIndication_data &v) {
+        lEII_test.pipe.enq(v);
+    }
+    __connect                 lERO_test.pipe = reqPipe;
+};
+
+__module Hardware {
+    EchoRequestInput           lERI;      // request pipe
+    EchoIndicationOutput       lEIO;      // indication pipe
+    // top interface
+    EchoRequestPipe            request;
+    EchoIndicationPipe        *indication;
+    void request.enq(const EchoRequest_data &v) {
+        lERI.pipe.enq(v);
+    }
+    __connect                  lEIO.pipe = indication;
+
+    // Module under test
+    Echo                       lEcho;
     __connect lERI.request = lEcho.request;
-    __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
-    __connect lERO_test.pipe = lERI.pipe;
-    __connect lEII_test.indication = indication; // user indication
+};
+
+__module Connect {
+    __software EchoRequest    request;
+    __software EchoIndication *indication;
+    Software                   sw;
+    Hardware                   hw;
+    // expose top interfaces
+    __connect                  sw.indication = indication;
+    __connect                  sw.request = request;
+
+    // connect interior interfaces
+    __connect                  hw.indication = sw.indPipe;
+    __connect                  sw.reqPipe = hw.request;
 };
 
 Connect connectTest;

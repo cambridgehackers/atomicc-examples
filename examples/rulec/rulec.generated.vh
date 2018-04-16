@@ -3,31 +3,16 @@
 
 //METASTART; l_module_OC_Connect
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
-//METAINTERNAL; lEIO; l_module_OC_EchoIndicationOutput;
-//METAINTERNAL; lERI; l_module_OC_EchoRequestInput;
-//METAINTERNAL; lEcho; l_module_OC_Echo;
-//METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
-//METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
-//METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
-//METAGUARD; request$say2; lERO_test$request$say2__RDY;
-//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
-//METAGUARD; request$say; lERO_test$request$say__RDY;
-//METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
-//METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
-//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
-//METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
-//METACONNECT; lEIO$pipe$enq__ENA; lEII_test$pipe$enq__ENA
-//METACONNECT; lEIO$pipe$enq__RDY; lEII_test$pipe$enq__RDY
-//METACONNECT; lEcho$indication$heard2__ENA; lEIO$indication$heard2__ENA
-//METACONNECT; lEcho$indication$heard2__RDY; lEIO$indication$heard2__RDY
-//METACONNECT; lEcho$indication$heard__ENA; lEIO$indication$heard__ENA
-//METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
-//METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
-//METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
-//METACONNECT; lEII_test$indication$heard2__ENA; indication$heard2__ENA
-//METACONNECT; lEII_test$indication$heard2__RDY; indication$heard2__RDY
-//METACONNECT; lEII_test$indication$heard__ENA; indication$heard__ENA
-//METACONNECT; lEII_test$indication$heard__RDY; indication$heard__RDY
+//METAINTERNAL; sw; l_module_OC_Software;
+//METAINTERNAL; hw; l_module_OC_Hardware;
+//METACONNECT; sw$indication$heard2__ENA; indication$heard2__ENA
+//METACONNECT; sw$indication$heard2__RDY; indication$heard2__RDY
+//METACONNECT; sw$indication$heard__ENA; indication$heard__ENA
+//METACONNECT; sw$indication$heard__RDY; indication$heard__RDY
+//METACONNECT; hw$indication$enq__ENA; sw$indPipe$enq__ENA
+//METACONNECT; hw$indication$enq__RDY; sw$indPipe$enq__RDY
+//METACONNECT; sw$reqPipe$enq__ENA; hw$request$enq__ENA
+//METACONNECT; sw$reqPipe$enq__RDY; hw$request$enq__RDY
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
@@ -70,4 +55,38 @@
 //METAGUARD; request$say2; pipe$enq__RDY;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
+//METASTART; l_module_OC_Hardware
+//METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_0;
+//METAINTERNAL; lERI; l_module_OC_EchoRequestInput;
+//METAINTERNAL; lEIO; l_module_OC_EchoIndicationOutput;
+//METAINTERNAL; lEcho; l_module_OC_Echo;
+//METAINVOKE; request$enq__ENA; :lERI$pipe$enq__ENA;
+//METAGUARD; request$enq; lERI$pipe$enq__RDY;
+//METACONNECT; lEIO$pipe$enq__ENA; indication$enq__ENA
+//METACONNECT; lEIO$pipe$enq__RDY; indication$enq__RDY
+//METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
+//METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
+//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
+//METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
+//METACONNECT; lEcho$indication$heard2__ENA; lEIO$indication$heard2__ENA
+//METACONNECT; lEcho$indication$heard2__RDY; lEIO$indication$heard2__RDY
+//METACONNECT; lEcho$indication$heard__ENA; lEIO$indication$heard__ENA
+//METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
+//METASTART; l_module_OC_Software
+//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; reqPipe; l_ainterface_OC_PipeIn;
+//METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
+//METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
+//METAINVOKE; indPipe$enq__ENA; :lEII_test$pipe$enq__ENA;
+//METAGUARD; indPipe$enq; lEII_test$pipe$enq__RDY;
+//METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
+//METAGUARD; request$say2; lERO_test$request$say2__RDY;
+//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
+//METAGUARD; request$say; lERO_test$request$say__RDY;
+//METACONNECT; lEII_test$indication$heard2__ENA; indication$heard2__ENA
+//METACONNECT; lEII_test$indication$heard2__RDY; indication$heard2__RDY
+//METACONNECT; lEII_test$indication$heard__ENA; indication$heard__ENA
+//METACONNECT; lEII_test$indication$heard__RDY; indication$heard__RDY
+//METACONNECT; lERO_test$pipe$enq__ENA; reqPipe$enq__ENA
+//METACONNECT; lERO_test$pipe$enq__RDY; reqPipe$enq__RDY
 `endif
