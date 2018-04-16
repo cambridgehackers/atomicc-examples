@@ -1,6 +1,6 @@
 EMODULE l_struct_OC_EchoIndication_data {
     FIELD INTEGER_32 tag
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
+    FIELD l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
 }
 EMODULE l_struct_OC_EchoRequest_data {
     FIELD INTEGER_32 tag
@@ -15,19 +15,27 @@ EMODULE l_struct_OC_EchoRequest_say2 {
     FIELD INTEGER_32 v
     FIELD INTEGER_32 v2
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
-}
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
     FIELD INTEGER_32 meth
     FIELD INTEGER_32 v
+}
+EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard2 {
+    FIELD INTEGER_32 meth
+    FIELD INTEGER_32 v
+    FIELD INTEGER_32 v2
 }
 EMODULE l_union_OC_EchoRequest_union {
     UNION l_struct_OC_EchoRequest_say say
     UNION l_struct_OC_EchoRequest_say2 say2
     FIELD INTEGER_96 DATA
 }
+EMODULE l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
+    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
+    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard2 heard2
+    FIELD INTEGER_96 DATA
+}
 EMODULE l_ainterface_OC_EchoIndication {
+    METHOD heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 )
     METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_EchoRequest {
@@ -67,29 +75,37 @@ MODULE l_module_OC_Echo {
     FIELD INTEGER_32 busy
     FIELD INTEGER_32 meth_temp
     FIELD INTEGER_32 v_temp
+    FIELD INTEGER_32 v2_temp
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
+    FIELD INTEGER_32 v2_delay
+    FIELD INTEGER_32 v_type
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
+        STORE :v2_delay = v2_temp
     }
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) if ((((busy) != (0)) ^ (1))) {
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
+        STORE :v2_temp = request$say2$v2
         STORE :busy = 1
+        STORE :v_type = 2
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
+        STORE :v_type = 1
     }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
-        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{meth_delay,v_delay}
+        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{meth_delay,v_delay,v2_delay}
     }
 }
 MODULE l_module_OC_EchoIndicationInput {
@@ -98,14 +114,23 @@ MODULE l_module_OC_EchoIndicationInput {
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
+    FIELD INTEGER_32 v2_delay
+    FIELD INTEGER_32 v_type
     METHOD/Rule input_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
-        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{meth_delay,v_delay}
+        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{meth_delay,v_delay,v2_delay}
     }
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if ((((busy_delay) != (0)) ^ (1))) {
         STORE ((pipe$enq$v$tag) == 1):meth_delay = pipe$enq$v$data$heard$meth
         STORE ((pipe$enq$v$tag) == 1):v_delay = pipe$enq$v$data$heard$v
         STORE ((pipe$enq$v$tag) == 1):busy_delay = 1
+        STORE ((pipe$enq$v$tag) == 1):v_type = 1
+        STORE ((pipe$enq$v$tag) == 2):meth_delay = pipe$enq$v$data$heard2$meth
+        STORE ((pipe$enq$v$tag) == 2):v_delay = pipe$enq$v$data$heard2$v
+        STORE ((pipe$enq$v$tag) == 2):v2_delay = pipe$enq$v$data$heard2$v2
+        STORE ((pipe$enq$v$tag) == 2):busy_delay = 1
+        STORE ((pipe$enq$v$tag) == 2):v_type = 2
     }
 }
 MODULE l_module_OC_EchoIndicationOutput {
@@ -115,6 +140,13 @@ MODULE l_module_OC_EchoIndicationOutput {
     FIELD l_struct_OC_EchoIndication_data ind1
     FIELD INTEGER_32 ind_busy
     FIELD INTEGER_32 even
+    METHOD indication$heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) if ((((ind_busy) != (0)) ^ (1))) {
+        STORE :ind0$tag = 2
+        STORE :ind0$data$heard2$meth = indication$heard2$meth
+        STORE :ind0$data$heard2$v = indication$heard2$v
+        STORE :ind0$data$heard2$v2 = indication$heard2$v2
+        STORE :ind_busy = 1
+    }
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((ind_busy) != (0)) ^ (1))) {
         STORE ((even) != (0)):ind1$tag = 1
         STORE ((even) != (0)):ind1$data$heard$meth = indication$heard$meth
