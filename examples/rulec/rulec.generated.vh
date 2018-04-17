@@ -33,7 +33,7 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:method$heard2__ENA;pipe$enq$v$tag == 1:method$heard__ENA;
 //METAGUARD; pipe$enq; method$heard__RDY & method$heard2__RDY;
 //METASTART; l_module_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
 //METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard2__ENA; method$heard__ENA
 //METAGUARD; method$heard2; pipe$enq__RDY;
@@ -51,7 +51,7 @@
 //METAINVOKE; method$say__ENA; :pipe$enq__ENA;
 //METAGUARD; method$say; pipe$enq__RDY;
 //METASTART; l_module_OC_Hardware
-//METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_1;
 //METAINTERNAL; lERI; l_module_OC_EchoRequestInput;
 //METAINTERNAL; lEIO; l_module_OC_EchoIndicationOutput;
 //METAINTERNAL; lEcho; l_module_OC_Echo;

@@ -33,37 +33,19 @@ __interface EchoIndication {
 
 //////////////////// Serialization structures for interfaces
 typedef struct {
-    int tag;
-#define EchoRequest_tag_say 1
-#define EchoRequest_tag_say2 2
-    union EchoRequest_union {
-        struct EchoRequest_say {
-            int meth;
-            int v;
-        } say;
-        struct EchoRequest_say2 {
-            int meth;
-            int v;
-            int v2;
-        } say2;
+    enum {say = 1, say2} tag;
+    union {
+        struct { int meth; int v; } say;
+        struct { int meth; int v; int v2; } say2;
     } data;
 } EchoRequest_data;
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 
 typedef struct {
-    int tag;
-#define EchoIndication_tag_heard 1
-#define EchoIndication_tag_heard2 2
-    union EchoIndication_union {
-        struct EchoIndication_heard {
-            int meth;
-            int v;
-        } heard;
-        struct EchoIndication_heard2 {
-            int meth;
-            int v;
-            int v2;
-        } heard2;
+    enum {heard=1, heard2} tag;
+    union {
+        struct { int meth; int v; } heard;
+        struct { int meth; int v; int v2; } heard2;
     } data;
 } EchoIndication_data;
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
@@ -75,7 +57,7 @@ __module EchoRequestOutput { // method -> pipe
     void method.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data data;
-        data.tag = EchoRequest_tag_say;
+        data.tag = EchoRequest_data::say;
         data.data.say.meth = meth;
         data.data.say.v = v;
         pipe->enq(data);
@@ -83,7 +65,7 @@ __module EchoRequestOutput { // method -> pipe
     void method.say2(int meth, int v, int v2) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data data;
-        data.tag = EchoRequest_tag_say2;
+        data.tag = EchoRequest_data::say2;
         data.data.say2.meth = meth;
         data.data.say2.v = v;
         data.data.say2.v2 = v2;
@@ -96,10 +78,10 @@ __module EchoIndicationInput { // pipe -> method
     EchoIndication                  *method;
     void pipe.enq(const EchoIndication_data &v) {
         switch (v.tag) {
-        case EchoIndication_tag_heard:
+        case EchoIndication_data::heard:
             method->heard(v.data.heard.meth, v.data.heard.v);
             break;
-        case EchoIndication_tag_heard2:
+        case EchoIndication_data::heard2:
             method->heard2(v.data.heard2.meth, v.data.heard2.v, v.data.heard2.v2);
             break;
         }
@@ -112,10 +94,10 @@ __module EchoRequestInput { // pipe -> method
     EchoRequest                    *method;
     void pipe.enq(const EchoRequest_data &v) {
         switch (v.tag) {
-        case EchoRequest_tag_say:
+        case EchoRequest_data::say:
             method->say(v.data.say.meth, v.data.say.v);
             break;
-        case EchoRequest_tag_say2:
+        case EchoRequest_data::say2:
             method->say2(v.data.say2.meth, v.data.say2.v, v.data.say2.v2);
             break;
         }
@@ -128,14 +110,14 @@ __module EchoIndicationOutput { // method -> pipe
 
     void method.heard(int meth, int v) {
         EchoIndication_data data;
-        data.tag = EchoIndication_tag_heard;
+        data.tag = EchoIndication_data::heard;
         data.data.heard.meth = meth;
         data.data.heard.v = v;
         pipe->enq(data);
     }
     void method.heard2(int meth, int v, int v2) {
         EchoIndication_data data;
-        data.tag = EchoIndication_tag_heard2;
+        data.tag = EchoIndication_data::heard2;
         data.data.heard2.meth = meth;
         data.data.heard2.v = v;
         data.data.heard2.v2 = v2;

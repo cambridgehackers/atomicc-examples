@@ -1,37 +1,37 @@
 EMODULE l_struct_OC_EchoIndication_data {
     FIELD INTEGER_32 tag
-    FIELD l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
+    FIELD l_union_OC_anon_OC_2 data
 }
 EMODULE l_struct_OC_EchoRequest_data {
     FIELD INTEGER_32 tag
-    FIELD l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
+    FIELD l_union_OC_anon data
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
+EMODULE l_struct_OC_anon {
     FIELD INTEGER_32 meth
     FIELD INTEGER_32 v
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard2 {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-    FIELD INTEGER_32 v2
-}
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-}
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 {
+EMODULE l_struct_OC_anon_OC_0 {
     FIELD INTEGER_32 meth
     FIELD INTEGER_32 v
     FIELD INTEGER_32 v2
 }
-EMODULE l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
-    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
-    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard2 heard2
+EMODULE l_struct_OC_anon_OC_3 {
+    FIELD INTEGER_32 meth
+    FIELD INTEGER_32 v
+}
+EMODULE l_struct_OC_anon_OC_4 {
+    FIELD INTEGER_32 meth
+    FIELD INTEGER_32 v
+    FIELD INTEGER_32 v2
+}
+EMODULE l_union_OC_anon {
+    UNION l_struct_OC_anon say
+    UNION l_struct_OC_anon_OC_0 say2
     FIELD INTEGER_96 DATA
 }
-EMODULE l_union_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
-    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
-    UNION l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2
+EMODULE l_union_OC_anon_OC_2 {
+    UNION l_struct_OC_anon_OC_3 heard
+    UNION l_struct_OC_anon_OC_4 heard2
     FIELD INTEGER_96 DATA
 }
 EMODULE l_ainterface_OC_EchoIndication {
@@ -45,7 +45,7 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
+EMODULE l_ainterface_OC_PipeIn_OC_1 {
     METHOD enq__ENA ( l_struct_OC_EchoIndication_data v )
 }
 MODULE l_module_OC_Connect {
@@ -53,7 +53,7 @@ MODULE l_module_OC_Connect {
     SOFTWARE indication
     INTERFACECONNECT sw$indication indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT request sw$request l_ainterface_OC_EchoRequest
-    INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_1
     INTERFACECONNECT sw$reqPipe hw$request l_ainterface_OC_PipeIn
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
@@ -99,7 +99,7 @@ MODULE l_module_OC_Echo {
     }
 }
 MODULE l_module_OC_EchoIndicationInput {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication method
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
         CALL/Action ((pipe$enq$v$tag) == 1):method$heard__ENA{pipe$enq$v$data$heard$meth,pipe$enq$v$data$heard$v}
@@ -108,7 +108,7 @@ MODULE l_module_OC_EchoIndicationInput {
 }
 MODULE l_module_OC_EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication method
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
     METHOD method$heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
         ALLOCA l_struct_OC_EchoIndication_data method$heard2__ENA$data
         LET INTEGER_32 :method$heard2__ENA$data$tag = 2
@@ -154,11 +154,11 @@ MODULE l_module_OC_EchoRequestOutput {
 }
 MODULE l_module_OC_Hardware {
     INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn
-    INTERFACECONNECT lEIO$pipe indication l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT lEIO$pipe indication l_ainterface_OC_PipeIn_OC_1
     INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
     INTERFACE l_ainterface_OC_PipeIn request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 indication
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 indication
     FIELD l_module_OC_EchoRequestInput lERI
     FIELD l_module_OC_EchoIndicationOutput lEIO
     FIELD l_module_OC_Echo lEcho
@@ -166,12 +166,12 @@ MODULE l_module_OC_Hardware {
 MODULE l_module_OC_Software {
     INTERFACECONNECT request lERO_test$method l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEII_test$method indication l_ainterface_OC_EchoIndication
-    INTERFACECONNECT indPipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT indPipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_1
     INTERFACECONNECT lERO_test$pipe reqPipe l_ainterface_OC_PipeIn
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD l_module_OC_EchoRequestOutput lERO_test
     FIELD l_module_OC_EchoIndicationInput lEII_test
     INTERFACE/Ptr l_ainterface_OC_PipeIn reqPipe
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 indPipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 indPipe
 }
