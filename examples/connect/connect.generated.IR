@@ -44,6 +44,7 @@ MODULE l_module_OC_Connect {
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
+    INTERFACECONNECT request lERO_test$request l_ainterface_OC_EchoRequest
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD l_module_OC_EchoIndicationOutput lEIO

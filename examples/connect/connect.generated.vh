@@ -20,6 +20,8 @@
 //METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
 //METACONNECT; lEII_test$indication$heard__ENA; indication$heard__ENA
 //METACONNECT; lEII_test$indication$heard__RDY; indication$heard__RDY
+//METACONNECT; request$say__ENA; lERO_test$request$say__ENA
+//METACONNECT; request$say__RDY; lERO_test$request$say__RDY
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; request$say__ENA; :indication$heard__ENA;
