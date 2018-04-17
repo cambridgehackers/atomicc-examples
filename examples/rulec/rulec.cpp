@@ -55,7 +55,6 @@ __module EchoRequestOutput { // method -> pipe
     EchoRequest                     method;
     EchoRequestPipe                *pipe;
     void method.say(int meth, int v) {
-        printf("entered EchoRequestOutput::say\n");
         EchoRequest_data data;
         data.tag = EchoRequest_data::say;
         data.data.say.meth = meth;
@@ -63,7 +62,6 @@ __module EchoRequestOutput { // method -> pipe
         pipe->enq(data);
     }
     void method.say2(int meth, int v, int v2) {
-        printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data data;
         data.tag = EchoRequest_data::say2;
         data.data.say2.meth = meth;
