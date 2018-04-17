@@ -33,7 +33,7 @@
 //METAINTERNAL; fifo8; l_module_OC_FifoPong;
 //METAINTERNAL; fifo9; l_module_OC_FifoPong;
 //METAINVOKE; in$say__ENA; in$say$meth == 0:fifo0$in$enq__ENA;in$say$meth == 1:fifo1$in$enq__ENA;in$say$meth == 2:fifo2$in$enq__ENA;in$say$meth == 3:fifo3$in$enq__ENA;in$say$meth == 4:fifo4$in$enq__ENA;in$say$meth == 5:fifo5$in$enq__ENA;in$say$meth == 6:fifo6$in$enq__ENA;in$say$meth == 7:fifo7$in$enq__ENA;in$say$meth == 8:fifo8$in$enq__ENA;in$say$meth == 9:fifo9$in$enq__ENA;
-//METAGUARD; in$say; ( ( in$say$meth != 0 ) | fifo0$in$enq__RDY ) & ( ( in$say$meth != 1 ) | fifo1$in$enq__RDY ) & ( ( in$say$meth != 2 ) | fifo2$in$enq__RDY ) & ( ( in$say$meth != 3 ) | fifo3$in$enq__RDY ) & ( ( in$say$meth != 4 ) | fifo4$in$enq__RDY ) & ( ( in$say$meth != 5 ) | fifo5$in$enq__RDY ) & ( ( in$say$meth != 6 ) | fifo6$in$enq__RDY ) & ( ( in$say$meth != 7 ) | fifo7$in$enq__RDY ) & ( ( in$say$meth != 8 ) | fifo8$in$enq__RDY ) & ( ( in$say$meth != 9 ) | fifo9$in$enq__RDY );
+//METAGUARD; in$say; fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
 //METAINVOKE; respond_rule_0__ENA; :fifo0$out$deq__ENA;:fifo0$out$first;:out$heard__ENA;
 //METAEXCLUSIVE; respond_rule_0__ENA; respond_rule_1__ENA; respond_rule_2__ENA; respond_rule_3__ENA; respond_rule_4__ENA; respond_rule_5__ENA; respond_rule_6__ENA; respond_rule_7__ENA; respond_rule_8__ENA; respond_rule_9__ENA
 //METAGUARD; respond_rule_0; fifo0$out$first__RDY & fifo0$out$deq__RDY & out$heard__RDY;

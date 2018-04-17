@@ -110,7 +110,7 @@ module l_module_OC_EchoIndicationInput (
     assign indication$heard$meth = pipe$enq$v[32:63];
     assign indication$heard$v = pipe$enq$v[64:95];
     assign indication$heard__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
-    assign pipe$enq__RDY = ( pipe$enq$v[0:31] != 1 ) | indication$heard__RDY;
+    assign pipe$enq__RDY = indication$heard__RDY;
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -151,7 +151,7 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = ( pipe$enq$v[0:31] != 1 ) | request$say__RDY;
+    assign pipe$enq__RDY = request$say__RDY;
     assign request$say$meth = pipe$enq$v[32:63];
     assign request$say$v = pipe$enq$v[64:95];
     assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;

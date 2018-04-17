@@ -323,7 +323,7 @@ module l_module_OC_EchoRequestInput (
     assign method$say2$v2 = pipe$enq$v[96:127];
     assign method$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
     assign method$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
-    assign pipe$enq__RDY = ( ( pipe$enq$v[0:31] != 1 ) | method$say__RDY ) & ( ( pipe$enq$v[0:31] != 2 ) | method$say2__RDY );
+    assign pipe$enq__RDY = method$say__RDY & method$say2__RDY;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (

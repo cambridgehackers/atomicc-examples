@@ -51,7 +51,7 @@
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:method$say2__ENA;pipe$enq$v$tag == 1:method$say__ENA;
-//METAGUARD; pipe$enq; ( ( pipe$enq$v$tag != 1 ) | method$say__RDY ) & ( ( pipe$enq$v$tag != 2 ) | method$say2__RDY );
+//METAGUARD; pipe$enq; method$say__RDY & method$say2__RDY;
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; method$say2__ENA; :pipe$enq__ENA;
