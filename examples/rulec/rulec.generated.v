@@ -170,53 +170,14 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]method$heard$meth,
     output [31:0]method$heard$v,
     input method$heard__RDY);
-    reg [31:0]busy_delay;
-    reg [31:0]meth_delay;
-    reg [31:0]v2_delay;
-    reg [31:0]v_delay;
-    reg [31:0]v_type;
-    wire input_rule__ENA;
-    wire input_rule__RDY;
-    assign input_rule__ENA = input_rule__RDY;
-    assign input_rule__RDY = ( busy_delay != 0 ) & ( ( v_type != 1 ) | method$heard__RDY ) & ( ( v_type == 1 ) | method$heard2__RDY );
-    assign method$heard$meth = meth_delay;
-    assign method$heard$v = v_delay;
-    assign method$heard2$meth = meth_delay;
-    assign method$heard2$v = v_delay;
-    assign method$heard2$v2 = v2_delay;
-    assign method$heard2__ENA = ( v_type != 1 ) & input_rule__ENA;
-    assign method$heard__ENA = ( v_type == 1 ) & input_rule__ENA;
-    assign pipe$enq__RDY = busy_delay == 0;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        busy_delay <= 0;
-        meth_delay <= 0;
-        v2_delay <= 0;
-        v_delay <= 0;
-        v_type <= 0;
-      end // nRST
-      else begin
-        if (input_rule__ENA) begin
-            busy_delay <= 0;
-        end; // End of input_rule__ENA
-        if (pipe$enq__ENA) begin
-            if (pipe$enq$v[0:31] == 1) begin
-            meth_delay <= pipe$enq$v[32:63];
-            v_delay <= pipe$enq$v[64:95];
-            busy_delay <= 1;
-            v_type <= 1;
-            end;
-            if (pipe$enq$v[0:31] == 2) begin
-            meth_delay <= pipe$enq$v[32:63];
-            v_delay <= pipe$enq$v[64:95];
-            v2_delay <= pipe$enq$v[96:127];
-            busy_delay <= 1;
-            v_type <= 2;
-            end;
-        end; // End of pipe$enq__ENA
-      end
-    end // always @ (posedge CLK)
+    assign method$heard$meth = pipe$enq$v[32:63];
+    assign method$heard$v = pipe$enq$v[64:95];
+    assign method$heard2$meth = pipe$enq$v[32:63];
+    assign method$heard2$v = pipe$enq$v[64:95];
+    assign method$heard2$v2 = pipe$enq$v[96:127];
+    assign method$heard2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
+    assign method$heard__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = method$heard__RDY & method$heard2__RDY;
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -234,71 +195,10 @@ module l_module_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
-    reg [31:0]even;
-    reg [95:0]ind0$data;
-    reg [31:0]ind0$tag;
-    reg [95:0]ind1$data;
-    reg [31:0]ind1$tag;
-    reg [31:0]ind_busy;
-    wire [31:0]ind0$data$heard$meth;
-    wire [31:0]ind0$data$heard$v;
-    wire [31:0]ind0$data$heard2$meth;
-    wire [31:0]ind0$data$heard2$v;
-    wire [31:0]ind0$data$heard2$v2;
-    wire [31:0]ind1$data$heard$meth;
-    wire [31:0]ind1$data$heard$v;
-    wire output_rulee__ENA;
-    wire output_rulee__RDY;
-    wire output_ruleo__ENA;
-    wire output_ruleo__RDY;
-    assign output_rulee__ENA = output_rulee__RDY;
-    assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign output_ruleo__ENA = output_ruleo__RDY;
-    assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign method$heard2__RDY = ind_busy == 0;
-    assign method$heard__RDY = ind_busy == 0;
-    assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data } : { ind1$tag , ind1$data };
-    assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        even <= 0;
-        ind0$data <= 0;
-        ind0$tag <= 0;
-        ind1$data <= 0;
-        ind1$tag <= 0;
-        ind_busy <= 0;
-      end // nRST
-      else begin
-        if (method$heard2__ENA) begin
-            ind0$tag <= 2;
-            ind0$data$heard2$meth <= method$heard2$meth;
-            ind0$data$heard2$v <= method$heard2$v;
-            ind0$data$heard2$v2 <= method$heard2$v2;
-            ind_busy <= 1;
-        end; // End of method$heard2__ENA
-        if (method$heard__ENA) begin
-            ind_busy <= 1;
-            even <= even == 0;
-            if (even != 0) begin
-            ind1$tag <= 1;
-            ind1$data$heard$meth <= method$heard$meth;
-            ind1$data$heard$v <= method$heard$v;
-            end;
-            if (even == 0) begin
-            ind0$tag <= 1;
-            ind0$data$heard$meth <= method$heard$meth;
-            ind0$data$heard$v <= method$heard$v;
-            end;
-        end; // End of method$heard__ENA
-        if (output_rulee__ENA) begin
-            ind_busy <= 0;
-        end; // End of output_rulee__ENA
-        if (output_ruleo__ENA) begin
-            ind_busy <= 0;
-        end; // End of output_ruleo__ENA
-      end
-    end // always @ (posedge CLK)
+    assign method$heard2__RDY = pipe$enq__RDY;
+    assign method$heard__RDY = pipe$enq__RDY;
+    assign pipe$enq$v = method$heard2__ENA ? { 2 , { method$heard2$meth , method$heard2$v , method$heard2$v2 } } : { 1 , { method$heard$meth , method$heard$v , 32'd0 } };
+    assign pipe$enq__ENA = method$heard2__ENA || method$heard__ENA;
 endmodule 
 
 module l_module_OC_EchoRequestInput (

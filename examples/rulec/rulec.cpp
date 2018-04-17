@@ -74,58 +74,35 @@ __module EchoRequestOutput { // method -> pipe
     EchoRequestPipe                *pipe;
     void method.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
-        EchoRequest_data ind;
-        ind.tag = EchoRequest_tag_say;
-        ind.data.say.meth = meth;
-        ind.data.say.v = v;
-        pipe->enq(ind);
+        EchoRequest_data data;
+        data.tag = EchoRequest_tag_say;
+        data.data.say.meth = meth;
+        data.data.say.v = v;
+        pipe->enq(data);
     }
     void method.say2(int meth, int v, int v2) {
         printf("entered EchoRequestOutput::say2\n");
-        EchoRequest_data ind;
-        ind.tag = EchoRequest_tag_say2;
-        ind.data.say2.meth = meth;
-        ind.data.say2.v = v;
-        ind.data.say2.v2 = v2;
-        pipe->enq(ind);
+        EchoRequest_data data;
+        data.tag = EchoRequest_tag_say2;
+        data.data.say2.meth = meth;
+        data.data.say2.v = v;
+        data.data.say2.v2 = v2;
+        pipe->enq(data);
     }
 };
 
 __module EchoIndicationInput { // pipe -> method
     EchoIndicationPipe               pipe;
     EchoIndication                  *method;
-    int busy_delay;
-    int meth_delay;
-    int v_delay;
-    int v2_delay;
-    int v_type;
-    void pipe.enq(const EchoIndication_data &v) if(!busy_delay) {
-printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
+    void pipe.enq(const EchoIndication_data &v) {
         switch (v.tag) {
         case EchoIndication_tag_heard:
-            meth_delay = v.data.heard.meth;
-            v_delay = v.data.heard.v;
-            busy_delay = 1;
-            v_type = 1;
+            method->heard(v.data.heard.meth, v.data.heard.v);
             break;
         case EchoIndication_tag_heard2:
-            meth_delay = v.data.heard2.meth;
-            v_delay = v.data.heard2.v;
-            v2_delay = v.data.heard2.v2;
-            busy_delay = 1;
-            v_type = 2;
+            method->heard2(v.data.heard2.meth, v.data.heard2.v, v.data.heard2.v2);
             break;
         }
-    }
-    EchoIndicationInput() {
-        __rule input_rule if(busy_delay != 0) {
-printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
-             busy_delay = 0;
-             if (v_type == 1)
-             method->heard(meth_delay, v_delay);
-             else
-             method->heard2(meth_delay, v_delay, v2_delay);
-           };
     }
 };
 
@@ -134,7 +111,6 @@ __module EchoRequestInput { // pipe -> method
     EchoRequestPipe                 pipe;
     EchoRequest                    *method;
     void pipe.enq(const EchoRequest_data &v) {
-        printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
             method->say(v.data.say.meth, v.data.say.v);
@@ -150,44 +126,20 @@ __module EchoIndicationOutput { // method -> pipe
     EchoIndication                  method;
     EchoIndicationPipe             *pipe;
 
-    EchoIndication_data ind0;
-    EchoIndication_data ind1;
-    int ind_busy;
-    int even;
-    void method.heard(int meth, int v) if(!ind_busy) {
-printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
-        if (even) {
-        ind1.tag = EchoIndication_tag_heard;
-        ind1.data.heard.meth = meth;
-        ind1.data.heard.v = v;
-        }
-        else {
-        ind0.tag = EchoIndication_tag_heard;
-        ind0.data.heard.meth = meth;
-        ind0.data.heard.v = v;
-        }
-        ind_busy = 1;
-        even = !even;
+    void method.heard(int meth, int v) {
+        EchoIndication_data data;
+        data.tag = EchoIndication_tag_heard;
+        data.data.heard.meth = meth;
+        data.data.heard.v = v;
+        pipe->enq(data);
     }
-    void method.heard2(int meth, int v, int v2) if(!ind_busy) {
-printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
-        ind0.tag = EchoIndication_tag_heard2;
-        ind0.data.heard2.meth = meth;
-        ind0.data.heard2.v = v;
-        ind0.data.heard2.v2 = v2;
-        ind_busy = 1;
-    }
-    EchoIndicationOutput() {
-        __rule output_rulee if(((ind_busy != 0) & (even != 0)) != 0) {
-printf("[output_rulee:%d]EchoIndicationOutput tag %d\n", __LINE__, ind0.tag);
-             ind_busy = 0;
-             pipe->enq(ind0);
-           };
-        __rule output_ruleo if(((ind_busy != 0) & (even == 0)) != 0) {
-printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, ind1.tag);
-             ind_busy = 0;
-             pipe->enq(ind1);
-           };
+    void method.heard2(int meth, int v, int v2) {
+        EchoIndication_data data;
+        data.tag = EchoIndication_tag_heard2;
+        data.data.heard2.meth = meth;
+        data.data.heard2.v = v;
+        data.data.heard2.v2 = v2;
+        pipe->enq(data);
     }
 };
 

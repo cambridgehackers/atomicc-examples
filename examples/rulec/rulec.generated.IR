@@ -101,59 +101,28 @@ MODULE l_module_OC_Echo {
 MODULE l_module_OC_EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication method
-    FIELD INTEGER_32 busy_delay
-    FIELD INTEGER_32 meth_delay
-    FIELD INTEGER_32 v_delay
-    FIELD INTEGER_32 v2_delay
-    FIELD INTEGER_32 v_type
-    METHOD/Rule input_rule__ENA if (((busy_delay) != (0))) {
-        STORE :busy_delay = 0
-        CALL/Action ((v_type) == (1)):method$heard__ENA{meth_delay,v_delay}
-        CALL/Action (((v_type) == (1)) ^ 1):method$heard2__ENA{meth_delay,v_delay,v2_delay}
-    }
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if ((((busy_delay) != (0)) ^ (1))) {
-        STORE ((pipe$enq$v$tag) == 1):meth_delay = pipe$enq$v$data$heard$meth
-        STORE ((pipe$enq$v$tag) == 1):v_delay = pipe$enq$v$data$heard$v
-        STORE ((pipe$enq$v$tag) == 1):busy_delay = 1
-        STORE ((pipe$enq$v$tag) == 1):v_type = 1
-        STORE ((pipe$enq$v$tag) == 2):meth_delay = pipe$enq$v$data$heard2$meth
-        STORE ((pipe$enq$v$tag) == 2):v_delay = pipe$enq$v$data$heard2$v
-        STORE ((pipe$enq$v$tag) == 2):v2_delay = pipe$enq$v$data$heard2$v2
-        STORE ((pipe$enq$v$tag) == 2):busy_delay = 1
-        STORE ((pipe$enq$v$tag) == 2):v_type = 2
+    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
+        CALL/Action ((pipe$enq$v$tag) == 1):method$heard__ENA{pipe$enq$v$data$heard$meth,pipe$enq$v$data$heard$v}
+        CALL/Action ((pipe$enq$v$tag) == 2):method$heard2__ENA{pipe$enq$v$data$heard2$meth,pipe$enq$v$data$heard2$v,pipe$enq$v$data$heard2$v2}
     }
 }
 MODULE l_module_OC_EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication method
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
-    FIELD l_struct_OC_EchoIndication_data ind0
-    FIELD l_struct_OC_EchoIndication_data ind1
-    FIELD INTEGER_32 ind_busy
-    FIELD INTEGER_32 even
-    METHOD method$heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) if ((((ind_busy) != (0)) ^ (1))) {
-        STORE :ind0$tag = 2
-        STORE :ind0$data$heard2$meth = method$heard2$meth
-        STORE :ind0$data$heard2$v = method$heard2$v
-        STORE :ind0$data$heard2$v2 = method$heard2$v2
-        STORE :ind_busy = 1
+    METHOD method$heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
+        ALLOCA l_struct_OC_EchoIndication_data method$heard2__ENA$data
+        LET INTEGER_32 :method$heard2__ENA$data$tag = 2
+        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$meth = method$heard2$meth
+        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$v = method$heard2$v
+        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$v2 = method$heard2$v2
+        CALL/Action :pipe$enq__ENA{method$heard2__ENA$data}
     }
-    METHOD method$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((ind_busy) != (0)) ^ (1))) {
-        STORE ((even) != (0)):ind1$tag = 1
-        STORE ((even) != (0)):ind1$data$heard$meth = method$heard$meth
-        STORE ((even) != (0)):ind1$data$heard$v = method$heard$v
-        STORE (((even) != (0)) ^ 1):ind0$tag = 1
-        STORE (((even) != (0)) ^ 1):ind0$data$heard$meth = method$heard$meth
-        STORE (((even) != (0)) ^ 1):ind0$data$heard$v = method$heard$v
-        STORE :ind_busy = 1
-        STORE :even = ((even) != (0)) ^ (1)
-    }
-    METHOD/Rule output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
-        STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind0}
-    }
-    METHOD/Rule output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
-        STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind1}
+    METHOD method$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+        ALLOCA l_struct_OC_EchoIndication_data method$heard__ENA$data
+        LET INTEGER_32 :method$heard__ENA$data$tag = 1
+        LET INTEGER_32 :method$heard__ENA$data$data$heard$meth = method$heard$meth
+        LET INTEGER_32 :method$heard__ENA$data$data$heard$v = method$heard$v
+        CALL/Action :pipe$enq__ENA{method$heard__ENA$data}
     }
 }
 MODULE l_module_OC_EchoRequestInput {
@@ -168,19 +137,19 @@ MODULE l_module_OC_EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest method
     INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
     METHOD method$say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
-        ALLOCA l_struct_OC_EchoRequest_data method$say2__ENA$ind
-        LET INTEGER_32 :method$say2__ENA$ind$tag = 2
-        LET INTEGER_32 :method$say2__ENA$ind$data$say2$meth = method$say2$meth
-        LET INTEGER_32 :method$say2__ENA$ind$data$say2$v = method$say2$v
-        LET INTEGER_32 :method$say2__ENA$ind$data$say2$v2 = method$say2$v2
-        CALL/Action :pipe$enq__ENA{method$say2__ENA$ind}
+        ALLOCA l_struct_OC_EchoRequest_data method$say2__ENA$data
+        LET INTEGER_32 :method$say2__ENA$data$tag = 2
+        LET INTEGER_32 :method$say2__ENA$data$data$say2$meth = method$say2$meth
+        LET INTEGER_32 :method$say2__ENA$data$data$say2$v = method$say2$v
+        LET INTEGER_32 :method$say2__ENA$data$data$say2$v2 = method$say2$v2
+        CALL/Action :pipe$enq__ENA{method$say2__ENA$data}
     }
     METHOD method$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
-        ALLOCA l_struct_OC_EchoRequest_data method$say__ENA$ind
-        LET INTEGER_32 :method$say__ENA$ind$tag = 1
-        LET INTEGER_32 :method$say__ENA$ind$data$say$meth = method$say$meth
-        LET INTEGER_32 :method$say__ENA$ind$data$say$v = method$say$v
-        CALL/Action :pipe$enq__ENA{method$say__ENA$ind}
+        ALLOCA l_struct_OC_EchoRequest_data method$say__ENA$data
+        LET INTEGER_32 :method$say__ENA$data$tag = 1
+        LET INTEGER_32 :method$say__ENA$data$data$say$meth = method$say$meth
+        LET INTEGER_32 :method$say__ENA$data$data$say$v = method$say$v
+        CALL/Action :pipe$enq__ENA{method$say__ENA$data}
     }
 }
 MODULE l_module_OC_Hardware {

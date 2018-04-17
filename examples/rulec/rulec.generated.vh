@@ -30,24 +30,15 @@
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; method; l_ainterface_OC_EchoIndication;
-//METAINVOKE; input_rule__ENA; v_type != 1:method$heard2__ENA;v_type == 1:method$heard__ENA;
-//METAEXCLUSIVE; input_rule__ENA; pipe$enq__ENA
-//METABEFORE; input_rule__ENA; :pipe$enq__ENA
-//METAGUARD; input_rule; ( busy_delay != 0 ) & ( ( v_type != 1 ) | method$heard__RDY ) & ( ( v_type == 1 ) | method$heard2__RDY );
-//METAGUARD; pipe$enq; busy_delay == 0;
-//METARULES; input_rule
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:method$heard2__ENA;pipe$enq$v$tag == 1:method$heard__ENA;
+//METAGUARD; pipe$enq; method$heard__RDY & method$heard2__RDY;
 //METASTART; l_module_OC_EchoIndicationOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
-//METAEXCLUSIVE; method$heard2__ENA; method$heard__ENA; output_rulee__ENA; output_ruleo__ENA
-//METAGUARD; method$heard2; ind_busy == 0;
-//METAEXCLUSIVE; method$heard__ENA; output_rulee__ENA; output_ruleo__ENA
-//METAGUARD; method$heard; ind_busy == 0;
-//METAINVOKE; output_rulee__ENA; :pipe$enq__ENA;
-//METAEXCLUSIVE; output_rulee__ENA; output_ruleo__ENA
-//METAGUARD; output_rulee; ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
-//METAINVOKE; output_ruleo__ENA; :pipe$enq__ENA;
-//METAGUARD; output_ruleo; ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
-//METARULES; output_rulee; output_ruleo
+//METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;
+//METAEXCLUSIVE; method$heard2__ENA; method$heard__ENA
+//METAGUARD; method$heard2; pipe$enq__RDY;
+//METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
+//METAGUARD; method$heard; pipe$enq__RDY;
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:method$say2__ENA;pipe$enq$v$tag == 1:method$say__ENA;
