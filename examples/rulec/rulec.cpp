@@ -20,11 +20,7 @@
  */
 #include <atomicc.h>
 
-typedef struct {
-    int a;
-    int b;
-} ValueType;
-
+//////////////////// Interface definitions for module under test
 __interface EchoRequest {
     void say(int meth, int v);
     void say2(int meth, int v, int v2);
@@ -35,7 +31,7 @@ __interface EchoIndication {
     void heard2(int meth, int v, int v2);
 };
 
-// Serialization structures
+//////////////////// Serialization structures for interfaces
 typedef struct {
     int tag;
 #define EchoRequest_tag_say 1
@@ -72,11 +68,11 @@ typedef struct {
 } EchoIndication_data;
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 
-#if 1 // software side classes
+//////////////////////////////////////////////// software side classes
 __module EchoRequestOutput { // method -> pipe
-    EchoRequest request;
-    EchoRequestPipe *pipe;
-    void request.say(int meth, int v) {
+    EchoRequest                     method;
+    EchoRequestPipe                *pipe;
+    void method.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say;
@@ -84,7 +80,7 @@ __module EchoRequestOutput { // method -> pipe
         ind.data.say.v = v;
         pipe->enq(ind);
     }
-    void request.say2(int meth, int v, int v2) {
+    void method.say2(int meth, int v, int v2) {
         printf("entered EchoRequestOutput::say2\n");
         EchoRequest_data ind;
         ind.tag = EchoRequest_tag_say2;
@@ -96,8 +92,8 @@ __module EchoRequestOutput { // method -> pipe
 };
 
 __module EchoIndicationInput { // pipe -> method
-    EchoIndicationPipe pipe;
-    EchoIndication *indication;
+    EchoIndicationPipe               pipe;
+    EchoIndication                  *method;
     int busy_delay;
     int meth_delay;
     int v_delay;
@@ -126,39 +122,39 @@ printf("[%s:%d]EchoIndicationInput tag %d\n", __FUNCTION__, __LINE__, v.tag);
 printf("[input_rule:%d]EchoIndicationInput\n", __LINE__);
              busy_delay = 0;
              if (v_type == 1)
-             indication->heard(meth_delay, v_delay);
+             method->heard(meth_delay, v_delay);
              else
-             indication->heard2(meth_delay, v_delay, v2_delay);
+             method->heard2(meth_delay, v_delay, v2_delay);
            };
     }
 };
-#endif
 
-// hardware side classes
+//////////////////////////////////////////////// hardware side classes
 __module EchoRequestInput { // pipe -> method
-    EchoRequestPipe pipe;
-    EchoRequest *request;
+    EchoRequestPipe                 pipe;
+    EchoRequest                    *method;
     void pipe.enq(const EchoRequest_data &v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
         case EchoRequest_tag_say:
-            request->say(v.data.say.meth, v.data.say.v);
+            method->say(v.data.say.meth, v.data.say.v);
             break;
         case EchoRequest_tag_say2:
-            request->say2(v.data.say2.meth, v.data.say2.v, v.data.say2.v2);
+            method->say2(v.data.say2.meth, v.data.say2.v, v.data.say2.v2);
             break;
         }
     }
 };
 
 __module EchoIndicationOutput { // method -> pipe
-    EchoIndication indication;
-    EchoIndicationPipe *pipe;
+    EchoIndication                  method;
+    EchoIndicationPipe             *pipe;
+
     EchoIndication_data ind0;
     EchoIndication_data ind1;
     int ind_busy;
     int even;
-    void indication.heard(int meth, int v) if(!ind_busy) {
+    void method.heard(int meth, int v) if(!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
         ind1.tag = EchoIndication_tag_heard;
@@ -173,7 +169,7 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         ind_busy = 1;
         even = !even;
     }
-    void indication.heard2(int meth, int v, int v2) if(!ind_busy) {
+    void method.heard2(int meth, int v, int v2) if(!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         ind0.tag = EchoIndication_tag_heard2;
         ind0.data.heard2.meth = meth;
@@ -195,8 +191,10 @@ printf("[output_ruleo:%d]EchoIndicationOutput tag %d\n", __LINE__, ind1.tag);
     }
 };
 
+//////////////////////////////////////////////// module under test
 __module Echo {
-    EchoRequest request;
+    EchoRequest                     request;
+    EchoIndication                 *indication;
     int busy;
     int meth_temp;
     int v_temp;
@@ -206,7 +204,6 @@ __module Echo {
     int v_delay;
     int v2_delay;
     int v_type;
-    EchoIndication *indication;
     void request.say(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
@@ -242,46 +239,42 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
+//////////////////////////// this is the stack that will run on the processor
 __module Software {
+    // interface functions for top of layer
+    EchoRequest                request;
+    EchoIndication            *indication;
     EchoRequestOutput          lERO_test;
     EchoIndicationInput        lEII_test;
-    // interface functions for top of layer
-    EchoRequest     request;
-    EchoIndication *indication;
-    void request.say(int meth, int v) {
-        lERO_test.request.say(meth, v);
-    }
-    void request.say2(int meth, int v, int v2) {
-        lERO_test.request.say2(meth, v, v2);
-    }
-    __connect                  lEII_test.indication = indication; // user indication
+    __connect                  request = lERO_test.method;
+    __connect                  lEII_test.method = indication; // user indication
 
     // interface function for bottom of layer
     EchoRequestPipe           *reqPipe;
     EchoIndicationPipe         indPipe;
-    void indPipe.enq(const EchoIndication_data &v) {
-        lEII_test.pipe.enq(v);
-    }
-    __connect                 lERO_test.pipe = reqPipe;
+    __connect                  indPipe = lEII_test.pipe;
+    __connect                  lERO_test.pipe = reqPipe;
 };
 
+//////////////////////////// this is the stack that will run in the hardware
 __module Hardware {
-    EchoRequestInput           lERI;      // request pipe
-    EchoIndicationOutput       lEIO;      // indication pipe
-    // top interface
     EchoRequestPipe            request;
     EchoIndicationPipe        *indication;
-    void request.enq(const EchoRequest_data &v) {
-        lERI.pipe.enq(v);
-    }
+
+    // top interface
+    EchoRequestInput           lERI;      // request pipe
+    EchoIndicationOutput       lEIO;      // indication pipe
+    __connect                  request = lERI.pipe;
     __connect                  lEIO.pipe = indication;
 
     // Module under test
     Echo                       lEcho;
-    __connect lERI.request = lEcho.request;
-    __connect lEcho.indication = lEIO.indication;
+    __connect lERI.method = lEcho.request;
+    __connect lEcho.indication = lEIO.method;
 };
 
+//////////////////////////// this is a test bench mockup to connect s/w and h/w
+//                           (just to check compilation)
 __module Connect {
     __software EchoRequest    request;
     __software EchoIndication *indication;
@@ -289,9 +282,9 @@ __module Connect {
     Hardware                   hw;
     // expose top interfaces
     __connect                  sw.indication = indication;
-    __connect                  sw.request = request;
+    __connect                  request = sw.request;
 
-    // connect interior interfaces
+    // connect h/w stack and s/w stack interfaces
     __connect                  hw.indication = sw.indPipe;
     __connect                  sw.reqPipe = hw.request;
 };

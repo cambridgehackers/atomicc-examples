@@ -29,27 +29,18 @@ module l_module_OC_Connect (
     wire sw$indPipe$enq__RDY;
     wire [127:0]sw$reqPipe$enq$v;
     wire sw$reqPipe$enq__ENA;
-    wire [31:0]sw$request$say$meth;
-    wire [31:0]sw$request$say$v;
-    wire [31:0]sw$request$say2$meth;
-    wire [31:0]sw$request$say2$v;
-    wire [31:0]sw$request$say2$v2;
-    wire sw$request$say2__ENA;
-    wire sw$request$say2__RDY;
-    wire sw$request$say__ENA;
-    wire sw$request$say__RDY;
     l_module_OC_Software sw (
         CLK,
         nRST,
-        sw$request$say2__ENA,
-        sw$request$say2$meth,
-        sw$request$say2$v,
-        sw$request$say2$v2,
-        sw$request$say2__RDY,
-        sw$request$say__ENA,
-        sw$request$say$meth,
-        sw$request$say$v,
-        sw$request$say__RDY,
+        request$say2__ENA,
+        request$say2$meth,
+        request$say2$v,
+        request$say2$v2,
+        request$say2__RDY,
+        request$say__ENA,
+        request$say$meth,
+        request$say$v,
+        request$say__RDY,
         indication$heard2__ENA,
         indication$heard2$meth,
         indication$heard2$v,
@@ -74,15 +65,6 @@ module l_module_OC_Connect (
         hw$indication$enq__ENA,
         hw$indication$enq$v,
         sw$indPipe$enq__RDY);
-    // assign request$say2__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign request$say__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say$meth = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say$v = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say2$meth = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say2$v = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say2$v2 = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say2__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign sw$request$say__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
 endmodule 
 
 module l_module_OC_Echo (
@@ -179,15 +161,15 @@ module l_module_OC_EchoIndicationInput (
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY,
-    output indication$heard2__ENA,
-    output [31:0]indication$heard2$meth,
-    output [31:0]indication$heard2$v,
-    output [31:0]indication$heard2$v2,
-    input indication$heard2__RDY,
-    output indication$heard__ENA,
-    output [31:0]indication$heard$meth,
-    output [31:0]indication$heard$v,
-    input indication$heard__RDY);
+    output method$heard2__ENA,
+    output [31:0]method$heard2$meth,
+    output [31:0]method$heard2$v,
+    output [31:0]method$heard2$v2,
+    input method$heard2__RDY,
+    output method$heard__ENA,
+    output [31:0]method$heard$meth,
+    output [31:0]method$heard$v,
+    input method$heard__RDY);
     reg [31:0]busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v2_delay;
@@ -196,14 +178,14 @@ module l_module_OC_EchoIndicationInput (
     wire input_rule__ENA;
     wire input_rule__RDY;
     assign input_rule__ENA = input_rule__RDY;
-    assign input_rule__RDY = ( busy_delay != 0 ) & ( ( v_type != 1 ) | indication$heard__RDY ) & ( ( v_type == 1 ) | indication$heard2__RDY );
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard2$meth = meth_delay;
-    assign indication$heard2$v = v_delay;
-    assign indication$heard2$v2 = v2_delay;
-    assign indication$heard2__ENA = ( v_type != 1 ) & input_rule__ENA;
-    assign indication$heard__ENA = ( v_type == 1 ) & input_rule__ENA;
+    assign input_rule__RDY = ( busy_delay != 0 ) & ( ( v_type != 1 ) | method$heard__RDY ) & ( ( v_type == 1 ) | method$heard2__RDY );
+    assign method$heard$meth = meth_delay;
+    assign method$heard$v = v_delay;
+    assign method$heard2$meth = meth_delay;
+    assign method$heard2$v = v_delay;
+    assign method$heard2$v2 = v2_delay;
+    assign method$heard2__ENA = ( v_type != 1 ) & input_rule__ENA;
+    assign method$heard__ENA = ( v_type == 1 ) & input_rule__ENA;
     assign pipe$enq__RDY = busy_delay == 0;
 
     always @( posedge CLK) begin
@@ -240,15 +222,15 @@ endmodule
 module l_module_OC_EchoIndicationOutput (
     input CLK,
     input nRST,
-    input indication$heard2__ENA,
-    input [31:0]indication$heard2$meth,
-    input [31:0]indication$heard2$v,
-    input [31:0]indication$heard2$v2,
-    output indication$heard2__RDY,
-    input indication$heard__ENA,
-    input [31:0]indication$heard$meth,
-    input [31:0]indication$heard$v,
-    output indication$heard__RDY,
+    input method$heard2__ENA,
+    input [31:0]method$heard2$meth,
+    input [31:0]method$heard2$v,
+    input [31:0]method$heard2$v2,
+    output method$heard2__RDY,
+    input method$heard__ENA,
+    input [31:0]method$heard$meth,
+    input [31:0]method$heard$v,
+    output method$heard__RDY,
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
@@ -273,8 +255,8 @@ module l_module_OC_EchoIndicationOutput (
     assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
     assign output_ruleo__ENA = output_ruleo__RDY;
     assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign indication$heard2__RDY = ind_busy == 0;
-    assign indication$heard__RDY = ind_busy == 0;
+    assign method$heard2__RDY = ind_busy == 0;
+    assign method$heard__RDY = ind_busy == 0;
     assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data } : { ind1$tag , ind1$data };
     assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
 
@@ -288,27 +270,27 @@ module l_module_OC_EchoIndicationOutput (
         ind_busy <= 0;
       end // nRST
       else begin
-        if (indication$heard2__ENA) begin
+        if (method$heard2__ENA) begin
             ind0$tag <= 2;
-            ind0$data$heard2$meth <= indication$heard2$meth;
-            ind0$data$heard2$v <= indication$heard2$v;
-            ind0$data$heard2$v2 <= indication$heard2$v2;
+            ind0$data$heard2$meth <= method$heard2$meth;
+            ind0$data$heard2$v <= method$heard2$v;
+            ind0$data$heard2$v2 <= method$heard2$v2;
             ind_busy <= 1;
-        end; // End of indication$heard2__ENA
-        if (indication$heard__ENA) begin
+        end; // End of method$heard2__ENA
+        if (method$heard__ENA) begin
             ind_busy <= 1;
             even <= even == 0;
             if (even != 0) begin
             ind1$tag <= 1;
-            ind1$data$heard$meth <= indication$heard$meth;
-            ind1$data$heard$v <= indication$heard$v;
+            ind1$data$heard$meth <= method$heard$meth;
+            ind1$data$heard$v <= method$heard$v;
             end;
             if (even == 0) begin
             ind0$tag <= 1;
-            ind0$data$heard$meth <= indication$heard$meth;
-            ind0$data$heard$v <= indication$heard$v;
+            ind0$data$heard$meth <= method$heard$meth;
+            ind0$data$heard$v <= method$heard$v;
             end;
-        end; // End of indication$heard__ENA
+        end; // End of method$heard__ENA
         if (output_rulee__ENA) begin
             ind_busy <= 0;
         end; // End of output_rulee__ENA
@@ -325,44 +307,44 @@ module l_module_OC_EchoRequestInput (
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY,
-    output request$say2__ENA,
-    output [31:0]request$say2$meth,
-    output [31:0]request$say2$v,
-    output [31:0]request$say2$v2,
-    input request$say2__RDY,
-    output request$say__ENA,
-    output [31:0]request$say$meth,
-    output [31:0]request$say$v,
-    input request$say__RDY);
-    assign pipe$enq__RDY = ( ( pipe$enq$v[0:31] != 1 ) | request$say__RDY ) & ( ( pipe$enq$v[0:31] != 2 ) | request$say2__RDY );
-    assign request$say$meth = pipe$enq$v[32:63];
-    assign request$say$v = pipe$enq$v[64:95];
-    assign request$say2$meth = pipe$enq$v[32:63];
-    assign request$say2$v = pipe$enq$v[64:95];
-    assign request$say2$v2 = pipe$enq$v[96:127];
-    assign request$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
-    assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    output method$say2__ENA,
+    output [31:0]method$say2$meth,
+    output [31:0]method$say2$v,
+    output [31:0]method$say2$v2,
+    input method$say2__RDY,
+    output method$say__ENA,
+    output [31:0]method$say$meth,
+    output [31:0]method$say$v,
+    input method$say__RDY);
+    assign method$say$meth = pipe$enq$v[32:63];
+    assign method$say$v = pipe$enq$v[64:95];
+    assign method$say2$meth = pipe$enq$v[32:63];
+    assign method$say2$v = pipe$enq$v[64:95];
+    assign method$say2$v2 = pipe$enq$v[96:127];
+    assign method$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
+    assign method$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = ( ( pipe$enq$v[0:31] != 1 ) | method$say__RDY ) & ( ( pipe$enq$v[0:31] != 2 ) | method$say2__RDY );
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
     input CLK,
     input nRST,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    input [31:0]request$say2$v2,
-    output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    output request$say__RDY,
+    input method$say2__ENA,
+    input [31:0]method$say2$meth,
+    input [31:0]method$say2$v,
+    input [31:0]method$say2$v2,
+    output method$say2__RDY,
+    input method$say__ENA,
+    input [31:0]method$say$meth,
+    input [31:0]method$say$v,
+    output method$say__RDY,
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
-    assign pipe$enq$v = request$say2__ENA ? { 2 , { request$say2$meth , request$say2$v , request$say2$v2 } } : { 1 , { request$say$meth , request$say$v , 32'd0 } };
-    assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
-    assign request$say2__RDY = pipe$enq__RDY;
-    assign request$say__RDY = pipe$enq__RDY;
+    assign method$say2__RDY = pipe$enq__RDY;
+    assign method$say__RDY = pipe$enq__RDY;
+    assign pipe$enq$v = method$say2__ENA ? { 2 , { method$say2$meth , method$say2$v , method$say2$v2 } } : { 1 , { method$say$meth , method$say$v , 32'd0 } };
+    assign pipe$enq__ENA = method$say2__ENA || method$say__ENA;
 endmodule 
 
 module l_module_OC_Hardware (
@@ -374,15 +356,15 @@ module l_module_OC_Hardware (
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
     input indication$enq__RDY);
-    wire lEIO$indication$heard2__RDY;
-    wire lEIO$indication$heard__RDY;
-    wire [31:0]lERI$request$say$meth;
-    wire [31:0]lERI$request$say$v;
-    wire [31:0]lERI$request$say2$meth;
-    wire [31:0]lERI$request$say2$v;
-    wire [31:0]lERI$request$say2$v2;
-    wire lERI$request$say2__ENA;
-    wire lERI$request$say__ENA;
+    wire lEIO$method$heard2__RDY;
+    wire lEIO$method$heard__RDY;
+    wire [31:0]lERI$method$say$meth;
+    wire [31:0]lERI$method$say$v;
+    wire [31:0]lERI$method$say2$meth;
+    wire [31:0]lERI$method$say2$v;
+    wire [31:0]lERI$method$say2$v2;
+    wire lERI$method$say2__ENA;
+    wire lERI$method$say__ENA;
     wire [31:0]lEcho$indication$heard$meth;
     wire [31:0]lEcho$indication$heard$v;
     wire [31:0]lEcho$indication$heard2$meth;
@@ -398,14 +380,14 @@ module l_module_OC_Hardware (
         request$enq__ENA,
         request$enq$v,
         request$enq__RDY,
-        lERI$request$say2__ENA,
-        lERI$request$say2$meth,
-        lERI$request$say2$v,
-        lERI$request$say2$v2,
+        lERI$method$say2__ENA,
+        lERI$method$say2$meth,
+        lERI$method$say2$v,
+        lERI$method$say2$v2,
         lEcho$request$say2__RDY,
-        lERI$request$say__ENA,
-        lERI$request$say$meth,
-        lERI$request$say$v,
+        lERI$method$say__ENA,
+        lERI$method$say$meth,
+        lERI$method$say$v,
         lEcho$request$say__RDY);
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
@@ -414,35 +396,35 @@ module l_module_OC_Hardware (
         lEcho$indication$heard2$meth,
         lEcho$indication$heard2$v,
         lEcho$indication$heard2$v2,
-        lEIO$indication$heard2__RDY,
+        lEIO$method$heard2__RDY,
         lEcho$indication$heard__ENA,
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
-        lEIO$indication$heard__RDY,
+        lEIO$method$heard__RDY,
         indication$enq__ENA,
         indication$enq$v,
         indication$enq__RDY);
     l_module_OC_Echo lEcho (
         CLK,
         nRST,
-        lERI$request$say2__ENA,
-        lERI$request$say2$meth,
-        lERI$request$say2$v,
-        lERI$request$say2$v2,
+        lERI$method$say2__ENA,
+        lERI$method$say2$meth,
+        lERI$method$say2$v,
+        lERI$method$say2$v2,
         lEcho$request$say2__RDY,
-        lERI$request$say__ENA,
-        lERI$request$say$meth,
-        lERI$request$say$v,
+        lERI$method$say__ENA,
+        lERI$method$say$meth,
+        lERI$method$say$v,
         lEcho$request$say__RDY,
         lEcho$indication$heard2__ENA,
         lEcho$indication$heard2$meth,
         lEcho$indication$heard2$v,
         lEcho$indication$heard2$v2,
-        lEIO$indication$heard2__RDY,
+        lEIO$method$heard2__RDY,
         lEcho$indication$heard__ENA,
         lEcho$indication$heard$meth,
         lEcho$indication$heard$v,
-        lEIO$indication$heard__RDY);
+        lEIO$method$heard__RDY);
 endmodule 
 
 module l_module_OC_Software (
