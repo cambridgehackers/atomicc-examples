@@ -39,7 +39,6 @@ typedef struct {
         struct { int meth; int v; int v2; } say2;
     } data;
 } EchoRequest_data;
-typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 
 typedef struct {
     enum {heard=1, heard2} tag;
@@ -48,12 +47,11 @@ typedef struct {
         struct { int meth; int v; int v2; } heard2;
     } data;
 } EchoIndication_data;
-typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 
 //////////////////////////////////////////////// software side classes
 __module EchoRequestOutput { // method -> pipe
     EchoRequest                     method;
-    EchoRequestPipe                *pipe;
+    PipeIn<EchoRequest_data>       *pipe;
     void method.say(int meth, int v) {
         EchoRequest_data data;
         data.tag = EchoRequest_data::say;
@@ -72,7 +70,7 @@ __module EchoRequestOutput { // method -> pipe
 };
 
 __module EchoIndicationInput { // pipe -> method
-    EchoIndicationPipe               pipe;
+    PipeIn<EchoIndication_data>      pipe;
     EchoIndication                  *method;
     void pipe.enq(const EchoIndication_data &v) {
         switch (v.tag) {
@@ -88,7 +86,7 @@ __module EchoIndicationInput { // pipe -> method
 
 //////////////////////////////////////////////// hardware side classes
 __module EchoRequestInput { // pipe -> method
-    EchoRequestPipe                 pipe;
+    PipeIn<EchoRequest_data>        pipe;
     EchoRequest                    *method;
     void pipe.enq(const EchoRequest_data &v) {
         switch (v.tag) {
@@ -104,7 +102,7 @@ __module EchoRequestInput { // pipe -> method
 
 __module EchoIndicationOutput { // method -> pipe
     EchoIndication                  method;
-    EchoIndicationPipe             *pipe;
+    PipeIn<EchoIndication_data>    *pipe;
 
     void method.heard(int meth, int v) {
         EchoIndication_data data;
@@ -182,16 +180,16 @@ __module Software {
     __connect                  lEII_test.method = indication; // user indication
 
     // interface function for bottom of layer
-    EchoRequestPipe           *reqPipe;
-    EchoIndicationPipe         indPipe;
+    PipeIn<EchoRequest_data>   *reqPipe;
+    PipeIn<EchoIndication_data> indPipe;
     __connect                  indPipe = lEII_test.pipe;
     __connect                  lERO_test.pipe = reqPipe;
 };
 
 //////////////////////////// this is the stack that will run in the hardware
 __module Hardware {
-    EchoRequestPipe            request;
-    EchoIndicationPipe        *indication;
+    PipeIn<EchoRequest_data>   request;
+    PipeIn<EchoIndication_data> *indication;
 
     // top interface
     EchoRequestInput           lERI;      // request pipe
