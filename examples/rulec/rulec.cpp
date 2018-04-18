@@ -20,7 +20,6 @@
  */
 #include <atomicc.h>
 
-//////////////////// Interface definitions for module under test
 __interface EchoRequest {
     void say(int meth, int v);
     void say2(int meth, int v, int v2);
@@ -31,97 +30,6 @@ __interface EchoIndication {
     void heard2(int meth, int v, int v2);
 };
 
-//////////////////// Serialization structures for interfaces
-typedef struct {
-    enum {say = 1, say2} tag;
-    union {
-        struct { int meth; int v; } say;
-        struct { int meth; int v; int v2; } say2;
-    } data;
-} EchoRequest_data;
-
-typedef struct {
-    enum {heard=1, heard2} tag;
-    union {
-        struct { int meth; int v; } heard;
-        struct { int meth; int v; int v2; } heard2;
-    } data;
-} EchoIndication_data;
-
-//////////////////////////////////////////////// software side classes
-__module EchoRequestOutput { // method -> pipe
-    EchoRequest                     method;
-    PipeIn<EchoRequest_data>       *pipe;
-    void method.say(int meth, int v) {
-        EchoRequest_data data;
-        data.tag = EchoRequest_data::say;
-        data.data.say.meth = meth;
-        data.data.say.v = v;
-        pipe->enq(data);
-    }
-    void method.say2(int meth, int v, int v2) {
-        EchoRequest_data data;
-        data.tag = EchoRequest_data::say2;
-        data.data.say2.meth = meth;
-        data.data.say2.v = v;
-        data.data.say2.v2 = v2;
-        pipe->enq(data);
-    }
-};
-
-__module EchoIndicationInput { // pipe -> method
-    PipeIn<EchoIndication_data>      pipe;
-    EchoIndication                  *method;
-    void pipe.enq(const EchoIndication_data &v) {
-        switch (v.tag) {
-        case EchoIndication_data::heard:
-            method->heard(v.data.heard.meth, v.data.heard.v);
-            break;
-        case EchoIndication_data::heard2:
-            method->heard2(v.data.heard2.meth, v.data.heard2.v, v.data.heard2.v2);
-            break;
-        }
-    }
-};
-
-//////////////////////////////////////////////// hardware side classes
-__module EchoRequestInput { // pipe -> method
-    PipeIn<EchoRequest_data>        pipe;
-    EchoRequest                    *method;
-    void pipe.enq(const EchoRequest_data &v) {
-        switch (v.tag) {
-        case EchoRequest_data::say:
-            method->say(v.data.say.meth, v.data.say.v);
-            break;
-        case EchoRequest_data::say2:
-            method->say2(v.data.say2.meth, v.data.say2.v, v.data.say2.v2);
-            break;
-        }
-    }
-};
-
-__module EchoIndicationOutput { // method -> pipe
-    EchoIndication                  method;
-    PipeIn<EchoIndication_data>    *pipe;
-
-    void method.heard(int meth, int v) {
-        EchoIndication_data data;
-        data.tag = EchoIndication_data::heard;
-        data.data.heard.meth = meth;
-        data.data.heard.v = v;
-        pipe->enq(data);
-    }
-    void method.heard2(int meth, int v, int v2) {
-        EchoIndication_data data;
-        data.tag = EchoIndication_data::heard2;
-        data.data.heard2.meth = meth;
-        data.data.heard2.v = v;
-        data.data.heard2.v2 = v2;
-        pipe->enq(data);
-    }
-};
-
-//////////////////////////////////////////////// module under test
 __module Echo {
     EchoRequest                     request;
     EchoIndication                 *indication;
@@ -171,29 +79,30 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
 
 //////////////////////////// this is the stack that will run on the processor
 __module Software {
+    M2P<EchoRequest>           lERO_test;
+    P2M<EchoIndication>        lEII_test;
+
     // interface functions for top of layer
     EchoRequest                request;
     EchoIndication            *indication;
-    EchoRequestOutput          lERO_test;
-    EchoIndicationInput        lEII_test;
     __connect                  request = lERO_test.method;
     __connect                  lEII_test.method = indication; // user indication
 
     // interface function for bottom of layer
-    PipeIn<EchoRequest_data>   *reqPipe;
-    PipeIn<EchoIndication_data> indPipe;
+    PipeIn<M2P<EchoRequest>::Data>   *reqPipe;
+    PipeIn<P2M<EchoIndication>::Data> indPipe;
     __connect                  indPipe = lEII_test.pipe;
     __connect                  lERO_test.pipe = reqPipe;
 };
 
 //////////////////////////// this is the stack that will run in the hardware
 __module Hardware {
-    PipeIn<EchoRequest_data>   request;
-    PipeIn<EchoIndication_data> *indication;
+    P2M<EchoRequest>                 lERI;      // request pipe
+    M2P<EchoIndication>              lEIO;      // indication pipe
 
     // top interface
-    EchoRequestInput           lERI;      // request pipe
-    EchoIndicationOutput       lEIO;      // indication pipe
+    PipeIn<P2M<EchoRequest>::Data>   request;
+    PipeIn<M2P<EchoIndication>::Data> *indication;
     __connect                  request = lERI.pipe;
     __connect                  lEIO.pipe = indication;
 
@@ -220,3 +129,9 @@ __module Connect {
 };
 
 Connect connectTest;
+
+// hack for clang
+P2M<EchoRequest>::Data foo1;
+P2M<EchoIndication>::Data foo2;
+M2P<EchoRequest>::Data foo3;
+M2P<EchoIndication>::Data foo4;

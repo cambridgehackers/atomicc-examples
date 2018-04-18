@@ -33,6 +33,7 @@
 #define __emodule class __attribute__(( atomicc_emodule ))
 #define __ready_valid __attribute__(( atomicc_ready_valid ))
 #define __software __attribute__(( atomicc_software ))
+#define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; int unused; }
 
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
@@ -45,6 +46,21 @@ template<class T>
 __interface PipeOut {
     void deq(void);
     T first(void);
+};
+
+template<class T> __emodule M2P { // method -> pipe
+public:
+    typedef __serialize(T) Data;
+    T                      method;
+    PipeIn<Data>          *pipe;
+    PipeIn<Data>           unused;
+};
+
+template<class T> __emodule P2M { // pipe -> method
+public:
+    typedef __serialize(T) Data;
+    PipeIn<Data>           pipe;
+    T                     *method;
 };
 
 static inline std::string utostr(uint64_t X) {

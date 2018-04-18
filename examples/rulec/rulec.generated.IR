@@ -1,39 +1,3 @@
-EMODULE l_struct_OC_EchoIndication_data {
-    FIELD INTEGER_32 tag
-    FIELD l_union_OC_anon_OC_2 data
-}
-EMODULE l_struct_OC_EchoRequest_data {
-    FIELD INTEGER_32 tag
-    FIELD l_union_OC_anon data
-}
-EMODULE l_struct_OC_anon {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-}
-EMODULE l_struct_OC_anon_OC_0 {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-    FIELD INTEGER_32 v2
-}
-EMODULE l_struct_OC_anon_OC_3 {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-}
-EMODULE l_struct_OC_anon_OC_4 {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-    FIELD INTEGER_32 v2
-}
-EMODULE l_union_OC_anon {
-    UNION l_struct_OC_anon say
-    UNION l_struct_OC_anon_OC_0 say2
-    FIELD INTEGER_96 DATA
-}
-EMODULE l_union_OC_anon_OC_2 {
-    UNION l_struct_OC_anon_OC_3 heard
-    UNION l_struct_OC_anon_OC_4 heard2
-    FIELD INTEGER_96 DATA
-}
 EMODULE l_ainterface_OC_EchoIndication {
     METHOD heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 )
     METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
@@ -43,17 +7,57 @@ EMODULE l_ainterface_OC_EchoRequest {
     METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
+    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( l_struct_OC_EchoIndication_data v )
+EMODULE l_ainterface_OC_PipeIn_OC_0 {
+    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoIndication_OD__KD__KD_Data v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
+    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
+    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data v )
+}
+EMODULE l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoIndication ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoRequest ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_P2M_MD_EchoIndication_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoIndication ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoRequest ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_module_OC_M2P {
+    INTERFACE l_ainterface_OC_EchoRequest method
+    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
+    INTERFACE l_ainterface_OC_PipeIn unused
+}
+EMODULE l_module_OC_M2P_OC_3 {
+    INTERFACE l_ainterface_OC_EchoIndication method
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_4 pipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 unused
+}
+EMODULE l_module_OC_P2M {
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication method
+}
+EMODULE l_module_OC_P2M_OC_1 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 pipe
+    INTERFACE/Ptr l_ainterface_OC_EchoRequest method
 }
 MODULE l_module_OC_Connect {
     SOFTWARE request
     SOFTWARE indication
     INTERFACECONNECT sw$indication indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT request sw$request l_ainterface_OC_EchoRequest
-    INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_4
     INTERFACECONNECT sw$reqPipe hw$request l_ainterface_OC_PipeIn
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
@@ -98,80 +102,26 @@ MODULE l_module_OC_Echo {
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{meth_delay,v_delay,v2_delay}
     }
 }
-MODULE l_module_OC_EchoIndicationInput {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 pipe
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication method
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
-        CALL/Action ((pipe$enq$v$tag) == 1):method$heard__ENA{pipe$enq$v$data$heard$meth,pipe$enq$v$data$heard$v}
-        CALL/Action ((pipe$enq$v$tag) == 2):method$heard2__ENA{pipe$enq$v$data$heard2$meth,pipe$enq$v$data$heard2$v,pipe$enq$v$data$heard2$v2}
-    }
-}
-MODULE l_module_OC_EchoIndicationOutput {
-    INTERFACE l_ainterface_OC_EchoIndication method
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
-    METHOD method$heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
-        ALLOCA l_struct_OC_EchoIndication_data method$heard2__ENA$data
-        LET INTEGER_32 :method$heard2__ENA$data$tag = 2
-        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$meth = method$heard2$meth
-        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$v = method$heard2$v
-        LET INTEGER_32 :method$heard2__ENA$data$data$heard2$v2 = method$heard2$v2
-        CALL/Action :pipe$enq__ENA{method$heard2__ENA$data}
-    }
-    METHOD method$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
-        ALLOCA l_struct_OC_EchoIndication_data method$heard__ENA$data
-        LET INTEGER_32 :method$heard__ENA$data$tag = 1
-        LET INTEGER_32 :method$heard__ENA$data$data$heard$meth = method$heard$meth
-        LET INTEGER_32 :method$heard__ENA$data$data$heard$v = method$heard$v
-        CALL/Action :pipe$enq__ENA{method$heard__ENA$data}
-    }
-}
-MODULE l_module_OC_EchoRequestInput {
-    INTERFACE l_ainterface_OC_PipeIn pipe
-    INTERFACE/Ptr l_ainterface_OC_EchoRequest method
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
-        CALL/Action ((pipe$enq$v$tag) == 1):method$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
-        CALL/Action ((pipe$enq$v$tag) == 2):method$say2__ENA{pipe$enq$v$data$say2$meth,pipe$enq$v$data$say2$v,pipe$enq$v$data$say2$v2}
-    }
-}
-MODULE l_module_OC_EchoRequestOutput {
-    INTERFACE l_ainterface_OC_EchoRequest method
-    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
-    METHOD method$say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) {
-        ALLOCA l_struct_OC_EchoRequest_data method$say2__ENA$data
-        LET INTEGER_32 :method$say2__ENA$data$tag = 2
-        LET INTEGER_32 :method$say2__ENA$data$data$say2$meth = method$say2$meth
-        LET INTEGER_32 :method$say2__ENA$data$data$say2$v = method$say2$v
-        LET INTEGER_32 :method$say2__ENA$data$data$say2$v2 = method$say2$v2
-        CALL/Action :pipe$enq__ENA{method$say2__ENA$data}
-    }
-    METHOD method$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
-        ALLOCA l_struct_OC_EchoRequest_data method$say__ENA$data
-        LET INTEGER_32 :method$say__ENA$data$tag = 1
-        LET INTEGER_32 :method$say__ENA$data$data$say$meth = method$say$meth
-        LET INTEGER_32 :method$say__ENA$data$data$say$v = method$say$v
-        CALL/Action :pipe$enq__ENA{method$say__ENA$data}
-    }
-}
 MODULE l_module_OC_Hardware {
-    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn
-    INTERFACECONNECT lEIO$pipe indication l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_2
+    INTERFACECONNECT lEIO$pipe indication l_ainterface_OC_PipeIn_OC_4
     INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
-    INTERFACE l_ainterface_OC_PipeIn request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 indication
-    FIELD l_module_OC_EchoRequestInput lERI
-    FIELD l_module_OC_EchoIndicationOutput lEIO
+    FIELD l_module_OC_P2M_OC_1 lERI
+    FIELD l_module_OC_M2P_OC_3 lEIO
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 request
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_4 indication
     FIELD l_module_OC_Echo lEcho
 }
 MODULE l_module_OC_Software {
     INTERFACECONNECT request lERO_test$method l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEII_test$method indication l_ainterface_OC_EchoIndication
-    INTERFACECONNECT indPipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT indPipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
     INTERFACECONNECT lERO_test$pipe reqPipe l_ainterface_OC_PipeIn
+    FIELD l_module_OC_M2P lERO_test
+    FIELD l_module_OC_P2M lEII_test
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    FIELD l_module_OC_EchoRequestOutput lERO_test
-    FIELD l_module_OC_EchoIndicationInput lEII_test
     INTERFACE/Ptr l_ainterface_OC_PipeIn reqPipe
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 indPipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 indPipe
 }
