@@ -12,10 +12,10 @@ module l_module_OC_Fifo1 (
     output out$first__RDY);
     reg [31:0]element;
     reg [7:0]full;
-    assign in$enq__RDY = full ^ 1;
-    assign out$deq__RDY = full;
-    assign out$first = element;
-    assign out$first__RDY = full;
+    assign in$enq__RDY = full  ^ 1;
+    assign out$deq__RDY = full ;
+    assign out$first = element ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -24,11 +24,11 @@ module l_module_OC_Fifo1 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            element <= in$enq$v;
-            full <= 1;
+            element  <= in$enq$v;
+            full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            full <= 0;
+            full  <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -47,10 +47,10 @@ module l_module_OC_Fifo1_OC_0 (
     reg [5:0]element$a;
     reg [3:0]element$b;
     reg [7:0]full;
-    assign in$enq__RDY = full ^ 1;
-    assign out$deq__RDY = full;
-    assign out$first = { element$a , element$b };
-    assign out$first__RDY = full;
+    assign in$enq__RDY = full  ^ 1;
+    assign out$deq__RDY = full ;
+    assign out$first = { element$a  , element$b  };
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -60,11 +60,11 @@ module l_module_OC_Fifo1_OC_0 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            { element$a , element$b } <= in$enq$v;
-            full <= 1;
+            { element$a  , element$b  } <= in$enq$v;
+            full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            full <= 0;
+            full  <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -89,8 +89,8 @@ module l_module_OC_IVector (
     wire fifo$out$first__RDY;
     wire respond__ENA;
     wire respond__RDY;
-    assign respond__ENA = respond__RDY;
-    assign respond__RDY = fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
+    assign respond__ENA = respond__RDY ;
+    assign respond__RDY = fifo$out$first__RDY  & fifo$out$deq__RDY  & ind$heard__RDY ;
     l_module_OC_Fifo1_OC_0 fifo (
         CLK,
         nRST,
@@ -101,9 +101,9 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$meth = fifo$out$first[0:5];
-    assign ind$heard$v = fifo$out$first[6:9];
-    assign ind$heard__ENA = respond__ENA;
+    assign ind$heard$meth = fifo$out$first[0:5] ;
+    assign ind$heard$v = fifo$out$first[6:9] ;
+    assign ind$heard__ENA = respond__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

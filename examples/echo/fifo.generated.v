@@ -12,10 +12,10 @@ module l_module_OC_Fifo1 (
     output out$first__RDY);
     reg [31:0]element;
     reg [7:0]full;
-    assign in$enq__RDY = full ^ 1;
-    assign out$deq__RDY = full;
-    assign out$first = element;
-    assign out$first__RDY = full;
+    assign in$enq__RDY = full  ^ 1;
+    assign out$deq__RDY = full ;
+    assign out$first = element ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -24,11 +24,11 @@ module l_module_OC_Fifo1 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            element <= in$enq$v;
-            full <= 1;
+            element  <= in$enq$v;
+            full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            full <= 0;
+            full  <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

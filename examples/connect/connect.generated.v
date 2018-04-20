@@ -91,10 +91,10 @@ module l_module_OC_Echo (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    assign indication$heard$meth = request$say$meth;
-    assign indication$heard$v = request$say$v;
-    assign indication$heard__ENA = request$say__ENA;
-    assign request$say__RDY = indication$heard__RDY;
+    assign indication$heard$meth = request$say$meth ;
+    assign indication$heard$v = request$say$v ;
+    assign indication$heard__ENA = request$say__ENA ;
+    assign request$say__RDY = indication$heard__RDY ;
 endmodule 
 
 module l_module_OC_EchoIndicationInput (
@@ -107,10 +107,10 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    assign indication$heard$meth = pipe$enq$v[32:63];
-    assign indication$heard$v = pipe$enq$v[64:95];
-    assign indication$heard__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
-    assign pipe$enq__RDY = indication$heard__RDY;
+    assign indication$heard$meth = pipe$enq$v[32:63] ;
+    assign indication$heard$v = pipe$enq$v[64:95] ;
+    assign indication$heard__ENA = ( pipe$enq$v[0:31]  == 1 ) & pipe$enq__ENA ;
+    assign pipe$enq__RDY = indication$heard__RDY ;
 endmodule 
 
 module l_module_OC_EchoIndicationOutput (
@@ -125,17 +125,17 @@ module l_module_OC_EchoIndicationOutput (
     input pipe$enq__RDY);
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
-    assign indication$heard__RDY = pipe$enq__RDY;
-    assign pipe$enq$v = { 1 , indication$heard__ENA$ind$data$heard$meth , indication$heard__ENA$ind$data$heard$v };
-    assign pipe$enq__ENA = indication$heard__ENA;
+    assign indication$heard__RDY = pipe$enq__RDY ;
+    assign pipe$enq$v = { 1 , indication$heard__ENA$ind$data$heard$meth  , indication$heard__ENA$ind$data$heard$v  };
+    assign pipe$enq__ENA = indication$heard__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (indication$heard__ENA) begin
-            indication$heard__ENA$ind$data$heard$meth <= indication$heard$meth;
-            indication$heard__ENA$ind$data$heard$v <= indication$heard$v;
+            indication$heard__ENA$ind$data$heard$meth  <= indication$heard$meth;
+            indication$heard__ENA$ind$data$heard$v  <= indication$heard$v;
         end; // End of indication$heard__ENA
       end
     end // always @ (posedge CLK)
@@ -151,10 +151,10 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = request$say__RDY;
-    assign request$say$meth = pipe$enq$v[32:63];
-    assign request$say$v = pipe$enq$v[64:95];
-    assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = request$say__RDY ;
+    assign request$say$meth = pipe$enq$v[32:63] ;
+    assign request$say$v = pipe$enq$v[64:95] ;
+    assign request$say__ENA = ( pipe$enq$v[0:31]  == 1 ) & pipe$enq__ENA ;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -169,17 +169,17 @@ module l_module_OC_EchoRequestOutput (
     input pipe$enq__RDY);
     wire [31:0]request$say__ENA$ind$data$say$meth;
     wire [31:0]request$say__ENA$ind$data$say$v;
-    assign pipe$enq$v = { 1 , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v };
-    assign pipe$enq__ENA = request$say__ENA;
-    assign request$say__RDY = pipe$enq__RDY;
+    assign pipe$enq$v = { 1 , request$say__ENA$ind$data$say$meth  , request$say__ENA$ind$data$say$v  };
+    assign pipe$enq__ENA = request$say__ENA ;
+    assign request$say__RDY = pipe$enq__RDY ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (request$say__ENA) begin
-            request$say__ENA$ind$data$say$meth <= request$say$meth;
-            request$say__ENA$ind$data$say$v <= request$say$v;
+            request$say__ENA$ind$data$say$meth  <= request$say$meth;
+            request$say__ENA$ind$data$say$v  <= request$say$v;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)

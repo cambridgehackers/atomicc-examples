@@ -18,10 +18,10 @@ module l_module_OC_Fifo2 (
     reg [31:0]element1$c;
     reg [31:0]rindex;
     reg [31:0]windex;
-    assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
-    assign out$deq__RDY = rindex != windex;
-    assign out$first = ( rindex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c };
-    assign out$first__RDY = rindex != windex;
+    assign in$enq__RDY = ( ( windex  + 1 ) % 2 ) != rindex ;
+    assign out$deq__RDY = rindex  != windex ;
+    assign out$first = ( rindex  == 0 ) ? { element0$a  , element0$b  , element0$c  } : { element1$a  , element1$b  , element1$c  };
+    assign out$first__RDY = rindex  != windex ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -36,11 +36,11 @@ module l_module_OC_Fifo2 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            ( windex == 0 ) ? { element0$a , element0$b , element0$c } : { element1$a , element1$b , element1$c } <= in$enq$v;
-            windex <= ( windex + 1 ) % 2;
+            ( windex  == 0 ) ? { element0$a  , element0$b  , element0$c  } : { element1$a  , element1$b  , element1$c  } <= in$enq$v;
+            windex  <= ( windex + 1 ) % 2;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            rindex <= ( rindex + 1 ) % 2;
+            rindex  <= ( rindex + 1 ) % 2;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -82,14 +82,14 @@ module l_module_OC_Lpm (
     wire [31:0]request$say__ENA$temp$c;
     wire respond__ENA;
     wire respond__RDY;
-    assign enter__ENA = enter__RDY;
-    assign enter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign exit_rule__ENA = exit_rule__RDY;
-    assign exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
-    assign recirc__ENA = recirc__RDY;
-    assign recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign respond__ENA = respond__RDY;
-    assign respond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
+    assign enter__ENA = enter__RDY ;
+    assign enter__RDY = inQ$out$first__RDY  & inQ$out$deq__RDY  & fifo$in$enq__RDY  & mem$ifc$req__RDY ;
+    assign exit_rule__ENA = exit_rule__RDY ;
+    assign exit_rule__RDY = fifo$out$first__RDY  & mem$ifc$resValue__RDY  & mem$ifc$resAccept__RDY  & fifo$out$deq__RDY  & outQ$in$enq__RDY ;
+    assign recirc__ENA = recirc__RDY ;
+    assign recirc__RDY = fifo$out$first__RDY  & mem$ifc$resValue__RDY  & mem$ifc$resAccept__RDY  & fifo$out$deq__RDY  & fifo$in$enq__RDY  & mem$ifc$req__RDY ;
+    assign respond__ENA = respond__RDY ;
+    assign respond__RDY = outQ$out$first__RDY  & outQ$out$deq__RDY  & ind$heard__RDY ;
     l_module_OC_Fifo1 inQ (
         CLK,
         nRST,
@@ -130,9 +130,9 @@ module l_module_OC_Lpm (
         mem$ifc$resAccept__RDY,
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
-    assign ind$heard$meth = outQ$out$first[0:31];
-    assign ind$heard$v = outQ$out$first[32:63];
-    assign ind$heard__ENA = respond__ENA;
+    assign ind$heard$meth = outQ$out$first[0:31] ;
+    assign ind$heard$v = outQ$out$first[32:63] ;
+    assign ind$heard__ENA = respond__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -157,12 +157,12 @@ module l_module_OC_LpmMemory (
     reg [31:0]saved$c;
     wire memdelay_rule__ENA;
     wire memdelay_rule__RDY;
-    assign memdelay_rule__ENA = memdelay_rule__RDY;
-    assign memdelay_rule__RDY = delayCount > 1;
-    assign ifc$req__RDY = delayCount == 0;
-    assign ifc$resAccept__RDY = delayCount == 1;
-    assign ifc$resValue = { saved$a , saved$b , saved$c };
-    assign ifc$resValue__RDY = delayCount == 1;
+    assign memdelay_rule__ENA = memdelay_rule__RDY ;
+    assign memdelay_rule__RDY = delayCount  > 1;
+    assign ifc$req__RDY = delayCount  == 0;
+    assign ifc$resAccept__RDY = delayCount  == 1;
+    assign ifc$resValue = { saved$a  , saved$b  , saved$c  };
+    assign ifc$resValue__RDY = delayCount  == 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -173,14 +173,14 @@ module l_module_OC_LpmMemory (
       end // nRST
       else begin
         if (ifc$req__ENA) begin
-            delayCount <= 4;
-            { saved$a , saved$b , saved$c } <= ifc$req$v;
+            delayCount  <= 4;
+            { saved$a  , saved$b  , saved$c  } <= ifc$req$v;
         end; // End of ifc$req__ENA
         if (ifc$resAccept__ENA) begin
-            delayCount <= 0;
+            delayCount  <= 0;
         end; // End of ifc$resAccept__ENA
         if (memdelay_rule__ENA) begin
-            delayCount <= delayCount - 1;
+            delayCount  <= delayCount - 1;
         end; // End of memdelay_rule__ENA
       end
     end // always @ (posedge CLK)

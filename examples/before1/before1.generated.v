@@ -42,10 +42,10 @@ module l_module_OC_Connect (
     wire swap2_rule__RDY;
     wire swap_rule__ENA;
     wire swap_rule__RDY;
-    assign swap2_rule__ENA = swap2_rule__RDY;
-    assign swap2_rule__RDY = lEcho$swap$y2xnull__RDY;
-    assign swap_rule__ENA = swap_rule__RDY;
-    assign swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
+    assign swap2_rule__ENA = swap2_rule__RDY ;
+    assign swap2_rule__RDY = lEcho$swap$y2xnull__RDY ;
+    assign swap_rule__ENA = swap_rule__RDY ;
+    assign swap_rule__RDY = lEcho$swap$x2y__RDY  & lEcho$swap$y2x__RDY ;
     l_module_OC_EchoIndicationOutput lEIO (
         CLK,
         nRST,
@@ -150,15 +150,15 @@ module l_module_OC_Echo (
     wire delay_rule__RDY;
     wire respond_rule__ENA;
     wire respond_rule__RDY;
-    assign delay_rule__ENA = delay_rule__RDY;
-    assign delay_rule__RDY = ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
-    assign respond_rule__ENA = respond_rule__RDY;
-    assign respond_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = respond_rule__ENA;
-    assign request$say2__RDY = busy == 0;
-    assign request$say__RDY = busy == 0;
+    assign delay_rule__ENA = delay_rule__RDY ;
+    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 0 ) ) != 0;
+    assign respond_rule__ENA = respond_rule__RDY ;
+    assign respond_rule__RDY = ( busy_delay  != 0 ) & indication$heard__RDY ;
+    assign indication$heard$meth = meth_delay ;
+    assign indication$heard$v = v_delay ;
+    assign indication$heard__ENA = respond_rule__ENA ;
+    assign request$say2__RDY = busy  == 0;
+    assign request$say__RDY = busy  == 0;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
@@ -176,29 +176,29 @@ module l_module_OC_Echo (
       end // nRST
       else begin
         if (delay_rule__ENA) begin
-            busy <= 0;
-            busy_delay <= 1;
-            meth_delay <= meth_temp;
-            v_delay <= v_temp;
+            busy  <= 0;
+            busy_delay  <= 1;
+            meth_delay  <= meth_temp;
+            v_delay  <= v_temp;
         end; // End of delay_rule__ENA
         if (request$say2__ENA) begin
-            meth_temp <= request$say2$meth;
-            v_temp <= request$say2$v;
-            busy <= 1;
+            meth_temp  <= request$say2$meth;
+            v_temp  <= request$say2$v;
+            busy  <= 1;
         end; // End of request$say2__ENA
         if (request$say__ENA) begin
-            meth_temp <= request$say$meth;
-            v_temp <= request$say$v;
-            busy <= 1;
+            meth_temp  <= request$say$meth;
+            v_temp  <= request$say$v;
+            busy  <= 1;
         end; // End of request$say__ENA
         if (respond_rule__ENA) begin
-            busy_delay <= 0;
+            busy_delay  <= 0;
         end; // End of respond_rule__ENA
         if (swap$x2y__ENA) begin
-            y <= x;
+            y  <= x;
         end; // End of swap$x2y__ENA
         if (swap$y2x__ENA) begin
-            x <= y;
+            x  <= y;
         end; // End of swap$y2x__ENA
       end
     end // always @ (posedge CLK)
@@ -219,12 +219,12 @@ module l_module_OC_EchoIndicationInput (
     reg [31:0]v_delay;
     wire input_rule__ENA;
     wire input_rule__RDY;
-    assign input_rule__ENA = input_rule__RDY;
-    assign input_rule__RDY = ( busy_delay != 0 ) & indication$heard__RDY;
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = input_rule__ENA;
-    assign pipe$enq__RDY = busy_delay == 0;
+    assign input_rule__ENA = input_rule__RDY ;
+    assign input_rule__RDY = ( busy_delay  != 0 ) & indication$heard__RDY ;
+    assign indication$heard$meth = meth_delay ;
+    assign indication$heard$v = v_delay ;
+    assign indication$heard__ENA = input_rule__ENA ;
+    assign pipe$enq__RDY = busy_delay  == 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -234,13 +234,13 @@ module l_module_OC_EchoIndicationInput (
       end // nRST
       else begin
         if (input_rule__ENA) begin
-            busy_delay <= 0;
+            busy_delay  <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
             if (pipe$enq$v[0:31] == 1) begin
-            meth_delay <= pipe$enq$v[32:63];
-            v_delay <= pipe$enq$v[64:95];
-            busy_delay <= 1;
+            meth_delay  <= pipe$enq$v[32:63];
+            v_delay  <= pipe$enq$v[64:95];
+            busy_delay  <= 1;
             end;
         end; // End of pipe$enq__ENA
       end
@@ -269,13 +269,13 @@ module l_module_OC_EchoIndicationOutput (
     wire output_rulee__RDY;
     wire output_ruleo__ENA;
     wire output_ruleo__RDY;
-    assign output_rulee__ENA = output_rulee__RDY;
-    assign output_rulee__RDY = ( ( ( ind_busy != 0 ) & ( even != 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign output_ruleo__ENA = output_ruleo__RDY;
-    assign output_ruleo__RDY = ( ( ( ind_busy != 0 ) & ( even == 0 ) ) != 0 ) & pipe$enq__RDY;
-    assign indication$heard__RDY = ind_busy == 0;
-    assign pipe$enq$v = output_rulee__ENA ? { ind0$tag , ind0$data$heard$meth , ind0$data$heard$v } : { ind1$tag , ind1$data$heard$meth , ind1$data$heard$v };
-    assign pipe$enq__ENA = output_rulee__ENA || output_ruleo__ENA;
+    assign output_rulee__ENA = output_rulee__RDY ;
+    assign output_rulee__RDY = ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
+    assign output_ruleo__ENA = output_ruleo__RDY ;
+    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 0 ) ) != 0 ) & pipe$enq__RDY ;
+    assign indication$heard__RDY = ind_busy  == 0;
+    assign pipe$enq$v = output_rulee__ENA  ? { ind0$tag  , ind0$data$heard$meth  , ind0$data$heard$v  } : { ind1$tag  , ind1$data$heard$meth  , ind1$data$heard$v  };
+    assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -290,24 +290,24 @@ module l_module_OC_EchoIndicationOutput (
       end // nRST
       else begin
         if (indication$heard__ENA) begin
-            ind_busy <= 1;
-            even <= even == 0;
+            ind_busy  <= 1;
+            even  <= even == 0;
             if (even != 0) begin
-            ind1$tag <= 1;
-            ind1$data$heard$meth <= indication$heard$meth;
-            ind1$data$heard$v <= indication$heard$v;
+            ind1$tag  <= 1;
+            ind1$data$heard$meth  <= indication$heard$meth;
+            ind1$data$heard$v  <= indication$heard$v;
             end;
             if (even == 0) begin
-            ind0$tag <= 1;
-            ind0$data$heard$meth <= indication$heard$meth;
-            ind0$data$heard$v <= indication$heard$v;
+            ind0$tag  <= 1;
+            ind0$data$heard$meth  <= indication$heard$meth;
+            ind0$data$heard$v  <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
         if (output_rulee__ENA) begin
-            ind_busy <= 0;
+            ind_busy  <= 0;
         end; // End of output_rulee__ENA
         if (output_ruleo__ENA) begin
-            ind_busy <= 0;
+            ind_busy  <= 0;
         end; // End of output_ruleo__ENA
       end
     end // always @ (posedge CLK)
@@ -327,13 +327,13 @@ module l_module_OC_EchoRequestInput (
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    assign pipe$enq__RDY = request$say__RDY & request$say2__RDY;
-    assign request$say$meth = pipe$enq$v[32:63];
-    assign request$say$v = pipe$enq$v[64:95];
-    assign request$say2$meth = pipe$enq$v[96:127];
-    assign request$say2$v = pipe$enq$v[128:159];
-    assign request$say2__ENA = ( pipe$enq$v[0:31] == 2 ) & pipe$enq__ENA;
-    assign request$say__ENA = ( pipe$enq$v[0:31] == 1 ) & pipe$enq__ENA;
+    assign pipe$enq__RDY = request$say__RDY  & request$say2__RDY ;
+    assign request$say$meth = pipe$enq$v[32:63] ;
+    assign request$say$v = pipe$enq$v[64:95] ;
+    assign request$say2$meth = pipe$enq$v[96:127] ;
+    assign request$say2$v = pipe$enq$v[128:159] ;
+    assign request$say2__ENA = ( pipe$enq$v[0:31]  == 2 ) & pipe$enq__ENA ;
+    assign request$say__ENA = ( pipe$enq$v[0:31]  == 1 ) & pipe$enq__ENA ;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -360,22 +360,22 @@ module l_module_OC_EchoRequestOutput (
     wire [31:0]request$say__ENA$ind$data$say2$meth;
     wire [31:0]request$say__ENA$ind$data$say2$v;
     wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = request$say2__ENA ? { 2 , request$say2__ENA$ind$data$say$meth , request$say2__ENA$ind$data$say$v , request$say2__ENA$ind$data$say2$meth , request$say2__ENA$ind$data$say2$v , request$say2__ENA$ind$data$say2$v2 } : { 1 , request$say__ENA$ind$data$say$meth , request$say__ENA$ind$data$say$v , request$say__ENA$ind$data$say2$meth , request$say__ENA$ind$data$say2$v , request$say__ENA$ind$data$say2$v2 };
-    assign pipe$enq__ENA = request$say2__ENA || request$say__ENA;
-    assign request$say2__RDY = pipe$enq__RDY;
-    assign request$say__RDY = pipe$enq__RDY;
+    assign pipe$enq$v = request$say2__ENA  ? { 2 , request$say2__ENA$ind$data$say$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$v2  } : { 1 , request$say__ENA$ind$data$say$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$v2  };
+    assign pipe$enq__ENA = request$say2__ENA  || request$say__ENA ;
+    assign request$say2__RDY = pipe$enq__RDY ;
+    assign request$say__RDY = pipe$enq__RDY ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (request$say2__ENA) begin
-            request$say2__ENA$ind$data$say2$meth <= request$say2$meth;
-            request$say2__ENA$ind$data$say2$v <= request$say2$v;
+            request$say2__ENA$ind$data$say2$meth  <= request$say2$meth;
+            request$say2__ENA$ind$data$say2$v  <= request$say2$v;
         end; // End of request$say2__ENA
         if (request$say__ENA) begin
-            request$say__ENA$ind$data$say$meth <= request$say$meth;
-            request$say__ENA$ind$data$say$v <= request$say$v;
+            request$say__ENA$ind$data$say$meth  <= request$say$meth;
+            request$say__ENA$ind$data$say$v  <= request$say$v;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)

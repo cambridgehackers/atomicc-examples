@@ -12,10 +12,10 @@ module l_module_OC_Fifo1 (
     output out$first__RDY);
     reg [31:0]element;
     reg [7:0]full;
-    assign in$enq__RDY = full ^ 1;
-    assign out$deq__RDY = full;
-    assign out$first = element;
-    assign out$first__RDY = full;
+    assign in$enq__RDY = full  ^ 1;
+    assign out$deq__RDY = full ;
+    assign out$first = element ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -24,11 +24,11 @@ module l_module_OC_Fifo1 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            element <= in$enq$v;
-            full <= 1;
+            element  <= in$enq$v;
+            full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            full <= 0;
+            full  <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -48,10 +48,10 @@ module l_module_OC_Fifo1_OC_3 (
     reg [31:0]element$b;
     reg [31:0]element$c;
     reg [7:0]full;
-    assign in$enq__RDY = full ^ 1;
-    assign out$deq__RDY = full;
-    assign out$first = { element$a , element$b , element$c };
-    assign out$first__RDY = full;
+    assign in$enq__RDY = full  ^ 1;
+    assign out$deq__RDY = full ;
+    assign out$first = { element$a  , element$b  , element$c  };
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -62,11 +62,11 @@ module l_module_OC_Fifo1_OC_3 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            { element$a , element$b , element$c } <= in$enq$v;
-            full <= 1;
+            { element$a  , element$b  , element$c  } <= in$enq$v;
+            full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
-            full <= 0;
+            full  <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -111,10 +111,10 @@ module l_module_OC_FifoPong (
         element2$out$deq__RDY,
         element2$out$first,
         element2$out$first__RDY);
-    assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
-    assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
-    assign out$first = { pong ? element2$out$first[0:31] : element1$out$first[0:31] , pong ? element2$out$first[32:63] : element1$out$first[32:63] , pong ? element2$out$first[64:95] : element1$out$first[64:95] };
-    assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
+    assign in$enq__RDY = ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
+    assign out$deq__RDY = ( ( pong  ^ 1 ) | element2$out$deq__RDY  ) & ( pong  | element1$out$deq__RDY  );
+    assign out$first = { pong  ? element2$out$first[0:31]  : element1$out$first[0:31]  , pong  ? element2$out$first[32:63]  : element1$out$first[32:63]  , pong  ? element2$out$first[64:95]  : element1$out$first[64:95]  };
+    assign out$first__RDY = ( ( pong  ^ 1 ) | element2$out$first__RDY  ) & ( pong  | element1$out$first__RDY  );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -122,7 +122,7 @@ module l_module_OC_FifoPong (
       end // nRST
       else begin
         if (out$deq__ENA) begin
-            pong <= pong ^ 1;
+            pong  <= pong ^ 1;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
@@ -202,26 +202,26 @@ module l_module_OC_IVector (
     wire respond_rule_8__RDY;
     wire respond_rule_9__ENA;
     wire respond_rule_9__RDY;
-    assign respond_rule_0__ENA = respond_rule_0__RDY;
-    assign respond_rule_0__RDY = fifo0$out$first__RDY & fifo0$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_1__ENA = respond_rule_1__RDY;
-    assign respond_rule_1__RDY = fifo1$out$first__RDY & fifo1$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_2__ENA = respond_rule_2__RDY;
-    assign respond_rule_2__RDY = fifo2$out$first__RDY & fifo2$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_3__ENA = respond_rule_3__RDY;
-    assign respond_rule_3__RDY = fifo3$out$first__RDY & fifo3$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_4__ENA = respond_rule_4__RDY;
-    assign respond_rule_4__RDY = fifo4$out$first__RDY & fifo4$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_5__ENA = respond_rule_5__RDY;
-    assign respond_rule_5__RDY = fifo5$out$first__RDY & fifo5$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_6__ENA = respond_rule_6__RDY;
-    assign respond_rule_6__RDY = fifo6$out$first__RDY & fifo6$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_7__ENA = respond_rule_7__RDY;
-    assign respond_rule_7__RDY = fifo7$out$first__RDY & fifo7$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_8__ENA = respond_rule_8__RDY;
-    assign respond_rule_8__RDY = fifo8$out$first__RDY & fifo8$out$deq__RDY & out$heard__RDY;
-    assign respond_rule_9__ENA = respond_rule_9__RDY;
-    assign respond_rule_9__RDY = fifo9$out$first__RDY & fifo9$out$deq__RDY & out$heard__RDY;
+    assign respond_rule_0__ENA = respond_rule_0__RDY ;
+    assign respond_rule_0__RDY = fifo0$out$first__RDY  & fifo0$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_1__ENA = respond_rule_1__RDY ;
+    assign respond_rule_1__RDY = fifo1$out$first__RDY  & fifo1$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_2__ENA = respond_rule_2__RDY ;
+    assign respond_rule_2__RDY = fifo2$out$first__RDY  & fifo2$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_3__ENA = respond_rule_3__RDY ;
+    assign respond_rule_3__RDY = fifo3$out$first__RDY  & fifo3$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_4__ENA = respond_rule_4__RDY ;
+    assign respond_rule_4__RDY = fifo4$out$first__RDY  & fifo4$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_5__ENA = respond_rule_5__RDY ;
+    assign respond_rule_5__RDY = fifo5$out$first__RDY  & fifo5$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_6__ENA = respond_rule_6__RDY ;
+    assign respond_rule_6__RDY = fifo6$out$first__RDY  & fifo6$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_7__ENA = respond_rule_7__RDY ;
+    assign respond_rule_7__RDY = fifo7$out$first__RDY  & fifo7$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_8__ENA = respond_rule_8__RDY ;
+    assign respond_rule_8__RDY = fifo8$out$first__RDY  & fifo8$out$deq__RDY  & out$heard__RDY ;
+    assign respond_rule_9__ENA = respond_rule_9__RDY ;
+    assign respond_rule_9__RDY = fifo9$out$first__RDY  & fifo9$out$deq__RDY  & out$heard__RDY ;
     l_module_OC_FifoPong fifo0 (
         CLK,
         nRST,
@@ -322,10 +322,10 @@ module l_module_OC_IVector (
         fifo9$out$deq__RDY,
         fifo9$out$first,
         fifo9$out$first__RDY);
-    assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
-    assign out$heard$meth = respond_rule_0__ENA ? 0 : respond_rule_1__ENA ? 1 : respond_rule_2__ENA ? 2 : respond_rule_3__ENA ? 3 : respond_rule_4__ENA ? 4 : respond_rule_5__ENA ? 5 : respond_rule_6__ENA ? 6 : respond_rule_7__ENA ? 7 : respond_rule_8__ENA ? 8 : 9;
-    assign out$heard$v = respond_rule_0__ENA ? fifo0$out$first[32:63] : respond_rule_1__ENA ? fifo1$out$first[32:63] : respond_rule_2__ENA ? fifo2$out$first[32:63] : respond_rule_3__ENA ? fifo3$out$first[32:63] : respond_rule_4__ENA ? fifo4$out$first[32:63] : respond_rule_5__ENA ? fifo5$out$first[32:63] : respond_rule_6__ENA ? fifo6$out$first[32:63] : respond_rule_7__ENA ? fifo7$out$first[32:63] : respond_rule_8__ENA ? fifo8$out$first[32:63] : fifo9$out$first[32:63];
-    assign out$heard__ENA = respond_rule_0__ENA || respond_rule_1__ENA || respond_rule_2__ENA || respond_rule_3__ENA || respond_rule_4__ENA || respond_rule_5__ENA || respond_rule_6__ENA || respond_rule_7__ENA || respond_rule_8__ENA || respond_rule_9__ENA;
+    assign in$say__RDY = fifo0$in$enq__RDY  & fifo1$in$enq__RDY  & fifo2$in$enq__RDY  & fifo3$in$enq__RDY  & fifo4$in$enq__RDY  & fifo5$in$enq__RDY  & fifo6$in$enq__RDY  & fifo7$in$enq__RDY  & fifo8$in$enq__RDY  & fifo9$in$enq__RDY ;
+    assign out$heard$meth = respond_rule_0__ENA  ? 0 : respond_rule_1__ENA  ? 1 : respond_rule_2__ENA  ? 2 : respond_rule_3__ENA  ? 3 : respond_rule_4__ENA  ? 4 : respond_rule_5__ENA  ? 5 : respond_rule_6__ENA  ? 6 : respond_rule_7__ENA  ? 7 : respond_rule_8__ENA  ? 8 : 9;
+    assign out$heard$v = respond_rule_0__ENA  ? fifo0$out$first[32:63]  : respond_rule_1__ENA  ? fifo1$out$first[32:63]  : respond_rule_2__ENA  ? fifo2$out$first[32:63]  : respond_rule_3__ENA  ? fifo3$out$first[32:63]  : respond_rule_4__ENA  ? fifo4$out$first[32:63]  : respond_rule_5__ENA  ? fifo5$out$first[32:63]  : respond_rule_6__ENA  ? fifo6$out$first[32:63]  : respond_rule_7__ENA  ? fifo7$out$first[32:63]  : respond_rule_8__ENA  ? fifo8$out$first[32:63]  : fifo9$out$first[32:63] ;
+    assign out$heard__ENA = respond_rule_0__ENA  || respond_rule_1__ENA  || respond_rule_2__ENA  || respond_rule_3__ENA  || respond_rule_4__ENA  || respond_rule_5__ENA  || respond_rule_6__ENA  || respond_rule_7__ENA  || respond_rule_8__ENA  || respond_rule_9__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
