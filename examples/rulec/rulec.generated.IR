@@ -55,14 +55,14 @@ EMODULE l_module_OC_P2M_OC_1 {
 MODULE l_module_OC_Connect {
     SOFTWARE request
     SOFTWARE indication
-    INTERFACECONNECT sw$indication indication l_ainterface_OC_EchoIndication
-    INTERFACECONNECT request sw$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_4
     INTERFACECONNECT sw$reqPipe hw$request l_ainterface_OC_PipeIn
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACECONNECT request sw$request l_ainterface_OC_EchoRequest
+    INTERFACECONNECT indication sw$indication l_ainterface_OC_EchoIndication
     FIELD l_module_OC_Software sw
     FIELD l_module_OC_Hardware hw
+    INTERFACE l_ainterface_OC_EchoRequest request
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
 }
 MODULE l_module_OC_Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
@@ -103,10 +103,10 @@ MODULE l_module_OC_Echo {
     }
 }
 MODULE l_module_OC_Hardware {
-    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_2
-    INTERFACECONNECT lEIO$pipe indication l_ainterface_OC_PipeIn_OC_4
     INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
+    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_2
+    INTERFACECONNECT indication lEIO$pipe l_ainterface_OC_PipeIn_OC_4
     FIELD l_module_OC_P2M_OC_1 lERI
     FIELD l_module_OC_M2P_OC_3 lEIO
     INTERFACE l_ainterface_OC_PipeIn_OC_2 request
@@ -115,9 +115,9 @@ MODULE l_module_OC_Hardware {
 }
 MODULE l_module_OC_Software {
     INTERFACECONNECT request lERO_test$method l_ainterface_OC_EchoRequest
-    INTERFACECONNECT lEII_test$method indication l_ainterface_OC_EchoIndication
+    INTERFACECONNECT indication lEII_test$method l_ainterface_OC_EchoIndication
+    INTERFACECONNECT reqPipe lERO_test$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT indPipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
-    INTERFACECONNECT lERO_test$pipe reqPipe l_ainterface_OC_PipeIn
     FIELD l_module_OC_M2P lERO_test
     FIELD l_module_OC_P2M lEII_test
     INTERFACE l_ainterface_OC_EchoRequest request

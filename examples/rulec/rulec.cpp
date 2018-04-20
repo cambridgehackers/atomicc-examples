@@ -83,16 +83,12 @@ __module Software {
     P2M<EchoIndication>        lEII_test;
 
     // interface functions for top of layer
-    EchoRequest                request;
-    EchoIndication            *indication;
-    __connect                  request = lERO_test.method;
-    __connect                  lEII_test.method = indication; // user indication
+    EchoRequest                request = lERO_test.method;
+    EchoIndication            *indication = lEII_test.method;
 
     // interface function for bottom of layer
-    PipeIn<M2P<EchoRequest>::Data>   *reqPipe;
-    PipeIn<P2M<EchoIndication>::Data> indPipe;
-    __connect                  indPipe = lEII_test.pipe;
-    __connect                  lERO_test.pipe = reqPipe;
+    PipeIn<M2P<EchoRequest>::Data>   *reqPipe = lERO_test.pipe;
+    PipeIn<P2M<EchoIndication>::Data> indPipe = lEII_test.pipe;
 };
 
 //////////////////////////// this is the stack that will run in the hardware
@@ -101,10 +97,8 @@ __module Hardware {
     M2P<EchoIndication>              lEIO;      // indication pipe
 
     // top interface
-    PipeIn<P2M<EchoRequest>::Data>   request;
-    PipeIn<M2P<EchoIndication>::Data> *indication;
-    __connect                  request = lERI.pipe;
-    __connect                  lEIO.pipe = indication;
+    PipeIn<P2M<EchoRequest>::Data>   request = lERI.pipe;
+    PipeIn<M2P<EchoIndication>::Data> *indication = lEIO.pipe;
 
     // Module under test
     Echo                       lEcho;
@@ -115,13 +109,12 @@ __module Hardware {
 //////////////////////////// this is a test bench mockup to connect s/w and h/w
 //                           (just to check compilation)
 __module Connect {
-    __software EchoRequest    request;
-    __software EchoIndication *indication;
     Software                   sw;
     Hardware                   hw;
-    // expose top interfaces
-    __connect                  sw.indication = indication;
-    __connect                  request = sw.request;
+
+    // top interfaces
+    __software EchoRequest    request = sw.request;
+    __software EchoIndication *indication = sw.indication;
 
     // connect h/w stack and s/w stack interfaces
     __connect                  hw.indication = sw.indPipe;
