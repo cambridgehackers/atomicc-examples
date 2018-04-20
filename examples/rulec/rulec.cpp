@@ -83,12 +83,12 @@ __module Software {
     P2M<EchoIndication>        lEII_test;
 
     // interface functions for top of layer
-    EchoRequest                request = lERO_test.method;
-    EchoIndication            *indication = lEII_test.method;
+    decltype(lERO_test.method) request = lERO_test.method;
+    decltype(lEII_test.method) indication = lEII_test.method;
 
     // interface function for bottom of layer
-    PipeIn<M2P<EchoRequest>::Data>   *reqPipe = lERO_test.pipe;
-    PipeIn<P2M<EchoIndication>::Data> indPipe = lEII_test.pipe;
+    decltype(lERO_test.pipe)   reqPipe = lERO_test.pipe;
+    decltype(lEII_test.pipe)   indPipe = lEII_test.pipe;
 };
 
 //////////////////////////// this is the stack that will run in the hardware
@@ -97,8 +97,8 @@ __module Hardware {
     M2P<EchoIndication>              lEIO;      // indication pipe
 
     // top interface
-    PipeIn<P2M<EchoRequest>::Data>   request = lERI.pipe;
-    PipeIn<M2P<EchoIndication>::Data> *indication = lEIO.pipe;
+    decltype(lERI.pipe)              request = lERI.pipe;
+    decltype(lEIO.pipe)              indication = lEIO.pipe;
 
     // Module under test
     Echo                       lEcho;
