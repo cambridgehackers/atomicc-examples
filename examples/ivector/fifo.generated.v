@@ -11,8 +11,8 @@ module l_module_OC_Fifo1 (
     output [31:0]out$first,
     output out$first__RDY);
     reg [31:0]element;
-    reg [7:0]full;
-    assign in$enq__RDY = full  ^ 1;
+    reg full;
+    assign in$enq__RDY = 0 == full ;
     assign out$deq__RDY = 0 != full ;
     assign out$first = element ;
     assign out$first__RDY = 0 != full ;

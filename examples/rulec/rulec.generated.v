@@ -102,7 +102,7 @@ module l_module_OC_Echo (
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 0 ) ) != 0;
+    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
     assign respond_rule__RDY = ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
     assign indication$heard$meth = meth_delay ;
@@ -112,8 +112,8 @@ module l_module_OC_Echo (
     assign indication$heard2$v2 = v2_delay ;
     assign indication$heard2__ENA = ( v_type  != 1 ) & respond_rule__ENA ;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
-    assign request$say2__RDY = busy  == 0;
-    assign request$say__RDY = busy  == 0;
+    assign request$say2__RDY = busy  == 32'd0;
+    assign request$say__RDY = busy  == 32'd0;
 
     always @( posedge CLK) begin
       if (!nRST) begin

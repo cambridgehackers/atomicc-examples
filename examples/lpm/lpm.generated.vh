@@ -27,10 +27,10 @@
 //METAPRIORITY; recirc; enter;exit
 //METASTART; l_module_OC_LpmMemory
 //METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
-//METAGUARD; ifc$req; delayCount  == 0;
+//METAGUARD; ifc$req; delayCount  == 32'd0;
 //METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
-//METAGUARD; ifc$resAccept; delayCount  == 1;
-//METAGUARD; ifc$resValue; delayCount  == 1;
+//METAGUARD; ifc$resAccept; delayCount  == 32'd1;
+//METAGUARD; ifc$resValue; delayCount  == 32'd1;
 //METAGUARD; memdelay_rule; 0 != ( delayCount  > 1 );
 //METARULES; memdelay_rule
 `endif

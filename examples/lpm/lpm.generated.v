@@ -159,10 +159,10 @@ module l_module_OC_LpmMemory (
     wire memdelay_rule__RDY;
     assign memdelay_rule__ENA = memdelay_rule__RDY ;
     assign memdelay_rule__RDY = 0 != ( delayCount  > 1 );
-    assign ifc$req__RDY = delayCount  == 0;
-    assign ifc$resAccept__RDY = delayCount  == 1;
+    assign ifc$req__RDY = delayCount  == 32'd0;
+    assign ifc$resAccept__RDY = delayCount  == 32'd1;
     assign ifc$resValue = { saved$a  , saved$b  , saved$c  };
-    assign ifc$resValue__RDY = delayCount  == 1;
+    assign ifc$resValue__RDY = delayCount  == 32'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin

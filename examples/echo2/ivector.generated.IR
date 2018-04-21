@@ -41,7 +41,7 @@ MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD INTEGER_32 element
-    FIELD INTEGER_8 full
+    FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -55,7 +55,7 @@ MODULE l_module_OC_Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
     FIELD l_struct_OC_ValuePair element
-    FIELD INTEGER_8 full
+    FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
@@ -70,7 +70,7 @@ MODULE l_module_OC_FifoPong {
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
     FIELD l_module_OC_Fifo1_OC_3 element1
     FIELD l_module_OC_Fifo1_OC_3 element2
-    FIELD INTEGER_8 pong
+    FIELD INTEGER_1 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         CALL/Action ((pong) ^ 1):element1$in$enq__ENA{in$enq$v}

@@ -3,7 +3,7 @@
 
 //METASTART; l_module_OC_Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; full  ^ 1;
+//METAGUARD; in$enq; 0 == full ;
 //METAGUARD; out$deq; 0 != full ;
 //METAGUARD; out$first; 0 != full ;
 `endif
