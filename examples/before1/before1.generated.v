@@ -237,7 +237,7 @@ module l_module_OC_EchoIndicationInput (
             busy_delay  <= 0;
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            if (pipe$enq$v[31:0] == 1) begin
+            if (pipe$enq$v[31:0] == 32'd1) begin
             meth_delay  <= pipe$enq$v[63:32];
             v_delay  <= pipe$enq$v[95:64];
             busy_delay  <= 1;
@@ -272,7 +272,7 @@ module l_module_OC_EchoIndicationOutput (
     assign output_rulee__ENA = output_rulee__RDY ;
     assign output_rulee__RDY = ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
     assign output_ruleo__ENA = output_ruleo__RDY ;
-    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 0 ) ) != 0 ) & pipe$enq__RDY ;
+    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 32'd0 ) ) != 0 ) & pipe$enq__RDY ;
     assign indication$heard__RDY = ind_busy  == 0;
     assign pipe$enq$v = output_rulee__ENA  ? { ind0$tag  , ind0$data$heard$meth  , ind0$data$heard$v  } : { ind1$tag  , ind1$data$heard$meth  , ind1$data$heard$v  };
     assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;
@@ -297,7 +297,7 @@ module l_module_OC_EchoIndicationOutput (
             ind1$data$heard$meth  <= indication$heard$meth;
             ind1$data$heard$v  <= indication$heard$v;
             end;
-            if (even == 0) begin
+            if (even == 32'd0) begin
             ind0$tag  <= 1;
             ind0$data$heard$meth  <= indication$heard$meth;
             ind0$data$heard$v  <= indication$heard$v;
@@ -332,8 +332,8 @@ module l_module_OC_EchoRequestInput (
     assign request$say$v = pipe$enq$v[95:64] ;
     assign request$say2$meth = pipe$enq$v[127:96] ;
     assign request$say2$v = pipe$enq$v[159:128] ;
-    assign request$say2__ENA = ( pipe$enq$v[31:0]  == 2 ) & pipe$enq__ENA ;
-    assign request$say__ENA = ( pipe$enq$v[31:0]  == 1 ) & pipe$enq__ENA ;
+    assign request$say2__ENA = ( pipe$enq$v[31:0]  == 32'd2 ) & pipe$enq__ENA ;
+    assign request$say__ENA = ( pipe$enq$v[31:0]  == 32'd1 ) & pipe$enq__ENA ;
 endmodule 
 
 module l_module_OC_EchoRequestOutput (
@@ -360,7 +360,7 @@ module l_module_OC_EchoRequestOutput (
     wire [31:0]request$say__ENA$ind$data$say2$meth;
     wire [31:0]request$say__ENA$ind$data$say2$v;
     wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = request$say2__ENA  ? { 2 , request$say2__ENA$ind$data$say$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$v2  } : { 1 , request$say__ENA$ind$data$say$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$v2  };
+    assign pipe$enq$v = request$say2__ENA  ? { 32'd2 , request$say2__ENA$ind$data$say$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$v2  } : { 32'd1 , request$say__ENA$ind$data$say$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$v2  };
     assign pipe$enq__ENA = request$say2__ENA  || request$say__ENA ;
     assign request$say2__RDY = pipe$enq__RDY ;
     assign request$say__RDY = pipe$enq__RDY ;

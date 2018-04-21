@@ -57,11 +57,11 @@
 //METAEXCLUSIVE; output_rulee__ENA; output_ruleo__ENA
 //METAGUARD; output_rulee; ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
 //METAINVOKE; output_ruleo__ENA; :pipe$enq__ENA;
-//METAGUARD; output_ruleo; ( ( ( ind_busy  != 0 ) & ( even  == 0 ) ) != 0 ) & pipe$enq__RDY ;
+//METAGUARD; output_ruleo; ( ( ( ind_busy  != 0 ) & ( even  == 32'd0 ) ) != 0 ) & pipe$enq__RDY ;
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag  == 2:request$say2__ENA;pipe$enq__ENA$v_2e_addr$tag  == 1:request$say__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag  == 32'd2:request$say2__ENA;pipe$enq__ENA$v_2e_addr$tag  == 32'd1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY  & request$say2__RDY ;
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;

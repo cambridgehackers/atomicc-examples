@@ -31,6 +31,6 @@
 //METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
 //METAGUARD; ifc$resAccept; delayCount  == 1;
 //METAGUARD; ifc$resValue; delayCount  == 1;
-//METAGUARD; memdelay_rule; delayCount  > 1;
+//METAGUARD; memdelay_rule; 0 != ( delayCount  > 1 );
 //METARULES; memdelay_rule
 `endif

@@ -24,9 +24,9 @@
 //METAEXCLUSIVE; request$say2__ENA; request$say__ENA
 //METAGUARD; request$say2; busy  == 0;
 //METAGUARD; request$say; busy  == 0;
-//METAINVOKE; respond_rule__ENA; v_type  != 1:indication$heard2__ENA;v_type  == 1:indication$heard__ENA;
+//METAINVOKE; respond_rule__ENA; v_type  != 1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
-//METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 1 ) | indication$heard2__RDY  );
+//METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_Hardware
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_4;
