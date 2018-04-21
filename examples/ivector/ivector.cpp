@@ -19,6 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include <fifo.cpp>
+//#include <fifo.h>
 
 typedef struct {
     int a;

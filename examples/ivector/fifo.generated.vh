@@ -1,11 +1,9 @@
 `ifndef __fifo_GENERATED__VH__
 `define __fifo_GENERATED__VH__
 
-`define l_class_OC_Fifo1_RULE_COUNT (0)
-
-//METAEXCLUSIVE; out$deq; in$enq
-//METAGUARD; out$deq; full;
-//METAGUARD; in$enq; full ^ 1;
-//METABEFORE; out$first; :in$enq
-//METAGUARD; out$first; full;
+//METASTART; l_module_OC_Fifo1
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; full  ^ 1;
+//METAGUARD; out$deq; full ;
+//METAGUARD; out$first; full ;
 `endif
