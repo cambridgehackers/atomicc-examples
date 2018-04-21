@@ -78,10 +78,10 @@
 //METAGUARD; method$heard; pipe$enq__RDY ;
 //METASTART; l_module_OC_EchoIndicationInput
 //METAEXTERNAL; method; l_ainterface_OC_EchoIndication;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[0:31]  == 1:method$heard2__ENA;pipe$enq$v[0:31]  == 2:method$heard__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:0]  == 32'd1:method$heard2__ENA;pipe$enq$v[31:0]  == 32'd2:method$heard__ENA;
 //METAGUARD; pipe$enq; method$heard2__RDY  & method$heard__RDY ;
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[0:31]  == 1:method$say2__ENA;pipe$enq$v[0:31]  == 2:method$say__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:0]  == 32'd1:method$say2__ENA;pipe$enq$v[31:0]  == 32'd2:method$say__ENA;
 //METAGUARD; pipe$enq; method$say2__RDY  & method$say__RDY ;
 `endif

@@ -113,7 +113,7 @@ module l_module_OC_FifoPong (
         element2$out$first__RDY);
     assign in$enq__RDY = ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
     assign out$deq__RDY = ( ( pong  ^ 1 ) | element2$out$deq__RDY  ) & ( pong  | element1$out$deq__RDY  );
-    assign out$first = { pong  ? element2$out$first[0:31]  : element1$out$first[0:31]  , pong  ? element2$out$first[32:63]  : element1$out$first[32:63]  , pong  ? element2$out$first[64:95]  : element1$out$first[64:95]  };
+    assign out$first = { pong  ? element2$out$first[31:0]  : element1$out$first[31:0]  , pong  ? element2$out$first[63:32]  : element1$out$first[63:32]  , pong  ? element2$out$first[95:64]  : element1$out$first[95:64]  };
     assign out$first__RDY = ( ( pong  ^ 1 ) | element2$out$first__RDY  ) & ( pong  | element1$out$first__RDY  );
 
     always @( posedge CLK) begin
@@ -154,7 +154,7 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$v = { fifo$out$first[0:31]  , fifo$out$first[32:63]  , fifo$out$first[64:95]  };
+    assign ind$heard$v = { fifo$out$first[31:0]  , fifo$out$first[63:32]  , fifo$out$first[95:64]  };
     assign ind$heard__ENA = respond__ENA ;
 endmodule 
 

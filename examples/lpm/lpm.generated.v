@@ -104,7 +104,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first[0:31] , inQ$out$first[32:63] , inQ$out$first[64:95] } : { mem$ifc$resValue[0:31] , mem$ifc$resValue[32:63] , mem$ifc$resValue[64:95] },
+        enter__ENA ? { inQ$out$first[31:0] , inQ$out$first[63:32] , inQ$out$first[95:64] } : { mem$ifc$resValue[31:0] , mem$ifc$resValue[63:32] , mem$ifc$resValue[95:64] },
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
@@ -114,7 +114,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         exit_rule__ENA,
-        { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] },
+        { fifo$out$first[31:0] , fifo$out$first[63:32] , fifo$out$first[95:64] },
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
@@ -124,14 +124,14 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first[0:31] , inQ$out$first[32:63] , inQ$out$first[64:95] } : { fifo$out$first[0:31] , fifo$out$first[32:63] , fifo$out$first[64:95] },
+        enter__ENA ? { inQ$out$first[31:0] , inQ$out$first[63:32] , inQ$out$first[95:64] } : { fifo$out$first[31:0] , fifo$out$first[63:32] , fifo$out$first[95:64] },
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,
         mem$ifc$resValue,
         mem$ifc$resValue__RDY);
-    assign ind$heard$meth = outQ$out$first[0:31] ;
-    assign ind$heard$v = outQ$out$first[32:63] ;
+    assign ind$heard$meth = outQ$out$first[31:0] ;
+    assign ind$heard$v = outQ$out$first[63:32] ;
     assign ind$heard__ENA = respond__ENA ;
 
     always @( posedge CLK) begin

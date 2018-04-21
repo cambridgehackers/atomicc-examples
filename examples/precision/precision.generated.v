@@ -101,8 +101,8 @@ module l_module_OC_IVector (
         fifo$out$deq__RDY,
         fifo$out$first,
         fifo$out$first__RDY);
-    assign ind$heard$meth = fifo$out$first[0:5] ;
-    assign ind$heard$v = fifo$out$first[6:9] ;
+    assign ind$heard$meth = fifo$out$first[5:0] ;
+    assign ind$heard$v = fifo$out$first[9:6] ;
     assign ind$heard__ENA = respond__ENA ;
 
     always @( posedge CLK) begin

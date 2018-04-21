@@ -11,6 +11,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o rulec.ll rulec.cpp
+	verilator --cc rulec.generated.v
 
 clean:
 	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp
