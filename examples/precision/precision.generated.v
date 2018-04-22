@@ -1,8 +1,6 @@
 `include "precision.generated.vh"
 
-module l_module_OC_Fifo1 (
-    input CLK,
-    input nRST,
+module l_module_OC_Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [9:0]in$enq$v,
     output in$enq__RDY,
@@ -36,9 +34,7 @@ module l_module_OC_Fifo1 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_IVector (
-    input CLK,
-    input nRST,
+module l_module_OC_IVector (input CLK, input nRST,
     input request$say__ENA,
     input [5:0]request$say$meth,
     input [3:0]request$say$v,
@@ -57,16 +53,14 @@ module l_module_OC_IVector (
     wire respond__RDY;
     assign respond__ENA = respond__RDY ;
     assign respond__RDY = fifo$out$first__RDY  & fifo$out$deq__RDY  & ind$heard__RDY ;
-    l_module_OC_Fifo1 fifo (
-        CLK,
-        nRST,
-        request$say__ENA,
-        { request$say$v , request$say$meth },
-        request$say__RDY,
-        respond__ENA,
-        fifo$out$deq__RDY,
-        fifo$out$first,
-        fifo$out$first__RDY);
+    l_module_OC_Fifo1 fifo (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(request$say__ENA),
+        .in$enq$v({ request$say$v , request$say$meth }),
+        .in$enq__RDY(request$say__RDY),
+        .out$deq__ENA(respond__ENA),
+        .out$deq__RDY(fifo$out$deq__RDY),
+        .out$first(fifo$out$first),
+        .out$first__RDY(fifo$out$first__RDY));
     assign ind$heard$meth = fifo$out$first[5:0] ;
     assign ind$heard$v = fifo$out$first[9:6] ;
     assign ind$heard__ENA = respond__ENA ;

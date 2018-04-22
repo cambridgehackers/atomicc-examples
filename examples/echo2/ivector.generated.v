@@ -1,8 +1,6 @@
 `include "ivector.generated.vh"
 
-module l_module_OC_Fifo1 (
-    input CLK,
-    input nRST,
+module l_module_OC_Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [95:0]in$enq$v,
     output in$enq__RDY,
@@ -38,9 +36,7 @@ module l_module_OC_Fifo1 (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_FifoPong (
-    input CLK,
-    input nRST,
+module l_module_OC_FifoPong (input CLK, input nRST,
     input in$enq__ENA,
     input [95:0]in$enq$v,
     output in$enq__RDY,
@@ -57,26 +53,22 @@ module l_module_OC_FifoPong (
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
     wire element2$out$first__RDY;
-    l_module_OC_Fifo1 element1 (
-        CLK,
-        nRST,
-        ( pong ^ 1 ) & in$enq__ENA,
-        in$enq$v,
-        element1$in$enq__RDY,
-        ( pong ^ 1 ) & out$deq__ENA,
-        element1$out$deq__RDY,
-        element1$out$first,
-        element1$out$first__RDY);
-    l_module_OC_Fifo1 element2 (
-        CLK,
-        nRST,
-        pong & in$enq__ENA,
-        in$enq$v,
-        element2$in$enq__RDY,
-        pong & out$deq__ENA,
-        element2$out$deq__RDY,
-        element2$out$first,
-        element2$out$first__RDY);
+    l_module_OC_Fifo1 element1 (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
+        .in$enq$v(in$enq$v),
+        .in$enq__RDY(element1$in$enq__RDY),
+        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA),
+        .out$deq__RDY(element1$out$deq__RDY),
+        .out$first(element1$out$first),
+        .out$first__RDY(element1$out$first__RDY));
+    l_module_OC_Fifo1 element2 (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(pong & in$enq__ENA),
+        .in$enq$v(in$enq$v),
+        .in$enq__RDY(element2$in$enq__RDY),
+        .out$deq__ENA(pong & out$deq__ENA),
+        .out$deq__RDY(element2$out$deq__RDY),
+        .out$first(element2$out$first),
+        .out$first__RDY(element2$out$first__RDY));
     assign in$enq__RDY = ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
     assign out$deq__RDY = ( ( pong  ^ 1 ) | element2$out$deq__RDY  ) & ( pong  | element1$out$deq__RDY  );
     assign out$first = { pong  ? element2$out$first[95:64]  : element1$out$first[95:64]  , pong  ? element2$out$first[63:32]  : element1$out$first[63:32]  , pong  ? element2$out$first[31:0]  : element1$out$first[31:0]  };
@@ -94,9 +86,7 @@ module l_module_OC_FifoPong (
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_IVector (
-    input CLK,
-    input nRST,
+module l_module_OC_IVector (input CLK, input nRST,
     input request$say__ENA,
     input [95:0]request$say$v,
     output request$say__RDY,
@@ -110,16 +100,14 @@ module l_module_OC_IVector (
     wire respond__RDY;
     assign respond__ENA = respond__RDY ;
     assign respond__RDY = fifo$out$deq__RDY  & fifo$out$first__RDY  & ind$heard__RDY ;
-    l_module_OC_FifoPong fifo (
-        CLK,
-        nRST,
-        request$say__ENA,
-        request$say$v,
-        request$say__RDY,
-        respond__ENA,
-        fifo$out$deq__RDY,
-        fifo$out$first,
-        fifo$out$first__RDY);
+    l_module_OC_FifoPong fifo (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(request$say__ENA),
+        .in$enq$v(request$say$v),
+        .in$enq__RDY(request$say__RDY),
+        .out$deq__ENA(respond__ENA),
+        .out$deq__RDY(fifo$out$deq__RDY),
+        .out$first(fifo$out$first),
+        .out$first__RDY(fifo$out$first__RDY));
     assign ind$heard$v = { fifo$out$first[95:64]  , fifo$out$first[63:32]  , fifo$out$first[31:0]  };
     assign ind$heard__ENA = respond__ENA ;
 endmodule 

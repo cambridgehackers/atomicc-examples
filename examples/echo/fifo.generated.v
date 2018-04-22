@@ -1,8 +1,6 @@
 `include "fifo.generated.vh"
 
-module l_module_OC_Fifo1 (
-    input CLK,
-    input nRST,
+module l_module_OC_Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [31:0]in$enq$v,
     output in$enq__RDY,
