@@ -18,6 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#define FIFO_NO_DUMMY_INSTANTIATION
 #include <fifo.cpp>
 
 typedef struct {
@@ -131,7 +132,7 @@ IVectorTest ivectorTest;
 //, 44
 //#endif
 //});
-//    printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
+//printf("[%s:%d]\n", __FUNCTION__, __LINE__);
 //    return 0;
 //}
 

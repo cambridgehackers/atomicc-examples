@@ -22,8 +22,9 @@
  *     http://csg.csail.mit.edu/pubs/memos/Memo-500/memo500.pdf
  *     (Originally from: http://csg.csail.mit.edu/pubs/memos/Memo-473/memo473.pdf )
  */
-//#include <fifo.cpp>
-#include <fifo.h>
+#define FIFO_NO_DUMMY_INSTANTIATION
+#include <fifo.cpp>
+//#include <fifo.h>
 
 #define MAX_COUNT 2
 template<class T>

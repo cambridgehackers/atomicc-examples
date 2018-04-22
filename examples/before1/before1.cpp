@@ -108,8 +108,8 @@ __module EchoIndicationOutput { // method -> pipe
     EchoIndicationPipe *pipe;
     EchoIndication_data ind0;
     EchoIndication_data ind1;
-    int ind_busy;
-    int even;
+    bool ind_busy;
+    bool even;
     void indication.heard(int meth, int v) if (!ind_busy) {
 printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
         if (even) {
@@ -142,7 +142,7 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
 __module EchoIndicationInput { // pipe -> method
     EchoIndicationPipe pipe;
     EchoIndication *indication;
-    int busy_delay;
+    bool busy_delay;
     int meth_delay;
     int v_delay;
     void pipe.enq(const EchoIndication_data v) if(!busy_delay) {
@@ -173,10 +173,10 @@ __interface Swap {
 __module Echo {
     EchoRequest request;
     Swap        swap;
-    int busy;
+    bool busy;
     int meth_temp;
     int v_temp;
-    int busy_delay;
+    bool busy_delay;
     int meth_delay;
     int v_delay;
     int x;

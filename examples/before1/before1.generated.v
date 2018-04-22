@@ -138,8 +138,8 @@ module l_module_OC_Echo (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    reg [31:0]busy;
-    reg [31:0]busy_delay;
+    reg busy;
+    reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]meth_temp;
     reg [31:0]v_delay;
@@ -151,14 +151,14 @@ module l_module_OC_Echo (
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
+    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 1'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
     assign respond_rule__RDY = ( busy_delay  != 0 ) & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = respond_rule__ENA ;
-    assign request$say2__RDY = busy  == 32'd0;
-    assign request$say__RDY = busy  == 32'd0;
+    assign request$say2__RDY = 0 == busy ;
+    assign request$say__RDY = 0 == busy ;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
@@ -214,7 +214,7 @@ module l_module_OC_EchoIndicationInput (
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    reg [31:0]busy_delay;
+    reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
     wire input_rule__ENA;
@@ -224,7 +224,7 @@ module l_module_OC_EchoIndicationInput (
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = input_rule__ENA ;
-    assign pipe$enq__RDY = busy_delay  == 32'd0;
+    assign pipe$enq__RDY = 0 == busy_delay ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -257,14 +257,14 @@ module l_module_OC_EchoIndicationOutput (
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    reg [31:0]even;
+    reg even;
     reg [31:0]ind0$data$heard$meth;
     reg [31:0]ind0$data$heard$v;
     reg [31:0]ind0$tag;
     reg [31:0]ind1$data$heard$meth;
     reg [31:0]ind1$data$heard$v;
     reg [31:0]ind1$tag;
-    reg [31:0]ind_busy;
+    reg ind_busy;
     wire output_rulee__ENA;
     wire output_rulee__RDY;
     wire output_ruleo__ENA;
@@ -272,8 +272,8 @@ module l_module_OC_EchoIndicationOutput (
     assign output_rulee__ENA = output_rulee__RDY ;
     assign output_rulee__RDY = ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
     assign output_ruleo__ENA = output_ruleo__RDY ;
-    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 32'd0 ) ) != 0 ) & pipe$enq__RDY ;
-    assign indication$heard__RDY = ind_busy  == 32'd0;
+    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 1'd0 ) ) != 0 ) & pipe$enq__RDY ;
+    assign indication$heard__RDY = 0 == ind_busy ;
     assign pipe$enq$v = output_rulee__ENA  ? { ind0$tag  , ind0$data$heard$meth  , ind0$data$heard$v  } : { ind1$tag  , ind1$data$heard$meth  , ind1$data$heard$v  };
     assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;
 
@@ -291,16 +291,16 @@ module l_module_OC_EchoIndicationOutput (
       else begin
         if (indication$heard__ENA) begin
             ind_busy  <= 1;
-            even  <= even == 0;
-            if (even != 0) begin
-            ind1$tag  <= 1;
-            ind1$data$heard$meth  <= indication$heard$meth;
-            ind1$data$heard$v  <= indication$heard$v;
-            end;
-            if (even == 32'd0) begin
+            even  <= even ^ 1;
+            if (even ^ 1) begin
             ind0$tag  <= 1;
             ind0$data$heard$meth  <= indication$heard$meth;
             ind0$data$heard$v  <= indication$heard$v;
+            end;
+            if (even) begin
+            ind1$tag  <= 1;
+            ind1$data$heard$meth  <= indication$heard$meth;
+            ind1$data$heard$v  <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
         if (output_rulee__ENA) begin

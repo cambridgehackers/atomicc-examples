@@ -1,5 +1,43 @@
 `include "lpm.generated.vh"
 
+module l_module_OC_Fifo1 (
+    input CLK,
+    input nRST,
+    input in$enq__ENA,
+    input [95:0]in$enq$v,
+    output in$enq__RDY,
+    input out$deq__ENA,
+    output out$deq__RDY,
+    output [95:0]out$first,
+    output out$first__RDY);
+    reg [31:0]element$a;
+    reg [31:0]element$b;
+    reg [31:0]element$c;
+    reg full;
+    assign in$enq__RDY = 0 == full ;
+    assign out$deq__RDY = 0 != full ;
+    assign out$first = { element$a  , element$b  , element$c  };
+    assign out$first__RDY = 0 != full ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        element$a <= 0;
+        element$b <= 0;
+        element$c <= 0;
+        full <= 0;
+      end // nRST
+      else begin
+        if (in$enq__ENA) begin
+            { element$a  , element$b  , element$c  } <= in$enq$v;
+            full  <= 1;
+        end; // End of in$enq__ENA
+        if (out$deq__ENA) begin
+            full  <= 0;
+        end; // End of out$deq__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
 module l_module_OC_Fifo2 (
     input CLK,
     input nRST,
@@ -36,8 +74,11 @@ module l_module_OC_Fifo2 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            ( windex  == 32'd0 ) ? { element0$a  , element0$b  , element0$c  } : { element1$a  , element1$b  , element1$c  } <= in$enq$v;
             windex  <= ( windex + 1 ) % 2;
+            if (windex == 32'd0)
+            { element0$a  , element0$b  , element0$c  } <= in$enq$v;
+            if (windex == 32'd1)
+            { element1$a  , element1$b  , element1$c  } <= in$enq$v;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
             rindex  <= ( rindex + 1 ) % 2;

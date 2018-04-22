@@ -18,7 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <fifo.h>
+#define FIFO_NO_DUMMY_INSTANTIATION
+#include <fifo.cpp>
 
 __interface EchoRequest {
   void say(const int v);

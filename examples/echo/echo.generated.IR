@@ -22,10 +22,6 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-}
 MODULE l_module_OC_Echo {
     SOFTWARE sout
     SOFTWARE ind
@@ -40,4 +36,18 @@ MODULE l_module_OC_Echo {
     METHOD sout$say__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
+}
+MODULE l_module_OC_Fifo1 {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD INTEGER_32 element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first INTEGER_32 = ((element)) if ((full))
 }

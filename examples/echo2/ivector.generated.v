@@ -4,40 +4,6 @@ module l_module_OC_Fifo1 (
     input CLK,
     input nRST,
     input in$enq__ENA,
-    input [31:0]in$enq$v,
-    output in$enq__RDY,
-    input out$deq__ENA,
-    output out$deq__RDY,
-    output [31:0]out$first,
-    output out$first__RDY);
-    reg [31:0]element;
-    reg full;
-    assign in$enq__RDY = 0 == full ;
-    assign out$deq__RDY = 0 != full ;
-    assign out$first = element ;
-    assign out$first__RDY = 0 != full ;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        element <= 0;
-        full <= 0;
-      end // nRST
-      else begin
-        if (in$enq__ENA) begin
-            element  <= in$enq$v;
-            full  <= 1;
-        end; // End of in$enq__ENA
-        if (out$deq__ENA) begin
-            full  <= 0;
-        end; // End of out$deq__ENA
-      end
-    end // always @ (posedge CLK)
-endmodule 
-
-module l_module_OC_Fifo1_OC_3 (
-    input CLK,
-    input nRST,
-    input in$enq__ENA,
     input [95:0]in$enq$v,
     output in$enq__RDY,
     input out$deq__ENA,
@@ -91,7 +57,7 @@ module l_module_OC_FifoPong (
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
     wire element2$out$first__RDY;
-    l_module_OC_Fifo1_OC_3 element1 (
+    l_module_OC_Fifo1 element1 (
         CLK,
         nRST,
         ( pong ^ 1 ) & in$enq__ENA,
@@ -101,7 +67,7 @@ module l_module_OC_FifoPong (
         element1$out$deq__RDY,
         element1$out$first,
         element1$out$first__RDY);
-    l_module_OC_Fifo1_OC_3 element2 (
+    l_module_OC_Fifo1 element2 (
         CLK,
         nRST,
         pong & in$enq__ENA,
