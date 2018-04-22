@@ -15,7 +15,7 @@ module l_module_OC_Fifo1 (
     reg full;
     assign in$enq__RDY = 0 == full ;
     assign out$deq__RDY = 0 != full ;
-    assign out$first = { element$a  , element$b  };
+    assign out$first = { element$b  , element$a  };
     assign out$first__RDY = 0 != full ;
 
     always @( posedge CLK) begin
@@ -26,7 +26,7 @@ module l_module_OC_Fifo1 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            { element$a  , element$b  } <= in$enq$v;
+            { element$b  , element$a  } <= in$enq$v;
             full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
@@ -61,7 +61,7 @@ module l_module_OC_IVector (
         CLK,
         nRST,
         request$say__ENA,
-        { request$say$meth , request$say$v },
+        { request$say$v , request$say$meth },
         request$say__RDY,
         respond__ENA,
         fifo$out$deq__RDY,

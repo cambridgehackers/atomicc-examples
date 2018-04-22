@@ -126,7 +126,7 @@ module l_module_OC_EchoIndicationOutput (
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
     assign indication$heard__RDY = pipe$enq__RDY ;
-    assign pipe$enq$v = { 32'd1 , indication$heard__ENA$ind$data$heard$meth  , indication$heard__ENA$ind$data$heard$v  };
+    assign pipe$enq$v = { indication$heard__ENA$ind$data$heard$v  , indication$heard__ENA$ind$data$heard$meth  , 32'd1 };
     assign pipe$enq__ENA = indication$heard__ENA ;
 
     always @( posedge CLK) begin
@@ -169,7 +169,7 @@ module l_module_OC_EchoRequestOutput (
     input pipe$enq__RDY);
     wire [31:0]request$say__ENA$ind$data$say$meth;
     wire [31:0]request$say__ENA$ind$data$say$v;
-    assign pipe$enq$v = { 32'd1 , request$say__ENA$ind$data$say$meth  , request$say__ENA$ind$data$say$v  };
+    assign pipe$enq$v = { request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 };
     assign pipe$enq__ENA = request$say__ENA ;
     assign request$say__RDY = pipe$enq__RDY ;
 

@@ -16,7 +16,7 @@ module l_module_OC_Fifo1 (
     reg full;
     assign in$enq__RDY = 0 == full ;
     assign out$deq__RDY = 0 != full ;
-    assign out$first = { element$a  , element$b  , element$c  };
+    assign out$first = { element$c  , element$b  , element$a  };
     assign out$first__RDY = 0 != full ;
 
     always @( posedge CLK) begin
@@ -28,7 +28,7 @@ module l_module_OC_Fifo1 (
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            { element$a  , element$b  , element$c  } <= in$enq$v;
+            { element$c  , element$b  , element$a  } <= in$enq$v;
             full  <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
@@ -58,7 +58,7 @@ module l_module_OC_Fifo2 (
     reg [31:0]windex;
     assign in$enq__RDY = ( ( windex  + 1 ) % 2 ) != rindex ;
     assign out$deq__RDY = rindex  != windex ;
-    assign out$first = ( rindex  == 32'd0 ) ? { element0$a  , element0$b  , element0$c  } : { element1$a  , element1$b  , element1$c  };
+    assign out$first = ( rindex  == 32'd0 ) ? { element0$c  , element0$b  , element0$a  } : { element1$c  , element1$b  , element1$a  };
     assign out$first__RDY = rindex  != windex ;
 
     always @( posedge CLK) begin
@@ -76,9 +76,9 @@ module l_module_OC_Fifo2 (
         if (in$enq__ENA) begin
             windex  <= ( windex + 1 ) % 2;
             if (windex == 32'd0)
-            { element0$a  , element0$b  , element0$c  } <= in$enq$v;
+            { element0$c  , element0$b  , element0$a  } <= in$enq$v;
             if (windex == 32'd1)
-            { element1$a  , element1$b  , element1$c  } <= in$enq$v;
+            { element1$c  , element1$b  , element1$a  } <= in$enq$v;
         end; // End of in$enq__ENA
         if (out$deq__ENA) begin
             rindex  <= ( rindex + 1 ) % 2;
@@ -135,7 +135,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         request$say__ENA,
-        { request$say$meth , request$say$v , request$say__ENA$temp$c },
+        { request$say__ENA$temp$c , request$say$v , request$say$meth },
         request$say__RDY,
         enter__ENA,
         inQ$out$deq__RDY,
@@ -145,7 +145,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first[31:0] , inQ$out$first[63:32] , inQ$out$first[95:64] } : { mem$ifc$resValue[31:0] , mem$ifc$resValue[63:32] , mem$ifc$resValue[95:64] },
+        enter__ENA ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { mem$ifc$resValue[95:64] , mem$ifc$resValue[63:32] , mem$ifc$resValue[31:0] },
         fifo$in$enq__RDY,
         exit_rule__ENA || recirc__ENA,
         fifo$out$deq__RDY,
@@ -155,7 +155,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         exit_rule__ENA,
-        { fifo$out$first[31:0] , fifo$out$first[63:32] , fifo$out$first[95:64] },
+        { fifo$out$first[95:64] , fifo$out$first[63:32] , fifo$out$first[31:0] },
         outQ$in$enq__RDY,
         respond__ENA,
         outQ$out$deq__RDY,
@@ -165,7 +165,7 @@ module l_module_OC_Lpm (
         CLK,
         nRST,
         enter__ENA || recirc__ENA,
-        enter__ENA ? { inQ$out$first[31:0] , inQ$out$first[63:32] , inQ$out$first[95:64] } : { fifo$out$first[31:0] , fifo$out$first[63:32] , fifo$out$first[95:64] },
+        enter__ENA ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { fifo$out$first[95:64] , fifo$out$first[63:32] , fifo$out$first[31:0] },
         mem$ifc$req__RDY,
         exit_rule__ENA || recirc__ENA,
         mem$ifc$resAccept__RDY,
@@ -202,7 +202,7 @@ module l_module_OC_LpmMemory (
     assign memdelay_rule__RDY = 0 != ( delayCount  > 1 );
     assign ifc$req__RDY = delayCount  == 32'd0;
     assign ifc$resAccept__RDY = delayCount  == 32'd1;
-    assign ifc$resValue = { saved$a  , saved$b  , saved$c  };
+    assign ifc$resValue = { saved$c  , saved$b  , saved$a  };
     assign ifc$resValue__RDY = delayCount  == 32'd1;
 
     always @( posedge CLK) begin
@@ -215,7 +215,7 @@ module l_module_OC_LpmMemory (
       else begin
         if (ifc$req__ENA) begin
             delayCount  <= 4;
-            { saved$a  , saved$b  , saved$c  } <= ifc$req$v;
+            { saved$c  , saved$b  , saved$a  } <= ifc$req$v;
         end; // End of ifc$req__ENA
         if (ifc$resAccept__ENA) begin
             delayCount  <= 0;
