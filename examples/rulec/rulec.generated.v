@@ -172,7 +172,7 @@ module l_module_OC_Hardware (input CLK, input nRST,
     wire lEcho$indication$heard__ENA;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
-    l_module_OC_EchoRequestInput lERI (.CLK(CLK), .nRST(nRST),
+    l_module_OC_EchoRequest___P2M lERI (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY),
@@ -185,7 +185,7 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .method$say$meth(lERI$method$say$meth),
         .method$say$v(lERI$method$say$v),
         .method$say__RDY(lEcho$request$say__RDY));
-    l_module_OC_EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
+    l_module_OC_EchoIndication___M2P lEIO (.CLK(CLK), .nRST(nRST),
         .method$heard2__ENA(lEcho$indication$heard2__ENA),
         .method$heard2$meth(lEcho$indication$heard2$meth),
         .method$heard2$v(lEcho$indication$heard2$v),
@@ -244,7 +244,7 @@ module l_module_OC_Software (input CLK, input nRST,
     input indPipe$enq__ENA,
     input [127:0]indPipe$enq$v,
     output indPipe$enq__RDY);
-    l_module_OC_EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
+    l_module_OC_EchoRequest___M2P lERO_test (.CLK(CLK), .nRST(nRST),
         .method$say2__ENA(request$say2__ENA),
         .method$say2$meth(request$say2$meth),
         .method$say2$v(request$say2$v),
@@ -257,7 +257,7 @@ module l_module_OC_Software (input CLK, input nRST,
         .pipe$enq__ENA(reqPipe$enq__ENA),
         .pipe$enq$v(reqPipe$enq$v),
         .pipe$enq__RDY(reqPipe$enq__RDY));
-    l_module_OC_EchoIndicationInput lEII_test (.CLK(CLK), .nRST(nRST),
+    l_module_OC_EchoIndication___P2M lEII_test (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(indPipe$enq__ENA),
         .pipe$enq$v(indPipe$enq$v),
         .pipe$enq__RDY(indPipe$enq__RDY),
@@ -272,7 +272,7 @@ module l_module_OC_Software (input CLK, input nRST,
         .method$heard__RDY(indication$heard__RDY));
 endmodule 
 
-module l_module_OC_EchoRequestOutput (input CLK, input nRST,
+module l_module_OC_EchoRequest___M2P (input CLK, input nRST,
     input method$say2__ENA,
     input [31:0]method$say2$meth,
     input [31:0]method$say2$v,
@@ -291,7 +291,7 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     assign pipe$enq__ENA = method$say2__ENA  || method$say__ENA ;
 endmodule 
 
-module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
+module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     input method$heard2__ENA,
     input [31:0]method$heard2$meth,
     input [31:0]method$heard2$v,
@@ -310,7 +310,7 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
     assign pipe$enq__ENA = method$heard2__ENA  || method$heard__ENA ;
 endmodule 
 
-module l_module_OC_EchoIndicationInput (input CLK, input nRST,
+module l_module_OC_EchoIndication___P2M (input CLK, input nRST,
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY,
@@ -333,7 +333,7 @@ module l_module_OC_EchoIndicationInput (input CLK, input nRST,
     assign pipe$enq__RDY = method$heard2__RDY  & method$heard__RDY ;
 endmodule 
 
-module l_module_OC_EchoRequestInput (input CLK, input nRST,
+module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY,
