@@ -1,8 +1,6 @@
 `define BSV_RESET_VALUE 1'b0
 `define BSV_RESET_EDGE negedge
 module mkXsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys_clk, input CLK, input RST_N);
-  reg dumpstarted;
-  wire dumpstarted_D_IN, dumpstarted_EN;
   wire sink_0_RDY_beat;
   wire top_RDY_indications_0_message_deq, top_RDY_indications_0_message_first, top_RDY_requests_0_message_enq;
   wire [31 : 0] top_indications_0_id, top_indications_0_message_first, top_requests_0_id, top_requests_0_message_enq_v;
@@ -14,29 +12,13 @@ module mkXsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
     .en_beat(top_RDY_indications_0_message_first && top_RDY_indications_0_message_deq));
 
   mkCnocTop top(.CLK(CLK), .RST_N(RST_N),
-    .requests_0_message_enq_v(top_requests_0_message_enq_v),
-    .EN_requests_0_message_enq(sink_0_RDY_beat && top_RDY_requests_0_message_enq),
+    .requests_0_message_enq_v(top_requests_0_message_enq_v), .EN_requests_0_message_enq(sink_0_RDY_beat && top_RDY_requests_0_message_enq),
     .EN_indications_0_message_deq(top_RDY_indications_0_message_first && top_RDY_indications_0_message_deq),
     .requests_0_id(top_requests_0_id), .RDY_requests_0_id(),
     .RDY_requests_0_message_enq(top_RDY_requests_0_message_enq),
     .requests_0_message_notFull(), .RDY_requests_0_message_notFull(),
     .indications_0_id(top_indications_0_id), .RDY_indications_0_id(),
-    .indications_0_message_first(top_indications_0_message_first),
-    .RDY_indications_0_message_first(top_RDY_indications_0_message_first),
+    .indications_0_message_first(top_indications_0_message_first), .RDY_indications_0_message_first(top_RDY_indications_0_message_first),
     .RDY_indications_0_message_deq(top_RDY_indications_0_message_deq),
     .indications_0_message_notEmpty(), .RDY_indications_0_message_notEmpty());
-
-  assign dumpstarted_D_IN = 1'd1 ;
-  assign dumpstarted_EN = !dumpstarted ;
-  always@(posedge CLK)
-  begin
-    if (RST_N == `BSV_RESET_VALUE)
-        dumpstarted <= 1'd0;
-    else
-        if (dumpstarted_EN) dumpstarted <= dumpstarted_D_IN;
-  end
-  initial
-  begin
-    dumpstarted = 1'h0;
-  end
 endmodule  // mkXsimTop
