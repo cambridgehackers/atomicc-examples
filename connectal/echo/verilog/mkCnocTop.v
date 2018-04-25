@@ -15,7 +15,6 @@ module mkCnocTop( input  CLK, input  RST_N,
        lEIO_RDY_portalIfc_indications_0_deq, lEIO_RDY_portalIfc_indications_0_first,
        lEIO_RDY_portalIfc_indications_1_deq, lEIO_RDY_portalIfc_indications_1_first,
        lEIO_portalIfc_indications_0_notEmpty, lEIO_portalIfc_indications_1_notEmpty;
-  wire lEIONoc_fifoMsgSource_EMPTY_N, lEIONoc_fifoMsgSource_FULL_N;
   wire [31 : 0] lERI_pipes_say2_PipeOut_first, lERI_pipes_say_PipeOut_first;
   wire lERI_RDY_pipes_say2_PipeOut_deq, lERI_RDY_pipes_say2_PipeOut_first,
        lERI_RDY_pipes_say_PipeOut_deq, lERI_RDY_pipes_say_PipeOut_first,
@@ -28,6 +27,8 @@ module mkCnocTop( input  CLK, input  RST_N,
        RULElERINoc_receiveMessage, RULElERINoc_receiveMessageHeader;
   wire [15 : 0] methodNumber__h1378, numWords__h1336;
   wire [7 : 0] _theResult____h1942, readyChannel__h1054;
+  wire lERINoc_fifoMsgSink_FULL_N, lERINoc_fifoMsgSink_EMPTY_N;
+  wire lEIONoc_fifoMsgSource_EMPTY_N, lEIONoc_fifoMsgSource_FULL_N;
 
   reg lEIONoc_bpState;
   reg [15 : 0] lEIONoc_messageWordsReg;
@@ -46,34 +47,47 @@ module mkCnocTop( input  CLK, input  RST_N,
   assign indications_0_id = 32'd5;
   assign RDY_indications_0_id = 1'd1;
   assign RDY_indications_0_message_notEmpty = 1'd1;
-  assign RDY_indications_0_message_first = lEIONoc_fifoMsgSource_EMPTY_N;
-  assign RDY_indications_0_message_deq = lEIONoc_fifoMsgSource_EMPTY_N;
-  assign indications_0_message_notEmpty = lEIONoc_fifoMsgSource_EMPTY_N;
-  wire lERINoc_fifoMsgSink_FULL_N, lERINoc_fifoMsgSink_EMPTY_N;
   assign RDY_requests_0_message_enq = lERINoc_fifoMsgSink_FULL_N;
   assign requests_0_message_notFull = lERINoc_fifoMsgSink_FULL_N;
   assign RULElERINoc_receiveMessageHeader = lERINoc_fifoMsgSink_EMPTY_N && !lERINoc_bpState;
   assign RULElERINoc_receiveMessage = lERINoc_fifoMsgSink_EMPTY_N && CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3 && lERINoc_bpState;
-/* *
+/* old *
   FIFO2 #(.width(32'd32), .guarded(32'd1)) lERINoc_fifoMsgSink(.RST(RST_N), .CLK(CLK),
     .D_IN(requests_0_message_enq_v), .ENQ(EN_requests_0_message_enq),
     .DEQ(lERINoc_fifoMsgSink_EMPTY_N && (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3)),
     .CLR(0), .D_OUT(lERINoc_fifoMsgSink_D_OUT),
     .FULL_N(lERINoc_fifoMsgSink_FULL_N), .EMPTY_N(lERINoc_fifoMsgSink_EMPTY_N));
 /* */
-/* */
+/* new */
 assign lERINoc_fifoMsgSink_D_OUT = requests_0_message_enq_v;
 assign lERINoc_fifoMsgSink_FULL_N = (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3);
 assign lERINoc_fifoMsgSink_EMPTY_N = EN_requests_0_message_enq;
 /* */
 
+  assign RDY_indications_0_message_first = lEIONoc_fifoMsgSource_EMPTY_N;
+  assign RDY_indications_0_message_deq = lEIONoc_fifoMsgSource_EMPTY_N;
+  assign indications_0_message_notEmpty = lEIONoc_fifoMsgSource_EMPTY_N;
+  assign RULElEIONoc_sendHeader = lEIONoc_fifoMsgSource_FULL_N && !lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
+  assign RULElEIONoc_sendMessage = lEIONoc_fifoMsgSource_FULL_N && CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2 && lEIONoc_bpState;
+/* old *
   FIFO2 #(.width(32'd32), .guarded(32'd1)) lEIONoc_fifoMsgSource(.RST(RST_N), .CLK(CLK),
     .D_IN(RULElEIONoc_sendHeader ?
         { methodNumber__h1378, numWords__h1336 + 16'd1 } : MUX_lEIONoc_fifoMsgSource_enq_1__VAL_2),
-    .ENQ(RULElEIONoc_sendHeader || RULElEIONoc_sendMessage),
+    .ENQ( lEIONoc_fifoMsgSource_FULL_N && 
+         (lEIONoc_bpState ?  (CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2) :
+                             (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty))),
     .DEQ(EN_indications_0_message_deq), .CLR(0), .D_OUT(indications_0_message_first),
-    .FULL_N(lEIONoc_fifoMsgSource_FULL_N),
-    .EMPTY_N(lEIONoc_fifoMsgSource_EMPTY_N));
+    .FULL_N(lEIONoc_fifoMsgSource_FULL_N), .EMPTY_N(lEIONoc_fifoMsgSource_EMPTY_N));
+/* */
+/* new */
+assign indications_0_message_first =
+    (!lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty))
+        ? { methodNumber__h1378, numWords__h1336 + 16'd1 } : MUX_lEIONoc_fifoMsgSource_enq_1__VAL_2;
+assign lEIONoc_fifoMsgSource_FULL_N = EN_indications_0_message_deq;
+assign lEIONoc_fifoMsgSource_EMPTY_N =
+    lEIONoc_bpState ?  (CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2) :
+                       (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
+/* */
 
   mkEchoRequestInput lERI(.CLK(CLK), .RST_N(RST_N),
       .portalIfc_messageSize_size_methodNumber(0),
@@ -141,9 +155,6 @@ assign lERINoc_fifoMsgSink_EMPTY_N = EN_requests_0_message_enq;
       .DEQ(lEIO_RDY_ifc_heard2 && lEcho_delay2_EMPTY_N), .CLR(0), .D_OUT(lEcho_delay2_D_OUT),
       .FULL_N(lEcho_delay2_FULL_N), .EMPTY_N(lEcho_delay2_EMPTY_N));
 
-  assign RULElEIONoc_sendHeader = lEIONoc_fifoMsgSource_FULL_N && !lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
-  assign RULElEIONoc_sendMessage = lEIONoc_fifoMsgSource_FULL_N &&
-         CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2 && lEIONoc_bpState;
   assign _theResult____h1942 = (lERINoc_fifoMsgSink_D_OUT[7:0] == 8'd1) ?
            lERINoc_fifoMsgSink_D_OUT[7:0] : (lERINoc_fifoMsgSink_D_OUT[7:0] - 8'd1);
   assign numWords__h1336 = { 5'd0, lEIO_portalIfc_messageSize_size[15:5] } + ((lEIO_portalIfc_messageSize_size[4:0] == 5'd0) ?  16'd0 : 16'd1);
