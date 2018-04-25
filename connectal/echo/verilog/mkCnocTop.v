@@ -51,77 +51,55 @@ module mkCnocTop( input  CLK, input  RST_N,
   assign requests_0_message_notFull = lERINoc_fifoMsgSink_FULL_N;
   assign RULElERINoc_receiveMessageHeader = lERINoc_fifoMsgSink_EMPTY_N && !lERINoc_bpState;
   assign RULElERINoc_receiveMessage = lERINoc_fifoMsgSink_EMPTY_N && CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3 && lERINoc_bpState;
-/* old *
-  FIFO2 #(.width(32'd32), .guarded(32'd1)) lERINoc_fifoMsgSink(.RST(RST_N), .CLK(CLK),
-    .D_IN(requests_0_message_enq_v), .ENQ(EN_requests_0_message_enq),
-    .DEQ(lERINoc_fifoMsgSink_EMPTY_N && (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3)),
-    .CLR(0), .D_OUT(lERINoc_fifoMsgSink_D_OUT),
-    .FULL_N(lERINoc_fifoMsgSink_FULL_N), .EMPTY_N(lERINoc_fifoMsgSink_EMPTY_N));
-/* */
-/* new */
-assign lERINoc_fifoMsgSink_D_OUT = requests_0_message_enq_v;
-assign lERINoc_fifoMsgSink_FULL_N = (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3);
-assign lERINoc_fifoMsgSink_EMPTY_N = EN_requests_0_message_enq;
-/* */
-
   assign RDY_indications_0_message_first = lEIONoc_fifoMsgSource_EMPTY_N;
   assign RDY_indications_0_message_deq = lEIONoc_fifoMsgSource_EMPTY_N;
   assign indications_0_message_notEmpty = lEIONoc_fifoMsgSource_EMPTY_N;
   assign RULElEIONoc_sendHeader = lEIONoc_fifoMsgSource_FULL_N && !lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
   assign RULElEIONoc_sendMessage = lEIONoc_fifoMsgSource_FULL_N && CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2 && lEIONoc_bpState;
-/* old *
-  FIFO2 #(.width(32'd32), .guarded(32'd1)) lEIONoc_fifoMsgSource(.RST(RST_N), .CLK(CLK),
-    .D_IN(RULElEIONoc_sendHeader ?
-        { methodNumber__h1378, numWords__h1336 + 16'd1 } : MUX_lEIONoc_fifoMsgSource_enq_1__VAL_2),
-    .ENQ( lEIONoc_fifoMsgSource_FULL_N && 
-         (lEIONoc_bpState ?  (CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2) :
-                             (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty))),
-    .DEQ(EN_indications_0_message_deq), .CLR(0), .D_OUT(indications_0_message_first),
-    .FULL_N(lEIONoc_fifoMsgSource_FULL_N), .EMPTY_N(lEIONoc_fifoMsgSource_EMPTY_N));
-/* */
-/* new */
-assign indications_0_message_first =
+
+  assign lERINoc_fifoMsgSink_D_OUT = requests_0_message_enq_v;
+  assign lERINoc_fifoMsgSink_FULL_N = (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3);
+  assign lERINoc_fifoMsgSink_EMPTY_N = EN_requests_0_message_enq;
+
+  assign indications_0_message_first =
     (!lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty))
         ? { methodNumber__h1378, numWords__h1336 + 16'd1 } : MUX_lEIONoc_fifoMsgSource_enq_1__VAL_2;
-assign lEIONoc_fifoMsgSource_FULL_N = EN_indications_0_message_deq;
-assign lEIONoc_fifoMsgSource_EMPTY_N =
+  assign lEIONoc_fifoMsgSource_FULL_N = EN_indications_0_message_deq;
+  assign lEIONoc_fifoMsgSource_EMPTY_N =
     lEIONoc_bpState ?  (CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2) :
                        (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
-/* */
 
   mkEchoRequestInput lERI(.CLK(CLK), .RST_N(RST_N),
-      .portalIfc_messageSize_size_methodNumber(0),
-      .portalIfc_requests_0_enq_v(lERINoc_fifoMsgSink_D_OUT),
-      .portalIfc_requests_1_enq_v(lERINoc_fifoMsgSink_D_OUT),
-      .portalIfc_requests_2_enq_v(lERINoc_fifoMsgSink_D_OUT),
-      .EN_portalIfc_requests_0_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd0),
-      .EN_portalIfc_requests_1_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd1),
-      .EN_portalIfc_requests_2_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd2),
-      .EN_pipes_say_PipeOut_deq(lERI_RDY_pipes_say_PipeOut_first &&
-         lERI_RDY_pipes_say_PipeOut_deq && lEcho_delay_FULL_N),
-      .EN_pipes_say2_PipeOut_deq(lERI_RDY_pipes_say2_PipeOut_first &&
-         lERI_RDY_pipes_say2_PipeOut_deq && lEcho_delay2_FULL_N),
-      .EN_pipes_setLeds_PipeOut_deq(lERI_RDY_pipes_setLeds_PipeOut_deq),
-      .portalIfc_messageSize_size(), .RDY_portalIfc_messageSize_size(),
-      .RDY_portalIfc_requests_0_enq(lERI_RDY_portalIfc_requests_0_enq),
-      .portalIfc_requests_0_notFull(), .RDY_portalIfc_requests_0_notFull(),
-      .RDY_portalIfc_requests_1_enq(lERI_RDY_portalIfc_requests_1_enq),
-      .portalIfc_requests_1_notFull(), .RDY_portalIfc_requests_1_notFull(),
-      .RDY_portalIfc_requests_2_enq(lERI_RDY_portalIfc_requests_2_enq),
-      .portalIfc_requests_2_notFull(), .RDY_portalIfc_requests_2_notFull(),
-      .portalIfc_intr_status(), .RDY_portalIfc_intr_status(),
-      .portalIfc_intr_channel(), .RDY_portalIfc_intr_channel(),
-      .pipes_say_PipeOut_first(lERI_pipes_say_PipeOut_first),
-      .RDY_pipes_say_PipeOut_first(lERI_RDY_pipes_say_PipeOut_first),
-      .RDY_pipes_say_PipeOut_deq(lERI_RDY_pipes_say_PipeOut_deq),
-      .pipes_say_PipeOut_notEmpty(), .RDY_pipes_say_PipeOut_notEmpty(),
-      .pipes_say2_PipeOut_first(lERI_pipes_say2_PipeOut_first),
-      .RDY_pipes_say2_PipeOut_first(lERI_RDY_pipes_say2_PipeOut_first),
-      .RDY_pipes_say2_PipeOut_deq(lERI_RDY_pipes_say2_PipeOut_deq),
-      .pipes_say2_PipeOut_notEmpty(), .RDY_pipes_say2_PipeOut_notEmpty(),
-      .pipes_setLeds_PipeOut_first(), .RDY_pipes_setLeds_PipeOut_first(),
-      .RDY_pipes_setLeds_PipeOut_deq(lERI_RDY_pipes_setLeds_PipeOut_deq),
-      .pipes_setLeds_PipeOut_notEmpty(), .RDY_pipes_setLeds_PipeOut_notEmpty());
+    .portalIfc_messageSize_size_methodNumber(0),
+    .portalIfc_requests_0_enq_v(lERINoc_fifoMsgSink_D_OUT),
+    .portalIfc_requests_1_enq_v(lERINoc_fifoMsgSink_D_OUT),
+    .portalIfc_requests_2_enq_v(lERINoc_fifoMsgSink_D_OUT),
+    .EN_portalIfc_requests_0_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd0),
+    .EN_portalIfc_requests_1_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd1),
+    .EN_portalIfc_requests_2_enq(RULElERINoc_receiveMessage && lERINoc_methodIdReg == 8'd2),
+    .EN_pipes_say_PipeOut_deq(lERI_RDY_pipes_say_PipeOut_first && lERI_RDY_pipes_say_PipeOut_deq && lEcho_delay_FULL_N),
+    .EN_pipes_say2_PipeOut_deq(lERI_RDY_pipes_say2_PipeOut_first && lERI_RDY_pipes_say2_PipeOut_deq && lEcho_delay2_FULL_N),
+    .EN_pipes_setLeds_PipeOut_deq(lERI_RDY_pipes_setLeds_PipeOut_deq),
+    .portalIfc_messageSize_size(), .RDY_portalIfc_messageSize_size(),
+    .RDY_portalIfc_requests_0_enq(lERI_RDY_portalIfc_requests_0_enq),
+    .portalIfc_requests_0_notFull(), .RDY_portalIfc_requests_0_notFull(),
+    .RDY_portalIfc_requests_1_enq(lERI_RDY_portalIfc_requests_1_enq),
+    .portalIfc_requests_1_notFull(), .RDY_portalIfc_requests_1_notFull(),
+    .RDY_portalIfc_requests_2_enq(lERI_RDY_portalIfc_requests_2_enq),
+    .portalIfc_requests_2_notFull(), .RDY_portalIfc_requests_2_notFull(),
+    .portalIfc_intr_status(), .RDY_portalIfc_intr_status(),
+    .portalIfc_intr_channel(), .RDY_portalIfc_intr_channel(),
+    .pipes_say_PipeOut_first(lERI_pipes_say_PipeOut_first),
+    .RDY_pipes_say_PipeOut_first(lERI_RDY_pipes_say_PipeOut_first),
+    .RDY_pipes_say_PipeOut_deq(lERI_RDY_pipes_say_PipeOut_deq),
+    .pipes_say_PipeOut_notEmpty(), .RDY_pipes_say_PipeOut_notEmpty(),
+    .pipes_say2_PipeOut_first(lERI_pipes_say2_PipeOut_first),
+    .RDY_pipes_say2_PipeOut_first(lERI_RDY_pipes_say2_PipeOut_first),
+    .RDY_pipes_say2_PipeOut_deq(lERI_RDY_pipes_say2_PipeOut_deq),
+    .pipes_say2_PipeOut_notEmpty(), .RDY_pipes_say2_PipeOut_notEmpty(),
+    .pipes_setLeds_PipeOut_first(), .RDY_pipes_setLeds_PipeOut_first(),
+    .RDY_pipes_setLeds_PipeOut_deq(lERI_RDY_pipes_setLeds_PipeOut_deq),
+    .pipes_setLeds_PipeOut_notEmpty(), .RDY_pipes_setLeds_PipeOut_notEmpty());
 
   mkEchoIndicationOutput lEIO(.CLK(CLK), .RST_N(RST_N),
     .ifc_heard2_a(lEcho_delay2_D_OUT[15:0]), .ifc_heard2_b(lEcho_delay2_D_OUT[31:16]), .ifc_heard_v(lEcho_delay_D_OUT),
