@@ -1,5 +1,4 @@
-`define BSV_RESET_VALUE 1'b0
-`define BSV_RESET_EDGE negedge
+
 module mkXsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys_clk, input CLK, input RST_N);
   wire sink_0_RDY_beat;
   wire top_RDY_indications_0_message_deq, top_RDY_indications_0_message_first, top_RDY_requests_0_message_enq;
