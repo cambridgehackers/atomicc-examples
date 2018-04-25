@@ -22,7 +22,6 @@ module mkCnocTop( input  CLK, input  RST_N,
        lERI_RDY_pipes_setLeds_PipeOut_deq, lERI_RDY_portalIfc_requests_0_enq,
        lERI_RDY_portalIfc_requests_1_enq, lERI_RDY_portalIfc_requests_2_enq;
   wire [31 : 0] lERINoc_fifoMsgSink_D_OUT;
-  wire lERINoc_fifoMsgSink_EMPTY_N, lERINoc_fifoMsgSink_FULL_N;
   wire [31 : 0] lEcho_delay_D_OUT; wire lEcho_delay_EMPTY_N, lEcho_delay_FULL_N;
   wire [31 : 0] lEcho_delay2_D_OUT; wire lEcho_delay2_EMPTY_N, lEcho_delay2_FULL_N;
   wire RULElEIONoc_sendHeader, RULElEIONoc_sendMessage,
@@ -41,11 +40,32 @@ module mkCnocTop( input  CLK, input  RST_N,
       CASE_lEIONoc_methodIdReg_0_lE_ETC__q2,
       CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3;
 
+  assign requests_0_id = 32'd6;
+  assign RDY_requests_0_id = 1'd1;
+  assign RDY_requests_0_message_notFull = 1'd1;
+  assign indications_0_id = 32'd5;
+  assign RDY_indications_0_id = 1'd1;
+  assign RDY_indications_0_message_notEmpty = 1'd1;
+  assign RDY_indications_0_message_first = lEIONoc_fifoMsgSource_EMPTY_N;
+  assign RDY_indications_0_message_deq = lEIONoc_fifoMsgSource_EMPTY_N;
+  assign indications_0_message_notEmpty = lEIONoc_fifoMsgSource_EMPTY_N;
+  wire lERINoc_fifoMsgSink_FULL_N, lERINoc_fifoMsgSink_EMPTY_N;
+  assign RDY_requests_0_message_enq = lERINoc_fifoMsgSink_FULL_N;
+  assign requests_0_message_notFull = lERINoc_fifoMsgSink_FULL_N;
+  assign RULElERINoc_receiveMessageHeader = lERINoc_fifoMsgSink_EMPTY_N && !lERINoc_bpState;
+  assign RULElERINoc_receiveMessage = lERINoc_fifoMsgSink_EMPTY_N && CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3 && lERINoc_bpState;
+/* *
   FIFO2 #(.width(32'd32), .guarded(32'd1)) lERINoc_fifoMsgSink(.RST(RST_N), .CLK(CLK),
     .D_IN(requests_0_message_enq_v), .ENQ(EN_requests_0_message_enq),
-    .DEQ(RULElERINoc_receiveMessage || RULElERINoc_receiveMessageHeader),
+    .DEQ(lERINoc_fifoMsgSink_EMPTY_N && (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3)),
     .CLR(0), .D_OUT(lERINoc_fifoMsgSink_D_OUT),
     .FULL_N(lERINoc_fifoMsgSink_FULL_N), .EMPTY_N(lERINoc_fifoMsgSink_EMPTY_N));
+/* */
+/* */
+assign lERINoc_fifoMsgSink_D_OUT = requests_0_message_enq_v;
+assign lERINoc_fifoMsgSink_FULL_N = (!lERINoc_bpState || CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3);
+assign lERINoc_fifoMsgSink_EMPTY_N = EN_requests_0_message_enq;
+/* */
 
   FIFO2 #(.width(32'd32), .guarded(32'd1)) lEIONoc_fifoMsgSource(.RST(RST_N), .CLK(CLK),
     .D_IN(RULElEIONoc_sendHeader ?
@@ -121,22 +141,9 @@ module mkCnocTop( input  CLK, input  RST_N,
       .DEQ(lEIO_RDY_ifc_heard2 && lEcho_delay2_EMPTY_N), .CLR(0), .D_OUT(lEcho_delay2_D_OUT),
       .FULL_N(lEcho_delay2_FULL_N), .EMPTY_N(lEcho_delay2_EMPTY_N));
 
-  assign requests_0_id = 32'd6;
-  assign RDY_requests_0_id = 1'd1;
-  assign RDY_requests_0_message_enq = lERINoc_fifoMsgSink_FULL_N;
-  assign requests_0_message_notFull = lERINoc_fifoMsgSink_FULL_N;
-  assign RDY_requests_0_message_notFull = 1'd1;
-  assign indications_0_id = 32'd5;
-  assign RDY_indications_0_id = 1'd1;
-  assign RDY_indications_0_message_first = lEIONoc_fifoMsgSource_EMPTY_N;
-  assign RDY_indications_0_message_deq = lEIONoc_fifoMsgSource_EMPTY_N;
-  assign indications_0_message_notEmpty = lEIONoc_fifoMsgSource_EMPTY_N;
-  assign RDY_indications_0_message_notEmpty = 1'd1;
   assign RULElEIONoc_sendHeader = lEIONoc_fifoMsgSource_FULL_N && !lEIONoc_bpState && (lEIO_portalIfc_indications_0_notEmpty || lEIO_portalIfc_indications_1_notEmpty);
   assign RULElEIONoc_sendMessage = lEIONoc_fifoMsgSource_FULL_N &&
          CASE_lEIONoc_methodIdReg_0_lE_ETC__q1 && CASE_lEIONoc_methodIdReg_0_lE_ETC__q2 && lEIONoc_bpState;
-  assign RULElERINoc_receiveMessageHeader = lERINoc_fifoMsgSink_EMPTY_N && !lERINoc_bpState;
-  assign RULElERINoc_receiveMessage = (lERINoc_fifoMsgSink_EMPTY_N && CASE_lERINoc_methodIdReg_0_lEchoR_ETC__q3) && lERINoc_bpState;
   assign _theResult____h1942 = (lERINoc_fifoMsgSink_D_OUT[7:0] == 8'd1) ?
            lERINoc_fifoMsgSink_D_OUT[7:0] : (lERINoc_fifoMsgSink_D_OUT[7:0] - 8'd1);
   assign numWords__h1336 = { 5'd0, lEIO_portalIfc_messageSize_size[15:5] } + ((lEIO_portalIfc_messageSize_size[4:0] == 5'd0) ?  16'd0 : 16'd1);
