@@ -19,7 +19,7 @@ define SIM_CXX_RULE
 $1/$(notdir $(basename $3)).o: $3
 	$(CXX) -c $2 -o $1/$(notdir $(basename $3)).o $3
 endef
-SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O
+SIM_CXXFLAGS= -g -fPIC -Ijni -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O
 $(foreach src, $(SIM_CXX_LOCAL), $(eval $(call SIM_CXX_RULE, $(DTOP)/lib, $(SIM_CXXFLAGS), $(src))))
 
 run:
