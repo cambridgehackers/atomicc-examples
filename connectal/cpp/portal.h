@@ -331,7 +331,8 @@ extern PortalTransportFunctions transportBsim, // Transport for bsim
   transportTrace,       // Trace transport tee
   transportXsim,        // Xilinx xsim transport
   transportWebSocketInit, // Websocket transport; Initiator side
-  transportWebSocketResp; // Websocket transport; Responder side
+  transportWebSocketResp, // Websocket transport; Responder side
+  transportReuse;        // reuse tcpip connection from another portal instance
 #ifdef __cplusplus
 }
 #endif

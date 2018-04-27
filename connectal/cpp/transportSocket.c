@@ -144,6 +144,14 @@ static int event_socket(struct PortalInternal *pint)
                 fprintf(stderr, "[%s:%d]afteracc %p accfd %d fd %d\n", __FUNCTION__, __LINE__, pint, pint->fpga_fd, sockfd);
             pint->client_fd[pint->client_fd_number++] = sockfd;
             pint->accept_finished = 1;
+            if (pint->mux) { // added for transportReuse, to copy fds 
+                pint->mux->client_fd_number = pint->client_fd_number;
+printf("[%s:%d] copy client_fd_number %d\n", __FUNCTION__, __LINE__, pint->client_fd_number);
+                for (int i = 0; i < pint->client_fd_number; i++) {
+printf("[%s:%d] %d/%d = %d\n", __FUNCTION__, __LINE__, i, pint->client_fd_number, pint->client_fd[i]);
+                    pint->mux->client_fd[i] = pint->client_fd[i];
+                }
+            }
 #ifndef NO_CPP_PORTAL_CODE
 #ifndef NO_POLLER_SUPPORT
             if (pint->poller)
@@ -334,3 +342,22 @@ static int poll_response(int id)
 }
 #endif
 
+static int init_reuse(struct PortalInternal *pint, void *aparam)
+{
+struct PortalInternal *param = (struct PortalInternal *)aparam;
+printf("[%s:%d]\n", __FUNCTION__, __LINE__);
+    param->mux = pint;   // so that client_fd can be updated
+    pint->transport = param->transport;
+    pint->fpga_fd = param->fpga_fd;
+    pint->indication_index = param->indication_index;
+    pint->request_index = param->request_index;
+    pint->accept_finished = param->accept_finished;
+    pint->fpga_fd = param->fpga_fd;
+    pint->map_base = (volatile unsigned int*)malloc(REQINFO_SIZE(pint->reqinfo));
+    pint->client_fd_number = param->client_fd_number;
+    for (int i = 0; i < param->client_fd_number; i++)
+        pint->client_fd[i] = param->client_fd[i];
+    return 0;
+}
+PortalTransportFunctions transportReuse = {
+    init_reuse, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL};

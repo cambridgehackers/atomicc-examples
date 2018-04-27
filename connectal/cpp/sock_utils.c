@@ -56,7 +56,7 @@ int init_listening(const char *arg_name, PortalSocketParam *param)
     struct addrinfo *addr = &addrinfo;
 
     if (trace_socket)
-        fprintf(stderr, "[%s:%d]\n", __FUNCTION__, __LINE__);
+        fprintf(stderr, "[%s:%d] listenName %s\n", __FUNCTION__, __LINE__, arg_name);
     if (param && param->addr) {
         fprintf(stderr, "[%s:%d] TCP\n", __FUNCTION__, __LINE__);
         addr = param->addr;

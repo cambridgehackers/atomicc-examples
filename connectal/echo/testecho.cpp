@@ -21,6 +21,7 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include "sock_utils.h"
 #include "EchoIndication.h"
 #include "EchoRequest.h"
 #include "GeneratedTypes.h"
@@ -39,7 +40,7 @@ public:
         sem_post(&sem_heard2);
         printf("heard an echo2: %ld %ld\n", a, b);
     }
-    EchoIndication(unsigned int id) : EchoIndicationWrapper(id) {}
+    EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
 };
 
 static void call_say(int v)
@@ -60,8 +61,14 @@ int main(int argc, const char **argv)
     long actualFrequency = 0;
     long requestedFrequency = 1e9 / MainClockPeriod;
 
-    EchoIndication echoIndication(IfcNames_EchoIndicationH2S);
+#if 1
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);
+#else
+    PortalSocketParam paramSocket = {};
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S, &transportSocketInit, &paramSocket);
+    echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H, &transportReuse, &echoIndication.pint);
+#endif
 
     int status = setClockFrequency(0, requestedFrequency, &actualFrequency);
     fprintf(stderr, "Requested main clock frequency %5.2f, actual clock frequency %5.2f MHz status=%d errno=%d\n",
