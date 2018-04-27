@@ -9,7 +9,6 @@ CFLAGS = $(CFLAGS_COMMON)
 
 include $(CONNECTALDIR)/scripts/Makefile.connectal.application
 SOURCES = ../testecho.cpp ../../cpp/transportXsim.c $(PORTAL_SRC_FILES)
-XSOURCES = $(CONNECTALDIR)/cpp/XsimTop.cpp $(PORTAL_SRC_FILES)
 LDLIBS :=    -lpthread
 
 ubuntu.exe: $(SOURCES)

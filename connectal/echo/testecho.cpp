@@ -28,12 +28,14 @@
 
 static EchoRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
+static int limitSay2 = 5;
 
 class EchoIndication : public EchoIndicationWrapper
 {
 public:
     virtual void heard(uint32_t v) {
         printf("heard an echo: %d\n", v);
+        if (limitSay2-- > 0)
 	echoRequestProxy->say2(v, 2*v);
     }
     virtual void heard2(uint16_t a, uint16_t b) {
@@ -61,7 +63,7 @@ int main(int argc, const char **argv)
     long actualFrequency = 0;
     long requestedFrequency = 1e9 / MainClockPeriod;
 
-#if 1
+#if 0
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);
 #else
