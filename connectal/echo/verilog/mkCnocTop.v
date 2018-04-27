@@ -1,10 +1,8 @@
 `define BSV_RESET_VALUE 1'b0
 `define BSV_RESET_EDGE negedge
 module mkCnocTop( input  CLK, input  RST_N,
-  output [31 : 0] requests_0_id, output RDY_requests_0_id,
   input  [31 : 0] requests_0_message_enq_v, input  EN_requests_0_message_enq, output RDY_requests_0_message_enq,
   output requests_0_message_notFull, output RDY_requests_0_message_notFull,
-  output [31 : 0] indications_0_id, output RDY_indications_0_id,
   output [31 : 0] indications_0_message_first, output RDY_indications_0_message_first,
   input  EN_indications_0_message_deq, output RDY_indications_0_message_deq,
   output indications_0_message_notEmpty, output RDY_indications_0_message_notEmpty);
@@ -38,11 +36,7 @@ module mkCnocTop( input  CLK, input  RST_N,
   reg [31 : 0] indicationData;
   reg CCI_methodIdReg_indDeq, CCR_methodIdReg_reqEnq;
 
-  assign requests_0_id = 32'd6;
-  assign RDY_requests_0_id = 1'd1;
   assign RDY_requests_0_message_notFull = 1'd1;
-  assign indications_0_id = 32'd5;
-  assign RDY_indications_0_id = 1'd1;
   assign RDY_indications_0_message_notEmpty = 1'd1;
   assign RDY_requests_0_message_enq = lERI_fifoMsgSink_FULL_N;
   assign requests_0_message_notFull = lERI_fifoMsgSink_FULL_N;

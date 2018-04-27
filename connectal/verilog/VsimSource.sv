@@ -1,4 +1,4 @@
-// Copyright (c) 2015 The Connectal Project
+// Copyright (c) 2015,2018 The Connectal Project
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,12 +29,12 @@
   `define BSV_RESET_EDGE negedge
 `endif
 
-module XsimSource( input CLK, input CLK_GATE, input RST, input [31:0] portal, input en_beat, input [31:0] beat);
+module VsimSource( input CLK, input CLK_GATE, input RST, input en_beat, input [31:0] beat);
 
-   import "DPI-C" function void dpi_msgSource_beat(input int portal, input int beat);
+   import "DPI-C" function void dpi_msgSource_beat(input int beat);
 
    always @(posedge CLK) begin
       if (en_beat)
-          dpi_msgSource_beat(portal, beat);
+          dpi_msgSource_beat(beat);
    end
 endmodule

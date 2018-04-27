@@ -76,7 +76,7 @@ extern "C" void dpi_init()
     if (trace_xsimtop) fprintf(stdout, "%s: end\n", __FUNCTION__);
 }
 
-extern "C" long long dpi_msgSink_beat(int portal)
+extern "C" long long dpi_msgSink_beat(void)
 {
   {
       if (clientfd != -1) {
@@ -103,7 +103,7 @@ extern "C" long long dpi_msgSink_beat(int portal)
                  memdump((uint8_t*)mastermap_base, len * sizeof(uint32_t), bname);
                  const uint32_t *pdata = (uint32_t *)mastermap_base;
                  uint32_t beat = pdata[1];
-                 printf("VerilatorTopRX: portal %d beat=%08x pdata %x\n", portal, beat, pdata[0]);
+                 printf("VerilatorTopRX: beat=%08x pdata %x\n", beat, pdata[0]);
                  return (1ll << 32) | beat;
              }
          }
@@ -119,10 +119,10 @@ extern "C" long long dpi_msgSink_beat(int portal)
   return 0xbadad7a;
 }
 
-extern "C" void dpi_msgSource_beat(int portal, int beat)
+extern "C" void dpi_msgSource_beat(int beat)
 {
     //if (trace_xsimtop)
-        //fprintf(stdout, "dpi_msgSource_beat: portal %d beat=%08x\n", portal, beat);
+        //fprintf(stdout, "dpi_msgSource_beat: beat=%08x\n", beat);
 printf("[%s:%d] index %x txBuffer[0] %x beat %x\n", __FUNCTION__, __LINE__, txBufIndex, txBuffer[0], beat);
     txBuffer[txBufIndex++] = beat;
     if (txBufIndex == (txBuffer[0] & 0xffff)) {

@@ -1,4 +1,4 @@
-// Copyright (c) 2015 The Connectal Project
+// Copyright (c) 2015,2018 The Connectal Project
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -29,11 +29,11 @@
   `define BSV_RESET_EDGE negedge
 `endif
 
-module XsimSink(input CLK, input CLK_GATE, input RST, input [31:0] portal, output RDY_beat, input EN_beat, output [31:0] beat);
+module VsimSink(input CLK, input CLK_GATE, input RST, output RDY_beat, input EN_beat, output [31:0] beat);
    reg     valid_reg;
    reg 	   [31:0] beat_reg;
    
-   import "DPI-C" function longint dpi_msgSink_beat(input int portal);
+   import "DPI-C" function longint dpi_msgSink_beat();
 
    assign RDY_beat = valid_reg;
    assign beat = beat_reg;
@@ -45,11 +45,11 @@ module XsimSink(input CLK, input CLK_GATE, input RST, input [31:0] portal, outpu
       end
       else if (EN_beat == 1 || valid_reg == 0) begin
 `ifndef BOARD_cvc
-	 automatic longint v = dpi_msgSink_beat(portal);
+	 automatic longint v = dpi_msgSink_beat();
 	 valid_reg <= v[32];
 	 beat_reg <= v[31:0];
 `else
-	 { valid_reg, beat_reg } <= dpi_msgSink_beat(portal);
+	 { valid_reg, beat_reg } <= dpi_msgSink_beat();
 `endif
       end
    end
