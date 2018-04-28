@@ -75,10 +75,16 @@ extern "C" void dpi_init()
     if (trace_xsimtop) fprintf(stdout, "%s: end\n", __FUNCTION__);
 }
 
+#define VALID_FLAG (1ll << 32)
+#define END_FLAG   (2ll << 32)
 extern "C" long long dpi_msgSink_beat(void)
 {
-    if (rxIndex < rxLength)
-        return (1ll << 32) | rxBuffer[rxIndex++];
+    if (rxIndex < rxLength) {
+        long long ret = VALID_FLAG | rxBuffer[rxIndex++];
+        if (rxIndex == rxLength)
+            ret |= END_FLAG;
+        return ret;
+    }
     if (clientfd != -1) {
         int sendFd;
         int len = portalRecvFd(clientfd, (void *)rxBuffer, sizeof(uint32_t), &sendFd);
@@ -102,7 +108,7 @@ extern "C" long long dpi_msgSink_beat(void)
                 char bname[100];
                 sprintf(bname,"RECV%d.%d", getpid(), clientfd);
                 memdump((uint8_t*)rxBuffer, rxLength * sizeof(uint32_t), bname);
-                return (1ll << 32) | rxBuffer[rxIndex++];
+                return VALID_FLAG | rxBuffer[rxIndex++];
             }
         }
     }
