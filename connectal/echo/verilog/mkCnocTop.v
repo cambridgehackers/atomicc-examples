@@ -106,6 +106,8 @@ module mkCnocTop( input  CLK, input  RST_N,
           requestId <= requests_0_message_enq_v[23:16];
         if (RULElERI_receivePortal)
           requestPortal <= requests_0_message_enq_v[23:16];
+        if (EN_requests_0_message_enq)
+          $display("CNOCTOP: incoming %x", requests_0_message_enq_v);
       end
   end
   initial

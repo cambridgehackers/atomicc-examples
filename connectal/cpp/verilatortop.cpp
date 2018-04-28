@@ -48,9 +48,8 @@ vluint64_t derived_time = 0;
 
 static int trace_xsimtop = 1;
 static int masterfpga_fd = -1, clientfd = -1, masterfpga_number = 5;
-static unsigned int mastermap_base[MAX_REQUEST_LENGTH];
-static uint32_t txBuffer[1000];
-static int txBufIndex;
+static uint32_t rxBuffer[MAX_REQUEST_LENGTH], txBuffer[MAX_REQUEST_LENGTH];
+static int rxIndex, txIndex, rxLength;
 
 static int finish = 0;
 long cycleCount;
@@ -78,44 +77,42 @@ extern "C" void dpi_init()
 
 extern "C" long long dpi_msgSink_beat(void)
 {
-  {
-      if (clientfd != -1) {
-         int sendFd;
-         int len = portalRecvFd(clientfd, (void *)mastermap_base, sizeof(uint32_t), &sendFd);
-         if (len == 0) { /* EOF */
-             printf("VerilatorTop.disconnect called %d\n", clientfd);
-             close(clientfd);
-             clientfd = -1;
-             exit(-1);
-         }
-         else if (len == -1) {
-             if (errno != EAGAIN) {
-                 printf( "%s[%d]: read error %d\n",__FUNCTION__, clientfd, errno);
-                 exit(1);
-             }
-         }
-         else if (len == sizeof(uint32_t)) {
-             int len = mastermap_base[0] & 0xffff;
-             int rc = portalRecvFd(clientfd, (void *)&mastermap_base[1], (len-1) * sizeof(uint32_t), &sendFd);
-             if (rc > 0) {
-                 char bname[100];
-                 sprintf(bname,"RECV%d.%d", getpid(), clientfd);
-                 memdump((uint8_t*)mastermap_base, len * sizeof(uint32_t), bname);
-                 const uint32_t *pdata = (uint32_t *)mastermap_base;
-                 uint32_t beat = pdata[1];
-                 printf("VerilatorTopRX: beat=%08x pdata %x\n", beat, pdata[0]);
-                 return (1ll << 32) | beat;
-             }
-         }
-      }
-      else if (masterfpga_fd != -1) {
-          int sockfd = accept_socket(masterfpga_fd);
-          if (sockfd != -1) {
-              printf("[%s:%d]afteracc accfd %d fd %d\n", __FUNCTION__, __LINE__, masterfpga_fd, sockfd);
-              clientfd = sockfd;
-          }
-      }
-  }
+    if (rxIndex < rxLength)
+        return (1ll << 32) | rxBuffer[rxIndex++];
+    if (clientfd != -1) {
+        int sendFd;
+        int len = portalRecvFd(clientfd, (void *)rxBuffer, sizeof(uint32_t), &sendFd);
+        if (len == 0) { /* EOF */
+            printf("VerilatorTop.disconnect called %d\n", clientfd);
+            close(clientfd);
+            clientfd = -1;
+            exit(-1);
+        }
+        else if (len == -1) {
+            if (errno != EAGAIN) {
+                printf( "%s[%d]: read error %d\n",__FUNCTION__, clientfd, errno);
+                exit(1);
+            }
+        }
+        else if (len == sizeof(uint32_t)) {
+            rxIndex = 0;
+            rxLength = rxBuffer[rxIndex] & 0xffff;
+            int rc = portalRecvFd(clientfd, (void *)&rxBuffer[1], (rxLength-1) * sizeof(uint32_t), &sendFd);
+            if (rc > 0) {
+                char bname[100];
+                sprintf(bname,"RECV%d.%d", getpid(), clientfd);
+                memdump((uint8_t*)rxBuffer, rxLength * sizeof(uint32_t), bname);
+                return (1ll << 32) | rxBuffer[rxIndex++];
+            }
+        }
+    }
+    else if (masterfpga_fd != -1) {
+        int sockfd = accept_socket(masterfpga_fd);
+        if (sockfd != -1) {
+            printf("[%s:%d]afteracc accfd %d fd %d\n", __FUNCTION__, __LINE__, masterfpga_fd, sockfd);
+            clientfd = sockfd;
+        }
+    }
   return 0xbadad7a;
 }
 
@@ -123,14 +120,14 @@ extern "C" void dpi_msgSource_beat(int beat)
 {
     //if (trace_xsimtop)
         //fprintf(stdout, "dpi_msgSource_beat: beat=%08x\n", beat);
-printf("[%s:%d] index %x txBuffer[0] %x beat %x\n", __FUNCTION__, __LINE__, txBufIndex, txBuffer[0], beat);
-    txBuffer[txBufIndex++] = beat;
-    if (txBufIndex == (txBuffer[0] & 0xffff)) {
+printf("[%s:%d] index %x txBuffer[0] %x beat %x\n", __FUNCTION__, __LINE__, txIndex, txBuffer[0], beat);
+    txBuffer[txIndex++] = beat;
+    if (txIndex == (txBuffer[0] & 0xffff)) {
         char bname[100];
         sprintf(bname,"SEND%d.%d", getpid(), masterfpga_fd);
         memdump((uint8_t*)txBuffer, (txBuffer[0] & 0xffff) * sizeof(uint32_t), bname);
         portalSendFd(clientfd, (void *)txBuffer, (txBuffer[0] & 0xffff) * sizeof(uint32_t), -1);
-        txBufIndex = 0;
+        txIndex = 0;
     }
 }
 
