@@ -67,7 +67,7 @@ int main(int argc, const char **argv)
 #if 0
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);
-#elif 0
+#elif 1
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL, &transportSocketInit, NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
