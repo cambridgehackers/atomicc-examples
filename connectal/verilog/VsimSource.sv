@@ -29,12 +29,12 @@
   `define BSV_RESET_EDGE negedge
 `endif
 
-module VsimSource( input CLK, input CLK_GATE, input RST, input en_beat, input [31:0] beat);
+module VsimSource( input CLK, input CLK_GATE, input RST, input en_beat, input [31:0] beat, input last);
 
-   import "DPI-C" function void dpi_msgSource_beat(input int beat);
+   import "DPI-C" function void dpi_msgSource_beat(input int beat, input int last);
 
    always @(posedge CLK) begin
       if (en_beat)
-          dpi_msgSource_beat(beat);
+          dpi_msgSource_beat(beat, last);
    end
 endmodule

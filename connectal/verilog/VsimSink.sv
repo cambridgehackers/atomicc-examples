@@ -29,27 +29,31 @@
   `define BSV_RESET_EDGE negedge
 `endif
 
-module VsimSink(input CLK, input CLK_GATE, input RST, output RDY_beat, input EN_beat, output [31:0] beat);
+module VsimSink(input CLK, input CLK_GATE, input RST, output RDY_beat, input EN_beat, output [31:0] beat, output last);
+   reg     last_reg;
    reg     valid_reg;
    reg 	   [31:0] beat_reg;
    
    import "DPI-C" function longint dpi_msgSink_beat();
 
+   assign last = last_reg;
    assign RDY_beat = valid_reg;
    assign beat = beat_reg;
    
    always @(posedge CLK) begin
       if (RST == `BSV_RESET_VALUE) begin
+	 last_reg <= 0;
 	 valid_reg <= 0;
 	 beat_reg <= 32'haaaaaaaa;
       end
       else if (EN_beat == 1 || valid_reg == 0) begin
 `ifndef BOARD_cvc
 	 automatic longint v = dpi_msgSink_beat();
+	 last_reg <= v[33];
 	 valid_reg <= v[32];
 	 beat_reg <= v[31:0];
 `else
-	 { valid_reg, beat_reg } <= dpi_msgSink_beat();
+	 { last_reg, valid_reg, beat_reg } <= dpi_msgSink_beat();
 `endif
       end
    end

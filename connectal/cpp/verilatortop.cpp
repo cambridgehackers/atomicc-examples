@@ -49,7 +49,7 @@ vluint64_t derived_time = 0;
 static int trace_xsimtop = 1;
 static int masterfpga_fd = -1, clientfd = -1, masterfpga_number = 5;
 static uint32_t rxBuffer[MAX_REQUEST_LENGTH], txBuffer[MAX_REQUEST_LENGTH];
-static int rxIndex, txIndex, rxLength;
+static int txIndex, rxLength;
 
 static int finish = 0;
 long cycleCount;
@@ -79,9 +79,10 @@ extern "C" void dpi_init()
 #define END_FLAG   (2ll << 32)
 extern "C" long long dpi_msgSink_beat(void)
 {
-    if (rxIndex < rxLength) {
-        long long ret = VALID_FLAG | rxBuffer[rxIndex++];
-        if (rxIndex == rxLength)
+top:
+    if (rxLength > 1) {
+        long long ret = VALID_FLAG | rxBuffer[--rxLength];
+        if (rxLength == 1)
             ret |= END_FLAG;
         return ret;
     }
@@ -101,14 +102,14 @@ extern "C" long long dpi_msgSink_beat(void)
             }
         }
         else if (len == sizeof(uint32_t)) {
-            rxIndex = 0;
-            rxLength = rxBuffer[rxIndex] & 0xffff;
+            rxLength = rxBuffer[0] & 0xffff;
             int rc = portalRecvFd(clientfd, (void *)&rxBuffer[1], (rxLength-1) * sizeof(uint32_t), &sendFd);
             if (rc > 0) {
                 char bname[100];
                 sprintf(bname,"RECV%d.%d", getpid(), clientfd);
                 memdump((uint8_t*)rxBuffer, rxLength * sizeof(uint32_t), bname);
-                return VALID_FLAG | rxBuffer[rxIndex++];
+                rxBuffer[1] = ((rxBuffer[1] & 0xffff0000) | (rxBuffer[0] >> 16)); //combine methodNumber and portalNumber
+                goto top;
             }
         }
     }
@@ -122,13 +123,13 @@ extern "C" long long dpi_msgSink_beat(void)
   return 0xbadad7a;
 }
 
-extern "C" void dpi_msgSource_beat(int beat)
+extern "C" void dpi_msgSource_beat(int beat, int last)
 {
     //if (trace_xsimtop)
         //fprintf(stdout, "dpi_msgSource_beat: beat=%08x\n", beat);
-printf("[%s:%d] index %x txBuffer[0] %x beat %x\n", __FUNCTION__, __LINE__, txIndex, txBuffer[0], beat);
+printf("[%s:%d] index %x txBuffer[0] %x beat %x last %x\n", __FUNCTION__, __LINE__, txIndex, txBuffer[0], beat, last);
     txBuffer[txIndex++] = beat;
-    if (txIndex == (txBuffer[0] & 0xffff)) {
+    if (last) {
         char bname[100];
         sprintf(bname,"SEND%d.%d", getpid(), masterfpga_fd);
         memdump((uint8_t*)txBuffer, (txBuffer[0] & 0xffff) * sizeof(uint32_t), bname);
