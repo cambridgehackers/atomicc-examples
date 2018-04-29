@@ -20,59 +20,59 @@
  */
 #include <atomicc.h>
 
+typedef __int(32) aint32;
+typedef __int(16) aint16;
+typedef __int(8) aint8;
 __interface EchoRequest {
-    void say(int meth, int v);
-    void say2(int meth, int v, int v2);
+    void say(aint32 v);
+    void say2(aint16 a, aint16 b);
+    void setLeds(aint8 v);
 };
 
 __interface EchoIndication {
-    void heard(int meth, int v);
-    void heard2(int meth, int v, int v2);
+    void heard(aint32 v);
+    void heard2(aint16 a, aint16 b);
 };
 
 __module Echo {
     EchoRequest                     request;
     EchoIndication                 *indication;
     int busy;
-    int meth_temp;
-    int v_temp;
-    int v2_temp;
+    aint32 v_temp, v_delay;
+    aint16 a_temp, b_temp, a_delay, b_delay;
     int busy_delay;
-    int meth_delay;
-    int v_delay;
-    int v2_delay;
     int v_type;
-    void request.say(int meth, int v) if(!busy) {
+    void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
-        meth_temp = meth;
         v_temp = v;
         busy = 1;
         v_type = 1;
     }
-    void request.say2(int meth, int v, int v2) if(!busy) {
+    void request.say2(aint16 a, aint16 b) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
-        meth_temp = meth;
-        v_temp = v;
-        v2_temp = v2;
+        a_temp = a;
+        b_temp = b;
         busy = 1;
         v_type = 2;
+    }
+    void request.setLeds(aint8 v) {
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
 printf("[delay_rule:%d]Echo\n", __LINE__);
              busy = 0;
              busy_delay = 1;
-             meth_delay = meth_temp;
              v_delay = v_temp;
-             v2_delay = v2_temp;
+             a_delay = a_temp;
+             b_delay = b_temp;
            };
         __rule respond_rule if(busy_delay != 0) {
 printf("[respond_rule:%d]Echo\n", __LINE__);
              busy_delay = 0;
              if (v_type == 1)
-             indication->heard(meth_delay, v_delay);
+             indication->heard(v_delay);
              else
-             indication->heard2(meth_delay, v_delay, v2_delay);
+             indication->heard2(a_delay, b_delay);
            };
     }
 };

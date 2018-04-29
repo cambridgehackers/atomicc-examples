@@ -1,10 +1,11 @@
 EMODULE l_ainterface_OC_EchoIndication {
-    METHOD heard2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 )
-    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD heard2__ENA ( INTEGER_16 a , INTEGER_16 b )
+    METHOD heard__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_EchoRequest {
-    METHOD say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 )
-    METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD say2__ENA ( INTEGER_16 a , INTEGER_16 b )
+    METHOD say__ENA ( INTEGER_32 v )
+    METHOD setLeds__ENA ( INTEGER_8 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data v )
@@ -68,38 +69,37 @@ MODULE l_module_OC_Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD INTEGER_32 busy
-    FIELD INTEGER_32 meth_temp
     FIELD INTEGER_32 v_temp
-    FIELD INTEGER_32 v2_temp
-    FIELD INTEGER_32 busy_delay
-    FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
-    FIELD INTEGER_32 v2_delay
+    FIELD INTEGER_16 a_temp
+    FIELD INTEGER_16 b_temp
+    FIELD INTEGER_16 a_delay
+    FIELD INTEGER_16 b_delay
+    FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
         STORE :busy_delay = 1
-        STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
-        STORE :v2_delay = v2_temp
+        STORE :a_delay = a_temp
+        STORE :b_delay = b_temp
     }
-    METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v , INTEGER_32 v2 ) if ((((busy) != (0)) ^ (1))) {
-        STORE :meth_temp = request$say2$meth
-        STORE :v_temp = request$say2$v
-        STORE :v2_temp = request$say2$v2
+    METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
+        STORE :a_temp = request$say2$a
+        STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
-    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
-        STORE :meth_temp = request$say$meth
+    METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
+    METHOD request$setLeds__ENA ( INTEGER_8 v )
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
-        CALL/Action ((v_type) == (1)):indication$heard__ENA{meth_delay,v_delay}
-        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{meth_delay,v_delay,v2_delay}
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
+        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
     }
 }
 MODULE l_module_OC_Hardware {
