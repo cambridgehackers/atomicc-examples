@@ -278,7 +278,7 @@ module l_module_OC_EchoRequest___M2P (input CLK, input nRST,
     assign method$say2__RDY = pipe$enq__RDY ;
     assign method$say__RDY = pipe$enq__RDY ;
     assign method$setLeds__RDY = pipe$enq__RDY ;
-    assign pipe$enq$v = method$say2__ENA  ? ( { method$say2$b, method$say2$a, 16'd1, 16'd2}  ) : method$say__ENA  ? ( { method$say$v, 16'd2, 16'd2}  ) : ( { 24'd0, method$setLeds$v, 16'd3, 16'd1}  );
+    assign pipe$enq$v = method$say2__ENA  ? ( { method$say2$b, method$say2$a, 16'd0, 16'd2}  ) : method$say__ENA  ? ( { method$say$v, 16'd1, 16'd2}  ) : ( { 24'd0, method$setLeds$v, 16'd2, 16'd1}  );
     assign pipe$enq__ENA = method$say2__ENA  || method$say__ENA  || method$setLeds__ENA ;
 endmodule 
 
@@ -295,7 +295,7 @@ module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     input pipe$enq__RDY);
     assign method$heard2__RDY = pipe$enq__RDY ;
     assign method$heard__RDY = pipe$enq__RDY ;
-    assign pipe$enq$v = method$heard2__ENA  ? ( { method$heard2$b, method$heard2$a, 16'd1, 16'd2}  ) : ( { method$heard$v, 16'd2, 16'd2}  );
+    assign pipe$enq$v = method$heard2__ENA  ? ( { method$heard2$b, method$heard2$a, 16'd0, 16'd2}  ) : ( { method$heard$v, 16'd1, 16'd2}  );
     assign pipe$enq__ENA = method$heard2__ENA  || method$heard__ENA ;
 endmodule 
 
@@ -313,8 +313,8 @@ module l_module_OC_EchoIndication___P2M (input CLK, input nRST,
     assign method$heard$v = pipe$enq$v[63:32] ;
     assign method$heard2$a = pipe$enq$v[47:32] ;
     assign method$heard2$b = pipe$enq$v[63:48] ;
-    assign method$heard2__ENA = ( pipe$enq$v[31:0]  == 32'd1 ) & pipe$enq__ENA ;
-    assign method$heard__ENA = ( pipe$enq$v[31:0]  == 32'd2 ) & pipe$enq__ENA ;
+    assign method$heard2__ENA = ( pipe$enq$v[31:16]  == 16'd0 ) & pipe$enq__ENA ;
+    assign method$heard__ENA = ( pipe$enq$v[31:16]  == 16'd1 ) & pipe$enq__ENA ;
     assign pipe$enq__RDY = method$heard2__RDY  & method$heard__RDY ;
 endmodule 
 
@@ -335,10 +335,10 @@ module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     assign method$say$v = pipe$enq$v[63:32] ;
     assign method$say2$a = pipe$enq$v[47:32] ;
     assign method$say2$b = pipe$enq$v[63:48] ;
-    assign method$say2__ENA = ( pipe$enq$v[31:0]  == 32'd1 ) & pipe$enq__ENA ;
-    assign method$say__ENA = ( pipe$enq$v[31:0]  == 32'd2 ) & pipe$enq__ENA ;
+    assign method$say2__ENA = ( pipe$enq$v[31:16]  == 16'd0 ) & pipe$enq__ENA ;
+    assign method$say__ENA = ( pipe$enq$v[31:16]  == 16'd1 ) & pipe$enq__ENA ;
     assign method$setLeds$v = pipe$enq$v[39:32] ;
-    assign method$setLeds__ENA = ( pipe$enq$v[31:0]  == 32'd3 ) & pipe$enq__ENA ;
+    assign method$setLeds__ENA = ( pipe$enq$v[31:16]  == 16'd2 ) & pipe$enq__ENA ;
     assign pipe$enq__RDY = method$say2__RDY  & method$say__RDY  & method$setLeds__RDY ;
 endmodule 
 
