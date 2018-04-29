@@ -3,7 +3,7 @@ export DTOP=$(PWD)
 CONNECTALDIR=$(PWD)/../../../../connectal
 SIMDIR=$(PWD)/../../../simulation
 
-VERILOG_PATH=./verilog $(SIMDIR)/verilog ../bsvverilog \
+VERILOG_PATH=./verilog $(SIMDIR)/verilog ../ \
     ../../../connectal/bsvverilog
 VERILATOR_ARGS= -O3 -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(DTOP)/jni -O " -LDFLAGS "-O " \
     -Wno-fatal -exe --profile-cfuncs --output-split 20000 $(VERILOG_PATH:%=-y %) \
