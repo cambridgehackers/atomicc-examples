@@ -49,7 +49,7 @@ vluint64_t derived_time = 0;
 static int trace_xsimtop = 1;
 static int masterfpga_fd = -1, clientfd = -1, masterfpga_number = 5;
 static uint32_t rxBuffer[MAX_REQUEST_LENGTH], txBuffer[MAX_REQUEST_LENGTH];
-static int txIndex, rxLength;
+static int txIndex = 1, rxLength;
 
 static int finish = 0;
 long cycleCount;
@@ -127,14 +127,16 @@ extern "C" void dpi_msgSource_beat(int beat, int last)
 {
     //if (trace_xsimtop)
         //fprintf(stdout, "dpi_msgSource_beat: beat=%08x\n", beat);
-printf("[%s:%d] index %x txBuffer[0] %x beat %x last %x\n", __FUNCTION__, __LINE__, txIndex, txBuffer[0], beat, last);
+//printf("[%s:%d] index %x txBuffer[0] %x beat %x last %x\n", __FUNCTION__, __LINE__, txIndex, txBuffer[0], beat, last);
     txBuffer[txIndex++] = beat;
     if (last) {
         char bname[100];
         sprintf(bname,"SEND%d.%d", getpid(), masterfpga_fd);
-        memdump((uint8_t*)txBuffer, (txBuffer[0] & 0xffff) * sizeof(uint32_t), bname);
+        txBuffer[0] = (txBuffer[1] << 16) | txIndex;
+        txBuffer[1] = (txBuffer[1] & 0xffff0000) | (txIndex - 1);
+        memdump((uint8_t*)txBuffer, txIndex * sizeof(uint32_t), bname);
         portalSendFd(clientfd, (void *)txBuffer, (txBuffer[0] & 0xffff) * sizeof(uint32_t), -1);
-        txIndex = 0;
+        txIndex = 1;
     }
 }
 

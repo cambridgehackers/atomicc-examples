@@ -35,6 +35,6 @@ module VsimSource( input CLK, input CLK_GATE, input RST, input en_beat, input [3
 
    always @(posedge CLK) begin
       if (en_beat)
-          dpi_msgSource_beat(beat, last);
+          dpi_msgSource_beat(beat, {31'b0, last});
    end
 endmodule
