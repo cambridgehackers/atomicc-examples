@@ -19,22 +19,40 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-//`timescale 1ns / 1ps
+`include "ProjectDefines.vh"
 
-`ifdef BSV_POSITIVE_RESET
-  `define BSV_RESET_VALUE 1'b1
-  `define BSV_RESET_EDGE posedge
-`else
-  `define BSV_RESET_VALUE 1'b0
-  `define BSV_RESET_EDGE negedge
-`endif
+module VsimSource( input CLK, input CLK_GATE, input RST_N, input en_data, input [`MAX_OUT_WIDTH-1:0] data, output RDY_data);
+  wire sourceLast;
+  reg [`MAX_OUT_WIDTH-1 : 0] outgoingData;
+  reg indicationState;
+  reg [15 : 0] indicationWords;
 
-module VsimSource( input CLK, input CLK_GATE, input RST, input en_beat, input [31:0] beat, input last);
+  assign sourceLast = indicationWords == 16'd1;
+  assign RDY_data = !indicationState;
 
    import "DPI-C" function void dpi_msgSource_beat(input int beat, input int last);
 
    always @(posedge CLK) begin
-      if (en_beat)
-          dpi_msgSource_beat(beat, {31'b0, last});
-   end
+    if (RST_N == `BSV_RESET_VALUE)
+      begin
+        indicationState <= 0;
+        indicationWords <= 16'd0;
+      end
+    else begin
+      if (en_data) begin
+          indicationState <= 1;
+          outgoingData <= {data[`MAX_OUT_WIDTH-1:16], /*portal*/16'd5};
+          indicationWords <= data[15:0] + 1;
+          //$display("VSOURCE: start data %x", data);
+      end
+      if (indicationState) begin
+          //$display("VSOURCE: state %x outgoing last %x data %x", indicationState, sourceLast, outgoingData);
+          dpi_msgSource_beat(outgoingData[31:0], {31'b0, sourceLast});
+          outgoingData <= {32'b0, outgoingData[`MAX_IN_WIDTH-1:32]};
+          if (sourceLast)
+              indicationState <= 0;
+          indicationWords <= indicationWords - 16'd1;
+      end
+    end
+  end
 endmodule

@@ -19,42 +19,38 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-//`timescale 1ns / 1ps
+`include "ProjectDefines.vh"
 
-`ifdef BSV_POSITIVE_RESET
-  `define BSV_RESET_VALUE 1'b1
-  `define BSV_RESET_EDGE posedge
-`else
-  `define BSV_RESET_VALUE 1'b0
-  `define BSV_RESET_EDGE negedge
-`endif
-
-module VsimSink(input CLK, input CLK_GATE, input RST, output RDY_beat, input EN_beat, output [31:0] beat, output last);
+module VsimSink(input CLK, input CLK_GATE, input RST_N, output RDY_data, input EN_data, output [`MAX_IN_WIDTH-1:0] data);
+   wire    last, valid;
+   wire    [31:0] beat;
    reg     last_reg;
-   reg     valid_reg;
-   reg 	   [31:0] beat_reg;
+   reg [`MAX_IN_WIDTH-1 : 0] incomingData;
    
    import "DPI-C" function longint dpi_msgSink_beat();
 
-   assign last = last_reg;
-   assign RDY_beat = valid_reg;
-   assign beat = beat_reg;
+   assign RDY_data = last_reg;
+   assign data = incomingData;
    
    always @(posedge CLK) begin
-      if (RST == `BSV_RESET_VALUE) begin
+      if (RST_N == `BSV_RESET_VALUE) begin
 	 last_reg <= 0;
-	 valid_reg <= 0;
-	 beat_reg <= 32'haaaaaaaa;
+	 incomingData <= `MAX_IN_WIDTH'haaaaaaaa;
       end
-      else if (EN_beat == 1 || valid_reg == 0) begin
+      else if (EN_data == 1 || last_reg == 0) begin
 `ifndef BOARD_cvc
 	 automatic longint v = dpi_msgSink_beat();
-	 last_reg <= v[33];
-	 valid_reg <= v[32];
-	 beat_reg <= v[31:0];
+	 last = v[33];
+	 valid = v[32];
+	 beat = v[31:0];
 `else
-	 { last_reg, valid_reg, beat_reg } <= dpi_msgSink_beat();
+	 { last, valid, beat } = dpi_msgSink_beat();
 `endif
+         last_reg <= last;
+         if (valid) begin
+             //$display("VSIMSINK: beat %x incomingData %x", v, incomingData);
+             incomingData <= {incomingData[`MAX_IN_WIDTH-1-32:0], beat};
+         end
       end
    end
 endmodule
