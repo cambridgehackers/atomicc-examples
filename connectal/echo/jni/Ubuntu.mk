@@ -1,13 +1,13 @@
 
-CONNECTALDIR?=$(PWD)/../..
+CONNECTALDIR?=$(PWD)/../../../../connectal
 DTOP?=$(PWD)/..
 
 CC=$(TOOLCHAIN)gcc
 CXX=$(TOOLCHAIN)g++
-CFLAGS_COMMON = -O -g -I$(DTOP)/jni -I$(CONNECTALDIR)/cpp
+CFLAGS_COMMON = -O -g -I$(DTOP)/jni -I$(CONNECTALDIR) -I$(CONNECTALDIR)/cpp
 CFLAGS = $(CFLAGS_COMMON)
 
-include $(CONNECTALDIR)/scripts/Makefile.connectal.application
+include $(DTOP)/../scripts/Makefile.connectal.application
 SOURCES = ../testecho.cpp $(PORTAL_SRC_FILES)
 LDLIBS :=    -lpthread
 

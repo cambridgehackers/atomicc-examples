@@ -1,8 +1,9 @@
 
 export DTOP=$(PWD)
-CONNECTALDIR=$(PWD)/..
+CONNECTALDIR=$(PWD)/../../../connectal
+SIMDIR=$(PWD)/../../simulation
 
-VERILOG_PATH=./verilog ../verilog ../bsvverilog
+VERILOG_PATH=./verilog $(SIMDIR)/verilog ../bsvverilog
 VERILATOR_ARGS= -O3 -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(DTOP)/jni -O " -LDFLAGS "-O " \
     -Wno-fatal -exe --profile-cfuncs --output-split 20000 $(VERILOG_PATH:%=-y %) \
     -DDerivedClockPeriod=4 -DMainClockPeriod=4
@@ -40,7 +41,7 @@ obj_dir/vlsim.mk: bin/libconnectal-sim.so verilog
 	rm -fr obj_dir
 	verilator -o vlsim --prefix vlsim $(VERILATOR_ARGS) -cc \
 	    --top-module mkVsimTop $(DTOP)/verilog/mkVsimTop.v \
-	    $(CONNECTALDIR)/cpp/verilatortop.cpp -LDFLAGS -L$(DTOP)/bin
+	    $(SIMDIR)/cpp/verilatortop.cpp -LDFLAGS -L$(DTOP)/bin
 
 obj_dir/vlsim: obj_dir/vlsim.mk
 	+$(MAKE) USER_LDLIBS="-lconnectal-sim -lpthread" VM_PARALLEL_BUILDS=1 -C obj_dir -f vlsim.mk
