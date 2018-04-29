@@ -1,0 +1,4 @@
+
+GENERATED_CPP=GeneratedCppCallbacks.cpp \
+    EchoRequest.c \
+    EchoIndication.c
