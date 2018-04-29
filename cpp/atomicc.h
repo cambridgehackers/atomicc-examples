@@ -34,6 +34,7 @@
 #define __ready_valid __attribute__(( atomicc_ready_valid ))
 #define __software __attribute__(( atomicc_software ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; int unused; }
+#define __int(A) int __attribute__(( atomicc_width(A) ))
 
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
