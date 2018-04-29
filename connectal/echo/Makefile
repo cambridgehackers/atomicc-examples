@@ -48,4 +48,4 @@ obj_dir/vlsim: obj_dir/vlsim.mk
 	cp obj_dir/vlsim bin/vlsim
 
 clean:
-	rm -rf obj_dir/ xx xxb */*.o SWSOCK0 */ubuntu.exe* */libconnectal-sim.so bin/vlsim
+	rm -rf obj_dir/ bin/ lib/ obj/ SWSOCK[0-9] */ubuntu.exe*
