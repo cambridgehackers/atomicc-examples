@@ -19,13 +19,19 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-`include "ProjectDefines.vh"
 
-module VsimSink(input CLK, input CLK_GATE, input RST_N, output RDY_data, input EN_data, output [`MAX_IN_WIDTH-1:0] data);
+module VsimSink(CLK, RST_N, RDY_data, EN_data, data);
+   parameter width = 64;
+   input CLK;
+   input RST_N;
+   output RDY_data;
+   input EN_data;
+   output [width-1:0] data;
+
    wire    last, valid;
    wire    [31:0] beat;
    reg     last_reg;
-   reg [`MAX_IN_WIDTH-1 : 0] incomingData;
+   reg [width-1 : 0] incomingData;
    
    import "DPI-C" function longint dpi_msgSink_beat();
 
@@ -35,7 +41,7 @@ module VsimSink(input CLK, input CLK_GATE, input RST_N, output RDY_data, input E
    always @(posedge CLK) begin
       if (RST_N == `BSV_RESET_VALUE) begin
 	 last_reg <= 0;
-	 incomingData <= `MAX_IN_WIDTH'haaaaaaaa;
+	 incomingData <= 32'haaaaaaaa;
       end
       else if (EN_data == 1 || last_reg == 0) begin
 `ifndef BOARD_cvc
@@ -48,8 +54,8 @@ module VsimSink(input CLK, input CLK_GATE, input RST_N, output RDY_data, input E
 `endif
          last_reg <= last;
          if (valid) begin
-             //$display("VSIMSINK: beat %x incomingData %x", v, incomingData);
-             incomingData <= {incomingData[`MAX_IN_WIDTH-1-32:0], beat};
+             //$display("VSIMSINK: incomingData %x beat %x", incomingData, v);
+             incomingData <= {incomingData[width-1-32:0], beat};
          end
       end
    end

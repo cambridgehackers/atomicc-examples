@@ -39,7 +39,7 @@ vlsim:  obj_dir/vlsim
 obj_dir/vlsim.mk: bin/libconnectal-sim.so verilog
 	rm -fr obj_dir
 	verilator -o vlsim --prefix vlsim $(VERILATOR_ARGS) -cc \
-	    --top-module mkVsimTop $(DTOP)/../verilog/mkVsimTop.v \
+	    --top-module mkVsimTop $(DTOP)/verilog/mkVsimTop.v \
 	    $(CONNECTALDIR)/cpp/verilatortop.cpp -LDFLAGS -L$(DTOP)/bin
 
 obj_dir/vlsim: obj_dir/vlsim.mk

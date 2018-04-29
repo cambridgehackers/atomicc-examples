@@ -1,6 +1,6 @@
 
 `include "ProjectDefines.vh"
-module mkCnocTop( input  CLK, input  RST_N,
+module mkEcho( input  CLK, input  RST_N,
   input  [`MAX_IN_WIDTH -1: 0] in_enq_v, input EN_in_enq, output RDY_in_enq,
   output [`MAX_OUT_WIDTH -1: 0] out_enq_v, output EN_out_enq, input RDY_out_enq);
 

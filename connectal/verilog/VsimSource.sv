@@ -19,36 +19,41 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-`include "ProjectDefines.vh"
 
-module VsimSource( input CLK, input CLK_GATE, input RST_N, input en_data, input [`MAX_OUT_WIDTH-1:0] data, output RDY_data);
-  wire sourceLast;
-  reg [`MAX_OUT_WIDTH-1 : 0] outgoingData;
-  reg indicationState;
-  reg [15 : 0] indicationWords;
+module VsimSource(CLK, RST_N, EN_data, data_v, data_length, RDY_data);
+   parameter width = 64;
+   input CLK;
+   input RST_N;
+   input EN_data;
+   input [width-1:0] data_v;
+   input [15:0] data_length;
+   output RDY_data;
+   wire sourceLast;
+   reg [width-1 : 0] outgoingData;
+   reg indicationState;
+   reg [15 : 0] indicationWords;
 
-  assign sourceLast = indicationWords == 16'd1;
-  assign RDY_data = !indicationState;
+   assign sourceLast = indicationWords == 16'd1;
+   assign RDY_data = !indicationState;
 
    import "DPI-C" function void dpi_msgSource_beat(input int beat, input int last);
 
    always @(posedge CLK) begin
-    if (RST_N == `BSV_RESET_VALUE)
-      begin
-        indicationState <= 0;
-        indicationWords <= 16'd0;
-      end
+    if (RST_N == `BSV_RESET_VALUE) begin
+      indicationState <= 0;
+      indicationWords <= 16'd0;
+    end
     else begin
-      if (en_data) begin
+      if (EN_data) begin
           indicationState <= 1;
-          outgoingData <= {data[`MAX_OUT_WIDTH-1:16], /*portal*/16'd5};
-          indicationWords <= data[15:0] + 1;
+          outgoingData <= data_v;
+          indicationWords <= data_length + 1;
           //$display("VSOURCE: start data %x", data);
       end
       if (indicationState) begin
-          //$display("VSOURCE: state %x outgoing last %x data %x", indicationState, sourceLast, outgoingData);
+          //$display("VSOURCE: outgoing data %x last %x", outgoingData, sourceLast);
           dpi_msgSource_beat(outgoingData[31:0], {31'b0, sourceLast});
-          outgoingData <= {32'b0, outgoingData[`MAX_IN_WIDTH-1:32]};
+          outgoingData <= {32'b0, outgoingData[width-1:32]};
           if (sourceLast)
               indicationState <= 0;
           indicationWords <= indicationWords - 16'd1;
