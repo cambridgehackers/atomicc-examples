@@ -29,9 +29,9 @@ run:
 prepare_dir:
 	mkdir -p bin lib obj
 
-ubuntu.exe:
-	cd jni; $(MAKE) --no-print-directory -f Ubuntu.mk ubuntu.exe
-	cp -v jni/ubuntu.exe bin
+#ubuntu.exe:
+#	cd jni; $(MAKE) --no-print-directory -f Ubuntu.mk ubuntu.exe
+#	cp -v jni/ubuntu.exe bin
 
 bin/libconnectal-sim.so: $(SIM_OBJECTS)
 	$(CXX) -O -g -Ijni -shared -fpic $(SIM_CXXFLAGS) -g -o bin/libconnectal-sim.so $(SIM_OBJECTS)
@@ -50,3 +50,22 @@ obj_dir/vlsim: obj_dir/vlsim.mk
 
 clean:
 	rm -rf obj_dir/ bin/ lib/ obj/ SWSOCK[0-9] */ubuntu.exe*
+
+CC=$(TOOLCHAIN)gcc
+CXX=$(TOOLCHAIN)g++
+CFLAGS_COMMON = -O -g -I$(DTOP)/jni -I$(CONNECTALDIR) -I$(CONNECTALDIR)/cpp
+CFLAGS = $(CFLAGS_COMMON)
+
+#include $(DTOP)/../scripts/Makefile.connectal.application
+include $(DTOP)/jni/Makefile.generated_files
+PORTAL_INFRA := portal.c transportHardware.c transportSocket.c portalPrintf.c poller.cpp sock_utils.c timer.c
+#PORTAL_INFRA += transportShared.c transportSerial.c portalJson.c 
+PORTAL_SRC_FILES := $(addprefix $(CONNECTALDIR)/cpp/, $(PORTAL_INFRA)) \
+      $(addprefix $(DTOP)/jni/,  $(GENERATED_CPP))
+
+SOURCES = $(DTOP)/testecho.cpp $(PORTAL_SRC_FILES)
+LDLIBS :=    -lpthread
+
+ubuntu.exe: $(SOURCES)
+	cd jni; $(CXX) $(CFLAGS) -o ubuntu.exe $(SOURCES) $(LDLIBS)
+	cp -v jni/ubuntu.exe bin
