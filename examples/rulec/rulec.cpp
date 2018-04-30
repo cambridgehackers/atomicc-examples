@@ -97,8 +97,8 @@ __module Hardware {
     M2P<EchoIndication>              lEIO;      // indication pipe
 
     // top interface
-    decltype(lERI.pipe)              request = lERI.pipe;
-    decltype(lEIO.pipe)              indication = lEIO.pipe;
+    __software decltype(lERI.pipe)              request = lERI.pipe;
+    __software decltype(lEIO.pipe)              indication = lEIO.pipe;
 
     // Module under test
     Echo                       lEcho;
@@ -113,8 +113,8 @@ __module Connect {
     Hardware                   hw;
 
     // top interfaces
-    __software EchoRequest    request = sw.request;
-    __software EchoIndication *indication = sw.indication;
+    EchoRequest    request = sw.request;
+    EchoIndication *indication = sw.indication;
 
     // connect h/w stack and s/w stack interfaces
     __connect                  hw.indication = sw.indPipe;

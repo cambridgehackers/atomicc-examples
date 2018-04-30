@@ -18,8 +18,6 @@ module l_module_OC_Connect (input CLK, input nRST,
     output indication$heard__ENA,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-// software: request
-// software: indication
     wire [63:0]hw$indication$enq$v;
     wire hw$indication$enq__ENA;
     wire hw$request$enq__RDY;
@@ -148,6 +146,8 @@ module l_module_OC_Hardware (input CLK, input nRST,
     output indication$enq__ENA,
     output [63:0]indication$enq$v,
     input indication$enq__RDY);
+// software: request
+// software: indication
     wire lEIO$method$heard2__RDY;
     wire lEIO$method$heard__RDY;
     wire [31:0]lERI$method$say$v;

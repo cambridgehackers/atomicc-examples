@@ -54,8 +54,6 @@ EMODULE l_module_OC_P2M_OC_1 {
     INTERFACE/Ptr l_ainterface_OC_EchoRequest method
 }
 MODULE l_module_OC_Connect {
-    SOFTWARE request
-    SOFTWARE indication
     INTERFACECONNECT hw$indication sw$indPipe l_ainterface_OC_PipeIn_OC_4
     INTERFACECONNECT sw$reqPipe hw$request l_ainterface_OC_PipeIn
     INTERFACECONNECT request sw$request l_ainterface_OC_EchoRequest
@@ -103,6 +101,8 @@ MODULE l_module_OC_Echo {
     }
 }
 MODULE l_module_OC_Hardware {
+    SOFTWARE request
+    SOFTWARE indication
     INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
     INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_2

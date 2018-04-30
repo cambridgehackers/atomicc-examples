@@ -1,31 +1,13 @@
 {
     "bsvdefines": [ ],
     "globaldecls": [
-        {
-            "dtype": "TypeDef", 
-            "tdtype": {
-                "name": "Bit", 
-                "params": [
-                    {
-                        "name": "32"
-                    }
-                ]
-            }, 
+        { "dtype": "TypeDef", 
+            "tdtype": { "name": "Bit", "params": [ { "name": "32" } ] }, 
             "tname": "SpecialTypeForSendingFd"
         }, 
-        {
-            "dtype": "TypeDef", 
+        { "dtype": "TypeDef", 
             "tdtype": {
-                "elements": [
-                    [
-                        "IfcNames_EchoIndicationH2S", 
-                        "5"
-                    ], 
-                    [
-                        "IfcNames_EchoRequestS2H", 
-                        "6"
-                    ]
-                ], 
+                "elements": [ [ "IfcNames_EchoIndicationH2S", "5" ], [ "IfcNames_EchoRequestS2H", "6" ] ], 
                 "name": "IfcNames", 
                 "type": "Enum"
             }, 
@@ -33,119 +15,26 @@
         }
     ], 
     "interfaces": [
-        {
-            "laksjdlPackage": "Echo", 
-            "cdecls": [
-                {
-                    "dname": "say", 
-                    "dparams": [
-                        {
-                            "pname": "v", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "32"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }, 
-                {
-                    "dname": "say2", 
-                    "dparams": [
-                        {
-                            "pname": "a", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "16"
-                                    }
-                                ]
-                            }
-                        }, 
-                        {
-                            "pname": "b", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "16"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }, 
-                {
-                    "dname": "setLeds", 
-                    "dparams": [
-                        {
-                            "pname": "v", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "8"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ], 
-            "cname": "EchoRequest"
-        }, 
-        {
-            "Packageaskljdlaksjd": "Echo", 
-            "cdecls": [
-                {
-                    "dname": "heard", 
-                    "dparams": [
-                        {
-                            "pname": "v", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "32"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }, 
-                {
-                    "dname": "heard2", 
-                    "dparams": [
-                        {
-                            "pname": "a", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "16"
-                                    }
-                                ]
-                            }
-                        }, 
-                        {
-                            "pname": "b", 
-                            "ptype": {
-                                "name": "Bit", 
-                                "params": [
-                                    {
-                                        "name": "16"
-                                    }
-                                ]
-                            }
-                        }
-                    ]
-                }
-            ], 
-            "cname": "EchoIndication"
-        }
+        { "cdecls": [
+                { "dname": "say", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] }, 
+                { "dname": "say2", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }, 
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] }, 
+                { "dname": "setLeds", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] }
+            ], "cname": "EchoRequest" }, 
+        { "cdecls": [
+                { "dname": "heard", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] }, 
+                { "dname": "heard2", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }, 
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] }
+            ], "cname": "EchoIndication" }
     ]
 }
