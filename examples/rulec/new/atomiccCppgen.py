@@ -27,6 +27,8 @@ import cppgen
 if __name__=='__main__':
     print 'new', sys.argv
     filename = "generatedDesignInterfaceFile.json"
+    if (len(sys.argv) > 1):
+        filename = sys.argv[1];
     jsondata = json.loads(open(filename).read())
     cppgen.generateJson = False
     cppgen.generate_cpp(".", False, jsondata)
