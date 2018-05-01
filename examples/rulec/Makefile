@@ -11,12 +11,19 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o rulec.ll rulec.cpp
-#	verilator --cc rulec.generated.v
 
 cleanmake:
 	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp
 
 ############################# for running verilator
+#
+# To compile/run a test:
+#
+#     make          (this generates the verilog and cppgen files from the original cpp source)
+#     make build    (this compiles the generated files, both for ubuntu.exe and vlsim)
+#     make run      (this runs bin/ubuntu.exe)
+#     make cleanup  (this cleans out the objects/etc that were created by 'make build')
+#
 DTOP=$(PWD)
 CONNECTALDIR=$(PWD)/../../../connectal
 SIMDIR=$(PWD)/../../../atomicc/simulation
