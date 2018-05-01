@@ -1,7 +1,7 @@
 
 export DTOP=$(PWD)/..
 CONNECTALDIR=$(PWD)/../../../../connectal
-SIMDIR=$(PWD)/../../../simulation
+SIMDIR=$(PWD)/../../../../atomicc/simulation
 
 VERILOG_PATH = ../verilog $(SIMDIR)/verilog ../
 VERILATOR_ARGS= -O3 -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(DTOP)/jni -O " -LDFLAGS "-O " \
