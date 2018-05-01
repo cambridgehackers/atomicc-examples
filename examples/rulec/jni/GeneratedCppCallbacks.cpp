@@ -1,7 +1,6 @@
 #include "GeneratedTypes.h"
 
 #ifndef NO_CPP_PORTAL_CODE
-extern const uint32_t ifcNamesNone = IfcNamesNone;
 extern const uint32_t ifcNames_EchoIndicationH2S = IfcNames_EchoIndicationH2S;
 extern const uint32_t ifcNames_EchoRequestS2H = IfcNames_EchoRequestS2H;
 

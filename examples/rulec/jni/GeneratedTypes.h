@@ -5,8 +5,8 @@
 extern "C" {
 #endif
 typedef uint32_t SpecialTypeForSendingFd;
-typedef enum XsimIfcNames { XsimIfcNames_XsimMsgRequest, XsimIfcNames_XsimMsgIndication,  } XsimIfcNames;
-typedef enum IfcNames { IfcNamesNone=0, PlatformIfcNames_MemServerRequestS2H=1, PlatformIfcNames_MMURequestS2H=2, PlatformIfcNames_MemServerIndicationH2S=3, PlatformIfcNames_MMUIndicationH2S=4, IfcNames_EchoIndicationH2S=5, IfcNames_EchoRequestS2H=6,  } IfcNames;
+typedef enum IfcNames { IfcNames_EchoIndicationH2S=5, IfcNames_EchoRequestS2H=6,  } IfcNames;
+
 
 int EchoRequest_say ( struct PortalInternal *p, const uint32_t v );
 int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b );
@@ -61,7 +61,6 @@ typedef struct {
     int (*heard2) (  struct PortalInternal *p, const uint16_t a, const uint16_t b );
 } EchoIndicationCb;
 extern EchoIndicationCb EchoIndicationProxyReq;
-
 #ifdef __cplusplus
 }
 #endif
