@@ -1,32 +1,5 @@
 #include "GeneratedTypes.h"
 
-int EchoIndication_heard ( struct PortalInternal *p, const uint32_t v )
-{
-    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoIndication_heard, 2);
-    volatile unsigned int* temp_working_addr = temp_working_addr_start;
-    if (p->transport->busywait(p, CHAN_NUM_EchoIndication_heard, "EchoIndication_heard")) return 1;
-    p->transport->write(p, &temp_working_addr, v);
-    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoIndication_heard << 16) | 2, -1);
-    return 0;
-};
-
-int EchoIndication_heard2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b )
-{
-    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoIndication_heard2, 2);
-    volatile unsigned int* temp_working_addr = temp_working_addr_start;
-    if (p->transport->busywait(p, CHAN_NUM_EchoIndication_heard2, "EchoIndication_heard2")) return 1;
-    p->transport->write(p, &temp_working_addr, b|(((unsigned long)a)<<16));
-    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoIndication_heard2 << 16) | 2, -1);
-    return 0;
-};
-
-EchoIndicationCb EchoIndicationProxyReq = {
-    portal_disconnect,
-    EchoIndication_heard,
-    EchoIndication_heard2,
-};
-EchoIndicationCb *pEchoIndicationProxyReq = &EchoIndicationProxyReq;
-
 const uint32_t EchoIndication_reqinfo = 0x20008;
 const char * EchoIndication_methodSignatures()
 {

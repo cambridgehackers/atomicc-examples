@@ -13,23 +13,6 @@ int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_
 int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v );
 enum { CHAN_NUM_EchoRequest_say,CHAN_NUM_EchoRequest_say2,CHAN_NUM_EchoRequest_setLeds};
 extern const uint32_t EchoRequest_reqinfo;
-
-typedef struct {
-    uint32_t v;
-} EchoRequest_sayData;
-typedef struct {
-    uint16_t a;
-    uint16_t b;
-} EchoRequest_say2Data;
-typedef struct {
-    uint8_t v;
-} EchoRequest_setLedsData;
-typedef union {
-    EchoRequest_sayData say;
-    EchoRequest_say2Data say2;
-    EchoRequest_setLedsData setLeds;
-} EchoRequestData;
-int EchoRequest_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd);
 typedef struct {
     PORTAL_DISCONNECT disconnect;
     int (*say) (  struct PortalInternal *p, const uint32_t v );
@@ -38,8 +21,6 @@ typedef struct {
 } EchoRequestCb;
 extern EchoRequestCb EchoRequestProxyReq;
 
-int EchoIndication_heard ( struct PortalInternal *p, const uint32_t v );
-int EchoIndication_heard2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b );
 enum { CHAN_NUM_EchoIndication_heard,CHAN_NUM_EchoIndication_heard2};
 extern const uint32_t EchoIndication_reqinfo;
 
@@ -60,7 +41,6 @@ typedef struct {
     int (*heard) (  struct PortalInternal *p, const uint32_t v );
     int (*heard2) (  struct PortalInternal *p, const uint16_t a, const uint16_t b );
 } EchoIndicationCb;
-extern EchoIndicationCb EchoIndicationProxyReq;
 #ifdef __cplusplus
 }
 #endif
