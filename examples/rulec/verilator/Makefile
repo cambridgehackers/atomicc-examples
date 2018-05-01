@@ -8,8 +8,7 @@ VERILATOR_ARGS= -O3 -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(DTOP)/jni -O " -LDFLAGS "
     -Wno-fatal -exe --profile-cfuncs --output-split 20000 $(VERILOG_PATH:%=-y %) \
     -DDerivedClockPeriod=4 -DMainClockPeriod=4
 
-SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, sock_utils.c portalPrintf.c poller.cpp \
-    transportSocket.c transportHardware.c portal.c)
+SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, sock_utils.c portalPrintf.c)
 SIM_OBJECTS = $(addprefix lib/, $(addsuffix .o, $(basename $(notdir $(SIM_CXX_COMMON)))))
 
 all: prepare_dir bin/ubuntu.exe bin/libconnectal-sim.so vlsim
