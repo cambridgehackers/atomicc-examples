@@ -1,3 +1,2 @@
 GENERATED_CPP = jni/GeneratedCppCallbacks.cpp \
     jni/EchoIndication.c jni/EchoRequest.c
-PROJECT_CPP = testecho.cpp

@@ -13,11 +13,14 @@ all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o rulec.ll rulec.cpp
 #	verilator --cc rulec.generated.v
 
-clean:
+cleanmake:
 	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp
 
-run:
-	clang++ -std=c++11 -I.. -g testrulec.cpp
-	./a.out
-	rm -f a.out
+############################# for running verilator
+DTOP=$(PWD)
+CONNECTALDIR=$(PWD)/../../../connectal
+SIMDIR=$(PWD)/../../../atomicc/simulation
 
+PROJECT_CPP = testecho.cpp
+
+include $(SIMDIR)/Makefile.verilator
