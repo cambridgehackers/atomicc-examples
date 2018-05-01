@@ -77,20 +77,6 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
-//////////////////////////// this is the stack that will run on the processor
-__module Software {
-    M2P<EchoRequest>           lERO_test;
-    P2M<EchoIndication>        lEII_test;
-
-    // interface functions for top of layer
-    decltype(lERO_test.method) request = lERO_test.method;
-    decltype(lEII_test.method) indication = lEII_test.method;
-
-    // interface function for bottom of layer
-    decltype(lERO_test.pipe)   reqPipe = lERO_test.pipe;
-    decltype(lEII_test.pipe)   indPipe = lEII_test.pipe;
-};
-
 //////////////////////////// this is the stack that will run in the hardware
 __module Hardware {
     P2M<EchoRequest>                 lERI;      // request pipe
@@ -106,22 +92,7 @@ __module Hardware {
     __connect lEcho.indication = lEIO.method;
 };
 
-//////////////////////////// this is a test bench mockup to connect s/w and h/w
-//                           (just to check compilation)
-__module Connect {
-    Software                   sw;
-    Hardware                   hw;
-
-    // top interfaces
-    EchoRequest    request = sw.request;
-    EchoIndication *indication = sw.indication;
-
-    // connect h/w stack and s/w stack interfaces
-    __connect                  hw.indication = sw.indPipe;
-    __connect                  sw.reqPipe = hw.request;
-};
-
-Connect connectTest;
+Hardware test;
 
 // hack for clang
 P2M<EchoRequest>::Data foo1;
