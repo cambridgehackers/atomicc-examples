@@ -13,8 +13,9 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 # -stdlib=libc++
 
 all:
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o counter.ll counter.cpp
-	$(CPP) -S $(CPPFLAGS) -o counter.S counter.cpp
+	mkdir -p generated
+	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o generated/counter.ll counter.cpp
+	$(CPP) -S $(CPPFLAGS) -o generated/counter.S counter.cpp
 	c++filt < counter.ll \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \

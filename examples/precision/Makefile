@@ -10,7 +10,8 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 
 all:
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o precision.ll precision.cpp
+	mkdir -p generated
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/precision.ll precision.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testprecision.cpp

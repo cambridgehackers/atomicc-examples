@@ -10,8 +10,9 @@ LLVMFLAGS = -S
 # -stdlib=libc++
 
 all:
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o reg_pipeline.ll reg_pipeline.cpp
-	$(CPP) -c $(CPPFLAGS) -o reg_pipeline.o reg_pipeline.cpp
+	mkdir -p generated
+	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o generated/reg_pipeline.ll reg_pipeline.cpp
+	$(CPP) -c $(CPPFLAGS) -o generated/reg_pipeline.o reg_pipeline.cpp
 	sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
             -e 's/}/\n}/g' \

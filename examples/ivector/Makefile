@@ -12,8 +12,9 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #   set follow-fork-mode child
 
 all:
-	#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o fifo.ll ../../cpp/fifo.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o ivector.ll ivector.cpp
+	mkdir -p generated
+	#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/fifo.ll ../../cpp/fifo.cpp
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/ivector.ll ivector.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testivector.cpp

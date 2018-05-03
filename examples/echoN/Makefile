@@ -9,8 +9,9 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 
 all:
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o echoN.ll echoN.cpp
-	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.ll ../../cpp/atomicc.cpp
+	mkdir -p generated
+	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o generated/echoN.ll echoN.cpp
+	$(CPP) $(CPPFLAGS) $(LLVMFLAGS) -o generated/atomicc.ll ../../cpp/atomicc.cpp
 	c++filt < echoN.ll  \
 	  | sed -e 's/{/\n{\n/g' \
             -e 's/\" \"/\"\n\"/g' \
@@ -25,8 +26,8 @@ clean:
 	rm -f *.bc *.o *.ll *.s echoN.exe.* echoN.tmp
 
 run:
-	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o echoN.bc echoN.cpp
-	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o atomicc.bc ../../cpp/atomicc.cpp
+	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o generated/echoN.bc echoN.cpp
+	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o generated/atomicc.bc ../../cpp/atomicc.cpp
 	llvm-link-3.3 -v echoN.bc atomicc.bc >echoN.exe.bc
 #	../../../llvm/build/bin/lli -force-interpreter=true echoN.exe.bc foo
 	lli-3.3 -force-interpreter=true echoN.exe.bc foo

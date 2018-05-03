@@ -11,7 +11,8 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 
 all:
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o rulec.ll rulec.cpp
+	mkdir -p generated
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
 
 cleanmake:
 	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp

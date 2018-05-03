@@ -10,10 +10,11 @@ CPPFLAGS += -fno-diagnostics-color
 CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 
-#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o connect.ll connect.cpp
-#$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.bc connect.cpp
+#$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/connect.ll connect.cpp
+#$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o generated/connect.bc connect.cpp
 all:
-	$(CPP) -S -c $(CPPFLAGS) $(LLVMFLAGS) -o connect.ll connect.cpp
+	mkdir -p generated
+	$(CPP) -S -c $(CPPFLAGS) $(LLVMFLAGS) -o generated/connect.ll connect.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testconnect.cpp

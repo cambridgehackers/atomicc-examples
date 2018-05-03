@@ -10,7 +10,8 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 
 all:
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o lpm.ll lpm.cpp
+	mkdir -p generated
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/lpm.ll lpm.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testlpm.cpp
