@@ -12,6 +12,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	mkdir -p generated
+	[ -f generated/l_module_OC_Hardware.v ] || ln -s rulec.generated.v generated/l_module_OC_Hardware.v
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
 
 cleanmake:
@@ -32,4 +33,5 @@ SIMDIR=$(PWD)/../../../atomicc/simulation
 
 PROJECT_CPP = testecho.cpp
 
+-include $(DTOP)/generated/rulec.generated.filelist
 include $(SIMDIR)/Makefile.verilator
