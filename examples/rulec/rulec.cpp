@@ -20,9 +20,12 @@
  */
 #include <atomicc.h>
 
-typedef __int(32) aint32;
+//typedef __int(32) aint32;
 typedef __int(16) aint16;
-typedef __int(8) aint8;
+//typedef __int(8) aint8;
+#define aint32 __int(32)
+//#define aint16 __int(16)
+#define aint8 __int(8)
 __interface EchoRequest {
     void say(aint32 v);
     void say2(aint16 a, aint16 b);
