@@ -67,6 +67,7 @@ MODULE l_module_OC_Lpm {
         ALLOCA l_struct_OC_ValuePair enter__ENA$temp
         CALL :inQ$out$first{}
         LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first
+        PRINTF :printf{"enter: (%d, %d)\n",enter__ENA$temp$a,enter__ENA$temp$b}
         CALL/Action :inQ$out$deq__ENA{}
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
@@ -80,6 +81,7 @@ MODULE l_module_OC_Lpm {
         LET l_struct_OC_ValuePair :exit_rule__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
+        PRINTF :printf{"exit: (%d, %d)\n",exit_rule__ENA$temp$a,exit_rule__ENA$temp$b}
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
     }
     METHOD/Rule recirc__ENA if ((1)) {
@@ -91,11 +93,13 @@ MODULE l_module_OC_Lpm {
         LET l_struct_OC_ValuePair :recirc__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
+        PRINTF :printf{"recirc: (%d, %d)\n",recirc__ENA$temp$a,recirc__ENA$temp$b}
         CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
         CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair request$say__ENA$temp
+        PRINTF :printf{"[%s:%d] (%d, %d)\n",("request$say"),90,request$say$meth,request$say$v}
         LET INTEGER_32 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
@@ -105,6 +109,7 @@ MODULE l_module_OC_Lpm {
         CALL :outQ$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first
         CALL/Action :outQ$out$deq__ENA{}
+        PRINTF :printf{"respond: (%d, %d)\n",respond__ENA$temp$a,respond__ENA$temp$b}
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     }
 }

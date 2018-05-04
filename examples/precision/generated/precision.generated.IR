@@ -24,7 +24,9 @@ EMODULE l_module_OC_Fifo {
 }
 EMODULE l_module_OC_IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
-    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
+    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
+        PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
+    }
 }
 MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
