@@ -165,6 +165,13 @@ module l_module_OC_Lpm (input CLK, input nRST,
       if (!nRST) begin
         doneCount <= 0;
       end // nRST
+      else begin
+            $display( "enter: (%d, %d)" , inQ$out$first[31:0] , inQ$out$first[63:32] );
+            $display( "exit: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+            $display( "recirc: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+            $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );
+            $display( "respond: (%d, %d)" , outQ$out$first[31:0] , outQ$out$first[63:32] );
+      end
     end // always @ (posedge CLK)
 endmodule 
 

@@ -158,6 +158,7 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
         if (request$say__ENA) begin
             request$say__ENA$ind$data$say$meth  <= request$say$meth;
             request$say__ENA$ind$data$say$v  <= request$say$v;
+            $display( "entered EchoRequestOutput::say" );
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)
