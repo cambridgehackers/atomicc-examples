@@ -9,6 +9,7 @@
 //METAGUARD; request$say2; busy  == 32'd0;
 //METAGUARD; request$say; busy  == 32'd0;
 //METAGUARD; request$setLeds; 1;
+//METAGUARD; request$zsay4; 1;
 //METAINVOKE; respond_rule__ENA; v_type  != 1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
@@ -24,6 +25,8 @@
 //METACONNECT; lERI$method$say__RDY; lEcho$request$say__RDY
 //METACONNECT; lERI$method$setLeds__ENA; lEcho$request$setLeds__ENA
 //METACONNECT; lERI$method$setLeds__RDY; lEcho$request$setLeds__RDY
+//METACONNECT; lERI$method$zsay4__ENA; lEcho$request$zsay4__ENA
+//METACONNECT; lERI$method$zsay4__RDY; lEcho$request$zsay4__RDY
 //METACONNECT; lEcho$indication$heard__ENA; lEIO$method$heard__ENA
 //METACONNECT; lEcho$indication$heard2__ENA; lEIO$method$heard2__ENA
 //METACONNECT; lEcho$indication$heard2__RDY; lEIO$method$heard2__RDY
@@ -41,6 +44,6 @@
 //METAGUARD; method$heard; pipe$enq__RDY ;
 //METASTART; l_module_OC_EchoRequest___P2M
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:16]  == 16'd1:method$say2__ENA;pipe$enq$v[31:16]  == 16'd0:method$say__ENA;pipe$enq$v[31:16]  == 16'd2:method$setLeds__ENA;
-//METAGUARD; pipe$enq; method$say__RDY  & method$say2__RDY  & method$setLeds__RDY ;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:16]  == 16'd1:method$say2__ENA;pipe$enq$v[31:16]  == 16'd0:method$say__ENA;pipe$enq$v[31:16]  == 16'd2:method$setLeds__ENA;pipe$enq$v[31:16]  == 16'd3:method$zsay4__ENA;
+//METAGUARD; pipe$enq; method$say__RDY  & method$say2__RDY  & method$setLeds__RDY  & method$zsay4__RDY ;
 `endif

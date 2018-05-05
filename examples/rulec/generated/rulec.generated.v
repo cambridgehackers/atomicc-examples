@@ -11,6 +11,8 @@ module l_module_OC_Echo (input CLK, input nRST,
     input request$setLeds__ENA,
     input [7:0]request$setLeds$v,
     output request$setLeds__RDY,
+    input request$zsay4__ENA,
+    output request$zsay4__RDY,
     output indication$heard__ENA,
     output [31:0]indication$heard$v,
     output indication$heard2__ENA,
@@ -43,6 +45,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = busy  == 32'd0;
     assign request$setLeds__RDY = 1;
+    assign request$zsay4__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -78,6 +81,9 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_type  <= 2;
             $display( "[%s:%d]Echo" , "request$say2" , 58 );
         end; // End of request$say2__ENA
+        if (request$zsay4__ENA) begin
+            $display( "[%s:%d]Echo" , "request$zsay4" , 70 );
+        end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
             $display( "[respond_rule:%d]Echo" , 84 );
@@ -104,6 +110,7 @@ module l_module_OC_Hardware (input CLK, input nRST,
     wire lERI$method$say__ENA;
     wire [7:0]lERI$method$setLeds$v;
     wire lERI$method$setLeds__ENA;
+    wire lERI$method$zsay4__ENA;
     wire [31:0]lEcho$indication$heard$v;
     wire [15:0]lEcho$indication$heard2$a;
     wire [15:0]lEcho$indication$heard2$b;
@@ -112,6 +119,7 @@ module l_module_OC_Hardware (input CLK, input nRST,
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
     wire lEcho$request$setLeds__RDY;
+    wire lEcho$request$zsay4__RDY;
     l_module_OC_EchoRequest___P2M lERI (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
@@ -125,7 +133,9 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .method$say__RDY(lEcho$request$say__RDY),
         .method$setLeds__ENA(lERI$method$setLeds__ENA),
         .method$setLeds$v(lERI$method$setLeds$v),
-        .method$setLeds__RDY(lEcho$request$setLeds__RDY));
+        .method$setLeds__RDY(lEcho$request$setLeds__RDY),
+        .method$zsay4__ENA(lERI$method$zsay4__ENA),
+        .method$zsay4__RDY(lEcho$request$zsay4__RDY));
     l_module_OC_EchoIndication___M2P lEIO (.CLK(CLK), .nRST(nRST),
         .method$heard__ENA(lEcho$indication$heard__ENA),
         .method$heard$v(lEcho$indication$heard$v),
@@ -148,6 +158,8 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .request$setLeds__ENA(lERI$method$setLeds__ENA),
         .request$setLeds$v(lERI$method$setLeds$v),
         .request$setLeds__RDY(lEcho$request$setLeds__RDY),
+        .request$zsay4__ENA(lERI$method$zsay4__ENA),
+        .request$zsay4__RDY(lEcho$request$zsay4__RDY),
         .indication$heard__ENA(lEcho$indication$heard__ENA),
         .indication$heard$v(lEcho$indication$heard$v),
         .indication$heard2__ENA(lEcho$indication$heard2__ENA),
@@ -187,7 +199,9 @@ module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     input method$say__RDY,
     output method$setLeds__ENA,
     output [7:0]method$setLeds$v,
-    input method$setLeds__RDY);
+    input method$setLeds__RDY,
+    output method$zsay4__ENA,
+    input method$zsay4__RDY);
     assign method$say$v = pipe$enq$v[63:32] ;
     assign method$say2$a = pipe$enq$v[47:32] ;
     assign method$say2$b = pipe$enq$v[63:48] ;
@@ -195,6 +209,7 @@ module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     assign method$say__ENA = ( pipe$enq$v[31:16]  == 16'd0 ) & pipe$enq__ENA ;
     assign method$setLeds$v = pipe$enq$v[39:32] ;
     assign method$setLeds__ENA = ( pipe$enq$v[31:16]  == 16'd2 ) & pipe$enq__ENA ;
-    assign pipe$enq__RDY = method$say__RDY  & method$say2__RDY  & method$setLeds__RDY ;
+    assign method$zsay4__ENA = ( pipe$enq$v[31:16]  == 16'd3 ) & pipe$enq__ENA ;
+    assign pipe$enq__RDY = method$say__RDY  & method$say2__RDY  & method$setLeds__RDY  & method$zsay4__RDY ;
 endmodule 
 

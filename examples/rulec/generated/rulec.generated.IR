@@ -6,6 +6,7 @@ EMODULE l_ainterface_OC_EchoRequest {
     METHOD say2__ENA ( INTEGER_16 a , INTEGER_16 b )
     METHOD say__ENA ( INTEGER_32 v )
     METHOD setLeds__ENA ( INTEGER_8 v )
+    METHOD zsay4__ENA
 }
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data v )
@@ -78,6 +79,9 @@ MODULE l_module_OC_Echo {
         STORE :v_type = 1
     }
     METHOD request$setLeds__ENA ( INTEGER_8 v )
+    METHOD request$zsay4__ENA {
+        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),70}
+    }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"[respond_rule:%d]Echo\n",84}
         STORE :busy_delay = 0

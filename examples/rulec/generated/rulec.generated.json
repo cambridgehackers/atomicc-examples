@@ -25,6 +25,8 @@
                     ] },
                 { "dname": "setLeds", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] },
+                { "dname": "zsay4", "dparams": [
                     ] }
             ], "direction": "0", "cname": "EchoRequest" },
         { "cdecls": [

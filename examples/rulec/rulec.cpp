@@ -30,7 +30,7 @@ __interface EchoRequest {
     void say(aint32 v);
     void say2(aint16 a, aint16 b);
     //void say3(aint32 a, aint32 b, aint32 c);
-    //void say4(void);
+    void zsay4(void);
     void setLeds(aint8 v);
 };
 
@@ -65,10 +65,10 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
-    void request.say4(void) if (false) {
+#endif
+    void request.zsay4(void) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
-#endif
     void request.setLeds(aint8 v) {
     }
     Echo() {

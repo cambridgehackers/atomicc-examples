@@ -166,11 +166,21 @@ module l_module_OC_Lpm (input CLK, input nRST,
         doneCount <= 0;
       end // nRST
       else begin
+        if (enter__ENA) begin
             $display( "enter: (%d, %d)" , inQ$out$first[31:0] , inQ$out$first[63:32] );
+        end; // End of enter__ENA
+        if (exit_rule__ENA) begin
             $display( "exit: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+        end; // End of exit_rule__ENA
+        if (recirc__ENA) begin
             $display( "recirc: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+        end; // End of recirc__ENA
+        if (request$say__ENA) begin
             $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );
+        end; // End of request$say__ENA
+        if (respond__ENA) begin
             $display( "respond: (%d, %d)" , outQ$out$first[31:0] , outQ$out$first[63:32] );
+        end; // End of respond__ENA
       end
     end // always @ (posedge CLK)
 endmodule 
