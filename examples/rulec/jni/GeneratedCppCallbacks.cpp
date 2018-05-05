@@ -18,9 +18,14 @@ int EchoIndicationheard2_cb (  struct PortalInternal *p, const uint16_t a, const
     (static_cast<EchoIndicationWrapper *>(p->parent))->heard2 ( a, b);
     return 0;
 };
+int EchoIndicationheard3_cb (  struct PortalInternal *p, const uint16_t a, const uint32_t b, const uint32_t c, const uint16_t d ) {
+    (static_cast<EchoIndicationWrapper *>(p->parent))->heard3 ( a, b, c, d);
+    return 0;
+};
 EchoIndicationCb EchoIndication_cbTable = {
     EchoIndicationdisconnect_cb,
     EchoIndicationheard_cb,
     EchoIndicationheard2_cb,
+    EchoIndicationheard3_cb,
 };
 #endif //NO_CPP_PORTAL_CODE

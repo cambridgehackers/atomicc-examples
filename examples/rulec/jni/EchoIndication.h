@@ -23,5 +23,6 @@ public:
     };
     virtual void heard ( const uint32_t v ) = 0;
     virtual void heard2 ( const uint16_t a, const uint16_t b ) = 0;
+    virtual void heard3 ( const uint16_t a, const uint32_t b, const uint32_t c, const uint16_t d ) = 0;
 };
 #endif // _ECHOINDICATION_H_

@@ -37,7 +37,7 @@ __interface EchoRequest {
 __interface EchoIndication {
     void heard(aint32 v);
     void heard2(aint16 a, aint16 b);
-    //void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
+    void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
 __module Echo {

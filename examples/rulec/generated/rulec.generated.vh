@@ -30,6 +30,8 @@
 //METACONNECT; lEcho$indication$heard__ENA; lEIO$method$heard__ENA
 //METACONNECT; lEcho$indication$heard2__ENA; lEIO$method$heard2__ENA
 //METACONNECT; lEcho$indication$heard2__RDY; lEIO$method$heard2__RDY
+//METACONNECT; lEcho$indication$heard3__ENA; lEIO$method$heard3__ENA
+//METACONNECT; lEcho$indication$heard3__RDY; lEIO$method$heard3__RDY
 //METACONNECT; lEcho$indication$heard__RDY; lEIO$method$heard__RDY
 //METACONNECT; request$enq__ENA; lERI$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; lERI$pipe$enq__RDY
@@ -38,9 +40,12 @@
 //METASTART; l_module_OC_EchoIndication___M2P
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
-//METAEXCLUSIVE; method$heard__ENA; method$heard2__ENA
+//METAEXCLUSIVE; method$heard__ENA; method$heard2__ENA; method$heard3__ENA
 //METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;
+//METAEXCLUSIVE; method$heard2__ENA; method$heard3__ENA
 //METAGUARD; method$heard2; pipe$enq__RDY ;
+//METAINVOKE; method$heard3__ENA; :pipe$enq__ENA;
+//METAGUARD; method$heard3; pipe$enq__RDY ;
 //METAGUARD; method$heard; pipe$enq__RDY ;
 //METASTART; l_module_OC_EchoRequest___P2M
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;

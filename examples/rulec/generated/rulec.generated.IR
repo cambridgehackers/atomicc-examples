@@ -1,5 +1,6 @@
 EMODULE l_ainterface_OC_EchoIndication {
     METHOD heard2__ENA ( INTEGER_16 a , INTEGER_16 b )
+    METHOD heard3__ENA ( INTEGER_16 a , INTEGER_32 b , INTEGER_32 c , INTEGER_16 d )
     METHOD heard__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_EchoRequest {

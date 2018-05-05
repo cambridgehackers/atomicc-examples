@@ -19,6 +19,12 @@ module l_module_OC_Echo (input CLK, input nRST,
     output [15:0]indication$heard2$a,
     output [15:0]indication$heard2$b,
     input indication$heard2__RDY,
+    output indication$heard3__ENA,
+    output [15:0]indication$heard3$a,
+    output [31:0]indication$heard3$b,
+    output [31:0]indication$heard3$c,
+    output [15:0]indication$heard3$d,
+    input indication$heard3__RDY,
     input indication$heard__RDY);
     reg [15:0]a_delay;
     reg [15:0]a_temp;
@@ -41,6 +47,11 @@ module l_module_OC_Echo (input CLK, input nRST,
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
     assign indication$heard2__ENA = ( v_type  != 1 ) & respond_rule__ENA ;
+    // assign indication$heard3$a = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign indication$heard3$b = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign indication$heard3$c = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = busy  == 32'd0;
@@ -97,11 +108,12 @@ module l_module_OC_Hardware (input CLK, input nRST,
     input [63:0]request$enq$v,
     output request$enq__RDY,
     output indication$enq__ENA,
-    output [63:0]indication$enq$v,
+    output [127:0]indication$enq$v,
     input indication$enq__RDY);
 // software: request
 // software: indication
     wire lEIO$method$heard2__RDY;
+    wire lEIO$method$heard3__RDY;
     wire lEIO$method$heard__RDY;
     wire [31:0]lERI$method$say$v;
     wire [15:0]lERI$method$say2$a;
@@ -115,6 +127,11 @@ module l_module_OC_Hardware (input CLK, input nRST,
     wire [15:0]lEcho$indication$heard2$a;
     wire [15:0]lEcho$indication$heard2$b;
     wire lEcho$indication$heard2__ENA;
+    wire [15:0]lEcho$indication$heard3$a;
+    wire [31:0]lEcho$indication$heard3$b;
+    wire [31:0]lEcho$indication$heard3$c;
+    wire [15:0]lEcho$indication$heard3$d;
+    wire lEcho$indication$heard3__ENA;
     wire lEcho$indication$heard__ENA;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
@@ -143,6 +160,12 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .method$heard2$a(lEcho$indication$heard2$a),
         .method$heard2$b(lEcho$indication$heard2$b),
         .method$heard2__RDY(lEIO$method$heard2__RDY),
+        .method$heard3__ENA(lEcho$indication$heard3__ENA),
+        .method$heard3$a(lEcho$indication$heard3$a),
+        .method$heard3$b(lEcho$indication$heard3$b),
+        .method$heard3$c(lEcho$indication$heard3$c),
+        .method$heard3$d(lEcho$indication$heard3$d),
+        .method$heard3__RDY(lEIO$method$heard3__RDY),
         .method$heard__RDY(lEIO$method$heard__RDY),
         .pipe$enq__ENA(indication$enq__ENA),
         .pipe$enq$v(indication$enq$v),
@@ -166,6 +189,12 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .indication$heard2$a(lEcho$indication$heard2$a),
         .indication$heard2$b(lEcho$indication$heard2$b),
         .indication$heard2__RDY(lEIO$method$heard2__RDY),
+        .indication$heard3__ENA(lEcho$indication$heard3__ENA),
+        .indication$heard3$a(lEcho$indication$heard3$a),
+        .indication$heard3$b(lEcho$indication$heard3$b),
+        .indication$heard3$c(lEcho$indication$heard3$c),
+        .indication$heard3$d(lEcho$indication$heard3$d),
+        .indication$heard3__RDY(lEIO$method$heard3__RDY),
         .indication$heard__RDY(lEIO$method$heard__RDY));
 endmodule 
 
@@ -176,14 +205,21 @@ module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     input [15:0]method$heard2$a,
     input [15:0]method$heard2$b,
     output method$heard2__RDY,
+    input method$heard3__ENA,
+    input [15:0]method$heard3$a,
+    input [31:0]method$heard3$b,
+    input [31:0]method$heard3$c,
+    input [15:0]method$heard3$d,
+    output method$heard3__RDY,
     output method$heard__RDY,
     output pipe$enq__ENA,
-    output [63:0]pipe$enq$v,
+    output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
     assign method$heard2__RDY = pipe$enq__RDY ;
+    assign method$heard3__RDY = pipe$enq__RDY ;
     assign method$heard__RDY = pipe$enq__RDY ;
-    assign pipe$enq$v = method$heard__ENA  ? ( { method$heard$v, 16'd0, 16'd2}  ) : ( { method$heard2$b, method$heard2$a, 16'd1, 16'd2}  );
-    assign pipe$enq__ENA = method$heard__ENA  || method$heard2__ENA ;
+    assign pipe$enq$v = method$heard__ENA  ? ( { 64'd0, method$heard$v, 16'd0, 16'd2}  ) : method$heard2__ENA  ? ( { 64'd0, method$heard2$b, method$heard2$a, 16'd1, 16'd2}  ) : ( { method$heard3$d, method$heard3$c, method$heard3$b, method$heard3$a, 16'd2, 16'd4}  );
+    assign pipe$enq__ENA = method$heard__ENA  || method$heard2__ENA  || method$heard3__ENA ;
 endmodule 
 
 module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
