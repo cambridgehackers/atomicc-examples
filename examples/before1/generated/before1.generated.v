@@ -1,13 +1,13 @@
 `include "before1.generated.vh"
 
 module l_module_OC_Connect (input CLK, input nRST,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
     input request$say2__ENA,
     input [31:0]request$say2$meth,
     input [31:0]request$say2$v,
     output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
     output request$say__RDY,
     output indication$heard__ENA,
     output [31:0]indication$heard$meth,
@@ -56,22 +56,22 @@ module l_module_OC_Connect (input CLK, input nRST,
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
         .pipe$enq__RDY(lERI$pipe$enq__RDY),
+        .request$say__ENA(lERI$request$say__ENA),
+        .request$say$meth(lERI$request$say$meth),
+        .request$say$v(lERI$request$say$v),
         .request$say2__ENA(lERI$request$say2__ENA),
         .request$say2$meth(lERI$request$say2$meth),
         .request$say2$v(lERI$request$say2$v),
         .request$say2__RDY(lEcho$request$say2__RDY),
-        .request$say__ENA(lERI$request$say__ENA),
-        .request$say$meth(lERI$request$say$meth),
-        .request$say$v(lERI$request$say$v),
         .request$say__RDY(lEcho$request$say__RDY));
     l_module_OC_Echo lEcho (.CLK(CLK), .nRST(nRST),
+        .request$say__ENA(lERI$request$say__ENA),
+        .request$say$meth(lERI$request$say$meth),
+        .request$say$v(lERI$request$say$v),
         .request$say2__ENA(lERI$request$say2__ENA),
         .request$say2$meth(lERI$request$say2$meth),
         .request$say2$v(lERI$request$say2$v),
         .request$say2__RDY(lEcho$request$say2__RDY),
-        .request$say__ENA(lERI$request$say__ENA),
-        .request$say$meth(lERI$request$say$meth),
-        .request$say$v(lERI$request$say$v),
         .request$say__RDY(lEcho$request$say__RDY),
         .swap$x2y__ENA(swap_rule__ENA),
         .swap$x2y__RDY(lEcho$swap$x2y__RDY),
@@ -84,13 +84,13 @@ module l_module_OC_Connect (input CLK, input nRST,
         .indication$heard$v(lEcho$indication$heard$v),
         .indication$heard__RDY(lEIO$indication$heard__RDY));
     l_module_OC_EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
+        .request$say__ENA(request$say__ENA),
+        .request$say$meth(request$say$meth),
+        .request$say$v(request$say$v),
         .request$say2__ENA(request$say2__ENA),
         .request$say2$meth(request$say2$meth),
         .request$say2$v(request$say2$v),
         .request$say2__RDY(request$say2__RDY),
-        .request$say__ENA(request$say__ENA),
-        .request$say$meth(request$say$meth),
-        .request$say$v(request$say$v),
         .request$say__RDY(request$say__RDY),
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
@@ -106,13 +106,13 @@ module l_module_OC_Connect (input CLK, input nRST,
 endmodule 
 
 module l_module_OC_Echo (input CLK, input nRST,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
     input request$say2__ENA,
     input [31:0]request$say2$meth,
     input [31:0]request$say2$v,
     output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
     output request$say__RDY,
     input swap$x2y__ENA,
     output swap$x2y__RDY,
@@ -168,18 +168,18 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of delay_rule__ENA
-        if (request$say2__ENA) begin
-            meth_temp  <= request$say2$meth;
-            v_temp  <= request$say2$v;
-            busy  <= 1;
-            $display( "[%s:%d]Echo" , "request$say2" , 192 );
-        end; // End of request$say2__ENA
         if (request$say__ENA) begin
             meth_temp  <= request$say$meth;
             v_temp  <= request$say$v;
             busy  <= 1;
             $display( "[%s:%d]Echo" , "request$say" , 186 );
         end; // End of request$say__ENA
+        if (request$say2__ENA) begin
+            meth_temp  <= request$say2$meth;
+            v_temp  <= request$say2$v;
+            busy  <= 1;
+            $display( "[%s:%d]Echo" , "request$say2" , 192 );
+        end; // End of request$say2__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
             $display( "respond_rule: Echo" );
@@ -309,13 +309,13 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
     input pipe$enq__ENA,
     input [191:0]pipe$enq$v,
     output pipe$enq__RDY,
+    output request$say__ENA,
+    output [31:0]request$say$meth,
+    output [31:0]request$say$v,
     output request$say2__ENA,
     output [31:0]request$say2$meth,
     output [31:0]request$say2$v,
     input request$say2__RDY,
-    output request$say__ENA,
-    output [31:0]request$say$meth,
-    output [31:0]request$say$v,
     input request$say__RDY);
     assign pipe$enq__RDY = request$say__RDY  & request$say2__RDY ;
     assign request$say$meth = pipe$enq$v[63:32] ;
@@ -327,13 +327,13 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
 endmodule 
 
 module l_module_OC_EchoRequestOutput (input CLK, input nRST,
+    input request$say__ENA,
+    input [31:0]request$say$meth,
+    input [31:0]request$say$v,
     input request$say2__ENA,
     input [31:0]request$say2$meth,
     input [31:0]request$say2$v,
     output request$say2__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
     output request$say__RDY,
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
@@ -348,8 +348,8 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     wire [31:0]request$say__ENA$ind$data$say2$meth;
     wire [31:0]request$say__ENA$ind$data$say2$v;
     wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = request$say2__ENA  ? { request$say2__ENA$ind$data$say2$v2  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say$meth  , 32'd2 } : { request$say__ENA$ind$data$say2$v2  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 };
-    assign pipe$enq__ENA = request$say2__ENA  || request$say__ENA ;
+    assign pipe$enq$v = request$say__ENA  ? { request$say__ENA$ind$data$say2$v2  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 } : { request$say2__ENA$ind$data$say2$v2  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say$meth  , 32'd2 };
+    assign pipe$enq__ENA = request$say__ENA  || request$say2__ENA ;
     assign request$say2__RDY = pipe$enq__RDY ;
     assign request$say__RDY = pipe$enq__RDY ;
 
@@ -357,16 +357,16 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request$say2__ENA) begin
-            request$say2__ENA$ind$data$say2$meth  <= request$say2$meth;
-            request$say2__ENA$ind$data$say2$v  <= request$say2$v;
-            $display( "entered EchoRequestOutput::say2" );
-        end; // End of request$say2__ENA
         if (request$say__ENA) begin
             request$say__ENA$ind$data$say$meth  <= request$say$meth;
             request$say__ENA$ind$data$say$v  <= request$say$v;
             $display( "entered EchoRequestOutput::say" );
         end; // End of request$say__ENA
+        if (request$say2__ENA) begin
+            request$say2__ENA$ind$data$say2$meth  <= request$say2$meth;
+            request$say2__ENA$ind$data$say2$v  <= request$say2$v;
+            $display( "entered EchoRequestOutput::say2" );
+        end; // End of request$say2__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

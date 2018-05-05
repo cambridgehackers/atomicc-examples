@@ -29,12 +29,15 @@ typedef __int(16) aint16;
 __interface EchoRequest {
     void say(aint32 v);
     void say2(aint16 a, aint16 b);
+    //void say3(aint32 a, aint32 b, aint32 c);
+    //void say4(void);
     void setLeds(aint8 v);
 };
 
 __interface EchoIndication {
     void heard(aint32 v);
     void heard2(aint16 a, aint16 b);
+    //void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
 __module Echo {
@@ -58,6 +61,14 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         busy = 1;
         v_type = 2;
     }
+#if 0
+    void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+    }
+    void request.say4(void) if (false) {
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+    }
+#endif
     void request.setLeds(aint8 v) {
     }
     Echo() {

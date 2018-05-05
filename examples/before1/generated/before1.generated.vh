@@ -8,18 +8,18 @@
 //METAINTERNAL; lEcho; l_module_OC_Echo;
 //METAINTERNAL; lERO_test; l_module_OC_EchoRequestOutput;
 //METAINTERNAL; lEII_test; l_module_OC_EchoIndicationInput;
+//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
 //METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
 //METAGUARD; request$say2; lERO_test$request$say2__RDY ;
-//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
 //METAGUARD; request$say; lERO_test$request$say__RDY ;
 //METAINVOKE; swap2_rule__ENA; :lEcho$swap$y2xnull__ENA;
 //METAGUARD; swap2_rule; lEcho$swap$y2xnull__RDY ;
 //METAINVOKE; swap_rule__ENA; :lEcho$swap$x2y__ENA;:lEcho$swap$y2x__ENA;
 //METAGUARD; swap_rule; lEcho$swap$x2y__RDY  & lEcho$swap$y2x__RDY ;
 //METARULES; swap2_rule; swap_rule
+//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
 //METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
-//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
 //METACONNECT; lEIO$pipe$enq__ENA; lEII_test$pipe$enq__ENA
 //METACONNECT; lEIO$pipe$enq__RDY; lEII_test$pipe$enq__RDY
@@ -33,7 +33,7 @@
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
 //METAGUARD; delay_rule; ( ( busy  != 0 ) & ( busy_delay  == 1'd0 ) ) != 0;
-//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
+//METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; 0 == busy ;
 //METAGUARD; request$say; 0 == busy ;
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
@@ -65,9 +65,9 @@
 //METAGUARD; pipe$enq; request$say__RDY  & request$say2__RDY ;
 //METASTART; l_module_OC_EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
-//METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
-//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
-//METAGUARD; request$say2; pipe$enq__RDY ;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
+//METAEXCLUSIVE; request$say__ENA; request$say2__ENA
+//METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
+//METAGUARD; request$say2; pipe$enq__RDY ;
 //METAGUARD; request$say; pipe$enq__RDY ;
 `endif

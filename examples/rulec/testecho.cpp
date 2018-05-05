@@ -42,6 +42,9 @@ public:
         sem_post(&sem_heard2);
         printf("heard an echo2: %d %d\n", a, b);
     }
+    virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
+        printf("heard an echo3: %d %d\n", a, b);
+    }
     EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
 };
 
