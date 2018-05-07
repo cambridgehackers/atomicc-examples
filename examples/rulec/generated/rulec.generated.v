@@ -110,8 +110,6 @@ module l_module_OC_Hardware (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
     input indication$enq__RDY);
-// software: request
-// software: indication
     wire lEIO$method$heard2__RDY;
     wire lEIO$method$heard3__RDY;
     wire lEIO$method$heard__RDY;

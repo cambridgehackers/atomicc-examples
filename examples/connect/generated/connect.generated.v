@@ -9,8 +9,6 @@ module l_module_OC_Connect (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-// software: request
-// software: indication
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
