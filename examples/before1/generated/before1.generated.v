@@ -170,13 +170,13 @@ module l_module_OC_Echo (input CLK, input nRST,
             meth_temp  <= request$say$meth;
             v_temp  <= request$say$v;
             busy  <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 186 );
+            $display( "[request$say:186]Echo" );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             meth_temp  <= request$say2$meth;
             v_temp  <= request$say2$v;
             busy  <= 1;
-            $display( "[%s:%d]Echo" , "request$say2" , 192 );
+            $display( "[request$say2:192]Echo" );
         end; // End of request$say2__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
@@ -184,14 +184,14 @@ module l_module_OC_Echo (input CLK, input nRST,
         end; // End of respond_rule__ENA
         if (swap$x2y__ENA) begin
             y  <= x;
-            $display( "[%s:%d]Echo" , "swap$x2y" , 206 );
+            $display( "[swap$x2y:206]Echo" );
         end; // End of swap$x2y__ENA
         if (swap$y2x__ENA) begin
             x  <= y;
-            $display( "[%s:%d]Echo" , "swap$y2x" , 198 );
+            $display( "[swap$y2x:198]Echo" );
         end; // End of swap$y2x__ENA
         if (swap$y2xnull__ENA) begin
-            $display( "[%s:%d]Echo" , "swap$y2xnull" , 202 );
+            $display( "[swap$y2xnull:202]Echo" );
         end; // End of swap$y2xnull__ENA
       end
     end // always @ (posedge CLK)
@@ -229,7 +229,7 @@ module l_module_OC_EchoIndicationInput (input CLK, input nRST,
             $display( "input_rule: EchoIndicationInput" );
         end; // End of input_rule__ENA
         if (pipe$enq__ENA) begin
-            $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe$enq$v[31:0] );
+            $display( "pipe$enq: EchoIndicationInput tag %d" , pipe$enq$v[31:0] );
             if (pipe$enq$v[31:0] == 32'd1) begin
             meth_delay  <= pipe$enq$v[63:32];
             v_delay  <= pipe$enq$v[95:64];
@@ -283,7 +283,7 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
         if (indication$heard__ENA) begin
             ind_busy  <= 1;
             even  <= even ^ 1;
-            $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 114 , even );
+            $display( "[indication$heard:114]EchoIndicationOutput even %d" , even );
             if (even ^ 1) begin
             ind0$tag  <= 1;
             ind0$data$heard$meth  <= indication$heard$meth;

@@ -77,27 +77,27 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:%d]Echo" , 76 );
+            $display( "[delay_rule:76]Echo" );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 52 );
+            $display( "[request$say:52]Echo" );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[%s:%d]Echo" , "request$say2" , 58 );
+            $display( "[request$say2:58]Echo" );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[%s:%d]Echo" , "request$zsay4" , 70 );
+            $display( "[request$zsay4:70]Echo" );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:%d]Echo" , 84 );
+            $display( "[respond_rule:84]Echo" );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)
