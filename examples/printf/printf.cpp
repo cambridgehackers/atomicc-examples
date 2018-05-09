@@ -39,15 +39,6 @@ __interface EchoIndication {
     void heard2(aint16 a, aint16 b);
     void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
-#define MAX_PRINTF 4//100
-typedef struct {int data[MAX_PRINTF];} PrintfData;
-typedef PipeIn<PrintfData> PrintfPipe;
-template<class In, class Forward> __emodule MuxPipe {
-public:
-    In           in;
-    Forward      forward;
-    In           *out;
-};
 
 __module Echo {
     EchoRequest                     request;
@@ -60,9 +51,7 @@ __module Echo {
     int v_type;
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
-printfp->enq(PrintfData{busy_delay, v_type, 0, 0});
-//PrintfData foo = {busy_delay, v_type};
-//printfp->enq(foo);
+printfp->enq(PrintfData{16'd4, PRINTF_PORT, PRINTF_NUMBER, busy_delay, v_type, 16'd0});
         v_temp = v;
         busy = 1;
         v_type = 1;

@@ -40,11 +40,13 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
 
 template<class T>
 __interface PipeIn {
+    typedef T Data;
     void enq(T v);
 };
 
 template<class T>
 __interface PipeOut {
+    typedef T Data;
     void deq(void);
     T first(void);
 };
@@ -64,6 +66,25 @@ public:
     typedef PipeIn<Data>   Pipe;
     Pipe                   pipe;
     T                     *method;
+};
+
+#define MAX_PRINTF              4//100
+#define PRINTF_PORT        0xffff
+#define PRINTF_NUMBER           1
+
+typedef struct {int data[MAX_PRINTF];} PrintfData;
+typedef PipeIn<PrintfData>             PrintfPipe;
+template<class In, class Forward> __emodule MuxPipe {
+public:
+    In           in;
+    Forward      forward;
+    In           *out;
+    void in.enq(In::Data v) {
+        out->enq(v);
+    }
+    void forward.enq(Forward::Data v) {
+        out->enq(v);
+    }
 };
 
 static inline std::string utostr(uint64_t X) {
