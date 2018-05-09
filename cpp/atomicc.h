@@ -40,7 +40,7 @@ extern "C" void atomiccSchedulePriority(const char *arule, const char *priority,
 
 template<class T>
 __interface PipeIn {
-    void enq(const T v);
+    void enq(T v);
 };
 
 template<class T>
@@ -52,15 +52,17 @@ __interface PipeOut {
 template<class T> __emodule M2P { // method -> pipe
 public:
     typedef __serialize(T) Data;
+    typedef PipeIn<Data>   Pipe;
     T                      method;
-    PipeIn<Data>          *pipe;
-    PipeIn<Data>           unused;
+    Pipe                  *pipe;
+    Pipe                   unused;
 };
 
 template<class T> __emodule P2M { // pipe -> method
 public:
     typedef __serialize(T) Data;
-    PipeIn<Data>           pipe;
+    typedef PipeIn<Data>   Pipe;
+    Pipe                   pipe;
     T                     *method;
 };
 

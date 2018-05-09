@@ -1,0 +1,126 @@
+EMODULE l_struct_OC_PrintfData {
+    FIELD/Count 4  INTEGER_32 data
+}
+EMODULE l_ainterface_OC_EchoIndication {
+    METHOD heard2__ENA ( INTEGER_16 a , INTEGER_16 b )
+    METHOD heard3__ENA ( INTEGER_16 a , INTEGER_32 b , INTEGER_32 c , INTEGER_16 d )
+    METHOD heard__ENA ( INTEGER_32 v )
+}
+EMODULE l_ainterface_OC_EchoRequest {
+    METHOD say2__ENA ( INTEGER_16 a , INTEGER_16 b )
+    METHOD say__ENA ( INTEGER_32 v )
+    METHOD setLeds__ENA ( INTEGER_8 v )
+    METHOD zsay4__ENA
+}
+EMODULE l_ainterface_OC_PipeIn {
+    METHOD enq__ENA ( l_struct_OC_PrintfData v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_0 {
+    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_1 {
+    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
+    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoIndication_OD__KD__KD_Data v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_3 {
+    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data v )
+}
+EMODULE l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoIndication ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoRequest ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_P2M_MD_EchoIndication_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoIndication ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data {
+    INTERFACE l_ainterface_OC_EchoRequest ifc
+    FIELD INTEGER_32 unused
+}
+EMODULE l_module_OC_M2P {
+    INTERFACE l_ainterface_OC_EchoIndication method
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 unused
+}
+EMODULE l_module_OC_MuxPipe {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE/Ptr l_ainterface_OC_PipeIn forward
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 out
+}
+EMODULE l_module_OC_P2M {
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE/Ptr l_ainterface_OC_EchoRequest method
+}
+MODULE l_module_OC_Echo {
+    INTERFACE l_ainterface_OC_EchoRequest request
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACE/Ptr l_ainterface_OC_PipeIn printfp
+    FIELD INTEGER_32 busy
+    FIELD INTEGER_32 v_temp
+    FIELD INTEGER_32 v_delay
+    FIELD INTEGER_16 a_temp
+    FIELD INTEGER_16 b_temp
+    FIELD INTEGER_16 a_delay
+    FIELD INTEGER_16 b_delay
+    FIELD INTEGER_32 busy_delay
+    FIELD INTEGER_32 v_type
+    METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+        PRINTF :printf{"[delay_rule:%d]Echo\n",89}
+        STORE :busy = 0
+        STORE :busy_delay = 1
+        STORE :v_delay = v_temp
+        STORE :a_delay = a_temp
+        STORE :b_delay = b_temp
+    }
+    METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
+        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),71}
+        STORE :a_temp = request$say2$a
+        STORE :b_temp = request$say2$b
+        STORE :busy = 1
+        STORE :v_type = 2
+    }
+    METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
+        ALLOCA l_struct_OC_PrintfData request$say__ENA$agg_2e_tmp
+        PRINTF :printf{"[%s:%d]Echo\n",("request$say"),62}
+        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[0] = busy_delay
+        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[1] = v_type
+        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[2] = 0
+        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[3] = 0
+        CALL/Action :printfp$enq__ENA{request$say__ENA$agg_2e_tmp}
+        STORE :v_temp = request$say$v
+        STORE :busy = 1
+        STORE :v_type = 1
+    }
+    METHOD request$setLeds__ENA ( INTEGER_8 v )
+    METHOD request$zsay4__ENA {
+        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),83}
+    }
+    METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
+        PRINTF :printf{"[respond_rule:%d]Echo\n",97}
+        STORE :busy_delay = 0
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
+        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
+    }
+}
+MODULE l_module_OC_Hardware {
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACECONNECT lEIO$pipe muxPipe$in l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT muxPipe$forward lEcho$printfp l_ainterface_OC_PipeIn
+    INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
+    INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
+    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT indication muxPipe$out l_ainterface_OC_PipeIn_OC_1
+    FIELD l_module_OC_P2M lERI
+    FIELD l_module_OC_M2P lEIO
+    FIELD l_module_OC_Echo lEcho
+    FIELD l_module_OC_MuxPipe muxPipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 request
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 indication
+}

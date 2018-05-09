@@ -12,11 +12,8 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	mkdir -p generated
-	[ -h generated/l_module_OC_Hardware.v ] || ln -s rulec.generated.v generated/l_module_OC_Hardware.v
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
-
-cleanmake:
-	rm -f *.bc *.o *.ll *.s rulec.exe.* rulec.tmp
+	[ -h generated/l_module_OC_Hardware.v ] || ln -s printf.generated.v generated/l_module_OC_Hardware.v
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/printf.ll printf.cpp
 
 ############################# for running verilator
 #
@@ -33,5 +30,5 @@ SIMDIR=$(PWD)/../../../atomicc/simulation
 
 PROJECT_CPP = testecho.cpp
 
--include $(DTOP)/generated/rulec.generated.filelist
+-include $(DTOP)/generated/printf.generated.filelist
 include $(SIMDIR)/Makefile.verilator
