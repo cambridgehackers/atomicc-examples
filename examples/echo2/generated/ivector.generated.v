@@ -2,11 +2,11 @@
 
 module l_module_OC_Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
-    input [95:0]in$enq$v,
+    input [703:0]in$enq$v,
     output in$enq__RDY,
     input out$deq__ENA,
     output out$deq__RDY,
-    output [95:0]out$first,
+    output [703:0]out$first,
     output out$first__RDY);
     reg [31:0]element$a;
     reg [31:0]element$b;
@@ -76,20 +76,20 @@ endmodule
 
 module l_module_OC_FifoPong (input CLK, input nRST,
     input in$enq__ENA,
-    input [95:0]in$enq$v,
+    input [703:0]in$enq$v,
     output in$enq__RDY,
     input out$deq__ENA,
     output out$deq__RDY,
-    output [95:0]out$first,
+    output [703:0]out$first,
     output out$first__RDY);
     reg pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;
-    wire [95:0]element1$out$first;
+    wire [703:0]element1$out$first;
     wire element1$out$first__RDY;
     wire element2$in$enq__RDY;
     wire element2$out$deq__RDY;
-    wire [95:0]element2$out$first;
+    wire [703:0]element2$out$first;
     wire element2$out$first__RDY;
     l_module_OC_Fifo1 element1 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
@@ -126,13 +126,13 @@ endmodule
 
 module l_module_OC_IVector (input CLK, input nRST,
     input request$say__ENA,
-    input [95:0]request$say$v,
+    input [703:0]request$say$v,
     output request$say__RDY,
     output ind$heard__ENA,
-    output [95:0]ind$heard$v,
+    output [703:0]ind$heard$v,
     input ind$heard__RDY);
     wire fifo$out$deq__RDY;
-    wire [95:0]fifo$out$first;
+    wire [703:0]fifo$out$first;
     wire fifo$out$first__RDY;
     wire respond__ENA;
     wire respond__RDY;
