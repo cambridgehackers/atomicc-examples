@@ -1,7 +1,7 @@
 EMODULE l_struct_OC_ValuePair {
     FIELD INTEGER_32 a
     FIELD INTEGER_32 b
-    FIELD/Array 20  INTEGER_32 c
+    FIELD/Count 20  INTEGER_32 c
 }
 EMODULE l_class_OC_IVectorTest {
     FIELD l_module_OC_IVector ivector
