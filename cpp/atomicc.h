@@ -51,26 +51,8 @@ __interface PipeOut {
     T first(void);
 };
 
-template<class T> __emodule M2P { // method -> pipe
-public:
-    typedef __serialize(T) Data;
-    typedef PipeIn<Data>   Pipe;
-    T                      method;
-    Pipe                  *pipe;
-    Pipe                   unused;
-};
-
-template<class T> __emodule P2M { // pipe -> method
-public:
-    typedef __serialize(T) Data;
-    typedef PipeIn<Data>   Pipe;
-    Pipe                   pipe;
-    T                     *method;
-};
-
 #define MAX_NOC_WIDTH                  4//100
-#define PRINTF_PORT    (uint16_t) 0xffff
-#define PRINTF_NUMBER  (uint16_t)      1
+#define PRINTF_PORT    (uint16_t) 0x7fff
 
 typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
 typedef PipeIn<NOCData>                   NOCPipe;
@@ -85,6 +67,25 @@ public:
     void forward.enq(NOCData v) {
         out->enq(v);
     }
+};
+
+template<class T> __emodule M2P { // method -> pipe
+public:
+    typedef __serialize(T) Data;
+    //typedef NOCPipe   Pipe;
+    typedef PipeIn<Data>   Pipe;
+    T                      method;
+    Pipe                  *pipe;
+    Pipe                   unused;
+};
+
+template<class T> __emodule P2M { // pipe -> method
+public:
+    typedef __serialize(T) Data;
+    //typedef NOCPipe   Pipe;
+    typedef PipeIn<Data>   Pipe;
+    Pipe                   pipe;
+    T                     *method;
 };
 
 static inline std::string utostr(uint64_t X) {

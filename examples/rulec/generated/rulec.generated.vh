@@ -15,7 +15,7 @@
 //METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_Hardware
-//METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; indication; l_ainterface_OC_PipeIn_OC_1;
 //METAINTERNAL; lERI; l_module_OC_EchoRequest___P2M;
 //METAINTERNAL; lEIO; l_module_OC_EchoIndication___M2P;
 //METAINTERNAL; lEcho; l_module_OC_Echo;
@@ -38,7 +38,7 @@
 //METACONNECT; indication$enq__ENA; lEIO$pipe$enq__ENA
 //METACONNECT; indication$enq__RDY; lEIO$pipe$enq__RDY
 //METASTART; l_module_OC_EchoIndication___M2P
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard__ENA; method$heard2__ENA; method$heard3__ENA
 //METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;

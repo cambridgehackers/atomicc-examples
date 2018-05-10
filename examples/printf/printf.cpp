@@ -20,6 +20,8 @@
  */
 #include <atomicc.h>
 
+#define PRINTF_NUMBER  (uint16_t)      1
+
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
 //typedef __int(8) aint8;
@@ -104,7 +106,7 @@ __module Hardware {
 
     // top interface
     __software decltype(lERI.pipe)              request = lERI.pipe;
-    __software decltype(lEIO.pipe)              indication = muxPipe.out;
+    //__software decltype(lEIO.pipe)              indication = muxPipe.out;
 
     // Module under test
     __connect lERI.method = lEcho.request;
