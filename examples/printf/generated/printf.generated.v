@@ -1,4 +1,4 @@
-`include "rulec.generated.vh"
+`include "printf.generated.vh"
 
 module l_module_OC_Echo (input CLK, input nRST,
     input request$say__ENA,
@@ -25,7 +25,10 @@ module l_module_OC_Echo (input CLK, input nRST,
     output [31:0]indication$heard3$c,
     output [15:0]indication$heard3$d,
     input indication$heard3__RDY,
-    input indication$heard__RDY);
+    input indication$heard__RDY,
+    output printfp$enq__ENA,
+    output [127:0]printfp$enq$v,
+    input printfp$enq__RDY);
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;
@@ -53,8 +56,10 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
+    assign printfp$enq$v = { v_type  , busy_delay  , 32'd1 , 32'd2147418116 };
+    assign printfp$enq__ENA = request$say__ENA ;
     assign request$say2__RDY = busy  == 32'd0;
-    assign request$say__RDY = busy  == 32'd0;
+    assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
     assign request$setLeds__RDY = 1;
     assign request$zsay4__RDY = 1;
 
@@ -77,27 +82,27 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:76]Echo" );
+            $display( "[delay_rule:80]Echo" );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[request$say:52]Echo" );
+            $display( "[request$say:55]Echo" );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[request$say2:58]Echo" );
+            $display( "[request$say2:62]Echo" );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[request$zsay4:70]Echo" );
+            $display( "[request$zsay4:74]Echo" );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:84]Echo" );
+            $display( "[respond_rule:88]Echo" );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)
@@ -106,13 +111,12 @@ endmodule
 module l_module_OC_Hardware (input CLK, input nRST,
     input request$enq__ENA,
     input [127:0]request$enq$v,
-    output request$enq__RDY,
-    output indication$enq__ENA,
-    output [127:0]indication$enq$v,
-    input indication$enq__RDY);
+    output request$enq__RDY);
     wire lEIO$method$heard2__RDY;
     wire lEIO$method$heard3__RDY;
     wire lEIO$method$heard__RDY;
+    wire [127:0]lEIO$pipe$enq$v;
+    wire lEIO$pipe$enq__ENA;
     wire [31:0]lERI$method$say$v;
     wire [15:0]lERI$method$say2$a;
     wire [15:0]lERI$method$say2$b;
@@ -131,10 +135,17 @@ module l_module_OC_Hardware (input CLK, input nRST,
     wire [15:0]lEcho$indication$heard3$d;
     wire lEcho$indication$heard3__ENA;
     wire lEcho$indication$heard__ENA;
+    wire [127:0]lEcho$printfp$enq$v;
+    wire lEcho$printfp$enq__ENA;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__RDY;
     wire lEcho$request$setLeds__RDY;
     wire lEcho$request$zsay4__RDY;
+    wire muxPipe$forward$enq__RDY;
+    wire muxPipe$in$enq__RDY;
+    wire [127:0]muxPipe$out$enq$v;
+    wire muxPipe$out$enq__ENA;
+    wire muxPipe$out$enq__RDY;
     l_module_OC_EchoRequest___P2M lERI (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
@@ -165,9 +176,9 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .method$heard3$d(lEcho$indication$heard3$d),
         .method$heard3__RDY(lEIO$method$heard3__RDY),
         .method$heard__RDY(lEIO$method$heard__RDY),
-        .pipe$enq__ENA(indication$enq__ENA),
-        .pipe$enq$v(indication$enq$v),
-        .pipe$enq__RDY(indication$enq__RDY));
+        .pipe$enq__ENA(lEIO$pipe$enq__ENA),
+        .pipe$enq$v(lEIO$pipe$enq$v),
+        .pipe$enq__RDY(muxPipe$in$enq__RDY));
     l_module_OC_Echo lEcho (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(lERI$method$say__ENA),
         .request$say$v(lERI$method$say$v),
@@ -193,7 +204,21 @@ module l_module_OC_Hardware (input CLK, input nRST,
         .indication$heard3$c(lEcho$indication$heard3$c),
         .indication$heard3$d(lEcho$indication$heard3$d),
         .indication$heard3__RDY(lEIO$method$heard3__RDY),
-        .indication$heard__RDY(lEIO$method$heard__RDY));
+        .indication$heard__RDY(lEIO$method$heard__RDY),
+        .printfp$enq__ENA(lEcho$printfp$enq__ENA),
+        .printfp$enq$v(lEcho$printfp$enq$v),
+        .printfp$enq__RDY(muxPipe$forward$enq__RDY));
+    l_module_OC_MuxPipe muxPipe (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(lEIO$pipe$enq__ENA),
+        .in$enq$v(lEIO$pipe$enq$v),
+        .in$enq__RDY(muxPipe$in$enq__RDY),
+        .forward$enq__ENA(lEcho$printfp$enq__ENA),
+        .forward$enq$v(lEcho$printfp$enq$v),
+        .forward$enq__RDY(muxPipe$forward$enq__RDY),
+        .out$enq__ENA(muxPipe$out$enq__ENA),
+        .out$enq$v(muxPipe$out$enq$v),
+        .out$enq__RDY(muxPipe$out$enq__RDY));
+    // assign muxPipe$out$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
 endmodule 
 
 module l_module_OC_EchoIndication___M2P (input CLK, input nRST,

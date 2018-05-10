@@ -72,8 +72,8 @@ public:
 template<class T> __emodule M2P { // method -> pipe
 public:
     typedef __serialize(T) Data;
-    //typedef NOCPipe   Pipe;
-    typedef PipeIn<Data>   Pipe;
+    typedef NOCPipe   Pipe;
+    //typedef PipeIn<Data>   Pipe;
     T                      method;
     Pipe                  *pipe;
     Pipe                   unused;
@@ -82,8 +82,8 @@ public:
 template<class T> __emodule P2M { // pipe -> method
 public:
     typedef __serialize(T) Data;
-    //typedef NOCPipe   Pipe;
-    typedef PipeIn<Data>   Pipe;
+    typedef NOCPipe   Pipe;
+    //typedef PipeIn<Data>   Pipe;
     Pipe                   pipe;
     T                     *method;
 };

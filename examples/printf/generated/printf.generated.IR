@@ -15,18 +15,6 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_2 {
-    METHOD enq__ENA ( l_serialize_OC_P2M_MD_EchoIndication_OD__KD__KD_Data v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_3 {
-    METHOD enq__ENA ( l_serialize_OC_M2P_MD_EchoRequest_OD__KD__KD_Data v )
-}
 EMODULE l_serialize_OC_M2P_MD_EchoIndication_OD__KD__KD_Data {
     INTERFACE l_ainterface_OC_EchoIndication ifc
     FIELD INTEGER_32 unused
@@ -45,8 +33,8 @@ EMODULE l_serialize_OC_P2M_MD_EchoRequest_OD__KD__KD_Data {
 }
 EMODULE l_module_OC_M2P {
     INTERFACE l_ainterface_OC_EchoIndication method
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 unused
+    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
+    INTERFACE l_ainterface_OC_PipeIn unused
 }
 EMODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -60,7 +48,7 @@ EMODULE l_module_OC_MuxPipe {
     }
 }
 EMODULE l_module_OC_P2M {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE l_ainterface_OC_PipeIn pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest method
 }
 MODULE l_module_OC_Echo {
@@ -116,14 +104,14 @@ MODULE l_module_OC_Echo {
 }
 MODULE l_module_OC_Hardware {
     SOFTWARE request
-    INTERFACECONNECT lEIO$pipe muxPipe$in l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT lEIO$pipe muxPipe$in l_ainterface_OC_PipeIn
     INTERFACECONNECT muxPipe$forward lEcho$printfp l_ainterface_OC_PipeIn
     INTERFACECONNECT lERI$method lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEcho$indication lEIO$method l_ainterface_OC_EchoIndication
-    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT request lERI$pipe l_ainterface_OC_PipeIn
     FIELD l_module_OC_P2M lERI
     FIELD l_module_OC_M2P lEIO
     FIELD l_module_OC_Echo lEcho
     FIELD l_module_OC_MuxPipe muxPipe
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 request
+    INTERFACE l_ainterface_OC_PipeIn request
 }

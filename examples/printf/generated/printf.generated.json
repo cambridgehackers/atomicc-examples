@@ -1,0 +1,33 @@
+{
+    "bsvdefines": [ ],
+    "globaldecls": [
+        { "dtype": "TypeDef",
+            "tdtype": { "name": "Bit", "params": [ { "name": "32" } ] },
+            "tname": "SpecialTypeForSendingFd"
+        },
+        { "dtype": "TypeDef",
+            "tdtype": {
+                "elements": [ [ "IfcNames_EchoRequestS2H", "5" ] ],
+                "name": "IfcNames",
+                "type": "Enum"
+            },
+            "tname": "IfcNames"
+        }
+    ],
+    "interfaces": [
+        { "cdecls": [
+                { "dname": "say", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
+                { "dname": "say2", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] },
+                { "dname": "setLeds", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] },
+                { "dname": "zsay4", "dparams": [
+                    ] }
+            ], "direction": "0", "cname": "EchoRequest" }
+    ]
+}
