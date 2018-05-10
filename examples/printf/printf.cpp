@@ -43,7 +43,7 @@ __interface EchoIndication {
 __module Echo {
     EchoRequest                     request;
     EchoIndication                 *indication;
-    PrintfPipe                     *printfp;
+    NOCPipe                        *printfp;
     int busy;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
@@ -51,7 +51,7 @@ __module Echo {
     int v_type;
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
-printfp->enq(PrintfData{16'd4, PRINTF_PORT, PRINTF_NUMBER, busy_delay, v_type, 16'd0});
+printfp->enq(NOCData{(PRINTF_PORT << 16 | (short)4), PRINTF_NUMBER, busy_delay, v_type});
         v_temp = v;
         busy = 1;
         v_type = 1;
@@ -98,7 +98,7 @@ __module Hardware {
     P2M<EchoRequest>                 lERI;      // request pipe
     M2P<EchoIndication>              lEIO;      // indication pipe
     Echo                            lEcho;
-    MuxPipe<M2P<EchoIndication>::Pipe, decltype(lEcho.printfp)> muxPipe;
+    MuxPipe                       muxPipe;
     __connect lEIO.pipe = muxPipe.in;
     __connect muxPipe.forward = lEcho.printfp;
 

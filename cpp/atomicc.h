@@ -68,21 +68,21 @@ public:
     T                     *method;
 };
 
-#define MAX_PRINTF              4//100
-#define PRINTF_PORT        0xffff
-#define PRINTF_NUMBER           1
+#define MAX_NOC_WIDTH                  4//100
+#define PRINTF_PORT    (uint16_t) 0xffff
+#define PRINTF_NUMBER  (uint16_t)      1
 
-typedef struct {int data[MAX_PRINTF];} PrintfData;
-typedef PipeIn<PrintfData>             PrintfPipe;
-template<class In, class Forward> __emodule MuxPipe {
+typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
+typedef PipeIn<NOCData>                   NOCPipe;
+__emodule MuxPipe {
 public:
-    In           in;
-    Forward      forward;
-    In           *out;
-    void in.enq(In::Data v) {
+    NOCPipe           in;
+    NOCPipe      forward;
+    NOCPipe         *out;
+    void in.enq(NOCData v) {
         out->enq(v);
     }
-    void forward.enq(Forward::Data v) {
+    void forward.enq(NOCData v) {
         out->enq(v);
     }
 };
