@@ -54,11 +54,11 @@ typedef struct {
     int c; // for c++ , need to generate std::copy [20];
 } ValuePair;
 
-__interface __ready_valid LpmIndication {
+__interface LpmIndication {
     void heard(int meth, int v);
 };
 
-__interface __ready_valid LpmRequest {
+__interface LpmRequest {
     void say(int meth, int v);
 };
 

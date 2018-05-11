@@ -31,7 +31,6 @@
 #define __interface class __attribute__(( atomicc_interface ))
 #define __module class __attribute__(( atomicc_module ))
 #define __emodule class __attribute__(( atomicc_emodule ))
-#define __ready_valid __attribute__(( atomicc_ready_valid ))
 #define __software __attribute__(( atomicc_software ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; int unused; }
 #define __int(A) int __attribute__(( atomicc_width(A) ))
@@ -68,7 +67,7 @@ public:
         out->enq(v);
     }
 };
-
+#if 0
 template<class T> __emodule M2P { // method -> pipe
 public:
     typedef __serialize(T) Data;
@@ -87,6 +86,7 @@ public:
     Pipe                   pipe;
     T                     *method;
 };
+#endif
 
 static inline std::string utostr(uint64_t X) {
   char Buffer[21], *BufPtr = Buffer+21;
