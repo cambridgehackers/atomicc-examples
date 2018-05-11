@@ -7,7 +7,7 @@
         },
         { "dtype": "TypeDef",
             "tdtype": {
-                "elements": [ [ "IfcNames_EchoRequestS2H", "5" ] ],
+                "elements": [ [ "IfcNames_EchoIndicationH2S", "5" ], [ "IfcNames_EchoRequestS2H", "6" ] ],
                 "name": "IfcNames",
                 "type": "Enum"
             },
@@ -15,6 +15,21 @@
         }
     ],
     "interfaces": [
+        { "cdecls": [
+                { "dname": "heard", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
+                { "dname": "heard2", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] },
+                { "dname": "heard3", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
+                        { "pname": "c", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
+                        { "pname": "d", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] }
+            ], "direction": "1", "cname": "EchoIndication" },
         { "cdecls": [
                 { "dname": "say", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
