@@ -16,19 +16,31 @@
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
 //METARULES; delay_rule; respond_rule
+//METASTART; l_module_OC_MuxPipe
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAINVOKE; forward$enq__ENA; :out$enq__ENA;
+//METAEXCLUSIVE; forward$enq__ENA; in$enq__ENA
+//METAGUARD; forward$enq; out$enq__RDY ;
+//METAINVOKE; in$enq__ENA; :out$enq__ENA;
+//METAGUARD; in$enq; out$enq__RDY ;
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;
-//METAINTERNAL; M2P; l_module_OC_EchoIndication___M2P;
+//METAINTERNAL; mux; l_module_OC_MuxPipe;
+//METAINTERNAL; M2P__indication; l_module_OC_EchoIndication___M2P;
 //METAINTERNAL; P2M__request; l_module_OC_EchoRequest___P2M;
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard__ENA; M2P$method$heard__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__ENA; M2P$method$heard2__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__RDY; M2P$method$heard2__RDY
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__ENA; M2P$method$heard3__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__RDY; M2P$method$heard3__RDY
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard__RDY; M2P$method$heard__RDY
-//METACONNECT; indication$enq__ENA; M2P$pipe$enq__ENA
-//METACONNECT; indication$enq__RDY; M2P$pipe$enq__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard__ENA; M2P__indication$method$heard__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__ENA; M2P__indication$method$heard2__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__RDY; M2P__indication$method$heard2__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__ENA; M2P__indication$method$heard3__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__RDY; M2P__indication$method$heard3__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard__RDY; M2P__indication$method$heard__RDY
+//METACONNECT; mux$in$enq__ENA; M2P__indication$pipe$enq__ENA
+//METACONNECT; mux$in$enq__RDY; M2P__indication$pipe$enq__RDY
+//METACONNECT; mux$forward$enq__ENA; DUT__l_module_OC_Echo$printfp$enq__ENA
+//METACONNECT; mux$forward$enq__RDY; DUT__l_module_OC_Echo$printfp$enq__RDY
+//METACONNECT; indication$enq__ENA; mux$out$enq__ENA
+//METACONNECT; indication$enq__RDY; mux$out$enq__RDY
 //METACONNECT; DUT__l_module_OC_Echo$request$say__ENA; P2M__request$method$say__ENA
 //METACONNECT; DUT__l_module_OC_Echo$request$say2__ENA; P2M__request$method$say2__ENA
 //METACONNECT; DUT__l_module_OC_Echo$request$say2__RDY; P2M__request$method$say2__RDY
