@@ -16,13 +16,6 @@
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
 //METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
 //METARULES; delay_rule; respond_rule
-//METASTART; l_module_OC_MuxPipe
-//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINVOKE; forward$enq__ENA; :out$enq__ENA;
-//METAEXCLUSIVE; forward$enq__ENA; in$enq__ENA
-//METAGUARD; forward$enq; out$enq__RDY ;
-//METAINVOKE; in$enq__ENA; :out$enq__ENA;
-//METAGUARD; in$enq; out$enq__RDY ;
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;
@@ -51,6 +44,13 @@
 //METACONNECT; DUT__l_module_OC_Echo$request$zsay4__RDY; P2M__request$method$zsay4__RDY
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
+//METASTART; l_module_OC_MuxPipe
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAINVOKE; forward$enq__ENA; :out$enq__ENA;
+//METAEXCLUSIVE; forward$enq__ENA; in$enq__ENA
+//METAGUARD; forward$enq; out$enq__RDY ;
+//METAINVOKE; in$enq__ENA; :out$enq__ENA;
+//METAGUARD; in$enq; out$enq__RDY ;
 //METASTART; l_module_OC_EchoIndication___M2P
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;

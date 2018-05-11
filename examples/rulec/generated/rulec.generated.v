@@ -124,9 +124,9 @@ module l_top (input CLK, input nRST,
     wire DUT__l_module_OC_Echo$request$say__RDY;
     wire DUT__l_module_OC_Echo$request$setLeds__RDY;
     wire DUT__l_module_OC_Echo$request$zsay4__RDY;
-    wire M2P$method$heard2__RDY;
-    wire M2P$method$heard3__RDY;
-    wire M2P$method$heard__RDY;
+    wire M2P__indication$method$heard2__RDY;
+    wire M2P__indication$method$heard3__RDY;
+    wire M2P__indication$method$heard__RDY;
     wire [31:0]P2M__request$method$say$v;
     wire [15:0]P2M__request$method$say2$a;
     wire [15:0]P2M__request$method$say2$b;
@@ -153,28 +153,28 @@ module l_top (input CLK, input nRST,
         .indication$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
         .indication$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
         .indication$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
-        .indication$heard2__RDY(M2P$method$heard2__RDY),
+        .indication$heard2__RDY(M2P__indication$method$heard2__RDY),
         .indication$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
         .indication$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
         .indication$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
         .indication$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
         .indication$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
-        .indication$heard3__RDY(M2P$method$heard3__RDY),
-        .indication$heard__RDY(M2P$method$heard__RDY));
-    l_module_OC_EchoIndication___M2P M2P (.CLK(CLK), .nRST(nRST),
+        .indication$heard3__RDY(M2P__indication$method$heard3__RDY),
+        .indication$heard__RDY(M2P__indication$method$heard__RDY));
+    l_module_OC_EchoIndication___M2P M2P__indication (.CLK(CLK), .nRST(nRST),
         .method$heard__ENA(DUT__l_module_OC_Echo$indication$heard__ENA),
         .method$heard$v(DUT__l_module_OC_Echo$indication$heard$v),
         .method$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
         .method$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
         .method$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
-        .method$heard2__RDY(M2P$method$heard2__RDY),
+        .method$heard2__RDY(M2P__indication$method$heard2__RDY),
         .method$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
         .method$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
         .method$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
         .method$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
         .method$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
-        .method$heard3__RDY(M2P$method$heard3__RDY),
-        .method$heard__RDY(M2P$method$heard__RDY),
+        .method$heard3__RDY(M2P__indication$method$heard3__RDY),
+        .method$heard__RDY(M2P__indication$method$heard__RDY),
         .pipe$enq__ENA(indication$enq__ENA),
         .pipe$enq$v(indication$enq$v),
         .pipe$enq__RDY(indication$enq__RDY));

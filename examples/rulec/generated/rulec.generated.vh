@@ -17,16 +17,16 @@
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;
-//METAINTERNAL; M2P; l_module_OC_EchoIndication___M2P;
+//METAINTERNAL; M2P__indication; l_module_OC_EchoIndication___M2P;
 //METAINTERNAL; P2M__request; l_module_OC_EchoRequest___P2M;
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard__ENA; M2P$method$heard__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__ENA; M2P$method$heard2__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__RDY; M2P$method$heard2__RDY
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__ENA; M2P$method$heard3__ENA
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__RDY; M2P$method$heard3__RDY
-//METACONNECT; DUT__l_module_OC_Echo$indication$heard__RDY; M2P$method$heard__RDY
-//METACONNECT; indication$enq__ENA; M2P$pipe$enq__ENA
-//METACONNECT; indication$enq__RDY; M2P$pipe$enq__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard__ENA; M2P__indication$method$heard__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__ENA; M2P__indication$method$heard2__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard2__RDY; M2P__indication$method$heard2__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__ENA; M2P__indication$method$heard3__ENA
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard3__RDY; M2P__indication$method$heard3__RDY
+//METACONNECT; DUT__l_module_OC_Echo$indication$heard__RDY; M2P__indication$method$heard__RDY
+//METACONNECT; indication$enq__ENA; M2P__indication$pipe$enq__ENA
+//METACONNECT; indication$enq__RDY; M2P__indication$pipe$enq__RDY
 //METACONNECT; DUT__l_module_OC_Echo$request$say__ENA; P2M__request$method$say__ENA
 //METACONNECT; DUT__l_module_OC_Echo$request$say2__ENA; P2M__request$method$say2__ENA
 //METACONNECT; DUT__l_module_OC_Echo$request$say2__RDY; P2M__request$method$say2__RDY

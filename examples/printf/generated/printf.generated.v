@@ -108,22 +108,6 @@ module l_module_OC_Echo (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_MuxPipe (input CLK, input nRST,
-    input in$enq__ENA,
-    input [127:0]in$enq$v,
-    output in$enq__RDY,
-    input forward$enq__ENA,
-    input [127:0]forward$enq$v,
-    output forward$enq__RDY,
-    output out$enq__ENA,
-    output [127:0]out$enq$v,
-    input out$enq__RDY);
-    assign forward$enq__RDY = out$enq__RDY ;
-    assign in$enq__RDY = out$enq__RDY ;
-    assign out$enq$v = forward$enq__ENA  ? forward$enq$v  : in$enq$v ;
-    assign out$enq__ENA = forward$enq__ENA  || in$enq__ENA ;
-endmodule 
-
 module l_top (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
@@ -234,6 +218,22 @@ module l_top (input CLK, input nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
+endmodule 
+
+module l_module_OC_MuxPipe (input CLK, input nRST,
+    input in$enq__ENA,
+    input [127:0]in$enq$v,
+    output in$enq__RDY,
+    input forward$enq__ENA,
+    input [127:0]forward$enq$v,
+    output forward$enq__RDY,
+    output out$enq__ENA,
+    output [127:0]out$enq$v,
+    input out$enq__RDY);
+    assign forward$enq__RDY = out$enq__RDY ;
+    assign in$enq__RDY = out$enq__RDY ;
+    assign out$enq$v = forward$enq__ENA  ? forward$enq$v  : in$enq$v ;
+    assign out$enq__ENA = forward$enq__ENA  || in$enq__ENA ;
 endmodule 
 
 module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
