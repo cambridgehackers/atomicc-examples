@@ -35,13 +35,18 @@ module l_module_OC_Echo (input CLK, input nRST,
     reg [15:0]b_temp;
     reg [31:0]busy;
     reg [31:0]busy_delay;
+    reg [31:0]clockReg;
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
+    wire clockRule__ENA;
+    wire clockRule__RDY;
     wire delay_rule__ENA;
     wire delay_rule__RDY;
     wire respond_rule__ENA;
     wire respond_rule__RDY;
+    assign clockRule__ENA = clockRule__RDY ;
+    assign clockRule__RDY = 1;
     assign delay_rule__ENA = delay_rule__RDY ;
     assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
@@ -56,7 +61,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
-    assign printfp$enq$v = { v_type  , busy_delay  , 32'd1 , 32'd2147418116 };
+    assign printfp$enq$v = { clockReg  , busy_delay  , 32'd1 , 32'd2147418116 };
     assign printfp$enq__ENA = request$say__ENA ;
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
@@ -71,38 +76,42 @@ module l_module_OC_Echo (input CLK, input nRST,
         b_temp <= 0;
         busy <= 0;
         busy_delay <= 0;
+        clockReg <= 0;
         v_delay <= 0;
         v_temp <= 0;
         v_type <= 0;
       end // nRST
       else begin
+        if (clockRule__ENA) begin
+            clockReg  <= clockReg + 1;
+        end; // End of clockRule__ENA
         if (delay_rule__ENA) begin
             busy  <= 0;
             busy_delay  <= 1;
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:80]Echo" );
+            $display( "[delay_rule:81]Echo" );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[request$say:55]Echo" );
+            $display( "[request$say:56]Echo" );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[request$say2:62]Echo" );
+            $display( "[request$say2:63]Echo" );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[request$zsay4:74]Echo" );
+            $display( "[request$zsay4:75]Echo" );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:88]Echo" );
+            $display( "[respond_rule:89]Echo" );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)
