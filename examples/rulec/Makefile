@@ -12,7 +12,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 
 all:
 	mkdir -p generated
-	[ -h generated/l_module_OC_Hardware.v ] || ln -s rulec.generated.v generated/l_module_OC_Hardware.v
+	[ -h generated/l_top.v ] || ln -s rulec.generated.v generated/l_top.v
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
 
 cleanmake:

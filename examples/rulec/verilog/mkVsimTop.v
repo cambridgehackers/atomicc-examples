@@ -15,7 +15,7 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
     .data_v(outgoingData), .data_length(outgoingLength),
     .EN_data(EN_outgoing && RDY_outgoing), .RDY_data(RDY_outgoing));
 
-  l_module_OC_Hardware top(.CLK(CLK), .nRST(RST_N),
+  l_top top(.CLK(CLK), .nRST(RST_N),
     .request$enq$v(incomingData),
     .request$enq__ENA(incomingEnable), .request$enq__RDY(RDY_echo_in_enq),
     .indication$enq$v(echoData),

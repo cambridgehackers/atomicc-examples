@@ -16,20 +16,6 @@
     ],
     "interfaces": [
         { "cdecls": [
-                { "dname": "say", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
-                    ] },
-                { "dname": "say2", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
-                    ] },
-                { "dname": "setLeds", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
-                    ] },
-                { "dname": "zsay4", "dparams": [
-                    ] }
-            ], "direction": "0", "cname": "EchoRequest" },
-        { "cdecls": [
                 { "dname": "heard", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
                     ] },
@@ -43,6 +29,20 @@
                         { "pname": "c", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
                         { "pname": "d", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
                     ] }
-            ], "direction": "1", "cname": "EchoIndication" }
+            ], "direction": "1", "cname": "EchoIndication" },
+        { "cdecls": [
+                { "dname": "say", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
+                { "dname": "say2", "dparams": [
+                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                    ] },
+                { "dname": "setLeds", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] },
+                { "dname": "zsay4", "dparams": [
+                    ] }
+            ], "direction": "0", "cname": "EchoRequest" }
     ]
 }

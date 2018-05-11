@@ -41,8 +41,8 @@ __interface EchoIndication {
 };
 
 __module Echo {
-    EchoRequest                     request;
-    EchoIndication                 *indication;
+    __software EchoRequest                     request;
+    __software EchoIndication                 *indication;
     int busy;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
@@ -91,25 +91,4 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
     }
 };
 
-//////////////////////////// this is the stack that will run in the hardware
-__module Hardware {
-    P2M<EchoRequest>                 lERI;      // request pipe
-    M2P<EchoIndication>              lEIO;      // indication pipe
-
-    // top interface
-    __software decltype(lERI.pipe)              request = lERI.pipe;
-    __software decltype(lEIO.pipe)              indication = lEIO.pipe;
-
-    // Module under test
-    Echo                       lEcho;
-    __connect lERI.method = lEcho.request;
-    __connect lEcho.indication = lEIO.method;
-};
-
-Hardware test;
-
-// hack for clang
-P2M<EchoRequest>::Data foo1;
-P2M<EchoIndication>::Data foo2;
-M2P<EchoRequest>::Data foo3;
-M2P<EchoIndication>::Data foo4;
+Echo test;
