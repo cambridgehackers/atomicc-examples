@@ -35,8 +35,8 @@ __emodule EchoInd {
 };
 
 __module Echo {
-  __software EchoRequest sout;
-  __software EchoIndication *ind;
+  EchoRequest sout;
+  EchoIndication *ind;
   Fifo<int> *fifo;
   void sout.say(const int v) {
       fifo->in.enq(v);

@@ -115,97 +115,97 @@ module l_top (input CLK, input nRST,
     input request$enq__ENA,
     input [127:0]request$enq$v,
     output request$enq__RDY);
-    wire lEIO$method$heard2__RDY;
-    wire lEIO$method$heard3__RDY;
-    wire lEIO$method$heard__RDY;
-    wire [31:0]lERI$method$say$v;
-    wire [15:0]lERI$method$say2$a;
-    wire [15:0]lERI$method$say2$b;
-    wire lERI$method$say2__ENA;
-    wire lERI$method$say__ENA;
-    wire [7:0]lERI$method$setLeds$v;
-    wire lERI$method$setLeds__ENA;
-    wire lERI$method$zsay4__ENA;
-    wire [31:0]lEcho$indication$heard$v;
-    wire [15:0]lEcho$indication$heard2$a;
-    wire [15:0]lEcho$indication$heard2$b;
-    wire lEcho$indication$heard2__ENA;
-    wire [15:0]lEcho$indication$heard3$a;
-    wire [31:0]lEcho$indication$heard3$b;
-    wire [31:0]lEcho$indication$heard3$c;
-    wire [15:0]lEcho$indication$heard3$d;
-    wire lEcho$indication$heard3__ENA;
-    wire lEcho$indication$heard__ENA;
-    wire [127:0]lEcho$printfp$enq$v;
-    wire lEcho$printfp$enq__ENA;
-    wire lEcho$printfp$enq__RDY;
-    wire lEcho$request$say2__RDY;
-    wire lEcho$request$say__RDY;
-    wire lEcho$request$setLeds__RDY;
-    wire lEcho$request$zsay4__RDY;
-    l_module_OC_EchoIndication___M2P lEIO (.CLK(CLK), .nRST(nRST),
-        .method$heard__ENA(lEcho$indication$heard__ENA),
-        .method$heard$v(lEcho$indication$heard$v),
-        .method$heard2__ENA(lEcho$indication$heard2__ENA),
-        .method$heard2$a(lEcho$indication$heard2$a),
-        .method$heard2$b(lEcho$indication$heard2$b),
-        .method$heard2__RDY(lEIO$method$heard2__RDY),
-        .method$heard3__ENA(lEcho$indication$heard3__ENA),
-        .method$heard3$a(lEcho$indication$heard3$a),
-        .method$heard3$b(lEcho$indication$heard3$b),
-        .method$heard3$c(lEcho$indication$heard3$c),
-        .method$heard3$d(lEcho$indication$heard3$d),
-        .method$heard3__RDY(lEIO$method$heard3__RDY),
-        .method$heard__RDY(lEIO$method$heard__RDY),
+    wire [31:0]DUT__l_module_OC_Echo$indication$heard$v;
+    wire [15:0]DUT__l_module_OC_Echo$indication$heard2$a;
+    wire [15:0]DUT__l_module_OC_Echo$indication$heard2$b;
+    wire DUT__l_module_OC_Echo$indication$heard2__ENA;
+    wire [15:0]DUT__l_module_OC_Echo$indication$heard3$a;
+    wire [31:0]DUT__l_module_OC_Echo$indication$heard3$b;
+    wire [31:0]DUT__l_module_OC_Echo$indication$heard3$c;
+    wire [15:0]DUT__l_module_OC_Echo$indication$heard3$d;
+    wire DUT__l_module_OC_Echo$indication$heard3__ENA;
+    wire DUT__l_module_OC_Echo$indication$heard__ENA;
+    wire [127:0]DUT__l_module_OC_Echo$printfp$enq$v;
+    wire DUT__l_module_OC_Echo$printfp$enq__ENA;
+    wire DUT__l_module_OC_Echo$printfp$enq__RDY;
+    wire DUT__l_module_OC_Echo$request$say2__RDY;
+    wire DUT__l_module_OC_Echo$request$say__RDY;
+    wire DUT__l_module_OC_Echo$request$setLeds__RDY;
+    wire DUT__l_module_OC_Echo$request$zsay4__RDY;
+    wire M2P$method$heard2__RDY;
+    wire M2P$method$heard3__RDY;
+    wire M2P$method$heard__RDY;
+    wire [31:0]P2M__request$method$say$v;
+    wire [15:0]P2M__request$method$say2$a;
+    wire [15:0]P2M__request$method$say2$b;
+    wire P2M__request$method$say2__ENA;
+    wire P2M__request$method$say__ENA;
+    wire [7:0]P2M__request$method$setLeds$v;
+    wire P2M__request$method$setLeds__ENA;
+    wire P2M__request$method$zsay4__ENA;
+    l_module_OC_Echo DUT__l_module_OC_Echo (.CLK(CLK), .nRST(nRST),
+        .request$say__ENA(P2M__request$method$say__ENA),
+        .request$say$v(P2M__request$method$say$v),
+        .request$say2__ENA(P2M__request$method$say2__ENA),
+        .request$say2$a(P2M__request$method$say2$a),
+        .request$say2$b(P2M__request$method$say2$b),
+        .request$say2__RDY(DUT__l_module_OC_Echo$request$say2__RDY),
+        .request$say__RDY(DUT__l_module_OC_Echo$request$say__RDY),
+        .request$setLeds__ENA(P2M__request$method$setLeds__ENA),
+        .request$setLeds$v(P2M__request$method$setLeds$v),
+        .request$setLeds__RDY(DUT__l_module_OC_Echo$request$setLeds__RDY),
+        .request$zsay4__ENA(P2M__request$method$zsay4__ENA),
+        .request$zsay4__RDY(DUT__l_module_OC_Echo$request$zsay4__RDY),
+        .indication$heard__ENA(DUT__l_module_OC_Echo$indication$heard__ENA),
+        .indication$heard$v(DUT__l_module_OC_Echo$indication$heard$v),
+        .indication$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
+        .indication$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
+        .indication$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
+        .indication$heard2__RDY(M2P$method$heard2__RDY),
+        .indication$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
+        .indication$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
+        .indication$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
+        .indication$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
+        .indication$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
+        .indication$heard3__RDY(M2P$method$heard3__RDY),
+        .indication$heard__RDY(M2P$method$heard__RDY),
+        .printfp$enq__ENA(DUT__l_module_OC_Echo$printfp$enq__ENA),
+        .printfp$enq$v(DUT__l_module_OC_Echo$printfp$enq$v),
+        .printfp$enq__RDY(DUT__l_module_OC_Echo$printfp$enq__RDY));
+    l_module_OC_EchoIndication___M2P M2P (.CLK(CLK), .nRST(nRST),
+        .method$heard__ENA(DUT__l_module_OC_Echo$indication$heard__ENA),
+        .method$heard$v(DUT__l_module_OC_Echo$indication$heard$v),
+        .method$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
+        .method$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
+        .method$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
+        .method$heard2__RDY(M2P$method$heard2__RDY),
+        .method$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
+        .method$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
+        .method$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
+        .method$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
+        .method$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
+        .method$heard3__RDY(M2P$method$heard3__RDY),
+        .method$heard__RDY(M2P$method$heard__RDY),
         .pipe$enq__ENA(indication$enq__ENA),
         .pipe$enq$v(indication$enq$v),
         .pipe$enq__RDY(indication$enq__RDY));
-    l_module_OC_EchoRequest___P2M lERI (.CLK(CLK), .nRST(nRST),
-        .method$say__ENA(lERI$method$say__ENA),
-        .method$say$v(lERI$method$say$v),
-        .method$say2__ENA(lERI$method$say2__ENA),
-        .method$say2$a(lERI$method$say2$a),
-        .method$say2$b(lERI$method$say2$b),
-        .method$say2__RDY(lEcho$request$say2__RDY),
-        .method$say__RDY(lEcho$request$say__RDY),
-        .method$setLeds__ENA(lERI$method$setLeds__ENA),
-        .method$setLeds$v(lERI$method$setLeds$v),
-        .method$setLeds__RDY(lEcho$request$setLeds__RDY),
-        .method$zsay4__ENA(lERI$method$zsay4__ENA),
-        .method$zsay4__RDY(lEcho$request$zsay4__RDY),
+    l_module_OC_EchoRequest___P2M P2M__request (.CLK(CLK), .nRST(nRST),
+        .method$say__ENA(P2M__request$method$say__ENA),
+        .method$say$v(P2M__request$method$say$v),
+        .method$say2__ENA(P2M__request$method$say2__ENA),
+        .method$say2$a(P2M__request$method$say2$a),
+        .method$say2$b(P2M__request$method$say2$b),
+        .method$say2__RDY(DUT__l_module_OC_Echo$request$say2__RDY),
+        .method$say__RDY(DUT__l_module_OC_Echo$request$say__RDY),
+        .method$setLeds__ENA(P2M__request$method$setLeds__ENA),
+        .method$setLeds$v(P2M__request$method$setLeds$v),
+        .method$setLeds__RDY(DUT__l_module_OC_Echo$request$setLeds__RDY),
+        .method$zsay4__ENA(P2M__request$method$zsay4__ENA),
+        .method$zsay4__RDY(DUT__l_module_OC_Echo$request$zsay4__RDY),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
-    l_module_OC_Echo lEcho (.CLK(CLK), .nRST(nRST),
-        .request$say__ENA(lERI$method$say__ENA),
-        .request$say$v(lERI$method$say$v),
-        .request$say2__ENA(lERI$method$say2__ENA),
-        .request$say2$a(lERI$method$say2$a),
-        .request$say2$b(lERI$method$say2$b),
-        .request$say2__RDY(lEcho$request$say2__RDY),
-        .request$say__RDY(lEcho$request$say__RDY),
-        .request$setLeds__ENA(lERI$method$setLeds__ENA),
-        .request$setLeds$v(lERI$method$setLeds$v),
-        .request$setLeds__RDY(lEcho$request$setLeds__RDY),
-        .request$zsay4__ENA(lERI$method$zsay4__ENA),
-        .request$zsay4__RDY(lEcho$request$zsay4__RDY),
-        .indication$heard__ENA(lEcho$indication$heard__ENA),
-        .indication$heard$v(lEcho$indication$heard$v),
-        .indication$heard2__ENA(lEcho$indication$heard2__ENA),
-        .indication$heard2$a(lEcho$indication$heard2$a),
-        .indication$heard2$b(lEcho$indication$heard2$b),
-        .indication$heard2__RDY(lEIO$method$heard2__RDY),
-        .indication$heard3__ENA(lEcho$indication$heard3__ENA),
-        .indication$heard3$a(lEcho$indication$heard3$a),
-        .indication$heard3$b(lEcho$indication$heard3$b),
-        .indication$heard3$c(lEcho$indication$heard3$c),
-        .indication$heard3$d(lEcho$indication$heard3$d),
-        .indication$heard3__RDY(lEIO$method$heard3__RDY),
-        .indication$heard__RDY(lEIO$method$heard__RDY),
-        .printfp$enq__ENA(lEcho$printfp$enq__ENA),
-        .printfp$enq$v(lEcho$printfp$enq$v),
-        .printfp$enq__RDY(lEcho$printfp$enq__RDY));
-    // assign lEcho$printfp$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign DUT__l_module_OC_Echo$printfp$enq__RDY = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
 endmodule 
 
 module l_module_OC_EchoIndication___M2P (input CLK, input nRST,

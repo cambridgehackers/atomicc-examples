@@ -62,8 +62,6 @@ EMODULE l_module_OC_MuxPipe {
     }
 }
 MODULE l_module_OC_Connect {
-    SOFTWARE request
-    SOFTWARE indication
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_1
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication

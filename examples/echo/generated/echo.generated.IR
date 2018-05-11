@@ -40,8 +40,6 @@ EMODULE l_module_OC_MuxPipe {
     }
 }
 MODULE l_module_OC_Echo {
-    SOFTWARE sout
-    SOFTWARE ind
     INTERFACE l_ainterface_OC_EchoRequest sout
     INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
     FIELD l_module_OC_Fifo1 fifo

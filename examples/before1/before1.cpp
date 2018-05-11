@@ -224,8 +224,8 @@ printf("respond_rule: Echo\n");
 };
 
 __module Connect {
-    __software EchoRequest request;
-    __software EchoIndication *indication;
+    EchoRequest request;
+    EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
