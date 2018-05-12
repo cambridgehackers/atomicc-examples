@@ -18,7 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <atomicc.h>
+#include "atomicc.h"
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;

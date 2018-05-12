@@ -44,7 +44,7 @@ __interface EchoIndication {
 __module Echo {
     __software EchoRequest                     request;
     __software EchoIndication                 *indication;
-    NOCPipe                        *printfp;
+    __printf;
     int busy;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
