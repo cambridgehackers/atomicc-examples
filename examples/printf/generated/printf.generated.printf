@@ -1,6 +1,6 @@
-ITEM "[delay_rule:83]Echo": 
-ITEM "[request$say:57]Echo": 
-ITEM "PTEST %x %x": 16, 16, 
-ITEM "[request$say2:65]Echo": 
-ITEM "[request$zsay4:77]Echo": 
-ITEM "[respond_rule:91]Echo": 
+"[delay_rule:84]Echo\n" 
+"REQUESTSAY %x %x" 16 16 
+"[request$say2:65]SAY2\n" 
+"[request$setLeds:80]SETLED\n" 
+"[request$zsay4:77]SAY4\n" 
+"[respond_rule:92]Echo\n" 

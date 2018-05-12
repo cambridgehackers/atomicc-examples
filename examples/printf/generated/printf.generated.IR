@@ -43,7 +43,7 @@ MODULE l_module_OC_Echo {
         STORE :clockReg = (clockReg) + (1)
     }
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",83}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",84}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -51,31 +51,26 @@ MODULE l_module_OC_Echo {
         STORE :b_delay = b_temp
     }
     METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),65}
+        PRINTF :printf{"[%s:%d]SAY2\n",("request$say2"),65}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
-        ALLOCA l_struct_OC_NOCData request$say__ENA$agg_2e_tmp
-        PRINTF :printf{"[%s:%d]Echo\n",("request$say"),57}
-        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[0] = 2147418116
-        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[1] = 1
-        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[2] = busy_delay
-        LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[3] = clockReg
-        CALL/Action :printfp$enq__ENA{request$say__ENA$agg_2e_tmp}
-        PRINTF :printf{"PTEST %x %x",busy_delay,clockReg}
+        PRINTF :printf{"REQUESTSAY %x %x",busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
-    METHOD request$setLeds__ENA ( INTEGER_8 v )
+    METHOD request$setLeds__ENA ( INTEGER_8 v ) {
+        PRINTF :printf{"[%s:%d]SETLED\n",("request$setLeds"),80}
+    }
     METHOD request$zsay4__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),77}
+        PRINTF :printf{"[%s:%d]SAY4\n",("request$zsay4"),77}
     }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",91}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",92}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}

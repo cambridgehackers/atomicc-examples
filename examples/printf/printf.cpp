@@ -54,15 +54,15 @@ __module Echo {
     int v_type;
     int clockReg;
     void request.say(aint32 v) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
-printfp->enq(NOCData{(PRINTF_PORT << 16 | (short)4), PRINTF_NUMBER, busy_delay, clockReg});
-printf("PTEST %x %x", busy_delay, clockReg);
+//printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+//printfp->enq(NOCData{(PRINTF_PORT << 16 | (short)4), PRINTF_NUMBER, busy_delay, clockReg});
+printf("REQUESTSAY %x %x", busy_delay, clockReg);
         v_temp = v;
         busy = 1;
         v_type = 1;
     }
     void request.say2(aint16 a, aint16 b) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]SAY2\n", __FUNCTION__, __LINE__);
         a_temp = a;
         b_temp = b;
         busy = 1;
@@ -70,13 +70,14 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
 #if 0
     void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]SAY3\n", __FUNCTION__, __LINE__);
     }
 #endif
     void request.zsay4(void) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]SAY4\n", __FUNCTION__, __LINE__);
     }
     void request.setLeds(aint8 v) {
+printf("[%s:%d]SETLED\n", __FUNCTION__, __LINE__);
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {

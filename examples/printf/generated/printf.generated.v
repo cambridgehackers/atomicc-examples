@@ -61,11 +61,11 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
-    assign printfp$enq$v = delay_rule__ENA  ? { 16'd1 , 16'd32767 , 16'd2 } : request$say__ENA  ? { clockReg  , busy_delay  , 32'd1 , 32'd2147418116 } : request$say__ENA  ? { 16'd2 , 16'd32767 , 16'd2 } : request$say__ENA  ? { busy_delay  , clockReg  , 16'd3 , 16'd32767 , 16'd3 } : request$say2__ENA  ? { 16'd4 , 16'd32767 , 16'd2 } : request$zsay4__ENA  ? { 16'd5 , 16'd32767 , 16'd2 } : { 16'd6 , 16'd32767 , 16'd2 };
-    assign printfp$enq__ENA = delay_rule__ENA  || request$say__ENA  || request$say__ENA  || request$say__ENA  || request$say2__ENA  || request$zsay4__ENA  || respond_rule__ENA ;
+    assign printfp$enq$v = delay_rule__ENA  ? { 16'd1 , 16'd32767 , 16'd2 } : request$say__ENA  ? { busy_delay  , clockReg  , 16'd2 , 16'd32767 , 16'd3 } : request$say2__ENA  ? { 16'd3 , 16'd32767 , 16'd2 } : request$setLeds__ENA  ? { 16'd4 , 16'd32767 , 16'd2 } : request$zsay4__ENA  ? { 16'd5 , 16'd32767 , 16'd2 } : { 16'd6 , 16'd32767 , 16'd2 };
+    assign printfp$enq__ENA = delay_rule__ENA  || request$say__ENA  || request$say2__ENA  || request$setLeds__ENA  || request$zsay4__ENA  || respond_rule__ENA ;
     assign request$say2__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
-    assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY  & printfp$enq__RDY  & printfp$enq__RDY ;
-    assign request$setLeds__RDY = 1;
+    assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
+    assign request$setLeds__RDY = printfp$enq__RDY ;
     assign request$zsay4__RDY = printfp$enq__RDY ;
 
     always @( posedge CLK) begin

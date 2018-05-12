@@ -6,15 +6,17 @@
 //METAEXTERNAL; printfp; l_ainterface_OC_PipeIn;
 //METAGUARD; clockRule; 1;
 //METAINVOKE; delay_rule__ENA; :printfp$enq__ENA;
-//METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; request$zsay4__ENA; respond_rule__ENA
+//METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
 //METAGUARD; delay_rule; ( ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0 ) & printfp$enq__RDY ;
 //METAINVOKE; request$say__ENA; :printfp$enq__ENA;
-//METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$zsay4__ENA; respond_rule__ENA
+//METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
 //METAINVOKE; request$say2__ENA; :printfp$enq__ENA;
-//METAEXCLUSIVE; request$say2__ENA; request$zsay4__ENA; respond_rule__ENA
+//METAEXCLUSIVE; request$say2__ENA; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
 //METAGUARD; request$say2; ( busy  == 32'd0 ) & printfp$enq__RDY ;
-//METAGUARD; request$say; ( busy  == 32'd0 ) & printfp$enq__RDY  & printfp$enq__RDY  & printfp$enq__RDY ;
-//METAGUARD; request$setLeds; 1;
+//METAGUARD; request$say; ( busy  == 32'd0 ) & printfp$enq__RDY ;
+//METAINVOKE; request$setLeds__ENA; :printfp$enq__ENA;
+//METAEXCLUSIVE; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
+//METAGUARD; request$setLeds; printfp$enq__RDY ;
 //METAINVOKE; request$zsay4__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$zsay4__ENA; respond_rule__ENA
 //METAGUARD; request$zsay4; printfp$enq__RDY ;
