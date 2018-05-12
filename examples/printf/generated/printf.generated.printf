@@ -1,0 +1,6 @@
+ITEM "[delay_rule:82]Echo": 
+ITEM "[request$say:56]Echo": 
+ITEM "PTEST %x %x": 16, 16, 
+ITEM "[request$say2:64]Echo": 
+ITEM "[request$zsay4:76]Echo": 
+ITEM "[respond_rule:90]Echo": 

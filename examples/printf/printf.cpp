@@ -55,6 +55,7 @@ __module Echo {
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
 printfp->enq(NOCData{(PRINTF_PORT << 16 | (short)4), PRINTF_NUMBER, busy_delay, clockReg});
+printf("PTEST %x %x", busy_delay, clockReg);
         v_temp = v;
         busy = 1;
         v_type = 1;

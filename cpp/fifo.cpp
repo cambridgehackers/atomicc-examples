@@ -20,6 +20,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifndef __FIFO_CPP__
+#define __FIFO_CPP__
 #define FIFODEFINE __module
 #define FIFODATA \
   T element;     \
@@ -67,3 +69,4 @@ bool Fifo1<T>::notFull() const {
 Fifo1<int> unused;
 //Fifo1<unsigned char> ff1Char;
 #endif
+#endif // __FIFO_CPP__

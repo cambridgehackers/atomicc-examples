@@ -47,7 +47,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     wire respond_rule__RDY;
     assign clockRule__ENA = clockRule__RDY ;
     assign clockRule__RDY = 1;
-    assign delay_rule__ENA = delay_rule__RDY ;
+    assign delay_rule__ENA = delay_rule__RDY  && printfp$enq__RDY ;
     assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
     assign respond_rule__RDY = ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
@@ -61,12 +61,12 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
-    assign printfp$enq$v = { clockReg  , busy_delay  , 32'd1 , 32'd2147418116 };
-    assign printfp$enq__ENA = request$say__ENA ;
-    assign request$say2__RDY = busy  == 32'd0;
+    assign printfp$enq$v = delay_rule__ENA  ? { 16'd1 , 16'd32767 , 16'd2 } : request$say__ENA  ? { clockReg  , busy_delay  , 32'd1 , 32'd2147418116 } : request$say__ENA  ? { 16'd2 , 16'd32767 , 16'd2 } : request$say__ENA  ? { busy_delay  , clockReg  , 16'd3 , 16'd32767 , 16'd3 } : request$say2__ENA  ? { 16'd4 , 16'd32767 , 16'd2 } : request$zsay4__ENA  ? { 16'd5 , 16'd32767 , 16'd2 } : { 16'd6 , 16'd32767 , 16'd2 };
+    assign printfp$enq__ENA = delay_rule__ENA  || request$say__ENA  || request$say__ENA  || request$say__ENA  || request$say2__ENA  || request$zsay4__ENA  || respond_rule__ENA ;
+    assign request$say2__RDY = busy  == 32'd0 && printfp$enq__RDY ;
     assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
-    assign request$setLeds__RDY = 1;
-    assign request$zsay4__RDY = 1;
+    assign request$setLeds__RDY = 1 && printfp$enq__RDY ;
+    assign request$zsay4__RDY = 1 && printfp$enq__RDY ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -91,28 +91,59 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:81]Echo" );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[request$say:56]Echo" );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[request$say2:63]Echo" );
         end; // End of request$say2__ENA
-        if (request$zsay4__ENA) begin
-            $display( "[request$zsay4:75]Echo" );
-        end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:89]Echo" );
         end; // End of respond_rule__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_module_OC_Fifo1 (input CLK, input nRST,
+    input in$enq__ENA,
+    input [127:0]in$enq$v,
+    output in$enq__RDY,
+    input out$deq__ENA,
+    output out$deq__RDY,
+    output [127:0]out$first,
+    output out$first__RDY);
+    reg [31:0]element$data0;
+    reg [31:0]element$data1;
+    reg [31:0]element$data2;
+    reg [31:0]element$data3;
+    reg full;
+    assign in$enq__RDY = 0 == full ;
+    assign out$deq__RDY = 0 != full ;
+    assign out$first = { element$data3  , element$data2  , element$data1  , element$data0  };
+    assign out$first__RDY = 0 != full ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        element$data0 <= 0;
+        element$data1 <= 0;
+        element$data2 <= 0;
+        element$data3 <= 0;
+        full <= 0;
+      end // nRST
+      else begin
+        if (in$enq__ENA) begin
+            { element$data3  , element$data2  , element$data1  , element$data0  } <= in$enq$v;
+            full  <= 1;
+        end; // End of in$enq__ENA
+        if (out$deq__ENA) begin
+            full  <= 0;
+        end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
 endmodule 
@@ -239,10 +270,22 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
-    assign forward$enq__RDY = out$enq__RDY ;
-    assign in$enq__RDY = out$enq__RDY ;
-    assign out$enq$v = forward$enq__ENA  ? forward$enq$v  : in$enq$v ;
-    assign out$enq__ENA = forward$enq__ENA  || in$enq__ENA ;
+    wire forwardFifo$out$deq__ENA;
+    wire forwardFifo$out$deq__RDY;
+    wire [127:0]forwardFifo$out$first;
+    wire forwardFifo$out$first__RDY;
+    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(forward$enq__ENA),
+        .in$enq$v(forward$enq$v),
+        .in$enq__RDY(forward$enq__RDY),
+        .out$deq__ENA(forwardFifo$out$deq__ENA),
+        .out$deq__RDY(forwardFifo$out$deq__RDY),
+        .out$first(forwardFifo$out$first),
+        .out$first__RDY(forwardFifo$out$first__RDY));
+    assign forwardFifo$out$deq__ENA = forwardFifo$out$deq__RDY && out$enq__RDY && !in$enq__ENA;
+    assign in$enq__RDY = out$enq__RDY && forward$enq__RDY;
+    assign out$enq$v = forwardFifo$out$deq__ENA ? forwardFifo$out$first : in$enq$v ;
+    assign out$enq__ENA = in$enq__ENA || forwardFifo$out$deq__ENA;
 endmodule 
 
 module l_module_OC_EchoIndication___M2P (input CLK, input nRST,

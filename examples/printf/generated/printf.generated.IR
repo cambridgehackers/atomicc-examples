@@ -15,12 +15,21 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeOut {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_NOCData
+}
+EMODULE l_module_OC_Fifo {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+}
 EMODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    FIELD l_module_OC_Fifo1 forwardFifo
     METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {
-        CALL/Action :out$enq__ENA{forward$enq$v}
+        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
     }
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :out$enq__ENA{in$enq$v}
@@ -46,7 +55,7 @@ MODULE l_module_OC_Echo {
         STORE :clockReg = (clockReg) + (1)
     }
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",81}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",82}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -54,7 +63,7 @@ MODULE l_module_OC_Echo {
         STORE :b_delay = b_temp
     }
     METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),63}
+        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),64}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
@@ -68,18 +77,33 @@ MODULE l_module_OC_Echo {
         LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[2] = busy_delay
         LET INTEGER_32 :request$say__ENA$agg_2e_tmp$data[3] = clockReg
         CALL/Action :printfp$enq__ENA{request$say__ENA$agg_2e_tmp}
+        PRINTF :printf{"PTEST %x %x",busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
     METHOD request$setLeds__ENA ( INTEGER_8 v )
     METHOD request$zsay4__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),75}
+        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),76}
     }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",89}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",90}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
     }
+}
+MODULE l_module_OC_Fifo1 {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD l_struct_OC_NOCData element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }

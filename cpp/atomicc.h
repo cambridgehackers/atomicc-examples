@@ -55,18 +55,6 @@ __interface PipeOut {
 
 typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
 typedef PipeIn<NOCData>                   NOCPipe;
-__emodule MuxPipe {
-public:
-    NOCPipe           in;
-    NOCPipe      forward;
-    NOCPipe         *out;
-    void in.enq(NOCData v) {
-        out->enq(v);
-    }
-    void forward.enq(NOCData v) {
-        out->enq(v);
-    }
-};
 #if 0
 template<class T> __emodule M2P { // method -> pipe
 public:
@@ -102,4 +90,26 @@ static inline std::string utostr(uint64_t X) {
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
 
-#endif
+#define FIFO_NO_DUMMY_INSTANTIATION
+#include "fifo.cpp"
+__emodule MuxPipe {
+public:
+    NOCPipe           in;
+    NOCPipe      forward;
+    NOCPipe         *out;
+    Fifo1<NOCData>   forwardFifo;
+    void in.enq(NOCData v) {
+        out->enq(v);
+    }
+    void forward.enq(NOCData v) {
+        forwardFifo.in.enq(v);
+    }
+    MuxPipe() {
+        __rule fifoRule {
+            out->enq(forwardFifo.out.first());
+            forwardFifo.out.deq();
+        }
+    }
+};
+
+#endif // _ATOMICC_H_
