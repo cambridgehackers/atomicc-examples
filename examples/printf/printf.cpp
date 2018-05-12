@@ -18,7 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <atomicc.h>
+#include "atomicc.h"
+#include "mux.h"
 
 #define PRINTF_NUMBER  (uint16_t)      1
 

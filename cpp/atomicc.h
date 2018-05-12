@@ -75,6 +75,7 @@ public:
     T                     *method;
 };
 #endif
+static NOCPipe unusedNOCPipe;
 
 static inline std::string utostr(uint64_t X) {
   char Buffer[21], *BufPtr = Buffer+21;
@@ -89,27 +90,4 @@ static inline std::string utostr(uint64_t X) {
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
-
-#define FIFO_NO_DUMMY_INSTANTIATION
-#include "fifo.cpp"
-__emodule MuxPipe {
-public:
-    NOCPipe           in;
-    NOCPipe      forward;
-    NOCPipe         *out;
-    Fifo1<NOCData>   forwardFifo;
-    void in.enq(NOCData v) {
-        out->enq(v);
-    }
-    void forward.enq(NOCData v) {
-        forwardFifo.in.enq(v);
-    }
-    MuxPipe() {
-        __rule fifoRule {
-            out->enq(forwardFifo.out.first());
-            forwardFifo.out.deq();
-        }
-    }
-};
-
 #endif // _ATOMICC_H_

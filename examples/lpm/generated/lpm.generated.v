@@ -176,7 +176,7 @@ module l_module_OC_Lpm (input CLK, input nRST,
             $display( "recirc: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
         end; // End of recirc__ENA
         if (request$say__ENA) begin
-            $display( "[request$say:90] (%d, %d)" , request$say$meth , request$say$v );
+            $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );
         end; // End of request$say__ENA
         if (respond__ENA) begin
             $display( "respond: (%d, %d)" , outQ$out$first[31:0] , outQ$out$first[63:32] );

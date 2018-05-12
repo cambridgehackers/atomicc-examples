@@ -50,7 +50,7 @@
 //METAGUARD; pipe$enq; 0 == busy_delay ;
 //METARULES; input_rule
 //METASTART; l_module_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAEXCLUSIVE; indication$heard__ENA; output_rulee__ENA; output_ruleo__ENA
 //METAGUARD; indication$heard; 0 == ind_busy ;
 //METAINVOKE; output_rulee__ENA; :pipe$enq__ENA;
@@ -64,7 +64,7 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag  == 32'd2:request$say2__ENA;pipe$enq__ENA$v_2e_addr$tag  == 32'd1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY  & request$say2__RDY ;
 //METASTART; l_module_OC_EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
