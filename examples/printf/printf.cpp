@@ -21,8 +21,6 @@
 #include "atomicc.h"
 #include "mux.h"
 
-#define PRINTF_NUMBER  (uint16_t)      1
-
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
 //typedef __int(8) aint8;
@@ -54,13 +52,13 @@ __module Echo {
     int v_type;
     int clockReg;
     void request.say(aint32 v) if(!busy) {
-printf("REQUESTSAY %x %x\n", busy_delay, clockReg);
+printf("[%s:%d]Echo %x %x\n", __FUNCTION__, __LINE__, busy_delay, clockReg);
         v_temp = v;
         busy = 1;
         v_type = 1;
     }
     void request.say2(aint16 a, aint16 b) if(!busy) {
-printf("[%s:%d]SAY2\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         a_temp = a;
         b_temp = b;
         busy = 1;
@@ -68,14 +66,14 @@ printf("[%s:%d]SAY2\n", __FUNCTION__, __LINE__);
     }
 #if 0
     void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
-printf("[%s:%d]SAY3\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
 #endif
     void request.zsay4(void) {
-printf("[%s:%d]SAY4\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
     void request.setLeds(aint8 v) {
-printf("[%s:%d]SETLED\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {

@@ -43,7 +43,7 @@ MODULE l_module_OC_Echo {
         STORE :clockReg = (clockReg) + (1)
     }
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",82}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",80}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -51,26 +51,26 @@ MODULE l_module_OC_Echo {
         STORE :b_delay = b_temp
     }
     METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]SAY2\n",("request$say2"),63}
+        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),61}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"REQUESTSAY %x %x\n",busy_delay,clockReg}
+        PRINTF :printf{"[%s:%d]Echo %x %x\n",("request$say"),55,busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
     METHOD request$setLeds__ENA ( INTEGER_8 v ) {
-        PRINTF :printf{"[%s:%d]SETLED\n",("request$setLeds"),78}
+        PRINTF :printf{"[%s:%d]Echo\n",("request$setLeds"),76}
     }
     METHOD request$zsay4__ENA {
-        PRINTF :printf{"[%s:%d]SAY4\n",("request$zsay4"),75}
+        PRINTF :printf{"[%s:%d]Echo\n",("request$zsay4"),73}
     }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",90}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",88}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
