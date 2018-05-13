@@ -3,12 +3,17 @@
 
 //METASTART; l_module_OC_Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; 1;
+//METAGUARD; out$deq; 1;
+//METAGUARD; out$first; 1;
+//METASTART; l_module_OC_Fifo1_OC_3
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 0 == full ;
 //METAGUARD; out$deq; 0 != full ;
 //METAGUARD; out$first; 0 != full ;
 //METASTART; l_module_OC_FifoPong
-//METAINTERNAL; element1; l_module_OC_Fifo1;
-//METAINTERNAL; element2; l_module_OC_Fifo1;
+//METAINTERNAL; element1; l_module_OC_Fifo1_OC_3;
+//METAINTERNAL; element2; l_module_OC_Fifo1_OC_3;
 //METAINVOKE; in$enq__ENA; pong  ^ 1:element1$in$enq__ENA;pong :element2$in$enq__ENA;
 //METAGUARD; in$enq; ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
 //METAINVOKE; out$deq__ENA; pong  ^ 1:element1$out$deq__ENA;pong :element2$out$deq__ENA;
@@ -59,4 +64,15 @@
 //METAINVOKE; respond_rule_9__ENA; :fifo9$out$deq__ENA;:fifo9$out$first;:out$heard__ENA;
 //METAGUARD; respond_rule_9; fifo9$out$first__RDY  & fifo9$out$deq__RDY  & out$heard__RDY ;
 //METARULES; respond_rule_0; respond_rule_1; respond_rule_2; respond_rule_3; respond_rule_4; respond_rule_5; respond_rule_6; respond_rule_7; respond_rule_8; respond_rule_9
+//METASTART; l_module_OC_MuxPipe
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
+//METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
+//METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
+//METAGUARD; fifoRule; forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
+//METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
+//METAGUARD; forward$enq; forwardFifo$in$enq__RDY ;
+//METAINVOKE; in$enq__ENA; :out$enq__ENA;
+//METAGUARD; in$enq; out$enq__RDY ;
+//METARULES; fifoRule
 `endif

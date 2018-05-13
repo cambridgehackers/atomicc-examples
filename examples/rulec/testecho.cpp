@@ -25,6 +25,7 @@
 #include "EchoIndication.h"
 #include "EchoRequest.h"
 #include "GeneratedTypes.h"
+void atomiccPrintfInit(const char *filename);
 
 static EchoRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
@@ -66,7 +67,7 @@ int main(int argc, const char **argv)
     long actualFrequency = 0;
     long requestedFrequency = 1e9 / MainClockPeriod;
 
-    initPortalHardware();  // start vlsim running
+    //atomiccPrintfInit("generated/rulec.generated.printf");
 #if 0
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);

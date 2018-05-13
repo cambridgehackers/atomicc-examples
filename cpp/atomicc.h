@@ -91,4 +91,8 @@ static inline std::string utostr(uint64_t X) {
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
+
+#ifndef __FIFO_CPP__
+#include "mux.h"
+#endif
 #endif // _ATOMICC_H_

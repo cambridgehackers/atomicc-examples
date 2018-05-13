@@ -2,6 +2,44 @@
 
 module l_module_OC_Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
+    input [127:0]in$enq$v,
+    output in$enq__RDY,
+    input out$deq__ENA,
+    output out$deq__RDY,
+    output [127:0]out$first,
+    output out$first__RDY);
+    reg [31:0]element$data0;
+    reg [31:0]element$data1;
+    reg [31:0]element$data2;
+    reg [31:0]element$data3;
+    reg full;
+    assign in$enq__RDY = 1;
+    assign out$deq__RDY = 1;
+    assign out$first = { element$data3  , element$data2  , element$data1  , element$data0  };
+    assign out$first__RDY = 1;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        element$data0 <= 0;
+        element$data1 <= 0;
+        element$data2 <= 0;
+        element$data3 <= 0;
+        full <= 0;
+      end // nRST
+      else begin
+        if (in$enq__ENA) begin
+            { element$data3  , element$data2  , element$data1  , element$data0  } <= in$enq$v;
+            full  <= 1;
+        end; // End of in$enq__ENA
+        if (out$deq__ENA) begin
+            full  <= 0;
+        end; // End of out$deq__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_module_OC_Fifo1_OC_3 (input CLK, input nRST,
+    input in$enq__ENA,
     input [703:0]in$enq$v,
     output in$enq__RDY,
     input out$deq__ENA,
@@ -91,7 +129,7 @@ module l_module_OC_FifoPong (input CLK, input nRST,
     wire element2$out$deq__RDY;
     wire [703:0]element2$out$first;
     wire element2$out$first__RDY;
-    l_module_OC_Fifo1 element1 (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_3 element1 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
@@ -99,7 +137,7 @@ module l_module_OC_FifoPong (input CLK, input nRST,
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
-    l_module_OC_Fifo1 element2 (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_3 element2 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(pong & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),
@@ -148,5 +186,35 @@ module l_module_OC_IVector (input CLK, input nRST,
         .out$first__RDY(fifo$out$first__RDY));
     assign ind$heard$v = { fifo$out$first[703:672]  , fifo$out$first[671:640]  , fifo$out$first[639:608]  , fifo$out$first[607:576]  , fifo$out$first[575:544]  , fifo$out$first[543:512]  , fifo$out$first[511:480]  , fifo$out$first[479:448]  , fifo$out$first[447:416]  , fifo$out$first[415:384]  , fifo$out$first[383:352]  , fifo$out$first[351:320]  , fifo$out$first[319:288]  , fifo$out$first[287:256]  , fifo$out$first[255:224]  , fifo$out$first[223:192]  , fifo$out$first[191:160]  , fifo$out$first[159:128]  , fifo$out$first[127:96]  , fifo$out$first[95:64]  , fifo$out$first[63:32]  , fifo$out$first[31:0]  };
     assign ind$heard__ENA = respond__ENA ;
+endmodule 
+
+module l_module_OC_MuxPipe (input CLK, input nRST,
+    input in$enq__ENA,
+    input [127:0]in$enq$v,
+    output in$enq__RDY,
+    input forward$enq__ENA,
+    input [127:0]forward$enq$v,
+    output forward$enq__RDY,
+    output out$enq__ENA,
+    output [127:0]out$enq$v,
+    input out$enq__RDY);
+    wire fifoRule__ENA;
+    wire fifoRule__RDY;
+    wire forwardFifo$out$deq__RDY;
+    wire [127:0]forwardFifo$out$first;
+    wire forwardFifo$out$first__RDY;
+    assign fifoRule__ENA = fifoRule__RDY ;
+    assign fifoRule__RDY = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
+    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(forward$enq__ENA),
+        .in$enq$v(forward$enq$v),
+        .in$enq__RDY(forward$enq__RDY),
+        .out$deq__ENA(fifoRule__ENA),
+        .out$deq__RDY(forwardFifo$out$deq__RDY),
+        .out$first(forwardFifo$out$first),
+        .out$first__RDY(forwardFifo$out$first__RDY));
+    assign in$enq__RDY = out$enq__RDY ;
+    assign out$enq$v = fifoRule__ENA  ? { forwardFifo$out$first[127:96]  , forwardFifo$out$first[95:64]  , forwardFifo$out$first[63:32]  , forwardFifo$out$first[31:0]  } : in$enq$v ;
+    assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
 endmodule 
 

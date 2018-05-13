@@ -3,7 +3,7 @@
 int EchoRequest_say ( struct PortalInternal *p, const uint32_t v )
 {
     unsigned int temp_working_addr_start[2 + 1] = {0, (CHAN_NUM_EchoRequest_say << 16) | 2,
-            v};
+            (unsigned int)(v)};
     p->transport->send(p, temp_working_addr_start + 2, (CHAN_NUM_EchoRequest_say << 16) | 2, -1);
     return 0;
 };
@@ -11,7 +11,7 @@ int EchoRequest_say ( struct PortalInternal *p, const uint32_t v )
 int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b )
 {
     unsigned int temp_working_addr_start[2 + 1] = {0, (CHAN_NUM_EchoRequest_say2 << 16) | 2,
-            b|(((unsigned long)a)<<16)};
+            (unsigned int)(b|(((unsigned long)a)<<16))};
     p->transport->send(p, temp_working_addr_start + 2, (CHAN_NUM_EchoRequest_say2 << 16) | 2, -1);
     return 0;
 };
@@ -19,7 +19,7 @@ int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_
 int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v )
 {
     unsigned int temp_working_addr_start[2 + 1] = {0, (CHAN_NUM_EchoRequest_setLeds << 16) | 2,
-            v};
+            (unsigned int)(v)};
     p->transport->send(p, temp_working_addr_start + 2, (CHAN_NUM_EchoRequest_setLeds << 16) | 2, -1);
     return 0;
 };

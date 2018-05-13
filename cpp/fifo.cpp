@@ -35,6 +35,7 @@
   
 
 #include <fifo.h>
+#include "mux.h"
 
 template<class T>
 void Fifo1<T>::in.enq(const T v) if (notFull()) {

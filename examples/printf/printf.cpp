@@ -19,7 +19,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "mux.h"
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;

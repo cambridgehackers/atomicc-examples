@@ -9,3 +9,4 @@ cd ../ivector ;make
 cd ../lpm ;make
 cd ../connect ;make
 cd ../precision ;make
+cd ../printf ;make

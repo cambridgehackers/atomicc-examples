@@ -31,7 +31,7 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag  == 32'd1:indication$heard__ENA;
 //METAGUARD; pipe$enq; indication$heard__RDY ;
 //METASTART; l_module_OC_EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
 //METAINVOKE; indication$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; indication$heard; pipe$enq__RDY ;
 //METASTART; l_module_OC_EchoRequestInput
@@ -39,7 +39,23 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag  == 32'd1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY ;
 //METASTART; l_module_OC_EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY ;
+//METASTART; l_module_OC_Fifo1
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; 0 == full ;
+//METAGUARD; out$deq; 0 != full ;
+//METAGUARD; out$first; 0 != full ;
+//METASTART; l_module_OC_MuxPipe
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
+//METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
+//METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
+//METAGUARD; fifoRule; forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
+//METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
+//METAGUARD; forward$enq; forwardFifo$in$enq__RDY ;
+//METAINVOKE; in$enq__ENA; :out$enq__ENA;
+//METAGUARD; in$enq; out$enq__RDY ;
+//METARULES; fifoRule
 `endif
