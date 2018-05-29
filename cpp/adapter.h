@@ -53,7 +53,7 @@ __module AdapterFromBus {
    __uint(__bitsize(T)) buffer;
 
    void in.enq(BusType x) if (count < maxBeats) {
-      buffer = (buffer << __bitsize(BusType)) | x;
+      buffer = x | (sizeof(buffer) > sizeof(BusType) ? (buffer << __bitsize(BusType)) : 0);
       count++;
    }
    AdapterFromBus() {
