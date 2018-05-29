@@ -29,18 +29,18 @@ __module AdapterToBus {
    PipeIn<BusType> *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    int              remain;
-   unsigned int __attribute__(( atomicc_width(sizeofBit(T)) )) buffer;
+   __uint(__bitsize(T)) buffer;
 
    void in.enq(T val) if (remain == 0) {
-      buffer = static_cast<decltype(buffer)>(val);
+      //buffer = reinterpret_cast<decltype(buffer)>(val);
       remain = maxBeats;
    }
    AdapterToBus() {
-      __rule copyRule if (remain != 0) {
-         out->enq(buffer >> (sizeofBit(BusType) * (maxBeats - 1));
-         remain--;
-         buffer <<= sizeofBit(BusType);
-      }
+      //__rule copyRule if (remain != 0) {
+         //out->enq(buffer >> (__bitsize(BusType) * (maxBeats - 1)));
+         //remain--;
+         //buffer <<= __bitsize(BusType);
+      //}
    }
 };
 
@@ -50,17 +50,17 @@ __module AdapterFromBus {
    PipeIn<T>       *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    int              count;
-   unsigned int __attribute__(( atomicc_width(sizeofBit(T)) )) buffer;
+   __uint(__bitsize(T)) buffer;
 
    void in.enq(BusType x) if (count < maxBeats) {
-      buffer = (buffer << sizeofBit(BusType)) | x;
+      buffer = (buffer << __bitsize(BusType)) | x;
       count++;
    }
    AdapterFromBus() {
-      __rule pushValue if (count == maxBeats) {
-          out->enq(static_cast<T>(buffer));
-          count = 0;
-      }
+      //__rule pushValue if (count == maxBeats) {
+          //out->enq(reinterpret_cast<T>(buffer));
+          //count = 0;
+      //}
    }
 };
 #endif
