@@ -19,6 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
+#include "adapter.h"
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
@@ -39,6 +40,8 @@ __interface EchoIndication {
     void heard2(aint16 a, aint16 b);
     void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
+typedef __serialize(EchoRequest) fooReq;
+typedef __serialize(EchoIndication) fooInd;
 
 __module Echo {
     __software EchoRequest                     request;
@@ -47,11 +50,13 @@ __module Echo {
     int busy;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
+    __int(18) xxx;
     int busy_delay;
     int v_type;
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
+xxx = v;
         busy = 1;
         v_type = 1;
     }
@@ -93,3 +98,7 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
 };
 
 Echo test;
+typedef __int(32) BusType;
+//#define BusType __int(32)
+AdapterFromBus<BusType, NOCData> fooFrom;
+AdapterToBus<NOCData, BusType> fooTo;

@@ -1,5 +1,78 @@
 `include "rulec.generated.vh"
 
+module l_module_OC_AdapterFromBus (input CLK, input nRST,
+    input in$enq__ENA,
+    input [31:0]in$enq$v,
+    output in$enq__RDY,
+    output out$enq__ENA,
+    output [127:0]out$enq$v,
+    input out$enq__RDY);
+    reg [127:0]buffer;
+    reg [31:0]count;
+    reg [31:0]maxBeats;
+    wire pushValue__ENA;
+    wire pushValue__RDY;
+    assign pushValue__ENA = pushValue__RDY ;
+    assign pushValue__RDY = ( count  == maxBeats  ) & out$enq__RDY ;
+    assign in$enq__RDY = 0 != ( count  < maxBeats  );
+    assign out$enq$v = buffer ;
+    assign out$enq__ENA = pushValue__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        buffer <= 0;
+        count <= 0;
+        maxBeats <= 0;
+      end // nRST
+      else begin
+        if (in$enq__ENA) begin
+            buffer  <= in$enq$x | ( buffer << 32 );
+            count  <= count + 1;
+        end; // End of in$enq__ENA
+        if (pushValue__ENA) begin
+            count  <= 0;
+        end; // End of pushValue__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_module_OC_AdapterToBus (input CLK, input nRST,
+    input in$enq__ENA,
+    input [127:0]in$enq$v,
+    output in$enq__RDY,
+    output out$enq__ENA,
+    output [31:0]out$enq$v,
+    input out$enq__RDY);
+    reg [127:0]buffer;
+    reg [31:0]maxBeats;
+    reg [31:0]remain;
+    wire copyRule__ENA;
+    wire copyRule__RDY;
+    assign copyRule__ENA = copyRule__RDY ;
+    assign copyRule__RDY = ( remain  != 0 ) & out$enq__RDY ;
+    assign in$enq__RDY = remain  == 32'd0;
+    assign out$enq$v = buffer ;
+    assign out$enq__ENA = copyRule__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        buffer <= 0;
+        maxBeats <= 0;
+        remain <= 0;
+      end // nRST
+      else begin
+        if (copyRule__ENA) begin
+            remain  <= 1 - ( remain );
+            buffer  <= buffer >> 32;
+        end; // End of copyRule__ENA
+        if (in$enq__ENA) begin
+            buffer  <= in$enq$val;
+            remain  <= maxBeats;
+        end; // End of in$enq__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
 module l_module_OC_Echo (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$v,
@@ -35,6 +108,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
+    reg [17:0]xxx;
     wire delay_rule__ENA;
     wire delay_rule__RDY;
     wire respond_rule__ENA;
@@ -69,6 +143,7 @@ module l_module_OC_Echo (input CLK, input nRST,
         v_delay <= 0;
         v_temp <= 0;
         v_type <= 0;
+        xxx <= 0;
       end // nRST
       else begin
         if (delay_rule__ENA) begin
@@ -77,27 +152,28 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:%d]Echo" , 77 );
+            $display( "[delay_rule:%d]Echo" , 82 );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
+            xxx  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 53 );
+            $display( "[%s:%d]Echo" , "request$say" , 57 );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[%s:%d]Echo" , "request$say2" , 59 );
+            $display( "[%s:%d]Echo" , "request$say2" , 64 );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[%s:%d]Echo" , "request$zsay4" , 71 );
+            $display( "[%s:%d]Echo" , "request$zsay4" , 76 );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:%d]Echo" , 85 );
+            $display( "[respond_rule:%d]Echo" , 90 );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)

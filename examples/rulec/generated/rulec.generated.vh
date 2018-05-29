@@ -1,6 +1,20 @@
 `ifndef __rulec_GENERATED__VH__
 `define __rulec_GENERATED__VH__
 
+//METASTART; l_module_OC_AdapterFromBus
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAEXCLUSIVE; in$enq__ENA; pushValue__ENA
+//METAGUARD; in$enq; 0 != ( count  < maxBeats  );
+//METAINVOKE; pushValue__ENA; :out$enq__ENA;
+//METAGUARD; pushValue; ( count  == maxBeats  ) & out$enq__RDY ;
+//METARULES; pushValue
+//METASTART; l_module_OC_AdapterToBus
+//METAEXTERNAL; out; l_ainterface_OC_PipeIn_OC_0;
+//METAINVOKE; copyRule__ENA; :out$enq__ENA;
+//METAEXCLUSIVE; copyRule__ENA; in$enq__ENA
+//METAGUARD; copyRule; ( remain  != 0 ) & out$enq__RDY ;
+//METAGUARD; in$enq; remain  == 32'd0;
+//METARULES; copyRule
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
