@@ -30,24 +30,25 @@ MODULE l_module_OC_AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD INTEGER_32 maxBeats
-    FIELD INTEGER_32 count
+    FIELD INTEGER_32 remain
     FIELD INTEGER_128 buffer
-    METHOD in$enq__ENA ( INTEGER_32 x ) if (((count) < (maxBeats))) {
-        STORE :buffer = (in$enq$x) | ((buffer) << (32))
-        STORE :count = (count) + (1)
+    METHOD in$enq__ENA ( INTEGER_32 v ) if (((remain) != (0))) {
+        STORE :buffer = (in$enq$v) | ((buffer) << (32))
+        STORE ((remain) < (0)):remain = (in$enq$v) - (1)
+        STORE (((remain) < (0)) ^ 1):remain = (remain) + (-1)
     }
-    METHOD/Rule pushValue__ENA if (((count) == (maxBeats))) {
+    METHOD/Rule pushValue__ENA if (((remain) == (0))) {
         ALLOCA l_struct_OC_NOCData pushValue__ENA$agg_2e_tmp
         LET INTEGER_128 :pushValue__ENA$agg_2e_tmp = buffer
         CALL/Action :out$enq__ENA{pushValue__ENA$agg_2e_tmp}
-        STORE :count = 0
+        STORE :remain = -1
     }
 }
 MODULE l_module_OC_AdapterToBus {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 out
     FIELD INTEGER_32 maxBeats
-    FIELD INTEGER_32 remain
+    FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
     METHOD/Rule copyRule__ENA if (((remain) != (0))) {
         CALL/Action :out$enq__ENA{buffer}
@@ -56,7 +57,7 @@ MODULE l_module_OC_AdapterToBus {
     }
     METHOD in$enq__ENA ( l_struct_OC_NOCData val ) if (((remain) == (0))) {
         STORE :buffer = in$enq$val
-        STORE :remain = maxBeats
+        STORE :remain = buffer
     }
 }
 MODULE l_module_OC_Echo {

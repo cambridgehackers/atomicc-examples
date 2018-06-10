@@ -31,12 +31,12 @@ __module AdapterToBus {
    PipeIn<T>        in;
    PipeIn<BusType> *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   int              remain;
+   __int(16)        remain;
    __uint(__bitsize(T)) buffer;
 
    void in.enq(T val) if (remain == 0) {
       buffer = CAST<decltype(buffer)>(val);
-      remain = maxBeats;
+      remain = buffer;
    }
    AdapterToBus() {
       __rule copyRule if (remain != 0) {
@@ -52,17 +52,20 @@ __module AdapterFromBus {
    PipeIn<BusType>  in;
    PipeIn<T>       *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   int              count;
+   int              remain;
    __uint(__bitsize(T)) buffer;
 
-   void in.enq(BusType x) if (count < maxBeats) {
-      buffer = x | (sizeof(buffer) > sizeof(BusType) ? (buffer << __bitsize(BusType)) : 0);
-      count++;
+   void in.enq(BusType v) if (remain != 0) {
+      buffer = v | (sizeof(buffer) > sizeof(BusType) ? (buffer << __bitsize(BusType)) : 0);
+      if (remain < 0)
+          remain = v - 1;
+      else
+          remain--;
    }
    AdapterFromBus() {
-      __rule pushValue if (count == maxBeats) {
+      __rule pushValue if (remain == 0) {
           out->enq(CAST<T>(buffer));
-          count = 0;
+          remain = -1;
       }
    }
 };

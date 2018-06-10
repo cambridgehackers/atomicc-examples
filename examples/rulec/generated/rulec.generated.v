@@ -8,29 +8,32 @@ module l_module_OC_AdapterFromBus (input CLK, input nRST,
     output [127:0]out$enq$v,
     input out$enq__RDY);
     reg [127:0]buffer;
-    reg [31:0]count;
     reg [31:0]maxBeats;
+    reg [31:0]remain;
     wire pushValue__ENA;
     wire pushValue__RDY;
     assign pushValue__ENA = pushValue__RDY ;
-    assign pushValue__RDY = ( count  == maxBeats  ) & out$enq__RDY ;
-    assign in$enq__RDY = 0 != ( count  < maxBeats  );
+    assign pushValue__RDY = ( remain  == 32'd0 ) & out$enq__RDY ;
+    assign in$enq__RDY = remain  != 0;
     assign out$enq$v = buffer ;
     assign out$enq__ENA = pushValue__ENA ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         buffer <= 0;
-        count <= 0;
         maxBeats <= 0;
+        remain <= 0;
       end // nRST
       else begin
         if (in$enq__ENA) begin
-            buffer  <= in$enq$x | ( buffer << 32 );
-            count  <= count + 1;
+            buffer  <= in$enq$v | ( buffer << 32 );
+            if (( remain < 0 ) ^ 1)
+            remain  <= 1 - ( remain );
+            if (remain < 0)
+            remain  <= in$enq$v - 1;
         end; // End of in$enq__ENA
         if (pushValue__ENA) begin
-            count  <= 0;
+            remain  <= -;
         end; // End of pushValue__ENA
       end
     end // always @ (posedge CLK)
@@ -45,12 +48,12 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
     input out$enq__RDY);
     reg [127:0]buffer;
     reg [31:0]maxBeats;
-    reg [31:0]remain;
+    reg [15:0]remain;
     wire copyRule__ENA;
     wire copyRule__RDY;
     assign copyRule__ENA = copyRule__RDY ;
     assign copyRule__RDY = ( remain  != 0 ) & out$enq__RDY ;
-    assign in$enq__RDY = remain  == 32'd0;
+    assign in$enq__RDY = remain  == 16'd0;
     assign out$enq$v = buffer ;
     assign out$enq__ENA = copyRule__ENA ;
 
@@ -67,7 +70,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
         end; // End of copyRule__ENA
         if (in$enq__ENA) begin
             buffer  <= in$enq$val;
-            remain  <= maxBeats;
+            remain  <= buffer;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
