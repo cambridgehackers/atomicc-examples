@@ -28,12 +28,12 @@ module l_module_OC_AdapterFromBus (input CLK, input nRST,
         if (in$enq__ENA) begin
             buffer  <= in$enq$v | ( buffer << 32 );
             if (( remain < 0 ) ^ 1)
-            remain  <= 1 - ( remain );
+            remain  <= remain + ( -1 );
             if (remain < 0)
             remain  <= in$enq$v - 1;
         end; // End of in$enq__ENA
         if (pushValue__ENA) begin
-            remain  <= -;
+            remain  <= -1;
         end; // End of pushValue__ENA
       end
     end // always @ (posedge CLK)
@@ -65,7 +65,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
       end // nRST
       else begin
         if (copyRule__ENA) begin
-            remain  <= 1 - ( remain );
+            remain  <= remain + ( -1 );
             buffer  <= buffer >> 32;
         end; // End of copyRule__ENA
         if (in$enq__ENA) begin
