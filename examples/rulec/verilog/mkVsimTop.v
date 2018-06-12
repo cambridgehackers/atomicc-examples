@@ -1,24 +1,24 @@
 
 `include "ProjectDefines.vh"
 module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys_clk, input CLK, input RST_N);
-  wire EN_incoming, EN_outgoing, sinkLast, EN_sinkBeat, EN_sourceBeat, sourceLast;
+  wire EN_incoming, EN_outgoing, writeLast, EN_writeBeat, EN_readBeat, readLast;
   wire RDY_echo_in_enq, EN_echo_out_enq, RDY_echo_out_enq, incomingEnable;
   wire [`MAX_OUT_WIDTH-1 : 0] outgoingData, echoData;
   wire [15: 0] outgoingLength;
-  wire [`MAX_BUS_WIDTH-1:0] sinkData;
+  wire [`MAX_BUS_WIDTH-1:0] writeData;
 
   reg  RDY_outgoing, RDY_incoming;
   reg  [`MAX_IN_WIDTH-1 : 0] incomingData;
   reg  [`MAX_OUT_WIDTH-1 : 0] outgoingBuffer;
-  reg  [15 : 0] indicationWords;
+  reg  [15 : 0] readCount;
 
-  assign sourceLast = indicationWords == 16'd1;
+  assign readLast = readCount == 16'd1;
 
   VsimSink #(.width(`MAX_BUS_WIDTH)) sink_0 (.CLK(CLK), .RST_N(RST_N),
-   .EN_beat(EN_sinkBeat), .RDY_beat(!RDY_incoming), .beat(sinkData), .last(sinkLast));
+   .EN_beat(EN_writeBeat), .RDY_beat(!RDY_incoming), .beat(writeData), .last(writeLast));
 
   VsimSource #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .RST_N(RST_N),
-   .EN_beat(EN_sourceBeat), .RDY_beat(!RDY_outgoing), .beat(outgoingBuffer[31:0]), .last(sourceLast));
+   .EN_beat(EN_readBeat), .RDY_beat(!RDY_outgoing), .beat(outgoingBuffer[31:0]), .last(readLast));
 
   always @(posedge CLK) begin
      if (RST_N == `BSV_RESET_VALUE) begin
@@ -29,25 +29,25 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
         // process 'write' requests
         if (EN_incoming && RDY_incoming)
             RDY_incoming <= 0;
-        if (EN_sinkBeat && !RDY_incoming) begin
-            $display("VSIMSINK: incomingData %x sinkData %x sinkLast %x", incomingData, sinkData, sinkLast);
-            incomingData <= incomingData << 32 | sinkData;
-            if (sinkLast)
+        if (EN_writeBeat && !RDY_incoming) begin
+            $display("VSIMSINK: incomingData %x writeData %x writeLast %x", incomingData, writeData, writeLast);
+            incomingData <= incomingData << 32 | writeData;
+            if (writeLast)
                 RDY_incoming <= 1;
         end 
         // process 'read' requests
         if (EN_outgoing && RDY_outgoing) begin
             RDY_outgoing <= 0;
             outgoingBuffer <= outgoingData;
-            indicationWords <= outgoingLength + 1;
+            readCount <= outgoingLength + 1;
             //$display("VSOURCE: start data %x", outgoingData);
         end
-        if (EN_sourceBeat && !RDY_outgoing) begin
-            //$display("VSOURCE: outgoing data %x last %x", outgoingBuffer, sourceLast);
+        if (EN_readBeat && !RDY_outgoing) begin
+            //$display("VSOURCE: outgoing data %x last %x", outgoingBuffer, readLast);
             outgoingBuffer <= {32'b0, outgoingBuffer[`MAX_OUT_WIDTH-1:32]};
-            if (sourceLast)
+            if (readLast)
                 RDY_outgoing <= 1;
-            indicationWords <= indicationWords - 16'd1;
+            readCount <= readCount - 16'd1;
         end
     end
   end
