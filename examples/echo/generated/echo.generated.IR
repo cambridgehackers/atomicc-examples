@@ -14,14 +14,14 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
+EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_2 {
+EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
     METHOD first INTEGER_32
 }
@@ -32,9 +32,9 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE l_module_OC_Fifo_OC_2 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
 MODULE l_module_OC_Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
@@ -64,8 +64,8 @@ MODULE l_module_OC_Fifo1 {
     METHOD out$first l_struct_OC_NOCData = ((element))
 }
 MODULE l_module_OC_Fifo1_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_32 element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {

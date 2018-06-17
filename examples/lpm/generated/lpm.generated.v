@@ -38,7 +38,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Fifo1_OC_0 (input CLK, input nRST,
+module l_module_OC_Fifo1_OC_2 (input CLK, input nRST,
     input in$enq__ENA,
     input [95:0]in$enq$v,
     output in$enq__RDY,
@@ -163,7 +163,7 @@ module l_module_OC_Lpm (input CLK, input nRST,
     assign recirc__RDY = fifo$out$first__RDY  & mem$ifc$resValue__RDY  & mem$ifc$resAccept__RDY  & fifo$out$deq__RDY  & fifo$in$enq__RDY  & mem$ifc$req__RDY ;
     assign respond__ENA = respond__RDY ;
     assign respond__RDY = outQ$out$first__RDY  & outQ$out$deq__RDY  & ind$heard__RDY ;
-    l_module_OC_Fifo1_OC_0 inQ (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_2 inQ (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say__ENA$temp$c , request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),
@@ -179,7 +179,7 @@ module l_module_OC_Lpm (input CLK, input nRST,
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    l_module_OC_Fifo1_OC_0 outQ (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_2 outQ (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(exit_rule__ENA),
         .in$enq$v({ fifo$out$first[95:64] , fifo$out$first[63:32] , fifo$out$first[31:0] }),
         .in$enq__RDY(outQ$in$enq__RDY),
