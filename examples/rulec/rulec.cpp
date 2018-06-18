@@ -100,5 +100,7 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
 Echo test;
 typedef __int(32) BusType;
 //#define BusType __int(32)
-AdapterFromBus<BusType, NOCData> fooFrom;
-AdapterToBus<NOCData, BusType> fooTo;
+typedef AdapterFromBus<BusType, NOCData> FBAR;
+typedef AdapterToBus<NOCData, BusType> TBAR;
+FBAR fooFrom;
+TBAR fooTo;

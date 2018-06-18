@@ -6,14 +6,14 @@
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METAGUARD; out$first; 1;
-//METASTART; l_module_OC_Fifo1_OC_3
+//METASTART; l_module_OC_Fifo1_OC_7
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 0 == full ;
 //METAGUARD; out$deq; 0 != full ;
 //METAGUARD; out$first; 0 != full ;
 //METASTART; l_module_OC_FifoPong
-//METAINTERNAL; element1; l_module_OC_Fifo1_OC_3;
-//METAINTERNAL; element2; l_module_OC_Fifo1_OC_3;
+//METAINTERNAL; element1; l_module_OC_Fifo1_OC_7;
+//METAINTERNAL; element2; l_module_OC_Fifo1_OC_7;
 //METAINVOKE; in$enq__ENA; pong  ^ 1:element1$in$enq__ENA;pong :element2$in$enq__ENA;
 //METAGUARD; in$enq; ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
 //METAINVOKE; out$deq__ENA; pong  ^ 1:element1$out$deq__ENA;pong :element2$out$deq__ENA;

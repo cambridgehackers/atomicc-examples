@@ -38,7 +38,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Fifo1_OC_3 (input CLK, input nRST,
+module l_module_OC_Fifo1_OC_7 (input CLK, input nRST,
     input in$enq__ENA,
     input [95:0]in$enq$v,
     output in$enq__RDY,
@@ -91,7 +91,7 @@ module l_module_OC_FifoPong (input CLK, input nRST,
     wire element2$out$deq__RDY;
     wire [95:0]element2$out$first;
     wire element2$out$first__RDY;
-    l_module_OC_Fifo1_OC_3 element1 (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_7 element1 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
@@ -99,7 +99,7 @@ module l_module_OC_FifoPong (input CLK, input nRST,
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
-    l_module_OC_Fifo1_OC_3 element2 (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_7 element2 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(pong & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),

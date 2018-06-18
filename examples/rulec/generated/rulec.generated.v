@@ -3,37 +3,42 @@
 module l_module_OC_AdapterFromBus (input CLK, input nRST,
     input in$enq__ENA,
     input [31:0]in$enq$v,
+    input in$enq$last,
     output in$enq__RDY,
     output out$enq__ENA,
     output [127:0]out$enq$v,
+    output [15:0]out$enq$length,
     input out$enq__RDY);
     reg [127:0]buffer;
     reg [31:0]maxBeats;
-    reg [31:0]remain;
+    reg waitForEnq;
+    wire [31:0]out$enq$v$data0;
+    wire [31:0]out$enq$v$data1;
+    wire [31:0]out$enq$v$data2;
+    wire [31:0]out$enq$v$data3;
     wire pushValue__ENA;
     wire pushValue__RDY;
     assign pushValue__ENA = pushValue__RDY ;
-    assign pushValue__RDY = ( remain  == 32'd0 ) & out$enq__RDY ;
-    assign in$enq__RDY = remain  != 0;
-    assign out$enq$v = buffer ;
-    assign out$enq__ENA = pushValue__ENA ;
+    assign pushValue__RDY = 0 != waitForEnq ;
+    assign in$enq__RDY = 0 == waitForEnq ;
+    // assign out$enq$length = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    assign out$enq$v = { out$enq$v$data3  , out$enq$v$data2  , out$enq$v$data1  , out$enq$v$data0  };
+    // assign out$enq__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         buffer <= 0;
         maxBeats <= 0;
-        remain <= 0;
+        waitForEnq <= 0;
       end // nRST
       else begin
         if (in$enq__ENA) begin
             buffer  <= in$enq$v | ( buffer << 32 );
-            if (( remain < 0 ) ^ 1)
-            remain  <= remain + ( -1 );
-            if (remain < 0)
-            remain  <= in$enq$v - 1;
+            if (in$enq$last)
+            waitForEnq  <= 1;
         end; // End of in$enq__ENA
         if (pushValue__ENA) begin
-            remain  <= -1;
+            waitForEnq  <= 0;
         end; // End of pushValue__ENA
       end
     end // always @ (posedge CLK)
@@ -42,9 +47,11 @@ endmodule
 module l_module_OC_AdapterToBus (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
+    input [15:0]in$enq$length,
     output in$enq__RDY,
     output out$enq__ENA,
     output [31:0]out$enq$v,
+    output out$enq$last,
     input out$enq__RDY);
     reg [127:0]buffer;
     reg [31:0]maxBeats;
@@ -54,6 +61,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
     assign copyRule__ENA = copyRule__RDY ;
     assign copyRule__RDY = ( remain  != 0 ) & out$enq__RDY ;
     assign in$enq__RDY = remain  == 16'd0;
+    assign out$enq$last = remain  == 16'd1;
     assign out$enq$v = buffer ;
     assign out$enq__ENA = copyRule__ENA ;
 
@@ -70,7 +78,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
         end; // End of copyRule__ENA
         if (in$enq__ENA) begin
             buffer  <= in$enq$val;
-            remain  <= buffer;
+            remain  <= in$enq$length + 1;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)

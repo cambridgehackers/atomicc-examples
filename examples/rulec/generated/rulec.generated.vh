@@ -2,15 +2,13 @@
 `define __rulec_GENERATED__VH__
 
 //METASTART; l_module_OC_AdapterFromBus
-//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; out; l_ainterface_OC_PipeInH;
 //METAEXCLUSIVE; in$enq__ENA; pushValue__ENA
-//METABEFORE; in$enq__ENA; :pushValue__ENA
-//METAGUARD; in$enq; remain  != 0;
-//METAINVOKE; pushValue__ENA; :out$enq__ENA;
-//METAGUARD; pushValue; ( remain  == 32'd0 ) & out$enq__RDY ;
+//METAGUARD; in$enq; 0 == waitForEnq ;
+//METAGUARD; pushValue; 0 != waitForEnq ;
 //METARULES; pushValue
 //METASTART; l_module_OC_AdapterToBus
-//METAEXTERNAL; out; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; out; l_ainterface_OC_PipeInB;
 //METAINVOKE; copyRule__ENA; :out$enq__ENA;
 //METAEXCLUSIVE; copyRule__ENA; in$enq__ENA
 //METAGUARD; copyRule; ( remain  != 0 ) & out$enq__RDY ;

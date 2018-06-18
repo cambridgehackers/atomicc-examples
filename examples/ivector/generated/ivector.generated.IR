@@ -18,14 +18,14 @@ EMODULE l_ainterface_OC_IVectorRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
+EMODULE l_ainterface_OC_PipeIn_OC_1 {
     METHOD enq__ENA ( l_struct_OC_ValuePair v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_1 {
+EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValuePair
 }
@@ -33,9 +33,9 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo_OC_2 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+EMODULE l_module_OC_Fifo_OC_5 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
 EMODULE l_module_OC_IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
@@ -55,9 +55,9 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element))
 }
-MODULE l_module_OC_Fifo1_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+MODULE l_module_OC_Fifo1_OC_7 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD l_struct_OC_ValuePair element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) if (((full) ^ (1))) {
@@ -70,10 +70,10 @@ MODULE l_module_OC_Fifo1_OC_3 {
     METHOD out$first l_struct_OC_ValuePair = ((element)) if ((full))
 }
 MODULE l_module_OC_FifoPong {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
-    FIELD l_module_OC_Fifo1_OC_3 element1
-    FIELD l_module_OC_Fifo1_OC_3 element2
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
+    FIELD l_module_OC_Fifo1_OC_7 element1
+    FIELD l_module_OC_Fifo1_OC_7 element2
     FIELD INTEGER_1 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}

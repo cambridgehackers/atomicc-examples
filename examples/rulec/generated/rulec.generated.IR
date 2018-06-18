@@ -15,8 +15,11 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( INTEGER_32 v )
+EMODULE l_ainterface_OC_PipeInB {
+    METHOD enq__ENA ( INTEGER_32 v , INTEGER_1 last )
+}
+EMODULE l_ainterface_OC_PipeInH {
+    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
@@ -27,37 +30,33 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeOut out
 }
 MODULE l_module_OC_AdapterFromBus {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    INTERFACE l_ainterface_OC_PipeInB in
+    INTERFACE/Ptr l_ainterface_OC_PipeInH out
     FIELD INTEGER_32 maxBeats
-    FIELD INTEGER_32 remain
+    FIELD INTEGER_1 waitForEnq
     FIELD INTEGER_128 buffer
-    METHOD in$enq__ENA ( INTEGER_32 v ) if (((remain) != (0))) {
+    METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_1 last ) if (((waitForEnq) ^ (1))) {
         STORE :buffer = (in$enq$v) | ((buffer) << (32))
-        STORE ((remain) < (0)):remain = (in$enq$v) - (1)
-        STORE (((remain) < (0)) ^ 1):remain = (remain) + (-1)
+        STORE (in$enq$last):waitForEnq = 1
     }
-    METHOD/Rule pushValue__ENA if (((remain) == (0))) {
-        ALLOCA l_struct_OC_NOCData pushValue__ENA$agg_2e_tmp
-        LET INTEGER_128 :pushValue__ENA$agg_2e_tmp = buffer
-        CALL/Action :out$enq__ENA{pushValue__ENA$agg_2e_tmp}
-        STORE :remain = -1
+    METHOD/Rule pushValue__ENA if ((waitForEnq)) {
+        STORE :waitForEnq = 0
     }
 }
 MODULE l_module_OC_AdapterToBus {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 out
+    INTERFACE l_ainterface_OC_PipeInH in
+    INTERFACE/Ptr l_ainterface_OC_PipeInB out
     FIELD INTEGER_32 maxBeats
     FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
     METHOD/Rule copyRule__ENA if (((remain) != (0))) {
-        CALL/Action :out$enq__ENA{buffer}
+        CALL/Action :out$enq__ENA{buffer,(remain) == (1)}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer)  >>  (32)
     }
-    METHOD in$enq__ENA ( l_struct_OC_NOCData val ) if (((remain) == (0))) {
+    METHOD in$enq__ENA ( l_struct_OC_NOCData val , INTEGER_16 length ) if (((remain) == (0))) {
         STORE :buffer = in$enq$val
-        STORE :remain = buffer
+        STORE :remain = (in$enq$length) + (1)
     }
 }
 MODULE l_module_OC_Echo {

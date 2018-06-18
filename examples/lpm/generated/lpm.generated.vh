@@ -6,7 +6,7 @@
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METAGUARD; out$first; 1;
-//METASTART; l_module_OC_Fifo1_OC_2
+//METASTART; l_module_OC_Fifo1_OC_5
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 0 == full ;
 //METAGUARD; out$deq; 0 != full ;
@@ -17,9 +17,9 @@
 //METAGUARD; out$first; rindex  != windex ;
 //METASTART; l_module_OC_Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
-//METAINTERNAL; inQ; l_module_OC_Fifo1_OC_2;
+//METAINTERNAL; inQ; l_module_OC_Fifo1_OC_5;
 //METAINTERNAL; fifo; l_module_OC_Fifo2;
-//METAINTERNAL; outQ; l_module_OC_Fifo1_OC_2;
+//METAINTERNAL; outQ; l_module_OC_Fifo1_OC_5;
 //METAINTERNAL; mem; l_module_OC_LpmMemory;
 //METAINVOKE; enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; enter__ENA; recirc__ENA

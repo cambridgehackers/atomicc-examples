@@ -26,21 +26,33 @@
 //#define CAST reinterpret_cast
 #define CAST __bit_cast
 
+typedef __int(16) LenType;
+template<class T>
+__interface PipeInH {
+    typedef T Data;
+    void enq(T v, LenType length);
+};
+template<class T>
+__interface PipeInB {
+    typedef T Data;
+    void enq(T v, bool last);
+};
+
 template<class T, class BusType>
 __module AdapterToBus {
-   PipeIn<T>        in;
-   PipeIn<BusType> *out;
+   PipeInH<T>        in;
+   PipeInB<BusType> *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    __int(16)        remain;
    __uint(__bitsize(T)) buffer;
 
-   void in.enq(T val) if (remain == 0) {
+   void in.enq(T val, LenType length) if (remain == 0) {
       buffer = CAST<decltype(buffer)>(val);
-      remain = buffer;
+      remain = length + 1;
    }
    AdapterToBus() {
       __rule copyRule if (remain != 0) {
-         out->enq(buffer);
+         out->enq(buffer, remain == 1);
          remain--;
          buffer >>= __bitsize(BusType);
       }
@@ -49,23 +61,21 @@ __module AdapterToBus {
 
 template<class BusType, class T>
 __module AdapterFromBus {
-   PipeIn<BusType>  in;
-   PipeIn<T>       *out;
+   PipeInB<BusType>  in;
+   PipeInH<T>       *out;
    const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   int              remain;
+   bool             waitForEnq;
    __uint(__bitsize(T)) buffer;
 
-   void in.enq(BusType v) if (remain != 0) {
+   void in.enq(BusType v, bool last) if (!waitForEnq) {
       buffer = v | (sizeof(buffer) > sizeof(BusType) ? (buffer << __bitsize(BusType)) : 0);
-      if (remain < 0)
-          remain = v - 1;
-      else
-          remain--;
+      if (last)
+          waitForEnq = 1;
    }
    AdapterFromBus() {
-      __rule pushValue if (remain == 0) {
-          out->enq(CAST<T>(buffer));
-          remain = -1;
+      __rule pushValue if (waitForEnq) {
+          //out->enq(CAST<T>(buffer), 0);
+          waitForEnq = 0;
       }
    }
 };
