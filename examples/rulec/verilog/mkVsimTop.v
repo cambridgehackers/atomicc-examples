@@ -1,27 +1,27 @@
 
 `include "ProjectDefines.vh"
 module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys_clk, input CLK, input RST_N);
-  wire EN_incoming, EN_outgoing, writeLast, EN_writeBeat, EN_readBeat, readLast;
+  wire EN_incoming, EN_outgoing, in$enq$last, EN_in$enq, EN_readBeat, readLast;
   wire RDY_echo_in_enq, EN_echo_out_enq, RDY_echo_out_enq, incomingEnable;
   wire [`MAX_OUT_WIDTH-1 : 0] outgoingData, echoData, incomingData;
   wire [15: 0] outgoingLength;
-  wire [`MAX_BUS_WIDTH-1:0] writeData, readData;
+  wire [`MAX_BUS_WIDTH-1:0] in$enq$v, readData;
   wire RDY_incoming, RDY_outgoing;
+  wire RDY_fromBus;
 
   VsimSink #(.width(`MAX_BUS_WIDTH)) sink_0 (.CLK(CLK), .RST_N(RST_N),
-   .EN_beat(EN_writeBeat), .RDY_beat(!RDY_incoming), .beat(writeData), .last(writeLast));
+   .EN_beat(EN_in$enq), .RDY_beat(RDY_fromBus), .beat(in$enq$v), .last(in$enq$last));
 
   VsimSource #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .RST_N(RST_N),
    .EN_beat(EN_readBeat), .RDY_beat(!RDY_outgoing), .beat(readData), .last(readLast));
 
-  wire RDY_fromBus;
-  assign EN_writeBeat = RDY_fromBus;
-  AdapterFromBus wadapter_0(.CLK(CLK), .RST_N(RST_N),
-   .EN_writeBeat(EN_writeBeat), .RDY_writeBeat(RDY_fromBus), .writeData(writeData), .writeLast(writeLast),
-   .EN_incoming(EN_incoming), .RDY_incoming(RDY_incoming), .incomingData(incomingData));
-  //l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
-    //.in$enq__ENA(EN_writeBeat), .in$enq$v(writeData), .in$enq$last(writeLast), .in$enq__RDY(RDY_fromBus),
-    //.out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
+  assign EN_in$enq = RDY_fromBus;
+  //AdapterFromBus wadapter_0(.CLK(CLK), .RST_N(RST_N),
+   //.EN_in$enq(EN_in$enq), .RDY_in$enq(RDY_fromBus), .in$enq$v(in$enq$v), .in$enq$last(in$enq$last),
+   //.EN_out$enq(EN_incoming), .RDY_out$enq(RDY_incoming), .out$enq$v(incomingData));
+  l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
+    .in$enq__ENA(EN_in$enq), .in$enq$v(in$enq$v), .in$enq$last(in$enq$last), .in$enq__RDY(RDY_fromBus),
+    .out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
   AdapterToBus radapter_0(.CLK(CLK), .RST_N(RST_N),
    .EN_readBeat(EN_readBeat), .RDY_readBeat(!RDY_outgoing), .readData(readData), .readLast(readLast),
    .EN_outgoing(EN_outgoing), .RDY_outgoing(RDY_outgoing), .outgoingData(outgoingData), .outgoingLength(outgoingLength));
@@ -32,8 +32,8 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
     .indication$enq$v(echoData),
     .indication$enq__ENA(EN_echo_out_enq), .indication$enq__RDY(RDY_echo_out_enq));
 
-  assign EN_incoming = RDY_echo_in_enq;  // 'and' together all RDY signals
-  assign incomingEnable = RDY_incoming && incomingData[15:0] == `IfcNames_EchoRequestS2H && RDY_echo_in_enq;
+  assign RDY_incoming = RDY_echo_in_enq;  // 'and' together all RDY signals
+  assign incomingEnable = EN_incoming && RDY_incoming && incomingData[15:0] == `IfcNames_EchoRequestS2H && RDY_echo_in_enq;
 
   assign EN_outgoing = (EN_echo_out_enq && RDY_echo_out_enq); // 'or' together all EN signals
   // use priority encoder to mux outgoing signals when multiple portals
@@ -43,27 +43,27 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
 endmodule  // mkVsimTop
 
 module AdapterFromBus(input CLK, input RST_N,
-   input EN_writeBeat, output RDY_writeBeat, input [`MAX_BUS_WIDTH-1:0] writeData, input writeLast,
-   input EN_incoming, output RDY_incoming, output [`MAX_IN_WIDTH-1:0]incomingData);
+   input EN_in$enq, output RDY_in$enq, input [`MAX_BUS_WIDTH-1:0] in$enq$v, input in$enq$last,
+   output EN_out$enq, input RDY_out$enq, output [`MAX_IN_WIDTH-1:0]out$enq$v);
 
   reg  [`MAX_IN_WIDTH-1 : 0] buffer;
   reg  waitForEnq;
 
-  assign RDY_writeBeat = !waitForEnq;
-  assign RDY_incoming = waitForEnq;
-  assign incomingData = buffer;
+  assign RDY_in$enq = !waitForEnq;
+  assign EN_out$enq = waitForEnq && RDY_out$enq;
+  assign out$enq$v = buffer;
   always @(posedge CLK) begin
      if (RST_N == `BSV_RESET_VALUE) begin
         waitForEnq <= 0;
      end
      else begin
         // process 'write' requests
-        if (EN_incoming && waitForEnq)
+        if (EN_out$enq)
             waitForEnq <= 0;
-        if (EN_writeBeat && !waitForEnq) begin
-            $display("VSIMSINK: buffer %x writeData %x writeLast %x", buffer, writeData, writeLast);
-            buffer <= buffer << 32 | writeData;
-            if (writeLast)
+        if (EN_in$enq && RDY_in$enq) begin
+            $display("VSIMSINK: buffer %x in$enq$v %x in$enq$last %x", buffer, in$enq$v, in$enq$last);
+            buffer <= buffer << 32 | in$enq$v;
+            if (in$enq$last)
                 waitForEnq <= 1;
         end 
     end
