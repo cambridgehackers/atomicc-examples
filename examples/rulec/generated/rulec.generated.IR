@@ -32,7 +32,6 @@ EMODULE l_module_OC_Fifo {
 MODULE l_module_OC_AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
-    FIELD INTEGER_32 maxBeats
     FIELD INTEGER_1 waitForEnq
     FIELD INTEGER_128 buffer
     METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_1 last ) if (((waitForEnq) ^ (1))) {
@@ -40,13 +39,15 @@ MODULE l_module_OC_AdapterFromBus {
         STORE (in$enq$last):waitForEnq = 1
     }
     METHOD/Rule pushValue__ENA if ((waitForEnq)) {
+        ALLOCA l_struct_OC_NOCData pushValue__ENA$agg_2e_tmp
+        LET INTEGER_128 :pushValue__ENA$agg_2e_tmp = buffer
+        CALL/Action :out$enq__ENA{pushValue__ENA$agg_2e_tmp,0}
         STORE :waitForEnq = 0
     }
 }
 MODULE l_module_OC_AdapterToBus {
     INTERFACE l_ainterface_OC_PipeInH in
     INTERFACE/Ptr l_ainterface_OC_PipeInB out
-    FIELD INTEGER_32 maxBeats
     FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
     METHOD/Rule copyRule__ENA if (((remain) != (0))) {

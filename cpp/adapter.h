@@ -23,9 +23,6 @@
 #define _ADAPTER_H_
 #include <atomicc.h>
 
-//#define CAST reinterpret_cast
-#define CAST __bit_cast
-
 typedef __int(16) LenType;
 template<class T>
 __interface PipeInH {
@@ -42,12 +39,12 @@ template<class T, class BusType>
 __module AdapterToBus {
    PipeInH<T>        in;
    PipeInB<BusType> *out;
-   const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
+   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    __int(16)        remain;
    __uint(__bitsize(T)) buffer;
 
    void in.enq(T val, LenType length) if (remain == 0) {
-      buffer = CAST<decltype(buffer)>(val);
+      buffer = __bit_cast<decltype(buffer)>(val);
       remain = length + 1;
    }
    AdapterToBus() {
@@ -63,7 +60,7 @@ template<class BusType, class T>
 __module AdapterFromBus {
    PipeInB<BusType>  in;
    PipeInH<T>       *out;
-   const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
+   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    bool             waitForEnq;
    __uint(__bitsize(T)) buffer;
 
@@ -74,7 +71,7 @@ __module AdapterFromBus {
    }
    AdapterFromBus() {
       __rule pushValue if (waitForEnq) {
-          //out->enq(CAST<T>(buffer), 0);
+          out->enq(__bit_cast<T>(buffer), 0);
           waitForEnq = 0;
       }
    }

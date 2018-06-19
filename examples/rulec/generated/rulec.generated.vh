@@ -5,7 +5,8 @@
 //METAEXTERNAL; out; l_ainterface_OC_PipeInH;
 //METAEXCLUSIVE; in$enq__ENA; pushValue__ENA
 //METAGUARD; in$enq; 0 == waitForEnq ;
-//METAGUARD; pushValue; 0 != waitForEnq ;
+//METAINVOKE; pushValue__ENA; :out$enq__ENA;
+//METAGUARD; pushValue; ( 0 != waitForEnq  ) & out$enq__RDY ;
 //METARULES; pushValue
 //METASTART; l_module_OC_AdapterToBus
 //METAEXTERNAL; out; l_ainterface_OC_PipeInB;

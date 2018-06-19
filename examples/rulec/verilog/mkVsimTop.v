@@ -14,9 +14,14 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   VsimSource #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .RST_N(RST_N),
    .EN_beat(EN_readBeat), .RDY_beat(!RDY_outgoing), .beat(readData), .last(readLast));
 
+  wire RDY_fromBus;
+  assign EN_writeBeat = RDY_fromBus;
   AdapterFromBus wadapter_0(.CLK(CLK), .RST_N(RST_N),
-   .EN_writeBeat(EN_writeBeat), .RDY_writeBeat(!RDY_incoming), .writeData(writeData), .writeLast(writeLast),
+   .EN_writeBeat(EN_writeBeat), .RDY_writeBeat(RDY_fromBus), .writeData(writeData), .writeLast(writeLast),
    .EN_incoming(EN_incoming), .RDY_incoming(RDY_incoming), .incomingData(incomingData));
+  //l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
+    //.in$enq__ENA(EN_writeBeat), .in$enq$v(writeData), .in$enq$last(writeLast), .in$enq__RDY(RDY_fromBus),
+    //.out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
   AdapterToBus radapter_0(.CLK(CLK), .RST_N(RST_N),
    .EN_readBeat(EN_readBeat), .RDY_readBeat(!RDY_outgoing), .readData(readData), .readLast(readLast),
    .EN_outgoing(EN_outgoing), .RDY_outgoing(RDY_outgoing), .outgoingData(outgoingData), .outgoingLength(outgoingLength));
@@ -38,25 +43,28 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
 endmodule  // mkVsimTop
 
 module AdapterFromBus(input CLK, input RST_N,
-   output EN_writeBeat, input RDY_writeBeat, input [`MAX_BUS_WIDTH-1:0] writeData, input writeLast,
+   input EN_writeBeat, output RDY_writeBeat, input [`MAX_BUS_WIDTH-1:0] writeData, input writeLast,
    input EN_incoming, output RDY_incoming, output [`MAX_IN_WIDTH-1:0]incomingData);
 
-  reg  RDY_incoming;
-  reg  [`MAX_IN_WIDTH-1 : 0] incomingData;
+  reg  [`MAX_IN_WIDTH-1 : 0] buffer;
+  reg  waitForEnq;
 
+  assign RDY_writeBeat = !waitForEnq;
+  assign RDY_incoming = waitForEnq;
+  assign incomingData = buffer;
   always @(posedge CLK) begin
      if (RST_N == `BSV_RESET_VALUE) begin
-        RDY_incoming <= 0;
+        waitForEnq <= 0;
      end
      else begin
         // process 'write' requests
-        if (EN_incoming && RDY_incoming)
-            RDY_incoming <= 0;
-        if (EN_writeBeat && !RDY_incoming) begin
-            $display("VSIMSINK: incomingData %x writeData %x writeLast %x", incomingData, writeData, writeLast);
-            incomingData <= incomingData << 32 | writeData;
+        if (EN_incoming && waitForEnq)
+            waitForEnq <= 0;
+        if (EN_writeBeat && !waitForEnq) begin
+            $display("VSIMSINK: buffer %x writeData %x writeLast %x", buffer, writeData, writeLast);
+            buffer <= buffer << 32 | writeData;
             if (writeLast)
-                RDY_incoming <= 1;
+                waitForEnq <= 1;
         end 
     end
   end
