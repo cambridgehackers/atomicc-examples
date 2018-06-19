@@ -43,8 +43,8 @@ __module AdapterToBus {
    __int(16)        remain;
    __uint(__bitsize(T)) buffer;
 
-   void in.enq(T val, LenType length) if (remain == 0) {
-      buffer = __bit_cast<decltype(buffer)>(val);
+   void in.enq(T v, LenType length) if (remain == 0) {
+      buffer = __bit_cast<decltype(buffer)>(v);
       remain = length + 1;
    }
    AdapterToBus() {
