@@ -69,7 +69,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
             buffer  <= buffer >> 32;
         end; // End of copyRule__ENA
         if (in$enq__ENA) begin
-            buffer  <= in$enq$val;
+            buffer  <= in$enq$v;
             remain  <= in$enq$length + 1;
         end; // End of in$enq__ENA
       end
