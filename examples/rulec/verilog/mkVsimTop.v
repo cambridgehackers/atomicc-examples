@@ -16,9 +16,6 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
    .EN_beat(EN_readBeat), .RDY_beat(!RDY_outgoing), .beat(readData), .last(readLast));
 
   assign EN_in$enq = RDY_fromBus;
-  //AdapterFromBus wadapter_0(.CLK(CLK), .RST_N(RST_N),
-   //.EN_in$enq(EN_in$enq), .RDY_in$enq(RDY_fromBus), .in$enq$v(in$enq$v), .in$enq$last(in$enq$last),
-   //.EN_out$enq(EN_incoming), .RDY_out$enq(RDY_incoming), .out$enq$v(incomingData));
   l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
     .in$enq__ENA(EN_in$enq), .in$enq$v(in$enq$v), .in$enq$last(in$enq$last), .in$enq__RDY(RDY_fromBus),
     .out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
@@ -41,35 +38,6 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   assign outgoingLength = echoData[15:0];
   assign RDY_echo_out_enq = RDY_outgoing;
 endmodule  // mkVsimTop
-
-module AdapterFromBus(input CLK, input RST_N,
-   input EN_in$enq, output RDY_in$enq, input [`MAX_BUS_WIDTH-1:0] in$enq$v, input in$enq$last,
-   output EN_out$enq, input RDY_out$enq, output [`MAX_IN_WIDTH-1:0]out$enq$v);
-
-  reg  [`MAX_IN_WIDTH-1 : 0] buffer;
-  reg  waitForEnq;
-
-  assign RDY_in$enq = !waitForEnq;
-  assign EN_out$enq = waitForEnq && RDY_out$enq;
-  assign out$enq$v = buffer;
-  always @(posedge CLK) begin
-     if (RST_N == `BSV_RESET_VALUE) begin
-        waitForEnq <= 0;
-     end
-     else begin
-        // process 'write' requests
-        if (EN_out$enq)
-            waitForEnq <= 0;
-        if (EN_in$enq && RDY_in$enq) begin
-            $display("VSIMSINK: buffer %x in$enq$v %x in$enq$last %x", buffer, in$enq$v, in$enq$last);
-            buffer <= buffer << 32 | in$enq$v;
-            if (in$enq$last)
-                waitForEnq <= 1;
-        end 
-    end
-  end
-
-endmodule  // Adapter
 
 module AdapterToBus(input CLK, input RST_N,
    output EN_readBeat, input RDY_readBeat, output [`MAX_BUS_WIDTH-1:0]readData, output readLast,
