@@ -38,7 +38,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Fifo1_OC_5 (input CLK, input nRST,
+module l_module_OC_Fifo1_OC_2 (input CLK, input nRST,
     input in$enq__ENA,
     input [9:0]in$enq$v,
     output in$enq__RDY,
@@ -91,7 +91,7 @@ module l_module_OC_IVector (input CLK, input nRST,
     wire respond__RDY;
     assign respond__ENA = respond__RDY ;
     assign respond__RDY = fifo$out$first__RDY  & fifo$out$deq__RDY  & ind$heard__RDY ;
-    l_module_OC_Fifo1_OC_5 fifo (.CLK(CLK), .nRST(nRST),
+    l_module_OC_Fifo1_OC_2 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),
