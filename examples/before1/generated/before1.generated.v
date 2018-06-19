@@ -135,14 +135,14 @@ module l_module_OC_Echo (input CLK, input nRST,
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 1'd0 ) ) != 0;
+    assign delay_rule__RDY = ( busy  & ( !busy_delay  ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
-    assign respond_rule__RDY = ( busy_delay  != 0 ) & indication$heard__RDY ;
+    assign respond_rule__RDY = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = respond_rule__ENA ;
-    assign request$say2__RDY = 0 == busy ;
-    assign request$say__RDY = 0 == busy ;
+    assign request$say2__RDY = !busy ;
+    assign request$say__RDY = !busy ;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
@@ -211,11 +211,11 @@ module l_module_OC_EchoIndicationInput (input CLK, input nRST,
     wire input_rule__ENA;
     wire input_rule__RDY;
     assign input_rule__ENA = input_rule__RDY ;
-    assign input_rule__RDY = ( busy_delay  != 0 ) & indication$heard__RDY ;
+    assign input_rule__RDY = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = input_rule__ENA ;
-    assign pipe$enq__RDY = 0 == busy_delay ;
+    assign pipe$enq__RDY = !busy_delay ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -261,10 +261,10 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
     wire output_ruleo__ENA;
     wire output_ruleo__RDY;
     assign output_rulee__ENA = output_rulee__RDY ;
-    assign output_rulee__RDY = ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
+    assign output_rulee__RDY = ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
     assign output_ruleo__ENA = output_ruleo__RDY ;
-    assign output_ruleo__RDY = ( ( ( ind_busy  != 0 ) & ( even  == 1'd0 ) ) != 0 ) & pipe$enq__RDY ;
-    assign indication$heard__RDY = 0 == ind_busy ;
+    assign output_ruleo__RDY = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
+    assign indication$heard__RDY = !ind_busy ;
     assign pipe$enq$v = output_rulee__ENA  ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
     assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;
 
@@ -367,10 +367,10 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     reg [31:0]element$data2;
     reg [31:0]element$data3;
     reg full;
-    assign in$enq__RDY = 0 == full ;
-    assign out$deq__RDY = 0 != full ;
+    assign in$enq__RDY = !full ;
+    assign out$deq__RDY = full ;
     assign out$first = { element$data3  , element$data2  , element$data1  , element$data0  };
-    assign out$first__RDY = 0 != full ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

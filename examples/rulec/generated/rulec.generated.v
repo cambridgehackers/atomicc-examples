@@ -14,8 +14,8 @@ module l_module_OC_AdapterFromBus (input CLK, input nRST,
     wire pushValue__ENA;
     wire pushValue__RDY;
     assign pushValue__ENA = pushValue__RDY ;
-    assign pushValue__RDY = ( 0 != waitForEnq  ) & out$enq__RDY ;
-    assign in$enq__RDY = 0 == waitForEnq ;
+    assign pushValue__RDY = waitForEnq  & out$enq__RDY ;
+    assign in$enq__RDY = !waitForEnq ;
     assign out$enq$length = 0;
     assign out$enq$v = buffer ;
     assign out$enq__ENA = pushValue__ENA ;
@@ -52,7 +52,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
     wire copyRule__ENA;
     wire copyRule__RDY;
     assign copyRule__ENA = copyRule__RDY ;
-    assign copyRule__RDY = ( remain  != 0 ) & out$enq__RDY ;
+    assign copyRule__RDY = ( remain  != 16'd0 ) & out$enq__RDY ;
     assign in$enq__RDY = remain  == 16'd0;
     assign out$enq$last = remain  == 16'd1;
     assign out$enq$v = buffer ;
@@ -117,13 +117,13 @@ module l_module_OC_Echo (input CLK, input nRST,
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
+    assign delay_rule__RDY = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
-    assign respond_rule__RDY = ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
+    assign respond_rule__RDY = ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
-    assign indication$heard2__ENA = ( v_type  != 1 ) & respond_rule__ENA ;
+    assign indication$heard2__ENA = ( v_type  != 32'd1 ) & respond_rule__ENA ;
     // assign indication$heard3$a = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3$b = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3$c = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
@@ -195,10 +195,10 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     reg [31:0]element$data2;
     reg [31:0]element$data3;
     reg full;
-    assign in$enq__RDY = 0 == full ;
-    assign out$deq__RDY = 0 != full ;
+    assign in$enq__RDY = !full ;
+    assign out$deq__RDY = full ;
     assign out$first = { element$data3  , element$data2  , element$data1  , element$data0  };
-    assign out$first__RDY = 0 != full ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

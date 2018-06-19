@@ -72,10 +72,10 @@ module l_module_OC_Fifo1_OC_3 (input CLK, input nRST,
     output out$first__RDY);
     reg [31:0]element;
     reg full;
-    assign in$enq__RDY = 0 == full ;
-    assign out$deq__RDY = 0 != full ;
+    assign in$enq__RDY = !full ;
+    assign out$deq__RDY = full ;
     assign out$first = element ;
-    assign out$first__RDY = 0 != full ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

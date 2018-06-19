@@ -7,7 +7,7 @@
 //METAGUARD; clockRule; 1;
 //METAINVOKE; delay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
-//METAGUARD; delay_rule; ( ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0 ) & printfp$enq__RDY ;
+//METAGUARD; delay_rule; ( ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0 ) & printfp$enq__RDY ;
 //METAINVOKE; request$say__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$setLeds__ENA; request$zsay4__ENA; respond_rule__ENA
 //METAINVOKE; request$say2__ENA; :printfp$enq__ENA;
@@ -20,15 +20,15 @@
 //METAINVOKE; request$zsay4__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$zsay4__ENA; respond_rule__ENA
 //METAGUARD; request$zsay4; printfp$enq__RDY ;
-//METAINVOKE; respond_rule__ENA; v_type  != 1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;:printfp$enq__ENA;
+//METAINVOKE; respond_rule__ENA; v_type  != 32'd1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;:printfp$enq__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
-//METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  ) & printfp$enq__RDY ;
+//METAGUARD; respond_rule; ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  ) & printfp$enq__RDY ;
 //METARULES; clockRule; delay_rule; respond_rule
 //METASTART; l_module_OC_Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; 0 == full ;
-//METAGUARD; out$deq; 0 != full ;
-//METAGUARD; out$first; 0 != full ;
+//METAGUARD; in$enq; !full ;
+//METAGUARD; out$deq; full ;
+//METAGUARD; out$first; full ;
 //METASTART; l_module_OC_MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; l_module_OC_Fifo1;

@@ -50,10 +50,10 @@ module l_module_OC_Fifo1_OC_2 (input CLK, input nRST,
     reg [31:0]element$b;
     reg [31:0]element$c;
     reg full;
-    assign in$enq__RDY = 0 == full ;
-    assign out$deq__RDY = 0 != full ;
+    assign in$enq__RDY = !full ;
+    assign out$deq__RDY = full ;
     assign out$first = { element$c  , element$b  , element$a  };
-    assign out$first__RDY = 0 != full ;
+    assign out$first__RDY = full ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -238,7 +238,7 @@ module l_module_OC_LpmMemory (input CLK, input nRST,
     wire memdelay_rule__ENA;
     wire memdelay_rule__RDY;
     assign memdelay_rule__ENA = memdelay_rule__RDY ;
-    assign memdelay_rule__RDY = 0 != ( delayCount  > 1 );
+    assign memdelay_rule__RDY = ( delayCount  > 1 ) != 0;
     assign ifc$req__RDY = delayCount  == 32'd0;
     assign ifc$resAccept__RDY = delayCount  == 32'd1;
     assign ifc$resValue = { saved$c  , saved$b  , saved$a  };

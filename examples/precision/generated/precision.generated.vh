@@ -8,9 +8,9 @@
 //METAGUARD; out$first; 1;
 //METASTART; l_module_OC_Fifo1_OC_2
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; 0 == full ;
-//METAGUARD; out$deq; 0 != full ;
-//METAGUARD; out$first; 0 != full ;
+//METAGUARD; in$enq; !full ;
+//METAGUARD; out$deq; full ;
+//METAGUARD; out$first; full ;
 //METASTART; l_module_OC_IVector
 //METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;
 //METAINTERNAL; fifo; l_module_OC_Fifo1_OC_2;

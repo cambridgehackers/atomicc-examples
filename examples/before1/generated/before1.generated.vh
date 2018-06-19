@@ -32,12 +32,12 @@
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
-//METAGUARD; delay_rule; ( ( busy  != 0 ) & ( busy_delay  == 1'd0 ) ) != 0;
+//METAGUARD; delay_rule; ( busy  & ( !busy_delay  ) ) != 0;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
-//METAGUARD; request$say2; 0 == busy ;
-//METAGUARD; request$say; 0 == busy ;
+//METAGUARD; request$say2; !busy ;
+//METAGUARD; request$say; !busy ;
 //METAINVOKE; respond_rule__ENA; :indication$heard__ENA;
-//METAGUARD; respond_rule; ( busy_delay  != 0 ) & indication$heard__RDY ;
+//METAGUARD; respond_rule; busy_delay  & indication$heard__RDY ;
 //METAGUARD; swap$x2y; 1;
 //METAGUARD; swap$y2x; 1;
 //METAGUARD; swap$y2xnull; 1;
@@ -46,18 +46,18 @@
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; input_rule__ENA; :indication$heard__ENA;
 //METAEXCLUSIVE; input_rule__ENA; pipe$enq__ENA
-//METAGUARD; input_rule; ( busy_delay  != 0 ) & indication$heard__RDY ;
-//METAGUARD; pipe$enq; 0 == busy_delay ;
+//METAGUARD; input_rule; busy_delay  & indication$heard__RDY ;
+//METAGUARD; pipe$enq; !busy_delay ;
 //METARULES; input_rule
 //METASTART; l_module_OC_EchoIndicationOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
 //METAEXCLUSIVE; indication$heard__ENA; output_rulee__ENA; output_ruleo__ENA
-//METAGUARD; indication$heard; 0 == ind_busy ;
+//METAGUARD; indication$heard; !ind_busy ;
 //METAINVOKE; output_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; output_rulee__ENA; output_ruleo__ENA
-//METAGUARD; output_rulee; ( ( ( ind_busy  != 0 ) & ( even  != 0 ) ) != 0 ) & pipe$enq__RDY ;
+//METAGUARD; output_rulee; ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
 //METAINVOKE; output_ruleo__ENA; :pipe$enq__ENA;
-//METAGUARD; output_ruleo; ( ( ( ind_busy  != 0 ) & ( even  == 1'd0 ) ) != 0 ) & pipe$enq__RDY ;
+//METAGUARD; output_ruleo; ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
 //METARULES; output_rulee; output_ruleo
 //METASTART; l_module_OC_EchoRequestInput
 //METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
@@ -72,9 +72,9 @@
 //METAGUARD; request$say; pipe$enq__RDY ;
 //METASTART; l_module_OC_Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; 0 == full ;
-//METAGUARD; out$deq; 0 != full ;
-//METAGUARD; out$first; 0 != full ;
+//METAGUARD; in$enq; !full ;
+//METAGUARD; out$deq; full ;
+//METAGUARD; out$first; full ;
 //METASTART; l_module_OC_MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; l_module_OC_Fifo1;

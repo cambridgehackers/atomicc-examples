@@ -4,35 +4,35 @@
 //METASTART; l_module_OC_AdapterFromBus
 //METAEXTERNAL; out; l_ainterface_OC_PipeInH;
 //METAEXCLUSIVE; in$enq__ENA; pushValue__ENA
-//METAGUARD; in$enq; 0 == waitForEnq ;
+//METAGUARD; in$enq; !waitForEnq ;
 //METAINVOKE; pushValue__ENA; :out$enq__ENA;
-//METAGUARD; pushValue; ( 0 != waitForEnq  ) & out$enq__RDY ;
+//METAGUARD; pushValue; waitForEnq  & out$enq__RDY ;
 //METARULES; pushValue
 //METASTART; l_module_OC_AdapterToBus
 //METAEXTERNAL; out; l_ainterface_OC_PipeInB;
 //METAINVOKE; copyRule__ENA; :out$enq__ENA;
 //METAEXCLUSIVE; copyRule__ENA; in$enq__ENA
-//METAGUARD; copyRule; ( remain  != 0 ) & out$enq__RDY ;
+//METAGUARD; copyRule; ( remain  != 16'd0 ) & out$enq__RDY ;
 //METAGUARD; in$enq; remain  == 16'd0;
 //METARULES; copyRule
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
-//METAGUARD; delay_rule; ( ( busy  != 0 ) & ( busy_delay  == 32'd0 ) ) != 0;
+//METAGUARD; delay_rule; ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; busy  == 32'd0;
 //METAGUARD; request$say; busy  == 32'd0;
 //METAGUARD; request$setLeds; 1;
 //METAGUARD; request$zsay4; 1;
-//METAINVOKE; respond_rule__ENA; v_type  != 1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;
+//METAINVOKE; respond_rule__ENA; v_type  != 32'd1:indication$heard2__ENA;v_type  == 32'd1:indication$heard__ENA;
 //METABEFORE; respond_rule__ENA; :delay_rule__ENA
-//METAGUARD; respond_rule; ( busy_delay  != 0 ) & ( ( v_type  != 1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
+//METAGUARD; respond_rule; ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
 //METARULES; delay_rule; respond_rule
 //METASTART; l_module_OC_Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; 0 == full ;
-//METAGUARD; out$deq; 0 != full ;
-//METAGUARD; out$first; 0 != full ;
+//METAGUARD; in$enq; !full ;
+//METAGUARD; out$deq; full ;
+//METAGUARD; out$first; full ;
 //METASTART; l_module_OC_MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
