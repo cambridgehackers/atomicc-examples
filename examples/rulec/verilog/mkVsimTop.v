@@ -8,10 +8,10 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   wire [`MAX_BUS_WIDTH-1:0] in$enq$v, readDatar;
   wire RDY_incoming, RDY_in$enqr;
 
-  VsimSink #(.width(`MAX_BUS_WIDTH)) sink_0 (.CLK(CLK), .RST_N(RST_N),
+  VsimReceive #(.width(`MAX_BUS_WIDTH)) sink_0 (.CLK(CLK), .nRST(RST_N),
    .EN_beat(EN_in$enq), .RDY_beat(EN_in$enq), .beat(in$enq$v), .last(in$enq$last));
 
-  VsimSource #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .RST_N(RST_N),
+  VsimSend #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .nRST(RST_N),
    .EN_beat(EN_out$enqr), .RDY_beat(!RDY_in$enqr), .beat(readDatar), .last(out$enq$last));
 
   l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
