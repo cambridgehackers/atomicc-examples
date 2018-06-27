@@ -24,9 +24,9 @@ cleanmake:
 # To compile/run a test:
 #
 #     make          (this generates the verilog and cppgen files from the original cpp source)
-#     make build    (this compiles the generated files, both for ubuntu.exe and vlsim)
+#     make verilator    (this compiles the generated files, both for ubuntu.exe and vlsim)
 #     make run      (this runs bin/ubuntu.exe)
-#     make cleanup  (this cleans out the objects/etc that were created by 'make build')
+#     make cleanup  (this cleans out the objects/etc that were created by 'make verilator')
 #
 DTOP=$(PWD)
 CONNECTALDIR=$(PWD)/../../../connectal
