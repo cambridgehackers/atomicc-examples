@@ -33,6 +33,9 @@ __interface EchoRequest {
     //void say3(aint32 a, aint32 b, aint32 c);
     void zsay4(void);
     void setLeds(aint8 v);
+    //__input int readme;
+    //__output int writeme;
+    //__inout int readwriteme;
 };
 
 __interface EchoIndication {
