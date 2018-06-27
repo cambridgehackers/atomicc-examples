@@ -1,0 +1,15 @@
+#
+set -x
+#set -e
+export STYLE=--lint-only
+##export STYLE=--xml-only
+
+verilator $STYLE \
+        -Iextrav \
+        -Iverilog \
+        -I../connectal/verilog/xilinx \
+        -I../connectal/verilog \
+        -I/scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog \
+	--top-module mkZynqTop \
+    verilog/mkZynqTop.v \
+    verilog/l_top.v \
