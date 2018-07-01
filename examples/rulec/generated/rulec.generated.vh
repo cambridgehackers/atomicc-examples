@@ -15,6 +15,9 @@
 //METAGUARD; copyRule; ( remain  != 16'd0 ) & out$enq__RDY ;
 //METAGUARD; in$enq; remain  == 16'd0;
 //METARULES; copyRule
+//METASTART; l_module_OC_CONNECTNET2
+//METAGUARD; assign; 1;
+//METARULES; assign
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA

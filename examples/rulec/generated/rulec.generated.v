@@ -76,6 +76,19 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+module l_module_OC_CONNECTNET2 (input CLK, input nRST,
+    input IN1,
+    input IN2,
+    output OUT1,
+    output OUT2);
+    wire assign__ENA;
+    wire assign__RDY;
+    assign assign__ENA = assign__RDY ;
+    assign assign__RDY = 1;
+    assign OUT1 = IN1 ;
+    assign OUT2 = IN2 ;
+endmodule 
+
 module l_module_OC_Echo (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$v,
@@ -155,28 +168,28 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:%d]Echo" , 85 );
+            $display( "[delay_rule:%d]Echo" , 102 );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             xxx  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 60 );
+            $display( "[%s:%d]Echo" , "request$say" , 77 );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[%s:%d]Echo" , "request$say2" , 67 );
+            $display( "[%s:%d]Echo" , "request$say2" , 84 );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[%s:%d]Echo" , "request$zsay4" , 79 );
+            $display( "[%s:%d]Echo" , "request$zsay4" , 96 );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:%d]Echo" , 93 );
+            $display( "[respond_rule:%d]Echo" , 110 );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)

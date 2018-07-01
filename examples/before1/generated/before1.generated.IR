@@ -77,11 +77,11 @@ MODULE l_module_OC_Connect {
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
     }
-    METHOD/Rule swap2_rule__ENA if ((1)) {
+    METHOD/Rule swap2_rule__ENA {
         PRINTF :printf{"swap2_rule:Connect\n"}
         CALL/Action :lEcho$swap$y2xnull__ENA{}
     }
-    METHOD/Rule swap_rule__ENA if ((1)) {
+    METHOD/Rule swap_rule__ENA {
         PRINTF :printf{"swap_rule:Connect\n"}
         CALL/Action :lEcho$swap$x2y__ENA{}
         CALL/Action :lEcho$swap$y2x__ENA{}
@@ -232,7 +232,7 @@ MODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD l_module_OC_Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA if ((1)) {
+    METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first

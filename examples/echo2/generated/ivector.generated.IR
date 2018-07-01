@@ -98,7 +98,7 @@ MODULE l_module_OC_IVector {
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
     }
-    METHOD/Rule respond__ENA if ((1)) {
+    METHOD/Rule respond__ENA {
         ALLOCA l_struct_OC_ValuePair respond__ENA$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
@@ -111,7 +111,7 @@ MODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD l_module_OC_Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA if ((1)) {
+    METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first

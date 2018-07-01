@@ -101,6 +101,19 @@ module l_module_OC_Connect (input CLK, input nRST,
         .indication$heard$meth(indication$heard$meth),
         .indication$heard$v(indication$heard$v),
         .indication$heard__RDY(indication$heard__RDY));
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (swap2_rule__ENA) begin
+            $display( "swap2_rule:Connect" );
+        end; // End of swap2_rule__ENA
+        if (swap_rule__ENA) begin
+            $display( "swap_rule:Connect" );
+        end; // End of swap_rule__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_Echo (input CLK, input nRST,
@@ -324,6 +337,16 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
     assign request$say2$v = pipe$enq$v[159:128] ;
     assign request$say2__ENA = ( pipe$enq$v[31:0]  == 32'd2 ) & pipe$enq__ENA ;
     assign request$say__ENA = ( pipe$enq$v[31:0]  == 32'd1 ) & pipe$enq__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (pipe$enq__ENA) begin
+            $display( "entered EchoRequestInput::enq tag %d" , pipe$enq$v[31:0] );
+        end; // End of pipe$enq__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_EchoRequestOutput (input CLK, input nRST,
@@ -352,6 +375,23 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     assign pipe$enq__ENA = request$say__ENA  || request$say2__ENA ;
     assign request$say2__RDY = pipe$enq__RDY ;
     assign request$say__RDY = pipe$enq__RDY ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (request$say__ENA) begin
+            request$say__ENA$ind$data$say$meth  <= request$say$meth;
+            request$say__ENA$ind$data$say$v  <= request$say$v;
+            $display( "entered EchoRequestOutput::say" );
+        end; // End of request$say__ENA
+        if (request$say2__ENA) begin
+            request$say2__ENA$ind$data$say2$meth  <= request$say2$meth;
+            request$say2__ENA$ind$data$say2$v  <= request$say2$v;
+            $display( "entered EchoRequestOutput::say2" );
+        end; // End of request$say2__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_Fifo1 (input CLK, input nRST,

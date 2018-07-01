@@ -39,7 +39,7 @@ MODULE l_module_OC_Echo {
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
     FIELD INTEGER_32 clockReg
-    METHOD/Rule clockRule__ENA if ((1)) {
+    METHOD/Rule clockRule__ENA {
         STORE :clockReg = (clockReg) + (1)
     }
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
@@ -95,7 +95,7 @@ MODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD l_module_OC_Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA if ((1)) {
+    METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first

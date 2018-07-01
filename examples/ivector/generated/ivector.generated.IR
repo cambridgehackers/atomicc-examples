@@ -102,70 +102,70 @@ MODULE l_module_OC_IVector {
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
         CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say__ENA$temp}
     }
-    METHOD/Rule respond_rule_0__ENA if ((1)) {
+    METHOD/Rule respond_rule_0__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_0__ENA$temp
         CALL :fifo[0]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_0__ENA$temp = fifo[0]$out$first
         CALL/Action :fifo[0]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{0,respond_rule_0__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_1__ENA if ((1)) {
+    METHOD/Rule respond_rule_1__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_1__ENA$temp
         CALL :fifo[1]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_1__ENA$temp = fifo[1]$out$first
         CALL/Action :fifo[1]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{1,respond_rule_1__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_2__ENA if ((1)) {
+    METHOD/Rule respond_rule_2__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_2__ENA$temp
         CALL :fifo[2]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_2__ENA$temp = fifo[2]$out$first
         CALL/Action :fifo[2]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{2,respond_rule_2__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_3__ENA if ((1)) {
+    METHOD/Rule respond_rule_3__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_3__ENA$temp
         CALL :fifo[3]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_3__ENA$temp = fifo[3]$out$first
         CALL/Action :fifo[3]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{3,respond_rule_3__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_4__ENA if ((1)) {
+    METHOD/Rule respond_rule_4__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_4__ENA$temp
         CALL :fifo[4]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_4__ENA$temp = fifo[4]$out$first
         CALL/Action :fifo[4]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{4,respond_rule_4__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_5__ENA if ((1)) {
+    METHOD/Rule respond_rule_5__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_5__ENA$temp
         CALL :fifo[5]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_5__ENA$temp = fifo[5]$out$first
         CALL/Action :fifo[5]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{5,respond_rule_5__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_6__ENA if ((1)) {
+    METHOD/Rule respond_rule_6__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_6__ENA$temp
         CALL :fifo[6]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_6__ENA$temp = fifo[6]$out$first
         CALL/Action :fifo[6]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{6,respond_rule_6__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_7__ENA if ((1)) {
+    METHOD/Rule respond_rule_7__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_7__ENA$temp
         CALL :fifo[7]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_7__ENA$temp = fifo[7]$out$first
         CALL/Action :fifo[7]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{7,respond_rule_7__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_8__ENA if ((1)) {
+    METHOD/Rule respond_rule_8__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_8__ENA$temp
         CALL :fifo[8]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_8__ENA$temp = fifo[8]$out$first
         CALL/Action :fifo[8]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{8,respond_rule_8__ENA$temp$b}
     }
-    METHOD/Rule respond_rule_9__ENA if ((1)) {
+    METHOD/Rule respond_rule_9__ENA {
         ALLOCA l_struct_OC_ValuePair respond_rule_9__ENA$temp
         CALL :fifo[9]$out$first{}
         LET l_struct_OC_ValuePair :respond_rule_9__ENA$temp = fifo[9]$out$first
@@ -178,7 +178,7 @@ MODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD l_module_OC_Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA if ((1)) {
+    METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first

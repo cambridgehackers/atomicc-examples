@@ -108,6 +108,17 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
     assign indication$heard__RDY = pipe$enq__RDY ;
     assign pipe$enq$v = { indication$heard__ENA$ind$data$heard$v  , indication$heard__ENA$ind$data$heard$meth  , 32'd1 };
     assign pipe$enq__ENA = indication$heard__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (indication$heard__ENA) begin
+            indication$heard__ENA$ind$data$heard$meth  <= indication$heard$meth;
+            indication$heard__ENA$ind$data$heard$v  <= indication$heard$v;
+        end; // End of indication$heard__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_EchoRequestInput (input CLK, input nRST,
@@ -122,6 +133,16 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
     assign request$say$meth = pipe$enq$v[63:32] ;
     assign request$say$v = pipe$enq$v[95:64] ;
     assign request$say__ENA = ( pipe$enq$v[31:0]  == 32'd1 ) & pipe$enq__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (pipe$enq__ENA) begin
+            $display( "entered EchoRequestInput::enq" );
+        end; // End of pipe$enq__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_EchoRequestOutput (input CLK, input nRST,
@@ -137,6 +158,18 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     assign pipe$enq$v = { request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 };
     assign pipe$enq__ENA = request$say__ENA ;
     assign request$say__RDY = pipe$enq__RDY ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (request$say__ENA) begin
+            request$say__ENA$ind$data$say$meth  <= request$say$meth;
+            request$say__ENA$ind$data$say$v  <= request$say$v;
+            $display( "entered EchoRequestOutput::say" );
+        end; // End of request$say__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_Fifo1 (input CLK, input nRST,

@@ -38,6 +38,23 @@ __interface EchoRequest {
     //__inout int readwriteme;
 };
 
+__interface CNCONNECTNET2 {
+    __input  __int(1)         IN1;
+    __input  __int(1)         IN2;
+    __output __int(1)         OUT1;
+    __output __int(1)         OUT2;
+};
+__module CONNECTNET2 {
+    CNCONNECTNET2 _;
+    CONNECTNET2() {
+        __rule assign {
+            _.OUT1 = _.IN1;
+            _.OUT2 = _.IN2;
+        }
+    }
+};
+CONNECTNET2 cntest;
+
 __interface EchoIndication {
     void heard(aint32 v);
     void heard2(aint16 a, aint16 b);

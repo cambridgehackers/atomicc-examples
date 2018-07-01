@@ -91,7 +91,7 @@ MODULE l_module_OC_Lpm {
     FIELD INTEGER_32 doneCount
     INTERFACE/Ptr l_ainterface_OC_LpmIndication ind
     INTERFACE l_ainterface_OC_LpmRequest request
-    METHOD/Rule enter__ENA if ((1)) {
+    METHOD/Rule enter__ENA {
         ALLOCA l_struct_OC_ValuePair enter__ENA$temp
         CALL :inQ$out$first{}
         LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first
@@ -100,7 +100,7 @@ MODULE l_module_OC_Lpm {
         CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
         CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
     }
-    METHOD/Rule exit_rule__ENA if ((1)) {
+    METHOD/Rule exit_rule__ENA {
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair exit_rule__ENA$temp
         CALL :fifo$out$first{}
@@ -112,7 +112,7 @@ MODULE l_module_OC_Lpm {
         PRINTF :printf{"exit: (%d, %d)\n",exit_rule__ENA$temp$a,exit_rule__ENA$temp$b}
         CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
     }
-    METHOD/Rule recirc__ENA if ((1)) {
+    METHOD/Rule recirc__ENA {
         ALLOCA l_struct_OC_ValuePair recirc__ENA$mtemp
         ALLOCA l_struct_OC_ValuePair recirc__ENA$temp
         CALL :fifo$out$first{}
@@ -132,7 +132,7 @@ MODULE l_module_OC_Lpm {
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
     }
-    METHOD/Rule respond__ENA if ((1)) {
+    METHOD/Rule respond__ENA {
         ALLOCA l_struct_OC_ValuePair respond__ENA$temp
         CALL :outQ$out$first{}
         LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first
@@ -162,7 +162,7 @@ MODULE l_module_OC_MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD l_module_OC_Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA if ((1)) {
+    METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
