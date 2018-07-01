@@ -36,3 +36,6 @@ unneeded:
 
 new: unneeded
 	make all
+
+clean:
+	rm -rf Cache Impl Synth bin hw vivado*
