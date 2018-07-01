@@ -5,11 +5,11 @@ LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -I../../cpp/ -I. -std=c++11 -std=gnu++11 -fno-unwind-tables -fno-use-cxa-atexit
 CPPFLAGS += -no-exceptions -fno-catch-undefined-behavior -O
-CPPFLAGS += -I/usr/include/c++/4.2.1
 CPPFLAGS += -fno-diagnostics-color
 CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 LLVMFLAGS = -emit-llvm
+include ../makefile.in
 
 all:
 	mkdir -p generated

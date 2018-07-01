@@ -11,6 +11,7 @@ LLVMFLAGS = -S -emit-llvm
 CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
 # -stdlib=libc++
+include ../makefile.in
 
 all:
 	mkdir -p generated

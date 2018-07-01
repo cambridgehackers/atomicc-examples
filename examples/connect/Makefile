@@ -4,11 +4,10 @@ CPP = $(CLANGBASE)clang++
 LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
 CPPFLAGS = -fblocks -I../../cpp/ -I. -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
-#needed on Mac to find <string>
-CPPFLAGS += -I/usr/include/c++/4.2.1
 CPPFLAGS += -fno-diagnostics-color
 CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
+include ../makefile.in
 
 #$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/connect.ll connect.cpp
 #$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -o generated/connect.bc connect.cpp

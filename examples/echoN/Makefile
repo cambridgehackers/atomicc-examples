@@ -7,6 +7,7 @@ CPPFLAGS += -fno-diagnostics-color
 LLVMFLAGS = -S
 CPPFLAGS += -Xclang -disable-lifetime-markers
 #CPPFLAGS += -emit-llvm
+include ../makefile.in
 
 all:
 	mkdir -p generated
