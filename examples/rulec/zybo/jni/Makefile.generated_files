@@ -1,2 +1,2 @@
 
-GENERATED_CPP=GeneratedCppCallbacks.cpp EchoRequest.c EchoIndication.c
+GENERATED_CPP=../../jni/GeneratedCppCallbacks.cpp ../../jni/EchoRequest.c ../../jni/EchoIndication.c

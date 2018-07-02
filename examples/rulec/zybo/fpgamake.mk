@@ -2,7 +2,7 @@
 
 TCLDIR=/home/jca/git/fpgamake/tcl
 BUILDCACHE=/home/jca/git/buildcache/buildcache
-CONNECTALDIR=../../../connectal
+CONNECTALDIR=../../../../connectal
 CACHEDIR = Cache
 FLOORPLAN=
 FPGAMAKE_PARTNAME=xc7z010clg400-1
