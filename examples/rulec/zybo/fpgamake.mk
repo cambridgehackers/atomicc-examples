@@ -2,6 +2,7 @@
 
 TCLDIR=/home/jca/git/fpgamake/tcl
 BUILDCACHE=/home/jca/git/buildcache/buildcache
+CONNECTALDIR=../../../connectal
 CACHEDIR = Cache
 FLOORPLAN=
 FPGAMAKE_PARTNAME=xc7z010clg400-1
@@ -15,7 +16,7 @@ include $(TCLDIR)/Makefile.fpgamake.common
 
 mkZynqTop_HEADERFILES = 
 mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
-    ../connectal/verilog/CONNECTNET2.v \
+    $(CONNECTALDIR)/verilog/CONNECTNET2.v \
     /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/ResetInverter.v \
     /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/FIFO2.v \
     /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/FIFO1.v
@@ -28,12 +29,12 @@ mkZynqTop_STUBS =
 mkZynqTop_IP = 
 mkZynqTop_SUBINST = 
 mkZynqTop_PATH = ../verilog/mkZynqTop.v
-mkZynqTop_USER_TCL_SCRIPT = ../connectal/constraints/xilinx/cdc.tcl
+mkZynqTop_USER_TCL_SCRIPT = $(CONNECTALDIR)/constraints/xilinx/cdc.tcl
 mkZynqTop_XDC = 
 
 $(eval $(call SYNTH_RULE,mkZynqTop))
 
-TopDown_XDC = ../connectal/constraints/xilinx/xc7z010clg400.xdc ../connectal/constraints/xilinx/zybo.xdc
+TopDown_XDC = $(CONNECTALDIR)/constraints/xilinx/xc7z010clg400.xdc $(CONNECTALDIR)/constraints/xilinx/zybo.xdc
 TopDown_NETLISTS = 
 TopDown_RECONFIG = 
 TopDown_SUBINST = 

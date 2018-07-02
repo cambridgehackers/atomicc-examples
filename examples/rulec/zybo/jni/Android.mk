@@ -1,7 +1,7 @@
 
 include $(CLEAR_VARS)
 DTOP?=/home/jca/git/atomicc-examples/examples/rulec/zybo
-CONNECTALDIR?=$(DTOP)/../connectal
+CONNECTALDIR?=$(DTOP)/../../../connectal
 LOCAL_ARM_MODE := arm
 include $(CONNECTALDIR)/scripts/Makefile.connectal.application
 LOCAL_SRC_FILES := $(DTOP)/../testechozynq.cpp $(PORTAL_SRC_FILES)

@@ -1,7 +1,7 @@
 
 
 export DTOP=$(PWD)
-CONNECTALDIR=$(DTOP)/../connectal
+CONNECTALDIR=$(DTOP)/../../../connectal
 
 BOARD=zybo
 MKTOP=mkZynqTop
@@ -38,4 +38,4 @@ new: unneeded
 	make all
 
 clean:
-	rm -rf Cache Impl Synth bin hw vivado*
+	rm -rf Cache Impl Synth bin hw vivado* obj/ .Xil libs/
