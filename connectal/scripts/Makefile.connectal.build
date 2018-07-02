@@ -22,6 +22,8 @@
 # File: Makefile.build
 #
 
+THISDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+
 V?=0
 ifeq ($(V),0)
   Q=@
@@ -62,8 +64,8 @@ bits: $(BITS_DEPENDENCES) prepare_bin_target
 ifneq ($(XILINX),)
 ifeq ($(OS),android)
 	@echo "zipping android"
-	$(CONNECTALDIR)/scripts/reorderbytes.py hw/mkTop.bin bin/mkTop.xdevcfg.bin
-	gzip -f bin/mkTop.xdevcfg.bin
+	cd $(BOARD); $(CONNECTALDIR)/scripts/reorderbytes.py hw/mkTop.bin bin/mkTop.xdevcfg.bin
+	cd $(BOARD); gzip -f bin/mkTop.xdevcfg.bin
 else
 ifneq ($(SIMULATION),)
 	@echo "not zipping xilinx"
@@ -72,23 +74,23 @@ ifneq ($(AWSF1),)
 	@echo "not zipping awsf1"
 else
 	@echo "zipping xilinx"
-	gzip -c hw/mkTop.bin > bin/mkTop.bin.gz
+	cd $(BOARD); gzip -c hw/mkTop.bin > bin/mkTop.bin.gz
 endif # AWSF1
 endif #xsim
 endif #android
 else #!xilinx
 endif #!xilinx
-	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --remove-section fpgadata bin/$(EXENAME); fi
-	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --add-section fpgadata=$(BINFILE) bin/$(EXENAME); fi
-	$(Q)if [ -f Impl/TopDown/top-post-route.dcp ]; then cp -f Impl/TopDown/top-post-route.dcp bin; fi
-	$(Q)if [ -f Impl/TopDown/top-post-route-timing-summary.rpt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.rpt; fi
-	$(Q)if [ -f Impl/TopDown/top-post-route-timing-summary.txt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.txt; fi
+	$(Q)cd $(BOARD); if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --remove-section fpgadata bin/$(EXENAME); fi
+	$(Q)cd $(BOARD); if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --add-section fpgadata=$(BINFILE) bin/$(EXENAME); fi
+	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route.dcp ]; then cp -f Impl/TopDown/top-post-route.dcp bin; fi
+	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route-timing-summary.rpt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.rpt; fi
+	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route-timing-summary.txt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.txt; fi
 
 android.exe: prepare_bin_target
-	+ndk-build $(CONNECTAL_NDK_PARAM)
-	@cp -fv libs/armeabi/android.exe bin
-	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
-	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
+	+cd $(BOARD); ndk-build $(CONNECTAL_NDK_PARAM)
+	@cd $(BOARD); cp -fv libs/armeabi/android.exe bin
+	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
+	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
 
 VIVADODIR=$(realpath $(shell dirname $(VIVADO))/..)
 
@@ -111,4 +113,8 @@ verilog: $(VFILE)
 	@echo "verilog"
 
 prepare_bin_target:
-	@mkdir -p bin jni
+	@mkdir -p $(BOARD)/bin $(BOARD)/jni
+	$(THISDIR)/../../../atomicc/scripts/atomiccConfig.py $(BOARD)
+	cp verilog/fpgamake.mk $(BOARD)
+	cp verilog/Android.mk $(BOARD)/jni
+	cp verilog/Application.mk $(BOARD)/jni

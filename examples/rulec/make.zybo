@@ -1,8 +1,8 @@
 
 
 export DTOP=$(PWD)
-CONNECTALSDIR=$(DTOP)/../../../connectal
-CONNECTALDIR=$(DTOP)/../../../../connectal
+CONNECTALSDIR=$(DTOP)/../../connectal
+CONNECTALDIR=$(DTOP)/../../../connectal
 
 BOARD=zybo
 MKTOP=mkZynqTop
@@ -13,7 +13,7 @@ XILINX=1
 ZYNQ=ZYNQ
 ZynqHostInterface=ZynqHostInterface
 PhysAddrWidth=32
-CONNECTAL_BITS_DEPENDENCES=hw/mkTop.bit
+CONNECTAL_BITS_DEPENDENCES=$(BOARD)/hw/mkTop.bit
 CONNECTAL_RUN_SCRIPT=$(CONNECTALSDIR)/scripts/run.android
 CONNECTAL_EXENAME=android.exe
 BOARD_zybo=BOARD_zybo
@@ -25,18 +25,12 @@ include $(CONNECTALSDIR)/scripts/Makefile.connectal.build
 export VERILOG_PATH=verilog $(CONNECTALDIR)/verilog/xilinx $(CONNECTALDIR)/verilog $(BLUESPEC_VERILOG)
 FPGAMAKE=$(DTOP)/../../../../fpgamake/fpgamake
 
-synth.%:fpgamake.mk
-	$(MAKE) -f fpgamake.mk Synth/$*/$*-synth.dcp
+synth.%:$(BOARD)/fpgamake.mk
+	$(MAKE) -C $(BOARD) -f fpgamake.mk Synth/$*/$*-synth.dcp
 
-hw/mkTop.bit: prepare_bin_target  fpgamake.mk
-	$(Q)mkdir -p hw
-	$(Q)$(MAKE) -f fpgamake.mk
-
-unneeded:
-	rm -rf Cache/ Impl/ Synth/ bin/ obj libs hw vivado* .Xil syntax.timestamp obj_dir/
-
-new: unneeded
-	make all
+$(BOARD)/hw/mkTop.bit: prepare_bin_target  $(BOARD)/fpgamake.mk
+	$(Q)mkdir -p $(BOARD)/hw
+	$(Q)$(MAKE) -C $(BOARD) -f fpgamake.mk
 
 clean:
-	rm -rf Cache Impl Synth bin hw vivado* obj/ .Xil libs/
+	rm -rf $(BOARD)
