@@ -15,7 +15,7 @@ module mkZynqTop #(parameter width = 64) (
   wire [3 : 0] ps7_ps7_foo_FCLKCLK, ps7_ps7_foo_FCLKRESETN, maxigp0ARLEN, maxigp0AWLEN;
 
   wire ps7_b2c_0_OUT1, ps7_b2c_0_OUT2;
-  CONNECTNET2 ps7_b2c_0(.IN1(ps7_ps7_foo_FCLKCLK[0]), .IN2(ps7_ps7_foo_FCLKRESETN[0]), .OUT1(ps7_b2c_0_OUT1), .OUT2(ps7_b2c_0_OUT2));
+  l_module_OC_CONNECTNET2 ps7_b2c_0(.IN1(ps7_ps7_foo_FCLKCLK[0]), .IN2(ps7_ps7_foo_FCLKRESETN[0]), .OUT1(ps7_b2c_0_OUT1), .OUT2(ps7_b2c_0_OUT2));
   BUFG ps7_fclk_0_c(.I(ps7_b2c_0_OUT1), .O(CLK));
   BUFG ps7_freset_0_r(.I(ps7_b2c_0_OUT2), .O(RST_N));
   BUFG ps7_clockGen_clkout0buffer(.I(ps7_clockGen_pll_CLKOUT0), .O(ps7_clockGen_clkout0buffer_O));

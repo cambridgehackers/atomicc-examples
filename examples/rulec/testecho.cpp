@@ -58,6 +58,7 @@ static void call_say(int v)
 
 static void call_say2(int v, int v2)
 {
+    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
     echoRequestProxy->say2(v, v2);
     sem_wait(&sem_heard2);
 }

@@ -21,31 +21,33 @@
 
 #include <errno.h>
 #include <stdio.h>
+#include "sock_utils.h"
 #include "EchoIndication.h"
 #include "EchoRequest.h"
 #include "GeneratedTypes.h"
+void atomiccPrintfInit(const char *filename);
 
 static EchoRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
+static int limitSay2 = 5;
 
 class EchoIndication : public EchoIndicationWrapper
 {
 public:
     virtual void heard(uint32_t v) {
         printf("heard an echo: %d\n", v);
+        if (limitSay2-- > 0)
 	echoRequestProxy->say2(v, 2*v);
     }
     virtual void heard2(uint16_t a, uint16_t b) {
         sem_post(&sem_heard2);
         printf("heard an echo2: %d %d\n", a, b);
     }
-    virtual void heard3 ( const uint16_t a, const uint32_t b, const uint32_t c, const uint16_t d ) {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-exit(-1);
+    virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
+        printf("heard an echo3: %d %d\n", a, b);
     }
     EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
 };
-EchoIndication *echoIndication;
 
 static void call_say(int v)
 {
@@ -66,14 +68,15 @@ int main(int argc, const char **argv)
     long actualFrequency = 0;
     long requestedFrequency = 1e9 / MainClockPeriod;
 
+    //atomiccPrintfInit("generated/rulec.generated.printf");
 #if 0
-    echoIndication = new EchoIndication(IfcNames_EchoIndicationH2S);
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);
 #else
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL, &transportPortal, NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
-    echoIndication = new EchoIndication(IfcNames_EchoIndicationH2S, &transportMux, &param);
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S, &transportMux, &param);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H, &transportMux, &param);
 #endif
 
@@ -92,5 +95,6 @@ int main(int argc, const char **argv)
     call_say2(v, v*3);
     printf("TEST TYPE: SEM\n");
     echoRequestProxy->setLeds(9);
+sleep(2);
     return 0;
 }

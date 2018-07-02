@@ -1,8 +1,10 @@
 
 
-TCLDIR=/home/jca/git/fpgamake/tcl
-BUILDCACHE=/home/jca/git/buildcache/buildcache
+BSVLIB=/scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog
 CONNECTALDIR=../../../../connectal
+TCLDIR=$(CONNECTALDIR)/../fpgamake/tcl
+BUILDCACHE=$(CONNECTALDIR)/../buildcache/buildcache
+
 CACHEDIR = Cache
 FLOORPLAN=
 FPGAMAKE_PARTNAME=xc7z010clg400-1
@@ -16,12 +18,7 @@ include $(TCLDIR)/Makefile.fpgamake.common
 
 mkZynqTop_HEADERFILES = 
 mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
-    $(CONNECTALDIR)/verilog/CONNECTNET2.v \
-    /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/ResetInverter.v \
-    /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/FIFO2.v \
-    /scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog/FIFO1.v
-
-    #/scratch/bluespec/Bluespec-2015.09.beta2/lib/Verilog.Vivado/SizedFIFO.v \
+    $(BSVLIB)/ResetInverter.v $(BSVLIB)/FIFO2.v $(BSVLIB)/FIFO1.v
 
 mkZynqTop_VHDFILES = 
 mkZynqTop_VHDL_LIBRARIES = 
