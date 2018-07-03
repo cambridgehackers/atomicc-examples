@@ -21,9 +21,7 @@
 //#define BOARD_zybo
 #include "atomicc.h"
 #include "adapter.h"
-#ifdef BOARD_zybo
 #include "VMMCME2_ADV.h"
-#endif
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
@@ -165,8 +163,6 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
         mmcm._.REF_JITTER1 = 1.0e-2;
         mmcm._.REF_JITTER2 = 1.0e-2;
         // args
-        mmcm._.CLKIN1 = CLK;
-        mmcm._.RST = ps7_clockGen_pll_reset_RESET_OUT;
         mmcm._.CLKIN2 = 0;
         mmcm._.CLKINSEL = 1;
         mmcm._.DADDR = 0;
@@ -178,10 +174,21 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
         mmcm._.PSEN = 0;
         mmcm._.PSINCDEC = 0;
         mmcm._.PWRDWN = 0;
+#if 0
+        mmcm._.CLKIN1 = CLK;
+        mmcm._.RST = ps7_clockGen_pll_reset_RESET_OUT;
         mmcm._.CLKFBIN = ps7_clockGen_pll_clkfbbuf_O;
         mmcm._.CLKFBOUT = ps7_clockGen_pll_CLKFBOUT;
         mmcm._.CLKOUT0 = ps7_clockGen_pll_CLKOUT0;
         mmcm._.CLKOUT0B = ps7_clockGen_pll_CLKOUT0B;
+#else
+        mmcm._.CLKIN1 = 1;
+        mmcm._.RST = 1;
+        mmcm._.CLKFBIN = 1;
+        mmcm._.CLKFBOUT = 1;
+        mmcm._.CLKOUT0 = 1;
+        mmcm._.CLKOUT0B = 1;
+#endif
         };
 #endif
     }
