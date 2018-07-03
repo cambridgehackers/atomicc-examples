@@ -34,5 +34,5 @@ zybo:
 	make -f make.zybo
 
 clean:
-	rm -rf *.bc *.o *.ll *.s rulec.exe.* rulec.tmp verilator zybo
+	rm -rf *.bc *.o *.ll *.s rulec.exe.* rulec.tmp verilator zybo SWSOCK*
 
