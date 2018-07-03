@@ -23,6 +23,7 @@
 #
 
 THISDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
+CONNECTALDIR = $(THISDIR)/../../../connectal
 
 V?=0
 ifeq ($(V),0)
@@ -54,7 +55,7 @@ all: exe bits extratarget
 extratarget::
 # placeholder for variant targets
 
-    exe: $(EXENAME)
+exe: $(EXENAME)
 
 ifneq ($(CONNECTAL_NOHARDWARE),1)
 BITS_DEPENDENCES ?= $(CONNECTAL_BITS_DEPENDENCES)
@@ -87,7 +88,7 @@ endif #!xilinx
 	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route-timing-summary.txt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.txt; fi
 
 android.exe: prepare_bin_target
-	+cd $(BOARD); ndk-build $(CONNECTAL_NDK_PARAM)
+	+cd $(BOARD); DTOP=$(DTOP) ndk-build $(CONNECTAL_NDK_PARAM)
 	@cd $(BOARD); cp -fv libs/armeabi/android.exe bin
 	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
 	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
@@ -113,8 +114,14 @@ verilog: $(VFILE)
 	@echo "verilog"
 
 prepare_bin_target:
-	@mkdir -p $(BOARD)/bin $(BOARD)/jni
+	@mkdir -p $(BOARD)/bin $(BOARD)/jni $(BOARD)/hw
 	$(THISDIR)/../../../atomicc/scripts/atomiccConfig.py $(BOARD)
 	cp verilog/fpgamake.mk $(BOARD)
 	cp verilog/Android.mk $(BOARD)/jni
 	cp verilog/Application.mk $(BOARD)/jni
+
+$(BOARD)/hw/mkTop.bit: prepare_bin_target  $(BOARD)/fpgamake.mk
+	$(Q)$(MAKE) -C $(BOARD) -f fpgamake.mk
+
+synth.%:$(BOARD)/fpgamake.mk
+	$(MAKE) -C $(BOARD) -f fpgamake.mk Synth/$*/$*-synth.dcp

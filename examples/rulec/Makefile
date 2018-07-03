@@ -1,6 +1,7 @@
 
-DTOP=$(PWD)
+export DTOP=$(PWD)
 CONNECTALDIR=$(PWD)/../../../connectal
+CONNECTALSDIR=$(DTOP)/../../connectal
 SIMMAKE=$(CONNECTALDIR)/../atomicc/simulation/Makefile.verilator
 
 include ../makefile.in
@@ -21,17 +22,29 @@ all:
 #     make cleanup  (this cleans out the objects/etc that were created by 'make verilator')
 #
 
-PROJECT_CPP = testecho.cpp
+export PROJECT_CPP = testecho.cpp
 
 .PHONY: verilator zybo
 verilator:
-	PROJECT_CPP=$(PROJECT_CPP) DTOP=$(DTOP) make -f $(SIMMAKE) verilator
+	#PROJECT_CPP=$(PROJECT_CPP) DTOP=$(DTOP) 
+	make -f $(SIMMAKE) verilator
 
 run:
-	PROJECT_CPP=$(PROJECT_CPP) DTOP=$(DTOP) make -f $(SIMMAKE) run
+	#PROJECT_CPP=$(PROJECT_CPP) DTOP=$(DTOP) 
+	make -f $(SIMMAKE) run
 
 zybo:
-	make -f make.zybo
+	BOARD=zybo \
+	MKTOP=mkZynqTop \
+	OS=android \
+	XILINX=1 \
+	PhysAddrWidth=32 \
+	CONNECTAL_BITS_DEPENDENCES=zybo/hw/mkTop.bit \
+	CONNECTAL_EXENAME=android.exe \
+	VERILOG_PATH=verilog $(BLUESPEC_VERILOG) \
+	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
+
+#	VERILOG_PATH=verilog $(CONNECTALDIR)/verilog/xilinx $(BLUESPEC_VERILOG) \
 
 clean:
 	rm -rf *.bc *.o *.ll *.s rulec.exe.* rulec.tmp verilator zybo SWSOCK*
