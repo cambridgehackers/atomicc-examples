@@ -18,8 +18,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+//#define BOARD_zybo
 #include "atomicc.h"
 #include "adapter.h"
+#ifdef BOARD_zybo
+#include "VMMCME2_ADV.h"
+#endif
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
@@ -73,6 +77,9 @@ __module Echo {
     __int(18) xxx;
     int busy_delay;
     int v_type;
+#ifdef BOARD_zybo
+    MMCME2_ADV mmcm;
+#endif
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         v_temp = v;
@@ -114,6 +121,69 @@ printf("[respond_rule:%d]Echo\n", __LINE__);
              else
              indication->heard2(a_delay, b_delay);
            };
+#ifdef BOARD_zybo
+        __rule init {
+        // params
+        mmcm._.BANDWIDTH = "OPTIMIZED";
+        mmcm._.CLKFBOUT_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT0_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT1_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT2_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT3_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT4_CASCADE = "FALSE";
+        mmcm._.CLKOUT4_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT5_USE_FINE_PS = "FALSE";
+        mmcm._.CLKOUT6_USE_FINE_PS = "FALSE";
+        mmcm._.COMPENSATION = "ZHOLD";
+        mmcm._.STARTUP_WAIT = "FALSE";
+        mmcm._.CLKFBOUT_MULT_F = 10.0;
+        mmcm._.CLKFBOUT_PHASE = 0.0;
+        mmcm._.CLKIN1_PERIOD = 10.0;
+        mmcm._.CLKIN2_PERIOD = 0.0;
+        mmcm._.DIVCLK_DIVIDE = 1;
+        mmcm._.CLKOUT0_DIVIDE_F = 5.0;
+        mmcm._.CLKOUT0_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT0_PHASE = 0.0;
+        mmcm._.CLKOUT1_DIVIDE = 10;
+        mmcm._.CLKOUT1_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT1_PHASE = 0.0;
+        mmcm._.CLKOUT2_DIVIDE = 10;
+        mmcm._.CLKOUT2_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT2_PHASE = 0.0;
+        mmcm._.CLKOUT3_DIVIDE = 10;
+        mmcm._.CLKOUT3_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT3_PHASE = 0.0;
+        mmcm._.CLKOUT4_DIVIDE = 10;
+        mmcm._.CLKOUT4_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT4_PHASE = 0.0;
+        mmcm._.CLKOUT5_DIVIDE = 10;
+        mmcm._.CLKOUT5_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT5_PHASE = 0.0;
+        mmcm._.CLKOUT6_DIVIDE = 10;
+        mmcm._.CLKOUT6_DUTY_CYCLE = 0.5;
+        mmcm._.CLKOUT6_PHASE = 0.0;
+        mmcm._.REF_JITTER1 = 1.0e-2;
+        mmcm._.REF_JITTER2 = 1.0e-2;
+        // args
+        mmcm._.CLKIN1 = CLK;
+        mmcm._.RST = ps7_clockGen_pll_reset_RESET_OUT;
+        mmcm._.CLKIN2 = 0;
+        mmcm._.CLKINSEL = 1;
+        mmcm._.DADDR = 0;
+        mmcm._.DCLK = 0;
+        mmcm._.DEN = 0;
+        mmcm._.DI = 0;
+        mmcm._.DWE = 0;
+        mmcm._.PSCLK = 0;
+        mmcm._.PSEN = 0;
+        mmcm._.PSINCDEC = 0;
+        mmcm._.PWRDWN = 0;
+        mmcm._.CLKFBIN = ps7_clockGen_pll_clkfbbuf_O;
+        mmcm._.CLKFBOUT = ps7_clockGen_pll_CLKFBOUT;
+        mmcm._.CLKOUT0 = ps7_clockGen_pll_CLKOUT0;
+        mmcm._.CLKOUT0B = ps7_clockGen_pll_CLKOUT0B;
+        };
+#endif
     }
 };
 
