@@ -18,10 +18,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-
 #include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
+//#include "portal.h"
 #include "EchoIndication.h"
 #include "EchoRequest.h"
 #include "GeneratedTypes.h"
@@ -73,7 +73,13 @@ int main(int argc, const char **argv)
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);
 #elif 1
-    Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL, &transportSocketInit, NULL, 0);
+    Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
+#ifdef SIMULATION
+        &transportSocketInit,
+#else
+        &transportPortal,
+#endif
+        NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, &transportMux, &param);
