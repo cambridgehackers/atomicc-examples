@@ -127,7 +127,7 @@ MODULE l_module_OC_Lpm {
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair request$say__ENA$temp
-        PRINTF :printf{"[%s:%d] (%d, %d)\n",("request$say"),90,request$say$meth,request$say$v}
+        PRINTF :printf{"[%s:%d] (%d, %d)\n","request$say",90,request$say$meth,request$say$v}
         LET INTEGER_32 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}

@@ -107,13 +107,13 @@ MODULE l_module_OC_Echo {
         STORE :v_delay = v_temp
     }
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$say2"),192}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",192}
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n",("request$say"),186}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say",186}
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
@@ -124,15 +124,15 @@ MODULE l_module_OC_Echo {
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD swap$x2y__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n",("swap$x2y"),206}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",206}
         STORE :y = x
     }
     METHOD swap$y2x__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n",("swap$y2x"),198}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2x",198}
         STORE :x = y
     }
     METHOD swap$y2xnull__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n",("swap$y2xnull"),202}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",202}
     }
 }
 MODULE l_module_OC_EchoIndicationInput {
@@ -149,7 +149,7 @@ MODULE l_module_OC_EchoIndicationInput {
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if (((busy_delay) ^ (1))) {
         ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v_2e_addr
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        PRINTF :printf{"%s: EchoIndicationInput tag %d\n",("pipe$enq"),pipe$enq__ENA$v_2e_addr$tag}
+        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq__ENA$v_2e_addr$tag}
         STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
         STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
         STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):busy_delay = 1
@@ -163,7 +163,7 @@ MODULE l_module_OC_EchoIndicationOutput {
     FIELD INTEGER_1 ind_busy
     FIELD INTEGER_1 even
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n",("indication$heard"),114,even}
+        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",114,even}
         STORE (even):ind1$tag = 1
         STORE (even):ind1$data$heard$meth = indication$heard$meth
         STORE (even):ind1$data$heard$v = indication$heard$v
