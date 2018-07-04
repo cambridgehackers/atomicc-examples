@@ -127,12 +127,79 @@ module l_module_OC_Echo (input CLK, input nRST,
     reg [17:0]xxx;
     wire delay_rule__ENA;
     wire delay_rule__RDY;
+    wire mmcm$CLKFBIN;
+    wire mmcm$CLKFBOUT;
+    wire mmcm$CLKFBOUTB;
+    wire mmcm$CLKFBSTOPPED;
+    wire mmcm$CLKIN1;
+    wire mmcm$CLKIN2;
+    wire mmcm$CLKINSEL;
+    wire mmcm$CLKINSTOPPED;
+    wire mmcm$CLKOUT0;
+    wire mmcm$CLKOUT0B;
+    wire mmcm$CLKOUT1;
+    wire mmcm$CLKOUT1B;
+    wire mmcm$CLKOUT2;
+    wire mmcm$CLKOUT2B;
+    wire mmcm$CLKOUT3;
+    wire mmcm$CLKOUT3B;
+    wire mmcm$CLKOUT4;
+    wire mmcm$CLKOUT5;
+    wire mmcm$CLKOUT6;
+    wire [6:0]mmcm$DADDR;
+    wire mmcm$DCLK;
+    wire mmcm$DEN;
+    wire [15:0]mmcm$DI;
+    wire [15:0]mmcm$DO;
+    wire mmcm$DRDY;
+    wire mmcm$DWE;
+    wire mmcm$LOCKED;
+    wire mmcm$PSCLK;
+    wire mmcm$PSDONE;
+    wire mmcm$PSEN;
+    wire mmcm$PSINCDEC;
+    wire mmcm$PWRDWN;
+    wire mmcm$RST;
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
     assign delay_rule__RDY = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
     assign respond_rule__RDY = ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
+    l_module_OC_MMCME2_ADV#(.BANDWIDTH(FOO), .CLKFBOUT_MULT_F(FOO), .CLKFBOUT_PHASE(FOO), .CLKFBOUT_USE_FINE_PS(FOO), .CLKIN1_PERIOD(FOO), .CLKIN2_PERIOD(FOO), .CLKOUT0_DIVIDE_F(FOO), .CLKOUT0_DUTY_CYCLE(FOO), .CLKOUT0_PHASE(FOO), .CLKOUT0_USE_FINE_PS(FOO), .CLKOUT1_DIVIDE(FOO), .CLKOUT1_DUTY_CYCLE(FOO), .CLKOUT1_PHASE(FOO), .CLKOUT1_USE_FINE_PS(FOO), .CLKOUT2_DIVIDE(FOO), .CLKOUT2_DUTY_CYCLE(FOO), .CLKOUT2_PHASE(FOO), .CLKOUT2_USE_FINE_PS(FOO), .CLKOUT3_DIVIDE(FOO), .CLKOUT3_DUTY_CYCLE(FOO), .CLKOUT3_PHASE(FOO), .CLKOUT3_USE_FINE_PS(FOO), .CLKOUT4_CASCADE(FOO), .CLKOUT4_DIVIDE(FOO), .CLKOUT4_DUTY_CYCLE(FOO), .CLKOUT4_PHASE(FOO), .CLKOUT4_USE_FINE_PS(FOO), .CLKOUT5_DIVIDE(FOO), .CLKOUT5_DUTY_CYCLE(FOO), .CLKOUT5_PHASE(FOO), .CLKOUT5_USE_FINE_PS(FOO), .CLKOUT6_DIVIDE(FOO), .CLKOUT6_DUTY_CYCLE(FOO), .CLKOUT6_PHASE(FOO), .CLKOUT6_USE_FINE_PS(FOO), .COMPENSATION(FOO), .DIVCLK_DIVIDE(FOO), .IS_CLKINSEL_INVERTED(FOO), .IS_PSEN_INVERTED(FOO), .IS_PSINCDEC_INVERTED(FOO), .IS_PWRDWN_INVERTED(FOO), .IS_RST_INVERTED(FOO), .REF_JITTER1(FOO), .REF_JITTER2(FOO), .SS_EN(FOO), .SS_MODE(FOO), .SS_MOD_PERIOD(FOO), .STARTUP_WAIT(FOO)) mmcm (.CLK(CLK), .nRST(nRST),
+        .CLKFBIN(mmcm$CLKFBIN),
+        .CLKFBOUT(mmcm$CLKFBOUT),
+        .CLKFBOUTB(mmcm$CLKFBOUTB),
+        .CLKFBSTOPPED(mmcm$CLKFBSTOPPED),
+        .CLKIN1(mmcm$CLKIN1),
+        .CLKIN2(mmcm$CLKIN2),
+        .CLKINSEL(mmcm$CLKINSEL),
+        .CLKINSTOPPED(mmcm$CLKINSTOPPED),
+        .CLKOUT0(mmcm$CLKOUT0),
+        .CLKOUT0B(mmcm$CLKOUT0B),
+        .CLKOUT1(mmcm$CLKOUT1),
+        .CLKOUT1B(mmcm$CLKOUT1B),
+        .CLKOUT2(mmcm$CLKOUT2),
+        .CLKOUT2B(mmcm$CLKOUT2B),
+        .CLKOUT3(mmcm$CLKOUT3),
+        .CLKOUT3B(mmcm$CLKOUT3B),
+        .CLKOUT4(mmcm$CLKOUT4),
+        .CLKOUT5(mmcm$CLKOUT5),
+        .CLKOUT6(mmcm$CLKOUT6),
+        .DADDR(mmcm$DADDR),
+        .DCLK(mmcm$DCLK),
+        .DEN(mmcm$DEN),
+        .DI(mmcm$DI),
+        .DO(mmcm$DO),
+        .DRDY(mmcm$DRDY),
+        .DWE(mmcm$DWE),
+        .LOCKED(mmcm$LOCKED),
+        .PSCLK(mmcm$PSCLK),
+        .PSDONE(mmcm$PSDONE),
+        .PSEN(mmcm$PSEN),
+        .PSINCDEC(mmcm$PSINCDEC),
+        .PWRDWN(mmcm$PWRDWN),
+        .RST(mmcm$RST));
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
@@ -143,6 +210,20 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
+    // assign mmcm$CLKFBIN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$CLKIN1 = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$CLKIN2 = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$CLKINSEL = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$DADDR = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$DCLK = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$DEN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$DI = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$DWE = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$PSCLK = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$PSEN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$PSINCDEC = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$PWRDWN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
+    // assign mmcm$RST = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = busy  == 32'd0;
     assign request$setLeds__RDY = 1;
@@ -168,28 +249,28 @@ module l_module_OC_Echo (input CLK, input nRST,
             v_delay  <= v_temp;
             a_delay  <= a_temp;
             b_delay  <= b_temp;
-            $display( "[delay_rule:%d]Echo" , 107 );
+            $display( "[delay_rule:%d]Echo" , 5 );
         end; // End of delay_rule__ENA
         if (request$say__ENA) begin
             v_temp  <= request$say$v;
             xxx  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 82 );
+            $display( "[%s:%d]Echo" , "request$say" , 1 );
         end; // End of request$say__ENA
         if (request$say2__ENA) begin
             a_temp  <= request$say2$a;
             b_temp  <= request$say2$b;
             busy  <= 1;
             v_type  <= 2;
-            $display( "[%s:%d]Echo" , "request$say2" , 89 );
+            $display( "[%s:%d]Echo" , "request$say2" , 2 );
         end; // End of request$say2__ENA
         if (request$zsay4__ENA) begin
-            $display( "[%s:%d]Echo" , "request$zsay4" , 101 );
+            $display( "[%s:%d]Echo" , "request$zsay4" , 4 );
         end; // End of request$zsay4__ENA
         if (respond_rule__ENA) begin
             busy_delay  <= 0;
-            $display( "[respond_rule:%d]Echo" , 115 );
+            $display( "[respond_rule:%d]Echo" , 6 );
         end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)

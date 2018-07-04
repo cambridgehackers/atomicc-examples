@@ -18,6 +18,89 @@ EMODULE l_ainterface_OC_EchoRequest {
     METHOD setLeds__ENA ( INTEGER_8 v )
     METHOD zsay4__ENA
 }
+EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
+    FIELD/Ptr/parameter INTEGER_8 BANDWIDTH
+    FIELD/input INTEGER_1 CLKFBIN
+    FIELD/output INTEGER_1 CLKFBOUT
+    FIELD/output INTEGER_1 CLKFBOUTB
+    FIELD/parameter FLOAT CLKFBOUT_MULT_F
+    FIELD/parameter FLOAT CLKFBOUT_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKFBOUT_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKFBSTOPPED
+    FIELD/input INTEGER_1 CLKIN1
+    FIELD/parameter FLOAT CLKIN1_PERIOD
+    FIELD/input INTEGER_1 CLKIN2
+    FIELD/parameter FLOAT CLKIN2_PERIOD
+    FIELD/input INTEGER_1 CLKINSEL
+    FIELD/output INTEGER_1 CLKINSTOPPED
+    FIELD/output INTEGER_1 CLKOUT0
+    FIELD/output INTEGER_1 CLKOUT0B
+    FIELD/parameter FLOAT CLKOUT0_DIVIDE_F
+    FIELD/parameter FLOAT CLKOUT0_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT0_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT0_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT1
+    FIELD/output INTEGER_1 CLKOUT1B
+    FIELD/parameter INTEGER_32 CLKOUT1_DIVIDE
+    FIELD/parameter FLOAT CLKOUT1_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT1_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT1_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT2
+    FIELD/output INTEGER_1 CLKOUT2B
+    FIELD/parameter INTEGER_32 CLKOUT2_DIVIDE
+    FIELD/parameter FLOAT CLKOUT2_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT2_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT2_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT3
+    FIELD/output INTEGER_1 CLKOUT3B
+    FIELD/parameter INTEGER_32 CLKOUT3_DIVIDE
+    FIELD/parameter FLOAT CLKOUT3_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT3_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT3_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT4
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_CASCADE
+    FIELD/parameter INTEGER_32 CLKOUT4_DIVIDE
+    FIELD/parameter FLOAT CLKOUT4_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT4_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT5
+    FIELD/parameter INTEGER_32 CLKOUT5_DIVIDE
+    FIELD/parameter FLOAT CLKOUT5_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT5_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT5_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT6
+    FIELD/parameter INTEGER_32 CLKOUT6_DIVIDE
+    FIELD/parameter FLOAT CLKOUT6_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT6_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT6_USE_FINE_PS
+    FIELD/Ptr/parameter INTEGER_8 COMPENSATION
+    FIELD/input INTEGER_7 DADDR
+    FIELD/input INTEGER_1 DCLK
+    FIELD/input INTEGER_1 DEN
+    FIELD/input INTEGER_16 DI
+    FIELD/parameter INTEGER_32 DIVCLK_DIVIDE
+    FIELD/output INTEGER_16 DO
+    FIELD/output INTEGER_1 DRDY
+    FIELD/input INTEGER_1 DWE
+    FIELD/parameter INTEGER_32 IS_CLKINSEL_INVERTED
+    FIELD/parameter INTEGER_32 IS_PSEN_INVERTED
+    FIELD/parameter INTEGER_32 IS_PSINCDEC_INVERTED
+    FIELD/parameter INTEGER_32 IS_PWRDWN_INVERTED
+    FIELD/parameter INTEGER_32 IS_RST_INVERTED
+    FIELD/output INTEGER_1 LOCKED
+    FIELD/input INTEGER_1 PSCLK
+    FIELD/output INTEGER_1 PSDONE
+    FIELD/input INTEGER_1 PSEN
+    FIELD/input INTEGER_1 PSINCDEC
+    FIELD/input INTEGER_1 PWRDWN
+    FIELD/parameter FLOAT REF_JITTER1
+    FIELD/parameter FLOAT REF_JITTER2
+    FIELD/input INTEGER_1 RST
+    FIELD/Ptr/parameter INTEGER_8 SS_EN
+    FIELD/Ptr/parameter INTEGER_8 SS_MODE
+    FIELD/parameter INTEGER_32 SS_MOD_PERIOD
+    FIELD/Ptr/parameter INTEGER_8 STARTUP_WAIT
+}
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
@@ -34,6 +117,9 @@ EMODULE l_ainterface_OC_PipeOut {
 EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
+}
+EMODULE l_module_OC_MMCME2_ADV {
+    INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
 }
 MODULE l_module_OC_AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
@@ -88,8 +174,9 @@ MODULE l_module_OC_Echo {
     FIELD INTEGER_18 xxx
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
+    FIELD l_module_OC_MMCME2_ADV mmcm
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",107}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",5}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -97,14 +184,14 @@ MODULE l_module_OC_Echo {
         STORE :b_delay = b_temp
     }
     METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",89}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",2}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say",82}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say",1}
         STORE :v_temp = request$say$v
         STORE :xxx = request$say$v
         STORE :busy = 1
@@ -112,10 +199,10 @@ MODULE l_module_OC_Echo {
     }
     METHOD request$setLeds__ENA ( INTEGER_8 v )
     METHOD request$zsay4__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","request$zsay4",101}
+        PRINTF :printf{"[%s:%d]Echo\n","request$zsay4",4}
     }
     METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",115}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",6}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}

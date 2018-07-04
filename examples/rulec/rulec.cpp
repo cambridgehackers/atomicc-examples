@@ -75,18 +75,16 @@ __module Echo {
     __int(18) xxx;
     int busy_delay;
     int v_type;
-#ifdef BOARD_zybo
     MMCME2_ADV mmcm;
-#endif
     void request.say(aint32 v) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, 1);
         v_temp = v;
 xxx = v;
         busy = 1;
         v_type = 1;
     }
     void request.say2(aint16 a, aint16 b) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, 2);
         a_temp = a;
         b_temp = b;
         busy = 1;
@@ -94,17 +92,17 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
 #if 0
     void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, 3);
     }
 #endif
     void request.zsay4(void) {
-printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
+printf("[%s:%d]Echo\n", __FUNCTION__, 4);
     }
     void request.setLeds(aint8 v) {
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
-printf("[delay_rule:%d]Echo\n", __LINE__);
+printf("[delay_rule:%d]Echo\n", 5);
              busy = 0;
              busy_delay = 1;
              v_delay = v_temp;
@@ -112,7 +110,7 @@ printf("[delay_rule:%d]Echo\n", __LINE__);
              b_delay = b_temp;
            };
         __rule respond_rule if(busy_delay != 0) {
-printf("[respond_rule:%d]Echo\n", __LINE__);
+printf("[respond_rule:%d]Echo\n", 6);
              busy_delay = 0;
              if (v_type == 1)
              indication->heard(v_delay);
