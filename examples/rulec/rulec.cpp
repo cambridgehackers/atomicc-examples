@@ -75,7 +75,23 @@ __module Echo {
     __int(18) xxx;
     int busy_delay;
     int v_type;
-    MMCME2_ADV mmcm;
+    MMCME2_ADV#( BANDWIDTH = "OPTIMIZED",
+        CLKFBOUT_USE_FINE_PS = "FALSE", CLKOUT0_USE_FINE_PS = "FALSE",
+        CLKOUT1_USE_FINE_PS = "FALSE", CLKOUT2_USE_FINE_PS = "FALSE",
+        CLKOUT3_USE_FINE_PS = "FALSE", CLKOUT4_USE_FINE_PS = "FALSE",
+        CLKOUT5_USE_FINE_PS = "FALSE", CLKOUT6_USE_FINE_PS = "FALSE",
+        CLKOUT4_CASCADE = "FALSE",
+        COMPENSATION = "ZHOLD", STARTUP_WAIT = "FALSE",
+        CLKFBOUT_MULT_F = 10.0, CLKFBOUT_PHASE = 0.0,
+        CLKIN1_PERIOD = 10.0, CLKIN2_PERIOD = 0.0, DIVCLK_DIVIDE = 1,
+        CLKOUT0_DIVIDE_F = 5.0, CLKOUT0_DUTY_CYCLE = 0.5, CLKOUT0_PHASE = 0.0,
+        CLKOUT1_DIVIDE = 10, CLKOUT1_DUTY_CYCLE = 0.5, CLKOUT1_PHASE = 0.0,
+        CLKOUT2_DIVIDE = 10, CLKOUT2_DUTY_CYCLE = 0.5, CLKOUT2_PHASE = 0.0,
+        CLKOUT3_DIVIDE = 10, CLKOUT3_DUTY_CYCLE = 0.5, CLKOUT3_PHASE = 0.0,
+        CLKOUT4_DIVIDE = 10, CLKOUT4_DUTY_CYCLE = 0.5, CLKOUT4_PHASE = 0.0,
+        CLKOUT5_DIVIDE = 10, CLKOUT5_DUTY_CYCLE = 0.5, CLKOUT5_PHASE = 0.0,
+        CLKOUT6_DIVIDE = 10, CLKOUT6_DUTY_CYCLE = 0.5, CLKOUT6_PHASE = 0.0,
+        REF_JITTER1 = 1.0e-2, REF_JITTER2 = 1.0e-2) mmcm;
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, 1);
         v_temp = v;
@@ -119,48 +135,6 @@ printf("[respond_rule:%d]Echo\n", 6);
            };
 #ifdef BOARD_zybo
         __rule init {
-        // params
-        mmcm._.BANDWIDTH = "OPTIMIZED";
-        mmcm._.CLKFBOUT_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT0_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT1_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT2_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT3_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT4_CASCADE = "FALSE";
-        mmcm._.CLKOUT4_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT5_USE_FINE_PS = "FALSE";
-        mmcm._.CLKOUT6_USE_FINE_PS = "FALSE";
-        mmcm._.COMPENSATION = "ZHOLD";
-        mmcm._.STARTUP_WAIT = "FALSE";
-        mmcm._.CLKFBOUT_MULT_F = 10.0;
-        mmcm._.CLKFBOUT_PHASE = 0.0;
-        mmcm._.CLKIN1_PERIOD = 10.0;
-        mmcm._.CLKIN2_PERIOD = 0.0;
-        mmcm._.DIVCLK_DIVIDE = 1;
-        mmcm._.CLKOUT0_DIVIDE_F = 5.0;
-        mmcm._.CLKOUT0_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT0_PHASE = 0.0;
-        mmcm._.CLKOUT1_DIVIDE = 10;
-        mmcm._.CLKOUT1_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT1_PHASE = 0.0;
-        mmcm._.CLKOUT2_DIVIDE = 10;
-        mmcm._.CLKOUT2_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT2_PHASE = 0.0;
-        mmcm._.CLKOUT3_DIVIDE = 10;
-        mmcm._.CLKOUT3_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT3_PHASE = 0.0;
-        mmcm._.CLKOUT4_DIVIDE = 10;
-        mmcm._.CLKOUT4_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT4_PHASE = 0.0;
-        mmcm._.CLKOUT5_DIVIDE = 10;
-        mmcm._.CLKOUT5_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT5_PHASE = 0.0;
-        mmcm._.CLKOUT6_DIVIDE = 10;
-        mmcm._.CLKOUT6_DUTY_CYCLE = 0.5;
-        mmcm._.CLKOUT6_PHASE = 0.0;
-        mmcm._.REF_JITTER1 = 1.0e-2;
-        mmcm._.REF_JITTER2 = 1.0e-2;
-        // args
         mmcm._.CLKIN2 = 0;
         mmcm._.CLKINSEL = 1;
         mmcm._.DADDR = 0;
