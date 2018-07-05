@@ -1,0 +1,156 @@
+EMODULE l_struct_OC_NOCData {
+    FIELD/Count 4  INTEGER_32 data
+}
+EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
+    FIELD/Ptr/parameter INTEGER_8 BANDWIDTH
+    FIELD/input INTEGER_1 CLKFBIN
+    FIELD/output INTEGER_1 CLKFBOUT
+    FIELD/output INTEGER_1 CLKFBOUTB
+    FIELD/parameter FLOAT CLKFBOUT_MULT_F
+    FIELD/parameter FLOAT CLKFBOUT_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKFBOUT_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKFBSTOPPED
+    FIELD/input INTEGER_1 CLKIN1
+    FIELD/parameter FLOAT CLKIN1_PERIOD
+    FIELD/input INTEGER_1 CLKIN2
+    FIELD/parameter FLOAT CLKIN2_PERIOD
+    FIELD/input INTEGER_1 CLKINSEL
+    FIELD/output INTEGER_1 CLKINSTOPPED
+    FIELD/output INTEGER_1 CLKOUT0
+    FIELD/output INTEGER_1 CLKOUT0B
+    FIELD/parameter FLOAT CLKOUT0_DIVIDE_F
+    FIELD/parameter FLOAT CLKOUT0_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT0_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT0_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT1
+    FIELD/output INTEGER_1 CLKOUT1B
+    FIELD/parameter INTEGER_32 CLKOUT1_DIVIDE
+    FIELD/parameter FLOAT CLKOUT1_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT1_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT1_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT2
+    FIELD/output INTEGER_1 CLKOUT2B
+    FIELD/parameter INTEGER_32 CLKOUT2_DIVIDE
+    FIELD/parameter FLOAT CLKOUT2_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT2_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT2_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT3
+    FIELD/output INTEGER_1 CLKOUT3B
+    FIELD/parameter INTEGER_32 CLKOUT3_DIVIDE
+    FIELD/parameter FLOAT CLKOUT3_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT3_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT3_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT4
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_CASCADE
+    FIELD/parameter INTEGER_32 CLKOUT4_DIVIDE
+    FIELD/parameter FLOAT CLKOUT4_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT4_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT5
+    FIELD/parameter INTEGER_32 CLKOUT5_DIVIDE
+    FIELD/parameter FLOAT CLKOUT5_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT5_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT5_USE_FINE_PS
+    FIELD/output INTEGER_1 CLKOUT6
+    FIELD/parameter INTEGER_32 CLKOUT6_DIVIDE
+    FIELD/parameter FLOAT CLKOUT6_DUTY_CYCLE
+    FIELD/parameter FLOAT CLKOUT6_PHASE
+    FIELD/Ptr/parameter INTEGER_8 CLKOUT6_USE_FINE_PS
+    FIELD/Ptr/parameter INTEGER_8 COMPENSATION
+    FIELD/input INTEGER_7 DADDR
+    FIELD/input INTEGER_1 DCLK
+    FIELD/input INTEGER_1 DEN
+    FIELD/input INTEGER_16 DI
+    FIELD/parameter INTEGER_32 DIVCLK_DIVIDE
+    FIELD/output INTEGER_16 DO
+    FIELD/output INTEGER_1 DRDY
+    FIELD/input INTEGER_1 DWE
+    FIELD/parameter INTEGER_32 IS_CLKINSEL_INVERTED
+    FIELD/parameter INTEGER_32 IS_PSEN_INVERTED
+    FIELD/parameter INTEGER_32 IS_PSINCDEC_INVERTED
+    FIELD/parameter INTEGER_32 IS_PWRDWN_INVERTED
+    FIELD/parameter INTEGER_32 IS_RST_INVERTED
+    FIELD/output INTEGER_1 LOCKED
+    FIELD/input INTEGER_1 PSCLK
+    FIELD/output INTEGER_1 PSDONE
+    FIELD/input INTEGER_1 PSEN
+    FIELD/input INTEGER_1 PSINCDEC
+    FIELD/input INTEGER_1 PWRDWN
+    FIELD/parameter FLOAT REF_JITTER1
+    FIELD/parameter FLOAT REF_JITTER2
+    FIELD/input INTEGER_1 RST
+    FIELD/Ptr/parameter INTEGER_8 SS_EN
+    FIELD/Ptr/parameter INTEGER_8 SS_MODE
+    FIELD/parameter INTEGER_32 SS_MOD_PERIOD
+    FIELD/Ptr/parameter INTEGER_8 STARTUP_WAIT
+}
+EMODULE l_ainterface_OC_PipeIn {
+    METHOD enq__ENA ( l_struct_OC_NOCData v )
+}
+EMODULE l_ainterface_OC_PipeOut {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_NOCData
+}
+EMODULE l_module_OC_Fifo {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+}
+EMODULE l_module_OC_MMCME2_ADV {
+    INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
+}
+MODULE l_module_OC_Fifo1 {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD l_struct_OC_NOCData element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
+}
+MODULE l_module_OC_MuxPipe {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeIn forward
+    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    FIELD l_module_OC_Fifo1 forwardFifo
+    METHOD/Rule fifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
+        CALL :forwardFifo$out$first{}
+        LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{fifoRule__ENA$agg_2e_tmp}
+        CALL/Action :forwardFifo$out$deq__ENA{}
+    }
+    METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
+    }
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :out$enq__ENA{in$enq$v}
+    }
+}
+MODULE l_module_OC_ZynqTop {
+    FIELD l_module_OC_MMCME2_ADV mmcm
+    PARAMS mmcm <REF_JITTER2:1.0e-2;REF_JITTER1:1.0e-2;CLKOUT6_PHASE:0.0;CLKOUT6_DUTY_CYCLE:0.5;CLKOUT6_DIVIDE:10;CLKOUT5_PHASE:0.0;CLKOUT5_DUTY_CYCLE:0.5;CLKOUT5_DIVIDE:10;CLKOUT4_PHASE:0.0;CLKOUT4_DUTY_CYCLE:0.5;CLKOUT4_DIVIDE:10;CLKOUT3_PHASE:0.0;CLKOUT3_DUTY_CYCLE:0.5;CLKOUT3_DIVIDE:10;CLKOUT2_PHASE:0.0;CLKOUT2_DUTY_CYCLE:0.5;CLKOUT2_DIVIDE:10;CLKOUT1_PHASE:0.0;CLKOUT1_DUTY_CYCLE:0.5;CLKOUT1_DIVIDE:10;CLKOUT0_PHASE:0.0;CLKOUT0_DUTY_CYCLE:0.5;CLKOUT0_DIVIDE_F:5.0;DIVCLK_DIVIDE:1;CLKIN2_PERIOD:0.0;CLKIN1_PERIOD:10.0;CLKFBOUT_PHASE:0.0;CLKFBOUT_MULT_F:10.0;STARTUP_WAIT:"FALSE";COMPENSATION:"ZHOLD";CLKOUT4_CASCADE:"FALSE";CLKOUT6_USE_FINE_PS:"FALSE";CLKOUT5_USE_FINE_PS:"FALSE";CLKOUT4_USE_FINE_PS:"FALSE";CLKOUT3_USE_FINE_PS:"FALSE";CLKOUT2_USE_FINE_PS:"FALSE";CLKOUT1_USE_FINE_PS:"FALSE";CLKOUT0_USE_FINE_PS:"FALSE";CLKFBOUT_USE_FINE_PS:"FALSE";BANDWIDTH:"OPTIMIZED">
+    METHOD/Rule init__ENA {
+        LET INTEGER_1 :mmcm$CLKIN2 = 0
+        LET INTEGER_1 :mmcm$CLKINSEL = 1
+        LET INTEGER_7 :mmcm$DADDR = 0
+        LET INTEGER_1 :mmcm$DCLK = 0
+        LET INTEGER_1 :mmcm$DEN = 0
+        LET INTEGER_16 :mmcm$DI = 0
+        LET INTEGER_1 :mmcm$DWE = 0
+        LET INTEGER_1 :mmcm$PSCLK = 0
+        LET INTEGER_1 :mmcm$PSEN = 0
+        LET INTEGER_1 :mmcm$PSINCDEC = 0
+        LET INTEGER_1 :mmcm$PWRDWN = 0
+        LET INTEGER_1 :mmcm$CLKIN1 = 1
+        LET INTEGER_1 :mmcm$RST = 1
+        LET INTEGER_1 :mmcm$CLKFBIN = 1
+        LET INTEGER_1 :mmcm$CLKFBOUT = 1
+        LET INTEGER_1 :mmcm$CLKOUT0 = 1
+        LET INTEGER_1 :mmcm$CLKOUT0B = 1
+    }
+}

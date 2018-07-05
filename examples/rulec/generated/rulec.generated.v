@@ -127,79 +127,12 @@ module l_module_OC_Echo (input CLK, input nRST,
     reg [17:0]xxx;
     wire delay_rule__ENA;
     wire delay_rule__RDY;
-    wire mmcm$CLKFBIN;
-    wire mmcm$CLKFBOUT;
-    wire mmcm$CLKFBOUTB;
-    wire mmcm$CLKFBSTOPPED;
-    wire mmcm$CLKIN1;
-    wire mmcm$CLKIN2;
-    wire mmcm$CLKINSEL;
-    wire mmcm$CLKINSTOPPED;
-    wire mmcm$CLKOUT0;
-    wire mmcm$CLKOUT0B;
-    wire mmcm$CLKOUT1;
-    wire mmcm$CLKOUT1B;
-    wire mmcm$CLKOUT2;
-    wire mmcm$CLKOUT2B;
-    wire mmcm$CLKOUT3;
-    wire mmcm$CLKOUT3B;
-    wire mmcm$CLKOUT4;
-    wire mmcm$CLKOUT5;
-    wire mmcm$CLKOUT6;
-    wire [6:0]mmcm$DADDR;
-    wire mmcm$DCLK;
-    wire mmcm$DEN;
-    wire [15:0]mmcm$DI;
-    wire [15:0]mmcm$DO;
-    wire mmcm$DRDY;
-    wire mmcm$DWE;
-    wire mmcm$LOCKED;
-    wire mmcm$PSCLK;
-    wire mmcm$PSDONE;
-    wire mmcm$PSEN;
-    wire mmcm$PSINCDEC;
-    wire mmcm$PWRDWN;
-    wire mmcm$RST;
     wire respond_rule__ENA;
     wire respond_rule__RDY;
     assign delay_rule__ENA = delay_rule__RDY ;
     assign delay_rule__RDY = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
     assign respond_rule__ENA = respond_rule__RDY ;
     assign respond_rule__RDY = ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
-    l_module_OC_MMCME2_ADV#(.REF_JITTER2(1.0e-2),.REF_JITTER1(1.0e-2),.CLKOUT6_PHASE(0.0),.CLKOUT6_DUTY_CYCLE(0.5),.CLKOUT6_DIVIDE(10),.CLKOUT5_PHASE(0.0),.CLKOUT5_DUTY_CYCLE(0.5),.CLKOUT5_DIVIDE(10),.CLKOUT4_PHASE(0.0),.CLKOUT4_DUTY_CYCLE(0.5),.CLKOUT4_DIVIDE(10),.CLKOUT3_PHASE(0.0),.CLKOUT3_DUTY_CYCLE(0.5),.CLKOUT3_DIVIDE(10),.CLKOUT2_PHASE(0.0),.CLKOUT2_DUTY_CYCLE(0.5),.CLKOUT2_DIVIDE(10),.CLKOUT1_PHASE(0.0),.CLKOUT1_DUTY_CYCLE(0.5),.CLKOUT1_DIVIDE(10),.CLKOUT0_PHASE(0.0),.CLKOUT0_DUTY_CYCLE(0.5),.CLKOUT0_DIVIDE_F(5.0),.DIVCLK_DIVIDE(1),.CLKIN2_PERIOD(0.0),.CLKIN1_PERIOD(10.0),.CLKFBOUT_PHASE(0.0),.CLKFBOUT_MULT_F(10.0),.STARTUP_WAIT("FALSE"),.COMPENSATION("ZHOLD"),.CLKOUT4_CASCADE("FALSE"),.CLKOUT6_USE_FINE_PS("FALSE"),.CLKOUT5_USE_FINE_PS("FALSE"),.CLKOUT4_USE_FINE_PS("FALSE"),.CLKOUT3_USE_FINE_PS("FALSE"),.CLKOUT2_USE_FINE_PS("FALSE"),.CLKOUT1_USE_FINE_PS("FALSE"),.CLKOUT0_USE_FINE_PS("FALSE"),.CLKFBOUT_USE_FINE_PS("FALSE"),.BANDWIDTH("OPTIMIZED")) mmcm (
-        .CLKFBIN(mmcm$CLKFBIN),
-        .CLKFBOUT(mmcm$CLKFBOUT),
-        .CLKFBOUTB(mmcm$CLKFBOUTB),
-        .CLKFBSTOPPED(mmcm$CLKFBSTOPPED),
-        .CLKIN1(mmcm$CLKIN1),
-        .CLKIN2(mmcm$CLKIN2),
-        .CLKINSEL(mmcm$CLKINSEL),
-        .CLKINSTOPPED(mmcm$CLKINSTOPPED),
-        .CLKOUT0(mmcm$CLKOUT0),
-        .CLKOUT0B(mmcm$CLKOUT0B),
-        .CLKOUT1(mmcm$CLKOUT1),
-        .CLKOUT1B(mmcm$CLKOUT1B),
-        .CLKOUT2(mmcm$CLKOUT2),
-        .CLKOUT2B(mmcm$CLKOUT2B),
-        .CLKOUT3(mmcm$CLKOUT3),
-        .CLKOUT3B(mmcm$CLKOUT3B),
-        .CLKOUT4(mmcm$CLKOUT4),
-        .CLKOUT5(mmcm$CLKOUT5),
-        .CLKOUT6(mmcm$CLKOUT6),
-        .DADDR(mmcm$DADDR),
-        .DCLK(mmcm$DCLK),
-        .DEN(mmcm$DEN),
-        .DI(mmcm$DI),
-        .DO(mmcm$DO),
-        .DRDY(mmcm$DRDY),
-        .DWE(mmcm$DWE),
-        .LOCKED(mmcm$LOCKED),
-        .PSCLK(mmcm$PSCLK),
-        .PSDONE(mmcm$PSDONE),
-        .PSEN(mmcm$PSEN),
-        .PSINCDEC(mmcm$PSINCDEC),
-        .PWRDWN(mmcm$PWRDWN),
-        .RST(mmcm$RST));
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
@@ -210,20 +143,6 @@ module l_module_OC_Echo (input CLK, input nRST,
     // assign indication$heard3$d = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     // assign indication$heard3__ENA = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
-    // assign mmcm$CLKFBIN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$CLKIN1 = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$CLKIN2 = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$CLKINSEL = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$DADDR = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$DCLK = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$DEN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$DI = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$DWE = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$PSCLK = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$PSEN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$PSINCDEC = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$PWRDWN = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
-    // assign mmcm$RST = MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE;
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = busy  == 32'd0;
     assign request$setLeds__RDY = 1;

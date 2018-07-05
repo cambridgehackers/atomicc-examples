@@ -20,7 +20,6 @@
 //METARULES; assign
 //METASTART; l_module_OC_Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
-//METAINTERNAL; mmcm; l_module_OC_MMCME2_ADV;
 //METAEXCLUSIVE; delay_rule__ENA; request$say2__ENA; request$say__ENA; respond_rule__ENA
 //METAGUARD; delay_rule; ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
