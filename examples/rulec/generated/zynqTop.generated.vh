@@ -19,6 +19,7 @@
 //METARULES; fifoRule
 //METASTART; l_module_OC_ZynqTop
 //METAINTERNAL; mmcm; l_module_OC_MMCME2_ADV;
+//METAINTERNAL; pps; l_module_OC_PS7;
 //METAGUARD; init; 1;
 //METARULES; init
 `endif

@@ -20,6 +20,7 @@
  */
 #include "atomicc.h"
 #include "VMMCME2_ADV.h"
+#include "VPPS7.h"
 
 __module ZynqTop {
     MMCME2_ADV#( BANDWIDTH = "OPTIMIZED",
@@ -39,6 +40,7 @@ __module ZynqTop {
         CLKOUT5_DIVIDE = 10, CLKOUT5_DUTY_CYCLE = 0.5, CLKOUT5_PHASE = 0.0,
         CLKOUT6_DIVIDE = 10, CLKOUT6_DUTY_CYCLE = 0.5, CLKOUT6_PHASE = 0.0,
         REF_JITTER1 = 1.0e-2, REF_JITTER2 = 1.0e-2) mmcm;
+    PS7 pps;
     ZynqTop() {
         __rule init {
         mmcm._.CLKIN2 = 0;
