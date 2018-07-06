@@ -13,6 +13,8 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   VsimSend #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .nRST(RST_N),
    .EN_beat(EN_readBeat), .RDY_beat(RDY_readBeat), .beat(readData), .last(readLast));
 
+`define BOZO
+`ifdef BOZO
   l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
     .in$enq__ENA(EN_writeBeat), .in$enq__RDY(RDY_writeBeat), .in$enq$v(writeData), .in$enq$last(writeLast),
     .out$enq__ENA(EN_incoming), .out$enq__RDY(RDY_request), .out$enq$v(requestData), .out$enq$length());
@@ -20,9 +22,14 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
    .in$enq__ENA(EN_indication), .in$enq__RDY(RDY_indication), .in$enq$v(outgoingData), .in$enq$length(indicationData[15:0]),
    .out$enq__ENA(EN_readBeat), .out$enq__RDY(RDY_readBeat), .out$enq$v(readData), .out$enq$last(readLast));
 
-  l_top top(.CLK(CLK), .nRST(RST_N),
+  l_module_OC_l_top top(.CLK(CLK), .nRST(RST_N),
     .request$enq__ENA(EN_request), .request$enq__RDY(RDY_request), .request$enq$v(requestData),
     .indication$enq__ENA(EN_indication), .indication$enq__RDY(RDY_indication), .indication$enq$v(indicationData));
+`else
+  l_module_OC_UserTop top (.CLK(CLK), .nRST(RST_N),
+    .write$enq__ENA(EN_writeBeat), .write$enq__RDY(RDY_writeBeat), .write$enq$v(writeData), .write$enq$last(writeLast),
+   .read$enq__ENA(EN_readBeat), .read$enq__RDY(RDY_readBeat), .read$enq$v(readData), .read$enq$last(readLast));
+`endif
 
   assign EN_request = EN_incoming && requestData[15:0] == `IfcNames_EchoRequestS2H;
   assign outgoingData = {indicationData[`MAX_OUT_WIDTH-1:16], `IfcNames_EchoIndicationH2S};

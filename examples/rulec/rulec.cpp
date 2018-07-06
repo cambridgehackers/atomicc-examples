@@ -134,11 +134,12 @@ module mkUser (input CLK, input nRST,
   l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(nRST),
     .in$enq__ENA(Userwrite), .in$enq$v(writeBeatData), .in$enq$last(requestLast), .in$enq__RDY(RDY_writeBeat),
     .out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
-  l_top ctop( .CLK (CLK ), .nRST(nRST),
+  l_module_OC_l_top ctop( .CLK (CLK ), .nRST(nRST),
     .request$enq$v (incomingData), .request$enq__ENA (EN_incoming), .request$enq__RDY(RDY_incoming),
     .indication$enq$v (echoData), .indication$enq__ENA(EN_echo_out_enq), .indication$enq__RDY(RDY_echo_out_enq));
 endmodule  // mkUser
 #endif
+#if 1
 __emodule l_top {
     PipeInH<NOCData> request;
     PipeInH<NOCData> *indication;
@@ -148,11 +149,12 @@ __module UserTop {
     PipeInB<BusType> *read;
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;
-    l_top       ctop;
+    //l_top       ctop;
     __connect radapter_0.out = read;
     __connect wadapter_0.in = write;
-    __connect wadapter_0.out = ctop.request;
-    __connect radapter_0.in = ctop.indication;
+    //__connect wadapter_0.out = ctop.request;
+    //__connect radapter_0.in = ctop.indication;
 };
 
 UserTop ttest;
+#endif

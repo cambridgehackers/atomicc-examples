@@ -272,18 +272,21 @@ module l_module_OC_UserTop (input CLK, input nRST,
     output [31:0]read$enq$v,
     output read$enq$last,
     input read$enq__RDY);
-    wire [15:0]ctop$indication$enq$length;
-    wire [127:0]ctop$indication$enq$v;
-    wire ctop$indication$enq__ENA;
-    wire ctop$request$enq__RDY;
+    wire [15:0]radapter_0$in$enq$length;
+    wire [31:0]radapter_0$in$enq$v$data0;
+    wire [31:0]radapter_0$in$enq$v$data1;
+    wire [31:0]radapter_0$in$enq$v$data2;
+    wire [31:0]radapter_0$in$enq$v$data3;
+    wire radapter_0$in$enq__ENA;
     wire radapter_0$in$enq__RDY;
     wire [15:0]wadapter_0$out$enq$length;
     wire [127:0]wadapter_0$out$enq$v;
     wire wadapter_0$out$enq__ENA;
+    wire wadapter_0$out$enq__RDY;
     l_module_OC_AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(ctop$indication$enq__ENA),
-        .in$enq$v(ctop$indication$enq$v),
-        .in$enq$length(ctop$indication$enq$length),
+        .in$enq__ENA(radapter_0$in$enq__ENA),
+        .in$enq$v({ radapter_0$in$enq$v$data3 , radapter_0$in$enq$v$data2 , radapter_0$in$enq$v$data1 , radapter_0$in$enq$v$data0 }),
+        .in$enq$length(radapter_0$in$enq$length),
         .in$enq__RDY(radapter_0$in$enq__RDY),
         .out$enq__ENA(read$enq__ENA),
         .out$enq$v(read$enq$v),
@@ -297,19 +300,13 @@ module l_module_OC_UserTop (input CLK, input nRST,
         .out$enq__ENA(wadapter_0$out$enq__ENA),
         .out$enq$v(wadapter_0$out$enq$v),
         .out$enq$length(wadapter_0$out$enq$length),
-        .out$enq__RDY(ctop$request$enq__RDY));
-    l_module_OC_l_top ctop (.CLK(CLK), .nRST(nRST),
-        .request$enq__ENA(wadapter_0$out$enq__ENA),
-        .request$enq$v(wadapter_0$out$enq$v),
-        .request$enq$length(wadapter_0$out$enq$length),
-        .request$enq__RDY(ctop$request$enq__RDY),
-        .indication$enq__ENA(ctop$indication$enq__ENA),
-        .indication$enq$v(ctop$indication$enq$v),
-        .indication$enq$length(ctop$indication$enq$length),
-        .indication$enq__RDY(radapter_0$in$enq__RDY));
+        .out$enq__RDY(wadapter_0$out$enq__RDY));
+    assign radapter_0$in$enq$length = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign radapter_0$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign wadapter_0$out$enq__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 endmodule 
 
-module l_top (input CLK, input nRST,
+module l_module_OC_l_top (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
     input indication$enq__RDY,
