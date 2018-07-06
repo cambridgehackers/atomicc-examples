@@ -51,10 +51,29 @@
 //METAEXTERNAL; read; l_ainterface_OC_PipeInB;
 //METAINTERNAL; radapter_0; l_module_OC_AdapterToBus;
 //METAINTERNAL; wadapter_0; l_module_OC_AdapterFromBus;
+//METAINTERNAL; ic; l_module_OC_indConnect;
+//METAINTERNAL; rc; l_module_OC_reqConnect;
+//METAINTERNAL; ctop; l_module_OC_l_top;
 //METACONNECT; radapter_0$out$enq__ENA; read$enq__ENA
 //METACONNECT; radapter_0$out$enq__RDY; read$enq__RDY
 //METACONNECT; wadapter_0$in$enq__ENA; write$enq__ENA
 //METACONNECT; wadapter_0$in$enq__RDY; write$enq__RDY
+//METACONNECT; ctop$indication$enq__ENA; ic$indication$enq__ENA
+//METACONNECT; ctop$indication$enq__RDY; ic$indication$enq__RDY
+//METACONNECT; radapter_0$in$enq__ENA; ic$rad$enq__ENA
+//METACONNECT; radapter_0$in$enq__RDY; ic$rad$enq__RDY
+//METACONNECT; ctop$request$enq__ENA; rc$request$enq__ENA
+//METACONNECT; ctop$request$enq__RDY; rc$request$enq__RDY
+//METACONNECT; wadapter_0$out$enq__ENA; rc$wad$enq__ENA
+//METACONNECT; wadapter_0$out$enq__RDY; rc$wad$enq__RDY
+//METASTART; l_module_OC_indConnect
+//METAEXTERNAL; rad; l_ainterface_OC_PipeInH;
+//METAINVOKE; indication$enq__ENA; :rad$enq__ENA;
+//METAGUARD; indication$enq; rad$enq__RDY ;
+//METASTART; l_module_OC_reqConnect
+//METAEXTERNAL; request; l_ainterface_OC_PipeIn;
+//METAINVOKE; wad$enq__ENA; :request$enq__ENA;
+//METAGUARD; wad$enq; request$enq__RDY ;
 //METASTART; l_module_OC_l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;

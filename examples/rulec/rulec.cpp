@@ -141,19 +141,43 @@ endmodule  // mkUser
 #endif
 #if 1
 __emodule l_top {
-    PipeInH<NOCData> request;
-    PipeInH<NOCData> *indication;
+    PipeIn<NOCData> request;
+    PipeIn<NOCData> *indication;
+};
+// for now, need indConnect and reqConnect since __connect is only used to export interfaces
+// (not connect to local ones)
+__module indConnect {
+    PipeIn<NOCData> indication;
+    PipeInH<NOCData> *rad;
+    void indication.enq(NOCData v) {
+        __int(16) len = __bit_cast<__int(__bitsize(v))>(v);
+printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
+        rad->enq(v, len);
+    }
+};
+__module reqConnect {
+    PipeInH<NOCData> wad;
+    PipeIn<NOCData> *request;
+    void wad.enq(NOCData v, __int(16) len) {
+printf("reqConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
+        request->enq(v);
+    }
 };
 __module UserTop {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;
-    //l_top       ctop;
     __connect radapter_0.out = read;
     __connect wadapter_0.in = write;
-    //__connect wadapter_0.out = ctop.request;
-    //__connect radapter_0.in = ctop.indication;
+
+    indConnect ic;
+    reqConnect rc;
+    l_top       ctop;
+    __connect ctop.indication = ic.indication;
+    __connect radapter_0.in = ic.rad;
+    __connect ctop.request = rc.request;
+    __connect wadapter_0.out = rc.wad;
 };
 
 UserTop ttest;

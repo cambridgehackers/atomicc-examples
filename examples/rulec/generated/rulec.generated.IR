@@ -35,6 +35,10 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
+EMODULE l_module_OC_l_top {
+    INTERFACE l_ainterface_OC_PipeIn request
+    INTERFACE/Ptr l_ainterface_OC_PipeIn indication
+}
 MODULE l_module_OC_AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
@@ -157,8 +161,31 @@ MODULE l_module_OC_MuxPipe {
 MODULE l_module_OC_UserTop {
     INTERFACECONNECT radapter_0$out read l_ainterface_OC_PipeInB
     INTERFACECONNECT wadapter_0$in write l_ainterface_OC_PipeInB
+    INTERFACECONNECT ctop$indication ic$indication l_ainterface_OC_PipeIn
+    INTERFACECONNECT radapter_0$in ic$rad l_ainterface_OC_PipeInH
+    INTERFACECONNECT ctop$request rc$request l_ainterface_OC_PipeIn
+    INTERFACECONNECT wadapter_0$out rc$wad l_ainterface_OC_PipeInH
     INTERFACE l_ainterface_OC_PipeInB write
     INTERFACE/Ptr l_ainterface_OC_PipeInB read
     FIELD l_module_OC_AdapterToBus radapter_0
     FIELD l_module_OC_AdapterFromBus wadapter_0
+    FIELD l_module_OC_indConnect ic
+    FIELD l_module_OC_reqConnect rc
+    FIELD l_module_OC_l_top ctop
+}
+MODULE l_module_OC_indConnect {
+    INTERFACE l_ainterface_OC_PipeIn indication
+    INTERFACE/Ptr l_ainterface_OC_PipeInH rad
+    METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq$v}
+        CALL/Action :rad$enq__ENA{indication$enq$v,indication$enq$v}
+    }
+}
+MODULE l_module_OC_reqConnect {
+    INTERFACE l_ainterface_OC_PipeInH wad
+    INTERFACE/Ptr l_ainterface_OC_PipeIn request
+    METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 len ) {
+        PRINTF :printf{"reqConnect.enq v %llx len %lx\n",wad$enq$v,wad$enq$len}
+        CALL/Action :request$enq__ENA{wad$enq$v}
+    }
 }

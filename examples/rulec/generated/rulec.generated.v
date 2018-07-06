@@ -272,21 +272,24 @@ module l_module_OC_UserTop (input CLK, input nRST,
     output [31:0]read$enq$v,
     output read$enq$last,
     input read$enq__RDY);
-    wire [15:0]radapter_0$in$enq$length;
-    wire [31:0]radapter_0$in$enq$v$data0;
-    wire [31:0]radapter_0$in$enq$v$data1;
-    wire [31:0]radapter_0$in$enq$v$data2;
-    wire [31:0]radapter_0$in$enq$v$data3;
-    wire radapter_0$in$enq__ENA;
+    wire [127:0]ctop$indication$enq$v;
+    wire ctop$indication$enq__ENA;
+    wire ctop$request$enq__RDY;
+    wire ic$indication$enq__RDY;
+    wire [15:0]ic$rad$enq$length;
+    wire [127:0]ic$rad$enq$v;
+    wire ic$rad$enq__ENA;
     wire radapter_0$in$enq__RDY;
+    wire [127:0]rc$request$enq$v;
+    wire rc$request$enq__ENA;
+    wire rc$wad$enq__RDY;
     wire [15:0]wadapter_0$out$enq$length;
     wire [127:0]wadapter_0$out$enq$v;
     wire wadapter_0$out$enq__ENA;
-    wire wadapter_0$out$enq__RDY;
     l_module_OC_AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(radapter_0$in$enq__ENA),
-        .in$enq$v({ radapter_0$in$enq$v$data3 , radapter_0$in$enq$v$data2 , radapter_0$in$enq$v$data1 , radapter_0$in$enq$v$data0 }),
-        .in$enq$length(radapter_0$in$enq$length),
+        .in$enq__ENA(ic$rad$enq__ENA),
+        .in$enq$v(ic$rad$enq$v),
+        .in$enq$length(ic$rad$enq$length),
         .in$enq__RDY(radapter_0$in$enq__RDY),
         .out$enq__ENA(read$enq__ENA),
         .out$enq$v(read$enq$v),
@@ -300,10 +303,77 @@ module l_module_OC_UserTop (input CLK, input nRST,
         .out$enq__ENA(wadapter_0$out$enq__ENA),
         .out$enq$v(wadapter_0$out$enq$v),
         .out$enq$length(wadapter_0$out$enq$length),
-        .out$enq__RDY(wadapter_0$out$enq__RDY));
-    assign radapter_0$in$enq$length = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign radapter_0$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign wadapter_0$out$enq__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+        .out$enq__RDY(rc$wad$enq__RDY));
+    l_module_OC_indConnect ic (.CLK(CLK), .nRST(nRST),
+        .indication$enq__ENA(ctop$indication$enq__ENA),
+        .indication$enq$v(ctop$indication$enq$v),
+        .indication$enq__RDY(ic$indication$enq__RDY),
+        .rad$enq__ENA(ic$rad$enq__ENA),
+        .rad$enq$v(ic$rad$enq$v),
+        .rad$enq$length(ic$rad$enq$length),
+        .rad$enq__RDY(radapter_0$in$enq__RDY));
+    l_module_OC_reqConnect rc (.CLK(CLK), .nRST(nRST),
+        .wad$enq__ENA(wadapter_0$out$enq__ENA),
+        .wad$enq$v(wadapter_0$out$enq$v),
+        .wad$enq$length(wadapter_0$out$enq$length),
+        .wad$enq__RDY(rc$wad$enq__RDY),
+        .request$enq__ENA(rc$request$enq__ENA),
+        .request$enq$v(rc$request$enq$v),
+        .request$enq__RDY(ctop$request$enq__RDY));
+    l_module_OC_l_top ctop (.CLK(CLK), .nRST(nRST),
+        .indication$enq__ENA(ctop$indication$enq__ENA),
+        .indication$enq$v(ctop$indication$enq$v),
+        .indication$enq__RDY(ic$indication$enq__RDY),
+        .request$enq__ENA(rc$request$enq__ENA),
+        .request$enq$v(rc$request$enq$v),
+        .request$enq__RDY(ctop$request$enq__RDY));
+endmodule 
+
+module l_module_OC_indConnect (input CLK, input nRST,
+    input indication$enq__ENA,
+    input [127:0]indication$enq$v,
+    output indication$enq__RDY,
+    output rad$enq__ENA,
+    output [127:0]rad$enq$v,
+    output [15:0]rad$enq$length,
+    input rad$enq__RDY);
+    assign indication$enq__RDY = rad$enq__RDY ;
+    assign rad$enq$length = indication$enq$v ;
+    assign rad$enq$v = indication$enq$v ;
+    assign rad$enq__ENA = indication$enq__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (indication$enq__ENA) begin
+            $display( "indConnect.enq v %llx len %lx" , indication$enq$v , indication$enq$v );
+        end; // End of indication$enq__ENA
+      end
+    end // always @ (posedge CLK)
+endmodule 
+
+module l_module_OC_reqConnect (input CLK, input nRST,
+    input wad$enq__ENA,
+    input [127:0]wad$enq$v,
+    input [15:0]wad$enq$length,
+    output wad$enq__RDY,
+    output request$enq__ENA,
+    output [127:0]request$enq$v,
+    input request$enq__RDY);
+    assign request$enq$v = wad$enq$v ;
+    assign request$enq__ENA = wad$enq__ENA ;
+    assign wad$enq__RDY = request$enq__RDY ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (wad$enq__ENA) begin
+            $display( "reqConnect.enq v %llx len %lx" , wad$enq$v , wad$enq$len );
+        end; // End of wad$enq__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule 
 
 module l_module_OC_l_top (input CLK, input nRST,
