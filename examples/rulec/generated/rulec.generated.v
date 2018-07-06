@@ -263,6 +263,52 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
 endmodule 
 
+module l_module_OC_UserTop (input CLK, input nRST,
+    input write$enq__ENA,
+    input [31:0]write$enq$v,
+    input write$enq$last,
+    output write$enq__RDY,
+    output read$enq__ENA,
+    output [31:0]read$enq$v,
+    output read$enq$last,
+    input read$enq__RDY);
+    wire [15:0]ctop$indication$enq$length;
+    wire [127:0]ctop$indication$enq$v;
+    wire ctop$indication$enq__ENA;
+    wire ctop$request$enq__RDY;
+    wire radapter_0$in$enq__RDY;
+    wire [15:0]wadapter_0$out$enq$length;
+    wire [127:0]wadapter_0$out$enq$v;
+    wire wadapter_0$out$enq__ENA;
+    l_module_OC_AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(ctop$indication$enq__ENA),
+        .in$enq$v(ctop$indication$enq$v),
+        .in$enq$length(ctop$indication$enq$length),
+        .in$enq__RDY(radapter_0$in$enq__RDY),
+        .out$enq__ENA(read$enq__ENA),
+        .out$enq$v(read$enq$v),
+        .out$enq$last(read$enq$last),
+        .out$enq__RDY(read$enq__RDY));
+    l_module_OC_AdapterFromBus wadapter_0 (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(write$enq__ENA),
+        .in$enq$v(write$enq$v),
+        .in$enq$last(write$enq$last),
+        .in$enq__RDY(write$enq__RDY),
+        .out$enq__ENA(wadapter_0$out$enq__ENA),
+        .out$enq$v(wadapter_0$out$enq$v),
+        .out$enq$length(wadapter_0$out$enq$length),
+        .out$enq__RDY(ctop$request$enq__RDY));
+    l_module_OC_l_top ctop (.CLK(CLK), .nRST(nRST),
+        .request$enq__ENA(wadapter_0$out$enq__ENA),
+        .request$enq$v(wadapter_0$out$enq$v),
+        .request$enq$length(wadapter_0$out$enq$length),
+        .request$enq__RDY(ctop$request$enq__RDY),
+        .indication$enq__ENA(ctop$indication$enq__ENA),
+        .indication$enq$v(ctop$indication$enq$v),
+        .indication$enq$length(ctop$indication$enq$length),
+        .indication$enq__RDY(radapter_0$in$enq__RDY));
+endmodule 
+
 module l_top (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,

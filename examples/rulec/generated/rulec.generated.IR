@@ -35,6 +35,10 @@ EMODULE l_module_OC_Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
+EMODULE l_module_OC_l_top {
+    INTERFACE l_ainterface_OC_PipeInH request
+    INTERFACE/Ptr l_ainterface_OC_PipeInH indication
+}
 MODULE l_module_OC_AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
@@ -153,4 +157,15 @@ MODULE l_module_OC_MuxPipe {
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :out$enq__ENA{in$enq$v}
     }
+}
+MODULE l_module_OC_UserTop {
+    INTERFACECONNECT radapter_0$out read l_ainterface_OC_PipeInB
+    INTERFACECONNECT wadapter_0$in write l_ainterface_OC_PipeInB
+    INTERFACECONNECT wadapter_0$out ctop$request l_ainterface_OC_PipeInH
+    INTERFACECONNECT radapter_0$in ctop$indication l_ainterface_OC_PipeInH
+    INTERFACE l_ainterface_OC_PipeInB write
+    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+    FIELD l_module_OC_AdapterToBus radapter_0
+    FIELD l_module_OC_AdapterFromBus wadapter_0
+    FIELD l_module_OC_l_top ctop
 }

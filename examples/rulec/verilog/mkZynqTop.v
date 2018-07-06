@@ -350,7 +350,8 @@ mkUser user(.CLK(CLK), .nRST(RST_N),
   .RDY_writeBeat(requestNotFull),
   .Userread(RULEread && !portalRControl), .readBeatData(indicationData), .RDY_readBeat(RDY_indication));
 endmodule  // mkZynqTop
-
+`define BOZO
+`ifdef BOZO
 module mkUser (input CLK, input nRST,
   input Userwrite, input [`MAX_BUS_WIDTH-1:0] writeBeatData, input requestLast, output RDY_writeBeat,
   input Userread, output [`MAX_BUS_WIDTH-1:0] readBeatData, output RDY_readBeat);
@@ -368,3 +369,4 @@ module mkUser (input CLK, input nRST,
     .request$enq$v (incomingData), .request$enq__ENA (EN_incoming), .request$enq__RDY(RDY_incoming),
     .indication$enq$v (echoData), .indication$enq__ENA(EN_echo_out_enq), .indication$enq__RDY(RDY_echo_out_enq));
 endmodule  // mkUser
+`endif

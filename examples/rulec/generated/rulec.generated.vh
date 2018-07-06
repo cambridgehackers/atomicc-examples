@@ -47,6 +47,19 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY ;
 //METARULES; fifoRule
+//METASTART; l_module_OC_UserTop
+//METAEXTERNAL; read; l_ainterface_OC_PipeInB;
+//METAINTERNAL; radapter_0; l_module_OC_AdapterToBus;
+//METAINTERNAL; wadapter_0; l_module_OC_AdapterFromBus;
+//METAINTERNAL; ctop; l_module_OC_l_top;
+//METACONNECT; radapter_0$out$enq__ENA; read$enq__ENA
+//METACONNECT; radapter_0$out$enq__RDY; read$enq__RDY
+//METACONNECT; wadapter_0$in$enq__ENA; write$enq__ENA
+//METACONNECT; wadapter_0$in$enq__RDY; write$enq__RDY
+//METACONNECT; wadapter_0$out$enq__ENA; ctop$request$enq__ENA
+//METACONNECT; wadapter_0$out$enq__RDY; ctop$request$enq__RDY
+//METACONNECT; radapter_0$in$enq__ENA; ctop$indication$enq__ENA
+//METACONNECT; radapter_0$in$enq__RDY; ctop$indication$enq__RDY
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;
