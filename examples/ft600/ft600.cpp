@@ -55,7 +55,7 @@ __module ModFt600 {
     __int(2) usb_rxf_delay;
     __int(1) usb_txe_delay;
 
-    IOBUF *iobufs[16];
+    IOBUF iobufs[16];
 
     ModFt600() {
         __rule handshake {
@@ -67,12 +67,11 @@ __module ModFt600 {
 	  usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
 	  usb_txe_delay = _.usb_txe;
         }
-	__rule iobufs {
-	  for (int i = 0; i < 16; i++) {
-	    iobufs[i]->_.IO =
-	      _.usb_ad[i];
-	  }
-	}
+	for (int i = 0; i < 16; i++) {
+	    __rule iobufs {
+	        iobufs[i]._.IO = _.usb_ad >> i;
+	    }
+        }
     }
 };
 
