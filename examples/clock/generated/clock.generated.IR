@@ -1,0 +1,164 @@
+EMODULE l_struct_OC_NOCData {
+    FIELD/Count 4  INTEGER_32 data
+}
+EMODULE l_ainterface_OC_Ft600 {
+    FIELD/input INTEGER_1 CLK
+    FIELD/input INTEGER_1 nRST
+    FIELD/input INTEGER_1 usb_clk
+    FIELD/input INTEGER_1 usb_rxf
+    FIELD/input INTEGER_1 usb_txe
+    FIELD/output INTEGER_1 usb_rd_n
+    FIELD/output INTEGER_1 usb_wr_n
+    FIELD/output INTEGER_1 usb_oe_n
+    FIELD/inout INTEGER_16 usb_ad
+}
+EMODULE l_ainterface_OC_I_IOBUF {
+    FIELD/output INTEGER_1 CLK
+    FIELD/output INTEGER_1 RST_N
+    FIELD/inout INTEGER_1 IO
+    FIELD/input INTEGER_1 I
+    FIELD/output INTEGER_1 O
+    FIELD/input INTEGER_1 T
+}
+EMODULE l_ainterface_OC_PipeIn {
+    METHOD enq__ENA ( l_struct_OC_NOCData v )
+}
+EMODULE l_ainterface_OC_PipeOut {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_NOCData
+}
+EMODULE l_module_OC_Fifo {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+}
+EMODULE l_module_OC_IOBUF {
+    INTERFACE l_ainterface_OC_I_IOBUF _
+}
+MODULE l_module_OC_Fifo1 {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD l_struct_OC_NOCData element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
+}
+MODULE l_module_OC_ModFt600 {
+    INTERFACE l_ainterface_OC_Ft600 _
+    FIELD INTEGER_1 usb_fifo_empty
+    FIELD INTEGER_2 usb_rxf_delay
+    FIELD INTEGER_1 usb_txe_delay
+    FIELD/Count 16  l_module_OC_IOBUF iobufs
+    METHOD/Rule handshake__ENA {
+        LET INTEGER_1 :usb_rd_n = (usb_rxf_delay) != (0)
+        LET INTEGER_1 :usb_oe_n = (usb_rxf_delay) & (1)
+        LET INTEGER_1 :usb_wr_n = ((usb_txe_delay) | (usb_fifo_empty)) | (((usb_rxf_delay) & (1)) ^ (-1))
+        STORE :usb_fifo_empty = 0
+        STORE :usb_rxf_delay = ((usb_rxf_delay) << (1)) | (usb_rxf)
+        STORE :usb_txe_delay = usb_txe
+    }
+    METHOD/Rule iobufs_0__ENA {
+        LET INTEGER_1 :iobufs[0]$IO = (usb_ad)  >>  (0)
+        LET INTEGER_1 :iobufs[0]$CLK = CLK
+        LET INTEGER_1 :iobufs[0]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_10__ENA {
+        LET INTEGER_1 :iobufs[10]$IO = (usb_ad)  >>  (10)
+        LET INTEGER_1 :iobufs[10]$CLK = CLK
+        LET INTEGER_1 :iobufs[10]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_11__ENA {
+        LET INTEGER_1 :iobufs[11]$IO = (usb_ad)  >>  (11)
+        LET INTEGER_1 :iobufs[11]$CLK = CLK
+        LET INTEGER_1 :iobufs[11]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_12__ENA {
+        LET INTEGER_1 :iobufs[12]$IO = (usb_ad)  >>  (12)
+        LET INTEGER_1 :iobufs[12]$CLK = CLK
+        LET INTEGER_1 :iobufs[12]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_13__ENA {
+        LET INTEGER_1 :iobufs[13]$IO = (usb_ad)  >>  (13)
+        LET INTEGER_1 :iobufs[13]$CLK = CLK
+        LET INTEGER_1 :iobufs[13]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_14__ENA {
+        LET INTEGER_1 :iobufs[14]$IO = (usb_ad)  >>  (14)
+        LET INTEGER_1 :iobufs[14]$CLK = CLK
+        LET INTEGER_1 :iobufs[14]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_15__ENA {
+        LET INTEGER_1 :iobufs[15]$IO = (usb_ad)  >>  (15)
+        LET INTEGER_1 :iobufs[15]$CLK = CLK
+        LET INTEGER_1 :iobufs[15]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_1__ENA {
+        LET INTEGER_1 :iobufs[1]$IO = (usb_ad)  >>  (1)
+        LET INTEGER_1 :iobufs[1]$CLK = CLK
+        LET INTEGER_1 :iobufs[1]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_2__ENA {
+        LET INTEGER_1 :iobufs[2]$IO = (usb_ad)  >>  (2)
+        LET INTEGER_1 :iobufs[2]$CLK = CLK
+        LET INTEGER_1 :iobufs[2]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_3__ENA {
+        LET INTEGER_1 :iobufs[3]$IO = (usb_ad)  >>  (3)
+        LET INTEGER_1 :iobufs[3]$CLK = CLK
+        LET INTEGER_1 :iobufs[3]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_4__ENA {
+        LET INTEGER_1 :iobufs[4]$IO = (usb_ad)  >>  (4)
+        LET INTEGER_1 :iobufs[4]$CLK = CLK
+        LET INTEGER_1 :iobufs[4]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_5__ENA {
+        LET INTEGER_1 :iobufs[5]$IO = (usb_ad)  >>  (5)
+        LET INTEGER_1 :iobufs[5]$CLK = CLK
+        LET INTEGER_1 :iobufs[5]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_6__ENA {
+        LET INTEGER_1 :iobufs[6]$IO = (usb_ad)  >>  (6)
+        LET INTEGER_1 :iobufs[6]$CLK = CLK
+        LET INTEGER_1 :iobufs[6]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_7__ENA {
+        LET INTEGER_1 :iobufs[7]$IO = (usb_ad)  >>  (7)
+        LET INTEGER_1 :iobufs[7]$CLK = CLK
+        LET INTEGER_1 :iobufs[7]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_8__ENA {
+        LET INTEGER_1 :iobufs[8]$IO = (usb_ad)  >>  (8)
+        LET INTEGER_1 :iobufs[8]$CLK = CLK
+        LET INTEGER_1 :iobufs[8]$RST_N = nRST
+    }
+    METHOD/Rule iobufs_9__ENA {
+        LET INTEGER_1 :iobufs[9]$IO = (usb_ad)  >>  (9)
+        LET INTEGER_1 :iobufs[9]$CLK = CLK
+        LET INTEGER_1 :iobufs[9]$RST_N = nRST
+    }
+}
+MODULE l_module_OC_MuxPipe {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeIn forward
+    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    FIELD l_module_OC_Fifo1 forwardFifo
+    METHOD/Rule fifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
+        CALL :forwardFifo$out$first{}
+        LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{fifoRule__ENA$agg_2e_tmp}
+        CALL/Action :forwardFifo$out$deq__ENA{}
+    }
+    METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
+    }
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :out$enq__ENA{in$enq$v}
+    }
+}
