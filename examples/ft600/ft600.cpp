@@ -67,11 +67,20 @@ __module ModFt600 {
 	  usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
 	  usb_txe_delay = _.usb_txe;
         }
+#if 0
 	for (int i = 0; i < 16; i++) {
 	    __rule iobufs {
 	        iobufs[i]._.IO = _.usb_ad >> i;
 	    }
         }
+#else
+        __rule iobufs {
+            int i = 0;
+            do {
+                iobufs[i]._.IO = _.usb_ad >> i;
+            } while(++i < 16);  // for loop unrolling to work, block must end in conditional
+        }
+#endif
     }
 };
 

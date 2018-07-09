@@ -24,23 +24,8 @@
 //METAINTERNAL; iobufs14; l_module_OC_IOBUF;
 //METAINTERNAL; iobufs15; l_module_OC_IOBUF;
 //METAGUARD; handshake; 1;
-//METAGUARD; iobufs_0; 1;
-//METAGUARD; iobufs_10; 1;
-//METAGUARD; iobufs_11; 1;
-//METAGUARD; iobufs_12; 1;
-//METAGUARD; iobufs_13; 1;
-//METAGUARD; iobufs_14; 1;
-//METAGUARD; iobufs_15; 1;
-//METAGUARD; iobufs_1; 1;
-//METAGUARD; iobufs_2; 1;
-//METAGUARD; iobufs_3; 1;
-//METAGUARD; iobufs_4; 1;
-//METAGUARD; iobufs_5; 1;
-//METAGUARD; iobufs_6; 1;
-//METAGUARD; iobufs_7; 1;
-//METAGUARD; iobufs_8; 1;
-//METAGUARD; iobufs_9; 1;
-//METARULES; handshake; iobufs_0; iobufs_1; iobufs_10; iobufs_11; iobufs_12; iobufs_13; iobufs_14; iobufs_15; iobufs_2; iobufs_3; iobufs_4; iobufs_5; iobufs_6; iobufs_7; iobufs_8; iobufs_9
+//METAGUARD; iobufs; 1;
+//METARULES; handshake; iobufs
 //METASTART; l_module_OC_MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
