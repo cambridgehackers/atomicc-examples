@@ -18,6 +18,14 @@ include $(TCLDIR)/Makefile.fpgamake.common
 
 mkZynqTop_HEADERFILES = 
 mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
+    ../generated/AdapterFromBus.v ../generated/AdapterToBus.v \
+    ../generated/CONNECTNET2.v \
+    ../generated/EchoIndication___M2P.v ../generated/EchoRequest___P2M.v \
+    ../generated/Echo.v \
+    ../generated/Fifo1.v \
+    ../generated/MuxPipe.v \
+    ../generated/indConnect.v ../generated/reqConnect.v \
+    ../generated/UserTop.v \
     $(BSVLIB)/ResetInverter.v $(BSVLIB)/FIFO2.v $(BSVLIB)/FIFO1.v
 
 mkZynqTop_VHDFILES = 
