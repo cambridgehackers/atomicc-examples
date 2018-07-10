@@ -8,6 +8,8 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    reg __defaultClock;
+    reg __defaultnReset;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -20,6 +22,8 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        __defaultClock <= 0;
+        __defaultnReset <= 0;
         element$data0 <= 0;
         element$data1 <= 0;
         element$data2 <= 0;
@@ -39,8 +43,6 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
 endmodule 
 
 module l_module_OC_ModFt600 (
-    input CLK,
-    input nRST,
     input usb_clk,
     input usb_rxf,
     input usb_txe,
@@ -48,6 +50,8 @@ module l_module_OC_ModFt600 (
     output usb_wr_n,
     output usb_oe_n,
     input [15:0]usb_ad);
+    reg __defaultClock;
+    reg __defaultnReset;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
@@ -168,113 +172,113 @@ module l_module_OC_ModFt600 (
     assign iobufs_9__ENA = iobufs_9__RDY ;
     assign iobufs_9__RDY = 1;
     l_module_OC_IOBUF iobufs0 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 0),
         .I(iobufs0$I),
         .O(iobufs0$O),
         .T(iobufs0$T));
     l_module_OC_IOBUF iobufs1 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 1),
         .I(iobufs1$I),
         .O(iobufs1$O),
         .T(iobufs1$T));
     l_module_OC_IOBUF iobufs2 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 2),
         .I(iobufs2$I),
         .O(iobufs2$O),
         .T(iobufs2$T));
     l_module_OC_IOBUF iobufs3 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 3),
         .I(iobufs3$I),
         .O(iobufs3$O),
         .T(iobufs3$T));
     l_module_OC_IOBUF iobufs4 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 4),
         .I(iobufs4$I),
         .O(iobufs4$O),
         .T(iobufs4$T));
     l_module_OC_IOBUF iobufs5 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 5),
         .I(iobufs5$I),
         .O(iobufs5$O),
         .T(iobufs5$T));
     l_module_OC_IOBUF iobufs6 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 6),
         .I(iobufs6$I),
         .O(iobufs6$O),
         .T(iobufs6$T));
     l_module_OC_IOBUF iobufs7 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 7),
         .I(iobufs7$I),
         .O(iobufs7$O),
         .T(iobufs7$T));
     l_module_OC_IOBUF iobufs8 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 8),
         .I(iobufs8$I),
         .O(iobufs8$O),
         .T(iobufs8$T));
     l_module_OC_IOBUF iobufs9 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 9),
         .I(iobufs9$I),
         .O(iobufs9$O),
         .T(iobufs9$T));
     l_module_OC_IOBUF iobufs10 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 10),
         .I(iobufs10$I),
         .O(iobufs10$O),
         .T(iobufs10$T));
     l_module_OC_IOBUF iobufs11 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 11),
         .I(iobufs11$I),
         .O(iobufs11$O),
         .T(iobufs11$T));
     l_module_OC_IOBUF iobufs12 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 12),
         .I(iobufs12$I),
         .O(iobufs12$O),
         .T(iobufs12$T));
     l_module_OC_IOBUF iobufs13 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 13),
         .I(iobufs13$I),
         .O(iobufs13$O),
         .T(iobufs13$T));
     l_module_OC_IOBUF iobufs14 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 14),
         .I(iobufs14$I),
         .O(iobufs14$O),
         .T(iobufs14$T));
     l_module_OC_IOBUF iobufs15 (
-        .CLK(CLK),
-        .RST_N(nRST),
+        .CLK(__defaultClock),
+        .RST_N(__defaultnReset),
         .IO(usb_ad >> 15),
         .I(iobufs15$I),
         .O(iobufs15$O),
@@ -317,6 +321,8 @@ module l_module_OC_ModFt600 (
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        __defaultClock <= 0;
+        __defaultnReset <= 0;
         usb_fifo_empty <= 0;
         usb_rxf_delay <= 0;
         usb_txe_delay <= 0;
@@ -341,6 +347,8 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    reg __defaultClock;
+    reg __defaultnReset;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;
@@ -359,5 +367,12 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign in$enq__RDY = out$enq__RDY ;
     assign out$enq$v = fifoRule__ENA  ? { forwardFifo$out$first[127:96]  , forwardFifo$out$first[95:64]  , forwardFifo$out$first[63:32]  , forwardFifo$out$first[31:0]  } : in$enq$v ;
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        __defaultClock <= 0;
+        __defaultnReset <= 0;
+      end // nRST
+    end // always @ (posedge CLK)
 endmodule 
 
