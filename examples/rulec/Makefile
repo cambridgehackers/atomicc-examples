@@ -8,9 +8,6 @@ include ../makefile.in
 
 all:
 	mkdir -p generated
-	[ -h generated/l_top.v ] || ln -s rulec.generated.v generated/l_top.v
-	[ -h generated/UserTop.v ] || ln -s rulec.generated.v generated/UserTop.v
-	[ -h generated/AdapterFromBus.v ] || ln -s rulec.generated.v generated/AdapterFromBus.v
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/zynqTop.ll zynqTop.cpp
 

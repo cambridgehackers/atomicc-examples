@@ -23,14 +23,14 @@ EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_module_OC_Fifo {
+EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_IOBUF {
+EMODULE IOBUF {
     INTERFACE l_ainterface_OC_I_IOBUF _
 }
-MODULE l_module_OC_Fifo1 {
+MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
@@ -44,12 +44,12 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }
-MODULE l_module_OC_ModFt600 {
+MODULE ModFt600 {
     INTERFACE l_ainterface_OC_Ft600 _
     FIELD INTEGER_1 usb_fifo_empty
     FIELD INTEGER_2 usb_rxf_delay
     FIELD INTEGER_1 usb_txe_delay
-    FIELD/Count 16  l_module_OC_IOBUF iobufs
+    FIELD/Count 16  IOBUF iobufs
     METHOD/Rule handshake__ENA {
         LET INTEGER_1 :usb_rd_n = (usb_rxf_delay) != (0)
         LET INTEGER_1 :usb_oe_n = (usb_rxf_delay) & (1)
@@ -77,11 +77,11 @@ MODULE l_module_OC_ModFt600 {
         LET INTEGER_1 :iobufs[15]$IO = (usb_ad)  >>  (15)
     }
 }
-MODULE l_module_OC_MuxPipe {
+MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD l_module_OC_Fifo1 forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

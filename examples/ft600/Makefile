@@ -8,8 +8,6 @@ include ../makefile.in
 
 all:
 	mkdir -p generated
-	[ -h generated/l_top.v ] || ln -s ft600.generated.v generated/l_top.v
-	[ -h generated/l_module_OC_AdapterFromBus.v ] || ln -s ft600.generated.v generated/l_module_OC_AdapterFromBus.v
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/ft600.ll ft600.cpp
 
 ############################# for running verilator
