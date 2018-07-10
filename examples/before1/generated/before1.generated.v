@@ -13,6 +13,7 @@ module l_module_OC_Connect (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
+    wire CLK, nRST;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
@@ -135,6 +136,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
+    wire CLK, nRST;
     reg busy;
     reg busy_delay;
     reg [31:0]meth_delay;
@@ -218,6 +220,7 @@ module l_module_OC_EchoIndicationInput (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
+    wire CLK, nRST;
     reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
@@ -261,6 +264,7 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire CLK, nRST;
     reg even;
     reg [31:0]ind0$data$heard$meth;
     reg [31:0]ind0$data$heard$v;
@@ -330,6 +334,7 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
     output [31:0]request$say2$v,
     input request$say2__RDY,
     input request$say__RDY);
+    wire CLK, nRST;
     assign pipe$enq__RDY = request$say__RDY  & request$say2__RDY ;
     assign request$say$meth = pipe$enq$v[63:32] ;
     assign request$say$v = pipe$enq$v[95:64] ;
@@ -361,6 +366,7 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire CLK, nRST;
     wire [31:0]request$say2__ENA$ind$data$say$meth;
     wire [31:0]request$say2__ENA$ind$data$say$v;
     wire [31:0]request$say2__ENA$ind$data$say2$meth;
@@ -402,6 +408,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -442,6 +449,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;

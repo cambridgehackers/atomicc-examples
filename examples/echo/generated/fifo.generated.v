@@ -8,6 +8,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -48,6 +49,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;

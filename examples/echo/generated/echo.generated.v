@@ -7,6 +7,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     output ind$heard__ENA,
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
+    wire CLK, nRST;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     wire respond_rule__ENA;
@@ -32,6 +33,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -70,6 +72,7 @@ module l_module_OC_Fifo1_OC_3 (input CLK, input nRST,
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element;
     reg full;
     assign in$enq__RDY = !full ;
@@ -104,6 +107,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;

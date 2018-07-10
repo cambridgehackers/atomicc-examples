@@ -8,6 +8,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -46,6 +47,7 @@ module l_module_OC_Fifo1_OC_2 (input CLK, input nRST,
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$a;
     reg [31:0]element$b;
     reg [31:0]element$c;
@@ -82,6 +84,7 @@ module l_module_OC_Fifo2 (input CLK, input nRST,
     output out$deq__RDY,
     output [95:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element0$a;
     reg [31:0]element0$b;
     reg [31:0]element0$c;
@@ -130,6 +133,7 @@ module l_module_OC_Lpm (input CLK, input nRST,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
     output request$say__RDY);
+    wire CLK, nRST;
     reg [31:0]doneCount;
     wire enter__ENA;
     wire enter__RDY;
@@ -231,6 +235,7 @@ module l_module_OC_LpmMemory (input CLK, input nRST,
     output ifc$resAccept__RDY,
     output [95:0]ifc$resValue,
     output ifc$resValue__RDY);
+    wire CLK, nRST;
     reg [31:0]delayCount;
     reg [31:0]saved$a;
     reg [31:0]saved$b;
@@ -276,6 +281,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;

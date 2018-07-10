@@ -29,6 +29,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     output printfp$enq__ENA,
     output [127:0]printfp$enq$v,
     input printfp$enq__RDY);
+    wire CLK, nRST;
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;
@@ -118,6 +119,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -158,6 +160,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;
@@ -178,13 +181,14 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
 endmodule 
 
-module l_top (input CLK, input nRST,
+module l_module_OC_l_top (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
     input indication$enq__RDY,
     input request$enq__ENA,
     input [127:0]request$enq$v,
     output request$enq__RDY);
+    wire CLK, nRST;
     wire [31:0]DUT__l_module_OC_Echo$indication$heard$v;
     wire [15:0]DUT__l_module_OC_Echo$indication$heard2$a;
     wire [15:0]DUT__l_module_OC_Echo$indication$heard2$b;
@@ -307,6 +311,7 @@ module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire CLK, nRST;
     assign method$heard2__RDY = pipe$enq__RDY ;
     assign method$heard3__RDY = pipe$enq__RDY ;
     assign method$heard__RDY = pipe$enq__RDY ;
@@ -330,6 +335,7 @@ module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY);
+    wire CLK, nRST;
     assign method$say$v = pipe$enq$v[63:32] ;
     assign method$say2$a = pipe$enq$v[47:32] ;
     assign method$say2$b = pipe$enq$v[63:48] ;

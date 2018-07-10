@@ -8,6 +8,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -46,6 +47,7 @@ module l_module_OC_Fifo1_OC_2 (input CLK, input nRST,
     output out$deq__RDY,
     output [9:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [5:0]element$a;
     reg [3:0]element$b;
     reg full;
@@ -81,6 +83,7 @@ module l_module_OC_IVector (input CLK, input nRST,
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
+    wire CLK, nRST;
     reg [8:0]counter;
     reg [7:0]fcounter;
     reg [8:0]gcounter;
@@ -122,6 +125,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;

@@ -9,6 +9,7 @@ module l_module_OC_AdapterFromBus (input CLK, input nRST,
     output [127:0]out$enq$v,
     output [15:0]out$enq$length,
     input out$enq__RDY);
+    wire CLK, nRST;
     reg [127:0]buffer;
     reg waitForEnq;
     wire pushValue__ENA;
@@ -47,6 +48,7 @@ module l_module_OC_AdapterToBus (input CLK, input nRST,
     output [31:0]out$enq$v,
     output out$enq$last,
     input out$enq__RDY);
+    wire CLK, nRST;
     reg [127:0]buffer;
     reg [15:0]remain;
     wire copyRule__ENA;
@@ -81,6 +83,7 @@ module l_module_OC_CONNECTNET2 (
     input IN2,
     output OUT1,
     output OUT2);
+    wire CLK, nRST;
     wire assign__ENA;
     wire assign__RDY;
     assign assign__ENA = assign__RDY ;
@@ -115,6 +118,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     output [15:0]indication$heard3$d,
     input indication$heard3__RDY,
     input indication$heard__RDY);
+    wire CLK, nRST;
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;
@@ -203,6 +207,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output out$deq__RDY,
     output [127:0]out$first,
     output out$first__RDY);
+    wire CLK, nRST;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -243,6 +248,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
+    wire CLK, nRST;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;
@@ -272,6 +278,7 @@ module l_module_OC_UserTop (input CLK, input nRST,
     output [31:0]read$enq$v,
     output read$enq$last,
     input read$enq__RDY);
+    wire CLK, nRST;
     wire [127:0]ctop$indication$enq$v;
     wire ctop$indication$enq__ENA;
     wire ctop$request$enq__RDY;
@@ -337,6 +344,7 @@ module l_module_OC_indConnect (input CLK, input nRST,
     output [127:0]rad$enq$v,
     output [15:0]rad$enq$length,
     input rad$enq__RDY);
+    wire CLK, nRST;
     assign indication$enq__RDY = rad$enq__RDY ;
     assign rad$enq$length = indication$enq$v ;
     assign rad$enq$v = indication$enq$v ;
@@ -361,6 +369,7 @@ module l_module_OC_reqConnect (input CLK, input nRST,
     output request$enq__ENA,
     output [127:0]request$enq$v,
     input request$enq__RDY);
+    wire CLK, nRST;
     assign request$enq$v = wad$enq$v ;
     assign request$enq__ENA = wad$enq__ENA ;
     assign wad$enq__RDY = request$enq__RDY ;
@@ -383,6 +392,7 @@ module l_module_OC_l_top (input CLK, input nRST,
     input request$enq__ENA,
     input [127:0]request$enq$v,
     output request$enq__RDY);
+    wire CLK, nRST;
     wire [31:0]DUT__l_module_OC_Echo$indication$heard$v;
     wire [15:0]DUT__l_module_OC_Echo$indication$heard2$a;
     wire [15:0]DUT__l_module_OC_Echo$indication$heard2$b;
@@ -486,6 +496,7 @@ module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
+    wire CLK, nRST;
     assign method$heard2__RDY = pipe$enq__RDY ;
     assign method$heard3__RDY = pipe$enq__RDY ;
     assign method$heard__RDY = pipe$enq__RDY ;
@@ -509,6 +520,7 @@ module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY);
+    wire CLK, nRST;
     assign method$say$v = pipe$enq$v[63:32] ;
     assign method$say2$a = pipe$enq$v[47:32] ;
     assign method$say2$b = pipe$enq$v[63:48] ;

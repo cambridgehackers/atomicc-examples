@@ -9,8 +9,6 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     output [127:0]out$first,
     output out$first__RDY);
     wire CLK, nRST;
-    reg __defaultClock;
-    reg __defaultnReset;
     reg [31:0]element$data0;
     reg [31:0]element$data1;
     reg [31:0]element$data2;
@@ -23,8 +21,6 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        __defaultClock <= 0;
-        __defaultnReset <= 0;
         element$data0 <= 0;
         element$data1 <= 0;
         element$data2 <= 0;
@@ -52,8 +48,6 @@ module l_module_OC_ModFt600 (
     output usb_oe_n,
     input [15:0]usb_ad);
     wire CLK, nRST;
-    reg __defaultClock;
-    reg __defaultnReset;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
@@ -325,8 +319,6 @@ module l_module_OC_ModFt600 (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        __defaultClock <= 0;
-        __defaultnReset <= 0;
         usb_fifo_empty <= 0;
         usb_rxf_delay <= 0;
         usb_txe_delay <= 0;
@@ -352,8 +344,6 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     output [127:0]out$enq$v,
     input out$enq__RDY);
     wire CLK, nRST;
-    reg __defaultClock;
-    reg __defaultnReset;
     wire fifoRule__ENA;
     wire fifoRule__RDY;
     wire forwardFifo$out$deq__RDY;
@@ -372,12 +362,5 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign in$enq__RDY = out$enq__RDY ;
     assign out$enq$v = fifoRule__ENA  ? { forwardFifo$out$first[127:96]  , forwardFifo$out$first[95:64]  , forwardFifo$out$first[63:32]  , forwardFifo$out$first[31:0]  } : in$enq$v ;
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-        __defaultClock <= 0;
-        __defaultnReset <= 0;
-      end // nRST
-    end // always @ (posedge CLK)
 endmodule 
 

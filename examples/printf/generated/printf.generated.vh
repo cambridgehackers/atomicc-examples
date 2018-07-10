@@ -40,7 +40,7 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY ;
 //METARULES; fifoRule
-//METASTART; l_top
+//METASTART; l_module_OC_l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
 //METAINTERNAL; DUT__l_module_OC_Echo; l_module_OC_Echo;
 //METAINTERNAL; mux; l_module_OC_MuxPipe;

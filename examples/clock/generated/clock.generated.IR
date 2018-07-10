@@ -35,8 +35,6 @@ EMODULE l_module_OC_IOBUF {
 MODULE l_module_OC_Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD INTEGER_1 __defaultClock
-    FIELD INTEGER_1 __defaultnReset
     FIELD l_struct_OC_NOCData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
@@ -49,8 +47,6 @@ MODULE l_module_OC_Fifo1 {
     METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }
 MODULE l_module_OC_ModFt600 {
-    FIELD INTEGER_1 __defaultClock
-    FIELD INTEGER_1 __defaultnReset
     INTERFACE l_ainterface_OC_Ft600 _
     FIELD INTEGER_1 usb_fifo_empty
     FIELD INTEGER_2 usb_rxf_delay
@@ -146,8 +142,6 @@ MODULE l_module_OC_ModFt600 {
     }
 }
 MODULE l_module_OC_MuxPipe {
-    FIELD INTEGER_1 __defaultClock
-    FIELD INTEGER_1 __defaultnReset
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
