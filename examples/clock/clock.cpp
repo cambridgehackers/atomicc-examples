@@ -29,8 +29,8 @@ typedef __int(16) aint16;
 #define aint8 __int(8)
 
 __interface Ft600 {
-  __input __int(1) CLK;
-  __input __int(1) nRST;
+  //changed __input __int(1) CLK;
+  //changed __input __int(1) nRST;
   __input __int(1) usb_clk;
   __input __int(1) usb_rxf;
   __input __int(1) usb_txe;
@@ -74,8 +74,8 @@ __module ModFt600 {
 	for (int i = 0; i < 16; i++) {
 	    __rule iobufs {
 	        iobufs[i]._.IO = _.usb_ad >> i;
-	        iobufs[i]._.CLK = _.CLK;
-	        iobufs[i]._.RST_N = _.nRST;
+	        iobufs[i]._.CLK = __defaultClock; //changed _.CLK;
+	        iobufs[i]._.RST_N = __defaultnReset; //changed _.nRST;
             }
         }
     }
