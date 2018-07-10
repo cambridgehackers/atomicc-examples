@@ -7,7 +7,7 @@ EMODULE l_struct_OC_ValuePair {
     FIELD/Count 20  INTEGER_32 c
 }
 EMODULE l_class_OC_IVectorTest {
-    FIELD l_module_OC_IVector ivector
+    FIELD IVector ivector
 }
 EMODULE l_ainterface_OC_IVectorRequest {
     METHOD say__ENA ( l_struct_OC_ValuePair v )
@@ -29,18 +29,18 @@ EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValuePair
 }
-EMODULE l_module_OC_Fifo {
+EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo_OC_2 {
+EMODULE Fifo_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
-EMODULE l_module_OC_IVectorIndication {
+EMODULE IVectorIndication {
     INTERFACE l_ainterface_OC_IndIF ind
 }
-MODULE l_module_OC_Fifo1 {
+MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
@@ -54,7 +54,7 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element))
 }
-MODULE l_module_OC_Fifo1_OC_3 {
+MODULE Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD l_struct_OC_ValuePair element
@@ -68,11 +68,11 @@ MODULE l_module_OC_Fifo1_OC_3 {
     }
     METHOD out$first l_struct_OC_ValuePair = ((element)) if ((full))
 }
-MODULE l_module_OC_FifoPong {
+MODULE FifoPong {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
-    FIELD l_module_OC_Fifo1_OC_3 element1
-    FIELD l_module_OC_Fifo1_OC_3 element2
+    FIELD Fifo1_OC_3 element1
+    FIELD Fifo1_OC_3 element2
     FIELD INTEGER_1 pong
     METHOD in$enq__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
@@ -91,9 +91,9 @@ MODULE l_module_OC_FifoPong {
         LET l_struct_OC_ValuePair ((pong) ^ 1):out$first$retval = element1$out$first
     }
 }
-MODULE l_module_OC_IVector {
+MODULE IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
-    FIELD l_module_OC_FifoPong fifo
+    FIELD FifoPong fifo
     INTERFACE/Ptr l_ainterface_OC_IndIF ind
     METHOD request$say__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{request$say$v}
@@ -106,11 +106,11 @@ MODULE l_module_OC_IVector {
         CALL/Action :ind$heard__ENA{respond__ENA$agg_2e_tmp}
     }
 }
-MODULE l_module_OC_MuxPipe {
+MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD l_module_OC_Fifo1 forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

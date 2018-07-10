@@ -1,14 +1,14 @@
 `ifndef __fifo_GENERATED__VH__
 `define __fifo_GENERATED__VH__
 
-//METASTART; l_module_OC_Fifo1
+//METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METAGUARD; out$first; 1;
-//METASTART; l_module_OC_MuxPipe
+//METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
 //METAGUARD; fifoRule; forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;

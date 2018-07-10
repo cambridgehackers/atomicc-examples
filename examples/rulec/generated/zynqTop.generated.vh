@@ -1,14 +1,14 @@
 `ifndef __zynqTop_GENERATED__VH__
 `define __zynqTop_GENERATED__VH__
 
-//METASTART; l_module_OC_Fifo1
+//METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full ;
 //METAGUARD; out$deq; full ;
 //METAGUARD; out$first; full ;
-//METASTART; l_module_OC_MuxPipe
+//METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
 //METAGUARD; fifoRule; forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
@@ -17,9 +17,9 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY ;
 //METARULES; fifoRule
-//METASTART; l_module_OC_ZynqTop
-//METAINTERNAL; mmcm; l_module_OC_MMCME2_ADV;
-//METAINTERNAL; pps; l_module_OC_PS7;
+//METASTART; ZynqTop
+//METAINTERNAL; mmcm; MMCME2_ADV;
+//METAINTERNAL; pps; PS7;
 //METAGUARD; init; 1;
 //METARULES; init
 `endif

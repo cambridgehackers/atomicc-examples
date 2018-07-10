@@ -1,6 +1,6 @@
 `include "zynqTop.generated.vh"
 
-module l_module_OC_Fifo1 (input CLK, input nRST,
+module Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -39,7 +39,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_MuxPipe (input CLK, input nRST,
+module MuxPipe (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -57,7 +57,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     wire forwardFifo$out$first__RDY;
     assign fifoRule__ENA = fifoRule__RDY ;
     assign fifoRule__RDY = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
-    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+    Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),
@@ -70,7 +70,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
 endmodule 
 
-module l_module_OC_ZynqTop (input CLK, input nRST);
+module ZynqTop (input CLK, input nRST);
     wire CLK, nRST;
     wire init__ENA;
     wire init__RDY;
@@ -712,7 +712,7 @@ module l_module_OC_ZynqTop (input CLK, input nRST);
     wire pps$SAXIHP3WVALID;
     assign init__ENA = init__RDY ;
     assign init__RDY = 1;
-    l_module_OC_MMCME2_ADV#(.REF_JITTER2(1.0e-2),.REF_JITTER1(1.0e-2),.CLKOUT6_PHASE(0.0),.CLKOUT6_DUTY_CYCLE(0.5),.CLKOUT6_DIVIDE(10),.CLKOUT5_PHASE(0.0),.CLKOUT5_DUTY_CYCLE(0.5),.CLKOUT5_DIVIDE(10),.CLKOUT4_PHASE(0.0),.CLKOUT4_DUTY_CYCLE(0.5),.CLKOUT4_DIVIDE(10),.CLKOUT3_PHASE(0.0),.CLKOUT3_DUTY_CYCLE(0.5),.CLKOUT3_DIVIDE(10),.CLKOUT2_PHASE(0.0),.CLKOUT2_DUTY_CYCLE(0.5),.CLKOUT2_DIVIDE(10),.CLKOUT1_PHASE(0.0),.CLKOUT1_DUTY_CYCLE(0.5),.CLKOUT1_DIVIDE(10),.CLKOUT0_PHASE(0.0),.CLKOUT0_DUTY_CYCLE(0.5),.CLKOUT0_DIVIDE_F(5.0),.DIVCLK_DIVIDE(1),.CLKIN2_PERIOD(0.0),.CLKIN1_PERIOD(10.0),.CLKFBOUT_PHASE(0.0),.CLKFBOUT_MULT_F(10.0),.STARTUP_WAIT("FALSE"),.COMPENSATION("ZHOLD"),.CLKOUT4_CASCADE("FALSE"),.CLKOUT6_USE_FINE_PS("FALSE"),.CLKOUT5_USE_FINE_PS("FALSE"),.CLKOUT4_USE_FINE_PS("FALSE"),.CLKOUT3_USE_FINE_PS("FALSE"),.CLKOUT2_USE_FINE_PS("FALSE"),.CLKOUT1_USE_FINE_PS("FALSE"),.CLKOUT0_USE_FINE_PS("FALSE"),.CLKFBOUT_USE_FINE_PS("FALSE"),.BANDWIDTH("OPTIMIZED")) mmcm (
+    MMCME2_ADV#(.REF_JITTER2(1.0e-2),.REF_JITTER1(1.0e-2),.CLKOUT6_PHASE(0.0),.CLKOUT6_DUTY_CYCLE(0.5),.CLKOUT6_DIVIDE(10),.CLKOUT5_PHASE(0.0),.CLKOUT5_DUTY_CYCLE(0.5),.CLKOUT5_DIVIDE(10),.CLKOUT4_PHASE(0.0),.CLKOUT4_DUTY_CYCLE(0.5),.CLKOUT4_DIVIDE(10),.CLKOUT3_PHASE(0.0),.CLKOUT3_DUTY_CYCLE(0.5),.CLKOUT3_DIVIDE(10),.CLKOUT2_PHASE(0.0),.CLKOUT2_DUTY_CYCLE(0.5),.CLKOUT2_DIVIDE(10),.CLKOUT1_PHASE(0.0),.CLKOUT1_DUTY_CYCLE(0.5),.CLKOUT1_DIVIDE(10),.CLKOUT0_PHASE(0.0),.CLKOUT0_DUTY_CYCLE(0.5),.CLKOUT0_DIVIDE_F(5.0),.DIVCLK_DIVIDE(1),.CLKIN2_PERIOD(0.0),.CLKIN1_PERIOD(10.0),.CLKFBOUT_PHASE(0.0),.CLKFBOUT_MULT_F(10.0),.STARTUP_WAIT("FALSE"),.COMPENSATION("ZHOLD"),.CLKOUT4_CASCADE("FALSE"),.CLKOUT6_USE_FINE_PS("FALSE"),.CLKOUT5_USE_FINE_PS("FALSE"),.CLKOUT4_USE_FINE_PS("FALSE"),.CLKOUT3_USE_FINE_PS("FALSE"),.CLKOUT2_USE_FINE_PS("FALSE"),.CLKOUT1_USE_FINE_PS("FALSE"),.CLKOUT0_USE_FINE_PS("FALSE"),.CLKFBOUT_USE_FINE_PS("FALSE"),.BANDWIDTH("OPTIMIZED")) mmcm (
         .CLKFBIN(1'd1),
         .CLKFBOUT(1'd1),
         .CLKFBOUTB(mmcm$CLKFBOUTB),
@@ -746,7 +746,7 @@ module l_module_OC_ZynqTop (input CLK, input nRST);
         .PSINCDEC(1'd0),
         .PWRDWN(1'd0),
         .RST(1'd1));
-    l_module_OC_PS7 pps (
+    PS7 pps (
         .DDRA(pps$DDRA),
         .DDRARB(pps$DDRARB),
         .DDRBA(pps$DDRBA),

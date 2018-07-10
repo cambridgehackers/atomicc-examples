@@ -1,6 +1,6 @@
 `include "before1.generated.vh"
 
-module l_module_OC_Connect (input CLK, input nRST,
+module Connect (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
@@ -43,7 +43,7 @@ module l_module_OC_Connect (input CLK, input nRST,
     assign swap2_rule__RDY = lEcho$swap$y2xnull__RDY ;
     assign swap_rule__ENA = swap_rule__RDY ;
     assign swap_rule__RDY = lEcho$swap$x2y__RDY  & lEcho$swap$y2x__RDY ;
-    l_module_OC_EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
+    EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
         .indication$heard__ENA(lEcho$indication$heard__ENA),
         .indication$heard$meth(lEcho$indication$heard$meth),
         .indication$heard$v(lEcho$indication$heard$v),
@@ -51,7 +51,7 @@ module l_module_OC_Connect (input CLK, input nRST,
         .pipe$enq__ENA(lEIO$pipe$enq__ENA),
         .pipe$enq$v(lEIO$pipe$enq$v),
         .pipe$enq__RDY(lEII_test$pipe$enq__RDY));
-    l_module_OC_EchoRequestInput lERI (.CLK(CLK), .nRST(nRST),
+    EchoRequestInput lERI (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
         .pipe$enq__RDY(lERI$pipe$enq__RDY),
@@ -63,7 +63,7 @@ module l_module_OC_Connect (input CLK, input nRST,
         .request$say2$v(lERI$request$say2$v),
         .request$say2__RDY(lEcho$request$say2__RDY),
         .request$say__RDY(lEcho$request$say__RDY));
-    l_module_OC_Echo lEcho (.CLK(CLK), .nRST(nRST),
+    Echo lEcho (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(lERI$request$say__ENA),
         .request$say$meth(lERI$request$say$meth),
         .request$say$v(lERI$request$say$v),
@@ -82,7 +82,7 @@ module l_module_OC_Connect (input CLK, input nRST,
         .indication$heard$meth(lEcho$indication$heard$meth),
         .indication$heard$v(lEcho$indication$heard$v),
         .indication$heard__RDY(lEIO$indication$heard__RDY));
-    l_module_OC_EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
+    EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(request$say__ENA),
         .request$say$meth(request$say$meth),
         .request$say$v(request$say$v),
@@ -94,7 +94,7 @@ module l_module_OC_Connect (input CLK, input nRST,
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
         .pipe$enq__RDY(lERI$pipe$enq__RDY));
-    l_module_OC_EchoIndicationInput lEII_test (.CLK(CLK), .nRST(nRST),
+    EchoIndicationInput lEII_test (.CLK(CLK), .nRST(nRST),
         .pipe$enq__ENA(lEIO$pipe$enq__ENA),
         .pipe$enq$v(lEIO$pipe$enq$v),
         .pipe$enq__RDY(lEII_test$pipe$enq__RDY),
@@ -117,7 +117,7 @@ module l_module_OC_Connect (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Echo (input CLK, input nRST,
+module Echo (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
@@ -212,7 +212,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_EchoIndicationInput (input CLK, input nRST,
+module EchoIndicationInput (input CLK, input nRST,
     input pipe$enq__ENA,
     input [95:0]pipe$enq$v,
     output pipe$enq__RDY,
@@ -256,7 +256,7 @@ module l_module_OC_EchoIndicationInput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
+module EchoIndicationOutput (input CLK, input nRST,
     input indication$heard__ENA,
     input [31:0]indication$heard$meth,
     input [31:0]indication$heard$v,
@@ -322,7 +322,7 @@ module l_module_OC_EchoIndicationOutput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_EchoRequestInput (input CLK, input nRST,
+module EchoRequestInput (input CLK, input nRST,
     input pipe$enq__ENA,
     input [191:0]pipe$enq$v,
     output pipe$enq__RDY,
@@ -354,7 +354,7 @@ module l_module_OC_EchoRequestInput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_EchoRequestOutput (input CLK, input nRST,
+module EchoRequestOutput (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
@@ -400,7 +400,7 @@ module l_module_OC_EchoRequestOutput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Fifo1 (input CLK, input nRST,
+module Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -439,7 +439,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_MuxPipe (input CLK, input nRST,
+module MuxPipe (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -457,7 +457,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     wire forwardFifo$out$first__RDY;
     assign fifoRule__ENA = fifoRule__RDY ;
     assign fifoRule__RDY = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
-    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+    Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),

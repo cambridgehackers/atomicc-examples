@@ -1,6 +1,6 @@
 `include "fifo.generated.vh"
 
-module l_module_OC_Fifo1 (input CLK, input nRST,
+module Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -39,7 +39,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_MuxPipe (input CLK, input nRST,
+module MuxPipe (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -57,7 +57,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     wire forwardFifo$out$first__RDY;
     assign fifoRule__ENA = fifoRule__RDY ;
     assign fifoRule__RDY = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
-    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+    Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),

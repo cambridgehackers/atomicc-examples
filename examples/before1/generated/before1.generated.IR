@@ -54,11 +54,11 @@ EMODULE l_ainterface_OC_Swap {
     METHOD y2x__ENA
     METHOD y2xnull__ENA
 }
-EMODULE l_module_OC_Fifo {
+EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-MODULE l_module_OC_Connect {
+MODULE Connect {
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
     INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_1
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
@@ -66,11 +66,11 @@ MODULE l_module_OC_Connect {
     INTERFACECONNECT lEII_test$indication indication l_ainterface_OC_EchoIndication
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    FIELD l_module_OC_EchoIndicationOutput lEIO
-    FIELD l_module_OC_EchoRequestInput lERI
-    FIELD l_module_OC_Echo lEcho
-    FIELD l_module_OC_EchoRequestOutput lERO_test
-    FIELD l_module_OC_EchoIndicationInput lEII_test
+    FIELD EchoIndicationOutput lEIO
+    FIELD EchoRequestInput lERI
+    FIELD Echo lEcho
+    FIELD EchoRequestOutput lERO_test
+    FIELD EchoIndicationInput lEII_test
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
     }
@@ -87,7 +87,7 @@ MODULE l_module_OC_Connect {
         CALL/Action :lEcho$swap$y2x__ENA{}
     }
 }
-MODULE l_module_OC_Echo {
+MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE l_ainterface_OC_Swap swap
     FIELD INTEGER_1 busy
@@ -135,7 +135,7 @@ MODULE l_module_OC_Echo {
         PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",202}
     }
 }
-MODULE l_module_OC_EchoIndicationInput {
+MODULE EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD INTEGER_1 busy_delay
@@ -155,7 +155,7 @@ MODULE l_module_OC_EchoIndicationInput {
         STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):busy_delay = 1
     }
 }
-MODULE l_module_OC_EchoIndicationOutput {
+MODULE EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication indication
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
     FIELD l_struct_OC_EchoIndication_data ind0
@@ -182,7 +182,7 @@ MODULE l_module_OC_EchoIndicationOutput {
         CALL/Action :pipe$enq__ENA{ind1}
     }
 }
-MODULE l_module_OC_EchoRequestInput {
+MODULE EchoRequestInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest request
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
@@ -193,7 +193,7 @@ MODULE l_module_OC_EchoRequestInput {
         CALL/Action ((pipe$enq__ENA$v_2e_addr$tag) == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
     }
 }
-MODULE l_module_OC_EchoRequestOutput {
+MODULE EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
@@ -213,7 +213,7 @@ MODULE l_module_OC_EchoRequestOutput {
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     }
 }
-MODULE l_module_OC_Fifo1 {
+MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
@@ -227,11 +227,11 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }
-MODULE l_module_OC_MuxPipe {
+MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD l_module_OC_Fifo1 forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

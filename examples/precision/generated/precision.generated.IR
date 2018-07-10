@@ -6,7 +6,7 @@ EMODULE l_struct_OC_ValueType {
     FIELD INTEGER_4 b
 }
 EMODULE l_class_OC_IVectorTest {
-    FIELD l_module_OC_IVector ivector
+    FIELD IVector ivector
 }
 EMODULE l_ainterface_OC_IVectorIndication {
     METHOD heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
@@ -28,21 +28,21 @@ EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValueType
 }
-EMODULE l_module_OC_Fifo {
+EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo_OC_3 {
+EMODULE Fifo_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
-EMODULE l_module_OC_IVectorInd {
+EMODULE IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
     METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
         PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
     }
 }
-MODULE l_module_OC_Fifo1 {
+MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
@@ -56,7 +56,7 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element))
 }
-MODULE l_module_OC_Fifo1_OC_2 {
+MODULE Fifo1_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD l_struct_OC_ValueType element
@@ -70,10 +70,10 @@ MODULE l_module_OC_Fifo1_OC_2 {
     }
     METHOD out$first l_struct_OC_ValueType = ((element)) if ((full))
 }
-MODULE l_module_OC_IVector {
+MODULE IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
     INTERFACE/Ptr l_ainterface_OC_IVectorIndication ind
-    FIELD l_module_OC_Fifo1_OC_2 fifo
+    FIELD Fifo1_OC_2 fifo
     FIELD INTEGER_8 fcounter
     FIELD INTEGER_9 counter
     FIELD INTEGER_9 gcounter
@@ -91,11 +91,11 @@ MODULE l_module_OC_IVector {
         CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
     }
 }
-MODULE l_module_OC_MuxPipe {
+MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD l_module_OC_Fifo1 forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

@@ -1,6 +1,6 @@
 `include "printf.generated.vh"
 
-module l_module_OC_Echo (input CLK, input nRST,
+module Echo (input CLK, input nRST,
     input request$say__ENA,
     input [31:0]request$say$v,
     input request$say2__ENA,
@@ -111,7 +111,7 @@ module l_module_OC_Echo (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_Fifo1 (input CLK, input nRST,
+module Fifo1 (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -150,7 +150,7 @@ module l_module_OC_Fifo1 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
-module l_module_OC_MuxPipe (input CLK, input nRST,
+module MuxPipe (input CLK, input nRST,
     input in$enq__ENA,
     input [127:0]in$enq$v,
     output in$enq__RDY,
@@ -168,7 +168,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     wire forwardFifo$out$first__RDY;
     assign fifoRule__ENA = fifoRule__RDY ;
     assign fifoRule__RDY = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
-    l_module_OC_Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
+    Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),
@@ -181,7 +181,7 @@ module l_module_OC_MuxPipe (input CLK, input nRST,
     assign out$enq__ENA = fifoRule__ENA  || in$enq__ENA ;
 endmodule 
 
-module l_module_OC_l_top (input CLK, input nRST,
+module l_top (input CLK, input nRST,
     output indication$enq__ENA,
     output [127:0]indication$enq$v,
     input indication$enq__RDY,
@@ -189,22 +189,22 @@ module l_module_OC_l_top (input CLK, input nRST,
     input [127:0]request$enq$v,
     output request$enq__RDY);
     wire CLK, nRST;
-    wire [31:0]DUT__l_module_OC_Echo$indication$heard$v;
-    wire [15:0]DUT__l_module_OC_Echo$indication$heard2$a;
-    wire [15:0]DUT__l_module_OC_Echo$indication$heard2$b;
-    wire DUT__l_module_OC_Echo$indication$heard2__ENA;
-    wire [15:0]DUT__l_module_OC_Echo$indication$heard3$a;
-    wire [31:0]DUT__l_module_OC_Echo$indication$heard3$b;
-    wire [31:0]DUT__l_module_OC_Echo$indication$heard3$c;
-    wire [15:0]DUT__l_module_OC_Echo$indication$heard3$d;
-    wire DUT__l_module_OC_Echo$indication$heard3__ENA;
-    wire DUT__l_module_OC_Echo$indication$heard__ENA;
-    wire [127:0]DUT__l_module_OC_Echo$printfp$enq$v;
-    wire DUT__l_module_OC_Echo$printfp$enq__ENA;
-    wire DUT__l_module_OC_Echo$request$say2__RDY;
-    wire DUT__l_module_OC_Echo$request$say__RDY;
-    wire DUT__l_module_OC_Echo$request$setLeds__RDY;
-    wire DUT__l_module_OC_Echo$request$zsay4__RDY;
+    wire [31:0]DUT__Echo$indication$heard$v;
+    wire [15:0]DUT__Echo$indication$heard2$a;
+    wire [15:0]DUT__Echo$indication$heard2$b;
+    wire DUT__Echo$indication$heard2__ENA;
+    wire [15:0]DUT__Echo$indication$heard3$a;
+    wire [31:0]DUT__Echo$indication$heard3$b;
+    wire [31:0]DUT__Echo$indication$heard3$c;
+    wire [15:0]DUT__Echo$indication$heard3$d;
+    wire DUT__Echo$indication$heard3__ENA;
+    wire DUT__Echo$indication$heard__ENA;
+    wire [127:0]DUT__Echo$printfp$enq$v;
+    wire DUT__Echo$printfp$enq__ENA;
+    wire DUT__Echo$request$say2__RDY;
+    wire DUT__Echo$request$say__RDY;
+    wire DUT__Echo$request$setLeds__RDY;
+    wire DUT__Echo$request$zsay4__RDY;
     wire M2P__indication$method$heard2__RDY;
     wire M2P__indication$method$heard3__RDY;
     wire M2P__indication$method$heard__RDY;
@@ -220,81 +220,81 @@ module l_module_OC_l_top (input CLK, input nRST,
     wire P2M__request$method$zsay4__ENA;
     wire mux$forward$enq__RDY;
     wire mux$in$enq__RDY;
-    l_module_OC_Echo DUT__l_module_OC_Echo (.CLK(CLK), .nRST(nRST),
+    Echo DUT__Echo (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(P2M__request$method$say__ENA),
         .request$say$v(P2M__request$method$say$v),
         .request$say2__ENA(P2M__request$method$say2__ENA),
         .request$say2$a(P2M__request$method$say2$a),
         .request$say2$b(P2M__request$method$say2$b),
-        .request$say2__RDY(DUT__l_module_OC_Echo$request$say2__RDY),
-        .request$say__RDY(DUT__l_module_OC_Echo$request$say__RDY),
+        .request$say2__RDY(DUT__Echo$request$say2__RDY),
+        .request$say__RDY(DUT__Echo$request$say__RDY),
         .request$setLeds__ENA(P2M__request$method$setLeds__ENA),
         .request$setLeds$v(P2M__request$method$setLeds$v),
-        .request$setLeds__RDY(DUT__l_module_OC_Echo$request$setLeds__RDY),
+        .request$setLeds__RDY(DUT__Echo$request$setLeds__RDY),
         .request$zsay4__ENA(P2M__request$method$zsay4__ENA),
-        .request$zsay4__RDY(DUT__l_module_OC_Echo$request$zsay4__RDY),
-        .indication$heard__ENA(DUT__l_module_OC_Echo$indication$heard__ENA),
-        .indication$heard$v(DUT__l_module_OC_Echo$indication$heard$v),
-        .indication$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
-        .indication$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
-        .indication$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
+        .request$zsay4__RDY(DUT__Echo$request$zsay4__RDY),
+        .indication$heard__ENA(DUT__Echo$indication$heard__ENA),
+        .indication$heard$v(DUT__Echo$indication$heard$v),
+        .indication$heard2__ENA(DUT__Echo$indication$heard2__ENA),
+        .indication$heard2$a(DUT__Echo$indication$heard2$a),
+        .indication$heard2$b(DUT__Echo$indication$heard2$b),
         .indication$heard2__RDY(M2P__indication$method$heard2__RDY),
-        .indication$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
-        .indication$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
-        .indication$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
-        .indication$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
-        .indication$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
+        .indication$heard3__ENA(DUT__Echo$indication$heard3__ENA),
+        .indication$heard3$a(DUT__Echo$indication$heard3$a),
+        .indication$heard3$b(DUT__Echo$indication$heard3$b),
+        .indication$heard3$c(DUT__Echo$indication$heard3$c),
+        .indication$heard3$d(DUT__Echo$indication$heard3$d),
         .indication$heard3__RDY(M2P__indication$method$heard3__RDY),
         .indication$heard__RDY(M2P__indication$method$heard__RDY),
-        .printfp$enq__ENA(DUT__l_module_OC_Echo$printfp$enq__ENA),
-        .printfp$enq$v(DUT__l_module_OC_Echo$printfp$enq$v),
+        .printfp$enq__ENA(DUT__Echo$printfp$enq__ENA),
+        .printfp$enq$v(DUT__Echo$printfp$enq$v),
         .printfp$enq__RDY(mux$forward$enq__RDY));
-    l_module_OC_MuxPipe mux (.CLK(CLK), .nRST(nRST),
+    MuxPipe mux (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(M2P__indication$pipe$enq__ENA),
         .in$enq$v(M2P__indication$pipe$enq$v),
         .in$enq__RDY(mux$in$enq__RDY),
-        .forward$enq__ENA(DUT__l_module_OC_Echo$printfp$enq__ENA),
-        .forward$enq$v(DUT__l_module_OC_Echo$printfp$enq$v),
+        .forward$enq__ENA(DUT__Echo$printfp$enq__ENA),
+        .forward$enq$v(DUT__Echo$printfp$enq$v),
         .forward$enq__RDY(mux$forward$enq__RDY),
         .out$enq__ENA(indication$enq__ENA),
         .out$enq$v(indication$enq$v),
         .out$enq__RDY(indication$enq__RDY));
-    l_module_OC_EchoIndication___M2P M2P__indication (.CLK(CLK), .nRST(nRST),
-        .method$heard__ENA(DUT__l_module_OC_Echo$indication$heard__ENA),
-        .method$heard$v(DUT__l_module_OC_Echo$indication$heard$v),
-        .method$heard2__ENA(DUT__l_module_OC_Echo$indication$heard2__ENA),
-        .method$heard2$a(DUT__l_module_OC_Echo$indication$heard2$a),
-        .method$heard2$b(DUT__l_module_OC_Echo$indication$heard2$b),
+    EchoIndication___M2P M2P__indication (.CLK(CLK), .nRST(nRST),
+        .method$heard__ENA(DUT__Echo$indication$heard__ENA),
+        .method$heard$v(DUT__Echo$indication$heard$v),
+        .method$heard2__ENA(DUT__Echo$indication$heard2__ENA),
+        .method$heard2$a(DUT__Echo$indication$heard2$a),
+        .method$heard2$b(DUT__Echo$indication$heard2$b),
         .method$heard2__RDY(M2P__indication$method$heard2__RDY),
-        .method$heard3__ENA(DUT__l_module_OC_Echo$indication$heard3__ENA),
-        .method$heard3$a(DUT__l_module_OC_Echo$indication$heard3$a),
-        .method$heard3$b(DUT__l_module_OC_Echo$indication$heard3$b),
-        .method$heard3$c(DUT__l_module_OC_Echo$indication$heard3$c),
-        .method$heard3$d(DUT__l_module_OC_Echo$indication$heard3$d),
+        .method$heard3__ENA(DUT__Echo$indication$heard3__ENA),
+        .method$heard3$a(DUT__Echo$indication$heard3$a),
+        .method$heard3$b(DUT__Echo$indication$heard3$b),
+        .method$heard3$c(DUT__Echo$indication$heard3$c),
+        .method$heard3$d(DUT__Echo$indication$heard3$d),
         .method$heard3__RDY(M2P__indication$method$heard3__RDY),
         .method$heard__RDY(M2P__indication$method$heard__RDY),
         .pipe$enq__ENA(M2P__indication$pipe$enq__ENA),
         .pipe$enq$v(M2P__indication$pipe$enq$v),
         .pipe$enq__RDY(mux$in$enq__RDY));
-    l_module_OC_EchoRequest___P2M P2M__request (.CLK(CLK), .nRST(nRST),
+    EchoRequest___P2M P2M__request (.CLK(CLK), .nRST(nRST),
         .method$say__ENA(P2M__request$method$say__ENA),
         .method$say$v(P2M__request$method$say$v),
         .method$say2__ENA(P2M__request$method$say2__ENA),
         .method$say2$a(P2M__request$method$say2$a),
         .method$say2$b(P2M__request$method$say2$b),
-        .method$say2__RDY(DUT__l_module_OC_Echo$request$say2__RDY),
-        .method$say__RDY(DUT__l_module_OC_Echo$request$say__RDY),
+        .method$say2__RDY(DUT__Echo$request$say2__RDY),
+        .method$say__RDY(DUT__Echo$request$say__RDY),
         .method$setLeds__ENA(P2M__request$method$setLeds__ENA),
         .method$setLeds$v(P2M__request$method$setLeds$v),
-        .method$setLeds__RDY(DUT__l_module_OC_Echo$request$setLeds__RDY),
+        .method$setLeds__RDY(DUT__Echo$request$setLeds__RDY),
         .method$zsay4__ENA(P2M__request$method$zsay4__ENA),
-        .method$zsay4__RDY(DUT__l_module_OC_Echo$request$zsay4__RDY),
+        .method$zsay4__RDY(DUT__Echo$request$zsay4__RDY),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
 endmodule 
 
-module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
+module EchoIndication___M2P (input CLK, input nRST,
     input method$heard__ENA,
     input [31:0]method$heard$v,
     input method$heard2__ENA,
@@ -319,7 +319,7 @@ module l_module_OC_EchoIndication___M2P (input CLK, input nRST,
     assign pipe$enq__ENA = method$heard__ENA  || method$heard2__ENA  || method$heard3__ENA ;
 endmodule 
 
-module l_module_OC_EchoRequest___P2M (input CLK, input nRST,
+module EchoRequest___P2M (input CLK, input nRST,
     output method$say__ENA,
     output [31:0]method$say$v,
     output method$say2__ENA,

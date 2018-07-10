@@ -2,7 +2,7 @@ EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
 }
 EMODULE l_class_OC_EchoTest {
-    FIELD l_module_OC_Echo echo
+    FIELD Echo echo
     FIELD INTEGER_32 x
 }
 EMODULE l_ainterface_OC_EchoIndication {
@@ -25,21 +25,21 @@ EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
     METHOD first INTEGER_32
 }
-EMODULE l_module_OC_EchoInd {
+EMODULE EchoInd {
     INTERFACE l_ainterface_OC_EchoIndication hout
 }
-EMODULE l_module_OC_Fifo {
+EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE l_module_OC_Fifo_OC_2 {
+EMODULE Fifo_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
-MODULE l_module_OC_Echo {
+MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
     INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
-    FIELD l_module_OC_Fifo1_OC_3 fifo
+    FIELD Fifo1_OC_3 fifo
     METHOD/Rule respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
@@ -49,7 +49,7 @@ MODULE l_module_OC_Echo {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
 }
-MODULE l_module_OC_Fifo1 {
+MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
@@ -63,7 +63,7 @@ MODULE l_module_OC_Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element))
 }
-MODULE l_module_OC_Fifo1_OC_3 {
+MODULE Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_32 element
@@ -77,11 +77,11 @@ MODULE l_module_OC_Fifo1_OC_3 {
     }
     METHOD out$first INTEGER_32 = ((element)) if ((full))
 }
-MODULE l_module_OC_MuxPipe {
+MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD l_module_OC_Fifo1 forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule fifoRule__ENA {
         ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

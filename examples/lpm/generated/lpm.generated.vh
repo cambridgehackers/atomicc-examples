@@ -1,26 +1,26 @@
 `ifndef __lpm_GENERATED__VH__
 `define __lpm_GENERATED__VH__
 
-//METASTART; l_module_OC_Fifo1
+//METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METAGUARD; out$first; 1;
-//METASTART; l_module_OC_Fifo1_OC_2
+//METASTART; Fifo1_OC_2
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full ;
 //METAGUARD; out$deq; full ;
 //METAGUARD; out$first; full ;
-//METASTART; l_module_OC_Fifo2
+//METASTART; Fifo2
 //METAGUARD; in$enq; ( ( windex  + 1 ) % 2 ) != rindex ;
 //METAGUARD; out$deq; rindex  != windex ;
 //METAGUARD; out$first; rindex  != windex ;
-//METASTART; l_module_OC_Lpm
+//METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
-//METAINTERNAL; inQ; l_module_OC_Fifo1_OC_2;
-//METAINTERNAL; fifo; l_module_OC_Fifo2;
-//METAINTERNAL; outQ; l_module_OC_Fifo1_OC_2;
-//METAINTERNAL; mem; l_module_OC_LpmMemory;
+//METAINTERNAL; inQ; Fifo1_OC_2;
+//METAINTERNAL; fifo; Fifo2;
+//METAINTERNAL; outQ; Fifo1_OC_2;
+//METAINTERNAL; mem; LpmMemory;
 //METAINVOKE; enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; enter__ENA; recirc__ENA
 //METAGUARD; enter; inQ$out$first__RDY  & inQ$out$deq__RDY  & fifo$in$enq__RDY  & mem$ifc$req__RDY ;
@@ -35,7 +35,7 @@
 //METAGUARD; respond; outQ$out$first__RDY  & outQ$out$deq__RDY  & ind$heard__RDY ;
 //METARULES; enter; exit_rule; recirc; respond
 //METAPRIORITY; recirc; enter;exit
-//METASTART; l_module_OC_LpmMemory
+//METASTART; LpmMemory
 //METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA; memdelay_rule__ENA
 //METAGUARD; ifc$req; delayCount  == 32'd0;
 //METAEXCLUSIVE; ifc$resAccept__ENA; memdelay_rule__ENA
@@ -43,9 +43,9 @@
 //METAGUARD; ifc$resValue; delayCount  == 32'd1;
 //METAGUARD; memdelay_rule; ( delayCount  > 1 ) != 0;
 //METARULES; memdelay_rule
-//METASTART; l_module_OC_MuxPipe
+//METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; l_module_OC_Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
 //METAGUARD; fifoRule; forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
