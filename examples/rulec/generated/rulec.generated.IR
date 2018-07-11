@@ -177,15 +177,15 @@ MODULE indConnect {
     INTERFACE l_ainterface_OC_PipeIn indication
     INTERFACE/Ptr l_ainterface_OC_PipeInH rad
     METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
-        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq$v}
-        CALL/Action :rad$enq__ENA{indication$enq$v,indication$enq$v}
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,(indication$enq$v) - (1)}
+        CALL/Action :rad$enq__ENA{indication$enq$v,(indication$enq$v) - (1)}
     }
 }
 MODULE reqConnect {
     INTERFACE l_ainterface_OC_PipeInH wad
     INTERFACE/Ptr l_ainterface_OC_PipeIn request
-    METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 len ) {
-        PRINTF :printf{"reqConnect.enq v %llx len %lx\n",wad$enq$v,wad$enq$len}
+    METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+        PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
         CALL/Action :request$enq__ENA{wad$enq$v}
     }
 }

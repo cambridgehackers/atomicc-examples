@@ -150,7 +150,7 @@ __module indConnect {
     PipeIn<NOCData> indication;
     PipeInH<NOCData> *rad;
     void indication.enq(NOCData v) {
-        __int(16) len = __bit_cast<__int(__bitsize(v))>(v);
+        __int(16) len = __bit_cast<__int(__bitsize(v))>(v) - 1;
 printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
         rad->enq(v, len);
     }
@@ -158,8 +158,8 @@ printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(
 __module reqConnect {
     PipeInH<NOCData> wad;
     PipeIn<NOCData> *request;
-    void wad.enq(NOCData v, __int(16) len) {
-printf("reqConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
+    void wad.enq(NOCData v, __int(16) length) {
+printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
         request->enq(v);
     }
 };

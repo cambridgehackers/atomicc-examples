@@ -10,7 +10,7 @@ module indConnect (input CLK, input nRST,
     input rad$enq__RDY);
     wire CLK, nRST;
     assign indication$enq__RDY = rad$enq__RDY ;
-    assign rad$enq$length = indication$enq$v ;
+    assign rad$enq$length = indication$enq$v  - 1;
     assign rad$enq$v = indication$enq$v ;
     assign rad$enq__ENA = indication$enq__ENA ;
 
@@ -19,7 +19,7 @@ module indConnect (input CLK, input nRST,
       end // nRST
       else begin
         if (indication$enq__ENA) begin
-            $display( "indConnect.enq v %llx len %lx" , indication$enq$v , indication$enq$v );
+            $display( "indConnect.enq v %llx len %lx" , indication$enq$v , ( indication$enq$v - 1 ) );
         end; // End of indication$enq__ENA
       end
     end // always @ (posedge CLK)
