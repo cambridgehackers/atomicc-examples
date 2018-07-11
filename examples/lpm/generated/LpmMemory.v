@@ -14,9 +14,7 @@ module LpmMemory (input CLK, input nRST,
     reg [31:0]saved$b;
     reg [31:0]saved$c;
     wire memdelay_rule__ENA;
-    wire memdelay_rule__RDY;
-    assign memdelay_rule__ENA = memdelay_rule__RDY ;
-    assign memdelay_rule__RDY = ( delayCount  > 1 ) != 0;
+    assign memdelay_rule__ENA = ( delayCount  > 1 ) != 0;
     assign ifc$req__RDY = delayCount  == 32'd0;
     assign ifc$resAccept__RDY = delayCount  == 32'd1;
     assign ifc$resValue = { saved$c  , saved$b  , saved$a  };

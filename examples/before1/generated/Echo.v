@@ -29,13 +29,9 @@ module Echo (input CLK, input nRST,
     reg [31:0]x;
     reg [31:0]y;
     wire delay_rule__ENA;
-    wire delay_rule__RDY;
     wire respond_rule__ENA;
-    wire respond_rule__RDY;
-    assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( busy  & ( !busy_delay  ) ) != 0;
-    assign respond_rule__ENA = respond_rule__RDY ;
-    assign respond_rule__RDY = busy_delay  & indication$heard__RDY ;
+    assign delay_rule__ENA = ( busy  & ( !busy_delay  ) ) != 0;
+    assign respond_rule__ENA = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = respond_rule__ENA ;

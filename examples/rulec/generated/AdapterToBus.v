@@ -13,9 +13,7 @@ module AdapterToBus (input CLK, input nRST,
     reg [127:0]buffer;
     reg [15:0]remain;
     wire copyRule__ENA;
-    wire copyRule__RDY;
-    assign copyRule__ENA = copyRule__RDY ;
-    assign copyRule__RDY = ( remain  != 16'd0 ) & out$enq__RDY ;
+    assign copyRule__ENA = ( remain  != 16'd0 ) & out$enq__RDY ;
     assign in$enq__RDY = remain  == 16'd0;
     assign out$enq$last = remain  == 16'd1;
     assign out$enq$v = buffer ;

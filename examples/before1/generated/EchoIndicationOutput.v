@@ -18,13 +18,9 @@ module EchoIndicationOutput (input CLK, input nRST,
     reg [31:0]ind1$tag;
     reg ind_busy;
     wire output_rulee__ENA;
-    wire output_rulee__RDY;
     wire output_ruleo__ENA;
-    wire output_ruleo__RDY;
-    assign output_rulee__ENA = output_rulee__RDY ;
-    assign output_rulee__RDY = ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
-    assign output_ruleo__ENA = output_ruleo__RDY ;
-    assign output_ruleo__RDY = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
+    assign output_rulee__ENA = ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
+    assign output_ruleo__ENA = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
     assign indication$heard__RDY = !ind_busy ;
     assign pipe$enq$v = output_rulee__ENA  ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
     assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;

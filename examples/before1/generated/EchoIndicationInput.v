@@ -13,9 +13,7 @@ module EchoIndicationInput (input CLK, input nRST,
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
     wire input_rule__ENA;
-    wire input_rule__RDY;
-    assign input_rule__ENA = input_rule__RDY ;
-    assign input_rule__RDY = busy_delay  & indication$heard__RDY ;
+    assign input_rule__ENA = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
     assign indication$heard__ENA = input_rule__ENA ;

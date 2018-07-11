@@ -12,9 +12,7 @@ module IVector (input CLK, input nRST,
     wire [703:0]fifo$out$first;
     wire fifo$out$first__RDY;
     wire respond__ENA;
-    wire respond__RDY;
-    assign respond__ENA = respond__RDY ;
-    assign respond__RDY = fifo$out$deq__RDY  & fifo$out$first__RDY  & ind$heard__RDY ;
+    assign respond__ENA = fifo$out$deq__RDY  & fifo$out$first__RDY  & ind$heard__RDY ;
     FifoPong fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v(request$say$v),

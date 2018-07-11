@@ -11,9 +11,7 @@ module Echo (input CLK, input nRST,
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     wire respond_rule__ENA;
-    wire respond_rule__RDY;
-    assign respond_rule__ENA = respond_rule__RDY ;
-    assign respond_rule__RDY = fifo$out$deq__RDY  & fifo$out$first__RDY  & ind$heard__RDY ;
+    assign respond_rule__ENA = fifo$out$deq__RDY  & fifo$out$first__RDY  & ind$heard__RDY ;
     Fifo1_OC_3 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(sout$say__ENA),
         .in$enq$v(sout$say$v),

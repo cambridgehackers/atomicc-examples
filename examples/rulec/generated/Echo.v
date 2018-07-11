@@ -38,13 +38,9 @@ module Echo (input CLK, input nRST,
     reg [31:0]v_type;
     reg [17:0]xxx;
     wire delay_rule__ENA;
-    wire delay_rule__RDY;
     wire respond_rule__ENA;
-    wire respond_rule__RDY;
-    assign delay_rule__ENA = delay_rule__RDY ;
-    assign delay_rule__RDY = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
-    assign respond_rule__ENA = respond_rule__RDY ;
-    assign respond_rule__RDY = ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
+    assign delay_rule__ENA = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
+    assign respond_rule__ENA = ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;

@@ -13,9 +13,7 @@ module AdapterFromBus (input CLK, input nRST,
     reg [127:0]buffer;
     reg waitForEnq;
     wire pushValue__ENA;
-    wire pushValue__RDY;
-    assign pushValue__ENA = pushValue__RDY ;
-    assign pushValue__RDY = waitForEnq  & out$enq__RDY ;
+    assign pushValue__ENA = waitForEnq  & out$enq__RDY ;
     assign in$enq__RDY = !waitForEnq ;
     assign out$enq$length = 0;
     assign out$enq$v = buffer ;

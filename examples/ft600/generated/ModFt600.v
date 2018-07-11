@@ -13,7 +13,6 @@ module ModFt600 (
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
     wire handshake__ENA;
-    wire handshake__RDY;
     wire iobufs0$I;
     wire iobufs0$O;
     wire iobufs0$T;
@@ -63,11 +62,8 @@ module ModFt600 (
     wire iobufs9$O;
     wire iobufs9$T;
     wire iobufs__ENA;
-    wire iobufs__RDY;
-    assign handshake__ENA = handshake__RDY ;
-    assign handshake__RDY = 1;
-    assign iobufs__ENA = iobufs__RDY ;
-    assign iobufs__RDY = 1;
+    assign handshake__ENA = 1;
+    assign iobufs__ENA = 1;
     IOBUF iobufs0 (
         .IO(usb_ad >> 0),
         .I(iobufs0$I),
