@@ -25,12 +25,12 @@ module AdapterFromBus (input CLK, input nRST,
         waitForEnq <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA) begin
+        if (in$enq__ENA & in$enq__RDY) begin
             buffer  <= in$enq$v | ( buffer << 32 );
             if (in$enq$last)
             waitForEnq  <= 1;
         end; // End of in$enq__ENA
-        if (pushValue__ENA) begin
+        if (pushValue__ENA & waitForEnq & out$enq__RDY) begin
             waitForEnq  <= 0;
         end; // End of pushValue__ENA
       end

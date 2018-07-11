@@ -26,11 +26,11 @@ module EchoIndicationInput (input CLK, input nRST,
         v_delay <= 0;
       end // nRST
       else begin
-        if (input_rule__ENA) begin
+        if (input_rule__ENA & busy_delay & indication$heard__RDY) begin
             busy_delay  <= 0;
             $display( "input_rule: EchoIndicationInput" );
         end; // End of input_rule__ENA
-        if (pipe$enq__ENA) begin
+        if (pipe$enq__ENA & pipe$enq__RDY) begin
             $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe$enq$v[31:0] );
             if (pipe$enq$v[31:0] == 32'd1) begin
             meth_delay  <= pipe$enq$v[63:32];

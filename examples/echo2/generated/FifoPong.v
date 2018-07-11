@@ -19,18 +19,18 @@ module FifoPong (input CLK, input nRST,
     wire [703:0]element2$out$first;
     wire element2$out$first__RDY;
     Fifo1_OC_3 element1 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
+        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA & ( ( pong ^ 1 ) | element2$in$enq__RDY )),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
-        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA),
+        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA & ( ( pong ^ 1 ) | element2$out$deq__RDY )),
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
     Fifo1_OC_3 element2 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(pong & in$enq__ENA),
+        .in$enq__ENA(pong & in$enq__ENA & ( pong | element1$in$enq__RDY )),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),
-        .out$deq__ENA(pong & out$deq__ENA),
+        .out$deq__ENA(pong & out$deq__ENA & ( pong | element1$out$deq__RDY )),
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));
@@ -44,7 +44,7 @@ module FifoPong (input CLK, input nRST,
         pong <= 0;
       end // nRST
       else begin
-        if (out$deq__ENA) begin
+        if (out$deq__ENA & out$deq__RDY) begin
             pong  <= pong ^ 1;
         end; // End of out$deq__ENA
       end

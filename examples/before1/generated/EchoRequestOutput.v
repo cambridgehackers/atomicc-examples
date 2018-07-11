@@ -23,7 +23,7 @@ module EchoRequestOutput (input CLK, input nRST,
     wire [31:0]request$say__ENA$ind$data$say2$meth;
     wire [31:0]request$say__ENA$ind$data$say2$v;
     wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = request$say__ENA  ? { request$say__ENA$ind$data$say2$v2  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 } : { request$say2__ENA$ind$data$say2$v2  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say$meth  , 32'd2 };
+    assign pipe$enq$v = ( request$say__ENA  & request$say__RDY  ) ? { request$say__ENA$ind$data$say2$v2  , request$say__ENA$ind$data$say2$v  , request$say__ENA$ind$data$say2$meth  , request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 } : { request$say2__ENA$ind$data$say2$v2  , request$say2__ENA$ind$data$say2$v  , request$say2__ENA$ind$data$say2$meth  , request$say2__ENA$ind$data$say$v  , request$say2__ENA$ind$data$say$meth  , 32'd2 };
     assign pipe$enq__ENA = request$say__ENA  || request$say2__ENA ;
     assign request$say2__RDY = pipe$enq__RDY ;
     assign request$say__RDY = pipe$enq__RDY ;
@@ -32,12 +32,12 @@ module EchoRequestOutput (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request$say__ENA) begin
+        if (request$say__ENA & request$say__RDY) begin
             request$say__ENA$ind$data$say$meth  <= request$say$meth;
             request$say__ENA$ind$data$say$v  <= request$say$v;
             $display( "entered EchoRequestOutput::say" );
         end; // End of request$say__ENA
-        if (request$say2__ENA) begin
+        if (request$say2__ENA & request$say2__RDY) begin
             request$say2__ENA$ind$data$say2$meth  <= request$say2$meth;
             request$say2__ENA$ind$data$say2$v  <= request$say2$v;
             $display( "entered EchoRequestOutput::say2" );

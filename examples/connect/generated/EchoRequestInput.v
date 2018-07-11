@@ -18,7 +18,7 @@ module EchoRequestInput (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (pipe$enq__ENA) begin
+        if (pipe$enq__ENA & pipe$enq__RDY) begin
             $display( "entered EchoRequestInput::enq" );
         end; // End of pipe$enq__ENA
       end

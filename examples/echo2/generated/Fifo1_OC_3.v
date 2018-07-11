@@ -64,11 +64,11 @@ module Fifo1_OC_3 (input CLK, input nRST,
         full <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA) begin
+        if (in$enq__ENA & in$enq__RDY) begin
             { element$c19  , element$c18  , element$c17  , element$c16  , element$c15  , element$c14  , element$c13  , element$c12  , element$c11  , element$c10  , element$c9  , element$c8  , element$c7  , element$c6  , element$c5  , element$c4  , element$c3  , element$c2  , element$c1  , element$c0  , element$b  , element$a  } <= in$enq$v;
             full  <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA) begin
+        if (out$deq__ENA & out$deq__RDY) begin
             full  <= 0;
         end; // End of out$deq__ENA
       end

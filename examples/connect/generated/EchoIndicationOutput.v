@@ -19,7 +19,7 @@ module EchoIndicationOutput (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (indication$heard__ENA) begin
+        if (indication$heard__ENA & indication$heard__RDY) begin
             indication$heard__ENA$ind$data$heard$meth  <= indication$heard$meth;
             indication$heard__ENA$ind$data$heard$v  <= indication$heard$v;
         end; // End of indication$heard__ENA

@@ -22,8 +22,8 @@ module EchoIndicationOutput (input CLK, input nRST,
     assign output_rulee__ENA = ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
     assign output_ruleo__ENA = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
     assign indication$heard__RDY = !ind_busy ;
-    assign pipe$enq$v = output_rulee__ENA  ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
-    assign pipe$enq__ENA = ( ( ind_busy  & even  ) != 0 ) || ( ( ind_busy  & ( !even  ) ) != 0 );
+    assign pipe$enq$v = ( output_rulee__ENA  & ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY  ) ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
+    assign pipe$enq__ENA = ( ( ( ind_busy  & even  ) != 0 ) & ( ( ind_busy  & even  ) != 0 ) ) || ( ( ( ind_busy  & ( !even  ) ) != 0 ) & ( ( ind_busy  & ( !even  ) ) != 0 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -37,7 +37,7 @@ module EchoIndicationOutput (input CLK, input nRST,
         ind_busy <= 0;
       end // nRST
       else begin
-        if (indication$heard__ENA) begin
+        if (indication$heard__ENA & indication$heard__RDY) begin
             ind_busy  <= 1;
             even  <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 114 , even );
@@ -52,10 +52,10 @@ module EchoIndicationOutput (input CLK, input nRST,
             ind1$data$heard$v  <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
-        if (output_rulee__ENA) begin
+        if (output_rulee__ENA & ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY) begin
             ind_busy  <= 0;
         end; // End of output_rulee__ENA
-        if (output_ruleo__ENA) begin
+        if (output_ruleo__ENA & ( ( ind_busy & ( !even ) ) != 0 ) & pipe$enq__RDY) begin
             ind_busy  <= 0;
         end; // End of output_ruleo__ENA
       end

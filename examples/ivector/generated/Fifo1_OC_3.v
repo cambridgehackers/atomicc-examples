@@ -26,11 +26,11 @@ module Fifo1_OC_3 (input CLK, input nRST,
         full <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA) begin
+        if (in$enq__ENA & in$enq__RDY) begin
             { element$c  , element$b  , element$a  } <= in$enq$v;
             full  <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA) begin
+        if (out$deq__ENA & out$deq__RDY) begin
             full  <= 0;
         end; // End of out$deq__ENA
       end

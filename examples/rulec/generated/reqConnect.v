@@ -17,7 +17,7 @@ module reqConnect (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (wad$enq__ENA) begin
+        if (wad$enq__ENA & wad$enq__RDY) begin
             $display( "reqConnect.enq v %llx length %lx" , wad$enq$v , wad$enq$length );
         end; // End of wad$enq__ENA
       end

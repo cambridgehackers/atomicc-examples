@@ -17,6 +17,7 @@ module Lpm (input CLK, input nRST,
     wire fifo$out$deq__RDY;
     wire [95:0]fifo$out$first;
     wire fifo$out$first__RDY;
+    wire inQ$in$enq__RDY;
     wire inQ$out$deq__RDY;
     wire [95:0]inQ$out$first;
     wire inQ$out$first__RDY;
@@ -45,7 +46,7 @@ module Lpm (input CLK, input nRST,
         .out$first__RDY(inQ$out$first__RDY));
     Fifo2 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( inQ$out$first__RDY & inQ$out$deq__RDY & mem$ifc$req__RDY ) || ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & mem$ifc$req__RDY )),
-        .in$enq$v(enter__ENA ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { mem$ifc$resValue[95:64] , mem$ifc$resValue[63:32] , mem$ifc$resValue[31:0] }),
+        .in$enq$v(( enter__ENA & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { mem$ifc$resValue[95:64] , mem$ifc$resValue[63:32] , mem$ifc$resValue[31:0] }),
         .in$enq__RDY(fifo$in$enq__RDY),
         .out$deq__ENA(( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & outQ$in$enq__RDY ) || ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY )),
         .out$deq__RDY(fifo$out$deq__RDY),
@@ -61,7 +62,7 @@ module Lpm (input CLK, input nRST,
         .out$first__RDY(outQ$out$first__RDY));
     LpmMemory mem (.CLK(CLK), .nRST(nRST),
         .ifc$req__ENA(( inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY ) || ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY )),
-        .ifc$req$v(enter__ENA ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { fifo$out$first[95:64] , fifo$out$first[63:32] , fifo$out$first[31:0] }),
+        .ifc$req$v(( enter__ENA & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { inQ$out$first[95:64] , inQ$out$first[63:32] , inQ$out$first[31:0] } : { fifo$out$first[95:64] , fifo$out$first[63:32] , fifo$out$first[31:0] }),
         .ifc$req__RDY(mem$ifc$req__RDY),
         .ifc$resAccept__ENA(( fifo$out$first__RDY & mem$ifc$resValue__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY ) || ( fifo$out$first__RDY & mem$ifc$resValue__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY )),
         .ifc$resAccept__RDY(mem$ifc$resAccept__RDY),
@@ -70,25 +71,26 @@ module Lpm (input CLK, input nRST,
     assign ind$heard$meth = outQ$out$first[31:0] ;
     assign ind$heard$v = outQ$out$first[63:32] ;
     assign ind$heard__ENA = outQ$out$first__RDY  & outQ$out$deq__RDY ;
+    assign request$say__RDY = inQ$in$enq__RDY ;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         doneCount <= 0;
       end // nRST
       else begin
-        if (enter__ENA) begin
+        if (enter__ENA & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY) begin
             $display( "enter: (%d, %d)" , inQ$out$first[31:0] , inQ$out$first[63:32] );
         end; // End of enter__ENA
-        if (exit_rule__ENA) begin
+        if (exit_rule__ENA & fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY) begin
             $display( "exit: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
         end; // End of exit_rule__ENA
-        if (recirc__ENA) begin
+        if (recirc__ENA & fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY) begin
             $display( "recirc: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
         end; // End of recirc__ENA
-        if (request$say__ENA) begin
+        if (request$say__ENA & request$say__RDY) begin
             $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );
         end; // End of request$say__ENA
-        if (respond__ENA) begin
+        if (respond__ENA & outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY) begin
             $display( "respond: (%d, %d)" , outQ$out$first[31:0] , outQ$out$first[63:32] );
         end; // End of respond__ENA
       end

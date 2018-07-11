@@ -18,7 +18,7 @@ module indConnect (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (indication$enq__ENA) begin
+        if (indication$enq__ENA & indication$enq__RDY) begin
             $display( "indConnect.enq v %llx len %lx" , indication$enq$v , ( indication$enq$v - 1 ) );
         end; // End of indication$enq__ENA
       end

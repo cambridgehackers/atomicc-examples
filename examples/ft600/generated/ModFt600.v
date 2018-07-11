@@ -187,7 +187,7 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (handshake__ENA) begin
+        if (handshake__ENA & 1) begin
             usb_fifo_empty  <= 0;
             usb_rxf_delay  <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay  <= usb_txe;

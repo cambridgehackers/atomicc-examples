@@ -28,14 +28,14 @@ module LpmMemory (input CLK, input nRST,
         saved$c <= 0;
       end // nRST
       else begin
-        if (ifc$req__ENA) begin
+        if (ifc$req__ENA & ifc$req__RDY) begin
             delayCount  <= 4;
             { saved$c  , saved$b  , saved$a  } <= ifc$req$v;
         end; // End of ifc$req__ENA
-        if (ifc$resAccept__ENA) begin
+        if (ifc$resAccept__ENA & ifc$resAccept__RDY) begin
             delayCount  <= 0;
         end; // End of ifc$resAccept__ENA
-        if (memdelay_rule__ENA) begin
+        if (memdelay_rule__ENA & ( delayCount > 1 ) != 0) begin
             delayCount  <= delayCount - 1;
         end; // End of memdelay_rule__ENA
       end

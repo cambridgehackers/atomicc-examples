@@ -34,14 +34,14 @@ module Fifo2 (input CLK, input nRST,
         windex <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA) begin
+        if (in$enq__ENA & in$enq__RDY) begin
             windex  <= ( windex + 1 ) % 2;
             if (windex == 32'd0)
             { element0$c  , element0$b  , element0$a  } <= in$enq$v;
             if (windex == 32'd1)
             { element1$c  , element1$b  , element1$a  } <= in$enq$v;
         end; // End of in$enq__ENA
-        if (out$deq__ENA) begin
+        if (out$deq__ENA & out$deq__RDY) begin
             rindex  <= ( rindex + 1 ) % 2;
         end; // End of out$deq__ENA
       end

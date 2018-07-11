@@ -72,7 +72,7 @@ module Connect (input CLK, input nRST,
         .swap$x2y__RDY(lEcho$swap$x2y__RDY),
         .swap$y2x__ENA(lEcho$swap$x2y__RDY),
         .swap$y2x__RDY(lEcho$swap$y2x__RDY),
-        .swap$y2xnull__ENA(||),
+        .swap$y2xnull__ENA(&),
         .swap$y2xnull__RDY(lEcho$swap$y2xnull__RDY),
         .indication$heard__ENA(lEcho$indication$heard__ENA),
         .indication$heard$meth(lEcho$indication$heard$meth),
@@ -103,10 +103,10 @@ module Connect (input CLK, input nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (swap2_rule__ENA) begin
+        if (swap2_rule__ENA & lEcho$swap$y2xnull__RDY) begin
             $display( "swap2_rule:Connect" );
         end; // End of swap2_rule__ENA
-        if (swap_rule__ENA) begin
+        if (swap_rule__ENA & lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin
             $display( "swap_rule:Connect" );
         end; // End of swap_rule__ENA
       end
