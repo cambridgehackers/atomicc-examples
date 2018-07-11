@@ -348,7 +348,7 @@ module mkUser (input CLK, input nRST,
         .in$enq$v(ctop$indication$enq$v), .in$enq$length(ctop$indication$enq$v[15:0]-1),
     .in$enq__RDY(ic$indication$enq__RDY),
     .out$enq__ENA(), .out$enq$v(read$enq$v), .out$enq$last(),
-    .out$enq__RDY(read$enq__RDY && read$enq__ENA));
+    .out$enq__RDY(read$enq__RDY));
   AdapterFromBus wadapter_0(.CLK(CLK), .nRST(nRST),
     .in$enq__ENA(write$enq__ENA), .in$enq$v(write$enq$v), .in$enq$last(write$enq$last),
     .in$enq__RDY(write$enq__RDY),
