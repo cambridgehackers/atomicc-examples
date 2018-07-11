@@ -10,16 +10,8 @@ module mkZynqTop #(parameter width = 64) (
   inout  FIXED_IO_ps_clk, inout  FIXED_IO_ps_porb, inout  FIXED_IO_ps_srstb);
 
   wire CLK, RST_N;
-  wire ps7_clockGen_clkout0buffer_O;
-  wire ps7_clockGen_pll_CLKFBOUT, ps7_clockGen_pll_CLKOUT0, ps7_clockGen_pll_CLKOUT0B;
-  wire [3 : 0] ps7_ps7_foo_FCLKCLK, ps7_ps7_foo_FCLKRESETN, maxigp0ARLEN, maxigp0AWLEN;
 
-  wire ps7_b2c_0_OUT1, ps7_b2c_0_OUT2;
-  CONNECTNET2 ps7_b2c_0(.IN1(ps7_ps7_foo_FCLKCLK[0]), .IN2(ps7_ps7_foo_FCLKRESETN[0]), .OUT1(ps7_b2c_0_OUT1), .OUT2(ps7_b2c_0_OUT2));
-  BUFG ps7_fclk_0_c(.I(ps7_b2c_0_OUT1), .O(CLK));
-  BUFG ps7_freset_0_r(.I(ps7_b2c_0_OUT2), .O(RST_N));
-  BUFG ps7_clockGen_clkout0buffer(.I(ps7_clockGen_pll_CLKOUT0), .O(ps7_clockGen_clkout0buffer_O));
-  wire ps7_clockGen_pll_clkfbbuf_O, ps7_clockGen_pll_reset_RESET_OUT;
+  wire mmcm$CLKFBIN, resetInv_RESET_OUT, mmcm$CLKFBOUT, mmcm$CLKOUT0;
 /* verilator lint_off PINMISSING */
   MMCME2_ADV #(.BANDWIDTH("OPTIMIZED"), .CLKFBOUT_USE_FINE_PS("FALSE"), .CLKOUT0_USE_FINE_PS("FALSE"),
         .CLKOUT1_USE_FINE_PS("FALSE"), .CLKOUT2_USE_FINE_PS("FALSE"), .CLKOUT3_USE_FINE_PS("FALSE"),
@@ -35,30 +27,31 @@ module mkZynqTop #(parameter width = 64) (
         .CLKOUT5_DUTY_CYCLE(0.5), .CLKOUT5_PHASE(0.0), .CLKOUT6_DIVIDE(32'd10),
         .CLKOUT6_DUTY_CYCLE(0.5), .CLKOUT6_PHASE(0.0), .REF_JITTER1(1.0e-2),
         .REF_JITTER2(1.0e-2)) ps7_clockGen_pll(.CLKIN1(CLK),
-        .RST(ps7_clockGen_pll_reset_RESET_OUT), .CLKIN2(1'd0), .CLKINSEL(1'd1),
+        .RST(resetInv_RESET_OUT), .CLKIN2(1'd0), .CLKINSEL(1'd1),
         .DADDR(7'd0), .DCLK(1'd0), .DEN(1'd0), .DI(16'd0), .DWE(1'd0), .PSCLK(1'd0),
-        .PSEN(1'd0), .PSINCDEC(1'd0), .PWRDWN(1'd0), .CLKFBIN(ps7_clockGen_pll_clkfbbuf_O), .LOCKED(),
-        .CLKFBOUT(ps7_clockGen_pll_CLKFBOUT), .CLKFBOUTB(),
-        .CLKOUT0(ps7_clockGen_pll_CLKOUT0), .CLKOUT0B(ps7_clockGen_pll_CLKOUT0B),
+        .PSEN(1'd0), .PSINCDEC(1'd0), .PWRDWN(1'd0), .CLKFBIN(mmcm$CLKFBIN), .LOCKED(),
+        .CLKFBOUT(mmcm$CLKFBOUT), .CLKFBOUTB(),
+        .CLKOUT0(mmcm$CLKOUT0), .CLKOUT0B(),
         .CLKOUT1(), .CLKOUT1B(), .CLKOUT2(), .CLKOUT2B(), .CLKOUT3(), .CLKOUT3B(),
         .CLKOUT4(), .CLKOUT5(), .CLKOUT6());
 /* verilator lint_on PINMISSING */
-  BUFG ps7_clockGen_pll_clkfbbuf(.I(ps7_clockGen_pll_CLKFBOUT), .O(ps7_clockGen_pll_clkfbbuf_O));
-  ResetInverter ps7_clockGen_pll_reset(.RESET_IN(RST_N), .RESET_OUT(ps7_clockGen_pll_reset_RESET_OUT));
+  BUFG mmcm$clkfbbuf(.I(mmcm$CLKFBOUT), .O(mmcm$CLKFBIN));
+  ResetInverter resetInv(.RESET_IN(RST_N), .RESET_OUT(resetInv_RESET_OUT));
+  BUFG ps7_clockGen_clkout0buffer(.I(mmcm$CLKOUT0), .O());
 
-  wire [31 : 0] maxigp0ARADDR, maxigp0AWADDR, maxigp0WDATA;
+  wire [31 : 0] maxigp0ARADDR, maxigp0AWADDR, maxigp0WDATA, maxigp0RDATA;
   wire [11 : 0] maxigp0ARID, maxigp0AWID, maxigp0WID;
-  wire maxigp0ARVALID, maxigp0AWVALID, maxigp0RREADY, maxigp0BREADY, maxigp0WLAST, maxigp0WVALID;
-  wire maxigp0AWREADY, maxigp0WREADY, read_reqFifo_EMPTY_N, maxigp0RVALID;
-  wire RDY_WriteDone;
-  wire [31 : 0] maxigp0RDATA;
   wire [13 : 0] maxigp0BRESP;
-  wire interrupt_0__read;
   wire [5 : 0] maxigp0RID;
+  wire [3 : 0] ps7_ps7_foo_FCLKCLK, fclkRESETN, maxigp0ARLEN, maxigp0AWLEN;
+  wire maxigp0ARVALID, maxigp0AWVALID, maxigp0RREADY, maxigp0BREADY, maxigp0WLAST, maxigp0WVALID;
+  wire maxigp0AWREADY, maxigp0WREADY, read_reqFifo_EMPTY_N, maxigp0RVALID, RDY_WriteDone, interrupt_0__read;
   wire reqwriteDataFifo_FULL_N, write_reqFifo_FULL_N, reqws_FULL_N;
   reg CMRlastWriteDataSeen;
   assign maxigp0AWREADY = reqws_FULL_N && write_reqFifo_FULL_N;
   assign maxigp0WREADY = !CMRlastWriteDataSeen && reqwriteDataFifo_FULL_N ;
+  BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
+  BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(RST_N));
 /* verilator lint_off PINMISSING */
   PS7 ps7_ps7_foo(.MAXIGP0ACLK(CLK),
         .MAXIGP1ACLK(CLK), .SAXIACPACLK(CLK), .SAXIGP0ACLK(CLK),
@@ -173,7 +166,7 @@ module mkZynqTop #(parameter width = 64) (
         .SAXIHP3BRESP(), .SAXIHP3BVALID(), .SAXIHP3RDATA(), .SAXIHP3RID(),
         .SAXIHP3RLAST(), .SAXIHP3RRESP(), .SAXIHP3RVALID(), .SAXIHP3RACOUNT(),
         .SAXIHP3RCOUNT(), .SAXIHP3WACOUNT(), .SAXIHP3WCOUNT(), .SAXIHP3WREADY(),
-        .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(ps7_ps7_foo_FCLKRESETN),
+        .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN),
         .DDRA(DDR_Addr), .DDRBA(DDR_BankAddr), .DDRCASB(DDR_CAS_n),
         .DDRCKE(DDR_CKE), .DDRCKN(DDR_Clk_n), .DDRCKP(DDR_Clk_p),
         .DDRCSB(DDR_CS_n), .DDRDM(DDR_DM), .DDRDQ(DDR_DQ),
@@ -189,32 +182,29 @@ module mkZynqTop #(parameter width = 64) (
   reg [9 : 0] readCount;
   reg [4 : 0] readAddr;
 
-  wire requestNotFull;
-  wire RDY_indication, RDY_requestEnq, ReadDataFifo_FULL_N;
+  wire write$enq__RDY, read$enq__ENA, RDY_requestEnq, ReadDataFifo_FULL_N;
   wire reqPortal_EMPTY_N, reqPortal_FULL_N, read_reqFifo_FULL_N;
   wire reqrs_EMPTY_N, reqrs_FULL_N, reqwriteDataFifo_EMPTY_N, reqws_EMPTY_N;
   wire readFirstNext, readAddr_EN, RULEread, reqPortal_D_OUT_last;
-  wire [31 : 0]indicationData, requestData, zzIntrChannel;
+  wire [31 : 0]read$enq$v, write$enq$v, zzIntrChannel;
   wire [9 : 0] reqPortal_D_OUT_base, read_reqFifo_D_OUT_count, readburstCount;
   wire [5 : 0] reqPortal_D_OUT_id, read_reqFifo_D_OUT_id;
   wire [4 : 0] reqPortal_D_OUT_addr, read_reqFifo_D_OUT_addr, readAddrupdate;
   wire [1 : 0] selectIndication, selectRequest;
-  assign zzIntrChannel = selectRIndReq ? 32'd0 : RDY_indication;
+  assign zzIntrChannel = selectRIndReq ? 32'd0 : read$enq__ENA;
 
-  assign interrupt_0__read = RDY_indication && ctrlPort_0_interruptEnableReg;
+  assign interrupt_0__read = read$enq__ENA && ctrlPort_0_interruptEnableReg;
   assign readFirstNext = readFirst ? read_reqFifo_D_OUT_count == 4  : readLast ;
-  assign RULEread = reqPortal_EMPTY_N && ReadDataFifo_FULL_N && (selectRIndReq ?
-        ((!(!portalRControl && reqPortal_D_OUT_addr == 4) && !reqPortal_D_OUT_last) || reqrs_EMPTY_N)
-       : ((!(!portalRControl && reqPortal_D_OUT_addr == 0) || RDY_indication) && reqrs_EMPTY_N));
+  assign RULEread = reqPortal_EMPTY_N && ReadDataFifo_FULL_N && ((selectRIndReq &&
+         (!(!portalRControl && reqPortal_D_OUT_addr == 4) && !reqPortal_D_OUT_last)) || reqrs_EMPTY_N);
+  //wire RULEreadNotportalRControl;
+  //assign RULEreadNotportalRControl = !portalRControl && reqPortal_EMPTY_N && ReadDataFifo_FULL_N && reqrs_EMPTY_N;
 
-  always@(reqPortal_D_OUT_addr or indicationData or requestNotFull)
+  always@(reqPortal_D_OUT_addr or read$enq$v or write$enq__RDY)
   begin
-    if (selectRIndReq)
-      requestValue = { 31'd0, (reqPortal_D_OUT_addr == 4 && requestNotFull) };
-    else
     case (reqPortal_D_OUT_addr)
-      0: requestValue = indicationData;
-      4: requestValue = { 31'd0, requestNotFull};
+      0: requestValue = read$enq$v;
+      4: requestValue = { 31'd0, write$enq__RDY};
       default: requestValue = 32'd0;
     endcase
   end
@@ -222,17 +212,14 @@ module mkZynqTop #(parameter width = 64) (
   begin
     case (reqPortal_D_OUT_addr)
       0: portalCtrlInfo = {31'd0,  zzIntrChannel != 0}; // PORTAL_CTRL_INTERRUPT_STATUS 0
-      //4: portalCtrlInfo = 0;//{31'd0, ctrlPort_0_interruptEnableReg;
+      //4: portalCtrlInfo = 0;//{31'd0, ctrlPort_0_interruptEnableReg; // PORTAL_CTRL_INTERRUPT_ENABLE 1
       8: portalCtrlInfo = 1;                         // PORTAL_CTRL_NUM_TILES        2
       5'h0C: portalCtrlInfo = zzIntrChannel;         // PORTAL_CTRL_IND_QUEUE_STATUS 3
       5'h10: portalCtrlInfo = selectRIndReq ? 6 : 5; // PORTAL_CTRL_PORTAL_ID        4
       5'h14: portalCtrlInfo = 2;                     // PORTAL_CTRL_NUM_PORTALS      5
-      //5'h18: portalCtrlInfo = 0;
-      //5'h1C: portalCtrlInfo = 0;
+      //5'h18: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_MSB      6
+      //5'h1C: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_LSB      7
       default: portalCtrlInfo = 32'h005A05A0;
-// PORTAL_CTRL_INTERRUPT_ENABLE 1
-// PORTAL_CTRL_COUNTER_MSB      6
-// PORTAL_CTRL_COUNTER_LSB      7
     endcase
   end
 
@@ -297,7 +284,7 @@ module mkZynqTop #(parameter width = 64) (
   assign EN_WriteData = maxigp0WVALID && maxigp0WREADY;
   FIFO2 #(.width(32), .guarded(1)) reqwriteDataFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
         .D_IN(maxigp0WDATA), .ENQ(EN_WriteData),
-        .D_OUT(requestData), .DEQ(RULEwrite), .FULL_N(reqwriteDataFifo_FULL_N), .EMPTY_N(reqwriteDataFifo_EMPTY_N));
+        .D_OUT(write$enq$v), .DEQ(RULEwrite), .FULL_N(reqwriteDataFifo_FULL_N), .EMPTY_N(reqwriteDataFifo_EMPTY_N));
   assign writeAddrupdate = writeFirst ?  write_reqFifo_D_OUT_addr : writeAddr ;
   assign writeburstCount = writeFirst ?  { 2'd0, write_reqFifo_D_OUT_count[9:2] } : writeCount ;
   FIFO2 #(.width(22), .guarded(1)) writeFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
@@ -326,7 +313,7 @@ module mkZynqTop #(parameter width = 64) (
     else
       begin
         if (RULEwrite && portalWControl && writeFifo_D_OUT_addr == 4)
-          ctrlPort_0_interruptEnableReg <= requestData[0];
+          ctrlPort_0_interruptEnableReg <= write$enq$v[0];
         if (EN_WriteData && maxigp0WLAST || EN_WriteReq)
           CMRlastWriteDataSeen <= !EN_WriteReq;
         if (readAddr_EN) begin
@@ -346,9 +333,9 @@ module mkZynqTop #(parameter width = 64) (
   end
 
 mkUser user(.CLK(CLK), .nRST(RST_N),
-  .write$enq__ENA(RULEwrite && !portalWControl), .write$enq$v(requestData), .write$enq$last(writeFifo_D_OUT_addr != 0),
-  .write$enq__RDY(requestNotFull),
-  .read$enq__RDY(RULEread && !portalRControl), .read$enq$v(indicationData), .read$enq$last(), .read$enq__ENA(RDY_indication));
+  .write$enq__ENA(RULEwrite && !portalWControl), .write$enq$v(write$enq$v), .write$enq$last(writeFifo_D_OUT_addr != 0),
+  .write$enq__RDY(write$enq__RDY),
+  .read$enq__RDY(RULEread && !portalRControl), .read$enq$v(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA));
 endmodule  // mkZynqTop
 `define BOZO
 `ifdef BOZO
