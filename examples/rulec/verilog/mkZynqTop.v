@@ -195,10 +195,7 @@ module mkZynqTop #(parameter width = 64) (
 
   assign interrupt_0__read = read$enq__ENA && ctrlPort_0_interruptEnableReg;
   assign readFirstNext = readFirst ? read_reqFifo_D_OUT_count == 4  : readLast ;
-  assign RULEread = reqPortal_EMPTY_N && ReadDataFifo_FULL_N && ((selectRIndReq &&
-         (!(!portalRControl && reqPortal_D_OUT_addr == 4) && !reqPortal_D_OUT_last)) || reqrs_EMPTY_N);
-  //wire RULEreadNotportalRControl;
-  //assign RULEreadNotportalRControl = !portalRControl && reqPortal_EMPTY_N && ReadDataFifo_FULL_N && reqrs_EMPTY_N;
+  assign RULEread = reqPortal_EMPTY_N && ReadDataFifo_FULL_N && reqrs_EMPTY_N;
 
   always@(reqPortal_D_OUT_addr or read$enq$v or write$enq__RDY)
   begin
