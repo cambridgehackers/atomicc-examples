@@ -17,7 +17,7 @@ module AdapterFromBus (input CLK, input nRST,
     assign in$enq__RDY = !waitForEnq ;
     assign out$enq$length = 0;
     assign out$enq$v = buffer ;
-    assign out$enq__ENA = pushValue__ENA ;
+    assign out$enq__ENA = waitForEnq ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

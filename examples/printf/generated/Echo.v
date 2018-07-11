@@ -49,15 +49,15 @@ module Echo (input CLK, input nRST,
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
-    assign indication$heard2__ENA = ( v_type  != 32'd1 ) & respond_rule__ENA ;
+    assign indication$heard2__ENA = ( v_type  != 32'd1 ) & ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( v_type  == 32'd1 ) & printfp$enq__RDY ;
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
+    assign indication$heard__ENA = ( v_type  == 32'd1 ) & ( busy_delay  != 32'd0 ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  ) & printfp$enq__RDY ;
     assign printfp$enq$v = delay_rule__ENA  ? { 16'd1 , 16'd32767 , 16'd2 } : request$say__ENA  ? { busy_delay  , clockReg  , 16'd2 , 16'd32767 , 16'd3 } : request$say2__ENA  ? { 16'd3 , 16'd32767 , 16'd2 } : request$setLeds__ENA  ? { 16'd4 , 16'd32767 , 16'd2 } : request$zsay4__ENA  ? { 16'd5 , 16'd32767 , 16'd2 } : { 16'd6 , 16'd32767 , 16'd2 };
-    assign printfp$enq__ENA = delay_rule__ENA  || request$say__ENA  || request$say2__ENA  || request$setLeds__ENA  || request$zsay4__ENA  || respond_rule__ENA ;
+    assign printfp$enq__ENA = ( ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0 ) || request$say__ENA  || request$say2__ENA  || request$setLeds__ENA  || request$zsay4__ENA  || ( ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  ) );
     assign request$say2__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
     assign request$say__RDY = ( busy  == 32'd0 ) & printfp$enq__RDY ;
     assign request$setLeds__RDY = printfp$enq__RDY ;

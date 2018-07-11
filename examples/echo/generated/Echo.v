@@ -16,10 +16,10 @@ module Echo (input CLK, input nRST,
         .in$enq__ENA(sout$say__ENA),
         .in$enq$v(sout$say$v),
         .in$enq__RDY(sout$say__RDY),
-        .out$deq__ENA(respond_rule__ENA),
+        .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(ind$heard$v),
         .out$first__RDY(fifo$out$first__RDY));
-    assign ind$heard__ENA = respond_rule__ENA ;
+    assign ind$heard__ENA = fifo$out$deq__RDY  & fifo$out$first__RDY ;
 endmodule 
 

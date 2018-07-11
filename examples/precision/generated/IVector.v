@@ -22,13 +22,13 @@ module IVector (input CLK, input nRST,
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),
-        .out$deq__ENA(respond__ENA),
+        .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
     assign ind$heard$meth = fifo$out$first[5:0] ;
     assign ind$heard$v = fifo$out$first[9:6] ;
-    assign ind$heard__ENA = respond__ENA ;
+    assign ind$heard__ENA = fifo$out$first__RDY  & fifo$out$deq__RDY ;
 
     always @( posedge CLK) begin
       if (!nRST) begin

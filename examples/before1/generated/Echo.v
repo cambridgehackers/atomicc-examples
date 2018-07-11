@@ -34,7 +34,7 @@ module Echo (input CLK, input nRST,
     assign respond_rule__ENA = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
-    assign indication$heard__ENA = respond_rule__ENA ;
+    assign indication$heard__ENA = busy_delay ;
     assign request$say2__RDY = !busy ;
     assign request$say__RDY = !busy ;
     assign swap$x2y__RDY = 1;

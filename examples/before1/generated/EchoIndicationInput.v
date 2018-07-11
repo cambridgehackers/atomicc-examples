@@ -16,7 +16,7 @@ module EchoIndicationInput (input CLK, input nRST,
     assign input_rule__ENA = busy_delay  & indication$heard__RDY ;
     assign indication$heard$meth = meth_delay ;
     assign indication$heard$v = v_delay ;
-    assign indication$heard__ENA = input_rule__ENA ;
+    assign indication$heard__ENA = busy_delay ;
     assign pipe$enq__RDY = !busy_delay ;
 
     always @( posedge CLK) begin

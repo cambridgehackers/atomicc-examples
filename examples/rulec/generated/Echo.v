@@ -44,13 +44,13 @@ module Echo (input CLK, input nRST,
     assign indication$heard$v = v_delay ;
     assign indication$heard2$a = a_delay ;
     assign indication$heard2$b = b_delay ;
-    assign indication$heard2__ENA = ( v_type  != 32'd1 ) & respond_rule__ENA ;
+    assign indication$heard2__ENA = ( v_type  != 32'd1 ) & ( busy_delay  != 32'd0 ) & ( ( v_type  != 32'd1 ) | indication$heard__RDY  ) & ( v_type  == 32'd1 );
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard__ENA = ( v_type  == 32'd1 ) & respond_rule__ENA ;
+    assign indication$heard__ENA = ( v_type  == 32'd1 ) & ( busy_delay  != 32'd0 ) & ( ( v_type  == 32'd1 ) | indication$heard2__RDY  );
     assign request$say2__RDY = busy  == 32'd0;
     assign request$say__RDY = busy  == 32'd0;
     assign request$setLeds__RDY = 1;

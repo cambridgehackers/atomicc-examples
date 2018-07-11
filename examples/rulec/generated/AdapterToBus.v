@@ -17,7 +17,7 @@ module AdapterToBus (input CLK, input nRST,
     assign in$enq__RDY = remain  == 16'd0;
     assign out$enq$last = remain  == 16'd1;
     assign out$enq$v = buffer ;
-    assign out$enq__ENA = copyRule__ENA ;
+    assign out$enq__ENA = remain  != 16'd0;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -23,7 +23,7 @@ module EchoIndicationOutput (input CLK, input nRST,
     assign output_ruleo__ENA = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
     assign indication$heard__RDY = !ind_busy ;
     assign pipe$enq$v = output_rulee__ENA  ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
-    assign pipe$enq__ENA = output_rulee__ENA  || output_ruleo__ENA ;
+    assign pipe$enq__ENA = ( ( ind_busy  & even  ) != 0 ) || ( ( ind_busy  & ( !even  ) ) != 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
