@@ -342,12 +342,12 @@ module mkUser (input CLK, input nRST,
 
   wire ctop$request$enq__RDY, rc$request$enq__ENA, ctop$indication$enq__ENA, ic$indication$enq__RDY;
   wire [`MAX_OUT_WIDTH-1 : 0] ctop$indication$enq$v, rc$request$enq$v;
-  assign read$enq__ENA = !ic$indication$enq__RDY;
+  //assign read$enq__ENA = !ic$indication$enq__RDY;
   AdapterToBus radapter_0(.CLK(CLK), .nRST(nRST),
     .in$enq__ENA(ctop$indication$enq__ENA),
         .in$enq$v(ctop$indication$enq$v), .in$enq$length(ctop$indication$enq$v[15:0]-1),
     .in$enq__RDY(ic$indication$enq__RDY),
-    .out$enq__ENA(), .out$enq$v(read$enq$v), .out$enq$last(),
+    .out$enq__ENA(read$enq__ENA), .out$enq$v(read$enq$v), .out$enq$last(),
     .out$enq__RDY(read$enq__RDY));
   AdapterFromBus wadapter_0(.CLK(CLK), .nRST(nRST),
     .in$enq__ENA(write$enq__ENA), .in$enq$v(write$enq$v), .in$enq$last(write$enq$last),
