@@ -356,17 +356,24 @@ module mkUser (input CLK, input nRST,
   input write$enq__ENA, input [`MAX_BUS_WIDTH-1:0] write$enq$v, input write$enq$last, output write$enq__RDY,
   input read$enq__RDY, output [`MAX_BUS_WIDTH-1:0] read$enq$v, output read$enq$last, output read$enq__ENA);
 
-  wire EN_outgoing, RDY_incoming, EN_incoming, RDY_echo_in_enq, EN_echo_out_enq, RDY_echo_out_enq;
-  wire [`MAX_OUT_WIDTH-1 : 0] echoData, incomingData;
-  assign read$enq__ENA = !RDY_echo_out_enq;
+  wire ctop$request$enq__RDY, rc$request$enq__ENA, ctop$indication$enq__ENA, ic$indication$enq__RDY;
+  wire [`MAX_OUT_WIDTH-1 : 0] ctop$indication$enq$v, rc$request$enq$v;
+  assign read$enq__ENA = !ic$indication$enq__RDY;
   AdapterToBus radapter_0(.CLK(CLK), .nRST(nRST),
-   .in$enq__ENA(EN_echo_out_enq), .in$enq__RDY(RDY_echo_out_enq), .in$enq$v(echoData), .in$enq$length(echoData[15:0]-1),
-   .out$enq__ENA(EN_outgoing), .out$enq__RDY(read$enq__RDY && read$enq__ENA), .out$enq$v(read$enq$v), .out$enq$last());
+    .in$enq__ENA(ctop$indication$enq__ENA),
+        .in$enq$v(ctop$indication$enq$v), .in$enq$length(ctop$indication$enq$v[15:0]-1),
+    .in$enq__RDY(ic$indication$enq__RDY),
+    .out$enq__ENA(), .out$enq$v(read$enq$v), .out$enq$last(),
+    .out$enq__RDY(read$enq__RDY && read$enq__ENA));
   AdapterFromBus wadapter_0(.CLK(CLK), .nRST(nRST),
-    .in$enq__ENA(write$enq__ENA), .in$enq$v(write$enq$v), .in$enq$last(write$enq$last), .in$enq__RDY(write$enq__RDY),
-    .out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
+    .in$enq__ENA(write$enq__ENA), .in$enq$v(write$enq$v), .in$enq$last(write$enq$last),
+    .in$enq__RDY(write$enq__RDY),
+    .out$enq__ENA(rc$request$enq__ENA), .out$enq$v(rc$request$enq$v), .out$enq$length(),
+    .out$enq__RDY(ctop$request$enq__RDY));
   l_top ctop( .CLK (CLK ), .nRST(nRST),
-    .request$enq$v (incomingData), .request$enq__ENA (EN_incoming), .request$enq__RDY(RDY_incoming),
-    .indication$enq$v (echoData), .indication$enq__ENA(EN_echo_out_enq), .indication$enq__RDY(RDY_echo_out_enq));
+    .request$enq__ENA (rc$request$enq__ENA), .request$enq$v (rc$request$enq$v),
+    .request$enq__RDY(ctop$request$enq__RDY),
+    .indication$enq__ENA(ctop$indication$enq__ENA), .indication$enq$v (ctop$indication$enq$v),
+    .indication$enq__RDY(ic$indication$enq__RDY));
 endmodule  // mkUser
 `endif
