@@ -1,6 +1,10 @@
 `ifndef __zynqTop_GENERATED__VH__
 `define __zynqTop_GENERATED__VH__
 
+//METASTART; ClockTop
+//METAINTERNAL; ps7_clockGen_pll; MMCME2_ADV;
+//METAINTERNAL; rinverter; ResetInverter;
+//METAINTERNAL; bufg1; BUFG;
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full ;
@@ -18,8 +22,5 @@
 //METAGUARD; in$enq; out$enq__RDY ;
 //METARULES; fifoRule
 //METASTART; ZynqTop
-//METAINTERNAL; mmcm; MMCME2_ADV;
 //METAINTERNAL; pps; PS7;
-//METAGUARD; init; 1;
-//METARULES; init
 `endif

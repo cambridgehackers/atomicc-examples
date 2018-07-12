@@ -2,23 +2,6 @@
 
 module ZynqTop (input CLK, input nRST);
     wire CLK, nRST;
-    wire init__ENA;
-    wire mmcm$CLKFBOUTB;
-    wire mmcm$CLKFBSTOPPED;
-    wire mmcm$CLKINSTOPPED;
-    wire mmcm$CLKOUT1;
-    wire mmcm$CLKOUT1B;
-    wire mmcm$CLKOUT2;
-    wire mmcm$CLKOUT2B;
-    wire mmcm$CLKOUT3;
-    wire mmcm$CLKOUT3B;
-    wire mmcm$CLKOUT4;
-    wire mmcm$CLKOUT5;
-    wire mmcm$CLKOUT6;
-    wire [15:0]mmcm$DO;
-    wire mmcm$DRDY;
-    wire mmcm$LOCKED;
-    wire mmcm$PSDONE;
     wire [14:0]pps$DDRA;
     wire [3:0]pps$DDRARB;
     wire [2:0]pps$DDRBA;
@@ -639,41 +622,6 @@ module ZynqTop (input CLK, input nRST);
     wire pps$SAXIHP3WRISSUECAP1EN;
     wire [7:0]pps$SAXIHP3WSTRB;
     wire pps$SAXIHP3WVALID;
-    assign init__ENA = 1;
-    MMCME2_ADV#(.REF_JITTER2(1.0e-2),.REF_JITTER1(1.0e-2),.CLKOUT6_PHASE(0.0),.CLKOUT6_DUTY_CYCLE(0.5),.CLKOUT6_DIVIDE(10),.CLKOUT5_PHASE(0.0),.CLKOUT5_DUTY_CYCLE(0.5),.CLKOUT5_DIVIDE(10),.CLKOUT4_PHASE(0.0),.CLKOUT4_DUTY_CYCLE(0.5),.CLKOUT4_DIVIDE(10),.CLKOUT3_PHASE(0.0),.CLKOUT3_DUTY_CYCLE(0.5),.CLKOUT3_DIVIDE(10),.CLKOUT2_PHASE(0.0),.CLKOUT2_DUTY_CYCLE(0.5),.CLKOUT2_DIVIDE(10),.CLKOUT1_PHASE(0.0),.CLKOUT1_DUTY_CYCLE(0.5),.CLKOUT1_DIVIDE(10),.CLKOUT0_PHASE(0.0),.CLKOUT0_DUTY_CYCLE(0.5),.CLKOUT0_DIVIDE_F(5.0),.DIVCLK_DIVIDE(1),.CLKIN2_PERIOD(0.0),.CLKIN1_PERIOD(10.0),.CLKFBOUT_PHASE(0.0),.CLKFBOUT_MULT_F(10.0),.STARTUP_WAIT("FALSE"),.COMPENSATION("ZHOLD"),.CLKOUT4_CASCADE("FALSE"),.CLKOUT6_USE_FINE_PS("FALSE"),.CLKOUT5_USE_FINE_PS("FALSE"),.CLKOUT4_USE_FINE_PS("FALSE"),.CLKOUT3_USE_FINE_PS("FALSE"),.CLKOUT2_USE_FINE_PS("FALSE"),.CLKOUT1_USE_FINE_PS("FALSE"),.CLKOUT0_USE_FINE_PS("FALSE"),.CLKFBOUT_USE_FINE_PS("FALSE"),.BANDWIDTH("OPTIMIZED")) mmcm (
-        .CLKFBIN(1'd1),
-        .CLKFBOUT(1'd1),
-        .CLKFBOUTB(mmcm$CLKFBOUTB),
-        .CLKFBSTOPPED(mmcm$CLKFBSTOPPED),
-        .CLKIN1(1'd1),
-        .CLKIN2(1'd0),
-        .CLKINSEL(1'd1),
-        .CLKINSTOPPED(mmcm$CLKINSTOPPED),
-        .CLKOUT0(1'd1),
-        .CLKOUT0B(1'd1),
-        .CLKOUT1(mmcm$CLKOUT1),
-        .CLKOUT1B(mmcm$CLKOUT1B),
-        .CLKOUT2(mmcm$CLKOUT2),
-        .CLKOUT2B(mmcm$CLKOUT2B),
-        .CLKOUT3(mmcm$CLKOUT3),
-        .CLKOUT3B(mmcm$CLKOUT3B),
-        .CLKOUT4(mmcm$CLKOUT4),
-        .CLKOUT5(mmcm$CLKOUT5),
-        .CLKOUT6(mmcm$CLKOUT6),
-        .DADDR(7'd0),
-        .DCLK(1'd0),
-        .DEN(1'd0),
-        .DI(16'd0),
-        .DO(mmcm$DO),
-        .DRDY(mmcm$DRDY),
-        .DWE(1'd0),
-        .LOCKED(mmcm$LOCKED),
-        .PSCLK(1'd0),
-        .PSDONE(mmcm$PSDONE),
-        .PSEN(1'd0),
-        .PSINCDEC(1'd0),
-        .PWRDWN(1'd0),
-        .RST(1'd1));
     PS7 pps (
         .DDRA(pps$DDRA),
         .DDRARB(pps$DDRARB),

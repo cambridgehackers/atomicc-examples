@@ -21,8 +21,10 @@
 #include "atomicc.h"
 #include "VMMCME2_ADV.h"
 #include "VPPS7.h"
+#include "VBUFG.h"
+#include "VResetInverter.h"
 
-__module ZynqTop {
+__module ClockTop {
     MMCME2_ADV#( BANDWIDTH = "OPTIMIZED",
         CLKFBOUT_USE_FINE_PS = "FALSE", CLKOUT0_USE_FINE_PS = "FALSE",
         CLKOUT1_USE_FINE_PS = "FALSE", CLKOUT2_USE_FINE_PS = "FALSE",
@@ -39,37 +41,40 @@ __module ZynqTop {
         CLKOUT4_DIVIDE = 10, CLKOUT4_DUTY_CYCLE = 0.5, CLKOUT4_PHASE = 0.0,
         CLKOUT5_DIVIDE = 10, CLKOUT5_DUTY_CYCLE = 0.5, CLKOUT5_PHASE = 0.0,
         CLKOUT6_DIVIDE = 10, CLKOUT6_DUTY_CYCLE = 0.5, CLKOUT6_PHASE = 0.0,
-        REF_JITTER1 = 1.0e-2, REF_JITTER2 = 1.0e-2) mmcm;
-    PS7 pps;
-    ZynqTop() {
+        REF_JITTER1 = 1.0e-2, REF_JITTER2 = 1.0e-2) ps7_clockGen_pll;
+    ResetInverter rinverter;
+    BUFG bufg1;
+    ClockTop() {
         __rule init {
-        mmcm._.CLKIN2 = 0;
-        mmcm._.CLKINSEL = 1;
-        mmcm._.DADDR = 0;
-        mmcm._.DCLK = 0;
-        mmcm._.DEN = 0;
-        mmcm._.DI = 0;
-        mmcm._.DWE = 0;
-        mmcm._.PSCLK = 0;
-        mmcm._.PSEN = 0;
-        mmcm._.PSINCDEC = 0;
-        mmcm._.PWRDWN = 0;
+        ps7_clockGen_pll._.CLKIN2 = 0;
+        ps7_clockGen_pll._.CLKINSEL = 1;
+        ps7_clockGen_pll._.DADDR = 0;
+        ps7_clockGen_pll._.DCLK = 0;
+        ps7_clockGen_pll._.DEN = 0;
+        ps7_clockGen_pll._.DI = 0;
+        ps7_clockGen_pll._.DWE = 0;
+        ps7_clockGen_pll._.PSCLK = 0;
+        ps7_clockGen_pll._.PSEN = 0;
+        ps7_clockGen_pll._.PSINCDEC = 0;
+        ps7_clockGen_pll._.PWRDWN = 0;
+        ps7_clockGen_pll._.CLKFBIN = ps7_clockGen_pll._.CLKFBOUT;
 #if 0
-        mmcm._.CLKIN1 = CLK;
-        mmcm._.RST = ps7_clockGen_pll_reset_RESET_OUT;
-        mmcm._.CLKFBIN = ps7_clockGen_pll_clkfbbuf_O;
-        mmcm._.CLKFBOUT = ps7_clockGen_pll_CLKFBOUT;
-        mmcm._.CLKOUT0 = ps7_clockGen_pll_CLKOUT0;
-        mmcm._.CLKOUT0B = ps7_clockGen_pll_CLKOUT0B;
+        ps7_clockGen_pll._.CLKIN1 = CLK;
+        ps7_clockGen_pll._.RST = ps7_clockGen_pll_reset_RESET_OUT;
+        ps7_clockGen_pll._.CLKOUT0 = ps7_clockGen_pll_CLKOUT0;
+        ps7_clockGen_pll._.CLKOUT0B = ps7_clockGen_pll_CLKOUT0B;
 #else
-        mmcm._.CLKIN1 = 1;
-        mmcm._.RST = 1;
-        mmcm._.CLKFBIN = 1;
-        mmcm._.CLKFBOUT = 1;
-        mmcm._.CLKOUT0 = 1;
-        mmcm._.CLKOUT0B = 1;
+        ps7_clockGen_pll._.CLKIN1 = 1;
+        ps7_clockGen_pll._.RST = 1;
+        ps7_clockGen_pll._.CLKOUT0 = 1;
+        ps7_clockGen_pll._.CLKOUT0B = 1;
 #endif
         };
+    }
+};
+__module ZynqTop {
+    PS7 pps;
+    ZynqTop() {
     }
 };
 
