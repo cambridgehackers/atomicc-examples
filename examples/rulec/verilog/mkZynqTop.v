@@ -11,6 +11,9 @@ module mkZynqTop #(parameter width = 64) (
 
   wire CLK, nRST;
 
+`ifdef BBB
+  ClockTop ps7_clockGen_pll ( .CLK(CLK), .nRST(nRST), .clockOut());
+`else
   wire mmcm$CLKFBIN, resetInv_RESET_OUT, mmcm$CLKFBOUT, mmcm$CLKOUT0;
 /* verilator lint_off PINMISSING */
   MMCME2_ADV #(.BANDWIDTH("OPTIMIZED"), .CLKFBOUT_USE_FINE_PS("FALSE"), .CLKOUT0_USE_FINE_PS("FALSE"),
@@ -38,6 +41,7 @@ module mkZynqTop #(parameter width = 64) (
   BUFG mmcm$clkfbbuf(.I(mmcm$CLKFBOUT), .O(mmcm$CLKFBIN));
   ResetInverter resetInv(.RESET_IN(nRST), .RESET_OUT(resetInv_RESET_OUT));
   BUFG ps7_clockGen_clkout0buffer(.I(mmcm$CLKOUT0), .O());
+`endif //BBB
 
   wire [31 : 0] maxigp0ARADDR, maxigp0AWADDR, maxigp0WDATA, maxigp0RDATA;
   wire [11 : 0] maxigp0ARID, maxigp0AWID, maxigp0WID;

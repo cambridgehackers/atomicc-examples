@@ -4,7 +4,10 @@
 //METASTART; ClockTop
 //METAINTERNAL; ps7_clockGen_pll; MMCME2_ADV;
 //METAINTERNAL; rinverter; ResetInverter;
-//METAINTERNAL; bufg1; BUFG;
+//METAINTERNAL; clkbuf; BUFG;
+//METAINTERNAL; clkbuf0; BUFG;
+//METAGUARD; init; 1;
+//METARULES; init
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full ;
