@@ -9,7 +9,7 @@ module mkZynqTop #(parameter width = 64) (
   inout  FIXED_IO_ddr_vrn, inout  FIXED_IO_ddr_vrp, inout  DDR_WEB, inout  [53 : 0] MIO,
   inout  FIXED_IO_ps_clk, inout  FIXED_IO_ps_porb, inout  FIXED_IO_ps_srstb);
 
-  wire CLK, RST_N;
+  wire CLK, nRST;
 
   wire mmcm$CLKFBIN, resetInv_RESET_OUT, mmcm$CLKFBOUT, mmcm$CLKOUT0;
 /* verilator lint_off PINMISSING */
@@ -36,7 +36,7 @@ module mkZynqTop #(parameter width = 64) (
         .CLKOUT4(), .CLKOUT5(), .CLKOUT6());
 /* verilator lint_on PINMISSING */
   BUFG mmcm$clkfbbuf(.I(mmcm$CLKFBOUT), .O(mmcm$CLKFBIN));
-  ResetInverter resetInv(.RESET_IN(RST_N), .RESET_OUT(resetInv_RESET_OUT));
+  ResetInverter resetInv(.RESET_IN(nRST), .RESET_OUT(resetInv_RESET_OUT));
   BUFG ps7_clockGen_clkout0buffer(.I(mmcm$CLKOUT0), .O());
 
   wire [31 : 0] maxigp0ARADDR, maxigp0AWADDR, maxigp0WDATA, maxigp0RDATA;
@@ -51,7 +51,7 @@ module mkZynqTop #(parameter width = 64) (
   assign maxigp0AWREADY = reqws_FULL_N && write_reqFifo_FULL_N;
   assign maxigp0WREADY = !CMRlastWriteDataSeen && reqwriteDataFifo_FULL_N ;
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
-  BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(RST_N));
+  BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
 /* verilator lint_off PINMISSING */
   PS7 ps7_ps7_foo(.MAXIGP0ACLK(CLK),
         .MAXIGP1ACLK(CLK), .SAXIACPACLK(CLK), .SAXIGP0ACLK(CLK),
@@ -222,7 +222,7 @@ module mkZynqTop #(parameter width = 64) (
 
   assign readAddr_EN = read_reqFifo_EMPTY_N && reqPortal_FULL_N;
 
-  FIFO1 #(.width(2), .guarded(1)) reqrs(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(2), .guarded(1)) reqrs(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN(maxigp0ARADDR[6:5] - 2'd1), .ENQ(maxigp0ARVALID),
         .D_OUT(selectIndication), .DEQ(RULEread && (!selectRIndReq || reqPortal_D_OUT_last)),
         .FULL_N(reqrs_FULL_N), .EMPTY_N(reqrs_EMPTY_N));
@@ -232,17 +232,17 @@ module mkZynqTop #(parameter width = 64) (
             selectRIndReq <= maxigp0ARADDR[12];
         end
   end
-  FIFO1 #(.width(21), .guarded(1)) reqArs(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(21), .guarded(1)) reqArs(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({ maxigp0ARADDR[4:0], { 4'd0, maxigp0ARLEN + 4'd1, 2'd0 }, maxigp0ARID[5:0]}), .ENQ(maxigp0ARVALID),
         .D_OUT({read_reqFifo_D_OUT_addr, read_reqFifo_D_OUT_count, read_reqFifo_D_OUT_id}),
         .DEQ(readAddr_EN && readFirstNext), .FULL_N(read_reqFifo_FULL_N), .EMPTY_N(read_reqFifo_EMPTY_N));
   assign readAddrupdate = readFirst ?  read_reqFifo_D_OUT_addr : readAddr ;
   assign readburstCount = readFirst ?  { 2'd0, read_reqFifo_D_OUT_count[9:2] } : readCount ;
-  FIFO2 #(.width(22), .guarded(1)) reqPortal(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO2 #(.width(22), .guarded(1)) reqPortal(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({readAddrupdate, readburstCount, read_reqFifo_D_OUT_id, readFirstNext}), .ENQ(readAddr_EN),
         .D_OUT({reqPortal_D_OUT_addr, reqPortal_D_OUT_base, reqPortal_D_OUT_id, reqPortal_D_OUT_last}),
         .DEQ(RULEread), .FULL_N(reqPortal_FULL_N), .EMPTY_N(reqPortal_EMPTY_N));
-  FIFO2 #(.width(38), .guarded(1)) ReadDataFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO2 #(.width(38), .guarded(1)) ReadDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({portalRControl ? portalCtrlInfo : requestValue, reqPortal_D_OUT_id}), .ENQ(RULEread),
         .D_OUT({maxigp0RDATA, maxigp0RID}), .DEQ(maxigp0RREADY && maxigp0RVALID),
         .FULL_N(ReadDataFifo_FULL_N), .EMPTY_N(maxigp0RVALID));
@@ -265,11 +265,11 @@ module mkZynqTop #(parameter width = 64) (
 
   assign reqdoneFifo_ENQ = RULEwrite && writeFifo_D_OUT_last;
   assign writeFirstNext = writeFirst ?  write_reqFifo_D_OUT_count == 4 : writeLast ;
-  FIFO1 #(.width(21), .guarded(1)) write_reqFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(21), .guarded(1)) write_reqFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({maxigp0AWADDR[4:0], { 4'd0, maxigp0AWLEN + 4'd1, 2'd0 }, maxigp0AWID[5:0] }), .ENQ(EN_WriteReq),
         .D_OUT({write_reqFifo_D_OUT_addr, write_reqFifo_D_OUT_count, write_reqFifo_D_OUT_id}),
         .DEQ(writeAddr_EN && writeFirstNext), .FULL_N(write_reqFifo_FULL_N), .EMPTY_N(write_reqFifo_EMPTY_N));
-  FIFO1 #(.width(2), .guarded(1)) reqws(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(2), .guarded(1)) reqws(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN(maxigp0AWADDR[6:5] - 2'd1), .ENQ(EN_WriteReq),
         .D_OUT(selectRequest), .DEQ(reqdoneFifo_ENQ), .FULL_N(reqws_FULL_N), .EMPTY_N(reqws_EMPTY_N));
   always@(posedge CLK) begin
@@ -279,22 +279,22 @@ module mkZynqTop #(parameter width = 64) (
         end
   end
   assign EN_WriteData = maxigp0WVALID && maxigp0WREADY;
-  FIFO2 #(.width(32), .guarded(1)) reqwriteDataFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO2 #(.width(32), .guarded(1)) reqwriteDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN(maxigp0WDATA), .ENQ(EN_WriteData),
         .D_OUT(write$enq$v), .DEQ(RULEwrite), .FULL_N(reqwriteDataFifo_FULL_N), .EMPTY_N(reqwriteDataFifo_EMPTY_N));
   assign writeAddrupdate = writeFirst ?  write_reqFifo_D_OUT_addr : writeAddr ;
   assign writeburstCount = writeFirst ?  { 2'd0, write_reqFifo_D_OUT_count[9:2] } : writeCount ;
-  FIFO2 #(.width(22), .guarded(1)) writeFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO2 #(.width(22), .guarded(1)) writeFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({ writeAddrupdate, writeburstCount, write_reqFifo_D_OUT_id, writeFirstNext }), .ENQ(writeAddr_EN),
         .D_OUT({writeFifo_D_OUT_addr, writeFifo_D_OUT_count, writeFifo_D_OUT_id, writeFifo_D_OUT_last}),
         .DEQ(RULEwrite), .FULL_N(writeFifo_FULL_N), .EMPTY_N(writeFifo_EMPTY_N));
-  FIFO1 #(.width(14), .guarded(1)) CMRdoneFifo(.RST(RST_N), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(14), .guarded(1)) CMRdoneFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN( { 8'd0, writeFifo_D_OUT_id}), .ENQ(reqdoneFifo_ENQ),
         .D_OUT(maxigp0BRESP), .DEQ(maxigp0BREADY), .FULL_N(WriteDone_FULL_N), .EMPTY_N(RDY_WriteDone));
 
   always@(posedge CLK)
   begin
-    if (RST_N == 0)
+    if (nRST == 0)
       begin
         ctrlPort_0_interruptEnableReg <=  1'd0;
         CMRlastWriteDataSeen <=  1'd0;
@@ -329,7 +329,7 @@ module mkZynqTop #(parameter width = 64) (
       end
   end
 
-UserTop user(.CLK(CLK), .nRST(RST_N),
+UserTop user(.CLK(CLK), .nRST(nRST),
   .write$enq__ENA(RULEwrite && !portalWControl), .write$enq$v(write$enq$v), .write$enq$last(writeFifo_D_OUT_addr != 0),
   .write$enq__RDY(write$enq__RDY),
   .read$enq__RDY(RULEread && !portalRControl), .read$enq$v(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA));
