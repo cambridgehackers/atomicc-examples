@@ -11,45 +11,8 @@ module mkZynqTop #(parameter width = 64) (
 
   wire CLK, nRST;
 
-//`define BBB
-`ifdef BBB
-reg hackme;
   wire ctclock$clockOut;
   ClockTop pclockTop ( .userCLK(CLK), .usernRST(nRST), .clockOut(ctclock$clockOut));
-wire readAddr_EN;
-  always@(posedge ctclock$clockOut)
-  begin
-  hackme <= readAddr_EN;
-  end
-`else
-  wire mmcm$CLKFBIN, resetInv_RESET_OUT, mmcm$CLKFBOUT, mmcm$CLKOUT0;
-/* verilator lint_off PINMISSING */
-  MMCME2_ADV #(.BANDWIDTH("OPTIMIZED"), .CLKFBOUT_USE_FINE_PS("FALSE"), .CLKOUT0_USE_FINE_PS("FALSE"),
-        .CLKOUT1_USE_FINE_PS("FALSE"), .CLKOUT2_USE_FINE_PS("FALSE"), .CLKOUT3_USE_FINE_PS("FALSE"),
-        .CLKOUT4_CASCADE("FALSE"), .CLKOUT4_USE_FINE_PS("FALSE"), .CLKOUT5_USE_FINE_PS("FALSE"),
-        .CLKOUT6_USE_FINE_PS("FALSE"), .COMPENSATION("ZHOLD"), .STARTUP_WAIT("FALSE"),
-        .CLKFBOUT_MULT_F(10.0), .CLKFBOUT_PHASE(0.0), .CLKIN1_PERIOD(10.0),
-        .CLKIN2_PERIOD(0.0), .DIVCLK_DIVIDE(32'd1), .CLKOUT0_DIVIDE_F(5.0),
-        .CLKOUT0_DUTY_CYCLE(0.5), .CLKOUT0_PHASE(0.0), .CLKOUT1_DIVIDE(32'd10),
-        .CLKOUT1_DUTY_CYCLE(0.5), .CLKOUT1_PHASE(0.0), .CLKOUT2_DIVIDE(32'd10),
-        .CLKOUT2_DUTY_CYCLE(0.5), .CLKOUT2_PHASE(0.0), .CLKOUT3_DIVIDE(32'd10),
-        .CLKOUT3_DUTY_CYCLE(0.5), .CLKOUT3_PHASE(0.0), .CLKOUT4_DIVIDE(32'd10),
-        .CLKOUT4_DUTY_CYCLE(0.5), .CLKOUT4_PHASE(0.0), .CLKOUT5_DIVIDE(32'd10),
-        .CLKOUT5_DUTY_CYCLE(0.5), .CLKOUT5_PHASE(0.0), .CLKOUT6_DIVIDE(32'd10),
-        .CLKOUT6_DUTY_CYCLE(0.5), .CLKOUT6_PHASE(0.0), .REF_JITTER1(1.0e-2),
-        .REF_JITTER2(1.0e-2)) ps7_clockGen_pll(.CLKIN1(CLK),
-        .RST(resetInv_RESET_OUT), .CLKIN2(1'd0), .CLKINSEL(1'd1),
-        .DADDR(7'd0), .DCLK(1'd0), .DEN(1'd0), .DI(16'd0), .DWE(1'd0), .PSCLK(1'd0),
-        .PSEN(1'd0), .PSINCDEC(1'd0), .PWRDWN(1'd0), .CLKFBIN(mmcm$CLKFBIN), .LOCKED(),
-        .CLKFBOUT(mmcm$CLKFBOUT), .CLKFBOUTB(),
-        .CLKOUT0(mmcm$CLKOUT0), .CLKOUT0B(),
-        .CLKOUT1(), .CLKOUT1B(), .CLKOUT2(), .CLKOUT2B(), .CLKOUT3(), .CLKOUT3B(),
-        .CLKOUT4(), .CLKOUT5(), .CLKOUT6());
-/* verilator lint_on PINMISSING */
-  BUFG mmcm$clkfbbuf(.I(mmcm$CLKFBOUT), .O(mmcm$CLKFBIN));
-  ResetInverter resetInv(.RESET_IN(nRST), .RESET_OUT(resetInv_RESET_OUT));
-  BUFG ps7_clockGen_clkout0buffer(.I(mmcm$CLKOUT0), .O());
-`endif //BBB
 
   wire [31 : 0] maxigp0ARADDR, maxigp0AWADDR, maxigp0WDATA, maxigp0RDATA;
   wire [11 : 0] maxigp0ARID, maxigp0AWID, maxigp0WID;
