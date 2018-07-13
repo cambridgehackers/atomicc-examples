@@ -29,7 +29,6 @@ module Echo (input CLK, input nRST,
     output printfp$enq__ENA,
     output [127:0]printfp$enq$v,
     input printfp$enq__RDY);
-    wire CLK, nRST;
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;

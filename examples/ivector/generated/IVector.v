@@ -9,7 +9,6 @@ module IVector (input CLK, input nRST,
     input [31:0]in$say$meth,
     input [31:0]in$say$v,
     output in$say__RDY);
-    wire CLK, nRST;
     reg [31:0]vsize;
     wire fifo0$in$enq__RDY;
     wire fifo0$out$deq__RDY;

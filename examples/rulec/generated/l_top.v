@@ -7,7 +7,6 @@ module l_top (input CLK, input nRST,
     input request$enq__ENA,
     input [127:0]request$enq$v,
     output request$enq__RDY);
-    wire CLK, nRST;
     wire [31:0]DUT__Echo$indication$heard$v;
     wire [15:0]DUT__Echo$indication$heard2$a;
     wire [15:0]DUT__Echo$indication$heard2$b;

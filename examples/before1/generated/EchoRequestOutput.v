@@ -12,7 +12,6 @@ module EchoRequestOutput (input CLK, input nRST,
     output pipe$enq__ENA,
     output [191:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire CLK, nRST;
     wire [31:0]request$say2__ENA$ind$data$say$meth;
     wire [31:0]request$say2__ENA$ind$data$say$v;
     wire [31:0]request$say2__ENA$ind$data$say2$meth;

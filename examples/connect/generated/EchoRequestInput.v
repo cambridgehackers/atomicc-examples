@@ -8,7 +8,6 @@ module EchoRequestInput (input CLK, input nRST,
     output [31:0]request$say$meth,
     output [31:0]request$say$v,
     input request$say__RDY);
-    wire CLK, nRST;
     assign pipe$enq__RDY = request$say__RDY ;
     assign request$say$meth = pipe$enq$v[63:32] ;
     assign request$say$v = pipe$enq$v[95:64] ;

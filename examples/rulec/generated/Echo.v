@@ -26,7 +26,6 @@ module Echo (input CLK, input nRST,
     output [15:0]indication$heard3$d,
     input indication$heard3__RDY,
     input indication$heard__RDY);
-    wire CLK, nRST;
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;

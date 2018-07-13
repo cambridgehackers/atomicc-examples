@@ -5,7 +5,8 @@ module CONNECTNET2 (
     input IN2,
     output OUT1,
     output OUT2);
-    wire CLK, nRST;
+    wire CLK;
+    wire nRST;
     wire assign__ENA;
     assign assign__ENA = 1;
     assign OUT1 = IN1 ;

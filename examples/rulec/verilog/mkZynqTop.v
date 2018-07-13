@@ -11,8 +11,16 @@ module mkZynqTop #(parameter width = 64) (
 
   wire CLK, nRST;
 
+//`define BBB
 `ifdef BBB
-  ClockTop ps7_clockGen_pll ( .CLK(CLK), .nRST(nRST), .clockOut());
+reg hackme;
+  wire ctclock$clockOut;
+  ClockTop pclockTop ( .userCLK(CLK), .usernRST(nRST), .clockOut(ctclock$clockOut));
+wire readAddr_EN;
+  always@(posedge ctclock$clockOut)
+  begin
+  hackme <= readAddr_EN;
+  end
 `else
   wire mmcm$CLKFBIN, resetInv_RESET_OUT, mmcm$CLKFBOUT, mmcm$CLKOUT0;
 /* verilator lint_off PINMISSING */

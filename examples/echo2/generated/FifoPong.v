@@ -8,7 +8,6 @@ module FifoPong (input CLK, input nRST,
     output out$deq__RDY,
     output [703:0]out$first,
     output out$first__RDY);
-    wire CLK, nRST;
     reg pong;
     wire element1$in$enq__RDY;
     wire element1$out$deq__RDY;

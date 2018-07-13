@@ -8,7 +8,6 @@ module EchoIndicationOutput (input CLK, input nRST,
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire CLK, nRST;
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
     assign indication$heard__RDY = pipe$enq__RDY ;

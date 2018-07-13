@@ -8,7 +8,6 @@ module LpmMemory (input CLK, input nRST,
     output ifc$resAccept__RDY,
     output [95:0]ifc$resValue,
     output ifc$resValue__RDY);
-    wire CLK, nRST;
     reg [31:0]delayCount;
     reg [31:0]saved$a;
     reg [31:0]saved$b;

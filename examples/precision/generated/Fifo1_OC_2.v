@@ -8,7 +8,6 @@ module Fifo1_OC_2 (input CLK, input nRST,
     output out$deq__RDY,
     output [9:0]out$first,
     output out$first__RDY);
-    wire CLK, nRST;
     reg [5:0]element$a;
     reg [3:0]element$b;
     reg full;

@@ -16,7 +16,6 @@ module EchoRequest___P2M (input CLK, input nRST,
     input pipe$enq__ENA,
     input [127:0]pipe$enq$v,
     output pipe$enq__RDY);
-    wire CLK, nRST;
     assign method$say$v = pipe$enq$v[63:32] ;
     assign method$say2$a = pipe$enq$v[47:32] ;
     assign method$say2$b = pipe$enq$v[63:48] ;

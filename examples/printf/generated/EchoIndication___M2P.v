@@ -17,7 +17,6 @@ module EchoIndication___M2P (input CLK, input nRST,
     output pipe$enq__ENA,
     output [127:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire CLK, nRST;
     assign method$heard2__RDY = pipe$enq__RDY ;
     assign method$heard3__RDY = pipe$enq__RDY ;
     assign method$heard__RDY = pipe$enq__RDY ;

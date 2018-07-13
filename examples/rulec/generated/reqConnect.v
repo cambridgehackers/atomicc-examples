@@ -8,7 +8,6 @@ module reqConnect (input CLK, input nRST,
     output request$enq__ENA,
     output [127:0]request$enq$v,
     input request$enq__RDY);
-    wire CLK, nRST;
     assign request$enq$v = wad$enq$v ;
     assign request$enq__ENA = wad$enq__ENA ;
     assign wad$enq__RDY = request$enq__RDY ;

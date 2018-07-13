@@ -9,7 +9,6 @@ module IVector (input CLK, input nRST,
     output [5:0]ind$heard$meth,
     output [3:0]ind$heard$v,
     input ind$heard__RDY);
-    wire CLK, nRST;
     reg [8:0]counter;
     reg [7:0]fcounter;
     reg [8:0]gcounter;

@@ -10,7 +10,6 @@ module MuxPipe (input CLK, input nRST,
     output out$enq__ENA,
     output [127:0]out$enq$v,
     input out$enq__RDY);
-    wire CLK, nRST;
     wire fifoRule__ENA;
     wire forwardFifo$out$deq__RDY;
     wire [127:0]forwardFifo$out$first;

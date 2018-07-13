@@ -8,7 +8,6 @@ module EchoIndicationInput (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire CLK, nRST;
     reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;

@@ -1,7 +1,6 @@
 `include "zynqTop.generated.vh"
 
 module ZynqTop (input CLK, input nRST);
-    wire CLK, nRST;
     wire [14:0]pps$DDRA;
     wire [3:0]pps$DDRARB;
     wire [2:0]pps$DDRBA;

@@ -2,8 +2,9 @@ EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
 }
 EMODULE l_ainterface_OC_ClockIfc {
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
+    FIELD/parameter FLOAT CLKIN1_PERIOD
+    FIELD/input INTEGER_1 userCLK
+    FIELD/input INTEGER_1 usernRST
     FIELD/output INTEGER_1 clockOut
 }
 EMODULE l_ainterface_OC_MResetInverterResetInverter {
@@ -545,10 +546,12 @@ MODULE ClockTop {
         LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
         LET INTEGER_1 :clockOut = clkbuf0$O
         LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
-        LET INTEGER_1 :rinverter$RESET_IN = __defaultnReset
+        LET INTEGER_1 :rinverter$RESET_IN = usernRST
         LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
         LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = __defaultClock
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
+        LET INTEGER_1 :__defaultClock = userCLK
+        LET INTEGER_1 :__defaultnReset = usernRST
     }
 }
 MODULE Fifo1 {

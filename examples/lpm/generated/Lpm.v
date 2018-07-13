@@ -9,7 +9,6 @@ module Lpm (input CLK, input nRST,
     input [31:0]request$say$meth,
     input [31:0]request$say$v,
     output request$say__RDY);
-    wire CLK, nRST;
     reg [31:0]doneCount;
     wire enter__ENA;
     wire exit_rule__ENA;

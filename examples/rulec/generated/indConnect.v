@@ -8,7 +8,6 @@ module indConnect (input CLK, input nRST,
     output [127:0]rad$enq$v,
     output [15:0]rad$enq$length,
     input rad$enq__RDY);
-    wire CLK, nRST;
     assign indication$enq__RDY = rad$enq__RDY ;
     assign rad$enq$length = indication$enq$v  - 1;
     assign rad$enq$v = indication$enq$v ;

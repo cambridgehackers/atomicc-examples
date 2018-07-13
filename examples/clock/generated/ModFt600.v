@@ -7,8 +7,9 @@ module ModFt600 (
     output usb_rd_n,
     output usb_wr_n,
     output usb_oe_n,
-    input [15:0]usb_ad);
-    wire CLK, nRST;
+    inout usb_ad);
+    wire CLK;
+    wire nRST;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
@@ -240,6 +241,7 @@ module ModFt600 (
     assign iobufs8$T = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign iobufs9$I = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign iobufs9$T = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_oe_n = usb_rxf_delay ;
     assign usb_rd_n = usb_rxf_delay  != 2'd0;
     assign usb_wr_n = usb_txe_delay  | usb_fifo_empty  | ( usb_rxf_delay  ^ ( -1 ) );

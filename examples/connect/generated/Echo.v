@@ -9,7 +9,6 @@ module Echo (input CLK, input nRST,
     output [31:0]indication$heard$meth,
     output [31:0]indication$heard$v,
     input indication$heard__RDY);
-    wire CLK, nRST;
     assign indication$heard$meth = request$say$meth ;
     assign indication$heard$v = request$say$v ;
     assign indication$heard__ENA = request$say__ENA ;

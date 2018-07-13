@@ -9,7 +9,6 @@ module AdapterToBus (input CLK, input nRST,
     output [31:0]out$enq$v,
     output out$enq$last,
     input out$enq__RDY);
-    wire CLK, nRST;
     reg [127:0]buffer;
     reg [15:0]remain;
     wire copyRule__ENA;

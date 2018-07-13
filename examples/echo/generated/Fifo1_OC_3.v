@@ -8,7 +8,6 @@ module Fifo1_OC_3 (input CLK, input nRST,
     output out$deq__RDY,
     output [31:0]out$first,
     output out$first__RDY);
-    wire CLK, nRST;
     reg [31:0]element;
     reg full;
     assign in$enq__RDY = !full ;

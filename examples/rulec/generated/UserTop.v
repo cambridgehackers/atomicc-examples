@@ -9,7 +9,6 @@ module UserTop (input CLK, input nRST,
     output [31:0]read$enq$v,
     output read$enq$last,
     input read$enq__RDY);
-    wire CLK, nRST;
     wire [127:0]ctop$indication$enq$v;
     wire ctop$indication$enq__ENA;
     wire ctop$request$enq__RDY;

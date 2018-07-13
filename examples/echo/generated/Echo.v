@@ -7,7 +7,6 @@ module Echo (input CLK, input nRST,
     output ind$heard__ENA,
     output [31:0]ind$heard$v,
     input ind$heard__RDY);
-    wire CLK, nRST;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     wire respond_rule__ENA;

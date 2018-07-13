@@ -25,9 +25,10 @@
 #include "VResetInverter.h"
 
 __interface ClockIfc {
-   __input __uint(1) CLK;
-   __input __uint(1) nRST;
-   __output __uint(1) clockOut;
+   __parameter float   CLKIN1_PERIOD;
+   __input  __uint(1)  userCLK;
+   __input  __uint(1)  usernRST;
+   __output __uint(1)  clockOut;
 };
 
 __module ClockTop {
@@ -68,10 +69,12 @@ __module ClockTop {
         clkbuf._.I = ps7_clockGen_pll._.CLKFBOUT;
         _.clockOut = clkbuf0._.O;
         ps7_clockGen_pll._.CLKFBIN = clkbuf._.O;
-        rinverter._.RESET_IN = __defaultnReset;
+        rinverter._.RESET_IN = _.usernRST;
         ps7_clockGen_pll._.RST = rinverter._.RESET_OUT;
         clkbuf0._.I = ps7_clockGen_pll._.CLKOUT0;
-        ps7_clockGen_pll._.CLKIN1 = __defaultClock;
+        ps7_clockGen_pll._.CLKIN1 = _.userCLK;
+        __defaultClock = _.userCLK;
+        __defaultnReset = _.usernRST;
         };
     }
 };

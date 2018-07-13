@@ -8,7 +8,6 @@ module EchoRequestOutput (input CLK, input nRST,
     output pipe$enq__ENA,
     output [95:0]pipe$enq$v,
     input pipe$enq__RDY);
-    wire CLK, nRST;
     wire [31:0]request$say__ENA$ind$data$say$meth;
     wire [31:0]request$say__ENA$ind$data$say$v;
     assign pipe$enq$v = { request$say__ENA$ind$data$say$v  , request$say__ENA$ind$data$say$meth  , 32'd1 };
