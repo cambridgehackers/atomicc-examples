@@ -508,6 +508,11 @@ EMODULE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
+EMODULE l_ainterface_OC_ZynqClock {
+    FIELD/output INTEGER_1 CLK
+    FIELD/output INTEGER_1 nRST
+    FIELD/output INTEGER_4 FCLKCLK
+}
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
 }
@@ -588,5 +593,35 @@ MODULE MuxPipe {
     }
 }
 MODULE ZynqTop {
+    INTERFACECONNECT DDR pps$DDR l_ainterface_OC_Pps7ddr
+    INTERFACECONNECT IRQ pps$IRQ l_ainterface_OC_Pps7irq
+    INTERFACECONNECT PS pps$PS l_ainterface_OC_Pps7ps
+    INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT MAXIGP0 pps$MAXIGP0 l_ainterface_OC_Pps7maxigp
+    INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_Pps7ddr DDR
+    INTERFACE l_ainterface_OC_Pps7irq IRQ
+    INTERFACE l_ainterface_OC_Pps7m M
+    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP0
+    INTERFACE l_ainterface_OC_Pps7ps PS
     FIELD PS7 pps
+    FIELD BUFG ps7_fclk_0_c
+    FIELD BUFG ps7_freset_0_r
+    METHOD/Rule init__ENA {
+        LET INTEGER_1 :ps7_fclk_0_c$I = pps$FCLKCLK
+        LET INTEGER_1 :__defaultClock = ps7_fclk_0_c$O
+        LET INTEGER_1 :ps7_freset_0_r$I = pps$FCLKRESETN
+        LET INTEGER_1 :__defaultnReset = ps7_freset_0_r$O
+        LET INTEGER_1 :pps$FPGAIDLEN = 1
+        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$MAXIGP1ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIACPACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIGP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIGP1ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIHP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIHP1ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIHP2ACLK = __defaultClock
+        LET INTEGER_1 :pps$SAXIHP3ACLK = __defaultClock
+        LET INTEGER_4 :FCLKCLK = pps$FCLKCLK
+    }
 }

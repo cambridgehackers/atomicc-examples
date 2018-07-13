@@ -25,6 +25,8 @@ module mkZynqTop #(parameter width = 64) (
   reg CMRlastWriteDataSeen;
   assign maxigp0AWREADY = reqws_FULL_N && write_reqFifo_FULL_N;
   assign maxigp0WREADY = !CMRlastWriteDataSeen && reqwriteDataFifo_FULL_N ;
+`define BBB
+`ifdef BBB
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
 /* verilator lint_off PINMISSING */
@@ -150,6 +152,38 @@ module mkZynqTop #(parameter width = 64) (
         .DDRVRP(FIXED_IO_ddr_vrp), .DDRWEB(DDR_WEB), .PSCLK(FIXED_IO_ps_clk),
         .PSPORB(FIXED_IO_ps_porb), .PSSRSTB(FIXED_IO_ps_srstb), .MIO(MIO));
 /* verilator lint_on PINMISSING */
+`else
+ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
+        .FCLKCLK(ps7_ps7_foo_FCLKCLK),
+        .IRQF2P({ 19'b0, interrupt_0__read}),
+
+        .MAXIGP0ARADDR(maxigp0ARADDR), .MAXIGP0ARID(maxigp0ARID), .MAXIGP0ARLEN(maxigp0ARLEN),
+        .MAXIGP0ARVALID(maxigp0ARVALID), .MAXIGP0ARREADY(!read_reqFifo_EMPTY_N),
+
+        .MAXIGP0RDATA(maxigp0RDATA), .MAXIGP0RRESP(0), .MAXIGP0RLAST(1),
+        .MAXIGP0RID({6'b0, maxigp0RID}), .MAXIGP0RREADY(maxigp0RREADY), .MAXIGP0RVALID(maxigp0RVALID),
+
+        .MAXIGP0AWADDR(maxigp0AWADDR), .MAXIGP0AWID(maxigp0AWID), .MAXIGP0AWLEN(maxigp0AWLEN),
+        .MAXIGP0AWVALID(maxigp0AWVALID), .MAXIGP0AWREADY(maxigp0AWREADY),
+
+        .MAXIGP0WDATA(maxigp0WDATA), .MAXIGP0WID(maxigp0WID), .MAXIGP0WLAST(maxigp0WLAST),
+        .MAXIGP0WVALID(maxigp0WVALID), .MAXIGP0WREADY(maxigp0WREADY),
+
+        .MAXIGP0BRESP(maxigp0BRESP[13:12]), .MAXIGP0BID(maxigp0BRESP[11:0]),
+        .MAXIGP0BVALID(RDY_WriteDone && maxigp0BREADY), .MAXIGP0BREADY(maxigp0BREADY),
+        .DDRA(DDR_Addr), .DDRBA(DDR_BankAddr), .DDRCASB(DDR_CAS_n),
+        .DDRCKE(DDR_CKE), .DDRCKN(DDR_Clk_n), .DDRCKP(DDR_Clk_p),
+        .DDRCSB(DDR_CS_n), .DDRDM(DDR_DM), .DDRDQ(DDR_DQ),
+        .DDRDQSN(DDR_DQS_n), .DDRDQSP(DDR_DQS_p), .DDRDRSTB(DDR_DRSTB),
+        .DDRODT(DDR_ODT), .DDRRASB(DDR_RAS_n), .DDRVRN(FIXED_IO_ddr_vrn),
+        .DDRVRP(FIXED_IO_ddr_vrp), .DDRWEB(DDR_WEB), .PSCLK(FIXED_IO_ps_clk),
+        .PSPORB(FIXED_IO_ps_porb), .PSSRSTB(FIXED_IO_ps_srstb), .MIO(MIO),
+    .DDRARB(0), .IRQP2F(),
+    .MAXIGP0ARBURST(), .MAXIGP0ARCACHE(), .MAXIGP0ARESETN(), .MAXIGP0ARLOCK(),
+    .MAXIGP0ARPROT(), .MAXIGP0ARQOS(), .MAXIGP0ARSIZE(), 
+    .MAXIGP0AWBURST(), .MAXIGP0AWCACHE(), .MAXIGP0AWLOCK(), .MAXIGP0AWPROT(),
+    .MAXIGP0AWQOS(), .MAXIGP0AWSIZE(), .MAXIGP0WSTRB());
+`endif
 
   reg ctrlPort_0_interruptEnableReg;
   reg readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
