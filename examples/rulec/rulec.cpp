@@ -70,13 +70,11 @@ __module Echo {
     int busy;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
-    __int(18) xxx;
     int busy_delay;
     int v_type;
     void request.say(aint32 v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, 1);
         v_temp = v;
-xxx = v;
         busy = 1;
         v_type = 1;
     }

@@ -35,7 +35,6 @@ module Echo (input CLK, input nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
-    reg [17:0]xxx;
     wire delay_rule__ENA;
     wire respond_rule__ENA;
     assign delay_rule__ENA = ( ( busy  != 32'd0 ) & ( busy_delay  == 32'd0 ) ) != 0;
@@ -66,7 +65,6 @@ module Echo (input CLK, input nRST,
         v_delay <= 0;
         v_temp <= 0;
         v_type <= 0;
-        xxx <= 0;
       end // nRST
       else begin
         if (delay_rule__ENA & ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0) begin
@@ -79,7 +77,6 @@ module Echo (input CLK, input nRST,
         end; // End of delay_rule__ENA
         if (request$say__ENA & request$say__RDY) begin
             v_temp  <= request$say$v;
-            xxx  <= request$say$v;
             busy  <= 1;
             v_type  <= 1;
             $display( "[%s:%d]Echo" , "request$say" , 1 );

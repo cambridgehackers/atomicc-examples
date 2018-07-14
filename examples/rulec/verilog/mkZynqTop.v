@@ -154,7 +154,7 @@ module mkZynqTop #(parameter width = 64) (
 /* verilator lint_on PINMISSING */
 `else
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
-        .FCLKCLK(ps7_ps7_foo_FCLKCLK),
+        .FCLKCLK(ps7_ps7_foo_FCLKCLK[3:0]),
         .IRQF2P({ 19'b0, interrupt_0__read}),
 
         .MAXIGP0ARADDR(maxigp0ARADDR), .MAXIGP0ARID(maxigp0ARID), .MAXIGP0ARLEN(maxigp0ARLEN),
@@ -182,7 +182,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
     .MAXIGP0ARBURST(), .MAXIGP0ARCACHE(), .MAXIGP0ARESETN(), .MAXIGP0ARLOCK(),
     .MAXIGP0ARPROT(), .MAXIGP0ARQOS(), .MAXIGP0ARSIZE(), 
     .MAXIGP0AWBURST(), .MAXIGP0AWCACHE(), .MAXIGP0AWLOCK(), .MAXIGP0AWPROT(),
-    .MAXIGP0AWQOS(), .MAXIGP0AWSIZE(), .MAXIGP0WSTRB());
+    .MAXIGP0AWQOS(), .MAXIGP0AWSIZE(), .MAXIGP0WSTRB(), .MAXIGP0ACLK(CLK));
 `endif
 
   reg ctrlPort_0_interruptEnableReg;
@@ -200,7 +200,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   wire [5 : 0] reqPortal_D_OUT_id, read_reqFifo_D_OUT_id;
   wire [4 : 0] reqPortal_D_OUT_addr, read_reqFifo_D_OUT_addr, readAddrupdate;
   wire [1 : 0] selectIndication, selectRequest;
-  assign zzIntrChannel = selectRIndReq ? 32'd0 : read$enq__ENA;
+  assign zzIntrChannel = {31'd0, selectRIndReq ? 1'd0 : read$enq__ENA};
 
   assign interrupt_0__read = read$enq__ENA && ctrlPort_0_interruptEnableReg;
   assign readFirstNext = readFirst ? read_reqFifo_D_OUT_count == 4  : readLast ;
@@ -267,6 +267,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   wire [5 : 0] writeFifo_D_OUT_id, write_reqFifo_D_OUT_id;
   wire [4 : 0] writeFifo_D_OUT_addr, write_reqFifo_D_OUT_addr, writeAddrupdate;
 
+assign RDY_requestEnq = 0; // MISSING ASSIGN
   assign EN_WriteReq = maxigp0AWVALID && maxigp0AWREADY;
   assign RULEwrite = reqwriteDataFifo_EMPTY_N && writeFifo_EMPTY_N && (!writeFifo_D_OUT_last || WriteDone_FULL_N)
             && (!selectWIndReq || portalWControl || (reqws_EMPTY_N && RDY_requestEnq));

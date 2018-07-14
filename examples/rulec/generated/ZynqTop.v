@@ -4,18 +4,18 @@ module ZynqTop (
     output CLK,
     output nRST,
     output [3:0]FCLKCLK,
-    inout DDRA,
+    inout [14:0]DDRA,
     input [3:0]DDRARB,
-    inout DDRBA,
+    inout [2:0]DDRBA,
     inout DDRCASB,
     inout DDRCKE,
     inout DDRCKN,
     inout DDRCKP,
     inout DDRCSB,
-    inout DDRDM,
-    inout DDRDQ,
-    inout DDRDQSN,
-    inout DDRDQSP,
+    inout [3:0]DDRDM,
+    inout [31:0]DDRDQ,
+    inout [3:0]DDRDQSN,
+    inout [3:0]DDRDQSP,
     inout DDRDRSTB,
     inout DDRODT,
     inout DDRRASB,
@@ -24,7 +24,7 @@ module ZynqTop (
     inout DDRWEB,
     input [19:0]IRQF2P,
     output [28:0]IRQP2F,
-    inout MIO,
+    inout [53:0]MIO,
     input MAXIGP0ACLK,
     output [31:0]MAXIGP0ARADDR,
     output [1:0]MAXIGP0ARBURST,
@@ -1238,10 +1238,10 @@ module ZynqTop (
         .SAXIHP3WSTRB(pps$SAXIHP3WSTRB),
         .SAXIHP3WVALID(pps$SAXIHP3WVALID));
     BUFG ps7_fclk_0_c (
-        .I(FCLKCLK),
+        .I(FCLKCLK[0]),
         .O(CLK));
     BUFG ps7_freset_0_r (
-        .I(pps$FCLKRESETN),
+        .I(pps$FCLKRESETN[0]),
         .O(nRST));
     assign pps$DMA0ACLK = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DAREADY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE

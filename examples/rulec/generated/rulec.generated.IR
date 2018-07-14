@@ -89,7 +89,6 @@ MODULE Echo {
     FIELD INTEGER_16 b_temp
     FIELD INTEGER_16 a_delay
     FIELD INTEGER_16 b_delay
-    FIELD INTEGER_18 xxx
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
     METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
@@ -110,7 +109,6 @@ MODULE Echo {
     METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say",1}
         STORE :v_temp = request$say$v
-        STORE :xxx = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
