@@ -11,6 +11,15 @@ EMODULE l_ainterface_OC_MResetInverterResetInverter {
     FIELD/input INTEGER_1 RESET_IN
     FIELD/output INTEGER_1 RESET_OUT
 }
+EMODULE l_ainterface_OC_MaxiI {
+    METHOD B__ENA ( INTEGER_12 id , INTEGER_2 resp )
+    METHOD R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
+}
+EMODULE l_ainterface_OC_MaxiO {
+    METHOD AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+}
 EMODULE l_ainterface_OC_MbufgBUFG {
     FIELD/input INTEGER_1 I
     FIELD/output INTEGER_1 O
@@ -599,16 +608,16 @@ MODULE ZynqTop {
     INTERFACECONNECT IRQ pps$IRQ l_ainterface_OC_Pps7irq
     INTERFACECONNECT PS pps$PS l_ainterface_OC_Pps7ps
     INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT MAXIGP0 pps$MAXIGP0 l_ainterface_OC_Pps7maxigp
     INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACECONNECT MAXIGP0 pps$MAXIGP0 l_ainterface_OC_Pps7maxigp
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7ddr DDR
     INTERFACE l_ainterface_OC_Pps7irq IRQ
     INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP0
     INTERFACE l_ainterface_OC_Pps7ps PS
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD PS7 pps
+    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP0
     METHOD/Rule init__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
     }

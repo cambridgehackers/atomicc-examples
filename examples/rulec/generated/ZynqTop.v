@@ -25,6 +25,12 @@ module ZynqTop (
     input wire [19:0]IRQF2P,
     output wire [28:0]IRQP2F,
     inout wire [53:0]MIO,
+    inout wire PSCLK,
+    inout wire PSPORB,
+    inout wire PSSRSTB,
+    output wire [3:0]FCLKCLK,
+    input wire [3:0]FCLKCLKTRIGN,
+    output wire [3:0]FCLKRESETN,
     input wire MAXIGP0ACLK,
     output wire [31:0]MAXIGP0ARADDR,
     output wire [1:0]MAXIGP0ARBURST,
@@ -64,13 +70,7 @@ module ZynqTop (
     output wire MAXIGP0WLAST,
     input wire MAXIGP0WREADY,
     output wire [3:0]MAXIGP0WSTRB,
-    output wire MAXIGP0WVALID,
-    inout wire PSCLK,
-    inout wire PSPORB,
-    inout wire PSSRSTB,
-    output wire [3:0]FCLKCLK,
-    input wire [3:0]FCLKCLKTRIGN,
-    output wire [3:0]FCLKRESETN);
+    output wire MAXIGP0WVALID);
     wire init__ENA;
     wire pps$DMA0ACLK;
     wire pps$DMA0DAREADY;
