@@ -118,7 +118,7 @@ __module ZynqTop {
     __connect M = pps._.M;
     __connect FCLK = pps._.FCLK;
 
-#define OLDIF
+//#define OLDIF
 #ifdef OLDIF
     Pps7maxigp       MAXIGP0;
     __connect MAXIGP0 = pps._.MAXIGP0;
@@ -143,7 +143,7 @@ __module ZynqTop {
             pps._.FPGAID.LEN = 1;
 #ifndef OLDIF
             pps._.MAXIGP0.ACLK = __defaultClock;
-            pps._.MAXIGP0.ARESETN = 1;
+            //pps._.MAXIGP0.ARESETN = 1;
 #endif
        }
 #ifndef OLDIF

@@ -2,6 +2,31 @@
 
 `default_nettype none
 module ZynqTop (
+    output wire MAXIGP0_O$AR__ENA,
+    output wire [31:0]MAXIGP0_O$AR$addr,
+    output wire [11:0]MAXIGP0_O$AR$id,
+    output wire [3:0]MAXIGP0_O$AR$len,
+    input wire MAXIGP0_O$AR__RDY,
+    output wire MAXIGP0_O$AW__ENA,
+    output wire [31:0]MAXIGP0_O$AW$addr,
+    output wire [11:0]MAXIGP0_O$AW$id,
+    output wire [3:0]MAXIGP0_O$AW$len,
+    input wire MAXIGP0_O$AW__RDY,
+    output wire MAXIGP0_O$W__ENA,
+    output wire [31:0]MAXIGP0_O$W$data,
+    output wire [11:0]MAXIGP0_O$W$id,
+    output wire MAXIGP0_O$W$last,
+    input wire MAXIGP0_O$W__RDY,
+    input wire MAXIGP0_I$B__ENA,
+    input wire [11:0]MAXIGP0_I$B$id,
+    input wire [1:0]MAXIGP0_I$B$resp,
+    output wire MAXIGP0_I$B__RDY,
+    input wire MAXIGP0_I$R__ENA,
+    input wire [31:0]MAXIGP0_I$R$data,
+    input wire [11:0]MAXIGP0_I$R$id,
+    input wire MAXIGP0_I$R$last,
+    input wire [1:0]MAXIGP0_I$R$resp,
+    output wire MAXIGP0_I$R__RDY,
     input wire CLK,
     input wire nRST,
     inout wire [14:0]DDRA,
@@ -30,47 +55,10 @@ module ZynqTop (
     inout wire PSSRSTB,
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
-    output wire [3:0]FCLKRESETN,
-    input wire MAXIGP0ACLK,
-    output wire [31:0]MAXIGP0ARADDR,
-    output wire [1:0]MAXIGP0ARBURST,
-    output wire [3:0]MAXIGP0ARCACHE,
-    output wire MAXIGP0ARESETN,
-    output wire [11:0]MAXIGP0ARID,
-    output wire [3:0]MAXIGP0ARLEN,
-    output wire [1:0]MAXIGP0ARLOCK,
-    output wire [2:0]MAXIGP0ARPROT,
-    output wire [3:0]MAXIGP0ARQOS,
-    input wire MAXIGP0ARREADY,
-    output wire [1:0]MAXIGP0ARSIZE,
-    output wire MAXIGP0ARVALID,
-    output wire [31:0]MAXIGP0AWADDR,
-    output wire [1:0]MAXIGP0AWBURST,
-    output wire [3:0]MAXIGP0AWCACHE,
-    output wire [11:0]MAXIGP0AWID,
-    output wire [3:0]MAXIGP0AWLEN,
-    output wire [1:0]MAXIGP0AWLOCK,
-    output wire [2:0]MAXIGP0AWPROT,
-    output wire [3:0]MAXIGP0AWQOS,
-    input wire MAXIGP0AWREADY,
-    output wire [1:0]MAXIGP0AWSIZE,
-    output wire MAXIGP0AWVALID,
-    input wire [11:0]MAXIGP0BID,
-    output wire MAXIGP0BREADY,
-    input wire [1:0]MAXIGP0BRESP,
-    input wire MAXIGP0BVALID,
-    input wire [31:0]MAXIGP0RDATA,
-    input wire [11:0]MAXIGP0RID,
-    input wire MAXIGP0RLAST,
-    output wire MAXIGP0RREADY,
-    input wire [1:0]MAXIGP0RRESP,
-    input wire MAXIGP0RVALID,
-    output wire [31:0]MAXIGP0WDATA,
-    output wire [11:0]MAXIGP0WID,
-    output wire MAXIGP0WLAST,
-    input wire MAXIGP0WREADY,
-    output wire [3:0]MAXIGP0WSTRB,
-    output wire MAXIGP0WVALID);
+    output wire [3:0]FCLKRESETN);
+    wire RULEgp0ar__ENA;
+    wire RULEgp0aw__ENA;
+    wire RULEgp0w__ENA;
     wire RULEinit__ENA;
     wire pps$DMA0ACLK;
     wire pps$DMA0DAREADY;
@@ -278,6 +266,26 @@ module ZynqTop (
     wire [31:0]pps$FTMTP2FDEBUG;
     wire [3:0]pps$FTMTP2FTRIG;
     wire [3:0]pps$FTMTP2FTRIGACK;
+    wire [1:0]pps$MAXIGP0ARBURST;
+    wire [3:0]pps$MAXIGP0ARCACHE;
+    wire pps$MAXIGP0ARESETN;
+    wire [1:0]pps$MAXIGP0ARLOCK;
+    wire [2:0]pps$MAXIGP0ARPROT;
+    wire [3:0]pps$MAXIGP0ARQOS;
+    wire [1:0]pps$MAXIGP0ARSIZE;
+    wire pps$MAXIGP0ARVALID;
+    wire [1:0]pps$MAXIGP0AWBURST;
+    wire [3:0]pps$MAXIGP0AWCACHE;
+    wire [1:0]pps$MAXIGP0AWLOCK;
+    wire [2:0]pps$MAXIGP0AWPROT;
+    wire [3:0]pps$MAXIGP0AWQOS;
+    wire [1:0]pps$MAXIGP0AWSIZE;
+    wire pps$MAXIGP0AWVALID;
+    wire pps$MAXIGP0BREADY;
+    wire pps$MAXIGP0RREADY;
+    wire pps$MAXIGP0WLAST;
+    wire [3:0]pps$MAXIGP0WSTRB;
+    wire pps$MAXIGP0WVALID;
     wire pps$MAXIGP1ACLK;
     wire [31:0]pps$MAXIGP1ARADDR;
     wire [1:0]pps$MAXIGP1ARBURST;
@@ -624,6 +632,9 @@ module ZynqTop (
     wire pps$SAXIHP3WRISSUECAP1EN;
     wire [7:0]pps$SAXIHP3WSTRB;
     wire pps$SAXIHP3WVALID;
+    assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
+    assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
+    assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
     assign RULEinit__ENA = 1;
     PS7 pps (
         .DDRA(DDRA),
@@ -856,46 +867,47 @@ module ZynqTop (
         .FTMTP2FTRIGACK(pps$FTMTP2FTRIGACK),
         .IRQF2P(IRQF2P),
         .IRQP2F(IRQP2F),
-        .MAXIGP0ACLK(MAXIGP0ACLK),
-        .MAXIGP0ARADDR(MAXIGP0ARADDR),
-        .MAXIGP0ARBURST(MAXIGP0ARBURST),
-        .MAXIGP0ARCACHE(MAXIGP0ARCACHE),
-        .MAXIGP0ARESETN(MAXIGP0ARESETN),
-        .MAXIGP0ARID(MAXIGP0ARID),
-        .MAXIGP0ARLEN(MAXIGP0ARLEN),
-        .MAXIGP0ARLOCK(MAXIGP0ARLOCK),
-        .MAXIGP0ARPROT(MAXIGP0ARPROT),
-        .MAXIGP0ARQOS(MAXIGP0ARQOS),
-        .MAXIGP0ARREADY(MAXIGP0ARREADY),
-        .MAXIGP0ARSIZE(MAXIGP0ARSIZE),
-        .MAXIGP0ARVALID(MAXIGP0ARVALID),
-        .MAXIGP0AWADDR(MAXIGP0AWADDR),
-        .MAXIGP0AWBURST(MAXIGP0AWBURST),
-        .MAXIGP0AWCACHE(MAXIGP0AWCACHE),
-        .MAXIGP0AWID(MAXIGP0AWID),
-        .MAXIGP0AWLEN(MAXIGP0AWLEN),
-        .MAXIGP0AWLOCK(MAXIGP0AWLOCK),
-        .MAXIGP0AWPROT(MAXIGP0AWPROT),
-        .MAXIGP0AWQOS(MAXIGP0AWQOS),
-        .MAXIGP0AWREADY(MAXIGP0AWREADY),
-        .MAXIGP0AWSIZE(MAXIGP0AWSIZE),
-        .MAXIGP0AWVALID(MAXIGP0AWVALID),
-        .MAXIGP0BID(MAXIGP0BID),
-        .MAXIGP0BREADY(MAXIGP0BREADY),
-        .MAXIGP0BRESP(MAXIGP0BRESP),
-        .MAXIGP0BVALID(MAXIGP0BVALID),
-        .MAXIGP0RDATA(MAXIGP0RDATA),
-        .MAXIGP0RID(MAXIGP0RID),
-        .MAXIGP0RLAST(MAXIGP0RLAST),
-        .MAXIGP0RREADY(MAXIGP0RREADY),
-        .MAXIGP0RRESP(MAXIGP0RRESP),
-        .MAXIGP0RVALID(MAXIGP0RVALID),
-        .MAXIGP0WDATA(MAXIGP0WDATA),
-        .MAXIGP0WID(MAXIGP0WID),
-        .MAXIGP0WLAST(MAXIGP0WLAST),
-        .MAXIGP0WREADY(MAXIGP0WREADY),
-        .MAXIGP0WSTRB(MAXIGP0WSTRB),
-        .MAXIGP0WVALID(MAXIGP0WVALID),
+        .MAXIGP0ACLK(CLK),
+        .MAXIGP0ARADDR(MAXIGP0_O$AR$addr),
+        .MAXIGP0ARBURST(pps$MAXIGP0ARBURST),
+        .MAXIGP0ARCACHE(pps$MAXIGP0ARCACHE),
+        .MAXIGP0ARESETN(pps$MAXIGP0ARESETN),
+        .MAXIGP0ARID(MAXIGP0_O$AR$id),
+        .MAXIGP0ARLEN(MAXIGP0_O$AR$len),
+        .MAXIGP0ARLOCK(pps$MAXIGP0ARLOCK),
+        .MAXIGP0ARPROT(pps$MAXIGP0ARPROT),
+        .MAXIGP0ARQOS(pps$MAXIGP0ARQOS),
+        .MAXIGP0ARREADY(MAXIGP0_O$AR__RDY),
+        .MAXIGP0ARSIZE(pps$MAXIGP0ARSIZE),
+        .MAXIGP0ARVALID(MAXIGP0_O$AR__ENA),
+        .MAXIGP0AWADDR(MAXIGP0_O$AW$addr),
+        .MAXIGP0AWBURST(pps$MAXIGP0AWBURST),
+        .MAXIGP0AWCACHE(pps$MAXIGP0AWCACHE),
+        .MAXIGP0AWID(MAXIGP0_O$AW$id),
+        .MAXIGP0AWLEN(MAXIGP0_O$AW$len),
+        .MAXIGP0AWLOCK(pps$MAXIGP0AWLOCK),
+        .MAXIGP0AWPROT(pps$MAXIGP0AWPROT),
+        .MAXIGP0AWQOS(pps$MAXIGP0AWQOS),
+        .MAXIGP0AWREADY(MAXIGP0_O$AW__RDY),
+        .MAXIGP0AWSIZE(pps$MAXIGP0AWSIZE),
+        .MAXIGP0AWVALID(MAXIGP0_O$AW__ENA),
+        .MAXIGP0BID(MAXIGP0_I$B$id),
+        .MAXIGP0BREADY(MAXIGP0_I$B__RDY),
+        .MAXIGP0BRESP(MAXIGP0_I$B$resp),
+        .MAXIGP0BVALID(MAXIGP0_I$B__ENA),
+        .MAXIGP0RDATA(MAXIGP0_I$R$data),
+        .MAXIGP0RID(MAXIGP0_I$R$id),
+        .MAXIGP0RLAST(MAXIGP0_I$R$last),
+        .MAXIGP0RREADY(MAXIGP0_I$R__RDY),
+        .MAXIGP0RRESP(MAXIGP0_I$R$resp),
+        .MAXIGP0RVALID(MAXIGP0_I$R__ENA),
+        .MAXIGP0WDATA(MAXIGP0_O$W$data),
+        .MAXIGP0WID(MAXIGP0_O$W$id),
+        .MAXIGP0WLAST(MAXIGP0_O$W$last),
+        .MAXIGP0WREADY(MAXIGP0_O$W__RDY),
+        .MAXIGP0WSTRB(pps$MAXIGP0WSTRB),
+        .MAXIGP0WVALID(MAXIGP0_O$W__ENA),
+
         .MAXIGP1ACLK(pps$MAXIGP1ACLK),
         .MAXIGP1ARADDR(pps$MAXIGP1ARADDR),
         .MAXIGP1ARBURST(pps$MAXIGP1ARBURST),

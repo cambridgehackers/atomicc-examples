@@ -609,7 +609,6 @@ MODULE ZynqTop {
     INTERFACECONNECT PS pps$PS l_ainterface_OC_Pps7ps
     INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
     INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
-    INTERFACECONNECT MAXIGP0 pps$MAXIGP0 l_ainterface_OC_Pps7maxigp
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7ddr DDR
     INTERFACE l_ainterface_OC_Pps7irq IRQ
@@ -617,8 +616,34 @@ MODULE ZynqTop {
     INTERFACE l_ainterface_OC_Pps7ps PS
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD PS7 pps
-    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP0
+    INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+    METHOD MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
+        LET INTEGER_12 :pps$MAXIGP0BID = MAXIGP0_I$B$id
+        LET INTEGER_2 :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
+        LET INTEGER_1 :pps$MAXIGP0BVALID = 1
+    }
+    METHOD MAXIGP0_I$R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp ) if ((pps$MAXIGP0RREADY)) {
+        LET INTEGER_32 :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
+        LET INTEGER_12 :pps$MAXIGP0RID = MAXIGP0_I$R$id
+        LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
+        LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
+        LET INTEGER_1 :pps$MAXIGP0RVALID = 1
+    }
+    METHOD/Rule RULEgp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
+        CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
+        LET INTEGER_1 :pps$MAXIGP0ARREADY = 1
+    }
+    METHOD/Rule RULEgp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
+        CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
+        LET INTEGER_1 :pps$MAXIGP0AWREADY = 1
+    }
+    METHOD/Rule RULEgp0w__ENA if ((pps$MAXIGP0WVALID)) {
+        CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
+        LET INTEGER_1 :pps$MAXIGP0WREADY = 1
+    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
+        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
     }
 }
