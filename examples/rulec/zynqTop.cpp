@@ -118,11 +118,6 @@ __module ZynqTop {
     __connect M = pps._.M;
     __connect FCLK = pps._.FCLK;
 
-//#define OLDIF
-#ifdef OLDIF
-    Pps7maxigp       MAXIGP0;
-    __connect MAXIGP0 = pps._.MAXIGP0;
-#else
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp) if (pps._.MAXIGP0.RREADY) {
@@ -137,16 +132,12 @@ __module ZynqTop {
         pps._.MAXIGP0.BRESP = resp;
         pps._.MAXIGP0.BVALID = 1;
     }
-#endif
     ZynqTop() {
        __rule init {
             pps._.FPGAID.LEN = 1;
-#ifndef OLDIF
             pps._.MAXIGP0.ACLK = __defaultClock;
             //pps._.MAXIGP0.ARESETN = 1;
-#endif
        }
-#ifndef OLDIF
        __rule gp0ar if (pps._.MAXIGP0.ARVALID) {
            MAXIGP0_O->AR(pps._.MAXIGP0.ARADDR, pps._.MAXIGP0.ARID, pps._.MAXIGP0.ARLEN);
            pps._.MAXIGP0.ARREADY = 1;
@@ -159,7 +150,6 @@ __module ZynqTop {
            MAXIGP0_O->W(pps._.MAXIGP0.WDATA, pps._.MAXIGP0.WID, pps._.MAXIGP0.WLAST);
            pps._.MAXIGP0.WREADY = 1;
        }
-#endif
     }
 };
 
