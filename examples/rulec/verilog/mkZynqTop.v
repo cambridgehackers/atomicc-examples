@@ -29,7 +29,7 @@ module mkZynqTop #(parameter width = 64) (
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
-        .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN),
+        .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN), .FCLKCLKTRIGN(),
         .IRQF2P({ 19'b0, interrupt_0__read}),
 
         .MAXIGP0ARADDR(maxigp0ARADDR[31:0]), .MAXIGP0ARID(maxigp0ARID), .MAXIGP0ARLEN(maxigp0ARLEN),
@@ -121,11 +121,11 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .DEQ(readAddr_EN && readFirstNext), .FULL_N(read_reqFifo_FULL_N), .EMPTY_N(read_reqFifo_EMPTY_N));
   assign readAddrupdate = readFirst ?  read_reqFifo_D_OUT_addr : readAddr ;
   assign readburstCount = readFirst ?  { 2'd0, read_reqFifo_D_OUT_count[9:2] } : readCount ;
-  FIFO2 #(.width(22), .guarded(1)) reqPortal(.RST(nRST), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(22), .guarded(1)) reqPortal(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({readAddrupdate, readburstCount, read_reqFifo_D_OUT_id, readFirstNext}), .ENQ(readAddr_EN),
         .D_OUT({reqPortal_D_OUT_addr, reqPortal_D_OUT_base, reqPortal_D_OUT_id, reqPortal_D_OUT_last}),
         .DEQ(RULEread), .FULL_N(reqPortal_FULL_N), .EMPTY_N(reqPortal_EMPTY_N));
-  FIFO2 #(.width(38), .guarded(1)) ReadDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(38), .guarded(1)) ReadDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({portalRControl ? portalCtrlInfo : requestValue, reqPortal_D_OUT_id}), .ENQ(RULEread),
         .D_OUT({maxigp0RDATA, maxigp0RID}), .DEQ(maxigp0RREADY && maxigp0RVALID),
         .FULL_N(ReadDataFifo_FULL_N), .EMPTY_N(maxigp0RVALID));
@@ -163,12 +163,12 @@ assign RDY_requestEnq = 0; // MISSING ASSIGN
         end
   end
   assign EN_WriteData = maxigp0WVALID && maxigp0WREADY;
-  FIFO2 #(.width(32), .guarded(1)) reqwriteDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(32), .guarded(1)) reqwriteDataFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN(maxigp0WDATA), .ENQ(EN_WriteData),
         .D_OUT(write$enq$v), .DEQ(RULEwrite), .FULL_N(reqwriteDataFifo_FULL_N), .EMPTY_N(reqwriteDataFifo_EMPTY_N));
   assign writeAddrupdate = writeFirst ?  write_reqFifo_D_OUT_addr : writeAddr ;
   assign writeburstCount = writeFirst ?  { 2'd0, write_reqFifo_D_OUT_count[9:2] } : writeCount ;
-  FIFO2 #(.width(22), .guarded(1)) writeFifo(.RST(nRST), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(22), .guarded(1)) writeFifo(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({ writeAddrupdate, writeburstCount, write_reqFifo_D_OUT_id, writeFirstNext }), .ENQ(writeAddr_EN),
         .D_OUT({writeFifo_D_OUT_addr, writeFifo_D_OUT_count, writeFifo_D_OUT_id, writeFifo_D_OUT_last}),
         .DEQ(RULEwrite), .FULL_N(writeFifo_FULL_N), .EMPTY_N(writeFifo_EMPTY_N));

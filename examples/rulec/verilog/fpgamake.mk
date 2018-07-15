@@ -27,7 +27,8 @@ mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
     ../generated/MuxPipe.v \
     ../generated/indConnect.v ../generated/reqConnect.v \
     ../generated/UserTop.v \
-    ../generated/ResetInverter.v $(BSVLIB)/FIFO2.v $(BSVLIB)/FIFO1.v
+    ../generated/ResetInverter.v \
+    $(BSVLIB)/FIFO1.v
 
 mkZynqTop_VHDFILES = 
 mkZynqTop_VHDL_LIBRARIES = 
