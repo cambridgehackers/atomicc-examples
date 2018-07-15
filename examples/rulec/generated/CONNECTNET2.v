@@ -1,10 +1,11 @@
 `include "rulec.generated.vh"
 
+`default_nettype none
 module CONNECTNET2 (
-    input IN1,
-    input IN2,
-    output OUT1,
-    output OUT2);
+    input wire IN1,
+    input wire IN2,
+    output wire OUT1,
+    output wire OUT2);
     wire CLK;
     wire nRST;
     wire assign__ENA;
@@ -13,3 +14,4 @@ module CONNECTNET2 (
     assign OUT2 = IN2 ;
 endmodule 
 
+`default_nettype wire    // set back to default value

@@ -1,12 +1,13 @@
 `include "echo.generated.vh"
 
-module Echo (input CLK, input nRST,
-    input sout$say__ENA,
-    input [31:0]sout$say$v,
-    output sout$say__RDY,
-    output ind$heard__ENA,
-    output [31:0]ind$heard$v,
-    input ind$heard__RDY);
+`default_nettype none
+module Echo (input wire CLK, input wire nRST,
+    input wire sout$say__ENA,
+    input wire [31:0]sout$say$v,
+    output wire sout$say__RDY,
+    output wire ind$heard__ENA,
+    output wire [31:0]ind$heard$v,
+    input wire ind$heard__RDY);
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
     wire respond_rule__ENA;
@@ -22,3 +23,4 @@ module Echo (input CLK, input nRST,
     assign ind$heard__ENA = fifo$out$deq__RDY  & fifo$out$first__RDY ;
 endmodule 
 
+`default_nettype wire    // set back to default value

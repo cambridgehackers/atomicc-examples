@@ -1,13 +1,14 @@
 `include "lpm.generated.vh"
 
-module LpmMemory (input CLK, input nRST,
-    input ifc$req__ENA,
-    input [95:0]ifc$req$v,
-    output ifc$req__RDY,
-    input ifc$resAccept__ENA,
-    output ifc$resAccept__RDY,
-    output [95:0]ifc$resValue,
-    output ifc$resValue__RDY);
+`default_nettype none
+module LpmMemory (input wire CLK, input wire nRST,
+    input wire ifc$req__ENA,
+    input wire [95:0]ifc$req$v,
+    output wire ifc$req__RDY,
+    input wire ifc$resAccept__ENA,
+    output wire ifc$resAccept__RDY,
+    output wire [95:0]ifc$resValue,
+    output wire ifc$resValue__RDY);
     reg [31:0]delayCount;
     reg [31:0]saved$a;
     reg [31:0]saved$b;
@@ -41,3 +42,4 @@ module LpmMemory (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

@@ -1,13 +1,14 @@
 `include "rulec.generated.vh"
 
-module indConnect (input CLK, input nRST,
-    input indication$enq__ENA,
-    input [127:0]indication$enq$v,
-    output indication$enq__RDY,
-    output rad$enq__ENA,
-    output [127:0]rad$enq$v,
-    output [15:0]rad$enq$length,
-    input rad$enq__RDY);
+`default_nettype none
+module indConnect (input wire CLK, input wire nRST,
+    input wire indication$enq__ENA,
+    input wire [127:0]indication$enq$v,
+    output wire indication$enq__RDY,
+    output wire rad$enq__ENA,
+    output wire [127:0]rad$enq$v,
+    output wire [15:0]rad$enq$length,
+    input wire rad$enq__RDY);
     assign indication$enq__RDY = rad$enq__RDY ;
     assign rad$enq$length = indication$enq$v  - 1;
     assign rad$enq$v = indication$enq$v ;
@@ -24,3 +25,4 @@ module indConnect (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

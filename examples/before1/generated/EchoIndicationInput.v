@@ -1,13 +1,14 @@
 `include "before1.generated.vh"
 
-module EchoIndicationInput (input CLK, input nRST,
-    input pipe$enq__ENA,
-    input [95:0]pipe$enq$v,
-    output pipe$enq__RDY,
-    output indication$heard__ENA,
-    output [31:0]indication$heard$meth,
-    output [31:0]indication$heard$v,
-    input indication$heard__RDY);
+`default_nettype none
+module EchoIndicationInput (input wire CLK, input wire nRST,
+    input wire pipe$enq__ENA,
+    input wire [95:0]pipe$enq$v,
+    output wire pipe$enq__RDY,
+    output wire indication$heard__ENA,
+    output wire [31:0]indication$heard$meth,
+    output wire [31:0]indication$heard$v,
+    input wire indication$heard__RDY);
     reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
@@ -41,3 +42,4 @@ module EchoIndicationInput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

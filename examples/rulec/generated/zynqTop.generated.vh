@@ -24,6 +24,9 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY ;
 //METARULES; fifoRule
+//METASTART; ResetInverter
+//METAGUARD; init; 1;
+//METARULES; init
 //METASTART; ZynqTop
 //METAINTERNAL; pps; PS7;
 //METAINTERNAL; ps7_fclk_0_c; BUFG;

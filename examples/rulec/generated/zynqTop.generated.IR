@@ -526,9 +526,6 @@ EMODULE MMCME2_ADV {
 EMODULE PS7 {
     INTERFACE l_ainterface_OC_Pps7PS7 _
 }
-EMODULE ResetInverter {
-    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-}
 MODULE ClockTop {
     INTERFACE l_ainterface_OC_ClockIfc _
     FIELD MMCME2_ADV ps7_clockGen_pll
@@ -590,6 +587,12 @@ MODULE MuxPipe {
     }
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :out$enq__ENA{in$enq$v}
+    }
+}
+MODULE ResetInverter {
+    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    METHOD/Rule init__ENA {
+        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
 }
 MODULE ZynqTop {

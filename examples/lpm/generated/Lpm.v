@@ -1,14 +1,15 @@
 `include "lpm.generated.vh"
 
-module Lpm (input CLK, input nRST,
-    output ind$heard__ENA,
-    output [31:0]ind$heard$meth,
-    output [31:0]ind$heard$v,
-    input ind$heard__RDY,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    output request$say__RDY);
+`default_nettype none
+module Lpm (input wire CLK, input wire nRST,
+    output wire ind$heard__ENA,
+    output wire [31:0]ind$heard$meth,
+    output wire [31:0]ind$heard$v,
+    input wire ind$heard__RDY,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$meth,
+    input wire [31:0]request$say$v,
+    output wire request$say__RDY);
     reg [31:0]doneCount;
     wire enter__ENA;
     wire exit_rule__ENA;
@@ -96,3 +97,4 @@ module Lpm (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

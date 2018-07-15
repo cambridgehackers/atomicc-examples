@@ -1,13 +1,14 @@
 `include "connect.generated.vh"
 
-module EchoIndicationOutput (input CLK, input nRST,
-    input indication$heard__ENA,
-    input [31:0]indication$heard$meth,
-    input [31:0]indication$heard$v,
-    output indication$heard__RDY,
-    output pipe$enq__ENA,
-    output [95:0]pipe$enq$v,
-    input pipe$enq__RDY);
+`default_nettype none
+module EchoIndicationOutput (input wire CLK, input wire nRST,
+    input wire indication$heard__ENA,
+    input wire [31:0]indication$heard$meth,
+    input wire [31:0]indication$heard$v,
+    output wire indication$heard__RDY,
+    output wire pipe$enq__ENA,
+    output wire [95:0]pipe$enq$v,
+    input wire pipe$enq__RDY);
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
     assign indication$heard__RDY = pipe$enq__RDY ;
@@ -26,3 +27,4 @@ module EchoIndicationOutput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

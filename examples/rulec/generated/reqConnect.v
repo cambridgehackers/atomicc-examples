@@ -1,13 +1,14 @@
 `include "rulec.generated.vh"
 
-module reqConnect (input CLK, input nRST,
-    input wad$enq__ENA,
-    input [127:0]wad$enq$v,
-    input [15:0]wad$enq$length,
-    output wad$enq__RDY,
-    output request$enq__ENA,
-    output [127:0]request$enq$v,
-    input request$enq__RDY);
+`default_nettype none
+module reqConnect (input wire CLK, input wire nRST,
+    input wire wad$enq__ENA,
+    input wire [127:0]wad$enq$v,
+    input wire [15:0]wad$enq$length,
+    output wire wad$enq__RDY,
+    output wire request$enq__ENA,
+    output wire [127:0]request$enq$v,
+    input wire request$enq__RDY);
     assign request$enq$v = wad$enq$v ;
     assign request$enq__ENA = wad$enq__ENA ;
     assign wad$enq__RDY = request$enq__RDY ;
@@ -23,3 +24,4 @@ module reqConnect (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

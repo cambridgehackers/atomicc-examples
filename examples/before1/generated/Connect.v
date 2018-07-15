@@ -1,18 +1,19 @@
 `include "before1.generated.vh"
 
-module Connect (input CLK, input nRST,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    output request$say2__RDY,
-    output request$say__RDY,
-    output indication$heard__ENA,
-    output [31:0]indication$heard$meth,
-    output [31:0]indication$heard$v,
-    input indication$heard__RDY);
+`default_nettype none
+module Connect (input wire CLK, input wire nRST,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$meth,
+    input wire [31:0]request$say$v,
+    input wire request$say2__ENA,
+    input wire [31:0]request$say2$meth,
+    input wire [31:0]request$say2$v,
+    output wire request$say2__RDY,
+    output wire request$say__RDY,
+    output wire indication$heard__ENA,
+    output wire [31:0]indication$heard$meth,
+    output wire [31:0]indication$heard$v,
+    input wire indication$heard__RDY);
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
@@ -112,3 +113,4 @@ module Connect (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

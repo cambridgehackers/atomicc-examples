@@ -1,14 +1,15 @@
 `include "rulec.generated.vh"
 
-module UserTop (input CLK, input nRST,
-    input write$enq__ENA,
-    input [31:0]write$enq$v,
-    input write$enq$last,
-    output write$enq__RDY,
-    output read$enq__ENA,
-    output [31:0]read$enq$v,
-    output read$enq$last,
-    input read$enq__RDY);
+`default_nettype none
+module UserTop (input wire CLK, input wire nRST,
+    input wire write$enq__ENA,
+    input wire [31:0]write$enq$v,
+    input wire write$enq$last,
+    output wire write$enq__RDY,
+    output wire read$enq__ENA,
+    output wire [31:0]read$enq$v,
+    output wire read$enq$last,
+    input wire read$enq__RDY);
     wire [127:0]ctop$indication$enq$v;
     wire ctop$indication$enq__ENA;
     wire ctop$request$enq__RDY;
@@ -66,3 +67,4 @@ module UserTop (input CLK, input nRST,
         .request$enq__RDY(ctop$request$enq__RDY));
 endmodule 
 
+`default_nettype wire    // set back to default value

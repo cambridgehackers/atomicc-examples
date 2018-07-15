@@ -1,13 +1,14 @@
 `include "lpm.generated.vh"
 
-module Fifo2 (input CLK, input nRST,
-    input in$enq__ENA,
-    input [95:0]in$enq$v,
-    output in$enq__RDY,
-    input out$deq__ENA,
-    output out$deq__RDY,
-    output [95:0]out$first,
-    output out$first__RDY);
+`default_nettype none
+module Fifo2 (input wire CLK, input wire nRST,
+    input wire in$enq__ENA,
+    input wire [95:0]in$enq$v,
+    output wire in$enq__RDY,
+    input wire out$deq__ENA,
+    output wire out$deq__RDY,
+    output wire [95:0]out$first,
+    output wire out$first__RDY);
     reg [31:0]element0$a;
     reg [31:0]element0$b;
     reg [31:0]element0$c;
@@ -47,3 +48,4 @@ module Fifo2 (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

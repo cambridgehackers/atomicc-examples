@@ -1,14 +1,15 @@
 `include "precision.generated.vh"
 
-module IVector (input CLK, input nRST,
-    input request$say__ENA,
-    input [5:0]request$say$meth,
-    input [3:0]request$say$v,
-    output request$say__RDY,
-    output ind$heard__ENA,
-    output [5:0]ind$heard$meth,
-    output [3:0]ind$heard$v,
-    input ind$heard__RDY);
+`default_nettype none
+module IVector (input wire CLK, input wire nRST,
+    input wire request$say__ENA,
+    input wire [5:0]request$say$meth,
+    input wire [3:0]request$say$v,
+    output wire request$say__RDY,
+    output wire ind$heard__ENA,
+    output wire [5:0]ind$heard$meth,
+    output wire [3:0]ind$heard$v,
+    input wire ind$heard__RDY);
     reg [8:0]counter;
     reg [7:0]fcounter;
     reg [8:0]gcounter;
@@ -38,3 +39,4 @@ module IVector (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

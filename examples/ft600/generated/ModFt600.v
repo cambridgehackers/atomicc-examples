@@ -1,13 +1,14 @@
 `include "ft600.generated.vh"
 
+`default_nettype none
 module ModFt600 (
-    input usb_clk,
-    input usb_rxf,
-    input usb_txe,
-    output usb_rd_n,
-    output usb_wr_n,
-    output usb_oe_n,
-    inout usb_ad);
+    input wire usb_clk,
+    input wire usb_rxf,
+    input wire usb_txe,
+    output wire usb_rd_n,
+    output wire usb_wr_n,
+    output wire usb_oe_n,
+    inout wire [15:0]usb_ad);
     wire CLK;
     wire nRST;
     reg usb_fifo_empty;
@@ -198,3 +199,4 @@ module ModFt600 (
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

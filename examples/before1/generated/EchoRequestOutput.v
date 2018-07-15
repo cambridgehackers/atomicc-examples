@@ -1,17 +1,18 @@
 `include "before1.generated.vh"
 
-module EchoRequestOutput (input CLK, input nRST,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    output request$say2__RDY,
-    output request$say__RDY,
-    output pipe$enq__ENA,
-    output [191:0]pipe$enq$v,
-    input pipe$enq__RDY);
+`default_nettype none
+module EchoRequestOutput (input wire CLK, input wire nRST,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$meth,
+    input wire [31:0]request$say$v,
+    input wire request$say2__ENA,
+    input wire [31:0]request$say2$meth,
+    input wire [31:0]request$say2$v,
+    output wire request$say2__RDY,
+    output wire request$say__RDY,
+    output wire pipe$enq__ENA,
+    output wire [191:0]pipe$enq$v,
+    input wire pipe$enq__RDY);
     wire [31:0]request$say2__ENA$ind$data$say$meth;
     wire [31:0]request$say2__ENA$ind$data$say$v;
     wire [31:0]request$say2__ENA$ind$data$say2$meth;
@@ -45,3 +46,4 @@ module EchoRequestOutput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

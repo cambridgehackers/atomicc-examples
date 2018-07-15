@@ -1,12 +1,13 @@
 `include "printf.generated.vh"
 
-module l_top (input CLK, input nRST,
-    output indication$enq__ENA,
-    output [127:0]indication$enq$v,
-    input indication$enq__RDY,
-    input request$enq__ENA,
-    input [127:0]request$enq$v,
-    output request$enq__RDY);
+`default_nettype none
+module l_top (input wire CLK, input wire nRST,
+    output wire indication$enq__ENA,
+    output wire [127:0]indication$enq$v,
+    input wire indication$enq__RDY,
+    input wire request$enq__ENA,
+    input wire [127:0]request$enq$v,
+    output wire request$enq__RDY);
     wire [31:0]DUT__Echo$indication$heard$v;
     wire [15:0]DUT__Echo$indication$heard2$a;
     wire [15:0]DUT__Echo$indication$heard2$b;
@@ -112,3 +113,4 @@ module l_top (input CLK, input nRST,
         .pipe$enq__RDY(request$enq__RDY));
 endmodule 
 
+`default_nettype wire    // set back to default value

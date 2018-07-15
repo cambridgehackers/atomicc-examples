@@ -1,24 +1,25 @@
 `include "before1.generated.vh"
 
-module Echo (input CLK, input nRST,
-    input request$say__ENA,
-    input [31:0]request$say$meth,
-    input [31:0]request$say$v,
-    input request$say2__ENA,
-    input [31:0]request$say2$meth,
-    input [31:0]request$say2$v,
-    output request$say2__RDY,
-    output request$say__RDY,
-    input swap$x2y__ENA,
-    output swap$x2y__RDY,
-    input swap$y2x__ENA,
-    output swap$y2x__RDY,
-    input swap$y2xnull__ENA,
-    output swap$y2xnull__RDY,
-    output indication$heard__ENA,
-    output [31:0]indication$heard$meth,
-    output [31:0]indication$heard$v,
-    input indication$heard__RDY);
+`default_nettype none
+module Echo (input wire CLK, input wire nRST,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$meth,
+    input wire [31:0]request$say$v,
+    input wire request$say2__ENA,
+    input wire [31:0]request$say2$meth,
+    input wire [31:0]request$say2$v,
+    output wire request$say2__RDY,
+    output wire request$say__RDY,
+    input wire swap$x2y__ENA,
+    output wire swap$x2y__RDY,
+    input wire swap$y2x__ENA,
+    output wire swap$y2x__RDY,
+    input wire swap$y2xnull__ENA,
+    output wire swap$y2xnull__RDY,
+    output wire indication$heard__ENA,
+    output wire [31:0]indication$heard$meth,
+    output wire [31:0]indication$heard$v,
+    input wire indication$heard__RDY);
     reg busy;
     reg busy_delay;
     reg [31:0]meth_delay;
@@ -90,3 +91,4 @@ module Echo (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

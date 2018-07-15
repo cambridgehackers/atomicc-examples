@@ -1,13 +1,14 @@
 `include "connect.generated.vh"
 
-module EchoRequestInput (input CLK, input nRST,
-    input pipe$enq__ENA,
-    input [95:0]pipe$enq$v,
-    output pipe$enq__RDY,
-    output request$say__ENA,
-    output [31:0]request$say$meth,
-    output [31:0]request$say$v,
-    input request$say__RDY);
+`default_nettype none
+module EchoRequestInput (input wire CLK, input wire nRST,
+    input wire pipe$enq__ENA,
+    input wire [95:0]pipe$enq$v,
+    output wire pipe$enq__RDY,
+    output wire request$say__ENA,
+    output wire [31:0]request$say$meth,
+    output wire [31:0]request$say$v,
+    input wire request$say__RDY);
     assign pipe$enq__RDY = request$say__RDY ;
     assign request$say$meth = pipe$enq$v[63:32] ;
     assign request$say$v = pipe$enq$v[95:64] ;
@@ -24,3 +25,4 @@ module EchoRequestInput (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

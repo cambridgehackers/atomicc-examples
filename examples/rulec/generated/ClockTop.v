@@ -1,10 +1,11 @@
 `include "zynqTop.generated.vh"
 
+`default_nettype none
 module ClockTop #(
     parameter real CLKIN1_PERIOD = 0.0)(
-    input userCLK,
-    input usernRST,
-    output clockOut);
+    input wire userCLK,
+    input wire usernRST,
+    output wire clockOut);
     wire CLK;
     wire nRST;
     wire clkbuf$O;
@@ -75,3 +76,4 @@ module ClockTop #(
         .O(clockOut));
 endmodule 
 
+`default_nettype wire    // set back to default value

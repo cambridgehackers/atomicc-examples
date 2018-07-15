@@ -1,12 +1,13 @@
 `include "ivector.generated.vh"
 
-module IVector (input CLK, input nRST,
-    input request$say__ENA,
-    input [703:0]request$say$v,
-    output request$say__RDY,
-    output ind$heard__ENA,
-    output [703:0]ind$heard$v,
-    input ind$heard__RDY);
+`default_nettype none
+module IVector (input wire CLK, input wire nRST,
+    input wire request$say__ENA,
+    input wire [703:0]request$say$v,
+    output wire request$say__RDY,
+    output wire ind$heard__ENA,
+    output wire [703:0]ind$heard$v,
+    input wire ind$heard__RDY);
     wire fifo$out$deq__RDY;
     wire [703:0]fifo$out$first;
     wire fifo$out$first__RDY;
@@ -24,3 +25,4 @@ module IVector (input CLK, input nRST,
     assign ind$heard__ENA = fifo$out$deq__RDY  & fifo$out$first__RDY ;
 endmodule 
 
+`default_nettype wire    // set back to default value

@@ -1,14 +1,15 @@
 `include "rulec.generated.vh"
 
-module AdapterFromBus (input CLK, input nRST,
-    input in$enq__ENA,
-    input [31:0]in$enq$v,
-    input in$enq$last,
-    output in$enq__RDY,
-    output out$enq__ENA,
-    output [127:0]out$enq$v,
-    output [15:0]out$enq$length,
-    input out$enq__RDY);
+`default_nettype none
+module AdapterFromBus (input wire CLK, input wire nRST,
+    input wire in$enq__ENA,
+    input wire [31:0]in$enq$v,
+    input wire in$enq$last,
+    output wire in$enq__RDY,
+    output wire out$enq__ENA,
+    output wire [127:0]out$enq$v,
+    output wire [15:0]out$enq$length,
+    input wire out$enq__RDY);
     reg [127:0]buffer;
     reg waitForEnq;
     wire pushValue__ENA;
@@ -36,3 +37,4 @@ module AdapterFromBus (input CLK, input nRST,
     end // always @ (posedge CLK)
 endmodule 
 
+`default_nettype wire    // set back to default value

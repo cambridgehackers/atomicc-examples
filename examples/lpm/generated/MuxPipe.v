@@ -1,15 +1,16 @@
 `include "lpm.generated.vh"
 
-module MuxPipe (input CLK, input nRST,
-    input in$enq__ENA,
-    input [127:0]in$enq$v,
-    output in$enq__RDY,
-    input forward$enq__ENA,
-    input [127:0]forward$enq$v,
-    output forward$enq__RDY,
-    output out$enq__ENA,
-    output [127:0]out$enq$v,
-    input out$enq__RDY);
+`default_nettype none
+module MuxPipe (input wire CLK, input wire nRST,
+    input wire in$enq__ENA,
+    input wire [127:0]in$enq$v,
+    output wire in$enq__RDY,
+    input wire forward$enq__ENA,
+    input wire [127:0]forward$enq$v,
+    output wire forward$enq__RDY,
+    output wire out$enq__ENA,
+    output wire [127:0]out$enq$v,
+    input wire out$enq__RDY);
     wire fifoRule__ENA;
     wire forwardFifo$out$deq__RDY;
     wire [127:0]forwardFifo$out$first;
@@ -28,3 +29,4 @@ module MuxPipe (input CLK, input nRST,
     assign out$enq__ENA = ( forwardFifo$out$first__RDY  & forwardFifo$out$deq__RDY  ) || in$enq__ENA ;
 endmodule 
 
+`default_nettype wire    // set back to default value
