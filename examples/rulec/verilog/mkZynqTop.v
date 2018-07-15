@@ -26,10 +26,10 @@ module mkZynqTop #(parameter width = 64) (
   reg CMRlastWriteDataSeen;
   assign maxigp0AWREADY = reqws_FULL_N && write_reqFifo_FULL_N;
   assign maxigp0WREADY = !CMRlastWriteDataSeen && reqwriteDataFifo_FULL_N ;
-`define BBB
-`ifdef BBB
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
+//`define BBB
+`ifdef BBB
 /* verilator lint_off PINMISSING */
   PS7 ps7_ps7_foo(.MAXIGP0ACLK(CLK),
         .MAXIGP1ACLK(CLK), .SAXIACPACLK(CLK), .SAXIGP0ACLK(CLK),
@@ -155,16 +155,16 @@ module mkZynqTop #(parameter width = 64) (
 /* verilator lint_on PINMISSING */
 `else
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
-        .FCLKCLK(ps7_ps7_foo_FCLKCLK[3:0]),
+        .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN),
         .IRQF2P({ 19'b0, interrupt_0__read}),
 
-        .MAXIGP0ARADDR(maxigp0ARADDR), .MAXIGP0ARID(maxigp0ARID), .MAXIGP0ARLEN(maxigp0ARLEN),
+        .MAXIGP0ARADDR(maxigp0ARADDR[31:0]), .MAXIGP0ARID(maxigp0ARID), .MAXIGP0ARLEN(maxigp0ARLEN),
         .MAXIGP0ARVALID(maxigp0ARVALID), .MAXIGP0ARREADY(!read_reqFifo_EMPTY_N),
 
         .MAXIGP0RDATA(maxigp0RDATA), .MAXIGP0RRESP(0), .MAXIGP0RLAST(1),
         .MAXIGP0RID({6'b0, maxigp0RID}), .MAXIGP0RREADY(maxigp0RREADY), .MAXIGP0RVALID(maxigp0RVALID),
 
-        .MAXIGP0AWADDR(maxigp0AWADDR), .MAXIGP0AWID(maxigp0AWID), .MAXIGP0AWLEN(maxigp0AWLEN),
+        .MAXIGP0AWADDR(maxigp0AWADDR[31:0]), .MAXIGP0AWID(maxigp0AWID), .MAXIGP0AWLEN(maxigp0AWLEN),
         .MAXIGP0AWVALID(maxigp0AWVALID), .MAXIGP0AWREADY(maxigp0AWREADY),
 
         .MAXIGP0WDATA(maxigp0WDATA), .MAXIGP0WID(maxigp0WID), .MAXIGP0WLAST(maxigp0WLAST),

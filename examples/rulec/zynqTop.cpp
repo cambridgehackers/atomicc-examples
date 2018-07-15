@@ -89,9 +89,8 @@ __module ClockTop {
 };
 
 __interface ZynqClock {
-    __output __uint(1) CLK;
-    __output __uint(1) nRST;
-    __output __uint(4) FCLKCLK;
+    __input __uint(1) CLK;
+    __input __uint(1) nRST;
 };
 
 __module ZynqTop {
@@ -101,32 +100,18 @@ __module ZynqTop {
     Pps7m            M;
     Pps7maxigp       MAXIGP0;
     Pps7ps           PS;
+    Pps7fclk         FCLK;
 
     PS7 pps;
-    BUFG ps7_fclk_0_c;
-    BUFG ps7_freset_0_r;
     __connect DDR = pps._.DDR;
     __connect IRQ = pps._.IRQ;
     __connect PS = pps._.PS;
     __connect M = pps._.M;
     __connect MAXIGP0 = pps._.MAXIGP0;
+    __connect FCLK = pps._.FCLK;
     ZynqTop() {
        __rule init {
-            ps7_fclk_0_c._.I = pps._.FCLK.CLK; // [0]
-            __defaultClock = ps7_fclk_0_c._.O;
-            ps7_freset_0_r._.I = pps._.FCLK.RESETN; // [0]
-            __defaultnReset = ps7_freset_0_r._.O;
             pps._.FPGAID.LEN = 1;
-            pps._.MAXIGP0.ACLK = __defaultClock;
-            pps._.MAXIGP1.ACLK = __defaultClock;
-            pps._.SAXIACP.ACLK = __defaultClock;
-            pps._.SAXIGP0.ACLK = __defaultClock;
-            pps._.SAXIGP1.ACLK = __defaultClock;
-            pps._.SAXIHP0.ACLK = __defaultClock;
-            pps._.SAXIHP1.ACLK = __defaultClock;
-            pps._.SAXIHP2.ACLK = __defaultClock;
-            pps._.SAXIHP3.ACLK = __defaultClock;
-            _.FCLKCLK = pps._.FCLK.CLK;
         }
     }
 };

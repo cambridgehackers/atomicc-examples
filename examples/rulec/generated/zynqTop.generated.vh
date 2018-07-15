@@ -29,8 +29,6 @@
 //METARULES; init
 //METASTART; ZynqTop
 //METAINTERNAL; pps; PS7;
-//METAINTERNAL; ps7_fclk_0_c; BUFG;
-//METAINTERNAL; ps7_freset_0_r; BUFG;
 //METAGUARD; init; 1;
 //METARULES; init
 `endif
