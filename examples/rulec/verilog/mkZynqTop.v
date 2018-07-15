@@ -1,13 +1,14 @@
 
 `include "ProjectDefines.vh"
+`default_nettype none
 module mkZynqTop #(parameter width = 64) (
-  inout  [14 : 0] DDR_Addr, inout  [2 : 0] DDR_BankAddr,
-  inout  DDR_CAS_n, inout  DDR_CKE, inout  DDR_CS_n, inout  DDR_Clk_n, inout  DDR_Clk_p,
-  inout  [3 : 0] DDR_DM, inout  [31 : 0] DDR_DQ,
-  inout  [3 : 0] DDR_DQS_n, inout  [3 : 0] DDR_DQS_p,
-  inout  DDR_DRSTB, inout  DDR_ODT, inout  DDR_RAS_n,
-  inout  FIXED_IO_ddr_vrn, inout  FIXED_IO_ddr_vrp, inout  DDR_WEB, inout  [53 : 0] MIO,
-  inout  FIXED_IO_ps_clk, inout  FIXED_IO_ps_porb, inout  FIXED_IO_ps_srstb);
+  inout wire [14 : 0] DDR_Addr, inout wire [2 : 0] DDR_BankAddr,
+  inout wire DDR_CAS_n, inout wire DDR_CKE, inout wire DDR_CS_n, inout wire DDR_Clk_n, inout wire DDR_Clk_p,
+  inout wire [3 : 0] DDR_DM, inout wire [31 : 0] DDR_DQ,
+  inout wire [3 : 0] DDR_DQS_n, inout wire [3 : 0] DDR_DQS_p,
+  inout wire DDR_DRSTB, inout wire DDR_ODT, inout wire DDR_RAS_n,
+  inout wire FIXED_IO_ddr_vrn, inout wire FIXED_IO_ddr_vrp, inout wire DDR_WEB, inout wire [53 : 0] MIO,
+  inout wire FIXED_IO_ps_clk, inout wire FIXED_IO_ps_porb, inout wire FIXED_IO_ps_srstb);
 
   wire CLK, nRST;
 
