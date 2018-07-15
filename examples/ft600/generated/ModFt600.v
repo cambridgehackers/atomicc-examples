@@ -14,7 +14,8 @@ module ModFt600 (
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
-    wire handshake__ENA;
+    wire RULEhandshake__ENA;
+    wire RULEiobufs__ENA;
     wire iobufs0$I;
     wire iobufs0$O;
     wire iobufs0$T;
@@ -63,9 +64,8 @@ module ModFt600 (
     wire iobufs9$I;
     wire iobufs9$O;
     wire iobufs9$T;
-    wire iobufs__ENA;
-    assign handshake__ENA = 1;
-    assign iobufs__ENA = 1;
+    assign RULEhandshake__ENA = 1;
+    assign RULEiobufs__ENA = 1;
     IOBUF iobufs0 (
         .IO(usb_ad >> 0),
         .I(iobufs0$I),
@@ -190,11 +190,11 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (handshake__ENA & 1) begin
+        if (RULEhandshake__ENA & 1) begin
             usb_fifo_empty <= 0;
             usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay <= usb_txe;
-        end; // End of handshake__ENA
+        end; // End of RULEhandshake__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

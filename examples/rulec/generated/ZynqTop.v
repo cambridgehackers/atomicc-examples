@@ -71,7 +71,7 @@ module ZynqTop (
     input wire MAXIGP0WREADY,
     output wire [3:0]MAXIGP0WSTRB,
     output wire MAXIGP0WVALID);
-    wire init__ENA;
+    wire RULEinit__ENA;
     wire pps$DMA0ACLK;
     wire pps$DMA0DAREADY;
     wire [1:0]pps$DMA0DATYPE;
@@ -624,7 +624,7 @@ module ZynqTop (
     wire pps$SAXIHP3WRISSUECAP1EN;
     wire [7:0]pps$SAXIHP3WSTRB;
     wire pps$SAXIHP3WVALID;
-    assign init__ENA = 1;
+    assign RULEinit__ENA = 1;
     PS7 pps (
         .DDRA(DDRA),
         .DDRARB(DDRARB),

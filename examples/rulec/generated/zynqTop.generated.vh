@@ -6,8 +6,8 @@
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
-//METAGUARD; init; 1;
-//METARULES; init
+//METAGUARD; RULEinit; 1;
+//METARULES; RULEinit
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
@@ -16,19 +16,19 @@
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;
-//METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
-//METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
-//METAGUARD; fifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
+//METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
+//METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
+//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY;
-//METARULES; fifoRule
+//METARULES; RULEfifoRule
 //METASTART; ResetInverter
-//METAGUARD; init; 1;
-//METARULES; init
+//METAGUARD; RULEinit; 1;
+//METARULES; RULEinit
 //METASTART; ZynqTop
 //METAINTERNAL; pps; PS7;
-//METAGUARD; init; 1;
-//METARULES; init
+//METAGUARD; RULEinit; 1;
+//METARULES; RULEinit
 `endif

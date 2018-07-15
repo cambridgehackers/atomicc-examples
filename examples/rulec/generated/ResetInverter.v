@@ -6,8 +6,8 @@ module ResetInverter (
     output wire RESET_OUT);
     wire CLK;
     wire nRST;
-    wire init__ENA;
-    assign init__ENA = 1;
+    wire RULEinit__ENA;
+    assign RULEinit__ENA = 1;
     assign RESET_OUT = !RESET_IN;
 endmodule 
 

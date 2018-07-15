@@ -15,7 +15,23 @@ module ModFt600 (
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
     wire CLK;
-    wire handshake__ENA;
+    wire RULEhandshake__ENA;
+    wire RULEiobufs_0__ENA;
+    wire RULEiobufs_10__ENA;
+    wire RULEiobufs_11__ENA;
+    wire RULEiobufs_12__ENA;
+    wire RULEiobufs_13__ENA;
+    wire RULEiobufs_14__ENA;
+    wire RULEiobufs_15__ENA;
+    wire RULEiobufs_1__ENA;
+    wire RULEiobufs_2__ENA;
+    wire RULEiobufs_3__ENA;
+    wire RULEiobufs_4__ENA;
+    wire RULEiobufs_5__ENA;
+    wire RULEiobufs_6__ENA;
+    wire RULEiobufs_7__ENA;
+    wire RULEiobufs_8__ENA;
+    wire RULEiobufs_9__ENA;
     wire iobufs0$I;
     wire iobufs0$O;
     wire iobufs0$T;
@@ -64,40 +80,24 @@ module ModFt600 (
     wire iobufs9$I;
     wire iobufs9$O;
     wire iobufs9$T;
-    wire iobufs_0__ENA;
-    wire iobufs_10__ENA;
-    wire iobufs_11__ENA;
-    wire iobufs_12__ENA;
-    wire iobufs_13__ENA;
-    wire iobufs_14__ENA;
-    wire iobufs_15__ENA;
-    wire iobufs_1__ENA;
-    wire iobufs_2__ENA;
-    wire iobufs_3__ENA;
-    wire iobufs_4__ENA;
-    wire iobufs_5__ENA;
-    wire iobufs_6__ENA;
-    wire iobufs_7__ENA;
-    wire iobufs_8__ENA;
-    wire iobufs_9__ENA;
     wire nRST;
-    assign handshake__ENA = 1;
-    assign iobufs_0__ENA = 1;
-    assign iobufs_10__ENA = 1;
-    assign iobufs_11__ENA = 1;
-    assign iobufs_12__ENA = 1;
-    assign iobufs_13__ENA = 1;
-    assign iobufs_14__ENA = 1;
-    assign iobufs_15__ENA = 1;
-    assign iobufs_1__ENA = 1;
-    assign iobufs_2__ENA = 1;
-    assign iobufs_3__ENA = 1;
-    assign iobufs_4__ENA = 1;
-    assign iobufs_5__ENA = 1;
-    assign iobufs_6__ENA = 1;
-    assign iobufs_7__ENA = 1;
-    assign iobufs_8__ENA = 1;
-    assign iobufs_9__ENA = 1;
+    assign RULEhandshake__ENA = 1;
+    assign RULEiobufs_0__ENA = 1;
+    assign RULEiobufs_10__ENA = 1;
+    assign RULEiobufs_11__ENA = 1;
+    assign RULEiobufs_12__ENA = 1;
+    assign RULEiobufs_13__ENA = 1;
+    assign RULEiobufs_14__ENA = 1;
+    assign RULEiobufs_15__ENA = 1;
+    assign RULEiobufs_1__ENA = 1;
+    assign RULEiobufs_2__ENA = 1;
+    assign RULEiobufs_3__ENA = 1;
+    assign RULEiobufs_4__ENA = 1;
+    assign RULEiobufs_5__ENA = 1;
+    assign RULEiobufs_6__ENA = 1;
+    assign RULEiobufs_7__ENA = 1;
+    assign RULEiobufs_8__ENA = 1;
+    assign RULEiobufs_9__ENA = 1;
     IOBUF iobufs0 (
         .CLK(CLK),
         .RST_N(nRST),
@@ -254,11 +254,11 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (handshake__ENA & 1) begin
+        if (RULEhandshake__ENA & 1) begin
             usb_fifo_empty <= 0;
             usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay <= usb_txe;
-        end; // End of handshake__ENA
+        end; // End of RULEhandshake__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

@@ -36,10 +36,10 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
-    wire delay_rule__ENA;
-    wire respond_rule__ENA;
-    assign delay_rule__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
-    assign respond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+    wire RULEdelay_rule__ENA;
+    wire RULErespond_rule__ENA;
+    assign RULEdelay_rule__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
+    assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
@@ -68,14 +68,18 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (delay_rule__ENA & ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0) begin
+        if (RULEdelay_rule__ENA & ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0) begin
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
             $display( "[delay_rule:%d]Echo" , 5 );
-        end; // End of delay_rule__ENA
+        end; // End of RULEdelay_rule__ENA
+        if (RULErespond_rule__ENA & ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY )) begin
+            busy_delay <= 0;
+            $display( "[respond_rule:%d]Echo" , 6 );
+        end; // End of RULErespond_rule__ENA
         if (request$say__ENA & request$say__RDY) begin
             v_temp <= request$say$v;
             busy <= 1;
@@ -92,10 +96,6 @@ module Echo (input wire CLK, input wire nRST,
         if (request$zsay4__ENA & request$zsay4__RDY) begin
             $display( "[%s:%d]Echo" , "request$zsay4" , 4 );
         end; // End of request$zsay4__ENA
-        if (respond_rule__ENA & ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY )) begin
-            busy_delay <= 0;
-            $display( "[respond_rule:%d]Echo" , 6 );
-        end; // End of respond_rule__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

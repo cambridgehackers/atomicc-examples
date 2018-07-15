@@ -23,33 +23,33 @@
 //METAINTERNAL; iobufs13; IOBUF;
 //METAINTERNAL; iobufs14; IOBUF;
 //METAINTERNAL; iobufs15; IOBUF;
-//METAGUARD; handshake; 1;
-//METAGUARD; iobufs_0; 1;
-//METAGUARD; iobufs_10; 1;
-//METAGUARD; iobufs_11; 1;
-//METAGUARD; iobufs_12; 1;
-//METAGUARD; iobufs_13; 1;
-//METAGUARD; iobufs_14; 1;
-//METAGUARD; iobufs_15; 1;
-//METAGUARD; iobufs_1; 1;
-//METAGUARD; iobufs_2; 1;
-//METAGUARD; iobufs_3; 1;
-//METAGUARD; iobufs_4; 1;
-//METAGUARD; iobufs_5; 1;
-//METAGUARD; iobufs_6; 1;
-//METAGUARD; iobufs_7; 1;
-//METAGUARD; iobufs_8; 1;
-//METAGUARD; iobufs_9; 1;
-//METARULES; handshake; iobufs_0; iobufs_1; iobufs_10; iobufs_11; iobufs_12; iobufs_13; iobufs_14; iobufs_15; iobufs_2; iobufs_3; iobufs_4; iobufs_5; iobufs_6; iobufs_7; iobufs_8; iobufs_9
+//METAGUARD; RULEhandshake; 1;
+//METAGUARD; RULEiobufs_0; 1;
+//METAGUARD; RULEiobufs_10; 1;
+//METAGUARD; RULEiobufs_11; 1;
+//METAGUARD; RULEiobufs_12; 1;
+//METAGUARD; RULEiobufs_13; 1;
+//METAGUARD; RULEiobufs_14; 1;
+//METAGUARD; RULEiobufs_15; 1;
+//METAGUARD; RULEiobufs_1; 1;
+//METAGUARD; RULEiobufs_2; 1;
+//METAGUARD; RULEiobufs_3; 1;
+//METAGUARD; RULEiobufs_4; 1;
+//METAGUARD; RULEiobufs_5; 1;
+//METAGUARD; RULEiobufs_6; 1;
+//METAGUARD; RULEiobufs_7; 1;
+//METAGUARD; RULEiobufs_8; 1;
+//METAGUARD; RULEiobufs_9; 1;
+//METARULES; RULEhandshake; RULEiobufs_0; RULEiobufs_1; RULEiobufs_10; RULEiobufs_11; RULEiobufs_12; RULEiobufs_13; RULEiobufs_14; RULEiobufs_15; RULEiobufs_2; RULEiobufs_3; RULEiobufs_4; RULEiobufs_5; RULEiobufs_6; RULEiobufs_7; RULEiobufs_8; RULEiobufs_9
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;
-//METAINVOKE; fifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
-//METAEXCLUSIVE; fifoRule__ENA; in$enq__ENA
-//METAGUARD; fifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
+//METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
+//METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
+//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY;
-//METARULES; fifoRule
+//METARULES; RULEfifoRule
 `endif

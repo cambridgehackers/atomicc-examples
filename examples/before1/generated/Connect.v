@@ -14,6 +14,8 @@ module Connect (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard$meth,
     output wire [31:0]indication$heard$v,
     input wire indication$heard__RDY);
+    wire RULEswap2_rule__ENA;
+    wire RULEswap_rule__ENA;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
@@ -35,10 +37,8 @@ module Connect (input wire CLK, input wire nRST,
     wire lEcho$swap$x2y__RDY;
     wire lEcho$swap$y2x__RDY;
     wire lEcho$swap$y2xnull__RDY;
-    wire swap2_rule__ENA;
-    wire swap_rule__ENA;
-    assign swap2_rule__ENA = lEcho$swap$y2xnull__RDY;
-    assign swap_rule__ENA = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
+    assign RULEswap2_rule__ENA = lEcho$swap$y2xnull__RDY;
+    assign RULEswap_rule__ENA = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
         .indication$heard__ENA(lEcho$indication$heard__ENA),
         .indication$heard$meth(lEcho$indication$heard$meth),
@@ -103,12 +103,12 @@ module Connect (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (swap2_rule__ENA & lEcho$swap$y2xnull__RDY) begin
+        if (RULEswap2_rule__ENA & lEcho$swap$y2xnull__RDY) begin
             $display( "swap2_rule:Connect" );
-        end; // End of swap2_rule__ENA
-        if (swap_rule__ENA & lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin
+        end; // End of RULEswap2_rule__ENA
+        if (RULEswap_rule__ENA & lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin
             $display( "swap_rule:Connect" );
-        end; // End of swap_rule__ENA
+        end; // End of RULEswap_rule__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

@@ -52,7 +52,7 @@ MODULE ModFt600 {
     FIELD INTEGER_2 usb_rxf_delay
     FIELD INTEGER_1 usb_txe_delay
     FIELD/Count 16  IOBUF iobufs
-    METHOD/Rule handshake__ENA {
+    METHOD/Rule RULEhandshake__ENA {
         LET INTEGER_1 :usb_rd_n = (usb_rxf_delay) != (0)
         LET INTEGER_1 :usb_oe_n = (usb_rxf_delay) & (1)
         LET INTEGER_1 :usb_wr_n = ((usb_txe_delay) | (usb_fifo_empty)) | (((usb_rxf_delay) & (1)) ^ (-1))
@@ -60,82 +60,82 @@ MODULE ModFt600 {
         STORE :usb_rxf_delay = ((usb_rxf_delay) << (1)) | (usb_rxf)
         STORE :usb_txe_delay = usb_txe
     }
-    METHOD/Rule iobufs_0__ENA {
+    METHOD/Rule RULEiobufs_0__ENA {
         LET INTEGER_1 :iobufs[0]$IO = (usb_ad)  >>  (0)
         LET INTEGER_1 :iobufs[0]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[0]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_10__ENA {
+    METHOD/Rule RULEiobufs_10__ENA {
         LET INTEGER_1 :iobufs[10]$IO = (usb_ad)  >>  (10)
         LET INTEGER_1 :iobufs[10]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[10]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_11__ENA {
+    METHOD/Rule RULEiobufs_11__ENA {
         LET INTEGER_1 :iobufs[11]$IO = (usb_ad)  >>  (11)
         LET INTEGER_1 :iobufs[11]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[11]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_12__ENA {
+    METHOD/Rule RULEiobufs_12__ENA {
         LET INTEGER_1 :iobufs[12]$IO = (usb_ad)  >>  (12)
         LET INTEGER_1 :iobufs[12]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[12]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_13__ENA {
+    METHOD/Rule RULEiobufs_13__ENA {
         LET INTEGER_1 :iobufs[13]$IO = (usb_ad)  >>  (13)
         LET INTEGER_1 :iobufs[13]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[13]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_14__ENA {
+    METHOD/Rule RULEiobufs_14__ENA {
         LET INTEGER_1 :iobufs[14]$IO = (usb_ad)  >>  (14)
         LET INTEGER_1 :iobufs[14]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[14]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_15__ENA {
+    METHOD/Rule RULEiobufs_15__ENA {
         LET INTEGER_1 :iobufs[15]$IO = (usb_ad)  >>  (15)
         LET INTEGER_1 :iobufs[15]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[15]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_1__ENA {
+    METHOD/Rule RULEiobufs_1__ENA {
         LET INTEGER_1 :iobufs[1]$IO = (usb_ad)  >>  (1)
         LET INTEGER_1 :iobufs[1]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[1]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_2__ENA {
+    METHOD/Rule RULEiobufs_2__ENA {
         LET INTEGER_1 :iobufs[2]$IO = (usb_ad)  >>  (2)
         LET INTEGER_1 :iobufs[2]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[2]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_3__ENA {
+    METHOD/Rule RULEiobufs_3__ENA {
         LET INTEGER_1 :iobufs[3]$IO = (usb_ad)  >>  (3)
         LET INTEGER_1 :iobufs[3]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[3]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_4__ENA {
+    METHOD/Rule RULEiobufs_4__ENA {
         LET INTEGER_1 :iobufs[4]$IO = (usb_ad)  >>  (4)
         LET INTEGER_1 :iobufs[4]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[4]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_5__ENA {
+    METHOD/Rule RULEiobufs_5__ENA {
         LET INTEGER_1 :iobufs[5]$IO = (usb_ad)  >>  (5)
         LET INTEGER_1 :iobufs[5]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[5]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_6__ENA {
+    METHOD/Rule RULEiobufs_6__ENA {
         LET INTEGER_1 :iobufs[6]$IO = (usb_ad)  >>  (6)
         LET INTEGER_1 :iobufs[6]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[6]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_7__ENA {
+    METHOD/Rule RULEiobufs_7__ENA {
         LET INTEGER_1 :iobufs[7]$IO = (usb_ad)  >>  (7)
         LET INTEGER_1 :iobufs[7]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[7]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_8__ENA {
+    METHOD/Rule RULEiobufs_8__ENA {
         LET INTEGER_1 :iobufs[8]$IO = (usb_ad)  >>  (8)
         LET INTEGER_1 :iobufs[8]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[8]$RST_N = __defaultnReset
     }
-    METHOD/Rule iobufs_9__ENA {
+    METHOD/Rule RULEiobufs_9__ENA {
         LET INTEGER_1 :iobufs[9]$IO = (usb_ad)  >>  (9)
         LET INTEGER_1 :iobufs[9]$CLK = __defaultClock
         LET INTEGER_1 :iobufs[9]$RST_N = __defaultnReset
@@ -146,11 +146,11 @@ MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
+    METHOD/Rule RULEfifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
-        CALL/Action :out$enq__ENA{fifoRule__ENA$agg_2e_tmp}
+        LET l_struct_OC_NOCData :RULEfifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{RULEfifoRule__ENA$agg_2e_tmp}
         CALL/Action :forwardFifo$out$deq__ENA{}
     }
     METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {

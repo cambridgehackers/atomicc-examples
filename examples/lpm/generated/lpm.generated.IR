@@ -91,39 +91,47 @@ MODULE Lpm {
     FIELD INTEGER_32 doneCount
     INTERFACE/Ptr l_ainterface_OC_LpmIndication ind
     INTERFACE l_ainterface_OC_LpmRequest request
-    METHOD/Rule enter__ENA {
-        ALLOCA l_struct_OC_ValuePair enter__ENA$temp
+    METHOD/Rule RULEenter__ENA {
+        ALLOCA l_struct_OC_ValuePair RULEenter__ENA$temp
         CALL :inQ$out$first{}
-        LET l_struct_OC_ValuePair :enter__ENA$temp = inQ$out$first
-        PRINTF :printf{"enter: (%d, %d)\n",enter__ENA$temp$a,enter__ENA$temp$b}
+        LET l_struct_OC_ValuePair :RULEenter__ENA$temp = inQ$out$first
+        PRINTF :printf{"enter: (%d, %d)\n",RULEenter__ENA$temp$a,RULEenter__ENA$temp$b}
         CALL/Action :inQ$out$deq__ENA{}
-        CALL/Action :fifo$in$enq__ENA{enter__ENA$temp}
-        CALL/Action :mem$ifc$req__ENA{enter__ENA$temp}
+        CALL/Action :fifo$in$enq__ENA{RULEenter__ENA$temp}
+        CALL/Action :mem$ifc$req__ENA{RULEenter__ENA$temp}
     }
-    METHOD/Rule exit_rule__ENA {
-        ALLOCA l_struct_OC_ValuePair exit_rule__ENA$mtemp
-        ALLOCA l_struct_OC_ValuePair exit_rule__ENA$temp
+    METHOD/Rule RULEexit_rule__ENA {
+        ALLOCA l_struct_OC_ValuePair RULEexit_rule__ENA$mtemp
+        ALLOCA l_struct_OC_ValuePair RULEexit_rule__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValuePair :exit_rule__ENA$temp = fifo$out$first
+        LET l_struct_OC_ValuePair :RULEexit_rule__ENA$temp = fifo$out$first
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_ValuePair :exit_rule__ENA$mtemp = mem$ifc$resValue
+        LET l_struct_OC_ValuePair :RULEexit_rule__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
-        PRINTF :printf{"exit: (%d, %d)\n",exit_rule__ENA$temp$a,exit_rule__ENA$temp$b}
-        CALL/Action :outQ$in$enq__ENA{exit_rule__ENA$temp}
+        PRINTF :printf{"exit: (%d, %d)\n",RULEexit_rule__ENA$temp$a,RULEexit_rule__ENA$temp$b}
+        CALL/Action :outQ$in$enq__ENA{RULEexit_rule__ENA$temp}
     }
-    METHOD/Rule recirc__ENA {
-        ALLOCA l_struct_OC_ValuePair recirc__ENA$mtemp
-        ALLOCA l_struct_OC_ValuePair recirc__ENA$temp
+    METHOD/Rule RULErecirc__ENA {
+        ALLOCA l_struct_OC_ValuePair RULErecirc__ENA$mtemp
+        ALLOCA l_struct_OC_ValuePair RULErecirc__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValuePair :recirc__ENA$temp = fifo$out$first
+        LET l_struct_OC_ValuePair :RULErecirc__ENA$temp = fifo$out$first
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_ValuePair :recirc__ENA$mtemp = mem$ifc$resValue
+        LET l_struct_OC_ValuePair :RULErecirc__ENA$mtemp = mem$ifc$resValue
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
-        PRINTF :printf{"recirc: (%d, %d)\n",recirc__ENA$temp$a,recirc__ENA$temp$b}
-        CALL/Action :fifo$in$enq__ENA{recirc__ENA$mtemp}
-        CALL/Action :mem$ifc$req__ENA{recirc__ENA$temp}
+        PRINTF :printf{"recirc: (%d, %d)\n",RULErecirc__ENA$temp$a,RULErecirc__ENA$temp$b}
+        CALL/Action :fifo$in$enq__ENA{RULErecirc__ENA$mtemp}
+        CALL/Action :mem$ifc$req__ENA{RULErecirc__ENA$temp}
+    }
+    METHOD/Rule RULErespond__ENA {
+        ALLOCA l_struct_OC_ValuePair RULErespond__ENA$temp
+        CALL :outQ$out$first{}
+        LET l_struct_OC_ValuePair :RULErespond__ENA$temp = outQ$out$first
+        CALL/Action :outQ$out$deq__ENA{}
+        PRINTF :printf{"respond: (%d, %d)\n",RULErespond__ENA$temp$a,RULErespond__ENA$temp$b}
+        CALL/Action :ind$heard__ENA{RULErespond__ENA$temp$a,RULErespond__ENA$temp$b}
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_ValuePair request$say__ENA$temp
@@ -132,19 +140,14 @@ MODULE Lpm {
         LET INTEGER_32 :request$say__ENA$temp$b = request$say$v
         CALL/Action :inQ$in$enq__ENA{request$say__ENA$temp}
     }
-    METHOD/Rule respond__ENA {
-        ALLOCA l_struct_OC_ValuePair respond__ENA$temp
-        CALL :outQ$out$first{}
-        LET l_struct_OC_ValuePair :respond__ENA$temp = outQ$out$first
-        CALL/Action :outQ$out$deq__ENA{}
-        PRINTF :printf{"respond: (%d, %d)\n",respond__ENA$temp$a,respond__ENA$temp$b}
-        CALL/Action :ind$heard__ENA{respond__ENA$temp$a,respond__ENA$temp$b}
-    }
 }
 MODULE LpmMemory {
     FIELD INTEGER_32 delayCount
     FIELD l_struct_OC_ValuePair saved
     INTERFACE l_ainterface_OC_LpmMem ifc
+    METHOD/Rule RULEmemdelay_rule__ENA if (((delayCount) > (1))) {
+        STORE :delayCount = (delayCount) - (1)
+    }
     METHOD ifc$req__ENA ( l_struct_OC_ValuePair v ) if (((delayCount) == (0))) {
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
@@ -153,20 +156,17 @@ MODULE LpmMemory {
         STORE :delayCount = 0
     }
     METHOD ifc$resValue l_struct_OC_ValuePair = ((saved)) if (((delayCount) == (1)))
-    METHOD/Rule memdelay_rule__ENA if (((delayCount) > (1))) {
-        STORE :delayCount = (delayCount) - (1)
-    }
 }
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
+    METHOD/Rule RULEfifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
-        CALL/Action :out$enq__ENA{fifoRule__ENA$agg_2e_tmp}
+        LET l_struct_OC_NOCData :RULEfifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{RULEfifoRule__ENA$agg_2e_tmp}
         CALL/Action :forwardFifo$out$deq__ENA{}
     }
     METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {

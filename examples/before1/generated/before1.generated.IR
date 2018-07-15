@@ -71,20 +71,20 @@ MODULE Connect {
     FIELD Echo lEcho
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
+    METHOD/Rule RULEswap2_rule__ENA {
+        PRINTF :printf{"swap2_rule:Connect\n"}
+        CALL/Action :lEcho$swap$y2xnull__ENA{}
+    }
+    METHOD/Rule RULEswap_rule__ENA {
+        PRINTF :printf{"swap_rule:Connect\n"}
+        CALL/Action :lEcho$swap$x2y__ENA{}
+        CALL/Action :lEcho$swap$y2x__ENA{}
+    }
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
-    }
-    METHOD/Rule swap2_rule__ENA {
-        PRINTF :printf{"swap2_rule:Connect\n"}
-        CALL/Action :lEcho$swap$y2xnull__ENA{}
-    }
-    METHOD/Rule swap_rule__ENA {
-        PRINTF :printf{"swap_rule:Connect\n"}
-        CALL/Action :lEcho$swap$x2y__ENA{}
-        CALL/Action :lEcho$swap$y2x__ENA{}
     }
 }
 MODULE Echo {
@@ -99,12 +99,17 @@ MODULE Echo {
     FIELD INTEGER_32 x
     FIELD INTEGER_32 y
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD/Rule delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+    METHOD/Rule RULEdelay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"delay_rule: Echo\n"}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
+    }
+    METHOD/Rule RULErespond_rule__ENA if (((busy_delay) != (0))) {
+        PRINTF :printf{"respond_rule: Echo\n"}
+        STORE :busy_delay = 0
+        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say2",192}
@@ -117,11 +122,6 @@ MODULE Echo {
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
-    }
-    METHOD/Rule respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"respond_rule: Echo\n"}
-        STORE :busy_delay = 0
-        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD swap$x2y__ENA {
         PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",206}
@@ -141,7 +141,7 @@ MODULE EchoIndicationInput {
     FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
-    METHOD/Rule input_rule__ENA if (((busy_delay) != (0))) {
+    METHOD/Rule RULEinput_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
@@ -162,6 +162,14 @@ MODULE EchoIndicationOutput {
     FIELD l_struct_OC_EchoIndication_data ind1
     FIELD INTEGER_1 ind_busy
     FIELD INTEGER_1 even
+    METHOD/Rule RULEoutput_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
+        STORE :ind_busy = 0
+        CALL/Action :pipe$enq__ENA{ind0}
+    }
+    METHOD/Rule RULEoutput_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
+        STORE :ind_busy = 0
+        CALL/Action :pipe$enq__ENA{ind1}
+    }
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",114,even}
         STORE (even):ind1$tag = 1
@@ -172,14 +180,6 @@ MODULE EchoIndicationOutput {
         STORE ((even) ^ 1):ind0$data$heard$v = indication$heard$v
         STORE :ind_busy = 1
         STORE :even = (even) ^ (1)
-    }
-    METHOD/Rule output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
-        STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind0}
-    }
-    METHOD/Rule output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
-        STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind1}
     }
 }
 MODULE EchoRequestInput {
@@ -232,11 +232,11 @@ MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
     FIELD Fifo1 forwardFifo
-    METHOD/Rule fifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData fifoRule__ENA$agg_2e_tmp
+    METHOD/Rule RULEfifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
-        CALL/Action :out$enq__ENA{fifoRule__ENA$agg_2e_tmp}
+        LET l_struct_OC_NOCData :RULEfifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{RULEfifoRule__ENA$agg_2e_tmp}
         CALL/Action :forwardFifo$out$deq__ENA{}
     }
     METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {
