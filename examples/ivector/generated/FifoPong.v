@@ -34,10 +34,10 @@ module FifoPong (input wire CLK, input wire nRST,
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));
-    assign in$enq__RDY = ( ( pong  ^ 1 ) | element2$in$enq__RDY  ) & ( pong  | element1$in$enq__RDY  );
-    assign out$deq__RDY = ( ( pong  ^ 1 ) | element2$out$deq__RDY  ) & ( pong  | element1$out$deq__RDY  );
-    assign out$first = { pong  ? element2$out$first[95:64]  : element1$out$first[95:64]  , pong  ? element2$out$first[63:32]  : element1$out$first[63:32]  , pong  ? element2$out$first[31:0]  : element1$out$first[31:0]  };
-    assign out$first__RDY = ( ( pong  ^ 1 ) | element2$out$first__RDY  ) & ( pong  | element1$out$first__RDY  );
+    assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
+    assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
+    assign out$first = { pong ? element2$out$first[95:64] : element1$out$first[95:64] , pong ? element2$out$first[63:32] : element1$out$first[63:32] , pong ? element2$out$first[31:0] : element1$out$first[31:0] };
+    assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -45,7 +45,7 @@ module FifoPong (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (out$deq__ENA & out$deq__RDY) begin
-            pong  <= pong ^ 1;
+            pong <= pong ^ 1;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

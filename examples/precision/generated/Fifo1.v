@@ -16,7 +16,7 @@ module Fifo1 (input wire CLK, input wire nRST,
     reg full;
     assign in$enq__RDY = 1;
     assign out$deq__RDY = 1;
-    assign out$first = { element$data3  , element$data2  , element$data1  , element$data0  };
+    assign out$first = { element$data3 , element$data2 , element$data1 , element$data0 };
     assign out$first__RDY = 1;
 
     always @( posedge CLK) begin
@@ -29,11 +29,11 @@ module Fifo1 (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (in$enq__ENA & in$enq__RDY) begin
-            { element$data3  , element$data2  , element$data1  , element$data0  } <= in$enq$v;
-            full  <= 1;
+            { element$data3 , element$data2 , element$data1 , element$data0 } <= in$enq$v;
+            full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA & out$deq__RDY) begin
-            full  <= 0;
+            full <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

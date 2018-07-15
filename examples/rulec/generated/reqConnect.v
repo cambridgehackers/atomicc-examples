@@ -9,9 +9,9 @@ module reqConnect (input wire CLK, input wire nRST,
     output wire request$enq__ENA,
     output wire [127:0]request$enq$v,
     input wire request$enq__RDY);
-    assign request$enq$v = wad$enq$v ;
-    assign request$enq__ENA = wad$enq__ENA ;
-    assign wad$enq__RDY = request$enq__RDY ;
+    assign request$enq$v = wad$enq$v;
+    assign request$enq__ENA = wad$enq__ENA;
+    assign wad$enq__RDY = request$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

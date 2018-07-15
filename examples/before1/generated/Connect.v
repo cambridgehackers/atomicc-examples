@@ -37,8 +37,8 @@ module Connect (input wire CLK, input wire nRST,
     wire lEcho$swap$y2xnull__RDY;
     wire swap2_rule__ENA;
     wire swap_rule__ENA;
-    assign swap2_rule__ENA = lEcho$swap$y2xnull__RDY ;
-    assign swap_rule__ENA = lEcho$swap$x2y__RDY  & lEcho$swap$y2x__RDY ;
+    assign swap2_rule__ENA = lEcho$swap$y2xnull__RDY;
+    assign swap_rule__ENA = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
         .indication$heard__ENA(lEcho$indication$heard__ENA),
         .indication$heard$meth(lEcho$indication$heard$meth),

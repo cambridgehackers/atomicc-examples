@@ -243,9 +243,9 @@ module ModFt600 (
     assign iobufs9$I = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign iobufs9$T = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign usb_oe_n = usb_rxf_delay ;
-    assign usb_rd_n = usb_rxf_delay  != 2'd0;
-    assign usb_wr_n = usb_txe_delay  | usb_fifo_empty  | ( usb_rxf_delay  ^ ( -1 ) );
+    assign usb_oe_n = usb_rxf_delay;
+    assign usb_rd_n = usb_rxf_delay != 2'd0;
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -255,9 +255,9 @@ module ModFt600 (
       end // nRST
       else begin
         if (handshake__ENA & 1) begin
-            usb_fifo_empty  <= 0;
-            usb_rxf_delay  <= ( usb_rxf_delay << 1 ) | usb_rxf;
-            usb_txe_delay  <= usb_txe;
+            usb_fifo_empty <= 0;
+            usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
+            usb_txe_delay <= usb_txe;
         end; // End of handshake__ENA
       end
     end // always @ (posedge CLK)

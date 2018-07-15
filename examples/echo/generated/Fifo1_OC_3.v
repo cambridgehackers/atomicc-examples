@@ -11,10 +11,10 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
     output wire out$first__RDY);
     reg [31:0]element;
     reg full;
-    assign in$enq__RDY = !full ;
-    assign out$deq__RDY = full ;
-    assign out$first = element ;
-    assign out$first__RDY = full ;
+    assign in$enq__RDY = !full;
+    assign out$deq__RDY = full;
+    assign out$first = element;
+    assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -23,11 +23,11 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (in$enq__ENA & in$enq__RDY) begin
-            element  <= in$enq$v;
-            full  <= 1;
+            element <= in$enq$v;
+            full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA & out$deq__RDY) begin
-            full  <= 0;
+            full <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

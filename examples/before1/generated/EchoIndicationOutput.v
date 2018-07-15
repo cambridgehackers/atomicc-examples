@@ -19,11 +19,11 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     reg ind_busy;
     wire output_rulee__ENA;
     wire output_ruleo__ENA;
-    assign output_rulee__ENA = ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY ;
-    assign output_ruleo__ENA = ( ( ind_busy  & ( !even  ) ) != 0 ) & pipe$enq__RDY ;
-    assign indication$heard__RDY = !ind_busy ;
-    assign pipe$enq$v = ( output_rulee__ENA  & ( ( ind_busy  & even  ) != 0 ) & pipe$enq__RDY  ) ? { ind0$data$heard$v  , ind0$data$heard$meth  , ind0$tag  } : { ind1$data$heard$v  , ind1$data$heard$meth  , ind1$tag  };
-    assign pipe$enq__ENA = ( ( ( ind_busy  & even  ) != 0 ) & ( ( ind_busy  & even  ) != 0 ) ) || ( ( ( ind_busy  & ( !even  ) ) != 0 ) & ( ( ind_busy  & ( !even  ) ) != 0 ) );
+    assign output_rulee__ENA = ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY;
+    assign output_ruleo__ENA = ( ( ind_busy & ( !even ) ) != 0 ) & pipe$enq__RDY;
+    assign indication$heard__RDY = !ind_busy;
+    assign pipe$enq$v = ( output_rulee__ENA & ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY ) ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag };
+    assign pipe$enq__ENA = ( ( ( ind_busy & even ) != 0 ) & ( ( ind_busy & even ) != 0 ) ) || ( ( ( ind_busy & ( !even ) ) != 0 ) & ( ( ind_busy & ( !even ) ) != 0 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -38,25 +38,25 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (indication$heard__ENA & indication$heard__RDY) begin
-            ind_busy  <= 1;
-            even  <= even ^ 1;
+            ind_busy <= 1;
+            even <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 114 , even );
             if (even ^ 1) begin
-            ind0$tag  <= 1;
-            ind0$data$heard$meth  <= indication$heard$meth;
-            ind0$data$heard$v  <= indication$heard$v;
+            ind0$tag <= 1;
+            ind0$data$heard$meth <= indication$heard$meth;
+            ind0$data$heard$v <= indication$heard$v;
             end;
             if (even) begin
-            ind1$tag  <= 1;
-            ind1$data$heard$meth  <= indication$heard$meth;
-            ind1$data$heard$v  <= indication$heard$v;
+            ind1$tag <= 1;
+            ind1$data$heard$meth <= indication$heard$meth;
+            ind1$data$heard$v <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
         if (output_rulee__ENA & ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY) begin
-            ind_busy  <= 0;
+            ind_busy <= 0;
         end; // End of output_rulee__ENA
         if (output_ruleo__ENA & ( ( ind_busy & ( !even ) ) != 0 ) & pipe$enq__RDY) begin
-            ind_busy  <= 0;
+            ind_busy <= 0;
         end; // End of output_ruleo__ENA
       end
     end // always @ (posedge CLK)

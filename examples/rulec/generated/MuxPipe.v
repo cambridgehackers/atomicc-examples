@@ -15,7 +15,7 @@ module MuxPipe (input wire CLK, input wire nRST,
     wire forwardFifo$out$deq__RDY;
     wire [127:0]forwardFifo$out$first;
     wire forwardFifo$out$first__RDY;
-    assign fifoRule__ENA = forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY ;
+    assign fifoRule__ENA = forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
     Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
@@ -24,9 +24,9 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out$deq__RDY(forwardFifo$out$deq__RDY),
         .out$first(forwardFifo$out$first),
         .out$first__RDY(forwardFifo$out$first__RDY));
-    assign in$enq__RDY = out$enq__RDY ;
-    assign out$enq$v = ( fifoRule__ENA  & forwardFifo$out$first__RDY  & out$enq__RDY  & forwardFifo$out$deq__RDY  ) ? { forwardFifo$out$first[127:96]  , forwardFifo$out$first[95:64]  , forwardFifo$out$first[63:32]  , forwardFifo$out$first[31:0]  } : in$enq$v ;
-    assign out$enq__ENA = ( forwardFifo$out$first__RDY  & forwardFifo$out$deq__RDY  ) || in$enq__ENA ;
+    assign in$enq__RDY = out$enq__RDY;
+    assign out$enq$v = ( fifoRule__ENA & forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY ) ? { forwardFifo$out$first[127:96] , forwardFifo$out$first[95:64] , forwardFifo$out$first[63:32] , forwardFifo$out$first[31:0] } : in$enq$v;
+    assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifo$out$deq__RDY ) || in$enq__ENA;
 endmodule 
 
 `default_nettype wire    // set back to default value

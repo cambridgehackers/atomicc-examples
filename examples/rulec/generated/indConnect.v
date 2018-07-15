@@ -9,10 +9,10 @@ module indConnect (input wire CLK, input wire nRST,
     output wire [127:0]rad$enq$v,
     output wire [15:0]rad$enq$length,
     input wire rad$enq__RDY);
-    assign indication$enq__RDY = rad$enq__RDY ;
-    assign rad$enq$length = indication$enq$v  - 1;
-    assign rad$enq$v = indication$enq$v ;
-    assign rad$enq__ENA = indication$enq__ENA ;
+    assign indication$enq__RDY = rad$enq__RDY;
+    assign rad$enq$length = indication$enq$v - 1;
+    assign rad$enq$v = indication$enq$v;
+    assign rad$enq__ENA = indication$enq__ENA;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -10,10 +10,10 @@ module Echo (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard$meth,
     output wire [31:0]indication$heard$v,
     input wire indication$heard__RDY);
-    assign indication$heard$meth = request$say$meth ;
-    assign indication$heard$v = request$say$v ;
-    assign indication$heard__ENA = request$say__ENA ;
-    assign request$say__RDY = indication$heard__RDY ;
+    assign indication$heard$meth = request$say$meth;
+    assign indication$heard$v = request$say$v;
+    assign indication$heard__ENA = request$say__ENA;
+    assign request$say__RDY = indication$heard__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value

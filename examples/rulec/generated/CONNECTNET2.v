@@ -10,8 +10,8 @@ module CONNECTNET2 (
     wire nRST;
     wire assign__ENA;
     assign assign__ENA = 1;
-    assign OUT1 = IN1 ;
-    assign OUT2 = IN2 ;
+    assign OUT1 = IN1;
+    assign OUT2 = IN2;
 endmodule 
 
 `default_nettype wire    // set back to default value
