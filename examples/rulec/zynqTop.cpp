@@ -31,6 +31,15 @@ __interface ClockIfc {
    __output __uint(1)  clockOut;
 };
 
+__module ResetInverter {
+    MResetInverterResetInverter _;
+    ResetInverter() {
+    __rule init {
+        _.RESET_OUT = !_.RESET_IN;
+    }
+    }
+};
+
 __module ClockTop {
     ClockIfc _;
     MMCME2_ADV#( BANDWIDTH = "OPTIMIZED",
