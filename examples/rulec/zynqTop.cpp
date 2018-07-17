@@ -134,12 +134,12 @@ __module ZynqTop {
        __rule init {
             pps._.FPGAID.LEN = 1;
             pps._.MAXIGP0.ACLK = __defaultClock;
-            //pps._.MAXIGP0.RVALID = 1;
-            //pps._.MAXIGP0.BVALID = 1;
             //pps._.MAXIGP0.ARESETN = 1;
-            //pps._.MAXIGP0.ARREADY = 1;
-            //pps._.MAXIGP0.AWREADY = 1;
-            //pps._.MAXIGP0.WREADY = 1;
+            pps._.MAXIGP0.RVALID = __valid(MAXIGP0_I.R);
+            pps._.MAXIGP0.BVALID = __valid(MAXIGP0_I.B);
+            pps._.MAXIGP0.ARREADY = __ready(MAXIGP0_O->AR);
+            pps._.MAXIGP0.AWREADY = __ready(MAXIGP0_O->AW);
+            pps._.MAXIGP0.WREADY = __ready(MAXIGP0_O->W);
        }
        __rule gp0ar if (pps._.MAXIGP0.ARVALID) {
            MAXIGP0_O->AR(pps._.MAXIGP0.ARADDR, pps._.MAXIGP0.ARID, pps._.MAXIGP0.ARLEN);
