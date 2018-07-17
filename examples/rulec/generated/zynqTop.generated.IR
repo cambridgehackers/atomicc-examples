@@ -640,5 +640,10 @@ MODULE ZynqTop {
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
         LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$MAXIGP0RVALID = "__valid:MAXIGP0_I$R"
+        LET INTEGER_1 :pps$MAXIGP0BVALID = "__valid:MAXIGP0_I$B"
+        LET INTEGER_1 :pps$MAXIGP0ARREADY = "__ready:MAXIGP0_O$AR"
+        LET INTEGER_1 :pps$MAXIGP0AWREADY = "__ready:MAXIGP0_O$AW"
+        LET INTEGER_1 :pps$MAXIGP0WREADY = "__ready:MAXIGP0_O$W"
     }
 }
