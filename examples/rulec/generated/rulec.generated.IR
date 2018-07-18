@@ -51,7 +51,7 @@ MODULE AdapterFromBus {
         STORE :waitForEnq = 0
     }
     METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_1 last ) if (((waitForEnq) ^ (1))) {
-        STORE :buffer = __bitconcat{__bitsubstr{buffer,127,32},in$enq$v}
+        STORE :buffer = __bitconcat{__bitsubstr{buffer,95,0},in$enq$v}
         STORE (in$enq$last):waitForEnq = 1
     }
 }
