@@ -67,7 +67,7 @@ bool Fifo1<T>::notFull() const {
 
 #ifndef FIFO_NO_DUMMY_INSTANTIATION
 //template class 
-Fifo1<int> unused;
+//Fifo1<int> unused;
 //Fifo1<unsigned char> ff1Char;
 #endif
 #endif // __FIFO_CPP__

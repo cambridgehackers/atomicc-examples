@@ -153,5 +153,58 @@ __module ZynqTop {
     }
 };
 
+typedef __uint(5)  AXIAddr;
+typedef __uint(6)  AXIId;
+typedef __uint(10) AXICount;
+typedef __uint(32) AXIData;
+typedef struct {
+    AXIAddr    addr;
+    AXICount   count;
+    AXIId      id;
+} AddrCount;
+typedef struct {
+  AddrCount ac;
+  __uint(1) last;
+} PortalInfo;
+typedef struct {
+  AXIData    data;
+  AXIId      id;
+} ReadResp;
+typedef struct {
+  __uint(2) resp;
+  __uint(12) id;
+} WriteResp;
+typedef struct {
+  AXIData    data;
+} WriteData;
+typedef struct {
+  __uint(1)    data;
+} AXIDelay;
+
+__module TestTop {
+    MaxiO             MAXIGP0_O;
+    MaxiI            *MAXIGP0_I;
+    Fifo1<AXIDelay>  reqrs, reqws;
+    Fifo1<AddrCount>  reqArs, write_req;
+    Fifo1<PortalInfo> reqPortal,write;
+    Fifo1<ReadResp>   ReadData;
+    Fifo1<WriteData>  reqwriteData;
+    Fifo1<AXIId>      CMRdone;
+    __uint(1) CMRlastWriteDataSeen, ctrlPort_0_interruptEnableReg, writeFirst, writeLast;
+    __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    AXIData requestValue, portalCtrlInfo;
+    AXICount readCount, writeCount;
+    AXIAddr readAddr, writeAddr;
+
+    void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
+        //MAXIGP0_I->R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp);
+    }
+    void MAXIGP0_O.AW(__uint(32) addr, __uint(12) id, __uint(4) len) {
+    }
+    void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
+        //MAXIGP0_I->B(__uint(12) id, __uint(2) resp);
+    }
+};
+
 ClockTop ctest;
 ZynqTop ztest;

@@ -1,5 +1,24 @@
+EMODULE l_struct_OC_AXIDelay {
+    FIELD INTEGER_1 data
+}
+EMODULE l_struct_OC_AddrCount {
+    FIELD INTEGER_5 addr
+    FIELD INTEGER_10 count
+    FIELD INTEGER_6 id
+}
 EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
+}
+EMODULE l_struct_OC_PortalInfo {
+    FIELD l_struct_OC_AddrCount ac
+    FIELD INTEGER_1 last
+}
+EMODULE l_struct_OC_ReadResp {
+    FIELD INTEGER_32 data
+    FIELD INTEGER_6 id
+}
+EMODULE l_struct_OC_WriteData {
+    FIELD INTEGER_32 data
 }
 EMODULE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
@@ -110,9 +129,51 @@ EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeIn_OC_0 {
+    METHOD enq__ENA ( l_struct_OC_AXIDelay v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_10 {
+    METHOD enq__ENA ( INTEGER_6 v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
+    METHOD enq__ENA ( l_struct_OC_AddrCount v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
+    METHOD enq__ENA ( l_struct_OC_PortalInfo v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_6 {
+    METHOD enq__ENA ( l_struct_OC_ReadResp v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_8 {
+    METHOD enq__ENA ( l_struct_OC_WriteData v )
+}
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
+}
+EMODULE l_ainterface_OC_PipeOut_OC_1 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_AXIDelay
+}
+EMODULE l_ainterface_OC_PipeOut_OC_11 {
+    METHOD deq__ENA
+    METHOD first INTEGER_6
+}
+EMODULE l_ainterface_OC_PipeOut_OC_3 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_AddrCount
+}
+EMODULE l_ainterface_OC_PipeOut_OC_5 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_PortalInfo
+}
+EMODULE l_ainterface_OC_PipeOut_OC_7 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_ReadResp
+}
+EMODULE l_ainterface_OC_PipeOut_OC_9 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_WriteData
 }
 EMODULE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
@@ -528,6 +589,30 @@ EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
+EMODULE Fifo_OC_13 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+}
+EMODULE Fifo_OC_15 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
+}
+EMODULE Fifo_OC_17 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+}
+EMODULE Fifo_OC_19 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+}
+EMODULE Fifo_OC_21 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
+}
+EMODULE Fifo_OC_23 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
+}
 EMODULE MMCME2_ADV {
     INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
 }
@@ -578,6 +663,90 @@ MODULE Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }
+MODULE Fifo1_OC_12 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+    FIELD l_struct_OC_AXIDelay element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_AXIDelay v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_AXIDelay = ((element)) if ((full))
+}
+MODULE Fifo1_OC_14 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
+    FIELD l_struct_OC_AddrCount element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_AddrCount = ((element)) if ((full))
+}
+MODULE Fifo1_OC_16 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+    FIELD l_struct_OC_PortalInfo element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_PortalInfo = ((element)) if ((full))
+}
+MODULE Fifo1_OC_18 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+    FIELD l_struct_OC_ReadResp element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_ReadResp = ((element)) if ((full))
+}
+MODULE Fifo1_OC_20 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
+    FIELD l_struct_OC_WriteData element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( l_struct_OC_WriteData v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first l_struct_OC_WriteData = ((element)) if ((full))
+}
+MODULE Fifo1_OC_22 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
+    FIELD INTEGER_6 element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( INTEGER_6 v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first INTEGER_6 = ((element)) if ((full))
+}
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
@@ -602,6 +771,38 @@ MODULE ResetInverter {
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
+}
+MODULE TestTop {
+    INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
+    FIELD Fifo1_OC_12 reqrs
+    FIELD Fifo1_OC_12 reqws
+    FIELD Fifo1_OC_14 reqArs
+    FIELD Fifo1_OC_14 write_req
+    FIELD Fifo1_OC_16 reqPortal
+    FIELD Fifo1_OC_16 write
+    FIELD Fifo1_OC_18 ReadData
+    FIELD Fifo1_OC_20 reqwriteData
+    FIELD Fifo1_OC_22 CMRdone
+    FIELD INTEGER_1 CMRlastWriteDataSeen
+    FIELD INTEGER_1 ctrlPort_0_interruptEnableReg
+    FIELD INTEGER_1 writeFirst
+    FIELD INTEGER_1 writeLast
+    FIELD INTEGER_1 readFirst
+    FIELD INTEGER_1 readLast
+    FIELD INTEGER_1 selectRIndReq
+    FIELD INTEGER_1 portalRControl
+    FIELD INTEGER_1 selectWIndReq
+    FIELD INTEGER_1 portalWControl
+    FIELD INTEGER_32 requestValue
+    FIELD INTEGER_32 portalCtrlInfo
+    FIELD INTEGER_10 readCount
+    FIELD INTEGER_10 writeCount
+    FIELD INTEGER_5 readAddr
+    FIELD INTEGER_5 writeAddr
+    METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 MODULE ZynqTop {
     INTERFACECONNECT DDR pps$DDR l_ainterface_OC_Pps7ddr
