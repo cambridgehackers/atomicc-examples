@@ -194,25 +194,6 @@ __module P7Wrap {
     }
 };
 
-__module ZynqTop {
-    ZynqClock        _;
-    Pps7m            M;
-    Pps7fclk         FCLK;
-    P7Wrap zt;
-    MaxiO            *MAXIGP0_O;
-    MaxiI            MAXIGP0_I;
-
-    __connect _ = zt._;
-    __connect M = zt.M;
-    __connect FCLK = zt.FCLK;
-    __connect MAXIGP0_O = zt.MAXIGP0_O;
-    __connect MAXIGP0_I = zt.MAXIGP0_I;
-    ZynqTop() {
-        __rule init {
-        }
-    }
-};
-
 typedef __uint(5)  AXIAddr;
 typedef __uint(6)  AXIId;
 typedef __uint(10) AXICount;
@@ -237,34 +218,137 @@ typedef struct {
 typedef struct {
   AXIData    data;
 } WriteData;
-typedef struct {
-  __uint(1)    data;
-} AXIDelay;
 
 __module TestTop {
-    MaxiO             MAXIGP0_O;
-    MaxiI            *MAXIGP0_I;
-    Fifo1<AXIDelay>  reqrs, reqws;
-    Fifo1<AddrCount>  reqArs, write_req;
-    Fifo1<PortalInfo> reqPortal,write;
-    Fifo1<ReadResp>   ReadData;
-    Fifo1<WriteData>  reqwriteData;
-    Fifo1<AXIId>      CMRdone;
-    __uint(1) CMRlastWriteDataSeen, ctrlPort_0_interruptEnableReg, writeFirst, writeLast;
-    __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-    AXIData requestValue, portalCtrlInfo;
-    AXICount readCount, writeCount;
-    AXIAddr readAddr, writeAddr;
+    MaxiO             MAXIGP0_O; 
+    MaxiI            *MAXIGP0_I; 
+    //.interrupt(read$enq__ENA && intEnable),
+  //readFirst <= 1'd1;
+  //writeFirst <= 1'd1;
+ 
+    __uint(1) intEnable, writeFirst, writeLast; 
+    __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl; 
+    AXIData requestValue, portalCtrlInfo; 
+    AXICount readCount, writeCount; 
+    AXIAddr readAddr, writeAddr; 
+ 
+    Fifo1<AddrCount>  reqArs, reqAws; 
+    Fifo1<PortalInfo> readBeat,writeBeat; 
+    Fifo1<ReadResp>   readData; 
+    Fifo1<WriteData>  writeData; 
+    Fifo1<AXIId>      writeDone; 
 
     void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        //MAXIGP0_I->R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp);
+        //reqArs.enq({ addr[4:0], { 4'd0, len + 4'd1, 2'd0 }, id[5:0]})
+        //portalRControl = MAXIGP0_O$AR$addr[11:5] == 7'd0;
+        //selectRIndReq = MAXIGP0_O$AR$addr[12];
     }
     void MAXIGP0_O.AW(__uint(32) addr, __uint(12) id, __uint(4) len) {
+        //reqAws.enq({addr[4:0], { 4'd0, len + 4'd1, 2'd0 }, id[5:0] });
+        //portalWControl = MAXIGP0_O$AW$addr[11:5] == 7'd0;
+        //selectWIndReq = MAXIGP0_O$AW$addr[12];
     }
     void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
-        //MAXIGP0_I->B(__uint(12) id, __uint(2) resp);
+        //writeData.enq(data);
     }
+#if 0
+    UserTop user; 
+    TestTop() {
+        __rule init {
+        }
+        __rule lread if (readBeat$DeqRDY && readData$EnqRDY) {
+            {readBeat$addr, readBeat$base, readBeat$id, readBeat$last} = readBeat.first();
+            readBeat.deq();
+            auto zzIntrChannel = !selectRIndReq && read$enq__ENA;
+            case (readBeat$addr)
+              0: requestValue = read$enq$v;
+              4: requestValue = write$enq__RDY;
+              default: requestValue = 0;
+            endcase
+            case (readBeat$addr)
+              0: portalCtrlInfo = zzIntrChannel; // PORTAL_CTRL_INTERRUPT_STATUS 0
+              //4: portalCtrlInfo = 0;//31'd0, intEnable; // PORTAL_CTRL_INTERRUPT_ENABLE 1
+              8: portalCtrlInfo = 1;                         // PORTAL_CTRL_NUM_TILES        2
+              5'h0C: portalCtrlInfo = zzIntrChannel;         // PORTAL_CTRL_IND_QUEUE_STATUS 3
+              5'h10: portalCtrlInfo = selectRIndReq ? 6 : 5; // PORTAL_CTRL_PORTAL_ID        4
+              5'h14: portalCtrlInfo = 2;                     // PORTAL_CTRL_NUM_PORTALS      5
+              //5'h18: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_MSB      6
+              //5'h1C: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_LSB      7
+              default: portalCtrlInfo = 0;
+            endcase
+            .read$enq__RDY(RULEread && !portalRControl)
+             user.read.enq(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA);
+            readData.enq({portalRControl ? portalCtrlInfo : requestValue, readBeat$id});
+        }
+        __rule lreadNext if (MAXIGP0_O$AR__RDY && readBeat$EnqRDY) {
+        {reqArs$addr, reqArs$count, reqArs$id}
+            auto temp = reqArs.first();
+            if (readFirstNext)
+                reqArs.deq();
+            auto readAddrupdate = readFirst ?  reqArs$addr : readAddr ;
+            auto readburstCount = readFirst ?  { 2'd0, reqArs$count[9:2] } : readCount ;
+            auto readFirstNext = readFirst ? reqArs$count == 4  : readLast ;
+            readBeat.enq({readAddrupdate, readburstCount, temp.id, readFirstNext});
+            readAddr <= readAddrupdate + 4 ;
+            readCount <= readburstCount - 1 ;
+            readFirst <= readFirstNext;
+            readLast <= readburstCount == 2 ;
+        }
+        __rule lR {
+            auto temp = readData.first(); readData.deq();
+            MAXIGP0_I->R(temp.data, temp.id, 1, 0);
+        }
+        __rule lwrite if ((!writeBeat$last || writeDone$EnqRDY) && (!selectWIndReq || portalWControl)) {
+            if (writeBeat$last)
+                writeDone.enq( writeBeat$id);
+            {writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last} = writeBeat.first(); writeBeat.deq();
+            write$enq$v = writeData.first(); writeData.deq();
+            if (portalWControl && writeBeat$addr == 4)
+                intEnable <= write$enq$v[0];
+            if (!portalWControl)
+                user.write.enq(write$enq$v, writeBeat$addr != 0);
+        }
+        __rule lwriteNext {
+            auto writeAddrupdate = writeFirst ?  reqAws$addr : writeAddr ;
+            auto writeburstCount = writeFirst ?  { 2'd0, reqAws$count[9:2] } : writeCount ;
+            auto writeFirstNext = writeFirst ?  reqAws$count == 4 : writeLast ;
+            {reqAws$addr, reqAws$count, reqAws$id} = reqAws.first();
+            if (writeFirstNext)
+                 reqAws.deq();
+            writeBeat.enq({ writeAddrupdate, writeburstCount, reqAws$id, writeFirstNext });
+            writeAddr <= writeAddrupdate + 4 ;
+            writeCount <= writeburstCount - 1 ;
+            writeFirst <= writeFirstNext ;
+            writeLast <= writeburstCount == 2 ;
+        }
+        __rule writeResponse {
+            MAXIGP0_I->B(writeDone.first(), 0);
+            writeDone.deq();
+        }
+    }
+#endif
 };
 
-ClockTop ctest;
+__module ZynqTop {
+    ZynqClock        _;
+    Pps7m            M;
+    Pps7fclk         FCLK;
+    P7Wrap zt;
+#if 1
+    MaxiO            *MAXIGP0_O;
+    MaxiI            MAXIGP0_I;
+
+    __connect MAXIGP0_O = zt.MAXIGP0_O;
+    __connect MAXIGP0_I = zt.MAXIGP0_I;
+#else
+    TestTop test;
+    __connect test.MAXIGP0_O = zt.MAXIGP0_O;
+    __connect test.MAXIGP0_I = zt.MAXIGP0_I;
+#endif
+    __connect _ = zt._;
+    __connect M = zt.M;
+    __connect FCLK = zt.FCLK;
+};
+
+
 ZynqTop ztest;

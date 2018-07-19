@@ -6,10 +6,14 @@
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
-//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit; RULEinit$100
+//METARULES; RULEinit
 //METASTART; Fifo1
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1_OC_10
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -30,16 +34,6 @@
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_18
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_20
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_22
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -70,28 +64,23 @@
 //METAGUARD; RULEinit; 1;
 //METARULES; RULEgp0ar; RULEgp0aw; RULEgp0w; RULEinit
 //METASTART; ResetInverter
-//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit; RULEinit$100
+//METARULES; RULEinit
 //METASTART; TestTop
 //METAEXTERNAL; MAXIGP0_I; l_ainterface_OC_MaxiI;
-//METAINTERNAL; reqrs; Fifo1_OC_12;
-//METAINTERNAL; reqws; Fifo1_OC_12;
-//METAINTERNAL; reqArs; Fifo1_OC_14;
-//METAINTERNAL; write_req; Fifo1_OC_14;
-//METAINTERNAL; reqPortal; Fifo1_OC_16;
-//METAINTERNAL; write; Fifo1_OC_16;
-//METAINTERNAL; ReadData; Fifo1_OC_18;
-//METAINTERNAL; reqwriteData; Fifo1_OC_20;
-//METAINTERNAL; CMRdone; Fifo1_OC_22;
+//METAINTERNAL; reqArs; Fifo1_OC_10;
+//METAINTERNAL; reqAws; Fifo1_OC_10;
+//METAINTERNAL; readBeat; Fifo1_OC_12;
+//METAINTERNAL; writeBeat; Fifo1_OC_12;
+//METAINTERNAL; readData; Fifo1_OC_14;
+//METAINTERNAL; writeData; Fifo1_OC_16;
+//METAINTERNAL; writeDone; Fifo1_OC_18;
 //METAGUARD; MAXIGP0_O$AR; 1;
 //METAGUARD; MAXIGP0_O$AW; 1;
 //METAGUARD; MAXIGP0_O$W; 1;
 //METASTART; ZynqTop
 //METAEXTERNAL; MAXIGP0_O; l_ainterface_OC_MaxiO;
 //METAINTERNAL; zt; P7Wrap;
-//METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
 //METACONNECT; MAXIGP0_O$AR__ENA; zt$MAXIGP0_O$AR__ENA
 //METACONNECT; MAXIGP0_O$AR__RDY; zt$MAXIGP0_O$AR__RDY
 //METACONNECT; MAXIGP0_O$AW__ENA; zt$MAXIGP0_O$AW__ENA

@@ -118,26 +118,6 @@ printf("[respond_rule:%d]Echo\n", 6);
 Echo test;
 typedef __int(32) BusType;
 
-#if 0
-module mkUser (input CLK, input nRST,
-  input Userwrite, input [`MAX_BUS_WIDTH-1:0] writeBeatData, input requestLast, output RDY_writeBeat,
-  input Userread, output [`MAX_BUS_WIDTH-1:0] readBeatData, output RDY_readBeat);
-
-  wire EN_outgoing, RDY_incoming, EN_incoming, RDY_echo_in_enq, EN_echo_out_enq, RDY_echo_out_enq;
-  wire [`MAX_OUT_WIDTH-1 : 0] echoData, incomingData;
-  assign RDY_readBeat = !RDY_echo_out_enq;
-  l_module_OC_AdapterToBus radapter_0(.CLK(CLK), .nRST(nRST),
-   .in$enq__ENA(EN_echo_out_enq), .in$enq__RDY(RDY_echo_out_enq), .in$enq$v(echoData), .in$enq$length(echoData[15:0]-1),
-   .out$enq__ENA(EN_outgoing), .out$enq__RDY(Userread && RDY_readBeat), .out$enq$v(readBeatData), .out$enq$last());
-  l_module_OC_AdapterFromBus wadapter_0(.CLK(CLK), .nRST(nRST),
-    .in$enq__ENA(Userwrite), .in$enq$v(writeBeatData), .in$enq$last(requestLast), .in$enq__RDY(RDY_writeBeat),
-    .out$enq__ENA(EN_incoming), .out$enq$v(incomingData), .out$enq$length(), .out$enq__RDY(RDY_incoming));
-  l_module_OC_l_top ctop( .CLK (CLK ), .nRST(nRST),
-    .request$enq$v (incomingData), .request$enq__ENA (EN_incoming), .request$enq__RDY(RDY_incoming),
-    .indication$enq$v (echoData), .indication$enq__ENA(EN_echo_out_enq), .indication$enq__RDY(RDY_echo_out_enq));
-endmodule  // mkUser
-#endif
-#if 1
 __emodule l_top {
     PipeIn<NOCData> request;
     PipeIn<NOCData> *indication;
@@ -179,4 +159,3 @@ __module UserTop {
 };
 
 UserTop ttest;
-#endif

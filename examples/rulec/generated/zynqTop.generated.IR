@@ -1,6 +1,3 @@
-EMODULE l_struct_OC_AXIDelay {
-    FIELD INTEGER_1 data
-}
 EMODULE l_struct_OC_AddrCount {
     FIELD INTEGER_5 addr
     FIELD INTEGER_10 count
@@ -130,22 +127,19 @@ EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( l_struct_OC_AXIDelay v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_10 {
-    METHOD enq__ENA ( INTEGER_6 v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_2 {
     METHOD enq__ENA ( l_struct_OC_AddrCount v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_4 {
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
     METHOD enq__ENA ( l_struct_OC_PortalInfo v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_6 {
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
     METHOD enq__ENA ( l_struct_OC_ReadResp v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_8 {
+EMODULE l_ainterface_OC_PipeIn_OC_6 {
     METHOD enq__ENA ( l_struct_OC_WriteData v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_8 {
+    METHOD enq__ENA ( INTEGER_6 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
@@ -153,27 +147,23 @@ EMODULE l_ainterface_OC_PipeOut {
 }
 EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_AXIDelay
-}
-EMODULE l_ainterface_OC_PipeOut_OC_11 {
-    METHOD deq__ENA
-    METHOD first INTEGER_6
+    METHOD first l_struct_OC_AddrCount
 }
 EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_AddrCount
+    METHOD first l_struct_OC_PortalInfo
 }
 EMODULE l_ainterface_OC_PipeOut_OC_5 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_PortalInfo
+    METHOD first l_struct_OC_ReadResp
 }
 EMODULE l_ainterface_OC_PipeOut_OC_7 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_ReadResp
+    METHOD first l_struct_OC_WriteData
 }
 EMODULE l_ainterface_OC_PipeOut_OC_9 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_WriteData
+    METHOD first INTEGER_6
 }
 EMODULE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
@@ -610,29 +600,25 @@ EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE Fifo_OC_13 {
+EMODULE Fifo_OC_11 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
-EMODULE Fifo_OC_15 {
+EMODULE Fifo_OC_13 {
     INTERFACE l_ainterface_OC_PipeIn_OC_2 in
     INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
-EMODULE Fifo_OC_17 {
+EMODULE Fifo_OC_15 {
     INTERFACE l_ainterface_OC_PipeIn_OC_4 in
     INTERFACE l_ainterface_OC_PipeOut_OC_5 out
 }
-EMODULE Fifo_OC_19 {
+EMODULE Fifo_OC_17 {
     INTERFACE l_ainterface_OC_PipeIn_OC_6 in
     INTERFACE l_ainterface_OC_PipeOut_OC_7 out
 }
-EMODULE Fifo_OC_21 {
+EMODULE Fifo_OC_19 {
     INTERFACE l_ainterface_OC_PipeIn_OC_8 in
     INTERFACE l_ainterface_OC_PipeOut_OC_9 out
-}
-EMODULE Fifo_OC_23 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
 }
 EMODULE MMCME2_ADV {
     INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
@@ -647,28 +633,6 @@ MODULE ClockTop {
     FIELD ResetInverter rinverter
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
-        LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DEN = 0
-        LET INTEGER_16 :ps7_clockGen_pll$DI = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DWE = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSEN = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSINCDEC = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PWRDWN = 0
-        LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
-        LET INTEGER_1 :clockOut = clkbuf0$O
-        LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
-        LET INTEGER_1 :rinverter$RESET_IN = usernRST
-        LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
-        LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
-        LET INTEGER_1 :__defaultClock = userCLK
-        LET INTEGER_1 :__defaultnReset = usernRST
-    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
         LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
@@ -706,23 +670,9 @@ MODULE Fifo1 {
     }
     METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
 }
-MODULE Fifo1_OC_12 {
+MODULE Fifo1_OC_10 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
-    FIELD l_struct_OC_AXIDelay element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_AXIDelay v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
-    }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
-    }
-    METHOD out$first l_struct_OC_AXIDelay = ((element)) if ((full))
-}
-MODULE Fifo1_OC_14 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD l_struct_OC_AddrCount element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) if (((full) ^ (1))) {
@@ -734,9 +684,9 @@ MODULE Fifo1_OC_14 {
     }
     METHOD out$first l_struct_OC_AddrCount = ((element)) if ((full))
 }
-MODULE Fifo1_OC_16 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+MODULE Fifo1_OC_12 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD l_struct_OC_PortalInfo element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) if (((full) ^ (1))) {
@@ -748,9 +698,9 @@ MODULE Fifo1_OC_16 {
     }
     METHOD out$first l_struct_OC_PortalInfo = ((element)) if ((full))
 }
-MODULE Fifo1_OC_18 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+MODULE Fifo1_OC_14 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
     FIELD l_struct_OC_ReadResp element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) if (((full) ^ (1))) {
@@ -762,9 +712,9 @@ MODULE Fifo1_OC_18 {
     }
     METHOD out$first l_struct_OC_ReadResp = ((element)) if ((full))
 }
-MODULE Fifo1_OC_20 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
+MODULE Fifo1_OC_16 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
     FIELD l_struct_OC_WriteData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_WriteData v ) if (((full) ^ (1))) {
@@ -776,9 +726,9 @@ MODULE Fifo1_OC_20 {
     }
     METHOD out$first l_struct_OC_WriteData = ((element)) if ((full))
 }
-MODULE Fifo1_OC_22 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
+MODULE Fifo1_OC_18 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
     FIELD INTEGER_6 element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_6 v ) if (((full) ^ (1))) {
@@ -874,9 +824,6 @@ MODULE P7Wrap {
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
-    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
@@ -884,17 +831,7 @@ MODULE ResetInverter {
 MODULE TestTop {
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
-    FIELD Fifo1_OC_12 reqrs
-    FIELD Fifo1_OC_12 reqws
-    FIELD Fifo1_OC_14 reqArs
-    FIELD Fifo1_OC_14 write_req
-    FIELD Fifo1_OC_16 reqPortal
-    FIELD Fifo1_OC_16 write
-    FIELD Fifo1_OC_18 ReadData
-    FIELD Fifo1_OC_20 reqwriteData
-    FIELD Fifo1_OC_22 CMRdone
-    FIELD INTEGER_1 CMRlastWriteDataSeen
-    FIELD INTEGER_1 ctrlPort_0_interruptEnableReg
+    FIELD INTEGER_1 intEnable
     FIELD INTEGER_1 writeFirst
     FIELD INTEGER_1 writeLast
     FIELD INTEGER_1 readFirst
@@ -909,21 +846,27 @@ MODULE TestTop {
     FIELD INTEGER_10 writeCount
     FIELD INTEGER_5 readAddr
     FIELD INTEGER_5 writeAddr
+    FIELD Fifo1_OC_10 reqArs
+    FIELD Fifo1_OC_10 reqAws
+    FIELD Fifo1_OC_12 readBeat
+    FIELD Fifo1_OC_12 writeBeat
+    FIELD Fifo1_OC_14 readData
+    FIELD Fifo1_OC_16 writeData
+    FIELD Fifo1_OC_18 writeDone
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 MODULE ZynqTop {
+    INTERFACECONNECT MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
     INTERFACECONNECT _ zt$_ l_ainterface_OC_ZynqClock
     INTERFACECONNECT M zt$M l_ainterface_OC_Pps7m
     INTERFACECONNECT FCLK zt$FCLK l_ainterface_OC_Pps7fclk
-    INTERFACECONNECT MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
-    INTERFACECONNECT MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD P7Wrap zt
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
-    METHOD/Rule RULEinit__ENA
 }

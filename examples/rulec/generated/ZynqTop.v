@@ -54,8 +54,6 @@ module ZynqTop (
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
     output wire [3:0]FCLKRESETN);
-    wire RULEinit__ENA;
-    assign RULEinit__ENA = 1;
     P7Wrap zt (
         .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(MAXIGP0_O$AR$addr),
