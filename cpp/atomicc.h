@@ -37,7 +37,7 @@
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
 #define __printf    NOCPipe *printfp
 extern "C" int __bitconcat(int, ...);
-extern "C" int __bitsubstr(int, int, int);
+extern "C" int __bitsubstr(int, ...);
 
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 

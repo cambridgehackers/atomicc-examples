@@ -75,9 +75,13 @@
 //METAINTERNAL; readData; Fifo1_OC_14;
 //METAINTERNAL; writeData; Fifo1_OC_16;
 //METAINTERNAL; writeDone; Fifo1_OC_18;
-//METAGUARD; MAXIGP0_O$AR; 1;
-//METAGUARD; MAXIGP0_O$AW; 1;
-//METAGUARD; MAXIGP0_O$W; 1;
+//METAINTERNAL; user; UserTop;
+//METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;
+//METAGUARD; MAXIGP0_O$AR; reqArs$in$enq__RDY;
+//METAINVOKE; MAXIGP0_O$AW__ENA; :reqAws$in$enq__ENA;
+//METAGUARD; MAXIGP0_O$AW; reqAws$in$enq__RDY;
+//METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
+//METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
 //METASTART; ZynqTop
 //METAEXTERNAL; MAXIGP0_O; l_ainterface_OC_MaxiO;
 //METAINTERNAL; zt; P7Wrap;

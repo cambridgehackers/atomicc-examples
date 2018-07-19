@@ -20,6 +20,8 @@
  */
 #include "atomicc.h"
 #include "adapter.h"
+#define __DONT_DEFINE_USER_TOP__
+#include "userTop.h"
 
 //typedef __int(32) aint32;
 typedef __int(16) aint16;
@@ -116,12 +118,7 @@ printf("[respond_rule:%d]Echo\n", 6);
 };
 
 Echo test;
-typedef __int(32) BusType;
 
-__emodule l_top {
-    PipeIn<NOCData> request;
-    PipeIn<NOCData> *indication;
-};
 // for now, need indConnect and reqConnect since __connect is only used to export interfaces
 // (not connect to local ones)
 __module indConnect {

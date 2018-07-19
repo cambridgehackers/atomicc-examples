@@ -126,6 +126,9 @@ EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeInB {
+    METHOD enq__ENA ( INTEGER_32 v , INTEGER_1 last )
+}
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( l_struct_OC_AddrCount v )
 }
@@ -626,6 +629,10 @@ EMODULE MMCME2_ADV {
 EMODULE PS7 {
     INTERFACE l_ainterface_OC_Pps7PS7 _
 }
+EMODULE UserTop {
+    INTERFACE l_ainterface_OC_PipeInB write
+    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+}
 MODULE ClockTop {
     INTERFACE l_ainterface_OC_ClockIfc _
     FIELD MMCME2_ADV ps7_clockGen_pll
@@ -853,9 +860,30 @@ MODULE TestTop {
     FIELD Fifo1_OC_14 readData
     FIELD Fifo1_OC_16 writeData
     FIELD Fifo1_OC_18 writeDone
-    METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+    FIELD UserTop user
+    METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
+        ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
+        LET INTEGER_5 :MAXIGP0_O$AR__ENA$agg_2e_tmp$addr = MAXIGP0_O$AR$addr
+        LET INTEGER_10 :MAXIGP0_O$AR__ENA$agg_2e_tmp$count = ((MAXIGP0_O$AR$len) + (1)) << (2)
+        LET INTEGER_6 :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
+        CALL/Action :reqArs$in$enq__ENA{MAXIGP0_O$AR__ENA$agg_2e_tmp}
+        STORE :portalRControl = (__bitsubstr{MAXIGP0_O$AR$addr,11,5}) == (0)
+        STORE :selectRIndReq = __bitsubstr{MAXIGP0_O$AR$addr,12}
+    }
+    METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
+        ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AW__ENA$agg_2e_tmp
+        LET INTEGER_5 :MAXIGP0_O$AW__ENA$agg_2e_tmp$addr = MAXIGP0_O$AW$addr
+        LET INTEGER_10 :MAXIGP0_O$AW__ENA$agg_2e_tmp$count = ((MAXIGP0_O$AW$len) + (1)) << (2)
+        LET INTEGER_6 :MAXIGP0_O$AW__ENA$agg_2e_tmp$id = MAXIGP0_O$AW$id
+        CALL/Action :reqAws$in$enq__ENA{MAXIGP0_O$AW__ENA$agg_2e_tmp}
+        STORE :portalWControl = (__bitsubstr{MAXIGP0_O$AW$addr,11,5}) == (0)
+        STORE :selectWIndReq = __bitsubstr{MAXIGP0_O$AW$addr,12}
+    }
+    METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last ) {
+        ALLOCA l_struct_OC_WriteData MAXIGP0_O$W__ENA$agg_2e_tmp
+        LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
+        CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
+    }
 }
 MODULE ZynqTop {
     INTERFACECONNECT MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO

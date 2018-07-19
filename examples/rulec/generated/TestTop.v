@@ -60,24 +60,24 @@ module TestTop (input wire CLK, input wire nRST,
     wire readData$out$deq__RDY;
     wire [37:0]readData$out$first;
     wire readData$out$first__RDY;
-    wire [4:0]reqArs$in$enq$v$addr;
-    wire [9:0]reqArs$in$enq$v$count;
-    wire [5:0]reqArs$in$enq$v$id;
-    wire reqArs$in$enq__ENA;
     wire reqArs$in$enq__RDY;
     wire reqArs$out$deq__ENA;
     wire reqArs$out$deq__RDY;
     wire [20:0]reqArs$out$first;
     wire reqArs$out$first__RDY;
-    wire [4:0]reqAws$in$enq$v$addr;
-    wire [9:0]reqAws$in$enq$v$count;
-    wire [5:0]reqAws$in$enq$v$id;
-    wire reqAws$in$enq__ENA;
     wire reqAws$in$enq__RDY;
     wire reqAws$out$deq__ENA;
     wire reqAws$out$deq__RDY;
     wire [20:0]reqAws$out$first;
     wire reqAws$out$first__RDY;
+    wire user$read$enq$last;
+    wire [31:0]user$read$enq$v;
+    wire user$read$enq__ENA;
+    wire user$read$enq__RDY;
+    wire user$write$enq$last;
+    wire [31:0]user$write$enq$v;
+    wire user$write$enq__ENA;
+    wire user$write$enq__RDY;
     wire [4:0]writeBeat$in$enq$v$ac$addr;
     wire [9:0]writeBeat$in$enq$v$ac$count;
     wire [5:0]writeBeat$in$enq$v$ac$id;
@@ -88,9 +88,6 @@ module TestTop (input wire CLK, input wire nRST,
     wire writeBeat$out$deq__RDY;
     wire [21:0]writeBeat$out$first;
     wire writeBeat$out$first__RDY;
-    wire [31:0]writeData$in$enq$v$data;
-    wire writeData$in$enq__ENA;
-    wire writeData$in$enq__RDY;
     wire writeData$out$deq__ENA;
     wire writeData$out$deq__RDY;
     wire [31:0]writeData$out$first;
@@ -103,17 +100,17 @@ module TestTop (input wire CLK, input wire nRST,
     wire [5:0]writeDone$out$first;
     wire writeDone$out$first__RDY;
     Fifo1_OC_10 reqArs (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqArs$in$enq__ENA),
-        .in$enq$v({ reqArs$in$enq$v$id , reqArs$in$enq$v$count , reqArs$in$enq$v$addr }),
-        .in$enq__RDY(reqArs$in$enq__RDY),
+        .in$enq__ENA(MAXIGP0_O$AR__ENA),
+        .in$enq$v({ MAXIGP0_O$AR$id , ( ( MAXIGP0_O$AR$len + 1 ) << 2 ) , MAXIGP0_O$AR$addr }),
+        .in$enq__RDY(MAXIGP0_O$AR__RDY),
         .out$deq__ENA(reqArs$out$deq__ENA),
         .out$deq__RDY(reqArs$out$deq__RDY),
         .out$first(reqArs$out$first),
         .out$first__RDY(reqArs$out$first__RDY));
     Fifo1_OC_10 reqAws (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqAws$in$enq__ENA),
-        .in$enq$v({ reqAws$in$enq$v$id , reqAws$in$enq$v$count , reqAws$in$enq$v$addr }),
-        .in$enq__RDY(reqAws$in$enq__RDY),
+        .in$enq__ENA(MAXIGP0_O$AW__ENA),
+        .in$enq$v({ MAXIGP0_O$AW$id , ( ( MAXIGP0_O$AW$len + 1 ) << 2 ) , MAXIGP0_O$AW$addr }),
+        .in$enq__RDY(MAXIGP0_O$AW__RDY),
         .out$deq__ENA(reqAws$out$deq__ENA),
         .out$deq__RDY(reqAws$out$deq__RDY),
         .out$first(reqAws$out$first),
@@ -143,9 +140,9 @@ module TestTop (input wire CLK, input wire nRST,
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
     Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(writeData$in$enq__ENA),
-        .in$enq$v({ writeData$in$enq$v$data }),
-        .in$enq__RDY(writeData$in$enq__RDY),
+        .in$enq__ENA(MAXIGP0_O$W__ENA),
+        .in$enq$v({ MAXIGP0_O$W$data }),
+        .in$enq__RDY(MAXIGP0_O$W__RDY),
         .out$deq__ENA(writeData$out$deq__ENA),
         .out$deq__RDY(writeData$out$deq__RDY),
         .out$first(writeData$out$first),
@@ -158,6 +155,15 @@ module TestTop (input wire CLK, input wire nRST,
         .out$deq__RDY(writeDone$out$deq__RDY),
         .out$first(writeDone$out$first),
         .out$first__RDY(writeDone$out$first__RDY));
+    UserTop user (.CLK(CLK), .nRST(nRST),
+        .write$enq__ENA(user$write$enq__ENA),
+        .write$enq$v(user$write$enq$v),
+        .write$enq$last(user$write$enq$last),
+        .write$enq__RDY(user$write$enq__RDY),
+        .read$enq__ENA(user$read$enq__ENA),
+        .read$enq$v(user$read$enq$v),
+        .read$enq$last(user$read$enq$last),
+        .read$enq__RDY(user$read$enq__RDY));
     assign MAXIGP0_I$B$id = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$B$resp = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$B__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -166,20 +172,20 @@ module TestTop (input wire CLK, input wire nRST,
     assign MAXIGP0_I$R$last = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$R$resp = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$R__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign MAXIGP0_O$AR__RDY = 1;
-    assign MAXIGP0_O$AW__RDY = 1;
-    assign MAXIGP0_O$W__RDY = 1;
+    assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
+    assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
     assign readBeat$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign readBeat$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign readData$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign readData$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign reqArs$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign reqArs$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign reqAws$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign reqAws$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign user$read$enq__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign user$write$enq$last = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign user$write$enq$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign user$write$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeBeat$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeBeat$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign writeData$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeData$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeDone$in$enq$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeDone$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -203,6 +209,16 @@ module TestTop (input wire CLK, input wire nRST,
         writeFirst <= 0;
         writeLast <= 0;
       end // nRST
+      else begin
+        if (MAXIGP0_O$AR__ENA & MAXIGP0_O$AR__RDY) begin
+            portalRControl <= MAXIGP0_O$AR$addr[11:5] == 0;
+            selectRIndReq <= MAXIGP0_O$AR$addr[12];
+        end; // End of MAXIGP0_O$AR__ENA
+        if (MAXIGP0_O$AW__ENA & MAXIGP0_O$AW__RDY) begin
+            portalWControl <= MAXIGP0_O$AW$addr[11:5] == 0;
+            selectWIndReq <= MAXIGP0_O$AW$addr[12];
+        end; // End of MAXIGP0_O$AW__ENA
+      end
     end // always @ (posedge CLK)
 endmodule 
 
