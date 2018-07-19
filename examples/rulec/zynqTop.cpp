@@ -124,18 +124,18 @@ __interface MaxiI {
     void R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp);
     void B(__uint(12) id, __uint(2) resp);
 };
-__module ZynqTop {
+__module P7Wrap {
     ZynqClock        _;
     Pps7m            M;
     Pps7fclk         FCLK;
+    MaxiO            *MAXIGP0_O;
+    MaxiI            MAXIGP0_I;
 
     PS7 pps;
     ClockTop pclockTop;
     __connect M = pps._.M;
     __connect FCLK = pps._.FCLK;
 
-    MaxiO            *MAXIGP0_O;
-    MaxiI            MAXIGP0_I;
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp) if (pps._.MAXIGP0.RREADY) {
         pps._.MAXIGP0.RDATA = data;
         pps._.MAXIGP0.RID = id;
@@ -146,7 +146,7 @@ __module ZynqTop {
         pps._.MAXIGP0.BID = id;
         pps._.MAXIGP0.BRESP = resp;
     }
-    ZynqTop() {
+    P7Wrap() {
        __rule init {
             pps._.FPGAID.LEN = 1;
             pps._.MAXIGP0.ACLK = __defaultClock;
@@ -191,6 +191,25 @@ __module ZynqTop {
        __rule gp0w if (pps._.MAXIGP0.WVALID) {
            MAXIGP0_O->W(pps._.MAXIGP0.WDATA, pps._.MAXIGP0.WID, pps._.MAXIGP0.WLAST);
        }
+    }
+};
+
+__module ZynqTop {
+    ZynqClock        _;
+    Pps7m            M;
+    Pps7fclk         FCLK;
+    P7Wrap zt;
+    MaxiO            *MAXIGP0_O;
+    MaxiI            MAXIGP0_I;
+
+    __connect _ = zt._;
+    __connect M = zt.M;
+    __connect FCLK = zt.FCLK;
+    __connect MAXIGP0_O = zt.MAXIGP0_O;
+    __connect MAXIGP0_I = zt.MAXIGP0_I;
+    ZynqTop() {
+        __rule init {
+        }
     }
 };
 

@@ -23,7 +23,7 @@ module mkZynqTop (
   wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
   wire write$enq__RDY, read$enq__ENA, readData$EnqRDY, zzIntrChannel;
   wire readBeat$DeqRDY, readBeat$EnqRDY, read_req$EnqRDY;
-  wire writeDataDeqRDY, readFirstNext, writeFirstNext, CMRdone$EnqRDY, readBeat$last;
+  wire writeDataDeqRDY, readFirstNext, writeFirstNext, writeDone$EnqRDY, readBeat$last;
   wire writeBeat$DeqRDY, writeBeat$EnqRDY, reqAws$DeqRDY, writeBeat$last;
 
   wire RULEwriteNext, RULEwrite, RULEAW, RULEW, RULER, RULEreadNext, RULEread;
@@ -58,9 +58,9 @@ module mkZynqTop (
         .D_IN({ writeAddrupdate, writeburstCount, reqAws$id, writeFirstNext }), .ENQ(RULEwriteNext),
         .D_OUT({writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}),
         .DEQ(RULEwrite), .FULL_N(writeBeat$EnqRDY), .EMPTY_N(writeBeat$DeqRDY));
-  FIFO1 #(.width(6), .guarded(1)) CMRdone(.RST(nRST), .CLK(CLK), .CLR(0),
+  FIFO1 #(.width(6), .guarded(1)) writeDone(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN( writeBeat$id), .ENQ(RULEwrite && writeBeat$last),
-        .D_OUT(MAXIGP0_I$B$id), .DEQ(MAXIGP0_I$B__RDY), .FULL_N(CMRdone$EnqRDY), .EMPTY_N(MAXIGP0_I$B__ENA));
+        .D_OUT(MAXIGP0_I$B$id), .DEQ(MAXIGP0_I$B__RDY), .FULL_N(writeDone$EnqRDY), .EMPTY_N(MAXIGP0_I$B__ENA));
 
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
@@ -94,7 +94,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   assign RULER = MAXIGP0_I$R__RDY && MAXIGP0_I$R__ENA;
   assign RULEW = MAXIGP0_O$W__ENA && MAXIGP0_O$W__RDY;
   assign RULEAW = MAXIGP0_O$AW__ENA && MAXIGP0_O$AW__RDY;
-  assign RULEwrite = writeDataDeqRDY && writeBeat$DeqRDY && (!writeBeat$last || CMRdone$EnqRDY)
+  assign RULEwrite = writeDataDeqRDY && writeBeat$DeqRDY && (!writeBeat$last || writeDone$EnqRDY)
             && (!selectWIndReq || portalWControl);
   assign RULEwriteNext = reqAws$DeqRDY && writeBeat$EnqRDY ;
 

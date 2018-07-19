@@ -809,57 +809,16 @@ MODULE MuxPipe {
         CALL/Action :out$enq__ENA{in$enq$v}
     }
 }
-MODULE ResetInverter {
-    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
-    }
-    METHOD/Rule RULEinit__ENA {
-        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
-    }
-}
-MODULE TestTop {
-    INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
-    INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
-    FIELD Fifo1_OC_12 reqrs
-    FIELD Fifo1_OC_12 reqws
-    FIELD Fifo1_OC_14 reqArs
-    FIELD Fifo1_OC_14 write_req
-    FIELD Fifo1_OC_16 reqPortal
-    FIELD Fifo1_OC_16 write
-    FIELD Fifo1_OC_18 ReadData
-    FIELD Fifo1_OC_20 reqwriteData
-    FIELD Fifo1_OC_22 CMRdone
-    FIELD INTEGER_1 CMRlastWriteDataSeen
-    FIELD INTEGER_1 ctrlPort_0_interruptEnableReg
-    FIELD INTEGER_1 writeFirst
-    FIELD INTEGER_1 writeLast
-    FIELD INTEGER_1 readFirst
-    FIELD INTEGER_1 readLast
-    FIELD INTEGER_1 selectRIndReq
-    FIELD INTEGER_1 portalRControl
-    FIELD INTEGER_1 selectWIndReq
-    FIELD INTEGER_1 portalWControl
-    FIELD INTEGER_32 requestValue
-    FIELD INTEGER_32 portalCtrlInfo
-    FIELD INTEGER_10 readCount
-    FIELD INTEGER_10 writeCount
-    FIELD INTEGER_5 readAddr
-    FIELD INTEGER_5 writeAddr
-    METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
-}
-MODULE ZynqTop {
+MODULE P7Wrap {
     INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
     INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    FIELD PS7 pps
-    FIELD ClockTop pclockTop
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+    FIELD PS7 pps
+    FIELD ClockTop pclockTop
     METHOD MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
         LET INTEGER_12 :pps$MAXIGP0BID = MAXIGP0_I$B$id
         LET INTEGER_2 :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
@@ -912,4 +871,59 @@ MODULE ZynqTop {
         LET INTEGER_1 :pclockTop$userCLK = __defaultClock
         LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
+}
+MODULE ResetInverter {
+    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
+    }
+    METHOD/Rule RULEinit__ENA {
+        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
+    }
+}
+MODULE TestTop {
+    INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
+    FIELD Fifo1_OC_12 reqrs
+    FIELD Fifo1_OC_12 reqws
+    FIELD Fifo1_OC_14 reqArs
+    FIELD Fifo1_OC_14 write_req
+    FIELD Fifo1_OC_16 reqPortal
+    FIELD Fifo1_OC_16 write
+    FIELD Fifo1_OC_18 ReadData
+    FIELD Fifo1_OC_20 reqwriteData
+    FIELD Fifo1_OC_22 CMRdone
+    FIELD INTEGER_1 CMRlastWriteDataSeen
+    FIELD INTEGER_1 ctrlPort_0_interruptEnableReg
+    FIELD INTEGER_1 writeFirst
+    FIELD INTEGER_1 writeLast
+    FIELD INTEGER_1 readFirst
+    FIELD INTEGER_1 readLast
+    FIELD INTEGER_1 selectRIndReq
+    FIELD INTEGER_1 portalRControl
+    FIELD INTEGER_1 selectWIndReq
+    FIELD INTEGER_1 portalWControl
+    FIELD INTEGER_32 requestValue
+    FIELD INTEGER_32 portalCtrlInfo
+    FIELD INTEGER_10 readCount
+    FIELD INTEGER_10 writeCount
+    FIELD INTEGER_5 readAddr
+    FIELD INTEGER_5 writeAddr
+    METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+}
+MODULE ZynqTop {
+    INTERFACECONNECT _ zt$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT M zt$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT FCLK zt$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACECONNECT MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_Pps7m M
+    INTERFACE l_ainterface_OC_Pps7fclk FCLK
+    FIELD P7Wrap zt
+    INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+    METHOD/Rule RULEinit__ENA
 }

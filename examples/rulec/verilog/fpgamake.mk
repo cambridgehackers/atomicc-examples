@@ -19,6 +19,7 @@ include $(TCLDIR)/Makefile.fpgamake.common
 mkZynqTop_HEADERFILES = 
 mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
     ../generated/AdapterFromBus.v ../generated/AdapterToBus.v \
+    ../generated/P7Wrap.v \
     ../generated/ZynqTop.v \
     ../generated/ClockTop.v \
     ../generated/EchoIndication___M2P.v ../generated/EchoRequest___P2M.v \
