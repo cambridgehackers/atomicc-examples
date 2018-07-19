@@ -19,7 +19,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "adapter.h"
 
 typedef __int(32) BusType;
 

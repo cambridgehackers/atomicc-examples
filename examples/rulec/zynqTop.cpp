@@ -223,7 +223,6 @@ typedef struct {
 __module TestTop {
     MaxiO             MAXIGP0_O; 
     MaxiI            *MAXIGP0_I; 
-    //.interrupt(read$enq__ENA && intEnable),
     __uint(1) intEnable, writeFirst, writeLast; 
     __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl; 
   //readFirst = 1'd1; //writeFirst = 1'd1;
@@ -252,13 +251,16 @@ __module TestTop {
     void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
         writeData.in.enq(WriteData{data});
     }
-    //PipeInB<BusType> readUser;
-    //void readUser.enq(BusType v) {
-    //}
-    //__connect user.read = readUser;
+#if 0
+    PipeInB<BusType> readUser;
+    void readUser.enq(BusType v) {
+    }
+    __connect user.read = readUser;
+#endif
 
     TestTop() {
         __rule init {
+    //.interrupt(read$enq__ENA && intEnable),
         }
         __rule lread {
             //{readBeat$addr, readBeat$base, readBeat$id, readBeat$last}
@@ -319,8 +321,10 @@ __module TestTop {
             writeData.out.deq();
             if (portalWControl && wb.ac.addr == 4)
                 intEnable = __bitsubstr(temp.data, 0, 0);
-            //if (!portalWControl)
-                //user.write.in.enq(temp, wb.ac.addr != 0);
+#if 0
+            if (!portalWControl)
+                user.write.enq(temp.data, wb.ac.addr != 0);
+#endif
         }
         __rule lwriteNext {
             //{reqAws$addr, reqAws$count, reqAws$id}

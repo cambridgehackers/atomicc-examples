@@ -91,6 +91,18 @@ static inline std::string utostr(uint64_t X) {
   return std::string(BufPtr, Buffer+21);
 }
 
+typedef __int(16) LenType;
+template<class T>
+__interface PipeInH {
+    typedef T Data;
+    void enq(T v, LenType length);
+};
+template<class T>
+__interface PipeInB {
+    typedef T Data;
+    void enq(T v, bool last);
+};
+
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})

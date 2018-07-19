@@ -126,6 +126,7 @@ __module indConnect {
     PipeInH<NOCData> *rad;
     void indication.enq(NOCData v) {
         __int(16) len = __bit_cast<__int(__bitsize(v))>(v) - 1;
+        //__int(16) len = __bitsubstr(__bit_cast<__int(__bitsize(v))>(v) - 1, 15, 0);
 printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
         rad->enq(v, len);
     }

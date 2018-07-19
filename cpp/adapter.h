@@ -23,18 +23,6 @@
 #define _ADAPTER_H_
 #include <atomicc.h>
 
-typedef __int(16) LenType;
-template<class T>
-__interface PipeInH {
-    typedef T Data;
-    void enq(T v, LenType length);
-};
-template<class T>
-__interface PipeInB {
-    typedef T Data;
-    void enq(T v, bool last);
-};
-
 template<class T, class BusType>
 __module AdapterToBus {
    PipeInH<T>        in;
