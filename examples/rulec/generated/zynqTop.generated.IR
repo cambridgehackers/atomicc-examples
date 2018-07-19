@@ -581,6 +581,24 @@ EMODULE l_ainterface_OC_Pps7saxihp {
 EMODULE l_ainterface_OC_ZynqClock {
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
+    FIELD/inout INTEGER_15 A
+    FIELD/input INTEGER_4 ARB
+    FIELD/inout INTEGER_3 BA
+    FIELD/inout INTEGER_1 CASB
+    FIELD/inout INTEGER_1 CKE
+    FIELD/inout INTEGER_1 CKN
+    FIELD/inout INTEGER_1 CKP
+    FIELD/inout INTEGER_1 CSB
+    FIELD/inout INTEGER_4 DM
+    FIELD/inout INTEGER_32 DQ
+    FIELD/inout INTEGER_4 DQSN
+    FIELD/inout INTEGER_4 DQSP
+    FIELD/inout INTEGER_1 DRSTB
+    FIELD/inout INTEGER_1 ODT
+    FIELD/inout INTEGER_1 RASB
+    FIELD/inout INTEGER_1 VRN
+    FIELD/inout INTEGER_1 VRP
+    FIELD/inout INTEGER_1 WEB
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _

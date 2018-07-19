@@ -91,6 +91,34 @@ __module ClockTop {
 __interface ZynqClock {
     __input __uint(1) CLK;
     __input __uint(1) nRST;
+    __inout  __uint(15) A;
+    __input  __uint(4)  ARB;
+    __inout  __uint(3)  BA;
+    __inout  __uint(1)  CASB;
+    __inout  __uint(1)  CKE;
+    __inout  __uint(1)  CKN;
+    __inout  __uint(1)  CKP;
+    __inout  __uint(1)  CSB;
+    __inout  __uint(4)  DM;
+    __inout  __uint(32) DQ;
+    __inout  __uint(4)  DQSN;
+    __inout  __uint(4)  DQSP;
+    __inout  __uint(1)  DRSTB;
+    __inout  __uint(1)  ODT;
+    __inout  __uint(1)  RASB;
+    __inout  __uint(1)  VRN;
+    __inout  __uint(1)  VRP;
+    __inout  __uint(1)  WEB;
+#if 0
+        .DDRA(DDR_Addr), .DDRBA(DDR_BankAddr), .DDRCASB(DDR_CAS_n),
+        .DDRCKE(DDR_CKE), .DDRCKN(DDR_Clk_n), .DDRCKP(DDR_Clk_p),
+        .DDRCSB(DDR_CS_n), .DDRDM(DDR_DM), .DDRDQ(DDR_DQ),
+        .DDRDQSN(DDR_DQS_n), .DDRDQSP(DDR_DQS_p), .DDRDRSTB(DDR_DRSTB),
+        .DDRODT(DDR_ODT), .DDRRASB(DDR_RAS_n), .DDRVRN(FIXED_IO_ddr_vrn),
+        .DDRVRP(FIXED_IO_ddr_vrp), .DDRWEB(DDR_WEB), .PSCLK(FIXED_IO_ps_clk),
+        .PSPORB(FIXED_IO_ps_porb), .PSSRSTB(FIXED_IO_ps_srstb), .MIO(MIO),
+    .DDRARB(0), .IRQP2F());
+#endif
 };
 
 __interface MaxiO {

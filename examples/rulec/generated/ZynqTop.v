@@ -29,6 +29,24 @@ module ZynqTop (
     output wire MAXIGP0_I$R__RDY,
     input wire CLK,
     input wire nRST,
+    inout wire [14:0]A,
+    input wire [3:0]ARB,
+    inout wire [2:0]BA,
+    inout wire CASB,
+    inout wire CKE,
+    inout wire CKN,
+    inout wire CKP,
+    inout wire CSB,
+    inout wire [3:0]DM,
+    inout wire [31:0]DQ,
+    inout wire [3:0]DQSN,
+    inout wire [3:0]DQSP,
+    inout wire DRSTB,
+    inout wire ODT,
+    inout wire RASB,
+    inout wire VRN,
+    inout wire VRP,
+    inout wire WEB,
     inout wire [14:0]DDRA,
     input wire [3:0]DDRARB,
     inout wire [2:0]DDRBA,
@@ -1255,10 +1273,27 @@ module ZynqTop (
         .SAXIHP3WRISSUECAP1EN(pps$SAXIHP3WRISSUECAP1EN),
         .SAXIHP3WSTRB(pps$SAXIHP3WSTRB),
         .SAXIHP3WVALID(pps$SAXIHP3WVALID));
+    assign A = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign BA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign CASB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign CKE = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign CKN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign CKP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign CSB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DM = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DQ = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DQSN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DQSP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DRSTB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
     assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
     assign MAXIGP0_O$W$last = RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
     assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
+    assign ODT = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign RASB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign VRN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign VRP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign WEB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0ACLK = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DAREADY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DRLAST = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
