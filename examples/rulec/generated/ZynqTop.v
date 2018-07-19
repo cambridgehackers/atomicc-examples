@@ -29,48 +29,29 @@ module ZynqTop (
     output wire MAXIGP0_I$R__RDY,
     input wire CLK,
     input wire nRST,
-    inout wire [14:0]A,
-    input wire [3:0]ARB,
-    inout wire [2:0]BA,
-    inout wire CASB,
-    inout wire CKE,
-    inout wire CKN,
-    inout wire CKP,
-    inout wire CSB,
-    inout wire [3:0]DM,
-    inout wire [31:0]DQ,
-    inout wire [3:0]DQSN,
-    inout wire [3:0]DQSP,
-    inout wire DRSTB,
-    inout wire ODT,
-    inout wire RASB,
-    inout wire VRN,
-    inout wire VRP,
-    inout wire WEB,
-    inout wire [14:0]DDRA,
-    input wire [3:0]DDRARB,
-    inout wire [2:0]DDRBA,
-    inout wire DDRCASB,
-    inout wire DDRCKE,
-    inout wire DDRCKN,
-    inout wire DDRCKP,
-    inout wire DDRCSB,
-    inout wire [3:0]DDRDM,
-    inout wire [31:0]DDRDQ,
-    inout wire [3:0]DDRDQSN,
-    inout wire [3:0]DDRDQSP,
-    inout wire DDRDRSTB,
-    inout wire DDRODT,
-    inout wire DDRRASB,
-    inout wire DDRVRN,
-    inout wire DDRVRP,
-    inout wire DDRWEB,
+    inout wire [14:0]DDR_Addr,
+    inout wire [2:0]DDR_BankAddr,
+    inout wire DDR_CAS_n,
+    inout wire DDR_CKE,
+    inout wire DDR_Clk_n,
+    inout wire DDR_Clk_p,
+    inout wire DDR_CS_n,
+    inout wire [3:0]DDR_DM,
+    inout wire [31:0]DDR_DQ,
+    inout wire [3:0]DDR_DQS_n,
+    inout wire [3:0]DDR_DQS_p,
+    inout wire DDR_DRSTB,
+    inout wire DDR_ODT,
+    inout wire DDR_RAS_n,
+    inout wire FIXED_IO_ddr_vrn,
+    inout wire FIXED_IO_ddr_vrp,
+    inout wire DDR_WEB,
+    inout wire FIXED_IO_ps_clk,
+    inout wire FIXED_IO_ps_porb,
+    inout wire FIXED_IO_ps_srstb,
     input wire [19:0]IRQF2P,
     output wire [28:0]IRQP2F,
     inout wire [53:0]MIO,
-    inout wire PSCLK,
-    inout wire PSPORB,
-    inout wire PSSRSTB,
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
     output wire [3:0]FCLKRESETN);
@@ -78,6 +59,23 @@ module ZynqTop (
     wire RULEgp0aw__ENA;
     wire RULEgp0w__ENA;
     wire RULEinit__ENA;
+    wire [14:0]pps$DDRA;
+    wire [2:0]pps$DDRBA;
+    wire pps$DDRCASB;
+    wire pps$DDRCKE;
+    wire pps$DDRCKN;
+    wire pps$DDRCKP;
+    wire pps$DDRCSB;
+    wire [3:0]pps$DDRDM;
+    wire [31:0]pps$DDRDQ;
+    wire [3:0]pps$DDRDQSN;
+    wire [3:0]pps$DDRDQSP;
+    wire pps$DDRDRSTB;
+    wire pps$DDRODT;
+    wire pps$DDRRASB;
+    wire pps$DDRVRN;
+    wire pps$DDRVRP;
+    wire pps$DDRWEB;
     wire pps$DMA0ACLK;
     wire pps$DMA0DAREADY;
     wire [1:0]pps$DMA0DATYPE;
@@ -342,6 +340,9 @@ module ZynqTop (
     wire pps$MAXIGP1WREADY;
     wire [3:0]pps$MAXIGP1WSTRB;
     wire pps$MAXIGP1WVALID;
+    wire pps$PSCLK;
+    wire pps$PSPORB;
+    wire pps$PSSRSTB;
     wire pps$SAXIACPACLK;
     wire [31:0]pps$SAXIACPARADDR;
     wire [1:0]pps$SAXIACPARBURST;
@@ -653,24 +654,24 @@ module ZynqTop (
     assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
     assign RULEinit__ENA = 1;
     PS7 pps (
-        .DDRA(DDRA),
-        .DDRARB(DDRARB),
-        .DDRBA(DDRBA),
-        .DDRCASB(DDRCASB),
-        .DDRCKE(DDRCKE),
-        .DDRCKN(DDRCKN),
-        .DDRCKP(DDRCKP),
-        .DDRCSB(DDRCSB),
-        .DDRDM(DDRDM),
-        .DDRDQ(DDRDQ),
-        .DDRDQSN(DDRDQSN),
-        .DDRDQSP(DDRDQSP),
-        .DDRDRSTB(DDRDRSTB),
-        .DDRODT(DDRODT),
-        .DDRRASB(DDRRASB),
-        .DDRVRN(DDRVRN),
-        .DDRVRP(DDRVRP),
-        .DDRWEB(DDRWEB),
+        .DDRA(pps$DDRA),
+        .DDRARB(4'd0),
+        .DDRBA(pps$DDRBA),
+        .DDRCASB(pps$DDRCASB),
+        .DDRCKE(pps$DDRCKE),
+        .DDRCKN(pps$DDRCKN),
+        .DDRCKP(pps$DDRCKP),
+        .DDRCSB(pps$DDRCSB),
+        .DDRDM(pps$DDRDM),
+        .DDRDQ(pps$DDRDQ),
+        .DDRDQSN(pps$DDRDQSN),
+        .DDRDQSP(pps$DDRDQSP),
+        .DDRDRSTB(pps$DDRDRSTB),
+        .DDRODT(pps$DDRODT),
+        .DDRRASB(pps$DDRRASB),
+        .DDRVRN(pps$DDRVRN),
+        .DDRVRP(pps$DDRVRP),
+        .DDRWEB(pps$DDRWEB),
         .DMA0ACLK(pps$DMA0ACLK),
         .DMA0DAREADY(pps$DMA0DAREADY),
         .DMA0DATYPE(pps$DMA0DATYPE),
@@ -964,9 +965,9 @@ module ZynqTop (
         .MAXIGP1WSTRB(pps$MAXIGP1WSTRB),
         .MAXIGP1WVALID(pps$MAXIGP1WVALID),
         .MIO(MIO),
-        .PSCLK(PSCLK),
-        .PSPORB(PSPORB),
-        .PSSRSTB(PSSRSTB),
+        .PSCLK(pps$PSCLK),
+        .PSPORB(pps$PSPORB),
+        .PSSRSTB(pps$PSSRSTB),
         .SAXIACPACLK(pps$SAXIACPACLK),
         .SAXIACPARADDR(pps$SAXIACPARADDR),
         .SAXIACPARBURST(pps$SAXIACPARBURST),
@@ -1273,27 +1274,30 @@ module ZynqTop (
         .SAXIHP3WRISSUECAP1EN(pps$SAXIHP3WRISSUECAP1EN),
         .SAXIHP3WSTRB(pps$SAXIHP3WSTRB),
         .SAXIHP3WVALID(pps$SAXIHP3WVALID));
-    assign A = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign BA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign CASB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign CKE = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign CKN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign CKP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign CSB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign DM = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign DQ = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign DQSN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign DQSP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign DRSTB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign DDR_Addr = pps$DDRA;
+    assign DDR_BankAddr = pps$DDRBA;
+    assign DDR_CAS_n = pps$DDRCASB;
+    assign DDR_CKE = pps$DDRCKE;
+    assign DDR_CS_n = pps$DDRCSB;
+    assign DDR_Clk_n = pps$DDRCKN;
+    assign DDR_Clk_p = pps$DDRCKP;
+    assign DDR_DM = pps$DDRDM;
+    assign DDR_DQ = pps$DDRDQ;
+    assign DDR_DQS_n = pps$DDRDQSN;
+    assign DDR_DQS_p = pps$DDRDQSP;
+    assign DDR_DRSTB = pps$DDRDRSTB;
+    assign DDR_ODT = pps$DDRODT;
+    assign DDR_RAS_n = pps$DDRRASB;
+    assign DDR_WEB = pps$DDRWEB;
+    assign FIXED_IO_ddr_vrn = pps$DDRVRN;
+    assign FIXED_IO_ddr_vrp = pps$DDRVRP;
+    assign FIXED_IO_ps_clk = pps$PSCLK;
+    assign FIXED_IO_ps_porb = pps$PSPORB;
+    assign FIXED_IO_ps_srstb = pps$PSSRSTB;
     assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
     assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
     assign MAXIGP0_O$W$last = RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
     assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
-    assign ODT = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign RASB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign VRN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign VRP = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign WEB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0ACLK = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DAREADY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DRLAST = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE

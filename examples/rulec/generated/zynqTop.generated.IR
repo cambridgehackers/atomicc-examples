@@ -581,24 +581,26 @@ EMODULE l_ainterface_OC_Pps7saxihp {
 EMODULE l_ainterface_OC_ZynqClock {
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
-    FIELD/inout INTEGER_15 A
-    FIELD/input INTEGER_4 ARB
-    FIELD/inout INTEGER_3 BA
-    FIELD/inout INTEGER_1 CASB
-    FIELD/inout INTEGER_1 CKE
-    FIELD/inout INTEGER_1 CKN
-    FIELD/inout INTEGER_1 CKP
-    FIELD/inout INTEGER_1 CSB
-    FIELD/inout INTEGER_4 DM
-    FIELD/inout INTEGER_32 DQ
-    FIELD/inout INTEGER_4 DQSN
-    FIELD/inout INTEGER_4 DQSP
-    FIELD/inout INTEGER_1 DRSTB
-    FIELD/inout INTEGER_1 ODT
-    FIELD/inout INTEGER_1 RASB
-    FIELD/inout INTEGER_1 VRN
-    FIELD/inout INTEGER_1 VRP
-    FIELD/inout INTEGER_1 WEB
+    FIELD/inout INTEGER_15 DDR_Addr
+    FIELD/inout INTEGER_3 DDR_BankAddr
+    FIELD/inout INTEGER_1 DDR_CAS_n
+    FIELD/inout INTEGER_1 DDR_CKE
+    FIELD/inout INTEGER_1 DDR_Clk_n
+    FIELD/inout INTEGER_1 DDR_Clk_p
+    FIELD/inout INTEGER_1 DDR_CS_n
+    FIELD/inout INTEGER_4 DDR_DM
+    FIELD/inout INTEGER_32 DDR_DQ
+    FIELD/inout INTEGER_4 DDR_DQS_n
+    FIELD/inout INTEGER_4 DDR_DQS_p
+    FIELD/inout INTEGER_1 DDR_DRSTB
+    FIELD/inout INTEGER_1 DDR_ODT
+    FIELD/inout INTEGER_1 DDR_RAS_n
+    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrn
+    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrp
+    FIELD/inout INTEGER_1 DDR_WEB
+    FIELD/inout INTEGER_1 FIXED_IO_ps_clk
+    FIELD/inout INTEGER_1 FIXED_IO_ps_porb
+    FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
@@ -823,16 +825,12 @@ MODULE TestTop {
     METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 MODULE ZynqTop {
-    INTERFACECONNECT DDR pps$DDR l_ainterface_OC_Pps7ddr
     INTERFACECONNECT IRQ pps$IRQ l_ainterface_OC_Pps7irq
-    INTERFACECONNECT PS pps$PS l_ainterface_OC_Pps7ps
     INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
     INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
-    INTERFACE l_ainterface_OC_Pps7ddr DDR
     INTERFACE l_ainterface_OC_Pps7irq IRQ
     INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7ps PS
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD PS7 pps
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
@@ -864,5 +862,26 @@ MODULE ZynqTop {
         LET INTEGER_1 :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
         LET INTEGER_1 :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
         LET INTEGER_1 :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
+        LET INTEGER_15 :DDR_Addr = pps$DDRA
+        LET INTEGER_3 :DDR_BankAddr = pps$DDRBA
+        LET INTEGER_1 :DDR_CAS_n = pps$DDRCASB
+        LET INTEGER_1 :DDR_CKE = pps$DDRCKE
+        LET INTEGER_1 :DDR_Clk_n = pps$DDRCKN
+        LET INTEGER_1 :DDR_Clk_p = pps$DDRCKP
+        LET INTEGER_1 :DDR_CS_n = pps$DDRCSB
+        LET INTEGER_4 :DDR_DM = pps$DDRDM
+        LET INTEGER_32 :DDR_DQ = pps$DDRDQ
+        LET INTEGER_4 :DDR_DQS_n = pps$DDRDQSN
+        LET INTEGER_4 :DDR_DQS_p = pps$DDRDQSP
+        LET INTEGER_1 :DDR_DRSTB = pps$DDRDRSTB
+        LET INTEGER_1 :DDR_ODT = pps$DDRODT
+        LET INTEGER_1 :DDR_RAS_n = pps$DDRRASB
+        LET INTEGER_1 :FIXED_IO_ddr_vrn = pps$DDRVRN
+        LET INTEGER_1 :FIXED_IO_ddr_vrp = pps$DDRVRP
+        LET INTEGER_1 :DDR_WEB = pps$DDRWEB
+        LET INTEGER_1 :FIXED_IO_ps_clk = pps$PSCLK
+        LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
+        LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
+        LET INTEGER_4 :pps$DDRARB = 0
     }
 }

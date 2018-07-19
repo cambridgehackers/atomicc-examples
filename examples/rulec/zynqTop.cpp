@@ -91,34 +91,26 @@ __module ClockTop {
 __interface ZynqClock {
     __input __uint(1) CLK;
     __input __uint(1) nRST;
-    __inout  __uint(15) A;
-    __input  __uint(4)  ARB;
-    __inout  __uint(3)  BA;
-    __inout  __uint(1)  CASB;
-    __inout  __uint(1)  CKE;
-    __inout  __uint(1)  CKN;
-    __inout  __uint(1)  CKP;
-    __inout  __uint(1)  CSB;
-    __inout  __uint(4)  DM;
-    __inout  __uint(32) DQ;
-    __inout  __uint(4)  DQSN;
-    __inout  __uint(4)  DQSP;
-    __inout  __uint(1)  DRSTB;
-    __inout  __uint(1)  ODT;
-    __inout  __uint(1)  RASB;
-    __inout  __uint(1)  VRN;
-    __inout  __uint(1)  VRP;
-    __inout  __uint(1)  WEB;
-#if 0
-        .DDRA(DDR_Addr), .DDRBA(DDR_BankAddr), .DDRCASB(DDR_CAS_n),
-        .DDRCKE(DDR_CKE), .DDRCKN(DDR_Clk_n), .DDRCKP(DDR_Clk_p),
-        .DDRCSB(DDR_CS_n), .DDRDM(DDR_DM), .DDRDQ(DDR_DQ),
-        .DDRDQSN(DDR_DQS_n), .DDRDQSP(DDR_DQS_p), .DDRDRSTB(DDR_DRSTB),
-        .DDRODT(DDR_ODT), .DDRRASB(DDR_RAS_n), .DDRVRN(FIXED_IO_ddr_vrn),
-        .DDRVRP(FIXED_IO_ddr_vrp), .DDRWEB(DDR_WEB), .PSCLK(FIXED_IO_ps_clk),
-        .PSPORB(FIXED_IO_ps_porb), .PSSRSTB(FIXED_IO_ps_srstb), .MIO(MIO),
-    .DDRARB(0), .IRQP2F());
-#endif
+    __inout  __uint(15) DDR_Addr;
+    __inout  __uint(3)  DDR_BankAddr;
+    __inout  __uint(1)  DDR_CAS_n;
+    __inout  __uint(1)  DDR_CKE;
+    __inout  __uint(1)  DDR_Clk_n;
+    __inout  __uint(1)  DDR_Clk_p;
+    __inout  __uint(1)  DDR_CS_n;
+    __inout  __uint(4)  DDR_DM;
+    __inout  __uint(32) DDR_DQ;
+    __inout  __uint(4)  DDR_DQS_n;
+    __inout  __uint(4)  DDR_DQS_p;
+    __inout  __uint(1)  DDR_DRSTB;
+    __inout  __uint(1)  DDR_ODT;
+    __inout  __uint(1)  DDR_RAS_n;
+    __inout  __uint(1)  FIXED_IO_ddr_vrn;
+    __inout  __uint(1)  FIXED_IO_ddr_vrp;
+    __inout  __uint(1)  DDR_WEB;
+    __inout  __uint(1)  FIXED_IO_ps_clk;
+    __inout  __uint(1)  FIXED_IO_ps_porb;
+    __inout  __uint(1)  FIXED_IO_ps_srstb;
 };
 
 __interface MaxiO {
@@ -133,16 +125,16 @@ __interface MaxiI {
 };
 __module ZynqTop {
     ZynqClock        _;
-    Pps7ddr          DDR;
+    //Pps7ddr          DDR;
     Pps7irq          IRQ;
     Pps7m            M;
-    Pps7ps           PS;
+    //Pps7ps           PS;
     Pps7fclk         FCLK;
 
     PS7 pps;
-    __connect DDR = pps._.DDR;
+    //__connect DDR = pps._.DDR;
     __connect IRQ = pps._.IRQ;
-    __connect PS = pps._.PS;
+    //__connect PS = pps._.PS;
     __connect M = pps._.M;
     __connect FCLK = pps._.FCLK;
 
@@ -168,6 +160,27 @@ __module ZynqTop {
             pps._.MAXIGP0.ARREADY = __ready(MAXIGP0_O->AR);
             pps._.MAXIGP0.AWREADY = __ready(MAXIGP0_O->AW);
             pps._.MAXIGP0.WREADY = __ready(MAXIGP0_O->W);
+            _.DDR_Addr = pps._.DDR.A;
+            _.DDR_BankAddr = pps._.DDR.BA;
+            _.DDR_CAS_n = pps._.DDR.CASB;
+            _.DDR_CKE = pps._.DDR.CKE;
+            _.DDR_Clk_n = pps._.DDR.CKN;
+            _.DDR_Clk_p = pps._.DDR.CKP;
+            _.DDR_CS_n = pps._.DDR.CSB;
+            _.DDR_DM = pps._.DDR.DM;
+            _.DDR_DQ = pps._.DDR.DQ;
+            _.DDR_DQS_n = pps._.DDR.DQSN;
+            _.DDR_DQS_p = pps._.DDR.DQSP;
+            _.DDR_DRSTB = pps._.DDR.DRSTB;
+            _.DDR_ODT = pps._.DDR.ODT;
+            _.DDR_RAS_n = pps._.DDR.RASB;
+            _.FIXED_IO_ddr_vrn = pps._.DDR.VRN;
+            _.FIXED_IO_ddr_vrp = pps._.DDR.VRP;
+            _.DDR_WEB = pps._.DDR.WEB;
+            _.FIXED_IO_ps_clk = pps._.PS.CLK;
+            _.FIXED_IO_ps_porb = pps._.PS.PORB;
+            _.FIXED_IO_ps_srstb = pps._.PS.SRSTB;
+            pps._.DDR.ARB = 0;
        }
        __rule gp0ar if (pps._.MAXIGP0.ARVALID) {
            MAXIGP0_O->AR(pps._.MAXIGP0.ARADDR, pps._.MAXIGP0.ARID, pps._.MAXIGP0.ARLEN);

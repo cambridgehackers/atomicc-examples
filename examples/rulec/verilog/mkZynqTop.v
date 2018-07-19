@@ -84,14 +84,14 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
 
         .MAXIGP0_I$B$resp(0), .MAXIGP0_I$B$id(MAXIGP0_I$B$id),
         .MAXIGP0_I$B__ENA(MAXIGP0_I$B__ENA && MAXIGP0_I$B__RDY), .MAXIGP0_I$B__RDY(MAXIGP0_I$B__RDY),
-        .DDRA(DDR_Addr), .DDRBA(DDR_BankAddr), .DDRCASB(DDR_CAS_n),
-        .DDRCKE(DDR_CKE), .DDRCKN(DDR_Clk_n), .DDRCKP(DDR_Clk_p),
-        .DDRCSB(DDR_CS_n), .DDRDM(DDR_DM), .DDRDQ(DDR_DQ),
-        .DDRDQSN(DDR_DQS_n), .DDRDQSP(DDR_DQS_p), .DDRDRSTB(DDR_DRSTB),
-        .DDRODT(DDR_ODT), .DDRRASB(DDR_RAS_n), .DDRVRN(FIXED_IO_ddr_vrn),
-        .DDRVRP(FIXED_IO_ddr_vrp), .DDRWEB(DDR_WEB), .PSCLK(FIXED_IO_ps_clk),
-        .PSPORB(FIXED_IO_ps_porb), .PSSRSTB(FIXED_IO_ps_srstb), .MIO(MIO),
-    .DDRARB(0), .IRQP2F());
+        .DDR_Addr(DDR_Addr), .DDR_BankAddr(DDR_BankAddr), .DDR_CAS_n(DDR_CAS_n),
+        .DDR_CKE(DDR_CKE), .DDR_Clk_n(DDR_Clk_n), .DDR_Clk_p(DDR_Clk_p),
+        .DDR_CS_n(DDR_CS_n), .DDR_DM(DDR_DM), .DDR_DQ(DDR_DQ),
+        .DDR_DQS_n(DDR_DQS_n), .DDR_DQS_p(DDR_DQS_p), .DDR_DRSTB(DDR_DRSTB),
+        .DDR_ODT(DDR_ODT), .DDR_RAS_n(DDR_RAS_n), .FIXED_IO_ddr_vrn(FIXED_IO_ddr_vrn),
+        .FIXED_IO_ddr_vrp(FIXED_IO_ddr_vrp), .DDR_WEB(DDR_WEB), .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
+        .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb), .MIO(MIO),
+        .IRQP2F());
 
   assign RULEread = readBeat$DeqRDY && readData$EnqRDY;
   assign RULEreadNext = MAXIGP0_O$AR__RDY && readBeat$EnqRDY;
