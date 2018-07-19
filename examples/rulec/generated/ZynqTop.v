@@ -49,8 +49,7 @@ module ZynqTop (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
-    input wire [19:0]IRQF2P,
-    output wire [28:0]IRQP2F,
+    input wire interrupt,
     inout wire [53:0]MIO,
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
@@ -59,6 +58,7 @@ module ZynqTop (
     wire RULEgp0aw__ENA;
     wire RULEgp0w__ENA;
     wire RULEinit__ENA;
+    wire pclockTop$clockOut;
     wire [14:0]pps$DDRA;
     wire [2:0]pps$DDRBA;
     wire pps$DDRCASB;
@@ -282,6 +282,7 @@ module ZynqTop (
     wire [31:0]pps$FTMTP2FDEBUG;
     wire [3:0]pps$FTMTP2FTRIG;
     wire [3:0]pps$FTMTP2FTRIGACK;
+    wire [28:0]pps$IRQP2F;
     wire [1:0]pps$MAXIGP0ARBURST;
     wire [3:0]pps$MAXIGP0ARCACHE;
     wire pps$MAXIGP0ARESETN;
@@ -882,8 +883,8 @@ module ZynqTop (
         .FTMTP2FDEBUG(pps$FTMTP2FDEBUG),
         .FTMTP2FTRIG(pps$FTMTP2FTRIG),
         .FTMTP2FTRIGACK(pps$FTMTP2FTRIGACK),
-        .IRQF2P(IRQF2P),
-        .IRQP2F(IRQP2F),
+        .IRQF2P(interrupt),
+        .IRQP2F(pps$IRQP2F),
         .MAXIGP0ACLK(CLK),
         .MAXIGP0ARADDR(MAXIGP0_O$AR$addr),
         .MAXIGP0ARBURST(pps$MAXIGP0ARBURST),
@@ -1274,6 +1275,10 @@ module ZynqTop (
         .SAXIHP3WRISSUECAP1EN(pps$SAXIHP3WRISSUECAP1EN),
         .SAXIHP3WSTRB(pps$SAXIHP3WSTRB),
         .SAXIHP3WVALID(pps$SAXIHP3WVALID));
+    ClockTop pclockTop (
+        .userCLK(CLK),
+        .usernRST(nRST),
+        .clockOut(pclockTop$clockOut));
     assign DDR_Addr = pps$DDRA;
     assign DDR_BankAddr = pps$DDRBA;
     assign DDR_CAS_n = pps$DDRCASB;

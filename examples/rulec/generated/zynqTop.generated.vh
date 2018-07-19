@@ -6,8 +6,9 @@
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
+//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METARULES; RULEinit; RULEinit$100
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
@@ -55,8 +56,9 @@
 //METAGUARD; in$enq; out$enq__RDY;
 //METARULES; RULEfifoRule
 //METASTART; ResetInverter
+//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METARULES; RULEinit; RULEinit$100
 //METASTART; TestTop
 //METAEXTERNAL; MAXIGP0_I; l_ainterface_OC_MaxiI;
 //METAINTERNAL; reqrs; Fifo1_OC_12;
@@ -74,6 +76,7 @@
 //METASTART; ZynqTop
 //METAEXTERNAL; MAXIGP0_O; l_ainterface_OC_MaxiO;
 //METAINTERNAL; pps; PS7;
+//METAINTERNAL; pclockTop; ClockTop;
 //METAGUARD; MAXIGP0_I$B; pps$MAXIGP0BREADY;
 //METAGUARD; MAXIGP0_I$R; pps$MAXIGP0RREADY;
 //METAINVOKE; RULEgp0ar__ENA; :MAXIGP0_O$AR__ENA;

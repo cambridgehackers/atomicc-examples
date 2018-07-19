@@ -1,7 +1,7 @@
 
 `include "ProjectDefines.vh"
 `default_nettype none
-module mkZynqTop #(parameter width = 64) (
+module mkZynqTop (
   inout wire [14 : 0] DDR_Addr, inout wire [2 : 0] DDR_BankAddr,
   inout wire DDR_CAS_n, inout wire DDR_CKE, inout wire DDR_CS_n, inout wire DDR_Clk_n, inout wire DDR_Clk_p,
   inout wire [3 : 0] DDR_DM, inout wire [31 : 0] DDR_DQ,
@@ -12,9 +12,7 @@ module mkZynqTop #(parameter width = 64) (
 
   wire CLK, nRST;
 
-  ClockTop pclockTop ( .userCLK(CLK), .usernRST(nRST), .clockOut());
-
-  wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v, zzIntrChannel;
+  wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v;
   wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
   wire [9 : 0] readBeat$base, reqArs$count, readburstCount, writeBeat$count, reqAws$count, writeburstCount;
   wire [5 : 0] MAXIGP0_I$R$id, readBeat$id, reqArs$id, writeBeat$id, reqAws$id, MAXIGP0_I$B$id;
@@ -22,9 +20,8 @@ module mkZynqTop #(parameter width = 64) (
   wire [3 : 0] ps7_ps7_foo_FCLKCLK, fclkRESETN, MAXIGP0_O$AR$len, MAXIGP0_O$AW$len;
 
   wire MAXIGP0_O$AR__ENA, MAXIGP0_O$AW__ENA, MAXIGP0_I$R__RDY, MAXIGP0_I$B__RDY, MAXIGP0_O$W$last, MAXIGP0_O$W__ENA;
-  wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA;
-  wire MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
-  wire write$enq__RDY, read$enq__ENA, readData$EnqRDY;
+  wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
+  wire write$enq__RDY, read$enq__ENA, readData$EnqRDY, zzIntrChannel;
   wire readBeat$DeqRDY, readBeat$EnqRDY, read_req$EnqRDY;
   wire writeDataDeqRDY, readFirstNext, writeFirstNext, CMRdone$EnqRDY, readBeat$last;
   wire writeBeat$DeqRDY, writeBeat$EnqRDY, reqAws$DeqRDY, writeBeat$last;
@@ -69,7 +66,7 @@ module mkZynqTop #(parameter width = 64) (
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN), .FCLKCLKTRIGN(),
-        .IRQF2P(read$enq__ENA && intEnable),
+        .interrupt(read$enq__ENA && intEnable),
         .MAXIGP0_O$AR$addr(MAXIGP0_O$AR$addr), .MAXIGP0_O$AR$id(MAXIGP0_O$AR$id), .MAXIGP0_O$AR$len(MAXIGP0_O$AR$len),
         .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA), .MAXIGP0_O$AR__RDY(!MAXIGP0_O$AR__RDY),
 
@@ -90,8 +87,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .DDR_DQS_n(DDR_DQS_n), .DDR_DQS_p(DDR_DQS_p), .DDR_DRSTB(DDR_DRSTB),
         .DDR_ODT(DDR_ODT), .DDR_RAS_n(DDR_RAS_n), .FIXED_IO_ddr_vrn(FIXED_IO_ddr_vrn),
         .FIXED_IO_ddr_vrp(FIXED_IO_ddr_vrp), .DDR_WEB(DDR_WEB), .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
-        .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb), .MIO(MIO),
-        .IRQP2F());
+        .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb), .MIO(MIO));
 
   assign RULEread = readBeat$DeqRDY && readData$EnqRDY;
   assign RULEreadNext = MAXIGP0_O$AR__RDY && readBeat$EnqRDY;

@@ -601,6 +601,7 @@ EMODULE l_ainterface_OC_ZynqClock {
     FIELD/inout INTEGER_1 FIXED_IO_ps_clk
     FIELD/inout INTEGER_1 FIXED_IO_ps_porb
     FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
+    FIELD/input INTEGER_1 interrupt
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
@@ -646,6 +647,28 @@ MODULE ClockTop {
     FIELD ResetInverter rinverter
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
+        LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
+        LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DCLK = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DEN = 0
+        LET INTEGER_16 :ps7_clockGen_pll$DI = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DWE = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSCLK = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSEN = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSINCDEC = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PWRDWN = 0
+        LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
+        LET INTEGER_1 :clockOut = clkbuf0$O
+        LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
+        LET INTEGER_1 :rinverter$RESET_IN = usernRST
+        LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
+        LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
+        LET INTEGER_1 :__defaultClock = userCLK
+        LET INTEGER_1 :__defaultnReset = usernRST
+    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
         LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
@@ -788,6 +811,9 @@ MODULE MuxPipe {
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
+    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
@@ -825,14 +851,13 @@ MODULE TestTop {
     METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 MODULE ZynqTop {
-    INTERFACECONNECT IRQ pps$IRQ l_ainterface_OC_Pps7irq
     INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
     INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
-    INTERFACE l_ainterface_OC_Pps7irq IRQ
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD PS7 pps
+    FIELD ClockTop pclockTop
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
     METHOD MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
@@ -883,5 +908,8 @@ MODULE ZynqTop {
         LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
         LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET INTEGER_4 :pps$DDRARB = 0
+        LET INTEGER_20 :pps$IRQF2P = interrupt
+        LET INTEGER_1 :pclockTop$userCLK = __defaultClock
+        LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
 }
