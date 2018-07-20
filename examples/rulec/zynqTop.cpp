@@ -134,8 +134,8 @@ __module P7Wrap {
 
     PS7 pps;
     ClockTop pclockTop;
-    __connect M = pps._.M;
-    __connect FCLK = pps._.FCLK;
+    __forward M = pps._.M;
+    __forward FCLK = pps._.FCLK;
 
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp) if (pps._.MAXIGP0.RREADY) {
         pps._.MAXIGP0.RDATA = data;
@@ -251,12 +251,10 @@ __module TestTop {
     void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
         writeData.in.enq(WriteData{data});
     }
-#if 0
     PipeInB<BusType> readUser;
     void readUser.enq(BusType v) {
     }
     __connect user.read = readUser;
-#endif
 
     TestTop() {
         __rule init {
@@ -290,9 +288,7 @@ __module TestTop {
              //user.read.in.enq(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA);
             readData.in.enq(ReadResp{portalRControl ? portalCtrlInfo : requestValue, temp.ac.id});
         }
-        __rule lreadNext //if (MAXIGP0_O$AR__RDY && readBeat$EnqRDY) 
-{
-            //{reqArs$addr, reqArs$count, reqArs$id}
+        __rule lreadNext { //if (MAXIGP0_O$AR__RDY && readBeat$EnqRDY) 
             auto temp = reqArs.out.first();
             auto readAddrupdate = readFirst ?  temp.addr : readAddr ;
             auto readburstCount = readFirst ?  __bitsubstr(temp.count, 9, 2) : readCount ;
@@ -309,25 +305,20 @@ __module TestTop {
             auto temp = readData.out.first(); readData.out.deq();
             MAXIGP0_I->R(temp.data, temp.id, 1, 0);
         }
-        __rule lwrite //if ((!writeBeat$last || writeDone$EnqRDY) && (!selectWIndReq || portalWControl)) 
-{
+        __rule lwrite { //if ((!writeBeat$last || writeDone$EnqRDY) && (!selectWIndReq || portalWControl)) 
             //{writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}
             auto wb = writeBeat.out.first();
             if (wb.last)
                 writeDone.in.enq( wb.ac.id);
             writeBeat.out.deq();
-            //write$enq$v
             auto temp = writeData.out.first();
             writeData.out.deq();
             if (portalWControl && wb.ac.addr == 4)
                 intEnable = __bitsubstr(temp.data, 0, 0);
-#if 0
             if (!portalWControl)
                 user.write.enq(temp.data, wb.ac.addr != 0);
-#endif
         }
         __rule lwriteNext {
-            //{reqAws$addr, reqAws$count, reqAws$id}
             auto temp = reqAws.out.first();
             auto writeAddrupdate = writeFirst ?  temp.addr : writeAddr ;
             auto writeburstCount = writeFirst ?  __bitsubstr(temp.count, 9, 2) : writeCount ;
@@ -356,16 +347,16 @@ __module ZynqTop {
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
 
-    __connect MAXIGP0_O = zt.MAXIGP0_O;
-    __connect MAXIGP0_I = zt.MAXIGP0_I;
+    __forward MAXIGP0_O = zt.MAXIGP0_O;
+    __forward MAXIGP0_I = zt.MAXIGP0_I;
 #else
     TestTop test;
     __connect test.MAXIGP0_O = zt.MAXIGP0_O;
     __connect test.MAXIGP0_I = zt.MAXIGP0_I;
 #endif
-    __connect _ = zt._;
-    __connect M = zt.M;
-    __connect FCLK = zt.FCLK;
+    __forward _ = zt._;
+    __forward M = zt.M;
+    __forward FCLK = zt.FCLK;
 };
 
 

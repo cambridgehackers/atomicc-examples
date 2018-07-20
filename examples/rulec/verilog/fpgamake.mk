@@ -17,26 +17,7 @@ REPORT_NWORST_TIMING_PATHS?=
 include $(TCLDIR)/Makefile.fpgamake.common
 
 mkZynqTop_HEADERFILES = 
-mkZynqTop_VFILES = ../verilog/mkZynqTop.v ../generated/l_top.v \
-    ../generated/AdapterFromBus.v ../generated/AdapterToBus.v \
-    ../generated/P7Wrap.v \
-    ../generated/TestTop.v \
-    ../generated/Fifo1_OC_12.v \
-    ../generated/Fifo1_OC_14.v \
-    ../generated/Fifo1_OC_16.v \
-    ../generated/Fifo1_OC_18.v \
-    ../generated/Fifo1_OC_20.v \
-    ../generated/Fifo1_OC_22.v \
-    ../generated/ZynqTop.v \
-    ../generated/ClockTop.v \
-    ../generated/EchoIndication___M2P.v ../generated/EchoRequest___P2M.v \
-    ../generated/Echo.v \
-    ../generated/Fifo1.v \
-    ../generated/MuxPipe.v \
-    ../generated/indConnect.v ../generated/reqConnect.v \
-    ../generated/UserTop.v \
-    ../generated/ResetInverter.v \
-    $(BSVLIB)/FIFO1.v
+mkZynqTop_VFILES = ../verilog/mkZynqTop.v $(wildcard ../generated/*.v) $(BSVLIB)/FIFO1.v
 
 mkZynqTop_VHDFILES = 
 mkZynqTop_VHDL_LIBRARIES = 

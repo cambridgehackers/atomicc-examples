@@ -157,8 +157,8 @@ MODULE MuxPipe {
     }
 }
 MODULE UserTop {
-    INTERFACECONNECT radapter_0$out read l_ainterface_OC_PipeInB
-    INTERFACECONNECT wadapter_0$in write l_ainterface_OC_PipeInB
+    INTERFACECONNECT/Forward radapter_0$out read l_ainterface_OC_PipeInB
+    INTERFACECONNECT/Forward wadapter_0$in write l_ainterface_OC_PipeInB
     INTERFACECONNECT ctop$indication ic$indication l_ainterface_OC_PipeIn
     INTERFACECONNECT radapter_0$in ic$rad l_ainterface_OC_PipeInH
     INTERFACECONNECT ctop$request rc$request l_ainterface_OC_PipeIn

@@ -144,8 +144,8 @@ __module UserTop {
     PipeInB<BusType> *read;
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;
-    __connect radapter_0.out = read;
-    __connect wadapter_0.in = write;
+    __forward radapter_0.out = read;
+    __forward wadapter_0.in = write;
 
     indConnect ic;
     reqConnect rc;

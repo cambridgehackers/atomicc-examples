@@ -767,8 +767,8 @@ MODULE MuxPipe {
     }
 }
 MODULE P7Wrap {
-    INTERFACECONNECT M pps$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT FCLK pps$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACECONNECT/Forward M pps$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT/Forward FCLK pps$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
@@ -836,6 +836,7 @@ MODULE ResetInverter {
     }
 }
 MODULE TestTop {
+    INTERFACECONNECT user$read readUser l_ainterface_OC_PipeInB
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
     FIELD INTEGER_1 intEnable
@@ -861,6 +862,7 @@ MODULE TestTop {
     FIELD Fifo1_OC_16 writeData
     FIELD Fifo1_OC_18 writeDone
     FIELD UserTop user
+    INTERFACE l_ainterface_OC_PipeInB readUser
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
         LET INTEGER_5 :MAXIGP0_O$AR__ENA$agg_2e_tmp$addr = MAXIGP0_O$AR$addr
@@ -884,13 +886,14 @@ MODULE TestTop {
         LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
+    METHOD readUser$enq__ENA ( INTEGER_32 v )
 }
 MODULE ZynqTop {
-    INTERFACECONNECT MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
-    INTERFACECONNECT MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
-    INTERFACECONNECT _ zt$_ l_ainterface_OC_ZynqClock
-    INTERFACECONNECT M zt$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT FCLK zt$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACECONNECT/Forward MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT/Forward MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
