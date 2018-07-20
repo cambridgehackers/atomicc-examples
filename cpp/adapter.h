@@ -54,7 +54,6 @@ __module AdapterFromBus {
 
    void in.enq(BusType v, bool last) if (!waitForEnq) {
       buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(BusType) - 1, 0), v);
-      //buffer = v | (sizeof(buffer) > sizeof(BusType) ? (buffer << __bitsize(BusType)) : 0);
       if (last)
           waitForEnq = 1;
    }
