@@ -211,12 +211,12 @@ module TestTop (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (MAXIGP0_O$AR__ENA & MAXIGP0_O$AR__RDY) begin
-            portalRControl <= MAXIGP0_O$AR$addr[11:5] == 0;
-            selectRIndReq <= MAXIGP0_O$AR$addr[12];
+            portalRControl <= (MAXIGP0_O$AR$addr)[11:5] == 0;
+            selectRIndReq <= (MAXIGP0_O$AR$addr)[12];
         end; // End of MAXIGP0_O$AR__ENA
         if (MAXIGP0_O$AW__ENA & MAXIGP0_O$AW__RDY) begin
-            portalWControl <= MAXIGP0_O$AW$addr[11:5] == 0;
-            selectWIndReq <= MAXIGP0_O$AW$addr[12];
+            portalWControl <= (MAXIGP0_O$AW$addr)[11:5] == 0;
+            selectWIndReq <= (MAXIGP0_O$AW$addr)[12];
         end; // End of MAXIGP0_O$AW__ENA
       end
     end // always @ (posedge CLK)
