@@ -159,31 +159,21 @@ MODULE MuxPipe {
 MODULE UserTop {
     INTERFACECONNECT/Forward radapter_0$out read l_ainterface_OC_PipeInB
     INTERFACECONNECT/Forward wadapter_0$in write l_ainterface_OC_PipeInB
-    INTERFACECONNECT ctop$indication ic$indication l_ainterface_OC_PipeIn
-    INTERFACECONNECT radapter_0$in ic$rad l_ainterface_OC_PipeInH
-    INTERFACECONNECT ctop$request rc$request l_ainterface_OC_PipeIn
-    INTERFACECONNECT wadapter_0$out rc$wad l_ainterface_OC_PipeInH
+    INTERFACECONNECT ctop$indication indication l_ainterface_OC_PipeIn
+    INTERFACECONNECT wadapter_0$out wad l_ainterface_OC_PipeInH
     INTERFACE l_ainterface_OC_PipeInB write
     INTERFACE/Ptr l_ainterface_OC_PipeInB read
     FIELD AdapterToBus radapter_0
     FIELD AdapterFromBus wadapter_0
-    FIELD indConnect ic
-    FIELD reqConnect rc
-    FIELD l_top ctop
-}
-MODULE indConnect {
-    INTERFACE l_ainterface_OC_PipeIn indication
-    INTERFACE/Ptr l_ainterface_OC_PipeInH rad
-    METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
-        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,(indication$enq$v) - (1)}
-        CALL/Action :rad$enq__ENA{indication$enq$v,(indication$enq$v) - (1)}
-    }
-}
-MODULE reqConnect {
     INTERFACE l_ainterface_OC_PipeInH wad
-    INTERFACE/Ptr l_ainterface_OC_PipeIn request
+    INTERFACE l_ainterface_OC_PipeIn indication
+    FIELD l_top ctop
+    METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,(__bitsubstr{indication$enq$v,15,0}) - (1)}
+        CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,(__bitsubstr{indication$enq$v,15,0}) - (1)}
+    }
     METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
-        CALL/Action :request$enq__ENA{wad$enq$v}
+        CALL/Action :ctop$request$enq__ENA{wad$enq$v}
     }
 }

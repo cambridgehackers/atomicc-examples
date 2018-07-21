@@ -254,7 +254,7 @@ __module TestTop {
     PipeInB<BusType> readUser;
     void readUser.enq(BusType v) {
     }
-    __connect user.read = readUser;
+    __connect readUser = user.read;
 
     TestTop() {
         __rule init {
@@ -359,5 +359,5 @@ __module ZynqTop {
     __forward FCLK = zt.FCLK;
 };
 
-
+//TestTop Ttest;
 ZynqTop ztest;

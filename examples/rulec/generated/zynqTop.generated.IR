@@ -836,7 +836,7 @@ MODULE ResetInverter {
     }
 }
 MODULE TestTop {
-    INTERFACECONNECT user$read readUser l_ainterface_OC_PipeInB
+    INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
     FIELD INTEGER_1 intEnable

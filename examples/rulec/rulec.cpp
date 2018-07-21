@@ -119,26 +119,6 @@ printf("[respond_rule:%d]Echo\n", 6);
 
 Echo test;
 
-// for now, need indConnect and reqConnect since __connect is only used to export interfaces
-// (not connect to local ones)
-__module indConnect {
-    PipeIn<NOCData> indication;
-    PipeInH<NOCData> *rad;
-    void indication.enq(NOCData v) {
-        __int(16) len = __bit_cast<__int(__bitsize(v))>(v) - 1;
-        //__int(16) len = __bitsubstr(__bit_cast<__int(__bitsize(v))>(v) - 1, 15, 0);
-printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
-        rad->enq(v, len);
-    }
-};
-__module reqConnect {
-    PipeInH<NOCData> wad;
-    PipeIn<NOCData> *request;
-    void wad.enq(NOCData v, __int(16) length) {
-printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
-        request->enq(v);
-    }
-};
 __module UserTop {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
@@ -147,13 +127,22 @@ __module UserTop {
     __forward radapter_0.out = read;
     __forward wadapter_0.in = write;
 
-    indConnect ic;
-    reqConnect rc;
+    PipeInH<NOCData> wad;
+    void wad.enq(NOCData v, __int(16) length) {
+printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
+        ctop.request.enq(v);
+    }
+    PipeIn<NOCData> indication;
+    void indication.enq(NOCData v) {
+        __int(__bitsize(v)) vint = __bit_cast<__int(__bitsize(v))>(v);
+        __int(16) len = __bitsubstr(vint, 15, 0) - 1;
+printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
+        radapter_0.in.enq(v, len);
+    }
+
     l_top       ctop;
-    __connect ctop.indication = ic.indication;
-    __connect radapter_0.in = ic.rad;
-    __connect ctop.request = rc.request;
-    __connect wadapter_0.out = rc.wad;
+    __connect ctop.indication = indication;
+    __connect wadapter_0.out = wad;
 };
 
 UserTop ttest;

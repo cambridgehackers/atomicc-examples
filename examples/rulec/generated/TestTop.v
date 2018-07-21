@@ -60,10 +60,6 @@ module TestTop (input wire CLK, input wire nRST,
     wire readData$out$deq__RDY;
     wire [37:0]readData$out$first;
     wire readData$out$first__RDY;
-    wire readUser$enq$last;
-    wire [31:0]readUser$enq$v;
-    wire readUser$enq__ENA;
-    wire readUser$enq__RDY;
     wire reqArs$in$enq__RDY;
     wire reqArs$out$deq__ENA;
     wire reqArs$out$deq__RDY;
@@ -74,7 +70,9 @@ module TestTop (input wire CLK, input wire nRST,
     wire reqAws$out$deq__RDY;
     wire [20:0]reqAws$out$first;
     wire reqAws$out$first__RDY;
-    wire user$read$enq__RDY;
+    wire user$read$enq$last;
+    wire [31:0]user$read$enq$v;
+    wire user$read$enq__ENA;
     wire user$write$enq$last;
     wire [31:0]user$write$enq$v;
     wire user$write$enq__ENA;
@@ -161,10 +159,10 @@ module TestTop (input wire CLK, input wire nRST,
         .write$enq$v(user$write$enq$v),
         .write$enq$last(user$write$enq$last),
         .write$enq__RDY(user$write$enq__RDY),
-        .read$enq__ENA(readUser$enq__ENA),
-        .read$enq$v(readUser$enq$v),
-        .read$enq$last(readUser$enq$last),
-        .read$enq__RDY(user$read$enq__RDY));
+        .read$enq__ENA(user$read$enq__ENA),
+        .read$enq$v(user$read$enq$v),
+        .read$enq$last(user$read$enq$last),
+        .read$enq__RDY(1));
     assign MAXIGP0_I$B$id = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$B$resp = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign MAXIGP0_I$B__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -181,7 +179,6 @@ module TestTop (input wire CLK, input wire nRST,
     assign readData$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign reqArs$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign reqAws$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign user$read$enq__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign user$write$enq$last = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign user$write$enq$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign user$write$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -191,8 +188,6 @@ module TestTop (input wire CLK, input wire nRST,
     assign writeDone$in$enq$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeDone$in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign writeDone$out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    // Extra assigments, not to output wires
-    assign readUser$enq__RDY = user$read$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -214,12 +209,12 @@ module TestTop (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (MAXIGP0_O$AR__ENA & MAXIGP0_O$AR__RDY) begin
-            portalRControl <= MAXIGP0_O$AR$addr[11:5] == 0;
-            selectRIndReq <= MAXIGP0_O$AR$addr[12];
+            portalRControl <= MAXIGP0_O$AR$addr[ 11 : 5 ] == 32'd0;
+            selectRIndReq <= MAXIGP0_O$AR$addr[ 12 ];
         end; // End of MAXIGP0_O$AR__ENA
         if (MAXIGP0_O$AW__ENA & MAXIGP0_O$AW__RDY) begin
-            portalWControl <= MAXIGP0_O$AW$addr[11:5] == 0;
-            selectWIndReq <= MAXIGP0_O$AW$addr[12];
+            portalWControl <= MAXIGP0_O$AW$addr[ 11 : 5 ] == 32'd0;
+            selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ];
         end; // End of MAXIGP0_O$AW__ENA
       end
     end // always @ (posedge CLK)

@@ -83,8 +83,8 @@
 //METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
 //METAGUARD; readUser$enq; 1;
-//METACONNECT; user$read$enq__ENA; readUser$enq__ENA
-//METACONNECT; user$read$enq__RDY; readUser$enq__RDY
+//METACONNECT; readUser$enq__ENA; user$read$enq__ENA
+//METACONNECT; readUser$enq__RDY; user$read$enq__RDY
 //METASTART; ZynqTop
 //METAEXTERNAL; MAXIGP0_O; l_ainterface_OC_MaxiO;
 //METAINTERNAL; zt; P7Wrap;
