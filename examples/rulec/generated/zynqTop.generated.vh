@@ -6,8 +6,9 @@
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
+//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METARULES; RULEinit; RULEinit$100
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
@@ -56,16 +57,27 @@
 //METAGUARD; MAXIGP0_I$B; pps$MAXIGP0BREADY;
 //METAGUARD; MAXIGP0_I$R; pps$MAXIGP0RREADY;
 //METAINVOKE; RULEgp0ar__ENA; :MAXIGP0_O$AR__ENA;
+//METAEXCLUSIVE; RULEgp0ar__ENA; RULEgp0ar$100__ENA
+//METAINVOKE; RULEgp0ar$100__ENA; :MAXIGP0_O$AR__ENA;
+//METAGUARD; RULEgp0ar$100; pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
 //METAGUARD; RULEgp0ar; pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
 //METAINVOKE; RULEgp0aw__ENA; :MAXIGP0_O$AW__ENA;
+//METAEXCLUSIVE; RULEgp0aw__ENA; RULEgp0aw$100__ENA
+//METAINVOKE; RULEgp0aw$100__ENA; :MAXIGP0_O$AW__ENA;
+//METAGUARD; RULEgp0aw$100; pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
 //METAGUARD; RULEgp0aw; pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
 //METAINVOKE; RULEgp0w__ENA; :MAXIGP0_O$W__ENA;
+//METAEXCLUSIVE; RULEgp0w__ENA; RULEgp0w$100__ENA
+//METAINVOKE; RULEgp0w$100__ENA; :MAXIGP0_O$W__ENA;
+//METAGUARD; RULEgp0w$100; pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
 //METAGUARD; RULEgp0w; pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEgp0ar; RULEgp0aw; RULEgp0w; RULEinit
+//METARULES; RULEgp0ar; RULEgp0ar$100; RULEgp0aw; RULEgp0aw$100; RULEgp0w; RULEgp0w$100; RULEinit; RULEinit$100
 //METASTART; ResetInverter
+//METAGUARD; RULEinit$100; 1;
 //METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METARULES; RULEinit; RULEinit$100
 //METASTART; TestTop
 //METAEXTERNAL; MAXIGP0_I; l_ainterface_OC_MaxiI;
 //METAINTERNAL; reqArs; Fifo1_OC_10;
@@ -82,7 +94,22 @@
 //METAGUARD; MAXIGP0_O$AW; reqAws$in$enq__RDY;
 //METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
+//METAGUARD; RULEinit; 1;
+//METAINVOKE; RULElR__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
+//METAGUARD; RULElR; readData$out$first__RDY & readData$out$deq__RDY & MAXIGP0_I$R__RDY;
+//METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;:readData$in$enq__ENA;
+//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA
+//METAINVOKE; RULElreadNext__ENA; :readBeat$in$enq__ENA;readFirst ? ( RULElreadNext__ENA$temp$count == 10'd4 ) : readLast:reqArs$out$deq__ENA;:reqArs$out$first;
+//METAGUARD; RULElreadNext; reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( readFirst ? ( 4 ) : readLast == 0 ) | reqArs$out$deq__RDY );
+//METAGUARD; RULElread; readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY;
+//METAINVOKE; RULElwrite__ENA; ( !portalWControl ) & ( ( ( RULElwrite__ENA$wb$ac$addr != 5'd4 ) & portalWControl & ( !RULElwrite__ENA$wb$last ) ) | ( ( !portalWControl ) & ( !RULElwrite__ENA$wb$last ) ) ):user$write$enq__ENA;!RULElwrite__ENA$wb$last:writeBeat$out$deq__ENA;:writeBeat$out$first;!RULElwrite__ENA$wb$last:writeData$out$deq__ENA;!RULElwrite__ENA$wb$last:writeData$out$first;RULElwrite__ENA$wb$last:writeDone$in$enq__ENA;
+//METAINVOKE; RULElwriteNext__ENA; writeFirst ? ( RULElwriteNext__ENA$temp$count == 10'd4 ) : writeLast:reqAws$out$deq__ENA;:reqAws$out$first;:writeBeat$in$enq__ENA;
+//METAGUARD; RULElwriteNext; reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( writeFirst ? ( 4 ) : writeLast == 0 ) | reqAws$out$deq__RDY );
+//METAGUARD; RULElwrite; writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
+//METAINVOKE; RULEwriteResponse__ENA; :MAXIGP0_I$B__ENA;:writeDone$out$deq__ENA;:writeDone$out$first;
+//METAGUARD; RULEwriteResponse; writeDone$out$first__RDY & MAXIGP0_I$B__RDY & writeDone$out$deq__RDY;
 //METAGUARD; readUser$enq; 1;
+//METARULES; RULEinit; RULElR; RULElread; RULElreadNext; RULElwrite; RULElwriteNext; RULEwriteResponse
 //METACONNECT; readUser$enq__ENA; user$read$enq__ENA
 //METACONNECT; readUser$enq__RDY; user$read$enq__RDY
 //METASTART; ZynqTop
@@ -98,4 +125,17 @@
 //METACONNECT; MAXIGP0_I$B__RDY; zt$MAXIGP0_I$B__RDY
 //METACONNECT; MAXIGP0_I$R__ENA; zt$MAXIGP0_I$R__ENA
 //METACONNECT; MAXIGP0_I$R__RDY; zt$MAXIGP0_I$R__RDY
+//METASTART; ZynqTopNew
+//METAINTERNAL; zt; P7Wrap;
+//METAINTERNAL; test; TestTop;
+//METACONNECT; test$MAXIGP0_O$AR__ENA; zt$MAXIGP0_O$AR__ENA
+//METACONNECT; test$MAXIGP0_O$AR__RDY; zt$MAXIGP0_O$AR__RDY
+//METACONNECT; test$MAXIGP0_O$AW__ENA; zt$MAXIGP0_O$AW__ENA
+//METACONNECT; test$MAXIGP0_O$AW__RDY; zt$MAXIGP0_O$AW__RDY
+//METACONNECT; test$MAXIGP0_O$W__ENA; zt$MAXIGP0_O$W__ENA
+//METACONNECT; test$MAXIGP0_O$W__RDY; zt$MAXIGP0_O$W__RDY
+//METACONNECT; test$MAXIGP0_I$B__ENA; zt$MAXIGP0_I$B__ENA
+//METACONNECT; test$MAXIGP0_I$B__RDY; zt$MAXIGP0_I$B__RDY
+//METACONNECT; test$MAXIGP0_I$R__ENA; zt$MAXIGP0_I$R__ENA
+//METACONNECT; test$MAXIGP0_I$R__RDY; zt$MAXIGP0_I$R__RDY
 `endif

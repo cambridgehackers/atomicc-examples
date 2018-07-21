@@ -640,6 +640,28 @@ MODULE ClockTop {
     FIELD ResetInverter rinverter
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
+        LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
+        LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DCLK = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DEN = 0
+        LET INTEGER_16 :ps7_clockGen_pll$DI = 0
+        LET INTEGER_1 :ps7_clockGen_pll$DWE = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSCLK = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSEN = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PSINCDEC = 0
+        LET INTEGER_1 :ps7_clockGen_pll$PWRDWN = 0
+        LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
+        LET INTEGER_1 :clockOut = clkbuf0$O
+        LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
+        LET INTEGER_1 :rinverter$RESET_IN = usernRST
+        LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
+        LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
+        LET INTEGER_1 :__defaultClock = userCLK
+        LET INTEGER_1 :__defaultnReset = usernRST
+    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
         LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
@@ -786,14 +808,56 @@ MODULE P7Wrap {
         LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
         LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
     }
+    METHOD/Rule RULEgp0ar$100__ENA if ((pps$MAXIGP0ARVALID)) {
+        CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
+    }
     METHOD/Rule RULEgp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
         CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
+    }
+    METHOD/Rule RULEgp0aw$100__ENA if ((pps$MAXIGP0AWVALID)) {
+        CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
     METHOD/Rule RULEgp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
         CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
+    METHOD/Rule RULEgp0w$100__ENA if ((pps$MAXIGP0WVALID)) {
+        CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
+    }
     METHOD/Rule RULEgp0w__ENA if ((pps$MAXIGP0WVALID)) {
         CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
+    }
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :pps$FPGAIDLEN = 1
+        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
+        LET INTEGER_1 :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
+        LET INTEGER_1 :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
+        LET INTEGER_1 :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
+        LET INTEGER_1 :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
+        LET INTEGER_15 :DDR_Addr = pps$DDRA
+        LET INTEGER_3 :DDR_BankAddr = pps$DDRBA
+        LET INTEGER_1 :DDR_CAS_n = pps$DDRCASB
+        LET INTEGER_1 :DDR_CKE = pps$DDRCKE
+        LET INTEGER_1 :DDR_Clk_n = pps$DDRCKN
+        LET INTEGER_1 :DDR_Clk_p = pps$DDRCKP
+        LET INTEGER_1 :DDR_CS_n = pps$DDRCSB
+        LET INTEGER_4 :DDR_DM = pps$DDRDM
+        LET INTEGER_32 :DDR_DQ = pps$DDRDQ
+        LET INTEGER_4 :DDR_DQS_n = pps$DDRDQSN
+        LET INTEGER_4 :DDR_DQS_p = pps$DDRDQSP
+        LET INTEGER_1 :DDR_DRSTB = pps$DDRDRSTB
+        LET INTEGER_1 :DDR_ODT = pps$DDRODT
+        LET INTEGER_1 :DDR_RAS_n = pps$DDRRASB
+        LET INTEGER_1 :FIXED_IO_ddr_vrn = pps$DDRVRN
+        LET INTEGER_1 :FIXED_IO_ddr_vrp = pps$DDRVRP
+        LET INTEGER_1 :DDR_WEB = pps$DDRWEB
+        LET INTEGER_1 :FIXED_IO_ps_clk = pps$PSCLK
+        LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
+        LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
+        LET INTEGER_4 :pps$DDRARB = 0
+        LET INTEGER_20 :pps$IRQF2P = interrupt
+        LET INTEGER_1 :pclockTop$userCLK = __defaultClock
+        LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
@@ -831,6 +895,9 @@ MODULE P7Wrap {
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    METHOD/Rule RULEinit$100__ENA {
+        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
+    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
@@ -886,6 +953,74 @@ MODULE TestTop {
         LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
+    METHOD/Rule RULEinit__ENA
+    METHOD/Rule RULElR__ENA {
+        ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
+        CALL :readData$out$first{}
+        LET l_struct_OC_ReadResp :RULElR__ENA$temp = readData$out$first
+        CALL/Action :readData$out$deq__ENA{}
+        CALL/Action :MAXIGP0_I$R__ENA{RULElR__ENA$temp$data,RULElR__ENA$temp$id,1,0}
+    }
+    METHOD/Rule RULElreadNext__ENA {
+        ALLOCA l_struct_OC_PortalInfo RULElreadNext__ENA$agg_2e_tmp
+        ALLOCA l_struct_OC_AddrCount RULElreadNext__ENA$temp
+        CALL :reqArs$out$first{}
+        LET l_struct_OC_AddrCount :RULElreadNext__ENA$temp = reqArs$out$first
+        LET INTEGER_5 :RULElreadNext__ENA$agg_2e_tmp$ac$addr = ((readFirst) != (0)) ? (RULElreadNext__ENA$temp$addr):(readAddr)
+        LET INTEGER_10 :RULElreadNext__ENA$agg_2e_tmp$ac$count = ((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)
+        LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
+        LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = ((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)
+        CALL/Action :readBeat$in$enq__ENA{RULElreadNext__ENA$agg_2e_tmp}
+        STORE :readAddr = (((readFirst) != (0)) ? (RULElreadNext__ENA$temp$addr):(readAddr)) + (4)
+        STORE :readCount = (((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) - (1)
+        STORE :readFirst = ((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)
+        STORE :readLast = (((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) == (2)
+        CALL/Action ((((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)) != (0)):reqArs$out$deq__ENA{}
+    }
+    METHOD/Rule RULElread__ENA {
+        ALLOCA l_struct_OC_ReadResp RULElread__ENA$agg_2e_tmp
+        ALLOCA l_struct_OC_PortalInfo RULElread__ENA$temp
+        CALL :readBeat$out$first{}
+        LET l_struct_OC_PortalInfo :RULElread__ENA$temp = readBeat$out$first
+        CALL/Action :readBeat$out$deq__ENA{}
+        LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = ((portalRControl) != (0)) ? (portalCtrlInfo):(requestValue)
+        LET INTEGER_6 :RULElread__ENA$agg_2e_tmp$id = RULElread__ENA$temp$ac$id
+        CALL/Action :readData$in$enq__ENA{RULElread__ENA$agg_2e_tmp}
+    }
+    METHOD/Rule RULElwriteNext__ENA {
+        ALLOCA l_struct_OC_PortalInfo RULElwriteNext__ENA$agg_2e_tmp
+        ALLOCA l_struct_OC_AddrCount RULElwriteNext__ENA$temp
+        CALL :reqAws$out$first{}
+        LET l_struct_OC_AddrCount :RULElwriteNext__ENA$temp = reqAws$out$first
+        LET INTEGER_5 :RULElwriteNext__ENA$agg_2e_tmp$ac$addr = ((writeFirst) != (0)) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)
+        LET INTEGER_10 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = ((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)
+        LET INTEGER_6 :RULElwriteNext__ENA$agg_2e_tmp$ac$id = RULElwriteNext__ENA$temp$id
+        LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = ((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)
+        CALL/Action :writeBeat$in$enq__ENA{RULElwriteNext__ENA$agg_2e_tmp}
+        STORE :writeAddr = (((writeFirst) != (0)) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)) + (4)
+        STORE :writeCount = (((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) - (1)
+        STORE :writeFirst = ((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)
+        STORE :writeLast = (((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) == (2)
+        CALL/Action ((((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)):reqAws$out$deq__ENA{}
+    }
+    METHOD/Rule RULElwrite__ENA {
+        ALLOCA l_struct_OC_WriteData RULElwrite__ENA$temp
+        ALLOCA l_struct_OC_PortalInfo RULElwrite__ENA$wb
+        CALL :writeBeat$out$first{}
+        LET l_struct_OC_PortalInfo :RULElwrite__ENA$wb = writeBeat$out$first
+        CALL/Action ((RULElwrite__ENA$wb$last) != (0)):writeDone$in$enq__ENA{RULElwrite__ENA$wb$ac$id}
+        CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeBeat$out$deq__ENA{}
+        CALL (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$first{}
+        LET l_struct_OC_WriteData (((RULElwrite__ENA$wb$last) != (0)) ^ 1):RULElwrite__ENA$temp = writeData$out$first
+        CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$deq__ENA{}
+        STORE (((RULElwrite__ENA$wb$ac$addr) == (4)) & (((portalWControl) != (0)) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1))):intEnable = __bitsubstr{RULElwrite__ENA$temp$data,0,0}
+        CALL/Action ((((portalWControl) != (0))^ 1) & (((((RULElwrite__ENA$wb$ac$addr) == (4))^ 1) & (((portalWControl) != (0)) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1))) | ((((portalWControl) != (0))^ 1) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1)))):user$write$enq__ENA{RULElwrite__ENA$temp$data,(RULElwrite__ENA$wb$ac$addr) != (0)}
+    }
+    METHOD/Rule RULEwriteResponse__ENA {
+        CALL :writeDone$out$first{}
+        CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
+        CALL/Action :writeDone$out$deq__ENA{}
+    }
     METHOD readUser$enq__ENA ( INTEGER_32 v )
 }
 MODULE ZynqTop {
@@ -900,4 +1035,16 @@ MODULE ZynqTop {
     FIELD P7Wrap zt
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+}
+MODULE ZynqTopNew {
+    INTERFACECONNECT test$MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT test$MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_Pps7m M
+    INTERFACE l_ainterface_OC_Pps7fclk FCLK
+    FIELD P7Wrap zt
+    FIELD TestTop test
 }

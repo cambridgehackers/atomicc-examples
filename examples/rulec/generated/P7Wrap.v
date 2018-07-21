@@ -54,9 +54,13 @@ module P7Wrap (
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
     output wire [3:0]FCLKRESETN);
+    wire RULEgp0ar$100__ENA;
     wire RULEgp0ar__ENA;
+    wire RULEgp0aw$100__ENA;
     wire RULEgp0aw__ENA;
+    wire RULEgp0w$100__ENA;
     wire RULEgp0w__ENA;
+    wire RULEinit$100__ENA;
     wire RULEinit__ENA;
     wire pclockTop$clockOut;
     wire [14:0]pps$DDRA;
@@ -283,21 +287,29 @@ module P7Wrap (
     wire [3:0]pps$FTMTP2FTRIG;
     wire [3:0]pps$FTMTP2FTRIGACK;
     wire [28:0]pps$IRQP2F;
+    wire [31:0]pps$MAXIGP0ARADDR;
     wire [1:0]pps$MAXIGP0ARBURST;
     wire [3:0]pps$MAXIGP0ARCACHE;
     wire pps$MAXIGP0ARESETN;
+    wire [11:0]pps$MAXIGP0ARID;
+    wire [3:0]pps$MAXIGP0ARLEN;
     wire [1:0]pps$MAXIGP0ARLOCK;
     wire [2:0]pps$MAXIGP0ARPROT;
     wire [3:0]pps$MAXIGP0ARQOS;
     wire [1:0]pps$MAXIGP0ARSIZE;
     wire pps$MAXIGP0ARVALID;
+    wire [31:0]pps$MAXIGP0AWADDR;
     wire [1:0]pps$MAXIGP0AWBURST;
     wire [3:0]pps$MAXIGP0AWCACHE;
+    wire [11:0]pps$MAXIGP0AWID;
+    wire [3:0]pps$MAXIGP0AWLEN;
     wire [1:0]pps$MAXIGP0AWLOCK;
     wire [2:0]pps$MAXIGP0AWPROT;
     wire [3:0]pps$MAXIGP0AWQOS;
     wire [1:0]pps$MAXIGP0AWSIZE;
     wire pps$MAXIGP0AWVALID;
+    wire [31:0]pps$MAXIGP0WDATA;
+    wire [11:0]pps$MAXIGP0WID;
     wire pps$MAXIGP0WLAST;
     wire [3:0]pps$MAXIGP0WSTRB;
     wire pps$MAXIGP0WVALID;
@@ -650,9 +662,13 @@ module P7Wrap (
     wire pps$SAXIHP3WRISSUECAP1EN;
     wire [7:0]pps$SAXIHP3WSTRB;
     wire pps$SAXIHP3WVALID;
+    assign RULEgp0ar$100__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
     assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
+    assign RULEgp0aw$100__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
     assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
+    assign RULEgp0w$100__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
     assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+    assign RULEinit$100__ENA = 1;
     assign RULEinit__ENA = 1;
     PS7 pps (
         .DDRA(pps$DDRA),
@@ -886,23 +902,23 @@ module P7Wrap (
         .IRQF2P(interrupt),
         .IRQP2F(pps$IRQP2F),
         .MAXIGP0ACLK(CLK),
-        .MAXIGP0ARADDR(MAXIGP0_O$AR$addr),
+        .MAXIGP0ARADDR(pps$MAXIGP0ARADDR),
         .MAXIGP0ARBURST(pps$MAXIGP0ARBURST),
         .MAXIGP0ARCACHE(pps$MAXIGP0ARCACHE),
         .MAXIGP0ARESETN(pps$MAXIGP0ARESETN),
-        .MAXIGP0ARID(MAXIGP0_O$AR$id),
-        .MAXIGP0ARLEN(MAXIGP0_O$AR$len),
+        .MAXIGP0ARID(pps$MAXIGP0ARID),
+        .MAXIGP0ARLEN(pps$MAXIGP0ARLEN),
         .MAXIGP0ARLOCK(pps$MAXIGP0ARLOCK),
         .MAXIGP0ARPROT(pps$MAXIGP0ARPROT),
         .MAXIGP0ARQOS(pps$MAXIGP0ARQOS),
         .MAXIGP0ARREADY(MAXIGP0_O$AR__RDY),
         .MAXIGP0ARSIZE(pps$MAXIGP0ARSIZE),
         .MAXIGP0ARVALID(pps$MAXIGP0ARVALID),
-        .MAXIGP0AWADDR(MAXIGP0_O$AW$addr),
+        .MAXIGP0AWADDR(pps$MAXIGP0AWADDR),
         .MAXIGP0AWBURST(pps$MAXIGP0AWBURST),
         .MAXIGP0AWCACHE(pps$MAXIGP0AWCACHE),
-        .MAXIGP0AWID(MAXIGP0_O$AW$id),
-        .MAXIGP0AWLEN(MAXIGP0_O$AW$len),
+        .MAXIGP0AWID(pps$MAXIGP0AWID),
+        .MAXIGP0AWLEN(pps$MAXIGP0AWLEN),
         .MAXIGP0AWLOCK(pps$MAXIGP0AWLOCK),
         .MAXIGP0AWPROT(pps$MAXIGP0AWPROT),
         .MAXIGP0AWQOS(pps$MAXIGP0AWQOS),
@@ -919,8 +935,8 @@ module P7Wrap (
         .MAXIGP0RREADY(MAXIGP0_I$R__RDY),
         .MAXIGP0RRESP(MAXIGP0_I$R$resp),
         .MAXIGP0RVALID(MAXIGP0_I$R__ENA),
-        .MAXIGP0WDATA(MAXIGP0_O$W$data),
-        .MAXIGP0WID(MAXIGP0_O$W$id),
+        .MAXIGP0WDATA(pps$MAXIGP0WDATA),
+        .MAXIGP0WID(pps$MAXIGP0WID),
         .MAXIGP0WLAST(pps$MAXIGP0WLAST),
         .MAXIGP0WREADY(MAXIGP0_O$W__RDY),
         .MAXIGP0WSTRB(pps$MAXIGP0WSTRB),
@@ -1299,10 +1315,18 @@ module P7Wrap (
     assign FIXED_IO_ps_clk = pps$PSCLK;
     assign FIXED_IO_ps_porb = pps$PSPORB;
     assign FIXED_IO_ps_srstb = pps$PSSRSTB;
-    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
-    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
-    assign MAXIGP0_O$W$last = RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
-    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
+    assign MAXIGP0_O$AR$addr = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARADDR : pps$MAXIGP0ARADDR;
+    assign MAXIGP0_O$AR$id = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARID : pps$MAXIGP0ARID;
+    assign MAXIGP0_O$AR$len = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARLEN : pps$MAXIGP0ARLEN;
+    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID || pps$MAXIGP0ARVALID;
+    assign MAXIGP0_O$AW$addr = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWADDR : pps$MAXIGP0AWADDR;
+    assign MAXIGP0_O$AW$id = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWID : pps$MAXIGP0AWID;
+    assign MAXIGP0_O$AW$len = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWLEN : pps$MAXIGP0AWLEN;
+    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID || pps$MAXIGP0AWVALID;
+    assign MAXIGP0_O$W$data = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WDATA : pps$MAXIGP0WDATA;
+    assign MAXIGP0_O$W$id = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WID : pps$MAXIGP0WID;
+    assign MAXIGP0_O$W$last = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WLAST : ( RULEgp0w$100__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) & pps$MAXIGP0WLAST;
+    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID || pps$MAXIGP0WVALID;
     assign pps$DMA0ACLK = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DAREADY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DRLAST = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE

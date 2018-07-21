@@ -343,21 +343,28 @@ __module ZynqTop {
     Pps7m            M;
     Pps7fclk         FCLK;
     P7Wrap zt;
-#if 1
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
 
     __forward MAXIGP0_O = zt.MAXIGP0_O;
     __forward MAXIGP0_I = zt.MAXIGP0_I;
-#else
-    TestTop test;
-    __connect test.MAXIGP0_O = zt.MAXIGP0_O;
-    __connect test.MAXIGP0_I = zt.MAXIGP0_I;
-#endif
     __forward _ = zt._;
     __forward M = zt.M;
     __forward FCLK = zt.FCLK;
 };
 
-//TestTop Ttest;
+__module ZynqTopNew {
+    ZynqClock        _;
+    Pps7m            M;
+    Pps7fclk         FCLK;
+    P7Wrap zt;
+    TestTop test;
+    __connect test.MAXIGP0_O = zt.MAXIGP0_O;
+    __connect test.MAXIGP0_I = zt.MAXIGP0_I;
+    __forward _ = zt._;
+    __forward M = zt.M;
+    __forward FCLK = zt.FCLK;
+};
+
+ZynqTopNew Ttest;
 ZynqTop ztest;
