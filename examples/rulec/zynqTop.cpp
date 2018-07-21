@@ -220,7 +220,12 @@ typedef struct {
   AXIData    data;
 } WriteData;
 
+__interface TestPins {
+    __output __uint(1) interrupt;
+};
+
 __module TestTop {
+    TestPins          _;
     MaxiO             MAXIGP0_O; 
     MaxiI            *MAXIGP0_I; 
     __uint(1) intEnable, writeFirst, writeLast; 
@@ -238,7 +243,6 @@ __module TestTop {
     UserTop user; 
 
     void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        //reqArs.in.enq({ addr[4:0], { 4'd0, len + 4'd1, 2'd0 }, id[5:0]})
         reqArs.in.enq(AddrCount{static_cast<AXIAddr>(addr), (len + 1)<<2, static_cast<AXIId>(id)});
         portalRControl = __bitsubstr(addr, 11, 5) == 0;
         selectRIndReq = __bitsubstr(addr, 12);
@@ -258,18 +262,17 @@ __module TestTop {
 
     TestTop() {
         __rule init {
-    //.interrupt(read$enq__ENA && intEnable),
+           _.interrupt = __valid(user.read->enq) && intEnable;
         }
         __rule lread {
             //{readBeat$addr, readBeat$base, readBeat$id, readBeat$last}
             auto temp = readBeat.out.first();
             readBeat.out.deq();
-#if 0
-            auto zzIntrChannel = !selectRIndReq && read$enq__ENA;
+            auto zzIntrChannel = !selectRIndReq && __valid(user.read->enq);
             __uint(32) requestValue, portalCtrlInfo;
             switch (temp.ac.addr) {
-              case 0: requestValue = read$enq$v; break;
-              case 4: requestValue = write$enq__RDY; break;
+              case 0: requestValue = 0; break; //read$enq$v; break;
+              case 4: requestValue = __ready(user.write.enq); break;
               default: requestValue = 0; break;
             }
             switch (temp.ac.addr) {
@@ -277,13 +280,12 @@ __module TestTop {
               //4: portalCtrlInfo = 0; break;//31'd0, intEnable; break; // PORTAL_CTRL_INTERRUPT_ENABLE 1
               case 8: portalCtrlInfo = 1; break;                         // PORTAL_CTRL_NUM_TILES        2
               case 0xc: portalCtrlInfo = zzIntrChannel; break;         // PORTAL_CTRL_IND_QUEUE_STATUS 3
-              case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break; // PORTAL_CTRL_PORTAL_ID        4
-              case 0x14: portalCtrlInfo = 2; break;                     // PORTAL_CTRL_NUM_PORTALS      5
+              case 0x10u: portalCtrlInfo = selectRIndReq ? 6 : 5; break; // PORTAL_CTRL_PORTAL_ID        4
+              case 0x14u: portalCtrlInfo = 2; break;                     // PORTAL_CTRL_NUM_PORTALS      5
               //5'h18: portalCtrlInfo = 0; break; // PORTAL_CTRL_COUNTER_MSB      6
               //5'h1C: portalCtrlInfo = 0; break; // PORTAL_CTRL_COUNTER_LSB      7
               default: portalCtrlInfo = 0; break;
             }
-#endif
             //.read$enq__RDY(RULEread && !portalRControl)
              //user.read.in.enq(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA);
             readData.in.enq(ReadResp{portalRControl ? portalCtrlInfo : requestValue, temp.ac.id});

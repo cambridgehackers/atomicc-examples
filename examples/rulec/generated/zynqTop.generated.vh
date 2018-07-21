@@ -94,11 +94,11 @@
 //METAGUARD; MAXIGP0_O$AW; reqAws$in$enq__RDY;
 //METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
+//METABEFORE; RULEinit__ENA; :RULElwrite__ENA
 //METAGUARD; RULEinit; 1;
 //METAINVOKE; RULElR__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
 //METAGUARD; RULElR; readData$out$first__RDY & readData$out$deq__RDY & MAXIGP0_I$R__RDY;
 //METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;:readData$in$enq__ENA;
-//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA
 //METAINVOKE; RULElreadNext__ENA; :readBeat$in$enq__ENA;readFirst ? ( RULElreadNext__ENA$temp$count == 10'd4 ) : readLast:reqArs$out$deq__ENA;:reqArs$out$first;
 //METAGUARD; RULElreadNext; reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( readFirst ? ( 4 ) : readLast == 0 ) | reqArs$out$deq__RDY );
 //METAGUARD; RULElread; readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY;

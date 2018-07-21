@@ -1,7 +1,7 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
-module TestTop (input wire CLK, input wire nRST,
+module TestTop (
     input wire MAXIGP0_O$AR__ENA,
     input wire [31:0]MAXIGP0_O$AR$addr,
     input wire [11:0]MAXIGP0_O$AR$id,
@@ -26,7 +26,10 @@ module TestTop (input wire CLK, input wire nRST,
     output wire [11:0]MAXIGP0_I$R$id,
     output wire MAXIGP0_I$R$last,
     output wire [1:0]MAXIGP0_I$R$resp,
-    input wire MAXIGP0_I$R__RDY);
+    input wire MAXIGP0_I$R__RDY,
+    output wire interrupt);
+    wire CLK;
+    wire nRST;
     reg intEnable;
     reg [31:0]portalCtrlInfo;
     reg portalRControl;
@@ -125,7 +128,7 @@ module TestTop (input wire CLK, input wire nRST,
         .out$first__RDY(writeBeat$out$first__RDY));
     Fifo1_OC_14 readData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(readBeat$out$first__RDY & readBeat$out$deq__RDY),
-        .in$enq$v({ readBeat$out$first[ 20 : 15 ] , portalRControl ? portalCtrlInfo : requestValue }),
+        .in$enq$v({ readBeat$out$first[ 20 : 15 ] , 32'd0 }),
         .in$enq__RDY(readData$in$enq__RDY),
         .out$deq__ENA(readData$out$first__RDY & MAXIGP0_I$R__RDY),
         .out$deq__RDY(readData$out$deq__RDY),
@@ -165,6 +168,7 @@ module TestTop (input wire CLK, input wire nRST,
     assign MAXIGP0_I$R__ENA = readData$out$first__RDY & readData$out$deq__RDY;
     assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
     assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
+    assign interrupt = ( user$read$enq__ENA == 0 ) & intEnable;
     // Extra assigments, not to output wires
     assign RULElreadNext__ENA$temp$count = reqArs$out$first[14:5];
     assign RULElwriteNext__ENA$temp$count = reqAws$out$first[14:5];

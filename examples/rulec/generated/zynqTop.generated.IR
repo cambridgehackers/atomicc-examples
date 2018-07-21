@@ -571,6 +571,9 @@ EMODULE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
+EMODULE l_ainterface_OC_TestPins {
+    FIELD/output INTEGER_1 interrupt
+}
 EMODULE l_ainterface_OC_ZynqClock {
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
@@ -904,6 +907,7 @@ MODULE ResetInverter {
 }
 MODULE TestTop {
     INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
+    INTERFACE l_ainterface_OC_TestPins _
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
     FIELD INTEGER_1 intEnable
@@ -953,7 +957,9 @@ MODULE TestTop {
         LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
-    METHOD/Rule RULEinit__ENA
+    METHOD/Rule RULEinit__ENA {
+        LET INTEGER_1 (((user$read$enq__ENA) != (0)) ^ 1):interrupt = (0)((intEnable) != (0))
+    }
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
         CALL :readData$out$first{}
@@ -983,7 +989,7 @@ MODULE TestTop {
         CALL :readBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElread__ENA$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
-        LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = ((portalRControl) != (0)) ? (portalCtrlInfo):(requestValue)
+        LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = ((portalRControl) != (0)) ? (0):(0)
         LET INTEGER_6 :RULElread__ENA$agg_2e_tmp$id = RULElread__ENA$temp$ac$id
         CALL/Action :readData$in$enq__ENA{RULElread__ENA$agg_2e_tmp}
     }

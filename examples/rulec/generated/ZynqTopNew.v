@@ -35,6 +35,7 @@ module ZynqTopNew (
     wire [11:0]test$MAXIGP0_I$R$id;
     wire test$MAXIGP0_I$R$last;
     wire [1:0]test$MAXIGP0_I$R$resp;
+    wire test$interrupt;
     wire zt$MAXIGP0_I$B__ENA;
     wire zt$MAXIGP0_I$B__RDY;
     wire zt$MAXIGP0_I$R__ENA;
@@ -107,7 +108,7 @@ module ZynqTopNew (
         .FCLKCLK(FCLKCLK),
         .FCLKCLKTRIGN(FCLKCLKTRIGN),
         .FCLKRESETN(FCLKRESETN));
-    TestTop test (.CLK(CLK), .nRST(nRST),
+    TestTop test (
         .MAXIGP0_O$AR__ENA(zt$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(zt$MAXIGP0_O$AR$addr),
         .MAXIGP0_O$AR$id(zt$MAXIGP0_O$AR$id),
@@ -132,7 +133,8 @@ module ZynqTopNew (
         .MAXIGP0_I$R$id(test$MAXIGP0_I$R$id),
         .MAXIGP0_I$R$last(test$MAXIGP0_I$R$last),
         .MAXIGP0_I$R$resp(test$MAXIGP0_I$R$resp),
-        .MAXIGP0_I$R__RDY(zt$MAXIGP0_I$R__RDY));
+        .MAXIGP0_I$R__RDY(zt$MAXIGP0_I$R__RDY),
+        .interrupt(test$interrupt));
 endmodule 
 
 `default_nettype wire    // set back to default value
