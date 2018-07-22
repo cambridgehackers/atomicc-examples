@@ -86,6 +86,7 @@
 //METAINTERNAL; writeBeat; Fifo1_OC_12;
 //METAINTERNAL; readData; Fifo1_OC_14;
 //METAINTERNAL; writeData; Fifo1_OC_16;
+//METAINTERNAL; readBus; Fifo1_OC_16;
 //METAINTERNAL; writeDone; Fifo1_OC_18;
 //METAINTERNAL; user; UserTop;
 //METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;
@@ -98,17 +99,18 @@
 //METAGUARD; RULEinit; 1;
 //METAINVOKE; RULElR__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
 //METAGUARD; RULElR; readData$out$first__RDY & readData$out$deq__RDY & MAXIGP0_I$R__RDY;
-//METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;:readData$in$enq__ENA;
+//METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;( RULElread__ENA$temp$ac$addr == 5'd0 ) & selectRIndReq:readBus$out$deq__ENA;( RULElread__ENA$temp$ac$addr == 5'd0 ) & selectRIndReq:readBus$out$first;:readData$in$enq__ENA;
 //METAINVOKE; RULElreadNext__ENA; :readBeat$in$enq__ENA;readFirst ? ( RULElreadNext__ENA$temp$count == 10'd4 ) : readLast:reqArs$out$deq__ENA;:reqArs$out$first;
 //METAGUARD; RULElreadNext; reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( readFirst ? ( 4 ) : readLast == 0 ) | reqArs$out$deq__RDY );
-//METAGUARD; RULElread; readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY;
-//METAINVOKE; RULElwrite__ENA; ( !portalWControl ) & ( ( ( RULElwrite__ENA$wb$ac$addr != 5'd4 ) & portalWControl & ( !RULElwrite__ENA$wb$last ) ) | ( ( !portalWControl ) & ( !RULElwrite__ENA$wb$last ) ) ):user$write$enq__ENA;!RULElwrite__ENA$wb$last:writeBeat$out$deq__ENA;:writeBeat$out$first;!RULElwrite__ENA$wb$last:writeData$out$deq__ENA;!RULElwrite__ENA$wb$last:writeData$out$first;RULElwrite__ENA$wb$last:writeDone$in$enq__ENA;
+//METAGUARD; RULElread; readBeat$out$first__RDY & readBeat$out$deq__RDY & ( ( !selectRIndReq ) | readBus$out$first__RDY ) & ( ( !selectRIndReq ) | readBus$out$deq__RDY ) & readData$in$enq__RDY;
+//METAINVOKE; RULElwrite__ENA; ( !portalWControl ) & ( !RULElwrite__ENA$wb$last ):user$write$enq__ENA;!RULElwrite__ENA$wb$last:writeBeat$out$deq__ENA;:writeBeat$out$first;!RULElwrite__ENA$wb$last:writeData$out$deq__ENA;!RULElwrite__ENA$wb$last:writeData$out$first;RULElwrite__ENA$wb$last:writeDone$in$enq__ENA;
 //METAINVOKE; RULElwriteNext__ENA; writeFirst ? ( RULElwriteNext__ENA$temp$count == 10'd4 ) : writeLast:reqAws$out$deq__ENA;:reqAws$out$first;:writeBeat$in$enq__ENA;
 //METAGUARD; RULElwriteNext; reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( writeFirst ? ( 4 ) : writeLast == 0 ) | reqAws$out$deq__RDY );
 //METAGUARD; RULElwrite; writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
 //METAINVOKE; RULEwriteResponse__ENA; :MAXIGP0_I$B__ENA;:writeDone$out$deq__ENA;:writeDone$out$first;
 //METAGUARD; RULEwriteResponse; writeDone$out$first__RDY & MAXIGP0_I$B__RDY & writeDone$out$deq__RDY;
-//METAGUARD; readUser$enq; 1;
+//METAINVOKE; readUser$enq__ENA; :readBus$in$enq__ENA;
+//METAGUARD; readUser$enq; readBus$in$enq__RDY;
 //METARULES; RULEinit; RULElR; RULElread; RULElreadNext; RULElwrite; RULElwriteNext; RULEwriteResponse
 //METACONNECT; readUser$enq__ENA; user$read$enq__ENA
 //METACONNECT; readUser$enq__RDY; user$read$enq__RDY

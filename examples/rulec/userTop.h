@@ -20,7 +20,7 @@
  */
 #include "atomicc.h"
 
-typedef __int(32) BusType;
+typedef __uint(32) BusType;
 
 __emodule l_top {
     PipeIn<NOCData> request;

@@ -3,6 +3,9 @@ EMODULE l_struct_OC_AddrCount {
     FIELD INTEGER_10 count
     FIELD INTEGER_6 id
 }
+EMODULE l_struct_OC_BusData {
+    FIELD INTEGER_32 data
+}
 EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
 }
@@ -13,9 +16,6 @@ EMODULE l_struct_OC_PortalInfo {
 EMODULE l_struct_OC_ReadResp {
     FIELD INTEGER_32 data
     FIELD INTEGER_6 id
-}
-EMODULE l_struct_OC_WriteData {
-    FIELD INTEGER_32 data
 }
 EMODULE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
@@ -139,7 +139,7 @@ EMODULE l_ainterface_OC_PipeIn_OC_4 {
     METHOD enq__ENA ( l_struct_OC_ReadResp v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_6 {
-    METHOD enq__ENA ( l_struct_OC_WriteData v )
+    METHOD enq__ENA ( l_struct_OC_BusData v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_8 {
     METHOD enq__ENA ( INTEGER_6 v )
@@ -162,7 +162,7 @@ EMODULE l_ainterface_OC_PipeOut_OC_5 {
 }
 EMODULE l_ainterface_OC_PipeOut_OC_7 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_WriteData
+    METHOD first l_struct_OC_BusData
 }
 EMODULE l_ainterface_OC_PipeOut_OC_9 {
     METHOD deq__ENA
@@ -747,16 +747,16 @@ MODULE Fifo1_OC_14 {
 MODULE Fifo1_OC_16 {
     INTERFACE l_ainterface_OC_PipeIn_OC_6 in
     INTERFACE l_ainterface_OC_PipeOut_OC_7 out
-    FIELD l_struct_OC_WriteData element
+    FIELD l_struct_OC_BusData element
     FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_WriteData v ) if (((full) ^ (1))) {
+    METHOD in$enq__ENA ( l_struct_OC_BusData v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_WriteData = ((element)) if ((full))
+    METHOD out$first l_struct_OC_BusData = ((element)) if ((full))
 }
 MODULE Fifo1_OC_18 {
     INTERFACE l_ainterface_OC_PipeIn_OC_8 in
@@ -931,6 +931,7 @@ MODULE TestTop {
     FIELD Fifo1_OC_12 writeBeat
     FIELD Fifo1_OC_14 readData
     FIELD Fifo1_OC_16 writeData
+    FIELD Fifo1_OC_16 readBus
     FIELD Fifo1_OC_18 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
@@ -953,12 +954,12 @@ MODULE TestTop {
         STORE :selectWIndReq = __bitsubstr{MAXIGP0_O$AW$addr,12}
     }
     METHOD MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last ) {
-        ALLOCA l_struct_OC_WriteData MAXIGP0_O$W__ENA$agg_2e_tmp
+        ALLOCA l_struct_OC_BusData MAXIGP0_O$W__ENA$agg_2e_tmp
         LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULEinit__ENA {
-        LET INTEGER_1 (((user$read$enq__ENA) != (0)) ^ 1):interrupt = (0)((intEnable) != (0))
+        LET INTEGER_1 (((readBus$out$first__RDY) != (0)) ^ 1):interrupt = (0)((intEnable) != (0))
     }
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
@@ -985,10 +986,14 @@ MODULE TestTop {
     }
     METHOD/Rule RULElread__ENA {
         ALLOCA l_struct_OC_ReadResp RULElread__ENA$agg_2e_tmp
+        ALLOCA l_struct_OC_BusData RULElread__ENA$ref_2e_tmp
         ALLOCA l_struct_OC_PortalInfo RULElread__ENA$temp
         CALL :readBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElread__ENA$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
+        CALL (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):readBus$out$first{}
+        LET l_struct_OC_BusData (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):RULElread__ENA$ref_2e_tmp = readBus$out$first
+        CALL/Action (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):readBus$out$deq__ENA{}
         LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = ((portalRControl) != (0)) ? (0):(0)
         LET INTEGER_6 :RULElread__ENA$agg_2e_tmp$id = RULElread__ENA$temp$ac$id
         CALL/Action :readData$in$enq__ENA{RULElread__ENA$agg_2e_tmp}
@@ -1010,24 +1015,28 @@ MODULE TestTop {
         CALL/Action ((((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)):reqAws$out$deq__ENA{}
     }
     METHOD/Rule RULElwrite__ENA {
-        ALLOCA l_struct_OC_WriteData RULElwrite__ENA$temp
+        ALLOCA l_struct_OC_BusData RULElwrite__ENA$temp
         ALLOCA l_struct_OC_PortalInfo RULElwrite__ENA$wb
         CALL :writeBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElwrite__ENA$wb = writeBeat$out$first
         CALL/Action ((RULElwrite__ENA$wb$last) != (0)):writeDone$in$enq__ENA{RULElwrite__ENA$wb$ac$id}
         CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeBeat$out$deq__ENA{}
         CALL (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$first{}
-        LET l_struct_OC_WriteData (((RULElwrite__ENA$wb$last) != (0)) ^ 1):RULElwrite__ENA$temp = writeData$out$first
+        LET l_struct_OC_BusData (((RULElwrite__ENA$wb$last) != (0)) ^ 1):RULElwrite__ENA$temp = writeData$out$first
         CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$deq__ENA{}
+        CALL/Action ((((portalWControl) != (0))^ 1) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1)):user$write$enq__ENA{RULElwrite__ENA$temp$data,(RULElwrite__ENA$wb$ac$addr) != (0)}
         STORE (((RULElwrite__ENA$wb$ac$addr) == (4)) & (((portalWControl) != (0)) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1))):intEnable = __bitsubstr{RULElwrite__ENA$temp$data,0,0}
-        CALL/Action ((((portalWControl) != (0))^ 1) & (((((RULElwrite__ENA$wb$ac$addr) == (4))^ 1) & (((portalWControl) != (0)) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1))) | ((((portalWControl) != (0))^ 1) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1)))):user$write$enq__ENA{RULElwrite__ENA$temp$data,(RULElwrite__ENA$wb$ac$addr) != (0)}
     }
     METHOD/Rule RULEwriteResponse__ENA {
         CALL :writeDone$out$first{}
         CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
         CALL/Action :writeDone$out$deq__ENA{}
     }
-    METHOD readUser$enq__ENA ( INTEGER_32 v )
+    METHOD readUser$enq__ENA ( INTEGER_32 v ) {
+        ALLOCA l_struct_OC_BusData readUser$enq__ENA$agg_2e_tmp
+        LET INTEGER_32 :readUser$enq__ENA$agg_2e_tmp$data = readUser$enq$v
+        CALL/Action :readBus$in$enq__ENA{readUser$enq__ENA$agg_2e_tmp}
+    }
 }
 MODULE ZynqTop {
     INTERFACECONNECT/Forward MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
