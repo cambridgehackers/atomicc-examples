@@ -85,8 +85,8 @@
 //METAINTERNAL; readBeat; Fifo1_OC_12;
 //METAINTERNAL; writeBeat; Fifo1_OC_12;
 //METAINTERNAL; readData; Fifo1_OC_14;
-//METAINTERNAL; writeData; Fifo1_OC_16;
 //METAINTERNAL; readBus; Fifo1_OC_16;
+//METAINTERNAL; writeData; Fifo1_OC_16;
 //METAINTERNAL; writeDone; Fifo1_OC_18;
 //METAINTERNAL; user; UserTop;
 //METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;

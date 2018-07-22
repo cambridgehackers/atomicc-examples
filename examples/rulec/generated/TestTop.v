@@ -31,14 +31,12 @@ module TestTop (
     wire CLK;
     wire nRST;
     reg intEnable;
-    reg [31:0]portalCtrlInfo;
     reg portalRControl;
     reg portalWControl;
     reg [4:0]readAddr;
     reg [9:0]readCount;
     reg readFirst;
     reg readLast;
-    reg [31:0]requestValue;
     reg selectRIndReq;
     reg selectWIndReq;
     reg [4:0]writeAddr;
@@ -138,14 +136,6 @@ module TestTop (
         .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
-    Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(MAXIGP0_O$W__ENA),
-        .in$enq$v({ MAXIGP0_O$W$data }),
-        .in$enq__RDY(MAXIGP0_O$W__RDY),
-        .out$deq__ENA(( !writeBeat$out$first__RDY ) & writeBeat$out$deq__RDY & writeData$out$first__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[ 21 : 21 ] & writeBeat$out$first__RDY & ( portalWControl | user$write$enq__RDY ) & ( portalWControl | user$write$enq__RDY )),
-        .out$deq__RDY(writeData$out$deq__RDY),
-        .out$first(writeData$out$first),
-        .out$first__RDY(writeData$out$first__RDY));
     Fifo1_OC_16 readBus (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(user$read$enq__ENA & user$read$enq__RDY),
         .in$enq$v({ user$read$enq$v }),
@@ -154,6 +144,14 @@ module TestTop (
         .out$deq__RDY(readBus$out$deq__RDY),
         .out$first(readBus$out$first),
         .out$first__RDY(readBus$out$first__RDY));
+    Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(MAXIGP0_O$W__ENA),
+        .in$enq$v({ MAXIGP0_O$W$data }),
+        .in$enq__RDY(MAXIGP0_O$W__RDY),
+        .out$deq__ENA(( !writeBeat$out$first__RDY ) & writeBeat$out$deq__RDY & writeData$out$first__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[ 21 : 21 ] & writeBeat$out$first__RDY & ( portalWControl | user$write$enq__RDY ) & ( portalWControl | user$write$enq__RDY )),
+        .out$deq__RDY(writeData$out$deq__RDY),
+        .out$first(writeData$out$first),
+        .out$first__RDY(writeData$out$first__RDY));
     Fifo1_OC_18 writeDone (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[ 21 : 21 ] & ( portalWControl | user$write$enq__RDY ) & ( portalWControl | user$write$enq__RDY )),
         .in$enq$v(writeBeat$out$first[ 20 : 15 ]),
@@ -190,14 +188,12 @@ module TestTop (
     always @( posedge CLK) begin
       if (!nRST) begin
         intEnable <= 0;
-        portalCtrlInfo <= 0;
         portalRControl <= 0;
         portalWControl <= 0;
         readAddr <= 0;
         readCount <= 0;
         readFirst <= 0;
         readLast <= 0;
-        requestValue <= 0;
         selectRIndReq <= 0;
         selectWIndReq <= 0;
         writeAddr <= 0;

@@ -229,14 +229,13 @@ __module TestTop {
     MaxiI            *MAXIGP0_I;
     __uint(1) intEnable, writeFirst, writeLast;
     __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-    BusType requestValue, portalCtrlInfo;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
 
     Fifo1<AddrCount>  reqArs, reqAws;
     Fifo1<PortalInfo> readBeat,writeBeat;
     Fifo1<ReadResp>   readData;
-    Fifo1<BusData>  writeData, readBus;
+    Fifo1<BusData>    readBus, writeData;
     Fifo1<AXIId>      writeDone;
     UserTop user;
 
@@ -266,8 +265,8 @@ __module TestTop {
         __rule lread {
             auto temp = readBeat.out.first();
             readBeat.out.deq();
-            __uint(1) zzIntrChannel = !selectRIndReq && __ready(readBus.out.first);
-            __uint(32) requestValue, portalCtrlInfo;
+            auto zzIntrChannel = !selectRIndReq && __ready(readBus.out.first);
+            BusType requestValue, portalCtrlInfo;
             switch (temp.ac.addr) {
               case 0: requestValue = readBus.out.first().data;
                       readBus.out.deq();

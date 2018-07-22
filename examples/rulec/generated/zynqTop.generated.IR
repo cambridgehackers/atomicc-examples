@@ -919,8 +919,6 @@ MODULE TestTop {
     FIELD INTEGER_1 portalRControl
     FIELD INTEGER_1 selectWIndReq
     FIELD INTEGER_1 portalWControl
-    FIELD INTEGER_32 requestValue
-    FIELD INTEGER_32 portalCtrlInfo
     FIELD INTEGER_10 readCount
     FIELD INTEGER_10 writeCount
     FIELD INTEGER_5 readAddr
@@ -930,8 +928,8 @@ MODULE TestTop {
     FIELD Fifo1_OC_12 readBeat
     FIELD Fifo1_OC_12 writeBeat
     FIELD Fifo1_OC_14 readData
-    FIELD Fifo1_OC_16 writeData
     FIELD Fifo1_OC_16 readBus
+    FIELD Fifo1_OC_16 writeData
     FIELD Fifo1_OC_18 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser

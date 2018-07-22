@@ -13,6 +13,7 @@ module mkZynqTop (
   wire CLK, nRST;
 
   wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v;
+  wire [31 : 0] requestValue, portalCtrlInfo;
   wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
   wire [9 : 0] readBeat$base, reqArs$count, readburstCount, writeBeat$count, reqAws$count, writeburstCount;
   wire [5 : 0] MAXIGP0_I$R$id, readBeat$id, reqArs$id, writeBeat$id, reqAws$id, MAXIGP0_I$B$id;
@@ -22,45 +23,13 @@ module mkZynqTop (
   wire MAXIGP0_O$AR__ENA, MAXIGP0_O$AW__ENA, MAXIGP0_I$R__RDY, MAXIGP0_I$B__RDY, MAXIGP0_O$W$last, MAXIGP0_O$W__ENA;
   wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
   wire write$enq__RDY, read$enq__ENA, readData$EnqRDY, zzIntrChannel;
-  wire readBeat$DeqRDY, readBeat$EnqRDY, read_req$EnqRDY;
+  wire readBeat$DeqRDY, readBeat$EnqRDY;
   wire writeDataDeqRDY, readFirstNext, writeFirstNext, writeDone$EnqRDY, readBeat$last;
-  wire writeBeat$DeqRDY, writeBeat$EnqRDY, reqAws$DeqRDY, writeBeat$last;
+  wire writeBeat$DeqRDY, writeBeat$EnqRDY, reqAws$DeqRDY, writeBeat$last, reqArs$DeqRDY;
 
-  wire RULEwriteNext, RULEwrite, RULEAW, RULEW, RULER, RULEreadNext, RULEread;
+  wire RULEwriteNext, RULEwrite, RULEreadNext, RULEread;
 
-  reg intEnable, writeFirst, writeLast;
-  reg readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-  reg [31 : 0] requestValue, portalCtrlInfo;
-  reg [9 : 0] readCount, writeCount;
-  reg [4 : 0] readAddr, writeAddr;
-
-  FIFO1 #(.width(21), .guarded(1)) reqArs(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({ MAXIGP0_O$AR$addr[4:0], { 4'd0, MAXIGP0_O$AR$len + 4'd1, 2'd0 }, MAXIGP0_O$AR$id[5:0]}), .ENQ(MAXIGP0_O$AR__ENA),
-        .D_OUT({reqArs$addr, reqArs$count, reqArs$id}),
-        .DEQ(RULEreadNext && !readFirstNext), .FULL_N(read_req$EnqRDY), .EMPTY_N(MAXIGP0_O$AR__RDY));
-  FIFO1 #(.width(22), .guarded(1)) readBeat(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({readAddrupdate, readburstCount, reqArs$id, !readFirstNext}), .ENQ(RULEreadNext),
-        .D_OUT({readBeat$addr, readBeat$base, readBeat$id, readBeat$last}),
-        .DEQ(RULEread), .FULL_N(readBeat$EnqRDY), .EMPTY_N(readBeat$DeqRDY));
-  FIFO1 #(.width(38), .guarded(1)) readData(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({portalRControl ? portalCtrlInfo : requestValue, readBeat$id}), .ENQ(RULEread),
-        .D_OUT({MAXIGP0_I$R$data, MAXIGP0_I$R$id}), .DEQ(RULER),
-        .FULL_N(readData$EnqRDY), .EMPTY_N(MAXIGP0_I$R__ENA));
-
-  FIFO1 #(.width(21), .guarded(1)) reqAws(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({MAXIGP0_O$AW$addr[4:0], { 4'd0, MAXIGP0_O$AW$len + 4'd1, 2'd0 }, MAXIGP0_O$AW$id[5:0] }), .ENQ(RULEAW),
-        .D_OUT({reqAws$addr, reqAws$count, reqAws$id}),
-        .DEQ(RULEwriteNext && !writeFirstNext), .FULL_N(MAXIGP0_O$AW__RDY), .EMPTY_N(reqAws$DeqRDY));
-  FIFO1 #(.width(32), .guarded(1)) writeData(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN(MAXIGP0_O$W$data), .ENQ(RULEW),
-        .D_OUT(write$enq$v), .DEQ(RULEwrite), .FULL_N(MAXIGP0_O$W__RDY), .EMPTY_N(writeDataDeqRDY));
-  FIFO1 #(.width(22), .guarded(1)) writeBeat(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({ writeAddrupdate, writeburstCount, reqAws$id, !writeFirstNext }), .ENQ(RULEwriteNext),
-        .D_OUT({writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}),
-        .DEQ(RULEwrite), .FULL_N(writeBeat$EnqRDY), .EMPTY_N(writeBeat$DeqRDY));
-  FIFO1 #(.width(6), .guarded(1)) writeDone(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN( writeBeat$id), .ENQ(RULEwrite && writeBeat$last),
-        .D_OUT(MAXIGP0_I$B$id), .DEQ(MAXIGP0_I$B__RDY), .FULL_N(writeDone$EnqRDY), .EMPTY_N(MAXIGP0_I$B__ENA));
+  reg intEnable;
 
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
@@ -68,7 +37,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN), .FCLKCLKTRIGN(),
         .interrupt(read$enq__ENA && intEnable),
         .MAXIGP0_O$AR$addr(MAXIGP0_O$AR$addr), .MAXIGP0_O$AR$id(MAXIGP0_O$AR$id), .MAXIGP0_O$AR$len(MAXIGP0_O$AR$len),
-        .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA), .MAXIGP0_O$AR__RDY(!MAXIGP0_O$AR__RDY),
+        .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA), .MAXIGP0_O$AR__RDY(MAXIGP0_O$AR__RDY),
 
         .MAXIGP0_I$R$data(MAXIGP0_I$R$data), .MAXIGP0_I$R$resp(0), .MAXIGP0_I$R$last(1),
         .MAXIGP0_I$R$id(MAXIGP0_I$R$id), .MAXIGP0_I$R__RDY(MAXIGP0_I$R__RDY), .MAXIGP0_I$R__ENA(MAXIGP0_I$R__ENA),
@@ -89,14 +58,78 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FIXED_IO_ddr_vrp(FIXED_IO_ddr_vrp), .DDR_WEB(DDR_WEB), .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
         .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb), .MIO(MIO));
 
+  reg writeFirst, writeLast;
+  reg readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+  reg [9 : 0] readCount, writeCount;
+  reg [4 : 0] readAddr, writeAddr;
+
+  Fifo1_OC_10 reqArs(.nRST(nRST), .CLK(CLK), // 21
+        .in$enq__ENA(MAXIGP0_O$AR__ENA),
+        .in$enq$v({ MAXIGP0_O$AR$addr[4:0], { 4'd0, MAXIGP0_O$AR$len + 4'd1, 2'd0 }, MAXIGP0_O$AR$id[5:0]}),
+        .in$enq__RDY(MAXIGP0_O$AR__RDY),
+        .out$deq__ENA(RULEreadNext && !readFirstNext),
+        .out$deq__RDY(reqArs$DeqRDY),
+        .out$first({reqArs$addr, reqArs$count, reqArs$id}),
+        .out$first__RDY());
+  Fifo1_OC_10 reqAws(.nRST(nRST), .CLK(CLK), // 21
+        .in$enq__ENA(MAXIGP0_O$AW__ENA && MAXIGP0_O$AW__RDY),
+        .in$enq$v({MAXIGP0_O$AW$addr[4:0], { 4'd0, MAXIGP0_O$AW$len + 4'd1, 2'd0 }, MAXIGP0_O$AW$id[5:0] }),
+        .in$enq__RDY(MAXIGP0_O$AW__RDY),
+        .out$deq__ENA(RULEwriteNext && !writeFirstNext),
+        .out$deq__RDY(reqAws$DeqRDY),
+        .out$first({reqAws$addr, reqAws$count, reqAws$id}),
+        .out$first__RDY());
+  Fifo1_OC_12 readBeat(.nRST(nRST), .CLK(CLK), // width 22
+        .in$enq__ENA(RULEreadNext),
+        .in$enq$v({readAddrupdate, readburstCount, reqArs$id, !readFirstNext}),
+        .in$enq__RDY(readBeat$EnqRDY),
+        .out$deq__ENA(RULEread),
+        .out$deq__RDY(readBeat$DeqRDY),
+        .out$first({readBeat$addr, readBeat$base, readBeat$id, readBeat$last}),
+        .out$first__RDY());
+  Fifo1_OC_12 writeBeat(.nRST(nRST), .CLK(CLK), // width 22
+        .in$enq__ENA(RULEwriteNext),
+        .in$enq$v({ writeAddrupdate, writeburstCount, reqAws$id, !writeFirstNext }),
+        .in$enq__RDY(writeBeat$EnqRDY),
+        .out$deq__ENA(RULEwrite),
+        .out$deq__RDY(writeBeat$DeqRDY),
+        .out$first({writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}),
+        .out$first__RDY());
+  Fifo1_OC_14 readData(.nRST(nRST), .CLK(CLK), // 38
+        .in$enq__ENA(RULEread),
+        .in$enq$v({portalRControl ? portalCtrlInfo : requestValue, readBeat$id}),
+        .in$enq__RDY(readData$EnqRDY),
+        .out$deq__ENA(MAXIGP0_I$R__RDY && MAXIGP0_I$R__ENA),
+        .out$deq__RDY(MAXIGP0_I$R__ENA),
+        .out$first({MAXIGP0_I$R$data, MAXIGP0_I$R$id}),
+        .out$first__RDY());
+  Fifo1_OC_16 writeData(.nRST(nRST), .CLK(CLK), // 32
+        .in$enq__ENA(MAXIGP0_O$W__ENA && MAXIGP0_O$W__RDY),
+        .in$enq$v(MAXIGP0_O$W$data),
+        .in$enq__RDY(MAXIGP0_O$W__RDY),
+        .out$deq__ENA(RULEwrite),
+        .out$deq__RDY(writeDataDeqRDY),
+        .out$first(write$enq$v),
+        .out$first__RDY());
+  Fifo1_OC_18 writeDone(.nRST(nRST), .CLK(CLK), // 6
+        .in$enq__ENA(RULEwrite && writeBeat$last),
+        .in$enq$v( writeBeat$id),
+        .in$enq__RDY(writeDone$EnqRDY),
+        .out$deq__ENA(MAXIGP0_I$B__RDY),
+        .out$deq__RDY(MAXIGP0_I$B__ENA),
+        .out$first(MAXIGP0_I$B$id),
+        .out$first__RDY());
+
+  UserTop user(.CLK(CLK), .nRST(nRST),
+    .write$enq__ENA(RULEwrite && !portalWControl), .write$enq$v(write$enq$v), .write$enq$last(writeBeat$addr != 0),
+    .write$enq__RDY(write$enq__RDY),
+    .read$enq__RDY(RULEread && !portalRControl), .read$enq$v(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA));
+
+  assign RULEreadNext = reqArs$DeqRDY && readBeat$EnqRDY;
   assign RULEread = readBeat$DeqRDY && readData$EnqRDY;
-  assign RULEreadNext = MAXIGP0_O$AR__RDY && readBeat$EnqRDY;
-  assign RULER = MAXIGP0_I$R__RDY && MAXIGP0_I$R__ENA;
-  assign RULEW = MAXIGP0_O$W__ENA && MAXIGP0_O$W__RDY;
-  assign RULEAW = MAXIGP0_O$AW__ENA && MAXIGP0_O$AW__RDY;
+  assign RULEwriteNext = reqAws$DeqRDY && writeBeat$EnqRDY ;
   assign RULEwrite = writeDataDeqRDY && writeBeat$DeqRDY && (!writeBeat$last || writeDone$EnqRDY)
             && (!selectWIndReq || portalWControl);
-  assign RULEwriteNext = reqAws$DeqRDY && writeBeat$EnqRDY ;
 
   assign zzIntrChannel = !selectRIndReq && read$enq__ENA;
   assign readAddrupdate = !readFirst ?  reqArs$addr : readAddr ;
@@ -107,28 +140,16 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   assign writeburstCount = !writeFirst ?  { 2'd0, reqAws$count[9:2] } : writeCount ;
   assign writeFirstNext = !(!writeFirst ?  reqAws$count == 4 : writeLast);
 
-  always@(readBeat$addr or read$enq$v or write$enq__RDY)
-  begin
-    case (readBeat$addr)
-      0: requestValue = read$enq$v;
-      4: requestValue = write$enq__RDY;
-      default: requestValue = 0;
-    endcase
-  end
-  always@(readBeat$addr or intEnable or zzIntrChannel or selectRIndReq)
-  begin
-    case (readBeat$addr)
-      0: portalCtrlInfo = zzIntrChannel; // PORTAL_CTRL_INTERRUPT_STATUS 0
+  assign requestValue = readBeat$addr == 0 ? read$enq$v : readBeat$addr == 4 ? write$enq__RDY : 0;
+  assign portalCtrlInfo = readBeat$addr == 0? zzIntrChannel : // PORTAL_CTRL_INTERRUPT_STATUS 0
       //4: portalCtrlInfo = 0;//{31'd0, intEnable; // PORTAL_CTRL_INTERRUPT_ENABLE 1
-      8: portalCtrlInfo = 1;                         // PORTAL_CTRL_NUM_TILES        2
-      5'h0C: portalCtrlInfo = zzIntrChannel;         // PORTAL_CTRL_IND_QUEUE_STATUS 3
-      5'h10: portalCtrlInfo = selectRIndReq ? 6 : 5; // PORTAL_CTRL_PORTAL_ID        4
-      5'h14: portalCtrlInfo = 2;                     // PORTAL_CTRL_NUM_PORTALS      5
-      //5'h18: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_MSB      6
-      //5'h1C: portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_LSB      7
-      default: portalCtrlInfo = 0;
-    endcase
-  end
+      readBeat$addr == 8 ? 1 :                         // PORTAL_CTRL_NUM_TILES        2
+      readBeat$addr == 5'h0C ? zzIntrChannel :         // PORTAL_CTRL_IND_QUEUE_STATUS 3
+      readBeat$addr == 5'h10 ? (selectRIndReq ? 6 : 5) : // PORTAL_CTRL_PORTAL_ID        4
+      readBeat$addr == 5'h14 ? 2 :                     // PORTAL_CTRL_NUM_PORTALS      5
+      //5'h18 ? portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_MSB      6
+      //5'h1C ? portalCtrlInfo = 0; // PORTAL_CTRL_COUNTER_LSB      7
+      0;
 
   always@(posedge CLK)
   begin
@@ -146,22 +167,22 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
       end
     else
       begin
-        if (MAXIGP0_O$AR__ENA) begin
+        if (MAXIGP0_O$AR__ENA && MAXIGP0_O$AR__RDY) begin
             portalRControl <= MAXIGP0_O$AR$addr[11:5] == 7'd0;
             selectRIndReq <= MAXIGP0_O$AR$addr[12];
         end
-        if (RULEAW) begin
+        if (MAXIGP0_O$AW__ENA && MAXIGP0_O$AW__RDY) begin
             portalWControl <= MAXIGP0_O$AW$addr[11:5] == 7'd0;
             selectWIndReq <= MAXIGP0_O$AW$addr[12];
         end
-        if (RULEwrite && portalWControl && writeBeat$addr == 4)
-          intEnable <= write$enq$v[0];
         if (RULEreadNext) begin
           readAddr <= readAddrupdate + 4 ;
           readCount <= readburstCount - 1 ;
           readFirst <= readFirstNext;
           readLast <= readburstCount == 2 ;
         end
+        if (RULEwrite && portalWControl && writeBeat$addr == 4)
+          intEnable <= write$enq$v[0];
 
         if (RULEwriteNext) begin
           writeAddr <= writeAddrupdate + 4 ;
@@ -171,9 +192,4 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         end
       end
   end
-
-UserTop user(.CLK(CLK), .nRST(nRST),
-  .write$enq__ENA(RULEwrite && !portalWControl), .write$enq$v(write$enq$v), .write$enq$last(writeBeat$addr != 0),
-  .write$enq__RDY(write$enq__RDY),
-  .read$enq__RDY(RULEread && !portalRControl), .read$enq$v(read$enq$v), .read$enq$last(), .read$enq__ENA(read$enq__ENA));
 endmodule  // mkZynqTop
