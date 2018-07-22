@@ -37,9 +37,9 @@ module mkZynqTop (
   FIFO1 #(.width(21), .guarded(1)) reqArs(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({ MAXIGP0_O$AR$addr[4:0], { 4'd0, MAXIGP0_O$AR$len + 4'd1, 2'd0 }, MAXIGP0_O$AR$id[5:0]}), .ENQ(MAXIGP0_O$AR__ENA),
         .D_OUT({reqArs$addr, reqArs$count, reqArs$id}),
-        .DEQ(RULEreadNext && readFirstNext), .FULL_N(read_req$EnqRDY), .EMPTY_N(MAXIGP0_O$AR__RDY));
+        .DEQ(RULEreadNext && !readFirstNext), .FULL_N(read_req$EnqRDY), .EMPTY_N(MAXIGP0_O$AR__RDY));
   FIFO1 #(.width(22), .guarded(1)) readBeat(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({readAddrupdate, readburstCount, reqArs$id, readFirstNext}), .ENQ(RULEreadNext),
+        .D_IN({readAddrupdate, readburstCount, reqArs$id, !readFirstNext}), .ENQ(RULEreadNext),
         .D_OUT({readBeat$addr, readBeat$base, readBeat$id, readBeat$last}),
         .DEQ(RULEread), .FULL_N(readBeat$EnqRDY), .EMPTY_N(readBeat$DeqRDY));
   FIFO1 #(.width(38), .guarded(1)) readData(.RST(nRST), .CLK(CLK), .CLR(0),
@@ -50,12 +50,12 @@ module mkZynqTop (
   FIFO1 #(.width(21), .guarded(1)) reqAws(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN({MAXIGP0_O$AW$addr[4:0], { 4'd0, MAXIGP0_O$AW$len + 4'd1, 2'd0 }, MAXIGP0_O$AW$id[5:0] }), .ENQ(RULEAW),
         .D_OUT({reqAws$addr, reqAws$count, reqAws$id}),
-        .DEQ(RULEwriteNext && writeFirstNext), .FULL_N(MAXIGP0_O$AW__RDY), .EMPTY_N(reqAws$DeqRDY));
+        .DEQ(RULEwriteNext && !writeFirstNext), .FULL_N(MAXIGP0_O$AW__RDY), .EMPTY_N(reqAws$DeqRDY));
   FIFO1 #(.width(32), .guarded(1)) writeData(.RST(nRST), .CLK(CLK), .CLR(0),
         .D_IN(MAXIGP0_O$W$data), .ENQ(RULEW),
         .D_OUT(write$enq$v), .DEQ(RULEwrite), .FULL_N(MAXIGP0_O$W__RDY), .EMPTY_N(writeDataDeqRDY));
   FIFO1 #(.width(22), .guarded(1)) writeBeat(.RST(nRST), .CLK(CLK), .CLR(0),
-        .D_IN({ writeAddrupdate, writeburstCount, reqAws$id, writeFirstNext }), .ENQ(RULEwriteNext),
+        .D_IN({ writeAddrupdate, writeburstCount, reqAws$id, !writeFirstNext }), .ENQ(RULEwriteNext),
         .D_OUT({writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}),
         .DEQ(RULEwrite), .FULL_N(writeBeat$EnqRDY), .EMPTY_N(writeBeat$DeqRDY));
   FIFO1 #(.width(6), .guarded(1)) writeDone(.RST(nRST), .CLK(CLK), .CLR(0),
@@ -99,13 +99,13 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   assign RULEwriteNext = reqAws$DeqRDY && writeBeat$EnqRDY ;
 
   assign zzIntrChannel = !selectRIndReq && read$enq__ENA;
-  assign readAddrupdate = readFirst ?  reqArs$addr : readAddr ;
-  assign readburstCount = readFirst ?  { 2'd0, reqArs$count[9:2] } : readCount ;
-  assign readFirstNext = readFirst ? reqArs$count == 4  : readLast ;
+  assign readAddrupdate = !readFirst ?  reqArs$addr : readAddr ;
+  assign readburstCount = !readFirst ?  { 2'd0, reqArs$count[9:2] } : readCount ;
+  assign readFirstNext = !(!readFirst ? reqArs$count == 4  : readLast );
 
-  assign writeAddrupdate = writeFirst ?  reqAws$addr : writeAddr ;
-  assign writeburstCount = writeFirst ?  { 2'd0, reqAws$count[9:2] } : writeCount ;
-  assign writeFirstNext = writeFirst ?  reqAws$count == 4 : writeLast ;
+  assign writeAddrupdate = !writeFirst ?  reqAws$addr : writeAddr ;
+  assign writeburstCount = !writeFirst ?  { 2'd0, reqAws$count[9:2] } : writeCount ;
+  assign writeFirstNext = !(!writeFirst ?  reqAws$count == 4 : writeLast);
 
   always@(readBeat$addr or read$enq$v or write$enq__RDY)
   begin
@@ -134,15 +134,15 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   begin
     if (nRST == 0)
       begin
-        intEnable <=  1'd0;
+        intEnable <=  0;
         readAddr <= 0;
         readCount <= 0;
-        readFirst <= 1'd1;
-        readLast <= 1'd0;
+        readFirst <= 0;
+        readLast <= 0;
         writeAddr <= 0;
         writeCount <= 0;
-        writeFirst <= 1'd1;
-        writeLast <= 1'd0;
+        writeFirst <= 0;
+        writeLast <= 0;
       end
     else
       begin

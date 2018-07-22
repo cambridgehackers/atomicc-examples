@@ -229,7 +229,6 @@ __module TestTop {
     MaxiI            *MAXIGP0_I;
     __uint(1) intEnable, writeFirst, writeLast;
     __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-  //readFirst = 1'd1; //writeFirst = 1'd1;
     BusType requestValue, portalCtrlInfo;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
@@ -291,15 +290,15 @@ __module TestTop {
         }
         __rule lreadNext {
             auto temp = reqArs.out.first();
-            auto readAddrupdate = readFirst ?  temp.addr : readAddr ;
-            auto readburstCount = readFirst ?  __bitsubstr(temp.count, 9, 2) : readCount ;
-            __uint(1) readFirstNext = readFirst ? static_cast<__uint(1)>(temp.count == 4)  : readLast ;
-            readBeat.in.enq(PortalInfo{readAddrupdate, static_cast<AXICount>(readburstCount), temp.id, readFirstNext});
+            auto readAddrupdate = !readFirst ?  temp.addr : readAddr ;
+            auto readburstCount = !readFirst ?  __bitsubstr(temp.count, 9, 2) : readCount ;
+            __uint(1) readFirstNext = !(!readFirst ? static_cast<__uint(1)>(temp.count == 4)  : readLast);
+            readBeat.in.enq(PortalInfo{readAddrupdate, static_cast<AXICount>(readburstCount), temp.id, !readFirstNext});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;
             readFirst = readFirstNext;
             readLast = readburstCount == 2 ;
-            if (readFirstNext)
+            if (!readFirstNext)
                 reqArs.out.deq();
         }
         __rule lR {
@@ -321,15 +320,15 @@ __module TestTop {
         }
         __rule lwriteNext {
             auto temp = reqAws.out.first();
-            auto writeAddrupdate = writeFirst ?  temp.addr : writeAddr ;
-            auto writeburstCount = writeFirst ?  __bitsubstr(temp.count, 9, 2) : writeCount ;
-            __uint(1) writeFirstNext = writeFirst ?  static_cast<__uint(1)>(temp.count == 4) : writeLast ;
-            writeBeat.in.enq({ writeAddrupdate, static_cast<AXICount>(writeburstCount), temp.id, writeFirstNext });
+            auto writeAddrupdate = !writeFirst ?  temp.addr : writeAddr ;
+            auto writeburstCount = !writeFirst ?  __bitsubstr(temp.count, 9, 2) : writeCount ;
+            __uint(1) writeFirstNext = !(!writeFirst ?  static_cast<__uint(1)>(temp.count == 4) : writeLast);
+            writeBeat.in.enq({ writeAddrupdate, static_cast<AXICount>(writeburstCount), temp.id, !writeFirstNext });
             writeAddr = writeAddrupdate + 4 ;
             writeCount = writeburstCount - 1 ;
             writeFirst = writeFirstNext ;
             writeLast = writeburstCount == 2 ;
-            if (writeFirstNext)
+            if (!writeFirstNext)
                  reqAws.out.deq();
         }
         __rule writeResponse {

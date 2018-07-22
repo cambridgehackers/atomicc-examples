@@ -973,16 +973,16 @@ MODULE TestTop {
         ALLOCA l_struct_OC_AddrCount RULElreadNext__ENA$temp
         CALL :reqArs$out$first{}
         LET l_struct_OC_AddrCount :RULElreadNext__ENA$temp = reqArs$out$first
-        LET INTEGER_5 :RULElreadNext__ENA$agg_2e_tmp$ac$addr = ((readFirst) != (0)) ? (RULElreadNext__ENA$temp$addr):(readAddr)
-        LET INTEGER_10 :RULElreadNext__ENA$agg_2e_tmp$ac$count = ((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)
+        LET INTEGER_5 :RULElreadNext__ENA$agg_2e_tmp$ac$addr = (((readFirst) != (0)) ^ 1) ? (RULElreadNext__ENA$temp$addr):(readAddr)
+        LET INTEGER_10 :RULElreadNext__ENA$agg_2e_tmp$ac$count = (((readFirst) != (0)) ^ 1) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)
         LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
-        LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = ((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)
+        LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = (((((((readFirst) != (0)) ^ 1) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)) != (0)) ^ (1)) != (0)) ^ (1)
         CALL/Action :readBeat$in$enq__ENA{RULElreadNext__ENA$agg_2e_tmp}
-        STORE :readAddr = (((readFirst) != (0)) ? (RULElreadNext__ENA$temp$addr):(readAddr)) + (4)
-        STORE :readCount = (((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) - (1)
-        STORE :readFirst = ((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)
-        STORE :readLast = (((readFirst) != (0)) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) == (2)
-        CALL/Action ((((readFirst) != (0)) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)) != (0)):reqArs$out$deq__ENA{}
+        STORE :readAddr = ((((readFirst) != (0)) ^ 1) ? (RULElreadNext__ENA$temp$addr):(readAddr)) + (4)
+        STORE :readCount = ((((readFirst) != (0)) ^ 1) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) - (1)
+        STORE :readFirst = (((((readFirst) != (0)) ^ 1) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)) != (0)) ^ (1)
+        STORE :readLast = ((((readFirst) != (0)) ^ 1) ? (__bitsubstr{RULElreadNext__ENA$temp$count,9,2}):(readCount)) == (2)
+        CALL/Action ((((((((readFirst) != (0)) ^ 1) ? ((RULElreadNext__ENA$temp$count) == (4)):(readLast)) != (0)) ^ (1)) != (0)) ^ 1):reqArs$out$deq__ENA{}
     }
     METHOD/Rule RULElread__ENA {
         ALLOCA l_struct_OC_ReadResp RULElread__ENA$agg_2e_tmp
@@ -1003,16 +1003,16 @@ MODULE TestTop {
         ALLOCA l_struct_OC_AddrCount RULElwriteNext__ENA$temp
         CALL :reqAws$out$first{}
         LET l_struct_OC_AddrCount :RULElwriteNext__ENA$temp = reqAws$out$first
-        LET INTEGER_5 :RULElwriteNext__ENA$agg_2e_tmp$ac$addr = ((writeFirst) != (0)) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)
-        LET INTEGER_10 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = ((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)
+        LET INTEGER_5 :RULElwriteNext__ENA$agg_2e_tmp$ac$addr = (((writeFirst) != (0)) ^ 1) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)
+        LET INTEGER_10 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = (((writeFirst) != (0)) ^ 1) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)
         LET INTEGER_6 :RULElwriteNext__ENA$agg_2e_tmp$ac$id = RULElwriteNext__ENA$temp$id
-        LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = ((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)
+        LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = (((((((writeFirst) != (0)) ^ 1) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)) ^ (1)) != (0)) ^ (1)
         CALL/Action :writeBeat$in$enq__ENA{RULElwriteNext__ENA$agg_2e_tmp}
-        STORE :writeAddr = (((writeFirst) != (0)) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)) + (4)
-        STORE :writeCount = (((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) - (1)
-        STORE :writeFirst = ((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)
-        STORE :writeLast = (((writeFirst) != (0)) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) == (2)
-        CALL/Action ((((writeFirst) != (0)) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)):reqAws$out$deq__ENA{}
+        STORE :writeAddr = ((((writeFirst) != (0)) ^ 1) ? (RULElwriteNext__ENA$temp$addr):(writeAddr)) + (4)
+        STORE :writeCount = ((((writeFirst) != (0)) ^ 1) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) - (1)
+        STORE :writeFirst = (((((writeFirst) != (0)) ^ 1) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)) ^ (1)
+        STORE :writeLast = ((((writeFirst) != (0)) ^ 1) ? (__bitsubstr{RULElwriteNext__ENA$temp$count,9,2}):(writeCount)) == (2)
+        CALL/Action ((((((((writeFirst) != (0)) ^ 1) ? ((RULElwriteNext__ENA$temp$count) == (4)):(writeLast)) != (0)) ^ (1)) != (0)) ^ 1):reqAws$out$deq__ENA{}
     }
     METHOD/Rule RULElwrite__ENA {
         ALLOCA l_struct_OC_BusData RULElwrite__ENA$temp

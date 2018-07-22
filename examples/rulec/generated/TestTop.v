@@ -93,16 +93,16 @@ module TestTop (
     wire writeDone$out$first__RDY;
     assign RULEinit__ENA = 1;
     assign RULElR__ENA = readData$out$first__RDY & readData$out$deq__RDY & MAXIGP0_I$R__RDY;
-    assign RULElreadNext__ENA = reqArs$out$first__RDY & readBeat$in$enq__RDY & ( readFirst ? 4 : ( !readLast ) | reqArs$out$deq__RDY );
+    assign RULElreadNext__ENA = reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( !readFirst ) ? 4 : readLast | reqArs$out$deq__RDY );
     assign RULElread__ENA = readBeat$out$first__RDY & readBeat$out$deq__RDY & ( ( !selectRIndReq ) | readBus$out$first__RDY ) & ( ( !selectRIndReq ) | readBus$out$deq__RDY ) & readData$in$enq__RDY;
-    assign RULElwriteNext__ENA = reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( writeFirst ? 4 : ( !writeLast ) | reqAws$out$deq__RDY );
+    assign RULElwriteNext__ENA = reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( !writeFirst ) ? 4 : writeLast | reqAws$out$deq__RDY );
     assign RULElwrite__ENA = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     assign RULEwriteResponse__ENA = writeDone$out$first__RDY & MAXIGP0_I$B__RDY & writeDone$out$deq__RDY;
     Fifo1_OC_10 reqArs (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AR__ENA),
         .in$enq$v({ MAXIGP0_O$AR$id , ( ( MAXIGP0_O$AR$len + 1 ) << 2 ) , MAXIGP0_O$AR$addr }),
         .in$enq__RDY(MAXIGP0_O$AR__RDY),
-        .out$deq__ENA(readFirst ? ( reqArs$out$first[ 14 : 5 ] == 10'd4 ) : ( readLast & reqArs$out$first__RDY & readBeat$in$enq__RDY )),
+        .out$deq__ENA(( !readFirst ) ? ( reqArs$out$first[ 14 : 5 ] == 10'd4 ) : ( ( !readLast ) & reqArs$out$first__RDY & readBeat$in$enq__RDY )),
         .out$deq__RDY(reqArs$out$deq__RDY),
         .out$first(reqArs$out$first),
         .out$first__RDY(reqArs$out$first__RDY));
@@ -110,21 +110,21 @@ module TestTop (
         .in$enq__ENA(MAXIGP0_O$AW__ENA),
         .in$enq$v({ MAXIGP0_O$AW$id , ( ( MAXIGP0_O$AW$len + 1 ) << 2 ) , MAXIGP0_O$AW$addr }),
         .in$enq__RDY(MAXIGP0_O$AW__RDY),
-        .out$deq__ENA(writeFirst ? ( reqAws$out$first[ 14 : 5 ] == 10'd4 ) : ( writeLast & reqAws$out$first__RDY & writeBeat$in$enq__RDY )),
+        .out$deq__ENA(( !writeFirst ) ? ( reqAws$out$first[ 14 : 5 ] == 10'd4 ) : ( ( !writeLast ) & reqAws$out$first__RDY & writeBeat$in$enq__RDY )),
         .out$deq__RDY(reqAws$out$deq__RDY),
         .out$first(reqAws$out$first),
         .out$first__RDY(reqAws$out$first__RDY));
     Fifo1_OC_12 readBeat (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqArs$out$first__RDY & ( readFirst ? 4 : ( !readLast ) | reqArs$out$deq__RDY ) & ( readFirst ? 4 : ( !readLast ) | reqArs$out$deq__RDY )),
-        .in$enq$v({ ( reqArs$out$first__RDY & readBeat$in$enq__RDY & readFirst ) ? 4 : ( ( !readLast ) | reqArs$out$deq__RDY ) ? readFirst ? ( reqArs$out$first[ 14 : 5 ] == 10'd4 ) : readLast : 0 , reqArs$out$first[ 20 : 15 ] , readFirst ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : readCount , readFirst ? reqArs$out$first[ 4 : 0 ] : readAddr }),
+        .in$enq__ENA(reqArs$out$first__RDY & ( ( !readFirst ) ? 4 : readLast | reqArs$out$deq__RDY ) & ( ( !readFirst ) ? 4 : readLast | reqArs$out$deq__RDY )),
+        .in$enq$v({ ( reqArs$out$first__RDY & readBeat$in$enq__RDY & ( !readFirst ) ) ? 4 : ( readLast | reqArs$out$deq__RDY ) ? ( !readFirst ) ? ( reqArs$out$first[ 14 : 5 ] == 10'd4 ) : ( !readLast ) : 0 , reqArs$out$first[ 20 : 15 ] , ( !readFirst ) ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : readCount , ( !readFirst ) ? reqArs$out$first[ 4 : 0 ] : readAddr }),
         .in$enq__RDY(readBeat$in$enq__RDY),
         .out$deq__ENA(readBeat$out$first__RDY & ( ( !selectRIndReq ) | readBus$out$first__RDY ) & ( ( !selectRIndReq ) | readBus$out$deq__RDY ) & readData$in$enq__RDY & ( ( !selectRIndReq ) | readBus$out$first__RDY ) & ( ( !selectRIndReq ) | readBus$out$deq__RDY )),
         .out$deq__RDY(readBeat$out$deq__RDY),
         .out$first(readBeat$out$first),
         .out$first__RDY(readBeat$out$first__RDY));
     Fifo1_OC_12 writeBeat (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqAws$out$first__RDY & ( writeFirst ? 4 : ( !writeLast ) | reqAws$out$deq__RDY ) & ( writeFirst ? 4 : ( !writeLast ) | reqAws$out$deq__RDY )),
-        .in$enq$v({ ( reqAws$out$first__RDY & writeBeat$in$enq__RDY & writeFirst ) ? 4 : ( ( !writeLast ) | reqAws$out$deq__RDY ) ? writeFirst ? ( reqAws$out$first[ 14 : 5 ] == 10'd4 ) : writeLast : 0 , reqAws$out$first[ 20 : 15 ] , writeFirst ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : writeCount , writeFirst ? reqAws$out$first[ 4 : 0 ] : writeAddr }),
+        .in$enq__ENA(reqAws$out$first__RDY & ( ( !writeFirst ) ? 4 : writeLast | reqAws$out$deq__RDY ) & ( ( !writeFirst ) ? 4 : writeLast | reqAws$out$deq__RDY )),
+        .in$enq$v({ ( reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( !writeFirst ) ) ? 4 : ( writeLast | reqAws$out$deq__RDY ) ? ( !writeFirst ) ? ( reqAws$out$first[ 14 : 5 ] == 10'd4 ) : ( !writeLast ) : 0 , reqAws$out$first[ 20 : 15 ] , ( !writeFirst ) ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : writeCount , ( !writeFirst ) ? reqAws$out$first[ 4 : 0 ] : writeAddr }),
         .in$enq__RDY(writeBeat$in$enq__RDY),
         .out$deq__ENA(( !writeBeat$out$first__RDY ) & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[ 21 : 21 ] & writeBeat$out$first__RDY & ( portalWControl | user$write$enq__RDY ) & ( portalWControl | user$write$enq__RDY )),
         .out$deq__RDY(writeBeat$out$deq__RDY),
@@ -214,21 +214,21 @@ module TestTop (
             portalWControl <= MAXIGP0_O$AW$addr[ 11 : 5 ] == 32'd0;
             selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ];
         end; // End of MAXIGP0_O$AW__ENA
-        if (RULElreadNext__ENA & reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( readFirst ? ( 4 ) : readLast == 0 ) | reqArs$out$deq__RDY )) begin
-            readAddr <= readFirst ? reqArs$out$first[4:0] : ( readAddr + 4 );
-            readCount <= readFirst ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : ( readCount - 1 );
-            readFirst <= readFirst ? ( reqArs$out$first[14:5] == 10'd4 ) : readLast;
-            readLast <= readFirst ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : ( readCount == 10'd2 );
+        if (RULElreadNext__ENA & reqArs$out$first__RDY & readBeat$in$enq__RDY & ( ( ( !readFirst ) ? ( 4 ) : readLast != 0 ) | reqArs$out$deq__RDY )) begin
+            readAddr <= ( !readFirst ) ? reqArs$out$first[4:0] : ( readAddr + 4 );
+            readCount <= ( !readFirst ) ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : ( readCount - 1 );
+            readFirst <= ( !readFirst ) ? ( reqArs$out$first[14:5] == 10'd4 ) : ( !readLast );
+            readLast <= ( !readFirst ) ? RULElreadNext__ENA$temp$count[ 9 : 2 ] : ( readCount == 10'd2 );
         end; // End of RULElreadNext__ENA
         if (RULElwrite__ENA & writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY )) begin
             if (( writeBeat$out$first[4:0] == 5'd4 ) & portalWControl & ( !writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[21:21] ))
             intEnable <= RULElwrite__ENA$temp$data[ 0 : 0 ];
         end; // End of RULElwrite__ENA
-        if (RULElwriteNext__ENA & reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( writeFirst ? ( 4 ) : writeLast == 0 ) | reqAws$out$deq__RDY )) begin
-            writeAddr <= writeFirst ? reqAws$out$first[4:0] : ( writeAddr + 4 );
-            writeCount <= writeFirst ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : ( writeCount - 1 );
-            writeFirst <= writeFirst ? ( reqAws$out$first[14:5] == 10'd4 ) : writeLast;
-            writeLast <= writeFirst ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : ( writeCount == 10'd2 );
+        if (RULElwriteNext__ENA & reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( ( !writeFirst ) ? ( 4 ) : writeLast != 0 ) | reqAws$out$deq__RDY )) begin
+            writeAddr <= ( !writeFirst ) ? reqAws$out$first[4:0] : ( writeAddr + 4 );
+            writeCount <= ( !writeFirst ) ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : ( writeCount - 1 );
+            writeFirst <= ( !writeFirst ) ? ( reqAws$out$first[14:5] == 10'd4 ) : ( !writeLast );
+            writeLast <= ( !writeFirst ) ? RULElwriteNext__ENA$temp$count[ 9 : 2 ] : ( writeCount == 10'd2 );
         end; // End of RULElwriteNext__ENA
       end
     end // always @ (posedge CLK)
