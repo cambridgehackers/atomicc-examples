@@ -29,7 +29,9 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]x;
     reg [31:0]y;
     wire RULEdelay_rule__ENA;
+    wire RULEdelay_rule__RDY;
     wire RULErespond_rule__ENA;
+    wire RULErespond_rule__RDY;
     assign RULEdelay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULErespond_rule__ENA = busy_delay & indication$heard__RDY;
     assign indication$heard$meth = meth_delay;
@@ -40,6 +42,9 @@ module Echo (input wire CLK, input wire nRST,
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
+    // Extra assigments, not to output wires
+    assign RULEdelay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
+    assign RULErespond_rule__RDY = busy_delay & indication$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -64,18 +69,18 @@ module Echo (input wire CLK, input wire nRST,
             busy_delay <= 0;
             $display( "respond_rule: Echo" );
         end; // End of RULErespond_rule__ENA
-        if (request$say__ENA & request$say__RDY) begin
-            meth_temp <= request$say$meth;
-            v_temp <= request$say$v;
-            busy <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 186 );
-        end; // End of request$say__ENA
         if (request$say2__ENA & request$say2__RDY) begin
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;
             busy <= 1;
             $display( "[%s:%d]Echo" , "request$say2" , 192 );
         end; // End of request$say2__ENA
+        if (request$say__ENA & request$say__RDY) begin
+            meth_temp <= request$say$meth;
+            v_temp <= request$say$v;
+            busy <= 1;
+            $display( "[%s:%d]Echo" , "request$say" , 186 );
+        end; // End of request$say__ENA
         if (swap$x2y__ENA & swap$x2y__RDY) begin
             y <= x;
             $display( "[%s:%d]Echo" , "swap$x2y" , 206 );

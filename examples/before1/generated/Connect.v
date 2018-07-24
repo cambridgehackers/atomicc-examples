@@ -15,27 +15,57 @@ module Connect (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard$v,
     input wire indication$heard__RDY);
     wire RULEswap2_rule__ENA;
+    wire RULEswap2_rule__RDY;
     wire RULEswap_rule__ENA;
+    wire RULEswap_rule__RDY;
+    wire lEII_test$indication$heard__RDY;
+    wire [95:0]lEII_test$pipe$enq$v;
     wire lEII_test$pipe$enq__ENA;
     wire lEII_test$pipe$enq__RDY;
+    wire [31:0]lEIO$indication$heard$meth;
+    wire [31:0]lEIO$indication$heard$v;
     wire lEIO$indication$heard__ENA;
     wire lEIO$indication$heard__RDY;
     wire [95:0]lEIO$pipe$enq$v;
+    wire lEIO$pipe$enq__ENA;
+    wire lEIO$pipe$enq__RDY;
+    wire [191:0]lERI$pipe$enq$v;
     wire lERI$pipe$enq__ENA;
     wire lERI$pipe$enq__RDY;
     wire [31:0]lERI$request$say$meth;
     wire [31:0]lERI$request$say$v;
     wire [31:0]lERI$request$say2$meth;
     wire [31:0]lERI$request$say2$v;
+    wire lERI$request$say2__ENA;
+    wire lERI$request$say2__RDY;
+    wire lERI$request$say__ENA;
+    wire lERI$request$say__RDY;
     wire [191:0]lERO_test$pipe$enq$v;
+    wire lERO_test$pipe$enq__ENA;
+    wire lERO_test$pipe$enq__RDY;
+    wire [31:0]lERO_test$request$say$meth;
+    wire [31:0]lERO_test$request$say$v;
+    wire [31:0]lERO_test$request$say2$meth;
+    wire [31:0]lERO_test$request$say2$v;
+    wire lERO_test$request$say2__ENA;
+    wire lERO_test$request$say__ENA;
     wire [31:0]lEcho$indication$heard$meth;
     wire [31:0]lEcho$indication$heard$v;
+    wire lEcho$indication$heard__ENA;
+    wire lEcho$indication$heard__RDY;
+    wire [31:0]lEcho$request$say$meth;
+    wire [31:0]lEcho$request$say$v;
+    wire [31:0]lEcho$request$say2$meth;
+    wire [31:0]lEcho$request$say2$v;
     wire lEcho$request$say2__ENA;
     wire lEcho$request$say2__RDY;
     wire lEcho$request$say__ENA;
     wire lEcho$request$say__RDY;
+    wire lEcho$swap$x2y__ENA;
     wire lEcho$swap$x2y__RDY;
+    wire lEcho$swap$y2x__ENA;
     wire lEcho$swap$y2x__RDY;
+    wire lEcho$swap$y2xnull__ENA;
     wire lEcho$swap$y2xnull__RDY;
     assign RULEswap2_rule__ENA = lEcho$swap$y2xnull__RDY;
     assign RULEswap_rule__ENA = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
@@ -98,6 +128,37 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard$meth(indication$heard$meth),
         .indication$heard$v(indication$heard$v),
         .indication$heard__RDY(indication$heard__RDY));
+    assign lEII_test$indication$heard__RDY = indication$heard__RDY;
+    assign lEII_test$pipe$enq$v = lEIO$pipe$enq$v;
+    assign lEIO$indication$heard$meth = lEcho$indication$heard$meth;
+    assign lEIO$indication$heard$v = lEcho$indication$heard$v;
+    assign lEIO$pipe$enq__ENA = lEII_test$pipe$enq__ENA;
+    assign lEIO$pipe$enq__RDY = lEII_test$pipe$enq__RDY;
+    assign lERI$pipe$enq$v = lERO_test$pipe$enq$v;
+    assign lERI$request$say2__ENA = lEcho$request$say2__ENA;
+    assign lERI$request$say2__RDY = lEcho$request$say2__RDY;
+    assign lERI$request$say__ENA = lEcho$request$say__ENA;
+    assign lERI$request$say__RDY = lEcho$request$say__RDY;
+    assign lERO_test$pipe$enq__ENA = lERI$pipe$enq__ENA;
+    assign lERO_test$pipe$enq__RDY = lERI$pipe$enq__RDY;
+    assign lERO_test$request$say$meth = request$say$meth;
+    assign lERO_test$request$say$v = request$say$v;
+    assign lERO_test$request$say2$meth = request$say2$meth;
+    assign lERO_test$request$say2$v = request$say2$v;
+    assign lERO_test$request$say2__ENA = request$say2__ENA & request$say2__RDY;
+    assign lERO_test$request$say__ENA = request$say__ENA & request$say__RDY;
+    assign lEcho$indication$heard__ENA = lEIO$indication$heard__ENA;
+    assign lEcho$indication$heard__RDY = lEIO$indication$heard__RDY;
+    assign lEcho$request$say$meth = lERI$request$say$meth;
+    assign lEcho$request$say$v = lERI$request$say$v;
+    assign lEcho$request$say2$meth = lERI$request$say2$meth;
+    assign lEcho$request$say2$v = lERI$request$say2$v;
+    assign lEcho$swap$x2y__ENA = lEcho$swap$y2x__RDY;
+    assign lEcho$swap$y2x__ENA = lEcho$swap$x2y__RDY;
+    assign lEcho$swap$y2xnull__ENA = 1;
+    // Extra assigments, not to output wires
+    assign RULEswap2_rule__RDY = lEcho$swap$y2xnull__RDY;
+    assign RULEswap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -12,10 +12,13 @@ module Fifo1_OC_2 (input wire CLK, input wire nRST,
     reg [5:0]element$a;
     reg [3:0]element$b;
     reg full;
+    wire [9:0]element;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
     assign out$first = { element$b , element$a };
     assign out$first__RDY = full;
+    // Extra assigments, not to output wires
+    assign element = { element$b , element$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

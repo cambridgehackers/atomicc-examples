@@ -78,6 +78,8 @@ __module ModFt600 {
             int i = 0;
             do {
                 iobufs[i]._.IO = _.usb_ad >> i;
+                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
+                //iobufs[i]._.T = _.usb_oe_n;
             } while(++i < 16);  // for loop unrolling to work, block must end in conditional
         }
 #endif

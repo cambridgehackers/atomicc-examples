@@ -10,17 +10,35 @@ module UserTop (input wire CLK, input wire nRST,
     output wire [31:0]read$enq$v,
     output wire read$enq$last,
     input wire read$enq__RDY);
+    wire [127:0]ctop$indication$enq$v;
+    wire ctop$indication$enq__ENA;
+    wire ctop$indication$enq__RDY;
+    wire [127:0]ctop$request$enq$v;
+    wire ctop$request$enq__ENA;
     wire ctop$request$enq__RDY;
     wire [127:0]indication$enq$v;
     wire indication$enq__ENA;
+    wire indication$enq__RDY;
+    wire [15:0]radapter_0$in$enq$length;
+    wire [127:0]radapter_0$in$enq$v;
+    wire radapter_0$in$enq__ENA;
     wire radapter_0$in$enq__RDY;
+    wire radapter_0$out$enq__RDY;
     wire [15:0]wad$enq$length;
     wire [127:0]wad$enq$v;
     wire wad$enq__ENA;
+    wire wad$enq__RDY;
+    wire wadapter_0$in$enq$last;
+    wire [31:0]wadapter_0$in$enq$v;
+    wire wadapter_0$in$enq__ENA;
+    wire [15:0]wadapter_0$out$enq$length;
+    wire [127:0]wadapter_0$out$enq$v;
+    wire wadapter_0$out$enq__ENA;
+    wire wadapter_0$out$enq__RDY;
     AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(indication$enq__ENA),
-        .in$enq$v(indication$enq$v),
-        .in$enq$length(indication$enq$v[ 15 : 0 ] - 1),
+        .in$enq$v(ctop$indication$enq$v),
+        .in$enq$length(ctop$indication$enq$v - 1),
         .in$enq__RDY(radapter_0$in$enq__RDY),
         .out$enq__ENA(read$enq__ENA),
         .out$enq$v(read$enq$v),
@@ -32,26 +50,45 @@ module UserTop (input wire CLK, input wire nRST,
         .in$enq$last(write$enq$last),
         .in$enq__RDY(write$enq__RDY),
         .out$enq__ENA(wad$enq__ENA),
-        .out$enq$v(wad$enq$v),
-        .out$enq$length(wad$enq$length),
+        .out$enq$v(wadapter_0$out$enq$v),
+        .out$enq$length(wadapter_0$out$enq$length),
         .out$enq__RDY(ctop$request$enq__RDY));
     l_top ctop (.CLK(CLK), .nRST(nRST),
         .indication$enq__ENA(indication$enq__ENA),
-        .indication$enq$v(indication$enq$v),
+        .indication$enq$v(ctop$indication$enq$v),
         .indication$enq__RDY(radapter_0$in$enq__RDY),
         .request$enq__ENA(wad$enq__ENA),
-        .request$enq$v(wad$enq$v),
+        .request$enq$v(wadapter_0$out$enq$v),
         .request$enq__RDY(ctop$request$enq__RDY));
+    assign ctop$indication$enq__ENA = indication$enq__ENA;
+    assign ctop$indication$enq__RDY = radapter_0$in$enq__RDY;
+    assign ctop$request$enq$v = wadapter_0$out$enq$v;
+    assign ctop$request$enq__ENA = wad$enq__ENA;
+    assign indication$enq$v = ctop$indication$enq$v;
+    assign radapter_0$in$enq$length = ctop$indication$enq$v - 1;
+    assign radapter_0$in$enq$v = ctop$indication$enq$v;
+    assign radapter_0$in$enq__ENA = indication$enq__ENA;
+    assign radapter_0$out$enq__RDY = read$enq__RDY;
+    assign wad$enq$length = wadapter_0$out$enq$length;
+    assign wad$enq$v = wadapter_0$out$enq$v;
+    assign wadapter_0$in$enq$last = write$enq$last;
+    assign wadapter_0$in$enq$v = write$enq$v;
+    assign wadapter_0$in$enq__ENA = write$enq__ENA;
+    assign wadapter_0$out$enq__ENA = wad$enq__ENA;
+    assign wadapter_0$out$enq__RDY = ctop$request$enq__RDY;
+    // Extra assigments, not to output wires
+    assign indication$enq__RDY = radapter_0$in$enq__RDY;
+    assign wad$enq__RDY = ctop$request$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (indication$enq__ENA & radapter_0$in$enq__RDY) begin
-            $display( "indConnect.enq v %llx len %lx" , indication$enq$v , indication$enq$v[ 15 : 0 ] - 1 );
+            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , indication$enq$v[ 15 : 0 ] - 1 );
         end; // End of indication$enq__ENA
         if (wad$enq__ENA & ctop$request$enq__RDY) begin
-            $display( "reqConnect.enq v %llx length %lx" , wad$enq$v , wad$enq$length );
+            $display( "reqConnect.enq v %llx length %lx" , wadapter_0$out$enq$v , wadapter_0$out$enq$length );
         end; // End of wad$enq__ENA
       end
     end // always @ (posedge CLK)

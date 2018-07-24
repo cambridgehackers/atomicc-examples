@@ -61,7 +61,7 @@
 //METAGUARD; RULErespond_rule_8; fifo8$out$first__RDY & fifo8$out$deq__RDY & out$heard__RDY;
 //METAINVOKE; RULErespond_rule_9__ENA; :fifo9$out$deq__ENA;:fifo9$out$first;:out$heard__ENA;
 //METAGUARD; RULErespond_rule_9; fifo9$out$first__RDY & fifo9$out$deq__RDY & out$heard__RDY;
-//METAINVOKE; in$say__ENA; in$say$meth == 32'd0:fifo0$in$enq__ENA;in$say$meth == 32'd1:fifo1$in$enq__ENA;in$say$meth == 32'd2:fifo2$in$enq__ENA;in$say$meth == 32'd3:fifo3$in$enq__ENA;in$say$meth == 32'd4:fifo4$in$enq__ENA;in$say$meth == 32'd5:fifo5$in$enq__ENA;in$say$meth == 32'd6:fifo6$in$enq__ENA;in$say$meth == 32'd7:fifo7$in$enq__ENA;in$say$meth == 32'd8:fifo8$in$enq__ENA;in$say$meth == 32'd9:fifo9$in$enq__ENA;
+//METAINVOKE; in$say__ENA; in$say$meth == 0:fifo0$in$enq__ENA;in$say$meth == 1:fifo1$in$enq__ENA;in$say$meth == 2:fifo2$in$enq__ENA;in$say$meth == 3:fifo3$in$enq__ENA;in$say$meth == 4:fifo4$in$enq__ENA;in$say$meth == 5:fifo5$in$enq__ENA;in$say$meth == 6:fifo6$in$enq__ENA;in$say$meth == 7:fifo7$in$enq__ENA;in$say$meth == 8:fifo8$in$enq__ENA;in$say$meth == 9:fifo9$in$enq__ENA;
 //METAGUARD; in$say; fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
 //METARULES; RULErespond_rule_0; RULErespond_rule_1; RULErespond_rule_2; RULErespond_rule_3; RULErespond_rule_4; RULErespond_rule_5; RULErespond_rule_6; RULErespond_rule_7; RULErespond_rule_8; RULErespond_rule_9
 //METASTART; MuxPipe

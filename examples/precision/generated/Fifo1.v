@@ -14,10 +14,13 @@ module Fifo1 (input wire CLK, input wire nRST,
     reg [31:0]element$data2;
     reg [31:0]element$data3;
     reg full;
+    wire [127:0]element;
     assign in$enq__RDY = 1;
     assign out$deq__RDY = 1;
     assign out$first = { element$data3 , element$data2 , element$data1 , element$data0 };
     assign out$first__RDY = 1;
+    // Extra assigments, not to output wires
+    assign element = { element$data3 , element$data2 , element$data1 , element$data0 };
 
     always @( posedge CLK) begin
       if (!nRST) begin

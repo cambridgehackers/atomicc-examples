@@ -32,10 +32,13 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
     reg [31:0]element$c8;
     reg [31:0]element$c9;
     reg full;
+    wire [703:0]element;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
     assign out$first = { element$c19 , element$c18 , element$c17 , element$c16 , element$c15 , element$c14 , element$c13 , element$c12 , element$c11 , element$c10 , element$c9 , element$c8 , element$c7 , element$c6 , element$c5 , element$c4 , element$c3 , element$c2 , element$c1 , element$c0 , element$b , element$a };
     assign out$first__RDY = full;
+    // Extra assigments, not to output wires
+    assign element = { element$c19 , element$c18 , element$c17 , element$c16 , element$c15 , element$c14 , element$c13 , element$c12 , element$c11 , element$c10 , element$c9 , element$c8 , element$c7 , element$c6 , element$c5 , element$c4 , element$c3 , element$c2 , element$c1 , element$c0 , element$b , element$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

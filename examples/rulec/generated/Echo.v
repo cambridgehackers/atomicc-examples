@@ -37,7 +37,9 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_temp;
     reg [31:0]v_type;
     wire RULEdelay_rule__ENA;
+    wire RULEdelay_rule__RDY;
     wire RULErespond_rule__ENA;
+    wire RULErespond_rule__RDY;
     assign RULEdelay_rule__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
     assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
     assign indication$heard$v = v_delay;
@@ -54,6 +56,9 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    // Extra assigments, not to output wires
+    assign RULEdelay_rule__RDY = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
+    assign RULErespond_rule__RDY = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -80,12 +85,6 @@ module Echo (input wire CLK, input wire nRST,
             busy_delay <= 0;
             $display( "[respond_rule:%d]Echo" , 6 );
         end; // End of RULErespond_rule__ENA
-        if (request$say__ENA & request$say__RDY) begin
-            v_temp <= request$say$v;
-            busy <= 1;
-            v_type <= 1;
-            $display( "[%s:%d]Echo" , "request$say" , 1 );
-        end; // End of request$say__ENA
         if (request$say2__ENA & request$say2__RDY) begin
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
@@ -93,6 +92,12 @@ module Echo (input wire CLK, input wire nRST,
             v_type <= 2;
             $display( "[%s:%d]Echo" , "request$say2" , 2 );
         end; // End of request$say2__ENA
+        if (request$say__ENA & request$say__RDY) begin
+            v_temp <= request$say$v;
+            busy <= 1;
+            v_type <= 1;
+            $display( "[%s:%d]Echo" , "request$say" , 1 );
+        end; // End of request$say__ENA
         if (request$zsay4__ENA & request$zsay4__RDY) begin
             $display( "[%s:%d]Echo" , "request$zsay4" , 4 );
         end; // End of request$zsay4__ENA
