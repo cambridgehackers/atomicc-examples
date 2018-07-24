@@ -55,13 +55,21 @@ module P7Wrap (
     input wire [3:0]FCLKCLKTRIGN,
     output wire [3:0]FCLKRESETN);
     wire RULEgp0ar$100__ENA;
+    wire RULEgp0ar$100__RDY;
     wire RULEgp0ar__ENA;
+    wire RULEgp0ar__RDY;
     wire RULEgp0aw$100__ENA;
+    wire RULEgp0aw$100__RDY;
     wire RULEgp0aw__ENA;
+    wire RULEgp0aw__RDY;
     wire RULEgp0w$100__ENA;
+    wire RULEgp0w$100__RDY;
     wire RULEgp0w__ENA;
+    wire RULEgp0w__RDY;
     wire RULEinit$100__ENA;
+    wire RULEinit$100__RDY;
     wire RULEinit__ENA;
+    wire RULEinit__RDY;
     wire pclockTop$clockOut;
     wire [14:0]pps$DDRA;
     wire [2:0]pps$DDRBA;
@@ -662,6 +670,38 @@ module P7Wrap (
     wire pps$SAXIHP3WRISSUECAP1EN;
     wire [7:0]pps$SAXIHP3WSTRB;
     wire pps$SAXIHP3WVALID;
+    assign DDR_Addr = pps$DDRA;
+    assign DDR_BankAddr = pps$DDRBA;
+    assign DDR_CAS_n = pps$DDRCASB;
+    assign DDR_CKE = pps$DDRCKE;
+    assign DDR_CS_n = pps$DDRCSB;
+    assign DDR_Clk_n = pps$DDRCKN;
+    assign DDR_Clk_p = pps$DDRCKP;
+    assign DDR_DM = pps$DDRDM;
+    assign DDR_DQ = pps$DDRDQ;
+    assign DDR_DQS_n = pps$DDRDQSN;
+    assign DDR_DQS_p = pps$DDRDQSP;
+    assign DDR_DRSTB = pps$DDRDRSTB;
+    assign DDR_ODT = pps$DDRODT;
+    assign DDR_RAS_n = pps$DDRRASB;
+    assign DDR_WEB = pps$DDRWEB;
+    assign FIXED_IO_ddr_vrn = pps$DDRVRN;
+    assign FIXED_IO_ddr_vrp = pps$DDRVRP;
+    assign FIXED_IO_ps_clk = pps$PSCLK;
+    assign FIXED_IO_ps_porb = pps$PSPORB;
+    assign FIXED_IO_ps_srstb = pps$PSSRSTB;
+    assign MAXIGP0_O$AR$addr = ( pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARADDR : pps$MAXIGP0ARADDR;
+    assign MAXIGP0_O$AR$id = ( pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARID : pps$MAXIGP0ARID;
+    assign MAXIGP0_O$AR$len = ( pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARLEN : pps$MAXIGP0ARLEN;
+    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID || pps$MAXIGP0ARVALID;
+    assign MAXIGP0_O$AW$addr = ( pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWADDR : pps$MAXIGP0AWADDR;
+    assign MAXIGP0_O$AW$id = ( pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWID : pps$MAXIGP0AWID;
+    assign MAXIGP0_O$AW$len = ( pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWLEN : pps$MAXIGP0AWLEN;
+    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID || pps$MAXIGP0AWVALID;
+    assign MAXIGP0_O$W$data = ( pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WDATA : pps$MAXIGP0WDATA;
+    assign MAXIGP0_O$W$id = ( pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WID : pps$MAXIGP0WID;
+    assign MAXIGP0_O$W$last = ( pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WLAST : ( pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST );
+    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID || pps$MAXIGP0WVALID;
     assign RULEgp0ar$100__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
     assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
     assign RULEgp0aw$100__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
@@ -1295,38 +1335,6 @@ module P7Wrap (
         .userCLK(CLK),
         .usernRST(nRST),
         .clockOut(pclockTop$clockOut));
-    assign DDR_Addr = pps$DDRA;
-    assign DDR_BankAddr = pps$DDRBA;
-    assign DDR_CAS_n = pps$DDRCASB;
-    assign DDR_CKE = pps$DDRCKE;
-    assign DDR_CS_n = pps$DDRCSB;
-    assign DDR_Clk_n = pps$DDRCKN;
-    assign DDR_Clk_p = pps$DDRCKP;
-    assign DDR_DM = pps$DDRDM;
-    assign DDR_DQ = pps$DDRDQ;
-    assign DDR_DQS_n = pps$DDRDQSN;
-    assign DDR_DQS_p = pps$DDRDQSP;
-    assign DDR_DRSTB = pps$DDRDRSTB;
-    assign DDR_ODT = pps$DDRODT;
-    assign DDR_RAS_n = pps$DDRRASB;
-    assign DDR_WEB = pps$DDRWEB;
-    assign FIXED_IO_ddr_vrn = pps$DDRVRN;
-    assign FIXED_IO_ddr_vrp = pps$DDRVRP;
-    assign FIXED_IO_ps_clk = pps$PSCLK;
-    assign FIXED_IO_ps_porb = pps$PSPORB;
-    assign FIXED_IO_ps_srstb = pps$PSSRSTB;
-    assign MAXIGP0_O$AR$addr = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARADDR : pps$MAXIGP0ARADDR;
-    assign MAXIGP0_O$AR$id = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARID : pps$MAXIGP0ARID;
-    assign MAXIGP0_O$AR$len = ( RULEgp0ar__ENA & pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY ) ? pps$MAXIGP0ARLEN : pps$MAXIGP0ARLEN;
-    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID || pps$MAXIGP0ARVALID;
-    assign MAXIGP0_O$AW$addr = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWADDR : pps$MAXIGP0AWADDR;
-    assign MAXIGP0_O$AW$id = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWID : pps$MAXIGP0AWID;
-    assign MAXIGP0_O$AW$len = ( RULEgp0aw__ENA & pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY ) ? pps$MAXIGP0AWLEN : pps$MAXIGP0AWLEN;
-    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID || pps$MAXIGP0AWVALID;
-    assign MAXIGP0_O$W$data = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WDATA : pps$MAXIGP0WDATA;
-    assign MAXIGP0_O$W$id = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WID : pps$MAXIGP0WID;
-    assign MAXIGP0_O$W$last = ( RULEgp0w__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) ? pps$MAXIGP0WLAST : ( RULEgp0w$100__ENA & pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY ) & pps$MAXIGP0WLAST;
-    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID || pps$MAXIGP0WVALID;
     assign pps$DMA0ACLK = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DAREADY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$DMA0DRLAST = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -1636,6 +1644,15 @@ module P7Wrap (
     assign pps$SAXIHP3WRISSUECAP1EN = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$SAXIHP3WSTRB = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign pps$SAXIHP3WVALID = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    // Extra assigments, not to output wires
+    assign RULEgp0ar$100__RDY = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
+    assign RULEgp0ar__RDY = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
+    assign RULEgp0aw$100__RDY = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
+    assign RULEgp0aw__RDY = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
+    assign RULEgp0w$100__RDY = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+    assign RULEgp0w__RDY = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+    assign RULEinit$100__RDY = 1;
+    assign RULEinit__RDY = 1;
 endmodule 
 
 `default_nettype wire    // set back to default value

@@ -16,6 +16,7 @@ module ModFt600 (
     reg usb_txe_delay;
     wire RULEhandshake__ENA;
     wire RULEiobufs__ENA;
+    wire RULEiobufs__RDY;
     wire iobufs0$I;
     wire iobufs0$O;
     wire iobufs0$T;
@@ -66,6 +67,9 @@ module ModFt600 (
     wire iobufs9$T;
     assign RULEhandshake__ENA = 1;
     assign RULEiobufs__ENA = 1;
+    assign usb_oe_n = usb_rxf_delay;
+    assign usb_rd_n = usb_rxf_delay != 2'd0;
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     IOBUF iobufs0 (
         .IO(usb_ad >> 0),
         .I(iobufs0$I),
@@ -179,9 +183,8 @@ module ModFt600 (
     assign iobufs9$I = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign iobufs9$T = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign usb_oe_n = usb_rxf_delay;
-    assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
+    // Extra assigments, not to output wires
+    assign RULEiobufs__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin

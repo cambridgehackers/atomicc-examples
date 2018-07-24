@@ -17,21 +17,37 @@ module ModFt600 (
     wire CLK;
     wire RULEhandshake__ENA;
     wire RULEiobufs_0__ENA;
+    wire RULEiobufs_0__RDY;
     wire RULEiobufs_10__ENA;
+    wire RULEiobufs_10__RDY;
     wire RULEiobufs_11__ENA;
+    wire RULEiobufs_11__RDY;
     wire RULEiobufs_12__ENA;
+    wire RULEiobufs_12__RDY;
     wire RULEiobufs_13__ENA;
+    wire RULEiobufs_13__RDY;
     wire RULEiobufs_14__ENA;
+    wire RULEiobufs_14__RDY;
     wire RULEiobufs_15__ENA;
+    wire RULEiobufs_15__RDY;
     wire RULEiobufs_1__ENA;
+    wire RULEiobufs_1__RDY;
     wire RULEiobufs_2__ENA;
+    wire RULEiobufs_2__RDY;
     wire RULEiobufs_3__ENA;
+    wire RULEiobufs_3__RDY;
     wire RULEiobufs_4__ENA;
+    wire RULEiobufs_4__RDY;
     wire RULEiobufs_5__ENA;
+    wire RULEiobufs_5__RDY;
     wire RULEiobufs_6__ENA;
+    wire RULEiobufs_6__RDY;
     wire RULEiobufs_7__ENA;
+    wire RULEiobufs_7__RDY;
     wire RULEiobufs_8__ENA;
+    wire RULEiobufs_8__RDY;
     wire RULEiobufs_9__ENA;
+    wire RULEiobufs_9__RDY;
     wire iobufs0$I;
     wire iobufs0$O;
     wire iobufs0$T;
@@ -98,6 +114,9 @@ module ModFt600 (
     assign RULEiobufs_7__ENA = 1;
     assign RULEiobufs_8__ENA = 1;
     assign RULEiobufs_9__ENA = 1;
+    assign usb_oe_n = usb_rxf_delay;
+    assign usb_rd_n = usb_rxf_delay != 2'd0;
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     IOBUF iobufs0 (
         .CLK(CLK),
         .RST_N(nRST),
@@ -243,9 +262,23 @@ module ModFt600 (
     assign iobufs9$I = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign iobufs9$T = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign usb_oe_n = usb_rxf_delay;
-    assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
+    // Extra assigments, not to output wires
+    assign RULEiobufs_0__RDY = 1;
+    assign RULEiobufs_10__RDY = 1;
+    assign RULEiobufs_11__RDY = 1;
+    assign RULEiobufs_12__RDY = 1;
+    assign RULEiobufs_13__RDY = 1;
+    assign RULEiobufs_14__RDY = 1;
+    assign RULEiobufs_15__RDY = 1;
+    assign RULEiobufs_1__RDY = 1;
+    assign RULEiobufs_2__RDY = 1;
+    assign RULEiobufs_3__RDY = 1;
+    assign RULEiobufs_4__RDY = 1;
+    assign RULEiobufs_5__RDY = 1;
+    assign RULEiobufs_6__RDY = 1;
+    assign RULEiobufs_7__RDY = 1;
+    assign RULEiobufs_8__RDY = 1;
+    assign RULEiobufs_9__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
