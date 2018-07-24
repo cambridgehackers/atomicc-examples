@@ -16,7 +16,7 @@ module Fifo1_OC_12 (input wire CLK, input wire nRST,
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
-    assign out$first = { element$last , element$ac$id , element$ac$count , element$ac$addr };
+    assign out$first = { element$last , element$ac$addr , element$ac$count , element$ac$id };
     assign out$first__RDY = full;
 
     always @( posedge CLK) begin
@@ -29,7 +29,7 @@ module Fifo1_OC_12 (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (in$enq__ENA & in$enq__RDY) begin
-            { element$last , element$ac$id , element$ac$count , element$ac$addr } <= in$enq$v;
+            { element$last , element$ac$addr , element$ac$count , element$ac$id } <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA & out$deq__RDY) begin

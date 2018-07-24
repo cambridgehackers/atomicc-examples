@@ -199,22 +199,18 @@ typedef __uint(5)  AXIAddr;
 typedef __uint(6)  AXIId;
 typedef __uint(10) AXICount;
 typedef struct {
-    AXIAddr    addr;
-    AXICount   count;
     AXIId      id;
+    AXICount   count;
+    AXIAddr    addr;
 } AddrCount;
 typedef struct {
   AddrCount ac;
   __uint(1) last;
 } PortalInfo;
 typedef struct {
-  BusType    data;
   AXIId      id;
+  BusType    data;
 } ReadResp;
-typedef struct {
-  __uint(2) resp;
-  __uint(12) id;
-} WriteResp;
 typedef struct {
   BusType    data;
 } BusData;
@@ -240,12 +236,12 @@ __module TestTop {
     UserTop user;
 
     void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        reqArs.in.enq(AddrCount{static_cast<AXIAddr>(addr), (len + 1)<<2, static_cast<AXIId>(id)});
+        reqArs.in.enq(AddrCount{static_cast<AXIId>(id), (len + 1)<<2, static_cast<AXIAddr>(addr)});
         portalRControl = __bitsubstr(addr, 11, 5) == 0;
         selectRIndReq = __bitsubstr(addr, 12);
     }
     void MAXIGP0_O.AW(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        reqAws.in.enq(AddrCount{static_cast<AXIAddr>(addr), (len + 1)<<2, static_cast<AXIId>(id) });
+        reqAws.in.enq(AddrCount{static_cast<AXIId>(id), (len + 1)<<2, static_cast<AXIAddr>(addr)});
         portalWControl = __bitsubstr(addr, 11, 5) == 0;
         selectWIndReq = __bitsubstr(addr, 12);
     }
@@ -285,14 +281,14 @@ __module TestTop {
               //5'h1C: portalCtrlInfo = 0; break; // PORTAL_CTRL_COUNTER_LSB      7
               default: portalCtrlInfo = 0; break;
             }
-            readData.in.enq(ReadResp{portalRControl ? portalCtrlInfo : requestValue, temp.ac.id});
+            readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : requestValue});
         }
         __rule lreadNext {
             auto temp = reqArs.out.first();
             auto readAddrupdate = !readFirst ?  temp.addr : readAddr ;
             auto readburstCount = !readFirst ?  __bitsubstr(temp.count, 9, 2) : readCount ;
             __uint(1) readFirstNext = !(!readFirst ? static_cast<__uint(1)>(temp.count == 4)  : readLast);
-            readBeat.in.enq(PortalInfo{readAddrupdate, static_cast<AXICount>(readburstCount), temp.id, !readFirstNext});
+            readBeat.in.enq(PortalInfo{temp.id, static_cast<AXICount>(readburstCount), readAddrupdate, !readFirstNext});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;
             readFirst = readFirstNext;
@@ -322,7 +318,7 @@ __module TestTop {
             auto writeAddrupdate = !writeFirst ?  temp.addr : writeAddr ;
             auto writeburstCount = !writeFirst ?  __bitsubstr(temp.count, 9, 2) : writeCount ;
             __uint(1) writeFirstNext = !(!writeFirst ?  static_cast<__uint(1)>(temp.count == 4) : writeLast);
-            writeBeat.in.enq({ writeAddrupdate, static_cast<AXICount>(writeburstCount), temp.id, !writeFirstNext });
+            writeBeat.in.enq(PortalInfo{temp.id, static_cast<AXICount>(writeburstCount), writeAddrupdate, !writeFirstNext });
             writeAddr = writeAddrupdate + 4 ;
             writeCount = writeburstCount - 1 ;
             writeFirst = writeFirstNext ;
