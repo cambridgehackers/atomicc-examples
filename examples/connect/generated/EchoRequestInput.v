@@ -9,6 +9,8 @@ module EchoRequestInput (input wire CLK, input wire nRST,
     output wire [31:0]request$say$meth,
     output wire [31:0]request$say$v,
     input wire request$say__RDY);
+    wire pipe$enq__EXECUTE;
+    assign pipe$enq__EXECUTE = pipe$enq__ENA & pipe$enq__RDY;
     assign pipe$enq__RDY = ( pipe$enq$v[31:0] != 32'd1 ) | request$say__RDY;
     assign request$say$meth = pipe$enq$v[63:32];
     assign request$say$v = pipe$enq$v[95:64];
@@ -18,7 +20,7 @@ module EchoRequestInput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (pipe$enq__ENA & pipe$enq__RDY) begin
+        if (pipe$enq__EXECUTE) begin
             $display( "entered EchoRequestInput::enq" );
         end; // End of pipe$enq__ENA
       end

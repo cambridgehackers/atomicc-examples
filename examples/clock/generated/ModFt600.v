@@ -14,6 +14,7 @@ module ModFt600 (
     reg usb_txe_delay;
     wire CLK;
     wire RULEhandshake__ENA;
+    wire RULEhandshake__EXECUTE;
     wire RULEhandshake__RDY;
     wire RULEiobufs_0__ENA;
     wire RULEiobufs_0__RDY;
@@ -49,6 +50,7 @@ module ModFt600 (
     wire RULEiobufs_9__RDY;
     wire nRST;
     assign RULEhandshake__ENA = 1;
+    assign RULEhandshake__EXECUTE = 1;
     assign RULEiobufs_0__ENA = 1;
     assign RULEiobufs_10__ENA = 1;
     assign RULEiobufs_11__ENA = 1;
@@ -207,7 +209,7 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (RULEhandshake__ENA & 1) begin
+        if (RULEhandshake__EXECUTE) begin
             usb_fifo_empty <= 0;
             usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay <= usb_txe;

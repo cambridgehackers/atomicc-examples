@@ -18,6 +18,7 @@ module FifoPong (input wire CLK, input wire nRST,
     wire element2$out$deq__RDY;
     wire [703:0]element2$out$first;
     wire element2$out$first__RDY;
+    wire out$deq__EXECUTE;
     wire [31:0]out$first$retval$b;
     wire [31:0]out$first$retval$c0;
     wire [31:0]out$first$retval$c1;
@@ -40,6 +41,7 @@ module FifoPong (input wire CLK, input wire nRST,
     wire [31:0]out$first$retval$c8;
     wire [31:0]out$first$retval$c9;
     assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
+    assign out$deq__EXECUTE = out$deq__ENA & out$deq__RDY;
     assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
     assign out$first = { out$first$retval$c19 , out$first$retval$c18 , out$first$retval$c17 , out$first$retval$c16 , out$first$retval$c15 , out$first$retval$c14 , out$first$retval$c13 , out$first$retval$c12 , out$first$retval$c11 , out$first$retval$c10 , out$first$retval$c9 , out$first$retval$c8 , out$first$retval$c7 , out$first$retval$c6 , out$first$retval$c5 , out$first$retval$c4 , out$first$retval$c3 , out$first$retval$c2 , out$first$retval$c1 , out$first$retval$c0 , out$first$retval$b , pong ? element2$out$first[31:0] : element1$out$first[31:0] };
     assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
@@ -87,7 +89,7 @@ module FifoPong (input wire CLK, input wire nRST,
         pong <= 0;
       end // nRST
       else begin
-        if (out$deq__ENA & out$deq__RDY) begin
+        if (out$deq__EXECUTE) begin
             pong <= pong ^ 1;
         end; // End of out$deq__ENA
       end
