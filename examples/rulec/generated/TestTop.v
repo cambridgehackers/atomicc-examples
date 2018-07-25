@@ -28,8 +28,6 @@ module TestTop (
     output wire [1:0]MAXIGP0_I$R$resp,
     input wire MAXIGP0_I$R__RDY,
     output wire interrupt);
-    wire CLK;
-    wire nRST;
     reg intEnable;
     reg portalRControl;
     reg portalWControl;
@@ -43,6 +41,7 @@ module TestTop (
     reg [9:0]writeCount;
     reg writeFirst;
     reg writeLast;
+    wire CLK;
     wire RULEinit__ENA;
     wire RULEinit__RDY;
     wire RULElR__ENA;
@@ -64,6 +63,7 @@ module TestTop (
     wire RULElwrite__RDY;
     wire RULEwriteResponse__ENA;
     wire RULEwriteResponse__RDY;
+    wire nRST;
     wire readBeat$in$enq__RDY;
     wire readBeat$out$deq__RDY;
     wire [21:0]readBeat$out$first;

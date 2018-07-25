@@ -9,15 +9,15 @@ module ModFt600 (
     output wire usb_wr_n,
     output wire usb_oe_n,
     inout wire [15:0]usb_ad);
-    wire CLK;
-    wire nRST;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
+    wire CLK;
     wire RULEhandshake__ENA;
     wire RULEhandshake__RDY;
     wire RULEiobufs__ENA;
     wire RULEiobufs__RDY;
+    wire nRST;
     assign RULEhandshake__ENA = 1;
     assign RULEiobufs__ENA = 1;
     assign usb_oe_n = usb_rxf_delay;

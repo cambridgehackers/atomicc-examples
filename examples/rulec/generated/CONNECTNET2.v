@@ -7,9 +7,9 @@ module CONNECTNET2 (
     output wire OUT1,
     output wire OUT2);
     wire CLK;
-    wire nRST;
     wire RULEassign__ENA;
     wire RULEassign__RDY;
+    wire nRST;
     assign OUT1 = IN1;
     assign OUT2 = IN2;
     assign RULEassign__ENA = 1;
