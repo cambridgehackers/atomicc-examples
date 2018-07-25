@@ -61,7 +61,7 @@ module Lpm (input wire CLK, input wire nRST,
     assign ind$heard__ENA = outQ$out$first__RDY & outQ$out$deq__RDY;
     assign request$say__EXECUTE = request$say__ENA & request$say__RDY;
     Fifo1_OC_2 inQ (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(request$say__ENA & request$say__RDY),
+        .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say__ENA$temp$c , request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),
         .out$deq__ENA(inQ$out$first__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY),

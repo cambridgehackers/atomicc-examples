@@ -21,8 +21,8 @@ module EchoRequestInput (input wire CLK, input wire nRST,
     assign request$say$v = pipe$enq$v[95:64];
     assign request$say2$meth = pipe$enq$v[127:96];
     assign request$say2$v = pipe$enq$v[159:128];
-    assign request$say2__ENA = ( pipe$enq$v[31:0] == 32'd2 ) & pipe$enq__ENA & pipe$enq__RDY;
-    assign request$say__ENA = ( pipe$enq$v[31:0] == 32'd1 ) & pipe$enq__ENA & pipe$enq__RDY;
+    assign request$say2__ENA = ( pipe$enq$v[31:0] == 32'd2 ) & pipe$enq__ENA;
+    assign request$say__ENA = ( pipe$enq$v[31:0] == 32'd1 ) & pipe$enq__ENA;
     // Extra assigments, not to output wires
     assign pipe$enq__ENA$v_2e_addr$tag = pipe$enq$v[31:0];
 

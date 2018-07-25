@@ -125,7 +125,7 @@ module TestTop (
     assign RULEwriteResponse__ENA = writeDone$out$first__RDY & MAXIGP0_I$B__RDY & writeDone$out$deq__RDY;
     assign interrupt = ( !readBus$out$first__RDY ) & intEnable;
     Fifo1_OC_10 reqArs (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(MAXIGP0_O$AR__ENA & MAXIGP0_O$AR__RDY),
+        .in$enq__ENA(MAXIGP0_O$AR__ENA),
         .in$enq$v({ MAXIGP0_O$AR$addr , ( MAXIGP0_O$AR$len + 1 ) << 2 , MAXIGP0_O$AR$id }),
         .in$enq__RDY(MAXIGP0_O$AR__RDY),
         .out$deq__ENA(( ( ( !readFirst ) ? ( reqArs$out$first[ 15 : 6 ] == 10'd4 ) : readLast ) != 0 ) & reqArs$out$first__RDY & readBeat$in$enq__RDY),
@@ -133,7 +133,7 @@ module TestTop (
         .out$first(reqArs$out$first),
         .out$first__RDY(reqArs$out$first__RDY));
     Fifo1_OC_10 reqAws (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(MAXIGP0_O$AW__ENA & MAXIGP0_O$AW__RDY),
+        .in$enq__ENA(MAXIGP0_O$AW__ENA),
         .in$enq$v({ MAXIGP0_O$AW$addr , ( MAXIGP0_O$AW$len + 1 ) << 2 , MAXIGP0_O$AW$id }),
         .in$enq__RDY(MAXIGP0_O$AW__RDY),
         .out$deq__ENA(( ( ( !writeFirst ) ? ( reqAws$out$first[ 15 : 6 ] == 10'd4 ) : writeLast ) != 0 ) & reqAws$out$first__RDY & writeBeat$in$enq__RDY),
@@ -165,7 +165,7 @@ module TestTop (
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
     Fifo1_OC_16 readBus (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(user$read$enq__ENA & user$read$enq__RDY),
+        .in$enq__ENA(user$read$enq__ENA),
         .in$enq$v({ user$read$enq$v }),
         .in$enq__RDY(),
         .out$deq__ENA(( readBeat$out$first[ 20 : 16 ] == 5'd0 ) & selectRIndReq & readBeat$out$first__RDY & readBeat$out$deq__RDY & ( ( readBeat$out$first[ 20 : 16 ] != 5'd0 ) | ( !selectRIndReq ) | readBus$out$first__RDY ) & readData$in$enq__RDY),
@@ -173,7 +173,7 @@ module TestTop (
         .out$first(),
         .out$first__RDY(readBus$out$first__RDY));
     Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(MAXIGP0_O$W__ENA & MAXIGP0_O$W__RDY),
+        .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v({ MAXIGP0_O$W$data }),
         .in$enq__RDY(MAXIGP0_O$W__RDY),
         .out$deq__ENA(( !RULElwrite__ENA$wb$last ) & writeBeat$out$first__RDY & ( ( !RULElwrite__ENA$wb$last ) | writeDone$in$enq__RDY ) & ( RULElwrite__ENA$wb$last | writeBeat$out$deq__RDY ) & ( RULElwrite__ENA$wb$last | writeData$out$first__RDY ) & ( portalWControl | RULElwrite__ENA$wb$last | user$write$enq__RDY )),

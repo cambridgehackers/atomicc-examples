@@ -50,7 +50,7 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard$v(lEcho$indication$heard$v),
         .indication$heard__RDY(lEIO$indication$heard__RDY));
     EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
-        .request$say__ENA(request$say__ENA & request$say__RDY),
+        .request$say__ENA(request$say__ENA),
         .request$say$meth(request$say$meth),
         .request$say$v(request$say$v),
         .request$say__RDY(request$say__RDY),

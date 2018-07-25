@@ -15,7 +15,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     assign indication$heard__EXECUTE = indication$heard__ENA & indication$heard__RDY;
     assign indication$heard__RDY = pipe$enq__RDY;
     assign pipe$enq$v = { indication$heard__ENA$ind$data$heard$v , indication$heard__ENA$ind$data$heard$meth , 32'd1 };
-    assign pipe$enq__ENA = indication$heard__ENA & indication$heard__RDY;
+    assign pipe$enq__ENA = indication$heard__ENA;
 
     always @( posedge CLK) begin
       if (!nRST) begin

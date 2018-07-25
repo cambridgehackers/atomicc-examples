@@ -46,18 +46,18 @@ module FifoPong (input wire CLK, input wire nRST,
     assign out$first = { out$first$retval$c19 , out$first$retval$c18 , out$first$retval$c17 , out$first$retval$c16 , out$first$retval$c15 , out$first$retval$c14 , out$first$retval$c13 , out$first$retval$c12 , out$first$retval$c11 , out$first$retval$c10 , out$first$retval$c9 , out$first$retval$c8 , out$first$retval$c7 , out$first$retval$c6 , out$first$retval$c5 , out$first$retval$c4 , out$first$retval$c3 , out$first$retval$c2 , out$first$retval$c1 , out$first$retval$c0 , out$first$retval$b , pong ? element2$out$first[31:0] : element1$out$first[31:0] };
     assign out$first__RDY = ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
     Fifo1_OC_3 element1 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA & in$enq__RDY),
+        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
-        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA & out$deq__RDY),
+        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA),
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
     Fifo1_OC_3 element2 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(pong & in$enq__ENA & in$enq__RDY),
+        .in$enq__ENA(pong & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),
-        .out$deq__ENA(pong & out$deq__ENA & out$deq__RDY),
+        .out$deq__ENA(pong & out$deq__ENA),
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));

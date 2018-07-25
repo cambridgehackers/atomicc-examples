@@ -23,7 +23,7 @@ module IVector (input wire CLK, input wire nRST,
     assign ind$heard$v = fifo$out$first[9:6];
     assign ind$heard__ENA = fifo$out$first__RDY & fifo$out$deq__RDY;
     Fifo1_OC_2 fifo (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(request$say__ENA & request$say__RDY),
+        .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),
         .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),

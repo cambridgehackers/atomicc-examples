@@ -19,9 +19,9 @@ module MuxPipe (input wire CLK, input wire nRST,
     assign RULEfifoRule__ENA = forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
     assign in$enq__RDY = out$enq__RDY;
     assign out$enq$v = ( forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY ) ? { forwardFifo$out$first[127:96] , forwardFifo$out$first[95:64] , forwardFifo$out$first[63:32] , forwardFifo$out$first[31:0] } : in$enq$v;
-    assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifo$out$deq__RDY ) || ( in$enq__ENA & in$enq__RDY );
+    assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifo$out$deq__RDY ) || in$enq__ENA;
     Fifo1 forwardFifo (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(forward$enq__ENA & forward$enq__RDY),
+        .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),
         .out$deq__ENA(forwardFifo$out$first__RDY & out$enq__RDY),

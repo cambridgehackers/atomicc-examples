@@ -12,7 +12,7 @@ module Echo (input wire CLK, input wire nRST,
     input wire indication$heard__RDY);
     assign indication$heard$meth = request$say$meth;
     assign indication$heard$v = request$say$v;
-    assign indication$heard__ENA = request$say__ENA & request$say__RDY;
+    assign indication$heard__ENA = request$say__ENA;
     assign request$say__RDY = indication$heard__RDY;
 endmodule 
 
