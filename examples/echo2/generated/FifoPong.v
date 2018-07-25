@@ -10,21 +10,14 @@ module FifoPong (input wire CLK, input wire nRST,
     output wire [703:0]out$first,
     output wire out$first__RDY);
     reg pong;
-    wire [703:0]element1$in$enq$v;
-    wire element1$in$enq__ENA;
     wire element1$in$enq__RDY;
-    wire element1$out$deq__ENA;
     wire element1$out$deq__RDY;
     wire [703:0]element1$out$first;
     wire element1$out$first__RDY;
-    wire [703:0]element2$in$enq$v;
-    wire element2$in$enq__ENA;
     wire element2$in$enq__RDY;
-    wire element2$out$deq__ENA;
     wire element2$out$deq__RDY;
     wire [703:0]element2$out$first;
     wire element2$out$first__RDY;
-    wire [31:0]out$first$retval$a;
     wire [31:0]out$first$retval$b;
     wire [31:0]out$first$retval$c0;
     wire [31:0]out$first$retval$c1;
@@ -66,14 +59,7 @@ module FifoPong (input wire CLK, input wire nRST,
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));
-    assign element1$in$enq$v = in$enq$v;
-    assign element1$in$enq__ENA = ( pong ^ 1 ) & in$enq__ENA & in$enq__RDY;
-    assign element1$out$deq__ENA = ( pong ^ 1 ) & out$deq__ENA & out$deq__RDY;
-    assign element2$in$enq$v = in$enq$v;
-    assign element2$in$enq__ENA = pong & in$enq__ENA & in$enq__RDY;
-    assign element2$out$deq__ENA = pong & out$deq__ENA & out$deq__RDY;
     // Extra assigments, not to output wires
-    assign out$first$retval$a = ( out$first__RDY & pong ) ? element2$out$first[31:0] : element1$out$first[31:0];
     assign out$first$retval$b = ( out$first__RDY & pong ) ? element2$out$first[63:32] : element1$out$first[63:32];
     assign out$first$retval$c0 = ( out$first__RDY & pong ) ? element2$out$first[95:64] : element1$out$first[95:64];
     assign out$first$retval$c1 = ( out$first__RDY & pong ) ? element2$out$first[127:96] : element1$out$first[127:96];

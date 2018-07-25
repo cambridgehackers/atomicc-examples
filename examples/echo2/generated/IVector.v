@@ -10,9 +10,6 @@ module IVector (input wire CLK, input wire nRST,
     input wire ind$heard__RDY);
     wire RULErespond__ENA;
     wire RULErespond__RDY;
-    wire [703:0]fifo$in$enq$v;
-    wire fifo$in$enq__ENA;
-    wire fifo$out$deq__ENA;
     wire fifo$out$deq__RDY;
     wire [703:0]fifo$out$first;
     wire fifo$out$first__RDY;
@@ -27,9 +24,6 @@ module IVector (input wire CLK, input wire nRST,
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    assign fifo$in$enq$v = request$say$v;
-    assign fifo$in$enq__ENA = request$say__ENA & request$say__RDY;
-    assign fifo$out$deq__ENA = fifo$out$first__RDY & ind$heard__RDY;
     // Extra assigments, not to output wires
     assign RULErespond__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 endmodule 

@@ -12,26 +12,9 @@ module ClockTop #(
     wire RULEinit$100__RDY;
     wire RULEinit__ENA;
     wire RULEinit__RDY;
-    wire clkbuf$I;
     wire clkbuf$O;
-    wire clkbuf0$I;
-    wire ps7_clockGen_pll$CLKFBIN;
     wire ps7_clockGen_pll$CLKFBOUT;
-    wire ps7_clockGen_pll$CLKIN1;
-    wire ps7_clockGen_pll$CLKIN2;
-    wire ps7_clockGen_pll$CLKINSEL;
     wire ps7_clockGen_pll$CLKOUT0;
-    wire [6:0]ps7_clockGen_pll$DADDR;
-    wire ps7_clockGen_pll$DCLK;
-    wire ps7_clockGen_pll$DEN;
-    wire [15:0]ps7_clockGen_pll$DI;
-    wire ps7_clockGen_pll$DWE;
-    wire ps7_clockGen_pll$PSCLK;
-    wire ps7_clockGen_pll$PSEN;
-    wire ps7_clockGen_pll$PSINCDEC;
-    wire ps7_clockGen_pll$PWRDWN;
-    wire ps7_clockGen_pll$RST;
-    wire rinverter$RESET_IN;
     wire rinverter$RESET_OUT;
     assign RULEinit$100__ENA = 1;
     assign RULEinit__ENA = 1;
@@ -78,23 +61,6 @@ module ClockTop #(
     BUFG clkbuf0 (
         .I(ps7_clockGen_pll$CLKOUT0),
         .O(clockOut));
-    assign clkbuf$I = ps7_clockGen_pll$CLKFBOUT;
-    assign clkbuf0$I = ps7_clockGen_pll$CLKOUT0;
-    assign ps7_clockGen_pll$CLKFBIN = clkbuf$O;
-    assign ps7_clockGen_pll$CLKIN1 = userCLK;
-    assign ps7_clockGen_pll$CLKIN2 = 1'd0;
-    assign ps7_clockGen_pll$CLKINSEL = 1'd1;
-    assign ps7_clockGen_pll$DADDR = 7'd0;
-    assign ps7_clockGen_pll$DCLK = 1'd0;
-    assign ps7_clockGen_pll$DEN = 1'd0;
-    assign ps7_clockGen_pll$DI = 16'd0;
-    assign ps7_clockGen_pll$DWE = 1'd0;
-    assign ps7_clockGen_pll$PSCLK = 1'd0;
-    assign ps7_clockGen_pll$PSEN = 1'd0;
-    assign ps7_clockGen_pll$PSINCDEC = 1'd0;
-    assign ps7_clockGen_pll$PWRDWN = 1'd0;
-    assign ps7_clockGen_pll$RST = rinverter$RESET_OUT;
-    assign rinverter$RESET_IN = usernRST;
     // Extra assigments, not to output wires
     assign RULEinit$100__RDY = 1;
     assign RULEinit__RDY = 1;

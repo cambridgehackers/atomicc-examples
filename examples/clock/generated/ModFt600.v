@@ -48,22 +48,6 @@ module ModFt600 (
     wire RULEiobufs_8__RDY;
     wire RULEiobufs_9__ENA;
     wire RULEiobufs_9__RDY;
-    wire iobufs0$IO;
-    wire iobufs1$IO;
-    wire iobufs10$IO;
-    wire iobufs11$IO;
-    wire iobufs12$IO;
-    wire iobufs13$IO;
-    wire iobufs14$IO;
-    wire iobufs15$IO;
-    wire iobufs2$IO;
-    wire iobufs3$IO;
-    wire iobufs4$IO;
-    wire iobufs5$IO;
-    wire iobufs6$IO;
-    wire iobufs7$IO;
-    wire iobufs8$IO;
-    wire iobufs9$IO;
     assign RULEhandshake__ENA = 1;
     assign RULEiobufs_0__ENA = 1;
     assign RULEiobufs_10__ENA = 1;
@@ -196,22 +180,6 @@ module ModFt600 (
         .I(0),
         .O(),
         .T(0));
-    assign iobufs0$IO = usb_ad >> 0;
-    assign iobufs1$IO = usb_ad >> 1;
-    assign iobufs10$IO = usb_ad >> 10;
-    assign iobufs11$IO = usb_ad >> 11;
-    assign iobufs12$IO = usb_ad >> 12;
-    assign iobufs13$IO = usb_ad >> 13;
-    assign iobufs14$IO = usb_ad >> 14;
-    assign iobufs15$IO = usb_ad >> 15;
-    assign iobufs2$IO = usb_ad >> 2;
-    assign iobufs3$IO = usb_ad >> 3;
-    assign iobufs4$IO = usb_ad >> 4;
-    assign iobufs5$IO = usb_ad >> 5;
-    assign iobufs6$IO = usb_ad >> 6;
-    assign iobufs7$IO = usb_ad >> 7;
-    assign iobufs8$IO = usb_ad >> 8;
-    assign iobufs9$IO = usb_ad >> 9;
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     // Extra assigments, not to output wires
     assign RULEhandshake__RDY = 1;
