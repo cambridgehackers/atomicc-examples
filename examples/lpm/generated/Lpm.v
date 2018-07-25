@@ -12,23 +12,15 @@ module Lpm (input wire CLK, input wire nRST,
     output wire request$say__RDY);
     reg [31:0]doneCount;
     wire RULEenter__ENA;
-    wire [31:0]RULEenter__ENA$temp$a;
-    wire [31:0]RULEenter__ENA$temp$b;
     wire RULEenter__EXECUTE;
     wire RULEenter__RDY;
     wire RULEexit_rule__ENA;
-    wire [31:0]RULEexit_rule__ENA$temp$a;
-    wire [31:0]RULEexit_rule__ENA$temp$b;
     wire RULEexit_rule__EXECUTE;
     wire RULEexit_rule__RDY;
     wire RULErecirc__ENA;
-    wire [31:0]RULErecirc__ENA$temp$a;
-    wire [31:0]RULErecirc__ENA$temp$b;
     wire RULErecirc__EXECUTE;
     wire RULErecirc__RDY;
     wire RULErespond__ENA;
-    wire [31:0]RULErespond__ENA$temp$a;
-    wire [31:0]RULErespond__ENA$temp$b;
     wire RULErespond__EXECUTE;
     wire RULErespond__RDY;
     wire fifo$in$enq__RDY;
@@ -93,17 +85,9 @@ module Lpm (input wire CLK, input wire nRST,
         .ifc$resValue(mem$ifc$resValue),
         .ifc$resValue__RDY(mem$ifc$resValue__RDY));
     // Extra assigments, not to output wires
-    assign RULEenter__ENA$temp$a = inQ$out$first[31:0];
-    assign RULEenter__ENA$temp$b = inQ$out$first[63:32];
     assign RULEenter__RDY = inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign RULEexit_rule__ENA$temp$a = fifo$out$first[31:0];
-    assign RULEexit_rule__ENA$temp$b = fifo$out$first[63:32];
     assign RULEexit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
-    assign RULErecirc__ENA$temp$a = fifo$out$first[31:0];
-    assign RULErecirc__ENA$temp$b = fifo$out$first[63:32];
     assign RULErecirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign RULErespond__ENA$temp$a = outQ$out$first[31:0];
-    assign RULErespond__ENA$temp$b = outQ$out$first[63:32];
     assign RULErespond__RDY = outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
 
     always @( posedge CLK) begin
@@ -112,16 +96,16 @@ module Lpm (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (RULEenter__EXECUTE) begin
-            $display( "enter: (%d, %d)" , inQ$out$first[31:0] , inQ$out$first[63:32] );
+            $display( "enter: (%d, %d)" , inQ$out$first[ 31 : 0 ] , inQ$out$first[ 63 : 32 ] );
         end; // End of RULEenter__ENA
         if (RULEexit_rule__EXECUTE) begin
-            $display( "exit: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+            $display( "exit: (%d, %d)" , fifo$out$first[ 31 : 0 ] , fifo$out$first[ 63 : 32 ] );
         end; // End of RULEexit_rule__ENA
         if (RULErecirc__EXECUTE) begin
-            $display( "recirc: (%d, %d)" , fifo$out$first[31:0] , fifo$out$first[63:32] );
+            $display( "recirc: (%d, %d)" , fifo$out$first[ 31 : 0 ] , fifo$out$first[ 63 : 32 ] );
         end; // End of RULErecirc__ENA
         if (RULErespond__EXECUTE) begin
-            $display( "respond: (%d, %d)" , outQ$out$first[31:0] , outQ$out$first[63:32] );
+            $display( "respond: (%d, %d)" , outQ$out$first[ 31 : 0 ] , outQ$out$first[ 63 : 32 ] );
         end; // End of RULErespond__ENA
         if (request$say__EXECUTE) begin
             $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );

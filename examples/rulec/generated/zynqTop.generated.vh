@@ -95,7 +95,6 @@
 //METAGUARD; MAXIGP0_O$AW; reqAws$in$enq__RDY;
 //METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
-//METABEFORE; RULEinit__ENA; :RULElwrite__ENA
 //METAGUARD; RULEinit; 1;
 //METAINVOKE; RULElR__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
 //METAGUARD; RULElR; readData$out$first__RDY & readData$out$deq__RDY & MAXIGP0_I$R__RDY;

@@ -18,7 +18,6 @@ module LpmMemory (input wire CLK, input wire nRST,
     wire RULEmemdelay_rule__RDY;
     wire ifc$req__EXECUTE;
     wire ifc$resAccept__EXECUTE;
-    wire [95:0]saved;
     assign RULEmemdelay_rule__ENA = ( delayCount > 1 ) != 0;
     assign RULEmemdelay_rule__EXECUTE = ( delayCount > 1 ) != 0;
     assign ifc$req__EXECUTE = ifc$req__ENA & ifc$req__RDY;
@@ -29,7 +28,6 @@ module LpmMemory (input wire CLK, input wire nRST,
     assign ifc$resValue__RDY = delayCount == 32'd1;
     // Extra assigments, not to output wires
     assign RULEmemdelay_rule__RDY = ( delayCount > 1 ) != 0;
-    assign saved = { saved$c , saved$b , saved$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

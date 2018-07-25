@@ -17,8 +17,6 @@ module Fifo2 (input wire CLK, input wire nRST,
     reg [31:0]element1$c;
     reg [31:0]rindex;
     reg [31:0]windex;
-    wire [95:0]element0;
-    wire [95:0]element1;
     wire in$enq__EXECUTE;
     wire out$deq__EXECUTE;
     assign in$enq__EXECUTE = in$enq__ENA & in$enq__RDY;
@@ -27,9 +25,6 @@ module Fifo2 (input wire CLK, input wire nRST,
     assign out$deq__RDY = rindex != windex;
     assign out$first = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
     assign out$first__RDY = rindex != windex;
-    // Extra assigments, not to output wires
-    assign element0 = { element0$c , element0$b , element0$a };
-    assign element1 = { element1$c , element1$b , element1$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

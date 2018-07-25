@@ -956,9 +956,7 @@ MODULE TestTop {
         LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
-    METHOD/Rule RULEinit__ENA {
-        LET INTEGER_1 (((readBus$out$first__RDY) != (0)) ^ 1):interrupt = (0)((intEnable) != (0))
-    }
+    METHOD/Rule RULEinit__ENA
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
         CALL :readData$out$first{}
