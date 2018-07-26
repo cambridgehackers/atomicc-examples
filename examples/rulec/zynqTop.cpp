@@ -195,8 +195,8 @@ __module P7Wrap {
     }
 };
 
-typedef __uint(5)  AXIAddr;
-typedef __uint(6)  AXIId;
+typedef __uint(5) AXIAddr;
+typedef __uint(6) AXIId;
 typedef __uint(10) AXICount;
 typedef struct {
     AXIId      id;
@@ -287,9 +287,9 @@ __module TestTop {
         __rule lreadNext {
             auto temp = reqArs.out.first();
             auto readAddrupdate = !readFirst ?  temp.addr : readAddr ;
-            auto readburstCount = !readFirst ?  __bitsubstr(temp.count, 9, 2) : readCount ;
-            __uint(1) readFirstNext = !(!readFirst ? static_cast<__uint(1)>(temp.count == 4)  : readLast);
-            readBeat.in.enq(PortalInfo{temp.id, static_cast<AXICount>(readburstCount), readAddrupdate, !readFirstNext});
+            AXICount readburstCount = !readFirst ?  temp.count : readCount ;
+            __uint(1) readFirstNext = !(!readFirst ? static_cast<__uint(1)>(temp.count == 1)  : readLast);
+            readBeat.in.enq(PortalInfo{temp.id, readburstCount, readAddrupdate, !readFirstNext});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;
             readFirst = readFirstNext;
