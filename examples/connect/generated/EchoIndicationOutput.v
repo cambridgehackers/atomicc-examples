@@ -11,8 +11,6 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     input wire pipe$enq__RDY);
     wire [31:0]indication$heard__ENA$ind$data$heard$meth;
     wire [31:0]indication$heard__ENA$ind$data$heard$v;
-    wire indication$heard__EXECUTE;
-    assign indication$heard__EXECUTE = indication$heard__ENA & indication$heard__RDY;
     assign indication$heard__RDY = pipe$enq__RDY;
     assign pipe$enq$v = { indication$heard__ENA$ind$data$heard$v , indication$heard__ENA$ind$data$heard$meth , 32'd1 };
     assign pipe$enq__ENA = indication$heard__ENA;
@@ -21,7 +19,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (indication$heard__EXECUTE) begin
+        if (indication$heard__ENA & indication$heard__RDY) begin
             indication$heard__ENA$ind$data$heard$meth <= indication$heard$meth;
             indication$heard__ENA$ind$data$heard$v <= indication$heard$v;
         end; // End of indication$heard__ENA

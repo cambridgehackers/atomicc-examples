@@ -32,11 +32,13 @@ __module AdapterToBus {
    __uint(__bitsize(T)) buffer;
 
    void in.enq(T v, LenType length) if (remain == 0) {
+      //printf("TTTTTT in.enq: v %x length %x\n", v, length);
       buffer = __bit_cast<decltype(buffer)>(v);
       remain = length + 1;
    }
    AdapterToBus() {
       __rule copyRule if (remain != 0) {
+         //printf("TTTTTT copyRule: buffer %x remain %x\n", buffer, remain);
          out->enq(buffer, remain == 1);
          remain--;
          buffer >>= __bitsize(BusType);
@@ -53,12 +55,14 @@ __module AdapterFromBus {
    __uint(__bitsize(T)) buffer;
 
    void in.enq(BusType v, bool last) if (!waitForEnq) {
+      //printf("FFFFFFFF in.enq: v %d last %d buffer %x\n", v, last, buffer);
       buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(BusType) - 1, 0), v);
       if (last)
           waitForEnq = 1;
    }
    AdapterFromBus() {
       __rule pushValue if (waitForEnq) {
+          //printf("FFFFFFFF pushValue: buffer %x\n", buffer);
           out->enq(__bit_cast<T>(buffer), 0);
           waitForEnq = 0;
       }

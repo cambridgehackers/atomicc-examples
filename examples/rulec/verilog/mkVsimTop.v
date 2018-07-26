@@ -21,6 +21,10 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   AdapterToBus radapter_0(.CLK(CLK), .nRST(RST_N),
    .in$enq__ENA(EN_indication), .in$enq__RDY(RDY_indication), .in$enq$v(outgoingData), .in$enq$length(indicationData[15:0]),
    .out$enq__ENA(EN_readBeat), .out$enq__RDY(RDY_readBeat), .out$enq$v(readData), .out$enq$last(readLast));
+  //always @(posedge CLK) begin
+    //if (EN_writeBeat) 
+        //$display("mkVsimTop: writeBeat %x last %x RDY %x", writeData, writeLast, RDY_writeBeat);
+  //end
 
   l_top top(.CLK(CLK), .nRST(RST_N),
     .request$enq__ENA(EN_request), .request$enq__RDY(RDY_request), .request$enq$v(requestData),

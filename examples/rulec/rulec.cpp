@@ -75,13 +75,13 @@ __module Echo {
     int busy_delay;
     int v_type;
     void request.say(aint32 v) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, 1);
+//printf("EEEEEEEE say: %d\n", v);
         v_temp = v;
         busy = 1;
         v_type = 1;
     }
     void request.say2(aint16 a, aint16 b) if(!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, 2);
+//printf("EEEEEEEE say2: a %d b %d\n", a, b);
         a_temp = a;
         b_temp = b;
         busy = 1;
@@ -89,17 +89,17 @@ printf("[%s:%d]Echo\n", __FUNCTION__, 2);
     }
 #if 0
     void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
-printf("[%s:%d]Echo\n", __FUNCTION__, 3);
+//printf("EEEEEEEE say3: a %d b %d c %d\n", a, b, c);
     }
 #endif
     void request.zsay4(void) {
-printf("[%s:%d]Echo\n", __FUNCTION__, 4);
+//printf("EEEEEEEE zsay4:%d]Echo\n", 4);
     }
     void request.setLeds(aint8 v) {
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
-printf("[delay_rule:%d]Echo\n", 5);
+//printf("EEEEEEEE delay_rule: v_temp %d a_temp %d b_temp %d\n", v_temp, a_temp, b_temp);
              busy = 0;
              busy_delay = 1;
              v_delay = v_temp;
@@ -107,7 +107,7 @@ printf("[delay_rule:%d]Echo\n", 5);
              b_delay = b_temp;
            };
         __rule respond_rule if(busy_delay != 0) {
-printf("[respond_rule:%d]Echo\n", 6);
+//printf("EEEEEEEE respond_rule: v_type %d v_delay %d a_delay %d b_delay %d\n", v_type, v_delay, a_delay, b_delay);
              busy_delay = 0;
              if (v_type == 1)
              indication->heard(v_delay);

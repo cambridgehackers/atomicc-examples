@@ -32,11 +32,7 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
     reg [31:0]element$c8;
     reg [31:0]element$c9;
     reg full;
-    wire in$enq__EXECUTE;
-    wire out$deq__EXECUTE;
-    assign in$enq__EXECUTE = in$enq__ENA & in$enq__RDY;
     assign in$enq__RDY = !full;
-    assign out$deq__EXECUTE = out$deq__ENA & out$deq__RDY;
     assign out$deq__RDY = full;
     assign out$first = { element$c19 , element$c18 , element$c17 , element$c16 , element$c15 , element$c14 , element$c13 , element$c12 , element$c11 , element$c10 , element$c9 , element$c8 , element$c7 , element$c6 , element$c5 , element$c4 , element$c3 , element$c2 , element$c1 , element$c0 , element$b , element$a };
     assign out$first__RDY = full;
@@ -68,11 +64,11 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
         full <= 0;
       end // nRST
       else begin
-        if (in$enq__EXECUTE) begin
+        if (in$enq__ENA & in$enq__RDY) begin
             { element$c19 , element$c18 , element$c17 , element$c16 , element$c15 , element$c14 , element$c13 , element$c12 , element$c11 , element$c10 , element$c9 , element$c8 , element$c7 , element$c6 , element$c5 , element$c4 , element$c3 , element$c2 , element$c1 , element$c0 , element$b , element$a } <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__EXECUTE) begin
+        if (out$deq__ENA & out$deq__RDY) begin
             full <= 0;
         end; // End of out$deq__ENA
       end

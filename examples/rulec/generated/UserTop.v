@@ -14,18 +14,14 @@ module UserTop (input wire CLK, input wire nRST,
     wire ctop$request$enq__RDY;
     wire [127:0]indication$enq$v;
     wire indication$enq__ENA;
-    wire indication$enq__EXECUTE;
     wire indication$enq__RDY;
     wire radapter_0$in$enq__RDY;
     wire [15:0]wad$enq$length;
     wire [127:0]wad$enq$v;
     wire wad$enq__ENA;
-    wire wad$enq__EXECUTE;
     wire wad$enq__RDY;
     wire [15:0]wadapter_0$out$enq$length;
     wire [127:0]wadapter_0$out$enq$v;
-    assign indication$enq__EXECUTE = indication$enq__ENA & radapter_0$in$enq__RDY;
-    assign wad$enq__EXECUTE = wad$enq__ENA & ctop$request$enq__RDY;
     AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(indication$enq__ENA),
         .in$enq$v(ctop$indication$enq$v),
@@ -62,10 +58,10 @@ module UserTop (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (indication$enq__EXECUTE) begin
+        if (indication$enq__ENA & indication$enq__RDY) begin
             $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , indication$enq$v[ 15 : 0 ] - 1 );
         end; // End of indication$enq__ENA
-        if (wad$enq__EXECUTE) begin
+        if (wad$enq__ENA & wad$enq__RDY) begin
             $display( "reqConnect.enq v %llx length %lx" , wadapter_0$out$enq$v , wadapter_0$out$enq$length );
         end; // End of wad$enq__ENA
       end
