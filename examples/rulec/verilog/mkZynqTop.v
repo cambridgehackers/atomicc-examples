@@ -59,23 +59,23 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
   reg [3 : 0] readCount, writeCount;
   reg [4 : 0] readAddr, writeAddr;
 
-  Fifo1_OC_10 reqArs(.nRST(nRST), .CLK(CLK), // 21
-        .in$enq__ENA(MAXIGP0_O$AR__ENA && MAXIGP0_O$AR__RDY),
-        .in$enq$v({ MAXIGP0_O$AR$addr[4:0], MAXIGP0_O$AR$len + 4'd1, MAXIGP0_O$AR$id[5:0]}),
+  Fifo1_OC_10 reqArs(.nRST(nRST), .CLK(CLK),
+        .in$enq__ENA(MAXIGP0_O$AR__ENA),
+        .in$enq$v({MAXIGP0_O$AR$addr[4:0], MAXIGP0_O$AR$len + 1, MAXIGP0_O$AR$id[5:0]}),
         .in$enq__RDY(MAXIGP0_O$AR__RDY),
         .out$deq__ENA(RULEreadNext && readLastNext),
         .out$deq__RDY(reqArs$out$deq__RDY),
         .out$first({reqArs$addr, reqArs$count, reqArs$id}),
         .out$first__RDY());
-  Fifo1_OC_10 reqAws(.nRST(nRST), .CLK(CLK), // 21
-        .in$enq__ENA(MAXIGP0_O$AW__ENA && MAXIGP0_O$AW__RDY),
-        .in$enq$v({MAXIGP0_O$AW$addr[4:0], MAXIGP0_O$AW$len + 4'd1, MAXIGP0_O$AW$id[5:0] }),
+  Fifo1_OC_10 reqAws(.nRST(nRST), .CLK(CLK),
+        .in$enq__ENA(MAXIGP0_O$AW__ENA),
+        .in$enq$v({MAXIGP0_O$AW$addr[4:0], MAXIGP0_O$AW$len + 1, MAXIGP0_O$AW$id[5:0]}),
         .in$enq__RDY(MAXIGP0_O$AW__RDY),
         .out$deq__ENA(RULEwriteNext && writeLastNext),
         .out$deq__RDY(reqAws$out$deq__RDY),
         .out$first({reqAws$addr, reqAws$count, reqAws$id}),
         .out$first__RDY());
-  Fifo1_OC_12 readBeat(.nRST(nRST), .CLK(CLK), // width 22
+  Fifo1_OC_12 readBeat(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(RULEreadNext),
         .in$enq$v({readAddrupdate, readburstCount, reqArs$id, readLastNext}),
         .in$enq__RDY(readBeat$in$enq__RDY),
@@ -83,15 +83,15 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .out$deq__RDY(readBeat$out$deq__RDY),
         .out$first({readBeat$addr, readBeat$base, readBeat$id, readBeat$last}),
         .out$first__RDY());
-  Fifo1_OC_12 writeBeat(.nRST(nRST), .CLK(CLK), // width 22
+  Fifo1_OC_12 writeBeat(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(RULEwriteNext),
-        .in$enq$v({ writeAddrupdate, writeburstCount, reqAws$id, writeLastNext }),
+        .in$enq$v({writeAddrupdate, writeburstCount, reqAws$id, writeLastNext}),
         .in$enq__RDY(writeBeat$in$enq__RDY),
         .out$deq__ENA(RULElwrite),
         .out$deq__RDY(writeBeat$out$deq__RDY),
         .out$first({writeBeat$addr, writeBeat$count, writeBeat$id, writeBeat$last}),
         .out$first__RDY());
-  Fifo1_OC_14 readData(.nRST(nRST), .CLK(CLK), // 38
+  Fifo1_OC_14 readData(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(RULElread),
         .in$enq$v({portalRControl ? portalCtrlInfo : requestValue, readBeat$id}),
         .in$enq__RDY(readData$in$enq__RDY),
@@ -99,15 +99,15 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .out$deq__RDY(MAXIGP0_I$R__ENA),
         .out$first({MAXIGP0_I$R$data, MAXIGP0_I$R$id}),
         .out$first__RDY());
-  Fifo1_OC_16 writeData(.nRST(nRST), .CLK(CLK), // 32
-        .in$enq__ENA(MAXIGP0_O$W__ENA && MAXIGP0_O$W__RDY),
+  Fifo1_OC_16 writeData(.nRST(nRST), .CLK(CLK),
+        .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v(MAXIGP0_O$W$data),
         .in$enq__RDY(MAXIGP0_O$W__RDY),
         .out$deq__ENA(RULElwrite),
         .out$deq__RDY(writeData$out$deq__RDY),
         .out$first(write$enq$v),
         .out$first__RDY());
-  Fifo1_OC_18 writeDone(.nRST(nRST), .CLK(CLK), // 6
+  Fifo1_OC_18 writeDone(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(RULElwrite && writeBeat$last),
         .in$enq$v(writeBeat$id),
         .in$enq__RDY(writeDone$in$enq__RDY),
@@ -116,7 +116,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .out$first(MAXIGP0_I$B$id),
         .out$first__RDY());
 
-  UserTop user(.CLK(CLK), .nRST(nRST),
+  UserTop user(.nRST(nRST), .CLK(CLK),
     .write$enq__ENA(RULElwrite && !portalWControl),
     .write$enq$v(write$enq$v), .write$enq$last(writeBeat$addr != 0),
     .write$enq__RDY(write$enq__RDY),
