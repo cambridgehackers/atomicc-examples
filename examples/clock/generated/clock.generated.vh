@@ -5,7 +5,6 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 //METASTART; ModFt600
 //METAINTERNAL; iobufs0; IOBUF;
 //METAINTERNAL; iobufs1; IOBUF;
@@ -46,7 +45,7 @@
 //METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
-//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
+//METAGUARD; RULEfifoRule; forwardFifo$out$deq__RDY & out$enq__RDY;
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;

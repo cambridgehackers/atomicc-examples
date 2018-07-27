@@ -5,16 +5,13 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
-//METAGUARD; out$first; 1;
 //METASTART; Fifo1_OC_2
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 //METASTART; Fifo2
 //METAGUARD; in$enq; ( ( windex + 1 ) % 2 ) != rindex;
 //METAGUARD; out$deq; rindex != windex;
-//METAGUARD; out$first; rindex != windex;
 //METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINTERNAL; inQ; Fifo1_OC_2;
@@ -23,14 +20,14 @@
 //METAINTERNAL; mem; LpmMemory;
 //METAINVOKE; RULEenter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; RULEenter__ENA; RULErecirc__ENA
-//METAGUARD; RULEenter; inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+//METAGUARD; RULEenter; inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
 //METAINVOKE; RULEexit_rule__ENA; :fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;:outQ$in$enq__ENA;
 //METAEXCLUSIVE; RULEexit_rule__ENA; RULErecirc__ENA
-//METAGUARD; RULEexit_rule; fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+//METAGUARD; RULEexit_rule; fifo$out$deq__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & outQ$in$enq__RDY;
 //METAINVOKE; RULErecirc__ENA; :fifo$in$enq__ENA;:fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$req__ENA;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;
-//METAGUARD; RULErecirc; fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+//METAGUARD; RULErecirc; fifo$out$deq__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
 //METAINVOKE; RULErespond__ENA; :ind$heard__ENA;:outQ$out$deq__ENA;:outQ$out$first;
-//METAGUARD; RULErespond; outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY;
+//METAGUARD; RULErespond; outQ$out$deq__RDY & ind$heard__RDY;
 //METAINVOKE; request$say__ENA; :inQ$in$enq__ENA;
 //METAGUARD; request$say; inQ$in$enq__RDY;
 //METARULES; RULEenter; RULEexit_rule; RULErecirc; RULErespond
@@ -48,7 +45,7 @@
 //METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
-//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
+//METAGUARD; RULEfifoRule; forwardFifo$out$deq__RDY & out$enq__RDY;
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;

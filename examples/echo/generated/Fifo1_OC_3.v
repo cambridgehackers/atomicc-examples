@@ -14,7 +14,7 @@ module Fifo1_OC_3 (input wire CLK, input wire nRST,
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
     assign out$first = element;
-    assign out$first__RDY = full;
+    assign out$first__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 
     always @( posedge CLK) begin
       if (!nRST) begin
