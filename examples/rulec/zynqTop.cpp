@@ -256,8 +256,7 @@ __module TestTop {
 
     TestTop() {
         __rule init {
-           //_.interrupt = __ready(readBus.out.first) && intEnable;
-//interrupt = (0)((intEnable) != (0))
+           _.interrupt = __ready(readBus.out.first) && intEnable;
         }
         __rule lread {
             auto temp = readBeat.out.first();
