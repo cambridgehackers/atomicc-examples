@@ -223,8 +223,8 @@ __module TestTop {
     TestPins          _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
-    __uint(1) intEnable, writeFirst, writeLast;
-    __uint(1) readFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    __uint(1) intEnable, writeNotFirst, writeLast;
+    __uint(1) readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
 
@@ -236,12 +236,12 @@ __module TestTop {
     UserTop user;
 
     void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        reqArs.in.enq(AddrCount{static_cast<AXIId>(id), (len + 1)<<2, static_cast<AXIAddr>(addr)});
+        reqArs.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
         portalRControl = __bitsubstr(addr, 11, 5) == 0;
         selectRIndReq = __bitsubstr(addr, 12);
     }
     void MAXIGP0_O.AW(__uint(32) addr, __uint(12) id, __uint(4) len) {
-        reqAws.in.enq(AddrCount{static_cast<AXIId>(id), (len + 1)<<2, static_cast<AXIAddr>(addr)});
+        reqAws.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
         portalWControl = __bitsubstr(addr, 11, 5) == 0;
         selectWIndReq = __bitsubstr(addr, 12);
     }
@@ -272,29 +272,26 @@ __module TestTop {
               default: requestValue = 0; break;
             }
             switch (temp.ac.addr) {
-              case 0: portalCtrlInfo = zzIntrChannel; break; // PORTAL_CTRL_INTERRUPT_STATUS 0
-              //4: portalCtrlInfo = 0; break;//31'd0, intEnable; break; // PORTAL_CTRL_INTERRUPT_ENABLE 1
-              case 8: portalCtrlInfo = 1; break;                         // PORTAL_CTRL_NUM_TILES        2
-              case 0xc: portalCtrlInfo = zzIntrChannel; break;         // PORTAL_CTRL_IND_QUEUE_STATUS 3
-              case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break; // PORTAL_CTRL_PORTAL_ID        4
-              case 0x14: portalCtrlInfo = 2; break;                     // PORTAL_CTRL_NUM_PORTALS      5
-              //5'h18: portalCtrlInfo = 0; break; // PORTAL_CTRL_COUNTER_MSB      6
-              //5'h1C: portalCtrlInfo = 0; break; // PORTAL_CTRL_COUNTER_LSB      7
+              case 0: portalCtrlInfo = zzIntrChannel; break;
+              case 8: portalCtrlInfo = 1; break;
+              case 0xc: portalCtrlInfo = zzIntrChannel; break;
+              case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
+              case 0x14: portalCtrlInfo = 2; break;
               default: portalCtrlInfo = 0; break;
             }
             readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : requestValue});
         }
         __rule lreadNext {
             auto temp = reqArs.out.first();
-            auto readAddrupdate = !readFirst ?  temp.addr : readAddr ;
-            AXICount readburstCount = !readFirst ?  temp.count : readCount ;
-            __uint(1) readFirstNext = !(!readFirst ? static_cast<__uint(1)>(temp.count == 1)  : readLast);
-            readBeat.in.enq(PortalInfo{temp.id, readburstCount, readAddrupdate, !readFirstNext});
+            auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
+            AXICount readburstCount = readNotFirst ? readCount : temp.count;
+            __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
+            readBeat.in.enq(PortalInfo{temp.id, readburstCount, readAddrupdate, readLastNext});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;
-            readFirst = readFirstNext;
+            readNotFirst = !readLastNext;
             readLast = readburstCount == 2 ;
-            if (!readFirstNext)
+            if (readLastNext)
                 reqArs.out.deq();
         }
         __rule lR {
@@ -316,16 +313,16 @@ __module TestTop {
         }
         __rule lwriteNext {
             auto temp = reqAws.out.first();
-            auto writeAddrupdate = !writeFirst ?  temp.addr : writeAddr ;
-            auto writeburstCount = !writeFirst ?  __bitsubstr(temp.count, 9, 2) : writeCount ;
-            __uint(1) writeFirstNext = !(!writeFirst ?  static_cast<__uint(1)>(temp.count == 4) : writeLast);
-            writeBeat.in.enq(PortalInfo{temp.id, static_cast<AXICount>(writeburstCount), writeAddrupdate, !writeFirstNext });
+            auto writeAddrupdate = writeNotFirst ? writeAddr : temp.addr;
+            AXICount writeburstCount = writeNotFirst ? writeCount : temp.count;
+            __uint(1) writeLastNext = writeNotFirst ? writeLast : temp.count == 1;
+            writeBeat.in.enq(PortalInfo{temp.id, writeburstCount, writeAddrupdate, writeLastNext});
             writeAddr = writeAddrupdate + 4 ;
             writeCount = writeburstCount - 1 ;
-            writeFirst = writeFirstNext ;
+            writeNotFirst = !writeLastNext ;
             writeLast = writeburstCount == 2 ;
-            if (!writeFirstNext)
-                 reqAws.out.deq();
+            if (writeLastNext)
+                reqAws.out.deq();
         }
         __rule writeResponse {
             MAXIGP0_I->B(writeDone.out.first(), 0);
