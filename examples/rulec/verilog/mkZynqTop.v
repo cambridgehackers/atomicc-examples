@@ -14,7 +14,7 @@ module mkZynqTop (
   wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v;
   wire [31 : 0] requestValue, portalCtrlInfo;
   wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
-  wire [9 : 0] readBeat$base, readburstCount, writeBeat$count, writeburstCount;
+  wire [3 : 0] readBeat$base, readburstCount, writeBeat$count, writeburstCount;
   wire [5 : 0] MAXIGP0_I$R$id, readBeat$id, reqArs$id, writeBeat$id, reqAws$id, MAXIGP0_I$B$id;
   wire [4 : 0] writeBeat$addr, reqAws$addr, writeAddrupdate, readBeat$addr, reqArs$addr, readAddrupdate;
   wire [3 : 0] ps7_ps7_foo_FCLKCLK, fclkRESETN, MAXIGP0_O$AR$len, MAXIGP0_O$AW$len, reqArs$count, reqAws$count;
@@ -46,7 +46,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .MAXIGP0_O$W__ENA(MAXIGP0_O$W__ENA), .MAXIGP0_O$W__RDY(MAXIGP0_O$W__RDY),
 
         .MAXIGP0_I$B$resp(0), .MAXIGP0_I$B$id(MAXIGP0_I$B$id),
-        .MAXIGP0_I$B__ENA(MAXIGP0_I$B__ENA && MAXIGP0_I$B__RDY), .MAXIGP0_I$B__RDY(MAXIGP0_I$B__RDY),
+        .MAXIGP0_I$B__ENA(MAXIGP0_I$B__ENA), .MAXIGP0_I$B__RDY(MAXIGP0_I$B__RDY),
         .DDR_Addr(DDR_Addr), .DDR_BankAddr(DDR_BankAddr), .DDR_CAS_n(DDR_CAS_n),
         .DDR_CKE(DDR_CKE), .DDR_Clk_n(DDR_Clk_n), .DDR_Clk_p(DDR_Clk_p),
         .DDR_CS_n(DDR_CS_n), .DDR_DM(DDR_DM), .DDR_DQ(DDR_DQ),
@@ -95,7 +95,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(RULElread),
         .in$enq$v({portalRControl ? portalCtrlInfo : requestValue, readBeat$id}),
         .in$enq__RDY(readData$in$enq__RDY),
-        .out$deq__ENA(MAXIGP0_I$R__RDY && MAXIGP0_I$R__ENA),
+        .out$deq__ENA(MAXIGP0_I$R__RDY),
         .out$deq__RDY(MAXIGP0_I$R__ENA),
         .out$first({MAXIGP0_I$R$data, MAXIGP0_I$R$id}),
         .out$first__RDY());

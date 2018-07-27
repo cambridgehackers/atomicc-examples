@@ -1,6 +1,6 @@
 EMODULE l_struct_OC_AddrCount {
     FIELD INTEGER_6 id
-    FIELD INTEGER_10 count
+    FIELD INTEGER_4 count
     FIELD INTEGER_5 addr
 }
 EMODULE l_struct_OC_BusData {
@@ -919,8 +919,8 @@ MODULE TestTop {
     FIELD INTEGER_1 portalRControl
     FIELD INTEGER_1 selectWIndReq
     FIELD INTEGER_1 portalWControl
-    FIELD INTEGER_10 readCount
-    FIELD INTEGER_10 writeCount
+    FIELD INTEGER_4 readCount
+    FIELD INTEGER_4 writeCount
     FIELD INTEGER_5 readAddr
     FIELD INTEGER_5 writeAddr
     FIELD Fifo1_OC_10 reqArs
@@ -936,7 +936,7 @@ MODULE TestTop {
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
         LET INTEGER_6 :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
-        LET INTEGER_10 :MAXIGP0_O$AR__ENA$agg_2e_tmp$count = (MAXIGP0_O$AR$len) + (1)
+        LET INTEGER_4 :MAXIGP0_O$AR__ENA$agg_2e_tmp$count = (MAXIGP0_O$AR$len) + (1)
         LET INTEGER_5 :MAXIGP0_O$AR__ENA$agg_2e_tmp$addr = MAXIGP0_O$AR$addr
         CALL/Action :reqArs$in$enq__ENA{MAXIGP0_O$AR__ENA$agg_2e_tmp}
         STORE :portalRControl = (__bitsubstr{MAXIGP0_O$AR$addr,11,5}) == (0)
@@ -945,7 +945,7 @@ MODULE TestTop {
     METHOD MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AW__ENA$agg_2e_tmp
         LET INTEGER_6 :MAXIGP0_O$AW__ENA$agg_2e_tmp$id = MAXIGP0_O$AW$id
-        LET INTEGER_10 :MAXIGP0_O$AW__ENA$agg_2e_tmp$count = (MAXIGP0_O$AW$len) + (1)
+        LET INTEGER_4 :MAXIGP0_O$AW__ENA$agg_2e_tmp$count = (MAXIGP0_O$AW$len) + (1)
         LET INTEGER_5 :MAXIGP0_O$AW__ENA$agg_2e_tmp$addr = MAXIGP0_O$AW$addr
         CALL/Action :reqAws$in$enq__ENA{MAXIGP0_O$AW__ENA$agg_2e_tmp}
         STORE :portalWControl = (__bitsubstr{MAXIGP0_O$AW$addr,11,5}) == (0)
@@ -972,7 +972,7 @@ MODULE TestTop {
         CALL :reqArs$out$first{}
         LET l_struct_OC_AddrCount :RULElreadNext__ENA$temp = reqArs$out$first
         LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
-        LET INTEGER_10 :RULElreadNext__ENA$agg_2e_tmp$ac$count = ((readNotFirst) != (0)) ? (readCount) : (((readNotFirst) != (0)) ^ 1) ? (RULElreadNext__ENA$temp$count) : 0
+        LET INTEGER_4 :RULElreadNext__ENA$agg_2e_tmp$ac$count = ((readNotFirst) != (0)) ? (readCount) : (((readNotFirst) != (0)) ^ 1) ? (RULElreadNext__ENA$temp$count) : 0
         LET INTEGER_5 :RULElreadNext__ENA$agg_2e_tmp$ac$addr = ((readNotFirst) != (0)) ? (readAddr) : (((readNotFirst) != (0)) ^ 1) ? (RULElreadNext__ENA$temp$addr) : 0
         LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = ((readNotFirst) != (0)) ? (readLast) : (((readNotFirst) != (0)) ^ 1) ? ((RULElreadNext__ENA$temp$count) == (1)) : 0
         CALL/Action :readBeat$in$enq__ENA{RULElreadNext__ENA$agg_2e_tmp}
@@ -1002,7 +1002,7 @@ MODULE TestTop {
         CALL :reqAws$out$first{}
         LET l_struct_OC_AddrCount :RULElwriteNext__ENA$temp = reqAws$out$first
         LET INTEGER_6 :RULElwriteNext__ENA$agg_2e_tmp$ac$id = RULElwriteNext__ENA$temp$id
-        LET INTEGER_10 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = ((writeNotFirst) != (0)) ? (writeCount) : (((writeNotFirst) != (0)) ^ 1) ? (RULElwriteNext__ENA$temp$count) : 0
+        LET INTEGER_4 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = ((writeNotFirst) != (0)) ? (writeCount) : (((writeNotFirst) != (0)) ^ 1) ? (RULElwriteNext__ENA$temp$count) : 0
         LET INTEGER_5 :RULElwriteNext__ENA$agg_2e_tmp$ac$addr = ((writeNotFirst) != (0)) ? (writeAddr) : (((writeNotFirst) != (0)) ^ 1) ? (RULElwriteNext__ENA$temp$addr) : 0
         LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = ((writeNotFirst) != (0)) ? (writeLast) : (((writeNotFirst) != (0)) ^ 1) ? ((RULElwriteNext__ENA$temp$count) == (1)) : 0
         CALL/Action :writeBeat$in$enq__ENA{RULElwriteNext__ENA$agg_2e_tmp}

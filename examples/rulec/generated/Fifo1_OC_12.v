@@ -3,14 +3,14 @@
 `default_nettype none
 module Fifo1_OC_12 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [21:0]in$enq$v,
+    input wire [15:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [21:0]out$first,
+    output wire [15:0]out$first,
     output wire out$first__RDY);
     reg [4:0]element$ac$addr;
-    reg [9:0]element$ac$count;
+    reg [3:0]element$ac$count;
     reg [5:0]element$ac$id;
     reg element$last;
     reg full;

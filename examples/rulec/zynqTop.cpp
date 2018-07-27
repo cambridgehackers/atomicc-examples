@@ -43,7 +43,7 @@ __module ResetInverter {
 
 __module ClockTop {
     ClockIfc _;
-    MMCME2_ADV#( BANDWIDTH = "OPTIMIZED",
+    MMCME2_ADV#(BANDWIDTH = "OPTIMIZED",
         CLKFBOUT_USE_FINE_PS = "FALSE", CLKOUT0_USE_FINE_PS = "FALSE",
         CLKOUT1_USE_FINE_PS = "FALSE", CLKOUT2_USE_FINE_PS = "FALSE",
         CLKOUT3_USE_FINE_PS = "FALSE", CLKOUT4_USE_FINE_PS = "FALSE",
@@ -197,7 +197,7 @@ __module P7Wrap {
 
 typedef __uint(5) AXIAddr;
 typedef __uint(6) AXIId;
-typedef __uint(10) AXICount;
+typedef __uint(4) AXICount;
 typedef struct {
     AXIId      id;
     AXICount   count;
@@ -301,7 +301,7 @@ __module TestTop {
         __rule lwrite {
             auto wb = writeBeat.out.first();
             if (wb.last)
-                writeDone.in.enq( wb.ac.id);
+                writeDone.in.enq(wb.ac.id);
             writeBeat.out.deq();
             auto temp = writeData.out.first();
             writeData.out.deq();
