@@ -267,12 +267,18 @@ __module TestTop {
             auto temp = readBeat.out.first();
             readBeat.out.deq();
             BusType res;
+#if 1
             switch (temp.ac.addr) {
               case 0: res = requestValue; haveUser = false; break;
               case 4: res = writeReady; break; //__ready(user.write.enq);
               default: res = 0; break;
             }
             readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : res});
+#else
+            if (!portalRControl && temp.ac.addr == 0)
+                haveUser = false;
+            readData.in.enq(ReadResp{temp.ac.id, portalCtrlInfo});
+#endif
         }
         __rule lreadNext {
             auto temp = reqArs.out.first();
@@ -280,6 +286,7 @@ __module TestTop {
             AXICount readburstCount = readNotFirst ? readCount : temp.count;
             __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
             auto zzIntrChannel = !selectRIndReq && haveUser;
+            //if (portalRControl)
             switch (readAddrupdate) {
               case 0: portalCtrlInfo = zzIntrChannel; break;
               case 8: portalCtrlInfo = 1; break;
@@ -288,6 +295,14 @@ __module TestTop {
               case 0x14: portalCtrlInfo = 2; break;
               default: portalCtrlInfo = 0; break;
             }
+#if 0
+            else
+            switch (readAddrupdate) {
+              case 0: portalCtrlInfo = requestValue; break;
+              case 4: portalCtrlInfo = writeReady; break; //__ready(user.write.enq);
+              default: portalCtrlInfo = 0; break;
+            }
+#endif
             readBeat.in.enq(PortalInfo{readLastNext, temp.id, readburstCount, readAddrupdate});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;
