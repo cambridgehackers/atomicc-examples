@@ -10,8 +10,8 @@ EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
 }
 EMODULE l_struct_OC_PortalInfo {
-    FIELD l_struct_OC_AddrCount ac
     FIELD INTEGER_1 last
+    FIELD l_struct_OC_AddrCount ac
 }
 EMODULE l_struct_OC_ReadResp {
     FIELD INTEGER_6 id
@@ -928,11 +928,14 @@ MODULE TestTop {
     FIELD Fifo1_OC_12 readBeat
     FIELD Fifo1_OC_12 writeBeat
     FIELD Fifo1_OC_14 readData
-    FIELD Fifo1_OC_16 readBus
     FIELD Fifo1_OC_16 writeData
     FIELD Fifo1_OC_18 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
+    FIELD INTEGER_32 requestValue
+    FIELD INTEGER_32 portalCtrlInfo
+    FIELD INTEGER_1 haveUser
+    FIELD INTEGER_1 writeReady
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
         LET INTEGER_6 :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
@@ -957,7 +960,8 @@ MODULE TestTop {
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULEinit__ENA {
-        LET INTEGER_1 :interrupt = __phi(__default:(0), ((readBus$out$first__RDY) != (0)):((intEnable) != (0)))
+        LET INTEGER_1 :interrupt = __phi(__default:(0), (haveUser):((intEnable) != (0)))
+        STORE :writeReady = user$write$enq__RDY
     }
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
@@ -971,10 +975,16 @@ MODULE TestTop {
         ALLOCA l_struct_OC_AddrCount RULElreadNext__ENA$temp
         CALL :reqArs$out$first{}
         LET l_struct_OC_AddrCount :RULElreadNext__ENA$temp = reqArs$out$first
+        STORE (((__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) == 0) & ((selectRIndReq) != (0))):portalCtrlInfo = __phi(__default:(0), (((selectRIndReq) != (0)) ^ 1):(haveUser))
+        STORE (((__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) == 8) & ((selectRIndReq) != (0))):portalCtrlInfo = 1
+        STORE (((__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) == 12) & ((selectRIndReq) != (0))):portalCtrlInfo = __phi(__default:(0), (((selectRIndReq) != (0)) ^ 1):(haveUser))
+        STORE (((__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) == 16) & ((selectRIndReq) != (0))):portalCtrlInfo = 5
+        STORE (((__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) == 20) & ((selectRIndReq) != (0))):portalCtrlInfo = 2
+        STORE :portalCtrlInfo = 0
+        LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = __phi(((readNotFirst) != (0)):(readLast), (((readNotFirst) != (0)) ^ 1):((RULElreadNext__ENA$temp$count) == (1)))
         LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
         LET INTEGER_4 :RULElreadNext__ENA$agg_2e_tmp$ac$count = __phi(((readNotFirst) != (0)):(readCount), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$count))
         LET INTEGER_5 :RULElreadNext__ENA$agg_2e_tmp$ac$addr = __phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))
-        LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = __phi(((readNotFirst) != (0)):(readLast), (((readNotFirst) != (0)) ^ 1):((RULElreadNext__ENA$temp$count) == (1)))
         CALL/Action :readBeat$in$enq__ENA{RULElreadNext__ENA$agg_2e_tmp}
         STORE :readAddr = (__phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))) + (4)
         STORE :readCount = (__phi(((readNotFirst) != (0)):(readCount), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$count))) - (1)
@@ -984,16 +994,13 @@ MODULE TestTop {
     }
     METHOD/Rule RULElread__ENA {
         ALLOCA l_struct_OC_ReadResp RULElread__ENA$agg_2e_tmp
-        ALLOCA l_struct_OC_BusData RULElread__ENA$ref_2e_tmp
         ALLOCA l_struct_OC_PortalInfo RULElread__ENA$temp
         CALL :readBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElread__ENA$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
-        CALL (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):readBus$out$first{}
-        LET l_struct_OC_BusData (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):RULElread__ENA$ref_2e_tmp = readBus$out$first
-        CALL/Action (((RULElread__ENA$temp$ac$addr) == 0) & ((selectRIndReq) != (0))):readBus$out$deq__ENA{}
+        STORE ((RULElread__ENA$temp$ac$addr) == 0):haveUser = 0
         LET INTEGER_6 :RULElread__ENA$agg_2e_tmp$id = RULElread__ENA$temp$ac$id
-        LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = __phi(((portalRControl) != (0)):(0), (((portalRControl) != (0)) ^ 1):(0))
+        LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = __phi(((portalRControl) != (0)):(portalCtrlInfo), (((portalRControl) != (0)) ^ 1):(0))
         CALL/Action :readData$in$enq__ENA{RULElread__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULElwriteNext__ENA {
@@ -1001,10 +1008,10 @@ MODULE TestTop {
         ALLOCA l_struct_OC_AddrCount RULElwriteNext__ENA$temp
         CALL :reqAws$out$first{}
         LET l_struct_OC_AddrCount :RULElwriteNext__ENA$temp = reqAws$out$first
+        LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = __phi(((writeNotFirst) != (0)):(writeLast), (((writeNotFirst) != (0)) ^ 1):((RULElwriteNext__ENA$temp$count) == (1)))
         LET INTEGER_6 :RULElwriteNext__ENA$agg_2e_tmp$ac$id = RULElwriteNext__ENA$temp$id
         LET INTEGER_4 :RULElwriteNext__ENA$agg_2e_tmp$ac$count = __phi(((writeNotFirst) != (0)):(writeCount), (((writeNotFirst) != (0)) ^ 1):(RULElwriteNext__ENA$temp$count))
         LET INTEGER_5 :RULElwriteNext__ENA$agg_2e_tmp$ac$addr = __phi(((writeNotFirst) != (0)):(writeAddr), (((writeNotFirst) != (0)) ^ 1):(RULElwriteNext__ENA$temp$addr))
-        LET INTEGER_1 :RULElwriteNext__ENA$agg_2e_tmp$last = __phi(((writeNotFirst) != (0)):(writeLast), (((writeNotFirst) != (0)) ^ 1):((RULElwriteNext__ENA$temp$count) == (1)))
         CALL/Action :writeBeat$in$enq__ENA{RULElwriteNext__ENA$agg_2e_tmp}
         STORE :writeAddr = (__phi(((writeNotFirst) != (0)):(writeAddr), (((writeNotFirst) != (0)) ^ 1):(RULElwriteNext__ENA$temp$addr))) + (4)
         STORE :writeCount = (__phi(((writeNotFirst) != (0)):(writeCount), (((writeNotFirst) != (0)) ^ 1):(RULElwriteNext__ENA$temp$count))) - (1)
@@ -1017,11 +1024,11 @@ MODULE TestTop {
         ALLOCA l_struct_OC_PortalInfo RULElwrite__ENA$wb
         CALL :writeBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElwrite__ENA$wb = writeBeat$out$first
+        CALL/Action :writeBeat$out$deq__ENA{}
+        CALL :writeData$out$first{}
+        LET l_struct_OC_BusData :RULElwrite__ENA$temp = writeData$out$first
+        CALL/Action :writeData$out$deq__ENA{}
         CALL/Action ((RULElwrite__ENA$wb$last) != (0)):writeDone$in$enq__ENA{RULElwrite__ENA$wb$ac$id}
-        CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeBeat$out$deq__ENA{}
-        CALL (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$first{}
-        LET l_struct_OC_BusData (((RULElwrite__ENA$wb$last) != (0)) ^ 1):RULElwrite__ENA$temp = writeData$out$first
-        CALL/Action (((RULElwrite__ENA$wb$last) != (0)) ^ 1):writeData$out$deq__ENA{}
         CALL/Action ((((portalWControl) != (0))^ 1) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1)):user$write$enq__ENA{RULElwrite__ENA$temp$data,(RULElwrite__ENA$wb$ac$addr) != (0)}
         STORE (((RULElwrite__ENA$wb$ac$addr) == (4)) & (((portalWControl) != (0)) & (((RULElwrite__ENA$wb$last) != (0)) ^ 1))):intEnable = __bitsubstr{RULElwrite__ENA$temp$data,0,0}
     }
@@ -1030,10 +1037,9 @@ MODULE TestTop {
         CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
         CALL/Action :writeDone$out$deq__ENA{}
     }
-    METHOD readUser$enq__ENA ( INTEGER_32 v ) {
-        ALLOCA l_struct_OC_BusData readUser$enq__ENA$agg_2e_tmp
-        LET INTEGER_32 :readUser$enq__ENA$agg_2e_tmp$data = readUser$enq$v
-        CALL/Action :readBus$in$enq__ENA{readUser$enq__ENA$agg_2e_tmp}
+    METHOD readUser$enq__ENA ( INTEGER_32 v ) if (((haveUser) ^ (1))) {
+        STORE :requestValue = readUser$enq$v
+        STORE :haveUser = 1
     }
 }
 MODULE ZynqTop {
