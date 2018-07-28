@@ -129,7 +129,10 @@ MODULE Fifo1 {
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
+        ALLOCA l_struct_OC_NOCData out$first$retval
+        LET l_struct_OC_NOCData :out$first$retval = element
+    }
 }
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -163,8 +166,12 @@ MODULE UserTop {
     INTERFACE l_ainterface_OC_PipeIn indication
     FIELD l_top ctop
     METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
-        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,(__bitsubstr{indication$enq$v,15,0}) - (1)}
-        CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,(__bitsubstr{indication$enq$v,15,0}) - (1)}
+        ALLOCA INTEGER_16 indication$enq__ENA$len
+        ALLOCA INTEGER_128 indication$enq__ENA$vint
+        LET INTEGER_128 :indication$enq__ENA$vint = indication$enq$v
+        LET INTEGER_16 :indication$enq__ENA$len = (__bitsubstr{indication$enq__ENA$vint,15,0}) - (1)
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq__ENA$len}
+        CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq__ENA$len}
     }
     METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}

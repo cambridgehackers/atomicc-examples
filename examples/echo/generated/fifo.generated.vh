@@ -5,6 +5,7 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
+//METABEFORE; out$first; :in$enq__ENA
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;

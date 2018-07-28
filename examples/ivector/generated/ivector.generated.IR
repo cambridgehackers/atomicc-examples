@@ -53,7 +53,10 @@ MODULE Fifo1 {
     METHOD out$deq__ENA {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_NOCData = ((element))
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
+        ALLOCA l_struct_OC_NOCData out$first$retval
+        LET l_struct_OC_NOCData :out$first$retval = element
+    }
 }
 MODULE Fifo1_OC_3 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
@@ -67,7 +70,10 @@ MODULE Fifo1_OC_3 {
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_ValuePair = ((element)) if ((full))
+    METHOD out$first l_struct_OC_ValuePair = ((out$first$retval)) if ((full)) {
+        ALLOCA l_struct_OC_ValuePair out$first$retval
+        LET l_struct_OC_ValuePair :out$first$retval = element
+    }
 }
 MODULE FifoPong {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
@@ -168,9 +174,11 @@ MODULE IVector {
         CALL/Action :out$heard__ENA{9,RULErespond_rule_9__ENA$temp$b}
     }
     METHOD in$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+        ALLOCA l_struct_OC_ValuePair in$say__ENA$agg_2e_tmp
         ALLOCA l_struct_OC_ValuePair in$say__ENA$temp
         LET INTEGER_32 :in$say__ENA$temp$b = in$say$v
-        CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say__ENA$temp}
+        LET l_struct_OC_ValuePair :in$say__ENA$agg_2e_tmp = in$say__ENA$temp
+        CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say__ENA$agg_2e_tmp}
     }
 }
 MODULE MuxPipe {

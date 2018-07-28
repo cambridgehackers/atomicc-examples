@@ -5,10 +5,12 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
+//METABEFORE; out$first; :in$enq__ENA
 //METASTART; Fifo1_OC_3
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
+//METABEFORE; out$first; :in$enq__ENA
 //METASTART; FifoPong
 //METAINTERNAL; element1; Fifo1_OC_3;
 //METAINTERNAL; element2; Fifo1_OC_3;

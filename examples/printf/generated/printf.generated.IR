@@ -88,7 +88,10 @@ MODULE Fifo1 {
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
+        ALLOCA l_struct_OC_NOCData out$first$retval
+        LET l_struct_OC_NOCData :out$first$retval = element
+    }
 }
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in

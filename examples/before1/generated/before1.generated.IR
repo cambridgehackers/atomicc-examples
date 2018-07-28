@@ -163,12 +163,16 @@ MODULE EchoIndicationOutput {
     FIELD INTEGER_1 ind_busy
     FIELD INTEGER_1 even
     METHOD/Rule RULEoutput_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
+        ALLOCA l_struct_OC_EchoIndication_data RULEoutput_rulee__ENA$agg_2e_tmp
         STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind0}
+        LET l_struct_OC_EchoIndication_data :RULEoutput_rulee__ENA$agg_2e_tmp = ind0
+        CALL/Action :pipe$enq__ENA{RULEoutput_rulee__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULEoutput_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
+        ALLOCA l_struct_OC_EchoIndication_data RULEoutput_ruleo__ENA$agg_2e_tmp
         STORE :ind_busy = 0
-        CALL/Action :pipe$enq__ENA{ind1}
+        LET l_struct_OC_EchoIndication_data :RULEoutput_ruleo__ENA$agg_2e_tmp = ind1
+        CALL/Action :pipe$enq__ENA{RULEoutput_ruleo__ENA$agg_2e_tmp}
     }
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",114,even}
@@ -225,7 +229,10 @@ MODULE Fifo1 {
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_NOCData = ((element)) if ((full))
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
+        ALLOCA l_struct_OC_NOCData out$first$retval
+        LET l_struct_OC_NOCData :out$first$retval = element
+    }
 }
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in

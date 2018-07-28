@@ -59,7 +59,7 @@ module UserTop (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (indication$enq__ENA & indication$enq__RDY) begin
-            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , indication$enq$v[ 15 : 0 ] - 1 );
+            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , ctop$indication$enq$v - 1 );
         end; // End of indication$enq__ENA
         if (wad$enq__ENA & wad$enq__RDY) begin
             $display( "reqConnect.enq v %llx length %lx" , wadapter_0$out$enq$v , wadapter_0$out$enq$length );

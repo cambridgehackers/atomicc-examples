@@ -5,6 +5,7 @@
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
+//METABEFORE; out$first; :in$enq__ENA
 //METASTART; ModFt600
 //METAINTERNAL; iobufs0; IOBUF;
 //METAINTERNAL; iobufs1; IOBUF;
