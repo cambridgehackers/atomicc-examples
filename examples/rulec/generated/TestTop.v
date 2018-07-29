@@ -1,7 +1,7 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
-module TestTop (
+module TestTop ( input wire CLK, input wire nRST,
     input wire MAXIGP0_O$AR__ENA,
     input wire [31:0]MAXIGP0_O$AR$addr,
     input wire [11:0]MAXIGP0_O$AR$id,
@@ -46,9 +46,6 @@ module TestTop (
     reg writeLast;
     reg writeNotFirst;
     reg writeReady;
-`endif
-    wire CLK;
-`ifdef sdsld
     wire RULEinit__ENA;
     wire RULEinit__RDY;
     wire RULElR__ENA;
@@ -74,9 +71,6 @@ module TestTop (
     wire RULElwrite__RDY;
     wire RULEwriteResponse__ENA;
     wire RULEwriteResponse__RDY;
-`endif
-    wire nRST;
-`ifdef aklsjlkjasd
     wire readBeat$in$enq__ENA;
     wire readBeat$in$enq__RDY;
     wire readBeat$out$deq__RDY;

@@ -220,6 +220,8 @@ typedef struct {
 
 __interface TestPins {
     __output __uint(1) interrupt;
+    __input __uint(1)  CLK;
+    __input __uint(1)  nRST;
 };
 
 __module TestTop {
@@ -377,6 +379,8 @@ __module ZynqTopNew {
     __connect test.MAXIGP0_O = zt.MAXIGP0_O;
     __connect test.MAXIGP0_I = zt.MAXIGP0_I;
     __connect test._ = zt.intr;
+    __connect test._.CLK = _.CLK;
+    __connect test._.nRST = _.nRST;
     __forward _ = zt._;
     __forward M = zt.M;
     __forward FCLK = zt.FCLK;

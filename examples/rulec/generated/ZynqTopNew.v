@@ -107,7 +107,7 @@ module ZynqTopNew (
         .FCLKCLK(FCLKCLK),
         .FCLKCLKTRIGN(FCLKCLKTRIGN),
         .FCLKRESETN(FCLKRESETN));
-    TestTop test (
+    TestTop test ( .CLK(CLK), .nRST(nRST),
         .MAXIGP0_O$AR__ENA(zt$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(zt$MAXIGP0_O$AR$addr),
         .MAXIGP0_O$AR$id(zt$MAXIGP0_O$AR$id),

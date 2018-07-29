@@ -15,7 +15,7 @@ module mkZynqTop (
 
   BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
   BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
-//`define NEWF
+`define NEWF
 `ifdef NEWF
   ZynqTopNew ps7_ps7_foo (.nRST(nRST), .CLK(CLK),
       .DDR_Addr(DDR_Addr), .DDR_BankAddr(DDR_BankAddr), .DDR_CAS_n(DDR_CAS_n), .DDR_CKE(DDR_CKE),
