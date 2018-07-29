@@ -24,7 +24,6 @@ module ZynqTopNew (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
-    input wire interrupt,
     inout wire [53:0]MIO,
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
@@ -54,6 +53,7 @@ module ZynqTopNew (
     wire zt$MAXIGP0_O$W$last;
     wire zt$MAXIGP0_O$W__ENA;
     wire zt$MAXIGP0_O$W__RDY;
+    wire zt$intrinterrupt;
     P7Wrap zt (
         .MAXIGP0_O$AR__ENA(zt$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(zt$MAXIGP0_O$AR$addr),
@@ -102,7 +102,7 @@ module ZynqTopNew (
         .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
         .FIXED_IO_ps_porb(FIXED_IO_ps_porb),
         .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb),
-        .interrupt(interrupt),
+        .intrinterrupt(zt$intrinterrupt),
         .MIO(MIO),
         .FCLKCLK(FCLKCLK),
         .FCLKCLKTRIGN(FCLKCLKTRIGN),
@@ -133,7 +133,7 @@ module ZynqTopNew (
         .MAXIGP0_I$R$last(test$MAXIGP0_I$R$last),
         .MAXIGP0_I$R$resp(test$MAXIGP0_I$R$resp),
         .MAXIGP0_I$R__RDY(zt$MAXIGP0_I$R__RDY),
-        .interrupt());
+        .interrupt(zt$intrinterrupt));
 endmodule 
 
 `default_nettype wire    // set back to default value

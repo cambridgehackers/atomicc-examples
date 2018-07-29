@@ -10,14 +10,30 @@ module mkZynqTop (
   inout wire FIXED_IO_ddr_vrn, inout wire FIXED_IO_ddr_vrp, inout wire DDR_WEB, inout wire [53 : 0] MIO,
   inout wire FIXED_IO_ps_clk, inout wire FIXED_IO_ps_porb, inout wire FIXED_IO_ps_srstb);
 
+  wire [3 : 0] ps7_ps7_foo_FCLKCLK, fclkRESETN;
   wire CLK, nRST;
+
+  BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
+  BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
+//`define NEWF
+`ifdef NEWF
+  ZynqTopNew ps7_ps7_foo (.nRST(nRST), .CLK(CLK),
+      .DDR_Addr(DDR_Addr), .DDR_BankAddr(DDR_BankAddr), .DDR_CAS_n(DDR_CAS_n), .DDR_CKE(DDR_CKE),
+      .DDR_Clk_n(DDR_Clk_n), .DDR_Clk_p(DDR_Clk_p), .DDR_CS_n(DDR_CS_n),
+      .DDR_DM(DDR_DM), .DDR_DQ(DDR_DQ),
+      .DDR_DQS_n(DDR_DQS_n), .DDR_DQS_p(DDR_DQS_p), .DDR_DRSTB(DDR_DRSTB),
+      .DDR_ODT(DDR_ODT), .DDR_RAS_n(DDR_RAS_n), .DDR_WEB(DDR_WEB),
+      .FIXED_IO_ddr_vrn(FIXED_IO_ddr_vrn), .FIXED_IO_ddr_vrp(FIXED_IO_ddr_vrp),
+      .FIXED_IO_ps_clk(FIXED_IO_ps_clk), .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb),
+      .MIO(MIO), .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKCLKTRIGN(), .FCLKRESETN(fclkRESETN));
+`else
   wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v;
   wire [31 : 0] requestValue, portalCtrlInfo;
   wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
   wire [3 : 0] readBeat$base, readburstCount, writeBeat$count, writeburstCount;
   wire [5 : 0] MAXIGP0_I$R$id, readBeat$id, reqArs$id, writeBeat$id, reqAws$id, MAXIGP0_I$B$id;
   wire [4 : 0] writeBeat$addr, reqAws$addr, writeAddrupdate, readBeat$addr, reqArs$addr, readAddrupdate;
-  wire [3 : 0] ps7_ps7_foo_FCLKCLK, fclkRESETN, MAXIGP0_O$AR$len, MAXIGP0_O$AW$len, reqArs$count, reqAws$count;
+  wire [3 : 0] MAXIGP0_O$AR$len, MAXIGP0_O$AW$len, reqArs$count, reqAws$count;
 
   wire MAXIGP0_O$AR__ENA, MAXIGP0_O$AW__ENA, MAXIGP0_I$R__RDY, MAXIGP0_I$B__RDY, MAXIGP0_O$W$last, MAXIGP0_O$W__ENA;
   wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
@@ -27,12 +43,9 @@ module mkZynqTop (
   wire writeBeat$out$deq__RDY, writeBeat$in$enq__RDY, reqAws$out$deq__RDY, writeBeat$last, reqArs$out$deq__RDY;
 
   wire RULEwriteNext, RULElwrite, RULEreadNext, RULElread;
-
-  BUFG ps7_fclk_0_c(.I(ps7_ps7_foo_FCLKCLK[0]), .O(CLK));
-  BUFG ps7_freset_0_r(.I(fclkRESETN[0]), .O(nRST));
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN), .FCLKCLKTRIGN(),
-        .interrupt(interrupt),
+        .intrinterrupt(interrupt),
         .MAXIGP0_O$AR$addr(MAXIGP0_O$AR$addr), .MAXIGP0_O$AR$id(MAXIGP0_O$AR$id), .MAXIGP0_O$AR$len(MAXIGP0_O$AR$len),
         .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA), .MAXIGP0_O$AR__RDY(MAXIGP0_O$AR__RDY),
 
@@ -189,4 +202,5 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         end
       end
   end
+`endif
 endmodule  // mkZynqTop

@@ -597,6 +597,8 @@ EMODULE l_ainterface_OC_ZynqClock {
     FIELD/inout INTEGER_1 FIXED_IO_ps_clk
     FIELD/inout INTEGER_1 FIXED_IO_ps_porb
     FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
+}
+EMODULE l_ainterface_OC_ZynqInterrupt {
     FIELD/input INTEGER_1 interrupt
 }
 EMODULE BUFG {
@@ -810,6 +812,7 @@ MODULE P7Wrap {
     INTERFACECONNECT/Forward M pps$M l_ainterface_OC_Pps7m
     INTERFACECONNECT/Forward FCLK pps$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_ZynqInterrupt intr
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
@@ -873,7 +876,7 @@ MODULE P7Wrap {
         LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
         LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET INTEGER_4 :pps$DDRARB = 0
-        LET INTEGER_20 :pps$IRQF2P = interrupt
+        LET INTEGER_20 :pps$IRQF2P = intr$interrupt
         LET INTEGER_1 :pclockTop$userCLK = __defaultClock
         LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
@@ -906,7 +909,7 @@ MODULE P7Wrap {
         LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
         LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET INTEGER_4 :pps$DDRARB = 0
-        LET INTEGER_20 :pps$IRQF2P = interrupt
+        LET INTEGER_20 :pps$IRQF2P = intr$interrupt
         LET INTEGER_1 :pclockTop$userCLK = __defaultClock
         LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
@@ -1079,9 +1082,11 @@ MODULE ZynqTop {
     INTERFACECONNECT/Forward MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
     INTERFACECONNECT/Forward MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
     INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT/Forward intr zt$intr l_ainterface_OC_ZynqInterrupt
     INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
     INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk
     INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_ZynqInterrupt intr
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
     FIELD P7Wrap zt
@@ -1091,6 +1096,7 @@ MODULE ZynqTop {
 MODULE ZynqTopNew {
     INTERFACECONNECT test$MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
     INTERFACECONNECT test$MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACECONNECT test$_ zt$intr l_ainterface_OC_TestPins
     INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
     INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
     INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk

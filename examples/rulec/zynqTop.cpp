@@ -112,6 +112,8 @@ __interface ZynqClock {
     __inout __uint(1)  FIXED_IO_ps_clk;
     __inout __uint(1)  FIXED_IO_ps_porb;
     __inout __uint(1)  FIXED_IO_ps_srstb;
+};
+__interface ZynqInterrupt {
     __input __uint(1)  interrupt;
 };
 
@@ -127,6 +129,7 @@ __interface MaxiI {
 };
 __module P7Wrap {
     ZynqClock        _;
+    ZynqInterrupt    intr;
     Pps7m            M;
     Pps7fclk         FCLK;
     MaxiO            *MAXIGP0_O;
@@ -178,7 +181,7 @@ __module P7Wrap {
             _.FIXED_IO_ps_porb = pps._.PS.PORB;
             _.FIXED_IO_ps_srstb = pps._.PS.SRSTB;
             pps._.DDR.ARB = 0;
-            pps._.IRQ.F2P = _.interrupt;
+            pps._.IRQ.F2P = intr.interrupt;
             pclockTop._.userCLK = __defaultClock;
             pclockTop._.usernRST = __defaultnReset;
             //pclockTop._.clockOut;
@@ -350,6 +353,7 @@ __module TestTop {
 
 __module ZynqTop {
     ZynqClock        _;
+    ZynqInterrupt    intr;
     Pps7m            M;
     Pps7fclk         FCLK;
     P7Wrap zt;
@@ -359,6 +363,7 @@ __module ZynqTop {
     __forward MAXIGP0_O = zt.MAXIGP0_O;
     __forward MAXIGP0_I = zt.MAXIGP0_I;
     __forward _ = zt._;
+    __forward intr = zt.intr;
     __forward M = zt.M;
     __forward FCLK = zt.FCLK;
 };
@@ -371,6 +376,7 @@ __module ZynqTopNew {
     TestTop test;
     __connect test.MAXIGP0_O = zt.MAXIGP0_O;
     __connect test.MAXIGP0_I = zt.MAXIGP0_I;
+    __connect test._ = zt.intr;
     __forward _ = zt._;
     __forward M = zt.M;
     __forward FCLK = zt.FCLK;
