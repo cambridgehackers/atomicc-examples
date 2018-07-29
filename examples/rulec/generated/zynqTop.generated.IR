@@ -19,8 +19,8 @@ EMODULE l_struct_OC_ReadResp {
 }
 EMODULE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
-    FIELD/input INTEGER_1 userCLK
-    FIELD/input INTEGER_1 usernRST
+    FIELD/input INTEGER_1 CLK
+    FIELD/input INTEGER_1 nRST
     FIELD/output INTEGER_1 clockOut
 }
 EMODULE l_ainterface_OC_MResetInverterResetInverter {
@@ -571,12 +571,7 @@ EMODULE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_TestPins {
-    FIELD/output INTEGER_1 interrupt
-}
 EMODULE l_ainterface_OC_ZynqClock {
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
     FIELD/inout INTEGER_15 DDR_Addr
     FIELD/inout INTEGER_3 DDR_BankAddr
     FIELD/inout INTEGER_1 DDR_CAS_n
@@ -600,6 +595,8 @@ EMODULE l_ainterface_OC_ZynqClock {
 }
 EMODULE l_ainterface_OC_ZynqInterrupt {
     FIELD/input INTEGER_1 interrupt
+    FIELD/input INTEGER_1 CLK
+    FIELD/input INTEGER_1 nRST
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
@@ -645,28 +642,6 @@ MODULE ClockTop {
     FIELD ResetInverter rinverter
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
-        LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DEN = 0
-        LET INTEGER_16 :ps7_clockGen_pll$DI = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DWE = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSEN = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSINCDEC = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PWRDWN = 0
-        LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
-        LET INTEGER_1 :clockOut = clkbuf0$O
-        LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
-        LET INTEGER_1 :rinverter$RESET_IN = usernRST
-        LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
-        LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
-        LET INTEGER_1 :__defaultClock = userCLK
-        LET INTEGER_1 :__defaultnReset = usernRST
-    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
         LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
@@ -682,12 +657,10 @@ MODULE ClockTop {
         LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
         LET INTEGER_1 :clockOut = clkbuf0$O
         LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
-        LET INTEGER_1 :rinverter$RESET_IN = usernRST
+        LET INTEGER_1 :rinverter$RESET_IN = nRST
         LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
         LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = userCLK
-        LET INTEGER_1 :__defaultClock = userCLK
-        LET INTEGER_1 :__defaultnReset = usernRST
+        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = CLK
     }
 }
 MODULE Fifo1 {
@@ -829,56 +802,14 @@ MODULE P7Wrap {
         LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
         LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
     }
-    METHOD/Rule RULEgp0ar$100__ENA if ((pps$MAXIGP0ARVALID)) {
-        CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
-    }
     METHOD/Rule RULEgp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
         CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
-    }
-    METHOD/Rule RULEgp0aw$100__ENA if ((pps$MAXIGP0AWVALID)) {
-        CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
     METHOD/Rule RULEgp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
         CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
-    METHOD/Rule RULEgp0w$100__ENA if ((pps$MAXIGP0WVALID)) {
-        CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
-    }
     METHOD/Rule RULEgp0w__ENA if ((pps$MAXIGP0WVALID)) {
         CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
-    }
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :pps$FPGAIDLEN = 1
-        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
-        LET INTEGER_1 :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
-        LET INTEGER_1 :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
-        LET INTEGER_1 :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
-        LET INTEGER_1 :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
-        LET INTEGER_1 :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
-        LET INTEGER_15 :DDR_Addr = pps$DDRA
-        LET INTEGER_3 :DDR_BankAddr = pps$DDRBA
-        LET INTEGER_1 :DDR_CAS_n = pps$DDRCASB
-        LET INTEGER_1 :DDR_CKE = pps$DDRCKE
-        LET INTEGER_1 :DDR_Clk_n = pps$DDRCKN
-        LET INTEGER_1 :DDR_Clk_p = pps$DDRCKP
-        LET INTEGER_1 :DDR_CS_n = pps$DDRCSB
-        LET INTEGER_4 :DDR_DM = pps$DDRDM
-        LET INTEGER_32 :DDR_DQ = pps$DDRDQ
-        LET INTEGER_4 :DDR_DQS_n = pps$DDRDQSN
-        LET INTEGER_4 :DDR_DQS_p = pps$DDRDQSP
-        LET INTEGER_1 :DDR_DRSTB = pps$DDRDRSTB
-        LET INTEGER_1 :DDR_ODT = pps$DDRODT
-        LET INTEGER_1 :DDR_RAS_n = pps$DDRRASB
-        LET INTEGER_1 :FIXED_IO_ddr_vrn = pps$DDRVRN
-        LET INTEGER_1 :FIXED_IO_ddr_vrp = pps$DDRVRP
-        LET INTEGER_1 :DDR_WEB = pps$DDRWEB
-        LET INTEGER_1 :FIXED_IO_ps_clk = pps$PSCLK
-        LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
-        LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
-        LET INTEGER_4 :pps$DDRARB = 0
-        LET INTEGER_20 :pps$IRQF2P = intr$interrupt
-        LET INTEGER_1 :pclockTop$userCLK = __defaultClock
-        LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
     }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
@@ -910,22 +841,21 @@ MODULE P7Wrap {
         LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET INTEGER_4 :pps$DDRARB = 0
         LET INTEGER_20 :pps$IRQF2P = intr$interrupt
-        LET INTEGER_1 :pclockTop$userCLK = __defaultClock
-        LET INTEGER_1 :pclockTop$usernRST = __defaultnReset
+        LET INTEGER_1 :__defaultClock = intr$CLK
+        LET INTEGER_1 :__defaultnReset = intr$nRST
+        LET INTEGER_1 :pclockTop$CLK = __defaultClock
+        LET INTEGER_1 :pclockTop$nRST = __defaultnReset
     }
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-    METHOD/Rule RULEinit$100__ENA {
-        LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
-    }
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
 }
 MODULE TestTop {
     INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
-    INTERFACE l_ainterface_OC_TestPins _
+    INTERFACE l_ainterface_OC_ZynqInterrupt _
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
     FIELD INTEGER_1 intEnable
@@ -1078,31 +1008,27 @@ MODULE TestTop {
         STORE :haveUser = 1
     }
 }
-MODULE ZynqTop {
-    INTERFACECONNECT/Forward MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
-    INTERFACECONNECT/Forward MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
-    INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
-    INTERFACECONNECT/Forward intr zt$intr l_ainterface_OC_ZynqInterrupt
-    INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk
-    INTERFACE l_ainterface_OC_ZynqClock _
-    INTERFACE l_ainterface_OC_ZynqInterrupt intr
-    INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    FIELD P7Wrap zt
-    INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
-    INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
-}
 MODULE ZynqTopNew {
-    INTERFACECONNECT test$MAXIGP0_O zt$MAXIGP0_O l_ainterface_OC_MaxiO
-    INTERFACECONNECT test$MAXIGP0_I zt$MAXIGP0_I l_ainterface_OC_MaxiI
-    INTERFACECONNECT test$_ zt$intr l_ainterface_OC_TestPins
-    INTERFACECONNECT/Forward _ zt$_ l_ainterface_OC_ZynqClock
-    INTERFACECONNECT/Forward M zt$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT/Forward FCLK zt$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACECONNECT/Forward _ ps7_ps7_foo$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT/Forward M ps7_ps7_foo$M l_ainterface_OC_Pps7m
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    FIELD P7Wrap zt
+    FIELD P7Wrap ps7_ps7_foo
     FIELD TestTop test
+    FIELD BUFG ps7_fclk_0_c
+    FIELD BUFG ps7_freset_0_r
+    METHOD/Rule RULEinit__ENA {
+        LET INTEGER_1 :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
+        LET INTEGER_1 :__defaultClock = ps7_fclk_0_c$O
+        LET INTEGER_1 :ps7_freset_0_r$I = ps7_ps7_foo$FCLK$RESETN
+        LET INTEGER_1 :__defaultnReset = ps7_freset_0_r$O
+        LET INTEGER_1 :test$interrupt = ps7_ps7_foo$intr$interrupt
+        LET INTEGER_1 :ps7_ps7_foo$intr$interrupt = test$interrupt
+        LET INTEGER_1 :ps7_ps7_foo$intr$CLK = __defaultClock
+        LET INTEGER_1 :ps7_ps7_foo$intr$nRST = __defaultnReset
+        LET INTEGER_1 :test$CLK = __defaultClock
+        LET INTEGER_1 :test$nRST = __defaultnReset
+    }
 }

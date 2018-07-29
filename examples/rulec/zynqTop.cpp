@@ -27,8 +27,8 @@
 
 __interface ClockIfc {
    __parameter float   CLKIN1_PERIOD;
-   __input  __uint(1)  userCLK;
-   __input  __uint(1)  usernRST;
+   __input  __uint(1)  CLK;
+   __input  __uint(1)  nRST;
    __output __uint(1)  clockOut;
 };
 
@@ -79,19 +79,15 @@ __module ClockTop {
         clkbuf._.I = ps7_clockGen_pll._.CLKFBOUT;
         _.clockOut = clkbuf0._.O;
         ps7_clockGen_pll._.CLKFBIN = clkbuf._.O;
-        rinverter._.RESET_IN = _.usernRST;
+        rinverter._.RESET_IN = _.nRST;
         ps7_clockGen_pll._.RST = rinverter._.RESET_OUT;
         clkbuf0._.I = ps7_clockGen_pll._.CLKOUT0;
-        ps7_clockGen_pll._.CLKIN1 = _.userCLK;
-        __defaultClock = _.userCLK;
-        __defaultnReset = _.usernRST;
+        ps7_clockGen_pll._.CLKIN1 = _.CLK;
         };
     }
 };
 
 __interface ZynqClock {
-    __input __uint(1)  CLK;
-    __input __uint(1)  nRST;
     __inout __uint(15) DDR_Addr;
     __inout __uint(3)  DDR_BankAddr;
     __inout __uint(1)  DDR_CAS_n;
@@ -115,6 +111,8 @@ __interface ZynqClock {
 };
 __interface ZynqInterrupt {
     __input __uint(1)  interrupt;
+    __input __uint(1)  CLK;
+    __input __uint(1)  nRST;
 };
 
 __interface MaxiO {
@@ -182,8 +180,10 @@ __module P7Wrap {
             _.FIXED_IO_ps_srstb = pps._.PS.SRSTB;
             pps._.DDR.ARB = 0;
             pps._.IRQ.F2P = intr.interrupt;
-            pclockTop._.userCLK = __defaultClock;
-            pclockTop._.usernRST = __defaultnReset;
+            __defaultClock = intr.CLK;
+            __defaultnReset = intr.nRST;
+            pclockTop._.CLK = __defaultClock;
+            pclockTop._.nRST = __defaultnReset;
             //pclockTop._.clockOut;
        }
        __rule gp0ar if (pps._.MAXIGP0.ARVALID) {
@@ -218,14 +218,8 @@ typedef struct {
   BusType    data;
 } BusData;
 
-__interface TestPins {
-    __output __uint(1) interrupt;
-    __input __uint(1)  CLK;
-    __input __uint(1)  nRST;
-};
-
 __module TestTop {
-    TestPins          _;
+    ZynqInterrupt     _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
     __uint(1) intEnable, writeNotFirst, writeLast;
@@ -353,38 +347,31 @@ __module TestTop {
     }
 };
 
-__module ZynqTop {
-    ZynqClock        _;
-    ZynqInterrupt    intr;
-    Pps7m            M;
-    Pps7fclk         FCLK;
-    P7Wrap zt;
-    MaxiO            *MAXIGP0_O;
-    MaxiI            MAXIGP0_I;
-
-    __forward MAXIGP0_O = zt.MAXIGP0_O;
-    __forward MAXIGP0_I = zt.MAXIGP0_I;
-    __forward _ = zt._;
-    __forward intr = zt.intr;
-    __forward M = zt.M;
-    __forward FCLK = zt.FCLK;
-};
-
 __module ZynqTopNew {
     ZynqClock        _;
     Pps7m            M;
-    Pps7fclk         FCLK;
-    P7Wrap zt;
-    TestTop test;
-    __connect test.MAXIGP0_O = zt.MAXIGP0_O;
-    __connect test.MAXIGP0_I = zt.MAXIGP0_I;
-    __connect test._ = zt.intr;
-    __connect test._.CLK = _.CLK;
-    __connect test._.nRST = _.nRST;
-    __forward _ = zt._;
-    __forward M = zt.M;
-    __forward FCLK = zt.FCLK;
+    P7Wrap           ps7_ps7_foo;
+    TestTop          test;
+    BUFG ps7_fclk_0_c;
+    BUFG ps7_freset_0_r;
+    __connect test.MAXIGP0_O = ps7_ps7_foo.MAXIGP0_O;
+    __connect test.MAXIGP0_I = ps7_ps7_foo.MAXIGP0_I;
+    __forward _ = ps7_ps7_foo._;
+    __forward M = ps7_ps7_foo.M;
+    ZynqTopNew() {
+        __rule init {
+            ps7_fclk_0_c._.I = ps7_ps7_foo.FCLK.CLK; // [0]
+            __defaultClock = ps7_fclk_0_c._.O;
+            ps7_freset_0_r._.I = ps7_ps7_foo.FCLK.RESETN; // [0]
+            __defaultnReset = ps7_freset_0_r._.O;
+            test._.interrupt = ps7_ps7_foo.intr.interrupt;
+            ps7_ps7_foo.intr.interrupt = test._.interrupt;
+            ps7_ps7_foo.intr.CLK = __defaultClock;
+            ps7_ps7_foo.intr.nRST = __defaultnReset;
+            test._.CLK = __defaultClock;
+            test._.nRST = __defaultnReset;
+        }
+    }
 };
 
 ZynqTopNew Ttest;
-ZynqTop ztest;
