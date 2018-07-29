@@ -371,7 +371,7 @@ module P7Wrap (
         .FTMTP2FDEBUG(),
         .FTMTP2FTRIG(),
         .FTMTP2FTRIGACK(0),
-        .IRQF2P(intrinterrupt),
+        .IRQF2P({19'd0, intrinterrupt}),
         .IRQP2F(),
         .MAXIGP0ACLK(CLK),
         .MAXIGP0ARADDR(pps$MAXIGP0ARADDR),
