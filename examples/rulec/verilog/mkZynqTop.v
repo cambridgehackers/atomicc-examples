@@ -27,29 +27,41 @@ module mkZynqTop (
       .FIXED_IO_ps_clk(FIXED_IO_ps_clk), .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb),
       .MIO(MIO), .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKCLKTRIGN(), .FCLKRESETN(fclkRESETN));
 `else
-  wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data, read$enq$v, write$enq$v;
-  wire [31 : 0] requestValue, portalCtrlInfo;
-  wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
-  wire [3 : 0] readBeat$base, readburstCount, writeBeat$count, writeburstCount;
-  wire [5 : 0] MAXIGP0_I$R$id, readBeat$id, reqArs$id, writeBeat$id, reqAws$id, MAXIGP0_I$B$id;
-  wire [4 : 0] writeBeat$addr, reqAws$addr, writeAddrupdate, readBeat$addr, reqArs$addr, readAddrupdate;
-  wire [3 : 0] MAXIGP0_O$AR$len, MAXIGP0_O$AW$len, reqArs$count, reqAws$count;
 
-  wire MAXIGP0_O$AR__ENA, MAXIGP0_O$AW__ENA, MAXIGP0_I$R__RDY, MAXIGP0_I$B__RDY, MAXIGP0_O$W$last, MAXIGP0_O$W__ENA;
-  wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
+  reg intEnable, writeNotFirst, writeLast, readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+  reg [3 : 0] readCount, writeCount;
+  reg [4 : 0] readAddr, writeAddr;
+wire interrupt;
+
+  wire [31 : 0] read$enq$v, write$enq$v;
+  wire [31 : 0] requestValue, portalCtrlInfo;
+  wire [3 : 0] readBeat$base, readburstCount, writeBeat$count, writeburstCount;
+  wire [5 : 0] readBeat$id, reqArs$id, writeBeat$id, reqAws$id;
+  wire [4 : 0] writeBeat$addr, reqAws$addr, writeAddrupdate, readBeat$addr, reqArs$addr, readAddrupdate;
+  wire [3 : 0] reqArs$count, reqAws$count;
+
   wire write$enq__RDY, read$enq__ENA, readData$in$enq__RDY, zzIntrChannel;
-  wire readBeat$out$deq__RDY, readBeat$in$enq__RDY, interrupt;
+  wire readBeat$out$deq__RDY, readBeat$in$enq__RDY;
   wire writeData$out$deq__RDY, readLastNext, writeLastNext, writeDone$in$enq__RDY, readBeat$last;
   wire writeBeat$out$deq__RDY, writeBeat$in$enq__RDY, reqAws$out$deq__RDY, writeBeat$last, reqArs$out$deq__RDY;
 
   wire RULEwriteNext, RULElwrite, RULEreadNext, RULElread;
+
+  wire [3 : 0] MAXIGP0_O$AR$len, MAXIGP0_O$AW$len;
+  wire [31 : 0] MAXIGP0_O$AR$addr, MAXIGP0_O$AW$addr, MAXIGP0_O$W$data, MAXIGP0_I$R$data;
+  wire [11 : 0] MAXIGP0_O$AR$id, MAXIGP0_O$AW$id, MAXIGP0_O$W$id;
+  wire [11 : 0] MAXIGP0_I$R$id, MAXIGP0_I$B$id;
+  wire MAXIGP0_O$AR__ENA, MAXIGP0_O$AW__ENA, MAXIGP0_I$R__RDY, MAXIGP0_I$B__RDY, MAXIGP0_O$W$last, MAXIGP0_O$W__ENA;
+  wire MAXIGP0_O$AR__RDY, MAXIGP0_I$R__ENA, MAXIGP0_I$B__ENA, MAXIGP0_O$W__RDY, MAXIGP0_O$AW__RDY;
+  wire [1:0]MAXIGP0_I$B$resp, MAXIGP0_I$R$resp;
+  wire MAXIGP0_I$R$last;
 ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FCLKCLK(ps7_ps7_foo_FCLKCLK), .FCLKRESETN(fclkRESETN), .FCLKCLKTRIGN(),
         .intrinterrupt(interrupt),
         .MAXIGP0_O$AR$addr(MAXIGP0_O$AR$addr), .MAXIGP0_O$AR$id(MAXIGP0_O$AR$id), .MAXIGP0_O$AR$len(MAXIGP0_O$AR$len),
         .MAXIGP0_O$AR__ENA(MAXIGP0_O$AR__ENA), .MAXIGP0_O$AR__RDY(MAXIGP0_O$AR__RDY),
 
-        .MAXIGP0_I$R$data(MAXIGP0_I$R$data), .MAXIGP0_I$R$resp(0), .MAXIGP0_I$R$last(1),
+        .MAXIGP0_I$R$data(MAXIGP0_I$R$data), .MAXIGP0_I$R$resp(MAXIGP0_I$R$resp), .MAXIGP0_I$R$last(MAXIGP0_I$R$last),
         .MAXIGP0_I$R$id(MAXIGP0_I$R$id), .MAXIGP0_I$R__RDY(MAXIGP0_I$R__RDY), .MAXIGP0_I$R__ENA(MAXIGP0_I$R__ENA),
 
         .MAXIGP0_O$AW$addr(MAXIGP0_O$AW$addr), .MAXIGP0_O$AW$id(MAXIGP0_O$AW$id), .MAXIGP0_O$AW$len(MAXIGP0_O$AW$len),
@@ -58,7 +70,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .MAXIGP0_O$W$data(MAXIGP0_O$W$data), .MAXIGP0_O$W$id(MAXIGP0_O$W$id), .MAXIGP0_O$W$last(MAXIGP0_O$W$last),
         .MAXIGP0_O$W__ENA(MAXIGP0_O$W__ENA), .MAXIGP0_O$W__RDY(MAXIGP0_O$W__RDY),
 
-        .MAXIGP0_I$B$resp(0), .MAXIGP0_I$B$id(MAXIGP0_I$B$id),
+        .MAXIGP0_I$B$resp(MAXIGP0_I$B$resp), .MAXIGP0_I$B$id(MAXIGP0_I$B$id),
         .MAXIGP0_I$B__ENA(MAXIGP0_I$B__ENA), .MAXIGP0_I$B__RDY(MAXIGP0_I$B__RDY),
         .DDR_Addr(DDR_Addr), .DDR_BankAddr(DDR_BankAddr), .DDR_CAS_n(DDR_CAS_n),
         .DDR_CKE(DDR_CKE), .DDR_Clk_n(DDR_Clk_n), .DDR_Clk_p(DDR_Clk_p),
@@ -68,9 +80,11 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .FIXED_IO_ddr_vrp(FIXED_IO_ddr_vrp), .DDR_WEB(DDR_WEB), .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
         .FIXED_IO_ps_porb(FIXED_IO_ps_porb), .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb), .MIO(MIO));
 
-  reg intEnable, writeNotFirst, writeLast, readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-  reg [3 : 0] readCount, writeCount;
-  reg [4 : 0] readAddr, writeAddr;
+  assign MAXIGP0_I$R$id[11:6] = 0;
+  assign MAXIGP0_I$B$id[11:6] = 0;
+  assign MAXIGP0_I$B$resp = 0;
+  assign MAXIGP0_I$R$last = 1;
+  assign MAXIGP0_I$R$resp = 0;
 
   Fifo1_OC_10 reqArs(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(MAXIGP0_O$AR__ENA),
@@ -110,7 +124,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .in$enq__RDY(readData$in$enq__RDY),
         .out$deq__ENA(MAXIGP0_I$R__RDY),
         .out$deq__RDY(MAXIGP0_I$R__ENA),
-        .out$first({MAXIGP0_I$R$data, MAXIGP0_I$R$id}),
+        .out$first({MAXIGP0_I$R$data, MAXIGP0_I$R$id[5:0]}),
         .out$first__RDY());
   Fifo1_OC_16 writeData(.nRST(nRST), .CLK(CLK),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
@@ -126,7 +140,7 @@ ZynqTop ps7_ps7_foo (.CLK(CLK), .nRST(nRST),
         .in$enq__RDY(writeDone$in$enq__RDY),
         .out$deq__ENA(MAXIGP0_I$B__RDY),
         .out$deq__RDY(MAXIGP0_I$B__ENA),
-        .out$first(MAXIGP0_I$B$id),
+        .out$first(MAXIGP0_I$B$id[5:0]),
         .out$first__RDY());
 
   UserTop user(.nRST(nRST), .CLK(CLK),
