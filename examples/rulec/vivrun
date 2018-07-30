@@ -1,0 +1,30 @@
+#
+#set -x
+#-source ../../../../connectal/../fpgamake/tcl/synth.tcl
+#echo create_project mkZynqTop -in_memory -part xc7z010clg400-1
+#echo     "set_property part xc7z010clg400-1 [current_project]"
+#echo     read_checkpoint  ./Impl/TopDown/top-post-route.dcp
+echo get_cells -hier
+echo get_cells -hier ps7_ps7_foo
+echo get_pins "*ps7_foo/FCLKCLK[0]"
+echo open_checkpoint zybo/Synth/mkZynqTop/mkZynqTop-synth.dcp
+echo get_property CLKIN1_PERIOD [get_cells -hierarch ps7_clockGen_pll]
+echo get_pins "*ps7_foo/FCLKCLK[0]"
+
+echo open_checkpoint zybo/Impl/TopDown/top-post-link.dcp
+
+MODULE=mkZynqTop HEADERFILES="" \
+INST=top \
+ VHDFILES="" VHDL_LIBRARIES="" IP="" SUBINST="" \
+ FPGAMAKE_PARTNAME=xc7z010clg400-1 FPGAMAKE_BOARDNAME=zybo \
+ FPGAMAKE_TOPMODULE=mkZynqTop PRESERVE_CLOCK_GATES=0 VERILOG_DEFINES="" \
+ XDC="" BUILDCACHE_CACHEDIR="Cache/Synth/mkZynqTop" BUILDCACHE_OUTPUTDIR="Synth/mkZynqTop" \
+  vivado  -mode tcl
+
+#  ../../../../connectal/../buildcache/buildcache 
+#     4 set fo [open "xx.1" "w"]
+#     5 set foo [get_cells -hier -verbose]
+#     6 open_checkpoint ./Impl/TopDown/top-post-route.dcp
+#     7 set foo [get_cells -hier -verbose]
+#     8 puts $fo [get_cells -hier -verbose]
+#     9 close $fo
