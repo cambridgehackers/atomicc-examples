@@ -936,7 +936,7 @@ MODULE TestTop {
         STORE (((RULElreadNext__ENA$readAddrupdate) == 12) & ((selectRIndReq) != (0))):portalCtrlInfo = RULElreadNext__ENA$zzIntrChannel
         STORE (((RULElreadNext__ENA$readAddrupdate) == 16) & ((selectRIndReq) != (0))):portalCtrlInfo = 5
         STORE (((RULElreadNext__ENA$readAddrupdate) == 20) & ((selectRIndReq) != (0))):portalCtrlInfo = 2
-        STORE :portalCtrlInfo = 0
+        STORE ((((RULElreadNext__ENA$readAddrupdate) != 0) & ((RULElreadNext__ENA$readAddrupdate) != 8) & ((RULElreadNext__ENA$readAddrupdate) != 12) & ((RULElreadNext__ENA$readAddrupdate) != 16) & ((RULElreadNext__ENA$readAddrupdate) != 20)) & ((selectRIndReq) != (0))):portalCtrlInfo = 0
         LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = RULElreadNext__ENA$readLastNext
         LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
         LET INTEGER_4 :RULElreadNext__ENA$agg_2e_tmp$ac$count = RULElreadNext__ENA$readburstCount
@@ -958,7 +958,7 @@ MODULE TestTop {
         LET INTEGER_32 ((RULElread__ENA$temp$ac$addr) == 0):RULElread__ENA$res = requestValue
         STORE ((RULElread__ENA$temp$ac$addr) == 0):haveUser = 0
         LET INTEGER_32 ((RULElread__ENA$temp$ac$addr) == 4):RULElread__ENA$res = writeReady
-        LET INTEGER_32 :RULElread__ENA$res = 0
+        LET INTEGER_32 (((RULElread__ENA$temp$ac$addr) != 0) & ((RULElread__ENA$temp$ac$addr) != 4)):RULElread__ENA$res = 0
         LET INTEGER_6 :RULElread__ENA$agg_2e_tmp$id = RULElread__ENA$temp$ac$id
         LET INTEGER_32 :RULElread__ENA$agg_2e_tmp$data = __phi(((portalRControl) != (0)):(portalCtrlInfo), (((portalRControl) != (0)) ^ 1):(RULElread__ENA$res))
         CALL/Action :readData$in$enq__ENA{RULElread__ENA$agg_2e_tmp}
