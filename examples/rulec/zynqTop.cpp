@@ -217,9 +217,14 @@ typedef struct {
 typedef struct {
   BusType    data;
 } BusData;
+__interface ZynqInterruptT {
+    __output __uint(1)  interrupt;
+    __input __uint(1)  CLK;
+    __input __uint(1)  nRST;
+};
 
 __module TestTop {
-    ZynqInterrupt     _;
+    ZynqInterruptT     _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
     __uint(1) intEnable, writeNotFirst, writeLast;
@@ -257,14 +262,12 @@ __module TestTop {
     }
     __connect readUser = user.read;
     __uint(32) portNum;
-    __uint(1) zzIntrChannel;
 
     TestTop() {
         __rule init {
            _.interrupt = haveUser && intEnable;
            writeReady = __ready(user.write.enq);
            portNum = selectRIndReq ? 6 : 5;
-           zzIntrChannel = !selectRIndReq & haveUser;
         }
         __rule lread {
             auto temp = readBeat.out.first();
@@ -288,6 +291,7 @@ __module TestTop {
             auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
             AXICount readburstCount = readNotFirst ? readCount : temp.count;
             __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
+            auto zzIntrChannel = !selectRIndReq & haveUser;
             //if (portalRControl)
             switch (readAddrupdate) {
               case 0: portalCtrlInfo = zzIntrChannel; break;

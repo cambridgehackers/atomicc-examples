@@ -144,9 +144,9 @@ module ZynqTopNew (
     BUFG ps7_freset_0_r (
         .I(ps7_ps7_foo$FCLKRESETN),
         .O(ps7_freset_0_r$O));
-    assign test$interrupt = test$interrupt;
     // Extra assigments, not to output wires
     assign RULEinit__RDY = 1;
+    assign test$interrupt = test$interrupt;
 endmodule 
 
 `default_nettype wire    // set back to default value
