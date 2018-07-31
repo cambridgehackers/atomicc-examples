@@ -884,6 +884,8 @@ MODULE TestTop {
     FIELD INTEGER_32 portalCtrlInfo
     FIELD INTEGER_1 haveUser
     FIELD INTEGER_1 writeReady
+    FIELD INTEGER_32 portNum
+    FIELD INTEGER_1 zzIntrChannel
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
         LET INTEGER_6 :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
@@ -910,6 +912,8 @@ MODULE TestTop {
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :interrupt = __phi(__default:(0), (haveUser):((intEnable) != (0)))
         STORE :writeReady = user$write$enq__RDY
+        STORE :portNum = 5
+        STORE :zzIntrChannel = (((selectRIndReq) != (0)) ^ (1)) & (haveUser)
     }
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp
@@ -924,19 +928,17 @@ MODULE TestTop {
         ALLOCA INTEGER_1 RULElreadNext__ENA$readLastNext
         ALLOCA INTEGER_4 RULElreadNext__ENA$readburstCount
         ALLOCA l_struct_OC_AddrCount RULElreadNext__ENA$temp
-        ALLOCA INTEGER_1 RULElreadNext__ENA$zzIntrChannel
         CALL :reqArs$out$first{}
         LET l_struct_OC_AddrCount :RULElreadNext__ENA$temp = reqArs$out$first
         LET INTEGER_5 :RULElreadNext__ENA$readAddrupdate = __phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$addr))
         LET INTEGER_4 :RULElreadNext__ENA$readburstCount = __phi(((readNotFirst) != (0)):(readCount), (((readNotFirst) != (0)) ^ 1):(RULElreadNext__ENA$temp$count))
         LET INTEGER_1 :RULElreadNext__ENA$readLastNext = __phi(((readNotFirst) != (0)):(readLast), (((readNotFirst) != (0)) ^ 1):((RULElreadNext__ENA$temp$count) == (1)))
-        LET INTEGER_1 :RULElreadNext__ENA$zzIntrChannel = __phi(__default:(0), (((selectRIndReq) != (0)) ^ 1):(haveUser))
-        STORE (((RULElreadNext__ENA$readAddrupdate) == 0) & ((selectRIndReq) != (0))):portalCtrlInfo = RULElreadNext__ENA$zzIntrChannel
-        STORE (((RULElreadNext__ENA$readAddrupdate) == 8) & ((selectRIndReq) != (0))):portalCtrlInfo = 1
-        STORE (((RULElreadNext__ENA$readAddrupdate) == 12) & ((selectRIndReq) != (0))):portalCtrlInfo = RULElreadNext__ENA$zzIntrChannel
-        STORE (((RULElreadNext__ENA$readAddrupdate) == 16) & ((selectRIndReq) != (0))):portalCtrlInfo = 5
-        STORE (((RULElreadNext__ENA$readAddrupdate) == 20) & ((selectRIndReq) != (0))):portalCtrlInfo = 2
-        STORE ((((RULElreadNext__ENA$readAddrupdate) != 0) & ((RULElreadNext__ENA$readAddrupdate) != 8) & ((RULElreadNext__ENA$readAddrupdate) != 12) & ((RULElreadNext__ENA$readAddrupdate) != 16) & ((RULElreadNext__ENA$readAddrupdate) != 20)) & ((selectRIndReq) != (0))):portalCtrlInfo = 0
+        STORE ((RULElreadNext__ENA$readAddrupdate) == 0):portalCtrlInfo = zzIntrChannel
+        STORE ((RULElreadNext__ENA$readAddrupdate) == 8):portalCtrlInfo = 1
+        STORE ((RULElreadNext__ENA$readAddrupdate) == 12):portalCtrlInfo = zzIntrChannel
+        STORE ((RULElreadNext__ENA$readAddrupdate) == 16):portalCtrlInfo = portNum
+        STORE ((RULElreadNext__ENA$readAddrupdate) == 20):portalCtrlInfo = 2
+        STORE (((RULElreadNext__ENA$readAddrupdate) != 0) & ((RULElreadNext__ENA$readAddrupdate) != 8) & ((RULElreadNext__ENA$readAddrupdate) != 12) & ((RULElreadNext__ENA$readAddrupdate) != 16) & ((RULElreadNext__ENA$readAddrupdate) != 20)):portalCtrlInfo = 0
         LET INTEGER_1 :RULElreadNext__ENA$agg_2e_tmp$last = RULElreadNext__ENA$readLastNext
         LET INTEGER_6 :RULElreadNext__ENA$agg_2e_tmp$ac$id = RULElreadNext__ENA$temp$id
         LET INTEGER_4 :RULElreadNext__ENA$agg_2e_tmp$ac$count = RULElreadNext__ENA$readburstCount

@@ -256,11 +256,15 @@ __module TestTop {
         haveUser = true;
     }
     __connect readUser = user.read;
+    __uint(32) portNum;
+    __uint(1) zzIntrChannel;
 
     TestTop() {
         __rule init {
            _.interrupt = haveUser && intEnable;
            writeReady = __ready(user.write.enq);
+           portNum = selectRIndReq ? 6 : 5;
+           zzIntrChannel = !selectRIndReq & haveUser;
         }
         __rule lread {
             auto temp = readBeat.out.first();
@@ -284,13 +288,13 @@ __module TestTop {
             auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
             AXICount readburstCount = readNotFirst ? readCount : temp.count;
             __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
-            auto zzIntrChannel = !selectRIndReq && haveUser;
             //if (portalRControl)
             switch (readAddrupdate) {
               case 0: portalCtrlInfo = zzIntrChannel; break;
               case 8: portalCtrlInfo = 1; break;
               case 0xc: portalCtrlInfo = zzIntrChannel; break;
-              case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
+              case 0x10: portalCtrlInfo = portNum; break;
+              //case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
               case 0x14: portalCtrlInfo = 2; break;
               default: portalCtrlInfo = 0; break;
             }
