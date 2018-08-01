@@ -113,7 +113,7 @@ module TestTop (
     assign interrupt = haveUser & intEnable;
     Fifo1_OC_10 reqArs (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AR__ENA),
-        .in$enq$v({ MAXIGP0_O$AR$addr[4:0] , MAXIGP0_O$AR$len + 4'd1 , MAXIGP0_O$AR$id[5:0] }),
+        .in$enq$v({ MAXIGP0_O$AR$addr[ 4 : 0 ] , MAXIGP0_O$AR$len + 4'd1 , MAXIGP0_O$AR$id[ 5 : 0 ] }),
         .in$enq__RDY(MAXIGP0_O$AR__RDY),
         .out$deq__ENA(RULElreadNext__ENA$readLastNext & readBeat$in$enq__RDY),
         .out$deq__RDY(reqArs$out$deq__RDY),
@@ -121,7 +121,7 @@ module TestTop (
         .out$first__RDY());
     Fifo1_OC_10 reqAws (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AW__ENA),
-        .in$enq$v({ MAXIGP0_O$AW$addr[4:0] , MAXIGP0_O$AW$len + 4'd1 , MAXIGP0_O$AW$id[5:0] }),
+        .in$enq$v({ MAXIGP0_O$AW$addr[ 4 : 0 ] , MAXIGP0_O$AW$len + 4'd1 , MAXIGP0_O$AW$id[ 5 : 0 ] }),
         .in$enq__RDY(MAXIGP0_O$AW__RDY),
         .out$deq__ENA(RULElwriteNext__ENA$writeLastNext & writeBeat$in$enq__RDY),
         .out$deq__RDY(reqAws$out$deq__RDY),
@@ -240,14 +240,14 @@ module TestTop (
             portalCtrlInfo <= ( !selectRIndReq ) & haveUser;
             if (RULElreadNext__ENA$readAddrupdate == 8)
             portalCtrlInfo <= 1;
-            if (RULElreadNext__ENA$readAddrupdate == 12)
-            portalCtrlInfo <= ( !selectRIndReq ) & haveUser;
             if (RULElreadNext__ENA$readAddrupdate == 16)
             portalCtrlInfo <= portNum;
-            if (RULElreadNext__ENA$readAddrupdate == 20)
-            portalCtrlInfo <= 2;
             if (( RULElreadNext__ENA$readAddrupdate != 0 ) & ( RULElreadNext__ENA$readAddrupdate != 8 ) & ( RULElreadNext__ENA$readAddrupdate != 12 ) & ( RULElreadNext__ENA$readAddrupdate != 16 ) & ( RULElreadNext__ENA$readAddrupdate != 20 ))
             portalCtrlInfo <= 0;
+            if (RULElreadNext__ENA$readAddrupdate == 12)
+            portalCtrlInfo <= ( !selectRIndReq ) & haveUser;
+            if (RULElreadNext__ENA$readAddrupdate == 20)
+            portalCtrlInfo <= 2;
             if (1) begin
             readAddr <= ( readNotFirst ? readAddr : reqArs$out$first[ 14 : 10 ] ) + 4;
             readCount <= ( readNotFirst ? readCount : reqArs$out$first[ 9 : 6 ] ) - 1;

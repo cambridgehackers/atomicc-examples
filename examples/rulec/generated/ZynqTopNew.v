@@ -139,10 +139,10 @@ module ZynqTopNew (
         .CLK(ps7_fclk_0_c$O),
         .nRST(ps7_freset_0_r$O));
     BUFG ps7_fclk_0_c (
-        .I(ps7_ps7_foo$FCLKCLK),
+        .I(ps7_ps7_foo$FCLKCLK[ 0 ]),
         .O(ps7_fclk_0_c$O));
     BUFG ps7_freset_0_r (
-        .I(ps7_ps7_foo$FCLKRESETN),
+        .I(ps7_ps7_foo$FCLKRESETN[ 0 ]),
         .O(ps7_freset_0_r$O));
     // Extra assigments, not to output wires
     assign RULEinit__RDY = 1;

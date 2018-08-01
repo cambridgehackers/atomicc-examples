@@ -52,15 +52,15 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
             ind_busy <= 1;
             even <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 114 , even );
-            if (even ^ 1) begin
-            ind0$tag <= 1;
-            ind0$data$heard$meth <= indication$heard$meth;
-            ind0$data$heard$v <= indication$heard$v;
-            end;
             if (even) begin
             ind1$tag <= 1;
             ind1$data$heard$meth <= indication$heard$meth;
             ind1$data$heard$v <= indication$heard$v;
+            end;
+            if (even ^ 1) begin
+            ind0$tag <= 1;
+            ind0$data$heard$meth <= indication$heard$meth;
+            ind0$data$heard$v <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
       end

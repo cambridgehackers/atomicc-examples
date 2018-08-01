@@ -65,7 +65,7 @@ module ModFt600 (
     assign RULEiobufs_7__ENA = 1;
     assign RULEiobufs_8__ENA = 1;
     assign RULEiobufs_9__ENA = 1;
-    assign usb_oe_n = usb_rxf_delay;
+    assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = usb_rxf_delay != 2'd0;
     assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     IOBUF iobufs0 (

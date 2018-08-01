@@ -25,7 +25,7 @@ module UserTop (input wire CLK, input wire nRST,
     AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(indication$enq__ENA),
         .in$enq$v(ctop$indication$enq$v),
-        .in$enq$length(ctop$indication$enq$v - 1),
+        .in$enq$length(ctop$indication$enq$v - 16'd1),
         .in$enq__RDY(radapter_0$in$enq__RDY),
         .out$enq__ENA(read$enq__ENA),
         .out$enq$v(read$enq$v),
@@ -59,7 +59,7 @@ module UserTop (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (indication$enq__ENA & indication$enq__RDY) begin
-            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , ctop$indication$enq$v - 1 );
+            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , ctop$indication$enq$v - 16'd1 );
         end; // End of indication$enq__ENA
         if (wad$enq__ENA & wad$enq__RDY) begin
             $display( "reqConnect.enq v %llx length %lx" , wadapter_0$out$enq$v , wadapter_0$out$enq$length );
