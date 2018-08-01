@@ -240,14 +240,14 @@ module TestTop (
             portalCtrlInfo <= ( !selectRIndReq ) & haveUser;
             if (RULElreadNext__ENA$readAddrupdate == 8)
             portalCtrlInfo <= 1;
-            if (RULElreadNext__ENA$readAddrupdate == 16)
-            portalCtrlInfo <= portNum;
-            if (( RULElreadNext__ENA$readAddrupdate != 0 ) & ( RULElreadNext__ENA$readAddrupdate != 8 ) & ( RULElreadNext__ENA$readAddrupdate != 12 ) & ( RULElreadNext__ENA$readAddrupdate != 16 ) & ( RULElreadNext__ENA$readAddrupdate != 20 ))
-            portalCtrlInfo <= 0;
             if (RULElreadNext__ENA$readAddrupdate == 12)
             portalCtrlInfo <= ( !selectRIndReq ) & haveUser;
+            if (RULElreadNext__ENA$readAddrupdate == 16)
+            portalCtrlInfo <= portNum;
             if (RULElreadNext__ENA$readAddrupdate == 20)
             portalCtrlInfo <= 2;
+            if (( RULElreadNext__ENA$readAddrupdate != 0 ) & ( RULElreadNext__ENA$readAddrupdate != 8 ) & ( RULElreadNext__ENA$readAddrupdate != 12 ) & ( RULElreadNext__ENA$readAddrupdate != 16 ) & ( RULElreadNext__ENA$readAddrupdate != 20 ))
+            portalCtrlInfo <= 0;
             if (1) begin
             readAddr <= ( readNotFirst ? readAddr : reqArs$out$first[ 14 : 10 ] ) + 4;
             readCount <= ( readNotFirst ? readCount : reqArs$out$first[ 9 : 6 ] ) - 1;

@@ -273,16 +273,16 @@ __module TestTop {
             auto temp = readBeat.out.first();
             readBeat.out.deq();
             BusType res;
+            if (!portalRControl && temp.ac.addr == 0)
+                haveUser = false;
 #if 1
             switch (temp.ac.addr) {
-              case 0: res = requestValue; haveUser = false; break;
+              case 0: res = requestValue; break;
               case 4: res = writeReady; break; //__ready(user.write.enq);
               default: res = 0; break;
             }
             readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : res});
 #else
-            if (!portalRControl && temp.ac.addr == 0)
-                haveUser = false;
             readData.in.enq(ReadResp{temp.ac.id, portalCtrlInfo});
 #endif
         }
@@ -372,7 +372,6 @@ __module ZynqTopNew {
             __defaultClock = ps7_fclk_0_c._.O;
             ps7_freset_0_r._.I = ps7_ps7_foo.FCLK.RESETN; // [0]
             __defaultnReset = ps7_freset_0_r._.O;
-            test._.interrupt = ps7_ps7_foo.intr.interrupt;
             ps7_ps7_foo.intr.interrupt = test._.interrupt;
             ps7_ps7_foo.intr.CLK = __defaultClock;
             ps7_ps7_foo.intr.nRST = __defaultnReset;

@@ -146,7 +146,6 @@ module ZynqTopNew (
         .O(ps7_freset_0_r$O));
     // Extra assigments, not to output wires
     assign RULEinit__RDY = 1;
-    assign test$interrupt = test$interrupt;
 endmodule 
 
 `default_nettype wire    // set back to default value
