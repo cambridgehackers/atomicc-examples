@@ -85,7 +85,7 @@
 //METAGUARD; RULEinit; 1;
 //METAINVOKE; RULElR__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
 //METAGUARD; RULElR; readData$out$deq__RDY & MAXIGP0_I$R__RDY;
-//METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;( RULElread__ENA$temp$ac$addr != 0 ) | ( portalRControl == 0 ):readData$in$enq__ENA;
+//METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;( ( RULElread__ENA$temp$ac$addr != 0 ) & ( RULElread__ENA$temp$ac$addr != 4 ) ) | ( ( ( RULElread__ENA$temp$ac$addr == 4 ) | ( RULElread__ENA$temp$ac$addr == 0 ) ) & ( portalRControl == 0 ) ):readData$in$enq__ENA;
 //METAEXCLUSIVE; RULElread__ENA; readUser$enq__ENA
 //METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA; :RULEinit__ENA; :RULElreadNext__ENA; :readUser$enq__ENA
 //METAINVOKE; RULElreadNext__ENA; 1:readBeat$in$enq__ENA;RULElreadNext__ENA$readLastNext != 0:reqArs$out$deq__ENA;:reqArs$out$first;
