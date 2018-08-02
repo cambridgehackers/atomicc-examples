@@ -102,8 +102,7 @@ module TestTop (
     assign MAXIGP0_I$B$resp = 0;
     assign MAXIGP0_I$R$data = readData$out$first[37:6];
     assign MAXIGP0_I$R$id = readData$out$first[5:0];
-    assign MAXIGP0_I$R$last = //readData$out$deq__RDY; &
- MAXIGP0_I$R__RDY;
+    assign MAXIGP0_I$R$last = readData$out$deq__RDY & MAXIGP0_I$R__RDY;
     assign MAXIGP0_I$R$resp = 0;
     assign RULEinit__ENA = 1;
     assign RULElR__ENA = readData$out$deq__RDY & MAXIGP0_I$R__RDY;
@@ -150,9 +149,10 @@ module TestTop (
         .in$enq$v({ RULElread__ENA$agg_2e_tmp$data , readBeat$out$first[ 6 : 1 ] }),
         .in$enq__RDY(readData$in$enq__RDY),
         .out$deq__ENA(MAXIGP0_I$R__RDY),
-        .out$deq__RDY(MAXIGP0_I$R__ENA),
+        .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY());
+    assign MAXIGP0_I$R__ENA = readData$out$deq__RDY;
     Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v({ MAXIGP0_O$W$data }),
