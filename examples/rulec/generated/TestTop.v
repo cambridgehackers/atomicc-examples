@@ -107,8 +107,7 @@ module TestTop (
     assign RULEinit__ENA = 1;
     assign RULElR__ENA = readData$out$deq__RDY & MAXIGP0_I$R__RDY;
     assign RULElreadNext__ENA = reqArs$out$deq__RDY & readBeat$in$enq__RDY;
-    assign RULElread__ENA = readBeat$out$deq__RDY & ( //portalRControl | 
-readData$in$enq__RDY );
+    assign RULElread__ENA = readBeat$out$deq__RDY & ( portalRControl | readData$in$enq__RDY );
     assign RULElwriteNext__ENA = reqAws$out$deq__RDY & writeBeat$in$enq__RDY;
     assign RULElwrite__ENA = writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     assign RULEwriteResponse__ENA = writeDone$out$deq__RDY & MAXIGP0_I$B__RDY;
@@ -133,8 +132,7 @@ readData$in$enq__RDY );
         .in$enq__ENA(reqArs$out$deq__RDY),
         .in$enq$v({ readNotFirst ? readAddr : reqArs$out$first[ 14 : 10 ] , readNotFirst ? readCount : reqArs$out$first[ 9 : 6 ] , reqArs$out$first[ 5 : 0 ] , reqArs$out$deq__RDY & readBeat$in$enq__RDY & RULElreadNext__ENA$readLastNext }),
         .in$enq__RDY(readBeat$in$enq__RDY),
-        .out$deq__ENA(//portalRControl | 
-readData$in$enq__RDY),
+        .out$deq__ENA(portalRControl | readData$in$enq__RDY),
         .out$deq__RDY(readBeat$out$deq__RDY),
         .out$first(readBeat$out$first),
         .out$first__RDY());
