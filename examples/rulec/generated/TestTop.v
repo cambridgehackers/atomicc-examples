@@ -145,7 +145,8 @@ module TestTop (
         .out$first(writeBeat$out$first),
         .out$first__RDY());
     Fifo1_OC_14 readData (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(readData$in$enq__ENA),
+        .in$enq__ENA(readBeat$out$deq__RDY),
+        //new.in$enq__ENA(( !portalRControl ) & readBeat$out$deq__RDY),
         .in$enq$v({ RULElread__ENA$agg_2e_tmp$data , readBeat$out$first[ 6 : 1 ] }),
         .in$enq__RDY(readData$in$enq__RDY),
         .out$deq__ENA(MAXIGP0_I$R__RDY),
@@ -179,7 +180,6 @@ module TestTop (
         .read$enq$last(user$read$enq$last),
         .read$enq__RDY(user$read$enq__RDY));
     assign readData$in$enq__ENA = readBeat$out$deq__RDY;
-    //newassign readData$in$enq__ENA = ( ( ( readBeat$out$first[15:11] != 5'd0 ) & ( readBeat$out$first[15:11] != 5'd4 ) ) | ( ( ( readBeat$out$first[15:11] == 5'd4 ) | ( readBeat$out$first[15:11] == 5'd0 ) ) & ( !portalRControl ) ) ) & readBeat$out$deq__RDY;
     assign readUser$enq$last = user$read$enq$last;
     assign readUser$enq$v = user$read$enq$v;
     assign readUser$enq__ENA = user$read$enq__ENA;
@@ -193,8 +193,7 @@ module TestTop (
     assign RULElreadNext__ENA$readAddrupdate = readNotFirst ? readAddr : reqArs$out$first[14:10];
     assign RULElreadNext__ENA$readLastNext = reqArs$out$deq__RDY & readBeat$in$enq__RDY & ( readNotFirst ? readLast : ( reqArs$out$first[9:6] == 4'd1 ) );
     assign RULElreadNext__RDY = reqArs$out$deq__RDY & readBeat$in$enq__RDY;
-    assign RULElread__ENA$agg_2e_tmp$data = portalRControl ? portalCtrlInfo : RULElread__ENA$res;
-    //newassign RULElread__ENA$agg_2e_tmp$data = ( ( portalRControl & ( ( ( readBeat$out$first[15:11] != 5'd0 ) & ( readBeat$out$first[15:11] != 5'd4 ) ) | ( ( ( readBeat$out$first[15:11] == 5'd4 ) | ( readBeat$out$first[15:11] == 5'd0 ) ) & ( !portalRControl ) ) ) ) ? portalCtrlInfo : 0 ) | ( ( ( !portalRControl ) & ( ( ( readBeat$out$first[15:11] != 5'd0 ) & ( readBeat$out$first[15:11] != 5'd4 ) ) | ( ( ( readBeat$out$first[15:11] == 5'd4 ) | ( readBeat$out$first[15:11] == 5'd0 ) ) & ( !portalRControl ) ) ) ) ? RULElread__ENA$res : 0 );
+    assign RULElread__ENA$agg_2e_tmp$data = ( portalRControl ? portalCtrlInfo : 0 ) | ( ( !portalRControl ) ? RULElread__ENA$res : 0 );
     assign RULElread__ENA$res = ( readBeat$out$deq__RDY & ( portalRControl | readData$in$enq__RDY ) & ( readBeat$out$first[15:11] == 5'd0 ) & ( !portalRControl ) ) ? requestValue : ( readBeat$out$deq__RDY & ( portalRControl | readData$in$enq__RDY ) & ( readBeat$out$first[15:11] == 5'd4 ) & ( !portalRControl ) & writeReady );
     assign RULElread__ENA$temp$ac$addr = readBeat$out$first[15:11];
     assign RULElread__RDY = readBeat$out$deq__RDY & ( portalRControl | readData$in$enq__RDY );
