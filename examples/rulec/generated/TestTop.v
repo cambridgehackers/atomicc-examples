@@ -57,7 +57,6 @@ module TestTop (
     wire RULElreadNext__ENA$readLastNext;
     wire RULElreadNext__RDY;
     wire RULElread__ENA;
-    wire [31:0]RULElread__ENA$agg_2e_tmp$data;
     wire [31:0]RULElread__ENA$res;
     wire [4:0]RULElread__ENA$temp$ac$addr;
     wire RULElread__RDY;
@@ -74,7 +73,6 @@ module TestTop (
     wire readBeat$in$enq__RDY;
     wire readBeat$out$deq__RDY;
     wire [15:0]readBeat$out$first;
-    wire readData$in$enq__ENA;
     wire readData$in$enq__RDY;
     wire readData$out$deq__RDY;
     wire [37:0]readData$out$first;
@@ -178,7 +176,6 @@ module TestTop (
         .read$enq$v(user$read$enq$v),
         .read$enq$last(user$read$enq$last),
         .read$enq__RDY(user$read$enq__RDY));
-    assign readData$in$enq__ENA = readBeat$out$deq__RDY;
     assign readUser$enq$last = user$read$enq$last;
     assign readUser$enq$v = user$read$enq$v;
     assign readUser$enq__ENA = user$read$enq__ENA;
@@ -192,7 +189,6 @@ module TestTop (
     assign RULElreadNext__ENA$readAddrupdate = readNotFirst ? readAddr : reqArs$out$first[14:10];
     assign RULElreadNext__ENA$readLastNext = reqArs$out$deq__RDY & readBeat$in$enq__RDY & ( readNotFirst ? readLast : ( reqArs$out$first[9:6] == 4'd1 ) );
     assign RULElreadNext__RDY = reqArs$out$deq__RDY & readBeat$in$enq__RDY;
-    assign RULElread__ENA$agg_2e_tmp$data = ( portalRControl ? portalCtrlInfo : 0 ) | ( ( !portalRControl ) ? RULElread__ENA$res : 0 );
     assign RULElread__ENA$res = ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[15:11] == 5'd0 ) ) ? requestValue : ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[15:11] == 5'd4 ) & writeReady );
     assign RULElread__ENA$temp$ac$addr = readBeat$out$first[15:11];
     assign RULElread__RDY = readBeat$out$deq__RDY & readData$in$enq__RDY;
