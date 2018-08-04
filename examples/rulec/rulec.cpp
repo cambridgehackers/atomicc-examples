@@ -119,6 +119,7 @@ __module Echo {
 
 Echo test;
 
+#define IfcNames_EchoIndicationH2S 5
 __module UserTop {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
@@ -136,8 +137,9 @@ printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsi
     void indication.enq(NOCData v) {
         __int(__bitsize(v)) vint = __bit_cast<__int(__bitsize(v))>(v);
         __int(16) len = __bitsubstr(vint, 15, 0) - 1;
+        __int(16) port = IfcNames_EchoIndicationH2S;
 printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
-        radapter_0.in.enq(v, len);
+        radapter_0.in.enq(__bit_cast<NOCData>(__bitconcat(__bitsubstr(vint, __bitsize(v) - 1, 16), port)), len);
     }
 
     l_top       ctop;
