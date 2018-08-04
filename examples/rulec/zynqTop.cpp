@@ -253,7 +253,7 @@ __module TestTop {
         writeData.in.enq(BusData{data});
     }
     PipeInB<BusType> readUser;
-    BusType requestValue, portalCtrlInfo;
+    BusType requestValue;
     bool haveUser;
     __uint(1) writeReady;
     void readUser.enq(BusType v) if (!haveUser) {
@@ -272,25 +272,32 @@ __module TestTop {
         __rule lread {
             auto temp = readBeat.out.first();
             readBeat.out.deq();
-            BusType res;
+            BusType res, portalCtrlInfo;
+            auto zzIntrChannel = !selectRIndReq & haveUser;
             if (!portalRControl && temp.ac.addr == 0)
                 haveUser = false;
-#if 1
+            switch (temp.ac.addr) {
+              case 0: portalCtrlInfo = zzIntrChannel; break;
+              case 8: portalCtrlInfo = 1; break;
+              case 0xc: portalCtrlInfo = zzIntrChannel; break;
+              case 0x10: portalCtrlInfo = portNum; break;
+              //case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
+              case 0x14: portalCtrlInfo = 2; break;
+              default: portalCtrlInfo = 0; break;
+            }
             switch (temp.ac.addr) {
               case 0: res = requestValue; break;
               case 4: res = writeReady; break; //__ready(user.write.enq);
               default: res = 0; break;
             }
             readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : res});
-#else
-            readData.in.enq(ReadResp{temp.ac.id, portalCtrlInfo});
-#endif
         }
         __rule lreadNext {
             auto temp = reqArs.out.first();
             auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
             AXICount readburstCount = readNotFirst ? readCount : temp.count;
             __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
+#if 0
             auto zzIntrChannel = !selectRIndReq & haveUser;
             //if (portalRControl)
             switch (readAddrupdate) {
@@ -300,13 +307,6 @@ __module TestTop {
               case 0x10: portalCtrlInfo = portNum; break;
               //case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
               case 0x14: portalCtrlInfo = 2; break;
-              default: portalCtrlInfo = 0; break;
-            }
-#if 0
-            else
-            switch (readAddrupdate) {
-              case 0: portalCtrlInfo = requestValue; break;
-              case 4: portalCtrlInfo = writeReady; break; //__ready(user.write.enq);
               default: portalCtrlInfo = 0; break;
             }
 #endif

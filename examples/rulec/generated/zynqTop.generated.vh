@@ -87,9 +87,8 @@
 //METAGUARD; RULElR; readData$out$deq__RDY & MAXIGP0_I$R__RDY;
 //METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;1:readData$in$enq__ENA;
 //METAEXCLUSIVE; RULElread__ENA; readUser$enq__ENA
-//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA; :RULEinit__ENA; :RULElreadNext__ENA; :readUser$enq__ENA
-//METAINVOKE; RULElreadNext__ENA; 1:readBeat$in$enq__ENA;RULElreadNext__ENA$readLastNext != 0:reqArs$out$deq__ENA;:reqArs$out$first;
-//METABEFORE; RULElreadNext__ENA; :MAXIGP0_O$AR__ENA; :RULEinit__ENA; :RULElread__ENA; :readUser$enq__ENA
+//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA; :RULEinit__ENA; :readUser$enq__ENA
+//METAINVOKE; RULElreadNext__ENA; :readBeat$in$enq__ENA;RULElreadNext__ENA$readLastNext != 0:reqArs$out$deq__ENA;:reqArs$out$first;
 //METAGUARD; RULElreadNext; reqArs$out$deq__RDY & readBeat$in$enq__RDY;
 //METAGUARD; RULElread; readBeat$out$deq__RDY & readData$in$enq__RDY;
 //METAINVOKE; RULElwrite__ENA; portalWControl == 0:user$write$enq__ENA;:writeBeat$out$deq__ENA;:writeBeat$out$first;:writeData$out$deq__ENA;:writeData$out$first;RULElwrite__ENA$wb$last != 0:writeDone$in$enq__ENA;
