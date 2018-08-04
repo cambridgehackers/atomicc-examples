@@ -30,81 +30,81 @@ module ModFt600 (
         .O(),
         .T(0));
     IOBUF iobufs1 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs2 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs3 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs4 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs5 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs6 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs7 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs8 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs9 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs10 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs11 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs12 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs13 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs14 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs15 (
-        .IO(0),
+        .IO(),
         .I(0),
         .O(),
         .T(0));
-    assign iobufs0$IO = ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) & ( usb_ad >> 32'd0 ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
+    assign iobufs0$IO = ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : 0 ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     // Extra assigments, not to output wires
     assign RULEhandshake__RDY = 1;

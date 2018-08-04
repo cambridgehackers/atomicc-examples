@@ -87,7 +87,6 @@ module TestTop (
     wire user$read$enq$last;
     wire [31:0]user$read$enq$v;
     wire user$read$enq__ENA;
-    wire user$read$enq__RDY;
     wire user$write$enq$last;
     wire user$write$enq__RDY;
     wire writeBeat$in$enq__RDY;
@@ -98,10 +97,12 @@ module TestTop (
     wire writeDone$in$enq__ENA;
     wire writeDone$out$deq__RDY;
     assign MAXIGP0_I$B$resp = 0;
+    assign MAXIGP0_I$B__ENA = writeDone$out$deq__RDY;
     assign MAXIGP0_I$R$data = readData$out$first[37:6];
     assign MAXIGP0_I$R$id = readData$out$first[5:0];
     assign MAXIGP0_I$R$last = readData$out$deq__RDY & MAXIGP0_I$R__RDY;
     assign MAXIGP0_I$R$resp = 0;
+    assign MAXIGP0_I$R__ENA = readData$out$deq__RDY;
     assign RULEinit__ENA = 1;
     assign RULElR__ENA = readData$out$deq__RDY & MAXIGP0_I$R__RDY;
     assign RULElreadNext__ENA = reqArs$out$deq__RDY & readBeat$in$enq__RDY;
@@ -150,7 +151,6 @@ module TestTop (
         .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY());
-    assign MAXIGP0_I$R__ENA = readData$out$deq__RDY;
     Fifo1_OC_16 writeData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v({ MAXIGP0_O$W$data }),
@@ -164,7 +164,7 @@ module TestTop (
         .in$enq$v(writeBeat$out$first[ 6 : 1 ]),
         .in$enq__RDY(),
         .out$deq__ENA(MAXIGP0_I$B__RDY),
-        .out$deq__RDY(MAXIGP0_I$B__ENA),
+        .out$deq__RDY(writeDone$out$deq__RDY),
         .out$first(MAXIGP0_I$B$id),
         .out$first__RDY());
     UserTop user (.CLK(CLK), .nRST(nRST),
@@ -175,13 +175,11 @@ module TestTop (
         .read$enq__ENA(user$read$enq__ENA),
         .read$enq$v(user$read$enq$v),
         .read$enq$last(user$read$enq$last),
-        .read$enq__RDY(user$read$enq__RDY));
+        .read$enq__RDY(!haveUser));
     assign readUser$enq$last = user$read$enq$last;
     assign readUser$enq$v = user$read$enq$v;
     assign readUser$enq__ENA = user$read$enq__ENA;
-    assign readUser$enq__RDY = user$read$enq__RDY;
     assign user$write$enq$last = ( !portalWControl ) & writeBeat$out$deq__RDY & writeData$out$deq__RDY & user$write$enq__RDY & ( writeBeat$out$first[15:11] != 5'd0 );
-    assign user$read$enq__RDY = readBeat$out$deq__RDY & readData$in$enq__RDY && !portalRControl;
     assign writeDone$in$enq__ENA = RULElwrite__ENA$wb$last & writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     // Extra assigments, not to output wires
     assign RULEinit__RDY = 1;
@@ -199,6 +197,7 @@ module TestTop (
     assign RULElwrite__ENA$wb$last = writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY ) & writeBeat$out$first[0:0];
     assign RULElwrite__RDY = writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     assign RULEwriteResponse__RDY = writeDone$out$deq__RDY & MAXIGP0_I$B__RDY;
+    assign readUser$enq__RDY = !haveUser;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -254,7 +253,7 @@ module TestTop (
             readLast <= ( readNotFirst ? readCount : reqArs$out$first[ 9 : 6 ] ) == 2;
             end;
         end; // End of RULElreadNext__ENA
-        if (0 & RULElread__ENA & RULElread__RDY) begin
+        if (RULElread__ENA & RULElread__RDY) begin
             if (( RULElread__ENA$temp$ac$addr == 0 ) & ( portalRControl == 0 ))
             haveUser <= 0;
         end; // End of RULElread__ENA
@@ -268,9 +267,9 @@ module TestTop (
             if (( RULElwrite__ENA$wb$ac$addr == 4 ) & ( portalWControl != 0 ))
             intEnable <= RULElwrite__ENA$temp$data[ 0 : 0 ];
         end; // End of RULElwrite__ENA
-        if (1 /*readUser$enq__ENA & readUser$enq__RDY*/) begin
+        if (readUser$enq__ENA & readUser$enq__RDY) begin
             requestValue <= user$read$enq$v;
-            haveUser <= user$read$enq__ENA;
+            haveUser <= 1;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

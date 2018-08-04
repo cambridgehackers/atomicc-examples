@@ -29,31 +29,31 @@ module ZynqTopNew (
     wire ps7_freset_0_r$O;
     wire [3:0]ps7_ps7_foo$FCLKCLK;
     wire [3:0]ps7_ps7_foo$FCLKRESETN;
-    wire ps7_ps7_foo$MAXIGP0_I$B__ENA;
     wire ps7_ps7_foo$MAXIGP0_I$B__RDY;
-    wire ps7_ps7_foo$MAXIGP0_I$R__ENA;
     wire ps7_ps7_foo$MAXIGP0_I$R__RDY;
     wire [31:0]ps7_ps7_foo$MAXIGP0_O$AR$addr;
     wire [11:0]ps7_ps7_foo$MAXIGP0_O$AR$id;
     wire [3:0]ps7_ps7_foo$MAXIGP0_O$AR$len;
     wire ps7_ps7_foo$MAXIGP0_O$AR__ENA;
-    wire ps7_ps7_foo$MAXIGP0_O$AR__RDY;
     wire [31:0]ps7_ps7_foo$MAXIGP0_O$AW$addr;
     wire [11:0]ps7_ps7_foo$MAXIGP0_O$AW$id;
     wire [3:0]ps7_ps7_foo$MAXIGP0_O$AW$len;
     wire ps7_ps7_foo$MAXIGP0_O$AW__ENA;
-    wire ps7_ps7_foo$MAXIGP0_O$AW__RDY;
     wire [31:0]ps7_ps7_foo$MAXIGP0_O$W$data;
     wire [11:0]ps7_ps7_foo$MAXIGP0_O$W$id;
     wire ps7_ps7_foo$MAXIGP0_O$W$last;
     wire ps7_ps7_foo$MAXIGP0_O$W__ENA;
-    wire ps7_ps7_foo$MAXIGP0_O$W__RDY;
     wire [11:0]test$MAXIGP0_I$B$id;
     wire [1:0]test$MAXIGP0_I$B$resp;
+    wire test$MAXIGP0_I$B__ENA;
     wire [31:0]test$MAXIGP0_I$R$data;
     wire [11:0]test$MAXIGP0_I$R$id;
     wire test$MAXIGP0_I$R$last;
     wire [1:0]test$MAXIGP0_I$R$resp;
+    wire test$MAXIGP0_I$R__ENA;
+    wire test$MAXIGP0_O$AR__RDY;
+    wire test$MAXIGP0_O$AW__RDY;
+    wire test$MAXIGP0_O$W__RDY;
     wire test$interrupt;
     assign RULEinit__ENA = 1;
     P7Wrap ps7_ps7_foo (
@@ -61,22 +61,22 @@ module ZynqTopNew (
         .MAXIGP0_O$AR$addr(ps7_ps7_foo$MAXIGP0_O$AR$addr),
         .MAXIGP0_O$AR$id(ps7_ps7_foo$MAXIGP0_O$AR$id),
         .MAXIGP0_O$AR$len(ps7_ps7_foo$MAXIGP0_O$AR$len),
-        .MAXIGP0_O$AR__RDY(ps7_ps7_foo$MAXIGP0_O$AR__RDY),
+        .MAXIGP0_O$AR__RDY(test$MAXIGP0_O$AR__RDY),
         .MAXIGP0_O$AW__ENA(ps7_ps7_foo$MAXIGP0_O$AW__ENA),
         .MAXIGP0_O$AW$addr(ps7_ps7_foo$MAXIGP0_O$AW$addr),
         .MAXIGP0_O$AW$id(ps7_ps7_foo$MAXIGP0_O$AW$id),
         .MAXIGP0_O$AW$len(ps7_ps7_foo$MAXIGP0_O$AW$len),
-        .MAXIGP0_O$AW__RDY(ps7_ps7_foo$MAXIGP0_O$AW__RDY),
+        .MAXIGP0_O$AW__RDY(test$MAXIGP0_O$AW__RDY),
         .MAXIGP0_O$W__ENA(ps7_ps7_foo$MAXIGP0_O$W__ENA),
         .MAXIGP0_O$W$data(ps7_ps7_foo$MAXIGP0_O$W$data),
         .MAXIGP0_O$W$id(ps7_ps7_foo$MAXIGP0_O$W$id),
         .MAXIGP0_O$W$last(ps7_ps7_foo$MAXIGP0_O$W$last),
-        .MAXIGP0_O$W__RDY(ps7_ps7_foo$MAXIGP0_O$W__RDY),
-        .MAXIGP0_I$B__ENA(ps7_ps7_foo$MAXIGP0_I$B__ENA),
+        .MAXIGP0_O$W__RDY(test$MAXIGP0_O$W__RDY),
+        .MAXIGP0_I$B__ENA(test$MAXIGP0_I$B__ENA),
         .MAXIGP0_I$B$id(test$MAXIGP0_I$B$id),
         .MAXIGP0_I$B$resp(test$MAXIGP0_I$B$resp),
         .MAXIGP0_I$B__RDY(ps7_ps7_foo$MAXIGP0_I$B__RDY),
-        .MAXIGP0_I$R__ENA(ps7_ps7_foo$MAXIGP0_I$R__ENA),
+        .MAXIGP0_I$R__ENA(test$MAXIGP0_I$R__ENA),
         .MAXIGP0_I$R$data(test$MAXIGP0_I$R$data),
         .MAXIGP0_I$R$id(test$MAXIGP0_I$R$id),
         .MAXIGP0_I$R$last(test$MAXIGP0_I$R$last),
@@ -114,22 +114,22 @@ module ZynqTopNew (
         .MAXIGP0_O$AR$addr(ps7_ps7_foo$MAXIGP0_O$AR$addr),
         .MAXIGP0_O$AR$id(ps7_ps7_foo$MAXIGP0_O$AR$id),
         .MAXIGP0_O$AR$len(ps7_ps7_foo$MAXIGP0_O$AR$len),
-        .MAXIGP0_O$AR__RDY(ps7_ps7_foo$MAXIGP0_O$AR__RDY),
+        .MAXIGP0_O$AR__RDY(test$MAXIGP0_O$AR__RDY),
         .MAXIGP0_O$AW__ENA(ps7_ps7_foo$MAXIGP0_O$AW__ENA),
         .MAXIGP0_O$AW$addr(ps7_ps7_foo$MAXIGP0_O$AW$addr),
         .MAXIGP0_O$AW$id(ps7_ps7_foo$MAXIGP0_O$AW$id),
         .MAXIGP0_O$AW$len(ps7_ps7_foo$MAXIGP0_O$AW$len),
-        .MAXIGP0_O$AW__RDY(ps7_ps7_foo$MAXIGP0_O$AW__RDY),
+        .MAXIGP0_O$AW__RDY(test$MAXIGP0_O$AW__RDY),
         .MAXIGP0_O$W__ENA(ps7_ps7_foo$MAXIGP0_O$W__ENA),
         .MAXIGP0_O$W$data(ps7_ps7_foo$MAXIGP0_O$W$data),
         .MAXIGP0_O$W$id(ps7_ps7_foo$MAXIGP0_O$W$id),
         .MAXIGP0_O$W$last(ps7_ps7_foo$MAXIGP0_O$W$last),
-        .MAXIGP0_O$W__RDY(ps7_ps7_foo$MAXIGP0_O$W__RDY),
-        .MAXIGP0_I$B__ENA(ps7_ps7_foo$MAXIGP0_I$B__ENA),
+        .MAXIGP0_O$W__RDY(test$MAXIGP0_O$W__RDY),
+        .MAXIGP0_I$B__ENA(test$MAXIGP0_I$B__ENA),
         .MAXIGP0_I$B$id(test$MAXIGP0_I$B$id),
         .MAXIGP0_I$B$resp(test$MAXIGP0_I$B$resp),
         .MAXIGP0_I$B__RDY(ps7_ps7_foo$MAXIGP0_I$B__RDY),
-        .MAXIGP0_I$R__ENA(ps7_ps7_foo$MAXIGP0_I$R__ENA),
+        .MAXIGP0_I$R__ENA(test$MAXIGP0_I$R__ENA),
         .MAXIGP0_I$R$data(test$MAXIGP0_I$R$data),
         .MAXIGP0_I$R$id(test$MAXIGP0_I$R$id),
         .MAXIGP0_I$R$last(test$MAXIGP0_I$R$last),

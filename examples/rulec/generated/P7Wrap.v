@@ -106,7 +106,10 @@ module P7Wrap (
     assign FIXED_IO_ps_clk = pps$PSCLK;
     assign FIXED_IO_ps_porb = pps$PSPORB;
     assign FIXED_IO_ps_srstb = pps$PSSRSTB;
+    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
+    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
     assign MAXIGP0_O$W$last = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
+    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
     assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
     assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
     assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
@@ -354,7 +357,7 @@ module P7Wrap (
         .MAXIGP0ARQOS(),
         .MAXIGP0ARREADY(MAXIGP0_O$AR__RDY),
         .MAXIGP0ARSIZE(),
-        .MAXIGP0ARVALID(MAXIGP0_O$AR__ENA),
+        .MAXIGP0ARVALID(pps$MAXIGP0ARVALID),
         .MAXIGP0AWADDR(MAXIGP0_O$AW$addr),
         .MAXIGP0AWBURST(),
         .MAXIGP0AWCACHE(),
@@ -365,7 +368,7 @@ module P7Wrap (
         .MAXIGP0AWQOS(),
         .MAXIGP0AWREADY(MAXIGP0_O$AW__RDY),
         .MAXIGP0AWSIZE(),
-        .MAXIGP0AWVALID(MAXIGP0_O$AW__ENA),
+        .MAXIGP0AWVALID(pps$MAXIGP0AWVALID),
         .MAXIGP0BID(MAXIGP0_I$B$id),
         .MAXIGP0BREADY(MAXIGP0_I$B__RDY),
         .MAXIGP0BRESP(MAXIGP0_I$B$resp),
@@ -381,7 +384,7 @@ module P7Wrap (
         .MAXIGP0WLAST(pps$MAXIGP0WLAST),
         .MAXIGP0WREADY(MAXIGP0_O$W__RDY),
         .MAXIGP0WSTRB(),
-        .MAXIGP0WVALID(MAXIGP0_O$W__ENA),
+        .MAXIGP0WVALID(pps$MAXIGP0WVALID),
         .MAXIGP1ACLK(0),
         .MAXIGP1ARADDR(),
         .MAXIGP1ARBURST(),

@@ -44,6 +44,7 @@ module Lpm (input wire CLK, input wire nRST,
     assign RULErespond__ENA = outQ$out$deq__RDY & ind$heard__RDY;
     assign ind$heard$meth = outQ$out$first[31:0];
     assign ind$heard$v = outQ$out$first[63:32];
+    assign ind$heard__ENA = outQ$out$deq__RDY;
     Fifo1_OC_2 inQ (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say__ENA$temp$c , request$say$v , request$say$meth }),
@@ -65,7 +66,7 @@ module Lpm (input wire CLK, input wire nRST,
         .in$enq$v({ fifo$out$first[ 95 : 64 ] , fifo$out$first[ 63 : 32 ] , fifo$out$first[ 31 : 0 ] }),
         .in$enq__RDY(outQ$in$enq__RDY),
         .out$deq__ENA(ind$heard__RDY),
-        .out$deq__RDY(ind$heard__ENA),
+        .out$deq__RDY(outQ$out$deq__RDY),
         .out$first(outQ$out$first),
         .out$first__RDY());
     LpmMemory mem (.CLK(CLK), .nRST(nRST),
