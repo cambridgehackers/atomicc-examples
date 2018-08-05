@@ -127,7 +127,7 @@ EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeInB {
-    METHOD enq__ENA ( INTEGER_32 v , INTEGER_1 last )
+    METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( l_struct_OC_AddrCount v )
@@ -886,7 +886,7 @@ MODULE TestTop {
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD INTEGER_32 requestValue
-    FIELD INTEGER_1 haveUser
+    FIELD INTEGER_16 requestLength
     FIELD INTEGER_1 writeReady
     FIELD INTEGER_32 portNum
     METHOD MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
@@ -913,7 +913,7 @@ MODULE TestTop {
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULEinit__ENA {
-        LET INTEGER_1 :interrupt = __phi(__default:(0), (haveUser):((intEnable) != (0)))
+        LET INTEGER_1 :interrupt = __phi(__default:(0), ((requestLength) != (0)):((intEnable) != (0)))
         STORE :writeReady = user$write$enq__RDY
         STORE :portNum = 5
     }
@@ -951,12 +951,12 @@ MODULE TestTop {
         ALLOCA INTEGER_32 RULElread__ENA$portalCtrlInfo
         ALLOCA INTEGER_32 RULElread__ENA$res
         ALLOCA l_struct_OC_PortalInfo RULElread__ENA$temp
-        ALLOCA INTEGER_32 RULElread__ENA$zzIntrChannel
+        ALLOCA INTEGER_16 RULElread__ENA$zzIntrChannel
         CALL :readBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULElread__ENA$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
-        LET INTEGER_32 :RULElread__ENA$zzIntrChannel = (((selectRIndReq) != (0)) ^ (1)) & (haveUser)
-        STORE (((RULElread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)):haveUser = 0
+        LET INTEGER_16 :RULElread__ENA$zzIntrChannel = __phi((((selectRIndReq) != (0)) ^ 1):(requestLength), ((selectRIndReq) != (0)):(0))
+        STORE (((RULElread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)):requestLength = 0
         LET INTEGER_32 (((RULElread__ENA$temp$ac$addr) == 0) & ((((RULElread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULElread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULElread__ENA$portalCtrlInfo = RULElread__ENA$zzIntrChannel
         LET INTEGER_32 (((RULElread__ENA$temp$ac$addr) == 8) & ((((RULElread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULElread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULElread__ENA$portalCtrlInfo = 1
         LET INTEGER_32 (((RULElread__ENA$temp$ac$addr) == 12) & ((((RULElread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULElread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULElread__ENA$portalCtrlInfo = RULElread__ENA$zzIntrChannel
@@ -1010,9 +1010,9 @@ MODULE TestTop {
         CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
         CALL/Action :writeDone$out$deq__ENA{}
     }
-    METHOD readUser$enq__ENA ( INTEGER_32 v ) if (((haveUser) ^ (1))) {
+    METHOD readUser$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((requestLength) == (0))) {
         STORE :requestValue = readUser$enq$v
-        STORE :haveUser = 1
+        STORE :requestLength = readUser$enq$length
     }
 }
 MODULE ZynqTopNew {

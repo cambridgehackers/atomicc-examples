@@ -254,18 +254,18 @@ __module TestTop {
     }
     PipeInB<BusType> readUser;
     BusType requestValue;
-    bool haveUser;
+    LenType requestLength;
     __uint(1) writeReady;
-    void readUser.enq(BusType v) if (!haveUser) {
+    void readUser.enq(BusType v, LenType length) if (requestLength == 0) {
         requestValue = v;
-        haveUser = true;
+        requestLength = length;
     }
     __connect readUser = user.read;
     __uint(32) portNum;
 
     TestTop() {
         __rule init {
-           _.interrupt = haveUser && intEnable;
+           _.interrupt = (requestLength != 0) && intEnable;
            writeReady = __ready(user.write.enq);
            portNum = selectRIndReq ? 6 : 5;
         }
@@ -273,9 +273,9 @@ __module TestTop {
             auto temp = readBeat.out.first();
             readBeat.out.deq();
             BusType res, portalCtrlInfo;
-            auto zzIntrChannel = !selectRIndReq & haveUser;
+            LenType zzIntrChannel = !selectRIndReq ? requestLength : 0;
             if (!portalRControl && temp.ac.addr == 0)
-                haveUser = false;
+                requestLength = 0;
             switch (temp.ac.addr) {
               case 0: portalCtrlInfo = zzIntrChannel; break;
               case 8: portalCtrlInfo = 1; break;
@@ -297,19 +297,6 @@ __module TestTop {
             auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
             AXICount readburstCount = readNotFirst ? readCount : temp.count;
             __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
-#if 0
-            auto zzIntrChannel = !selectRIndReq & haveUser;
-            //if (portalRControl)
-            switch (readAddrupdate) {
-              case 0: portalCtrlInfo = zzIntrChannel; break;
-              case 8: portalCtrlInfo = 1; break;
-              case 0xc: portalCtrlInfo = zzIntrChannel; break;
-              case 0x10: portalCtrlInfo = portNum; break;
-              //case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
-              case 0x14: portalCtrlInfo = 2; break;
-              default: portalCtrlInfo = 0; break;
-            }
-#endif
             readBeat.in.enq(PortalInfo{readLastNext, temp.id, readburstCount, readAddrupdate});
             readAddr = readAddrupdate + 4 ;
             readCount = readburstCount - 1 ;

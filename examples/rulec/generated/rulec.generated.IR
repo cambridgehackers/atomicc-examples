@@ -22,7 +22,7 @@ EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeInB {
-    METHOD enq__ENA ( INTEGER_32 v , INTEGER_1 last )
+    METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeInH {
     METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
@@ -50,9 +50,9 @@ MODULE AdapterFromBus {
         CALL/Action :out$enq__ENA{RULEpushValue__ENA$agg_2e_tmp,0}
         STORE :waitForEnq = 0
     }
-    METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_1 last ) if (((waitForEnq) ^ (1))) {
+    METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((waitForEnq) ^ (1))) {
         STORE :buffer = __bitconcat{__bitsubstr{buffer,95,0},in$enq$v}
-        STORE (in$enq$last):waitForEnq = 1
+        STORE ((in$enq$length) == (1)):waitForEnq = 1
     }
 }
 MODULE AdapterToBus {
@@ -61,7 +61,7 @@ MODULE AdapterToBus {
     FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
     METHOD/Rule RULEcopyRule__ENA if (((remain) != (0))) {
-        CALL/Action :out$enq__ENA{buffer,(remain) == (1)}
+        CALL/Action :out$enq__ENA{buffer,remain}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)
     }

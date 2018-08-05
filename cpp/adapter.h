@@ -39,7 +39,7 @@ __module AdapterToBus {
    AdapterToBus() {
       __rule copyRule if (remain != 0) {
          //printf("TTTTTT copyRule: buffer %x remain %x\n", buffer, remain);
-         out->enq(buffer, remain == 1);
+         out->enq(buffer, remain);
          remain--;
          buffer >>= __bitsize(BusType);
       }
@@ -54,10 +54,10 @@ __module AdapterFromBus {
    bool             waitForEnq;
    __uint(__bitsize(T)) buffer;
 
-   void in.enq(BusType v, bool last) if (!waitForEnq) {
+   void in.enq(BusType v, LenType length) if (!waitForEnq) {
       //printf("FFFFFFFF in.enq: v %d last %d buffer %x\n", v, last, buffer);
       buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(BusType) - 1, 0), v);
-      if (last)
+      if (length == 1)  // this is the last beat
           waitForEnq = 1;
    }
    AdapterFromBus() {

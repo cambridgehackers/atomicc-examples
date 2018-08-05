@@ -100,7 +100,7 @@ __interface PipeInH {
 template<class T>
 __interface PipeInB {
     typedef T Data;
-    void enq(T v, bool last);
+    void enq(T v, LenType length); // last item in packet has (length == 1)
 };
 
 #define container_of(ptr, type, member) ({			\
