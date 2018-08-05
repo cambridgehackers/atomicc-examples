@@ -17,17 +17,13 @@ module Fifo2 (input wire CLK, input wire nRST,
     reg [31:0]element1$c;
     reg [31:0]rindex;
     reg [31:0]windex;
-    wire [31:0]out$first$retval$a;
-    wire [31:0]out$first$retval$b;
-    wire [31:0]out$first$retval$c;
+    wire [95:0]out$first$retval;
     assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
-    assign out$first = { out$first$retval$c , out$first$retval$b , out$first$retval$a };
+    assign out$first = out$first$retval;
     assign out$first__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     // Extra assigments, not to output wires
-    assign out$first$retval$a = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
-    assign out$first$retval$b = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
-    assign out$first$retval$c = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
+    assign out$first$retval = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

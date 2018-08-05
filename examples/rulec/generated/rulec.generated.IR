@@ -166,12 +166,16 @@ MODULE UserTop {
     INTERFACE l_ainterface_OC_PipeIn indication
     FIELD l_top ctop
     METHOD indication$enq__ENA ( l_struct_OC_NOCData v ) {
+        ALLOCA l_struct_OC_NOCData indication$enq__ENA$agg_2e_tmp
         ALLOCA INTEGER_16 indication$enq__ENA$len
+        ALLOCA INTEGER_16 indication$enq__ENA$port
         ALLOCA INTEGER_128 indication$enq__ENA$vint
         LET INTEGER_128 :indication$enq__ENA$vint = indication$enq$v
         LET INTEGER_16 :indication$enq__ENA$len = (__bitsubstr{indication$enq__ENA$vint,15,0}) - (1)
+        LET INTEGER_16 :indication$enq__ENA$port = 5
         PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq__ENA$len}
-        CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq__ENA$len}
+        LET INTEGER_32 :indication$enq__ENA$agg_2e_tmp = __bitconcat{__bitsubstr{indication$enq__ENA$vint,127,16},indication$enq__ENA$port}
+        CALL/Action :radapter_0$in$enq__ENA{indication$enq__ENA$agg_2e_tmp,indication$enq__ENA$len}
     }
     METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}

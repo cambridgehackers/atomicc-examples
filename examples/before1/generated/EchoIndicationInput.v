@@ -22,7 +22,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     assign pipe$enq__RDY = !busy_delay;
     // Extra assigments, not to output wires
     assign RULEinput_rule__RDY = busy_delay & indication$heard__RDY;
-    assign pipe$enq__ENA$v_2e_addr$tag = pipe$enq$v[31:0];
+    assign pipe$enq__ENA$v_2e_addr$tag = pipe$enq$v[ 31 : 0 ];
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -13,7 +13,7 @@ module mkVsimTop(input CLK_derivedClock, input RST_N_derivedReset, input CLK_sys
   VsimSend #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .nRST(RST_N),
    .EN_beat(EN_readBeat), .RDY_beat(RDY_readBeat), .beat(readData), .last(readLast));
 
-`define BOZO
+//`define BOZO
 `ifdef BOZO
   AdapterFromBus wadapter_0(.CLK(CLK), .nRST(RST_N),
     .in$enq__ENA(EN_writeBeat), .in$enq__RDY(RDY_writeBeat), .in$enq$v(writeData), .in$enq$last(writeLast),
