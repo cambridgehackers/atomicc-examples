@@ -47,20 +47,11 @@ __interface VBeat {
 };
 
 __emodule VsimReceive {
-    VBeat *beat;
+    VBeat *_;
 };
 __emodule VsimSend {
-    VBeat beat;
+    VBeat _;
 };
-  //VsimReceive #(.width(`MAX_BUS_WIDTH)) sink_0 (.CLK(CLK), .nRST(RST_N),
-   //.EN_beat(EN_writeBeat), .RDY_beat(RDY_writeBeat), .beat(writeData), .last(writeLast));
-  //VsimSend #(.width(`MAX_BUS_WIDTH)) source_0 (.CLK(CLK), .nRST(RST_N),
-   //.EN_beat(EN_readBeat), .RDY_beat(RDY_readBeat), .beat(readData), .last(readLength == 1));
-
-  //assign writeLength = writeLast ? 1 : 2;
-  //UserTop top (.CLK(CLK), .nRST(RST_N),
-    //.write$enq__ENA(EN_writeBeat), .write$enq__RDY(RDY_writeBeat), .write$enq$v(writeData), .write$enq$length(writeLength),
-   //.read$enq__ENA(EN_readBeat), .read$enq__RDY(RDY_readBeat), .read$enq$v(readData), .read$enq$length(readLength));
 
 #define MAX_BUS_WIDTH 32
 __module VsimTop {
@@ -72,13 +63,13 @@ __module VsimTop {
     VsimSend/*#(width=MAX_BUS_WIDTH)*/ source_0;
 
     void readUser.enq(BusType v, LenType length) {
-        source_0.beat.beat(v, length == 1);
+        source_0._.beat(v, length == 1);
     }
     void writeUser.beat(int v, bool last) {
         user.write.enq(v, last ? 1 : 2);
     }
     __connect readUser = user.read;
-    __connect sink_0.beat = writeUser;
+    __connect sink_0._ = writeUser;
 
     VsimTop() {
         __rule init {

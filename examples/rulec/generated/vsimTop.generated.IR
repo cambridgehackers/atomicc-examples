@@ -33,10 +33,10 @@ EMODULE UserTop {
     INTERFACE/Ptr l_ainterface_OC_PipeInB read
 }
 EMODULE VsimReceive {
-    INTERFACE/Ptr l_ainterface_OC_VBeat beat
+    INTERFACE/Ptr l_ainterface_OC_VBeat _
 }
 EMODULE VsimSend {
-    INTERFACE l_ainterface_OC_VBeat beat
+    INTERFACE l_ainterface_OC_VBeat _
 }
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -79,7 +79,7 @@ MODULE ResetInverter {
 }
 MODULE VsimTop {
     INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
-    INTERFACECONNECT sink_0$beat writeUser l_ainterface_OC_VBeat
+    INTERFACECONNECT sink_0 writeUser VsimReceive
     INTERFACE l_ainterface_OC_VsimInterface _
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD UserTop user
@@ -87,7 +87,7 @@ MODULE VsimTop {
     FIELD VsimReceive sink_0
     FIELD VsimSend source_0
     METHOD readUser$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) {
-        CALL/Action :source_0$beat$beat__ENA{readUser$enq$v,(readUser$enq$length) == (1)}
+        CALL/Action :source_0$beat__ENA{readUser$enq$v,(readUser$enq$length) == (1)}
     }
     METHOD writeUser$beat__ENA ( INTEGER_32 v , INTEGER_1 last ) {
         CALL/Action :user$write$enq__ENA{writeUser$beat$v,(writeUser$beat$last) ? (1) : (2)}
