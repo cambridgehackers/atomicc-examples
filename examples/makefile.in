@@ -9,5 +9,7 @@ CPPFLAGS += -Xclang -disable-lifetime-markers
 CPPFLAGS += -I/usr/include/c++/4.2.1 -I/usr/include/c++/5
 CPPFLAGS += -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5
 CPPFLAGS += -I/usr/include/x86_64-linux-gnu/
+#   catch signal SIGSEGV
+#   set follow-fork-mode child
 
 #CPPFLAGS += -emit-llvm

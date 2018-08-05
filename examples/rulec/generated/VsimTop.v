@@ -25,7 +25,7 @@ module VsimTop (
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write$enq__ENA(sink_0$beat$beat__ENA),
         .write$enq$v(sink_0$beat$beat$v),
-        .write$enq$length(2),
+        .write$enq$length(sink_0$beat$beat$last ? 1 : 2),
         .write$enq__RDY(user$write$enq__RDY),
         .read$enq__ENA(user$read$enq__ENA),
         .read$enq$v(user$read$enq$v),

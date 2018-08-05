@@ -915,7 +915,7 @@ MODULE TestTop {
     METHOD/Rule RULEinit__ENA {
         LET INTEGER_1 :interrupt = __phi(__default:(0), ((requestLength) != (0)):((intEnable) != (0)))
         STORE :writeReady = user$write$enq__RDY
-        STORE :portNum = 5
+        STORE :portNum = ((selectRIndReq) != (0)) ? (6) : (5)
     }
     METHOD/Rule RULElR__ENA {
         ALLOCA l_struct_OC_ReadResp RULElR__ENA$temp

@@ -239,7 +239,7 @@ module TestTop (
         end; // End of MAXIGP0_O$AW__ENA
         if (RULEinit__ENA & RULEinit__RDY) begin
             writeReady <= user$write$enq__RDY;
-            portNum <= 5;
+            portNum <= selectRIndReq ? 6 : 5;
         end; // End of RULEinit__ENA
         if (RULElreadNext__ENA & RULElreadNext__RDY) begin
             readAddr <= RULElreadNext__ENA$readAddrupdate + 4;
