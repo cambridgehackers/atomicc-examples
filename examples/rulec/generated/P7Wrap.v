@@ -62,50 +62,10 @@ module P7Wrap (
     wire RULEgp0w__RDY;
     wire RULEinit__ENA;
     wire RULEinit__RDY;
-    wire [14:0]pps$DDRA;
-    wire [2:0]pps$DDRBA;
-    wire pps$DDRCASB;
-    wire pps$DDRCKE;
-    wire pps$DDRCKN;
-    wire pps$DDRCKP;
-    wire pps$DDRCSB;
-    wire [3:0]pps$DDRDM;
-    wire [31:0]pps$DDRDQ;
-    wire [3:0]pps$DDRDQSN;
-    wire [3:0]pps$DDRDQSP;
-    wire pps$DDRDRSTB;
-    wire pps$DDRODT;
-    wire pps$DDRRASB;
-    wire pps$DDRVRN;
-    wire pps$DDRVRP;
-    wire pps$DDRWEB;
     wire pps$MAXIGP0ARVALID;
     wire pps$MAXIGP0AWVALID;
     wire pps$MAXIGP0WLAST;
     wire pps$MAXIGP0WVALID;
-    wire pps$PSCLK;
-    wire pps$PSPORB;
-    wire pps$PSSRSTB;
-    assign DDR_Addr = pps$DDRA;
-    assign DDR_BankAddr = pps$DDRBA;
-    assign DDR_CAS_n = pps$DDRCASB;
-    assign DDR_CKE = pps$DDRCKE;
-    assign DDR_CS_n = pps$DDRCSB;
-    assign DDR_Clk_n = pps$DDRCKN;
-    assign DDR_Clk_p = pps$DDRCKP;
-    assign DDR_DM = pps$DDRDM;
-    assign DDR_DQ = pps$DDRDQ;
-    assign DDR_DQS_n = pps$DDRDQSN;
-    assign DDR_DQS_p = pps$DDRDQSP;
-    assign DDR_DRSTB = pps$DDRDRSTB;
-    assign DDR_ODT = pps$DDRODT;
-    assign DDR_RAS_n = pps$DDRRASB;
-    assign DDR_WEB = pps$DDRWEB;
-    assign FIXED_IO_ddr_vrn = pps$DDRVRN;
-    assign FIXED_IO_ddr_vrp = pps$DDRVRP;
-    assign FIXED_IO_ps_clk = pps$PSCLK;
-    assign FIXED_IO_ps_porb = pps$PSPORB;
-    assign FIXED_IO_ps_srstb = pps$PSSRSTB;
     assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
     assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
     assign MAXIGP0_O$W$last = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
@@ -115,24 +75,24 @@ module P7Wrap (
     assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
     assign RULEinit__ENA = 1;
     PS7 pps (
-        .DDRA(pps$DDRA),
+        .DDRA(DDR_Addr),
         .DDRARB(4'd0),
-        .DDRBA(pps$DDRBA),
-        .DDRCASB(pps$DDRCASB),
-        .DDRCKE(pps$DDRCKE),
-        .DDRCKN(pps$DDRCKN),
-        .DDRCKP(pps$DDRCKP),
-        .DDRCSB(pps$DDRCSB),
-        .DDRDM(pps$DDRDM),
-        .DDRDQ(pps$DDRDQ),
-        .DDRDQSN(pps$DDRDQSN),
-        .DDRDQSP(pps$DDRDQSP),
-        .DDRDRSTB(pps$DDRDRSTB),
-        .DDRODT(pps$DDRODT),
-        .DDRRASB(pps$DDRRASB),
-        .DDRVRN(pps$DDRVRN),
-        .DDRVRP(pps$DDRVRP),
-        .DDRWEB(pps$DDRWEB),
+        .DDRBA(DDR_BankAddr),
+        .DDRCASB(DDR_CAS_n),
+        .DDRCKE(DDR_CKE),
+        .DDRCKN(DDR_Clk_n),
+        .DDRCKP(DDR_Clk_p),
+        .DDRCSB(DDR_CS_n),
+        .DDRDM(DDR_DM),
+        .DDRDQ(DDR_DQ),
+        .DDRDQSN(DDR_DQS_n),
+        .DDRDQSP(DDR_DQS_p),
+        .DDRDRSTB(DDR_DRSTB),
+        .DDRODT(DDR_ODT),
+        .DDRRASB(DDR_RAS_n),
+        .DDRVRN(FIXED_IO_ddr_vrn),
+        .DDRVRP(FIXED_IO_ddr_vrp),
+        .DDRWEB(DDR_WEB),
         .DMA0ACLK(0),
         .DMA0DAREADY(0),
         .DMA0DATYPE(),
@@ -426,9 +386,9 @@ module P7Wrap (
         .MAXIGP1WSTRB(),
         .MAXIGP1WVALID(),
         .MIO(MIO),
-        .PSCLK(pps$PSCLK),
-        .PSPORB(pps$PSPORB),
-        .PSSRSTB(pps$PSSRSTB),
+        .PSCLK(FIXED_IO_ps_clk),
+        .PSPORB(FIXED_IO_ps_porb),
+        .PSSRSTB(FIXED_IO_ps_srstb),
         .SAXIACPACLK(0),
         .SAXIACPARADDR(0),
         .SAXIACPARBURST(0),

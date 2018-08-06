@@ -79,7 +79,7 @@ MODULE ResetInverter {
 }
 MODULE VsimTop {
     INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
-    INTERFACECONNECT sink_0 writeUser VsimReceive
+    INTERFACECONNECT sink_0$_ writeUser l_ainterface_OC_VBeat
     INTERFACE l_ainterface_OC_VsimInterface _
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD UserTop user
