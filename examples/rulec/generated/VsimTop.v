@@ -5,7 +5,8 @@ module VsimTop (
     input wire CLK,
     input wire nRST,
     input wire CLK_derivedClock,
-    input wire nRST_derivedReset);
+    input wire nRST_derivedReset,
+    input wire CLK_sys_clk);
     wire [15:0]readUser$enq$length;
     wire [31:0]readUser$enq$v;
     wire readUser$enq__ENA;

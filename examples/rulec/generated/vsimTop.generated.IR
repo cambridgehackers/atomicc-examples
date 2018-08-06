@@ -23,6 +23,7 @@ EMODULE l_ainterface_OC_VsimInterface {
     FIELD/input INTEGER_1 nRST
     FIELD/input INTEGER_1 CLK_derivedClock
     FIELD/input INTEGER_1 nRST_derivedReset
+    FIELD/input INTEGER_1 CLK_sys_clk
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in

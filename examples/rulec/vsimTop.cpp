@@ -30,6 +30,7 @@ __interface VsimInterface {
    __input  __uint(1)  nRST;
    __input  __uint(1)  CLK_derivedClock;
    __input  __uint(1)  nRST_derivedReset;
+   __input  __uint(1)  CLK_sys_clk;
 };
 
 __module ResetInverter {
