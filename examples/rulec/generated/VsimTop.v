@@ -7,8 +7,6 @@ module VsimTop (
     input wire CLK_derivedClock,
     input wire nRST_derivedReset,
     input wire CLK_sys_clk);
-    wire [15:0]readUser$enq$length;
-    wire [31:0]readUser$enq$v;
     wire readUser$enq__ENA;
     wire readUser$enq__RDY;
     wire sink_0$beat$last;
@@ -19,8 +17,6 @@ module VsimTop (
     wire [31:0]user$read$enq$v;
     wire user$read$enq__ENA;
     wire user$write$enq__RDY;
-    wire writeUser$beat$last;
-    wire [31:0]writeUser$beat$v;
     wire writeUser$beat__ENA;
     wire writeUser$beat__RDY;
     UserTop user (.CLK(CLK), .nRST(nRST),
@@ -42,11 +38,7 @@ module VsimTop (
         .beat$v(user$read$enq$v),
         .beat$last(user$read$enq__ENA & ( user$read$enq$length == 16'd1 )),
         .beat__RDY(source_0$beat__RDY));
-    assign readUser$enq$length = user$read$enq$length;
-    assign readUser$enq$v = user$read$enq$v;
     assign readUser$enq__ENA = user$read$enq__ENA;
-    assign writeUser$beat$last = sink_0$beat$last;
-    assign writeUser$beat$v = sink_0$beat$v;
     assign writeUser$beat__ENA = sink_0$beat__ENA;
     // Extra assigments, not to output wires
     assign readUser$enq__RDY = source_0$beat__RDY;

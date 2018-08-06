@@ -63,20 +63,6 @@ module IVector (input wire CLK, input wire nRST,
     wire [95:0]fifo9$out$first;
     wire [31:0]in$say__ENA$temp$a;
     wire [31:0]in$say__ENA$temp$c;
-    assign RULErespond_rule_0__ENA = fifo0$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_1__ENA = fifo1$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_2__ENA = fifo2$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_3__ENA = fifo3$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_4__ENA = fifo4$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_5__ENA = fifo5$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_6__ENA = fifo6$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_7__ENA = fifo7$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_8__ENA = fifo8$out$deq__RDY & out$heard__RDY;
-    assign RULErespond_rule_9__ENA = fifo9$out$deq__RDY & out$heard__RDY;
-    assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
-    assign out$heard$meth = ( fifo0$out$deq__RDY & out$heard__RDY ) ? 0 : ( ( fifo1$out$deq__RDY & out$heard__RDY ) ? 1 : ( ( fifo2$out$deq__RDY & out$heard__RDY ) ? 2 : ( ( fifo3$out$deq__RDY & out$heard__RDY ) ? 3 : ( ( fifo4$out$deq__RDY & out$heard__RDY ) ? 4 : ( ( fifo5$out$deq__RDY & out$heard__RDY ) ? 5 : ( ( fifo6$out$deq__RDY & out$heard__RDY ) ? 6 : ( ( fifo7$out$deq__RDY & out$heard__RDY ) ? 7 : ( ( fifo8$out$deq__RDY & out$heard__RDY ) ? 8 : 9 ) ) ) ) ) ) ) );
-    assign out$heard$v = ( fifo0$out$deq__RDY & out$heard__RDY ) ? fifo0$out$first[ 63 : 32 ] : ( ( fifo1$out$deq__RDY & out$heard__RDY ) ? fifo1$out$first[ 63 : 32 ] : ( ( fifo2$out$deq__RDY & out$heard__RDY ) ? fifo2$out$first[ 63 : 32 ] : ( ( fifo3$out$deq__RDY & out$heard__RDY ) ? fifo3$out$first[ 63 : 32 ] : ( ( fifo4$out$deq__RDY & out$heard__RDY ) ? fifo4$out$first[ 63 : 32 ] : ( ( fifo5$out$deq__RDY & out$heard__RDY ) ? fifo5$out$first[ 63 : 32 ] : ( ( fifo6$out$deq__RDY & out$heard__RDY ) ? fifo6$out$first[ 63 : 32 ] : ( ( fifo7$out$deq__RDY & out$heard__RDY ) ? fifo7$out$first[ 63 : 32 ] : ( ( fifo8$out$deq__RDY & out$heard__RDY ) ? fifo8$out$first[ 63 : 32 ] : fifo9$out$first[ 63 : 32 ] ) ) ) ) ) ) ) );
-    assign out$heard__ENA = fifo0$out$deq__RDY || fifo1$out$deq__RDY || fifo2$out$deq__RDY || fifo3$out$deq__RDY || fifo4$out$deq__RDY || fifo5$out$deq__RDY || fifo6$out$deq__RDY || fifo7$out$deq__RDY || fifo8$out$deq__RDY || fifo9$out$deq__RDY;
     FifoPong fifo0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( in$say$meth == 32'd0 ) & in$say__ENA),
         .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
@@ -157,16 +143,30 @@ module IVector (input wire CLK, input wire nRST,
         .out$deq__RDY(fifo9$out$deq__RDY),
         .out$first(fifo9$out$first),
         .out$first__RDY());
+    assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
+    assign out$heard$meth = ( fifo0$out$deq__RDY & out$heard__RDY ) ? 0 : ( ( fifo1$out$deq__RDY & out$heard__RDY ) ? 1 : ( ( fifo2$out$deq__RDY & out$heard__RDY ) ? 2 : ( ( fifo3$out$deq__RDY & out$heard__RDY ) ? 3 : ( ( fifo4$out$deq__RDY & out$heard__RDY ) ? 4 : ( ( fifo5$out$deq__RDY & out$heard__RDY ) ? 5 : ( ( fifo6$out$deq__RDY & out$heard__RDY ) ? 6 : ( ( fifo7$out$deq__RDY & out$heard__RDY ) ? 7 : ( ( fifo8$out$deq__RDY & out$heard__RDY ) ? 8 : 9 ) ) ) ) ) ) ) );
+    assign out$heard$v = ( fifo0$out$deq__RDY & out$heard__RDY ) ? fifo0$out$first[ 63 : 32 ] : ( ( fifo1$out$deq__RDY & out$heard__RDY ) ? fifo1$out$first[ 63 : 32 ] : ( ( fifo2$out$deq__RDY & out$heard__RDY ) ? fifo2$out$first[ 63 : 32 ] : ( ( fifo3$out$deq__RDY & out$heard__RDY ) ? fifo3$out$first[ 63 : 32 ] : ( ( fifo4$out$deq__RDY & out$heard__RDY ) ? fifo4$out$first[ 63 : 32 ] : ( ( fifo5$out$deq__RDY & out$heard__RDY ) ? fifo5$out$first[ 63 : 32 ] : ( ( fifo6$out$deq__RDY & out$heard__RDY ) ? fifo6$out$first[ 63 : 32 ] : ( ( fifo7$out$deq__RDY & out$heard__RDY ) ? fifo7$out$first[ 63 : 32 ] : ( ( fifo8$out$deq__RDY & out$heard__RDY ) ? fifo8$out$first[ 63 : 32 ] : fifo9$out$first[ 63 : 32 ] ) ) ) ) ) ) ) );
+    assign out$heard__ENA = fifo0$out$deq__RDY || fifo1$out$deq__RDY || fifo2$out$deq__RDY || fifo3$out$deq__RDY || fifo4$out$deq__RDY || fifo5$out$deq__RDY || fifo6$out$deq__RDY || fifo7$out$deq__RDY || fifo8$out$deq__RDY || fifo9$out$deq__RDY;
     // Extra assigments, not to output wires
+    assign RULErespond_rule_0__ENA = fifo0$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_0__RDY = fifo0$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_1__ENA = fifo1$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_1__RDY = fifo1$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_2__ENA = fifo2$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_2__RDY = fifo2$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_3__ENA = fifo3$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_3__RDY = fifo3$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_4__ENA = fifo4$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_4__RDY = fifo4$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_5__ENA = fifo5$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_5__RDY = fifo5$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_6__ENA = fifo6$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_6__RDY = fifo6$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_7__ENA = fifo7$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_7__RDY = fifo7$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_8__ENA = fifo8$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_8__RDY = fifo8$out$deq__RDY & out$heard__RDY;
+    assign RULErespond_rule_9__ENA = fifo9$out$deq__RDY & out$heard__RDY;
     assign RULErespond_rule_9__RDY = fifo9$out$deq__RDY & out$heard__RDY;
 
     always @( posedge CLK) begin

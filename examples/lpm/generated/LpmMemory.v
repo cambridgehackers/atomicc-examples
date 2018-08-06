@@ -15,12 +15,12 @@ module LpmMemory (input wire CLK, input wire nRST,
     reg [31:0]saved$c;
     wire RULEmemdelay_rule__ENA;
     wire RULEmemdelay_rule__RDY;
-    assign RULEmemdelay_rule__ENA = delayCount > 1;
     assign ifc$req__RDY = delayCount == 32'd0;
     assign ifc$resAccept__RDY = delayCount == 32'd1;
     assign ifc$resValue = { saved$c , saved$b , saved$a };
     assign ifc$resValue__RDY = delayCount == 32'd1;
     // Extra assigments, not to output wires
+    assign RULEmemdelay_rule__ENA = delayCount > 1;
     assign RULEmemdelay_rule__RDY = delayCount > 1;
 
     always @( posedge CLK) begin
@@ -31,14 +31,14 @@ module LpmMemory (input wire CLK, input wire nRST,
         saved$c <= 0;
       end // nRST
       else begin
-        if (RULEmemdelay_rule__ENA & RULEmemdelay_rule__RDY) begin
+        if (RULEmemdelay_rule__ENA & RULEmemdelay_rule__RDY) begin // RULEmemdelay_rule__ENA
             delayCount <= delayCount - 1;
         end; // End of RULEmemdelay_rule__ENA
-        if (ifc$req__ENA & ifc$req__RDY) begin
+        if (ifc$req__ENA & ifc$req__RDY) begin // ifc$req__ENA
             delayCount <= 4;
             { saved$c , saved$b , saved$a } <= ifc$req$v;
         end; // End of ifc$req__ENA
-        if (ifc$resAccept__ENA & ifc$resAccept__RDY) begin
+        if (ifc$resAccept__ENA & ifc$resAccept__RDY) begin // ifc$resAccept__ENA
             delayCount <= 0;
         end; // End of ifc$resAccept__ENA
       end

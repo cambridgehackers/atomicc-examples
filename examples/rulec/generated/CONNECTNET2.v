@@ -12,8 +12,8 @@ module CONNECTNET2 (
     wire nRST;
     assign OUT1 = IN1;
     assign OUT2 = IN2;
-    assign RULEassign__ENA = 1;
     // Extra assigments, not to output wires
+    assign RULEassign__ENA = 1;
     assign RULEassign__RDY = 1;
 endmodule 
 

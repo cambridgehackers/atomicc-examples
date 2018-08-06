@@ -48,156 +48,156 @@ module ModFt600 (
     wire RULEiobufs_9__ENA;
     wire RULEiobufs_9__RDY;
     wire nRST;
-    assign RULEhandshake__ENA = 1;
-    assign RULEiobufs_0__ENA = 1;
-    assign RULEiobufs_10__ENA = 1;
-    assign RULEiobufs_11__ENA = 1;
-    assign RULEiobufs_12__ENA = 1;
-    assign RULEiobufs_13__ENA = 1;
-    assign RULEiobufs_14__ENA = 1;
-    assign RULEiobufs_15__ENA = 1;
-    assign RULEiobufs_1__ENA = 1;
-    assign RULEiobufs_2__ENA = 1;
-    assign RULEiobufs_3__ENA = 1;
-    assign RULEiobufs_4__ENA = 1;
-    assign RULEiobufs_5__ENA = 1;
-    assign RULEiobufs_6__ENA = 1;
-    assign RULEiobufs_7__ENA = 1;
-    assign RULEiobufs_8__ENA = 1;
-    assign RULEiobufs_9__ENA = 1;
-    assign usb_oe_n = usb_rxf_delay[ 0 ];
-    assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     IOBUF iobufs0 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 0),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs1 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 1),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs2 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 2),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs3 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 3),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs4 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 4),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs5 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 5),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs6 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 6),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs7 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 7),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs8 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 8),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs9 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 9),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs10 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 10),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs11 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 11),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs12 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 12),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs13 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 13),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs14 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 14),
         .I(0),
         .O(),
         .T(0));
     IOBUF iobufs15 (
-        .CLK(),
-        .RST_N(),
+        .CLK(CLK),
+        .RST_N(nRST),
         .IO(usb_ad >> 15),
         .I(0),
         .O(),
         .T(0));
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign usb_oe_n = usb_rxf_delay[ 0 ];
+    assign usb_rd_n = usb_rxf_delay != 2'd0;
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     // Extra assigments, not to output wires
+    assign RULEhandshake__ENA = 1;
     assign RULEhandshake__RDY = 1;
+    assign RULEiobufs_0__ENA = 1;
     assign RULEiobufs_0__RDY = 1;
+    assign RULEiobufs_10__ENA = 1;
     assign RULEiobufs_10__RDY = 1;
+    assign RULEiobufs_11__ENA = 1;
     assign RULEiobufs_11__RDY = 1;
+    assign RULEiobufs_12__ENA = 1;
     assign RULEiobufs_12__RDY = 1;
+    assign RULEiobufs_13__ENA = 1;
     assign RULEiobufs_13__RDY = 1;
+    assign RULEiobufs_14__ENA = 1;
     assign RULEiobufs_14__RDY = 1;
+    assign RULEiobufs_15__ENA = 1;
     assign RULEiobufs_15__RDY = 1;
+    assign RULEiobufs_1__ENA = 1;
     assign RULEiobufs_1__RDY = 1;
+    assign RULEiobufs_2__ENA = 1;
     assign RULEiobufs_2__RDY = 1;
+    assign RULEiobufs_3__ENA = 1;
     assign RULEiobufs_3__RDY = 1;
+    assign RULEiobufs_4__ENA = 1;
     assign RULEiobufs_4__RDY = 1;
+    assign RULEiobufs_5__ENA = 1;
     assign RULEiobufs_5__RDY = 1;
+    assign RULEiobufs_6__ENA = 1;
     assign RULEiobufs_6__RDY = 1;
+    assign RULEiobufs_7__ENA = 1;
     assign RULEiobufs_7__RDY = 1;
+    assign RULEiobufs_8__ENA = 1;
     assign RULEiobufs_8__RDY = 1;
+    assign RULEiobufs_9__ENA = 1;
     assign RULEiobufs_9__RDY = 1;
 
     always @( posedge CLK) begin
@@ -207,7 +207,7 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (RULEhandshake__ENA & RULEhandshake__RDY) begin
+        if (RULEhandshake__ENA & RULEhandshake__RDY) begin // RULEhandshake__ENA
             usb_fifo_empty <= 0;
             usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay <= usb_txe;

@@ -40,24 +40,24 @@ module Echo (input wire CLK, input wire nRST,
     wire RULEdelay_rule__RDY;
     wire RULErespond_rule__ENA;
     wire RULErespond_rule__RDY;
-    assign RULEdelay_rule__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
-    assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
     assign indication$heard2__ENA = ( v_type != 32'd1 ) & ( busy_delay != 32'd0 );
-    assign indication$heard__ENA = ( v_type == 32'd1 ) & ( busy_delay != 32'd0 );
-    assign request$say2__RDY = busy == 32'd0;
-    assign request$say__RDY = busy == 32'd0;
-    assign request$setLeds__RDY = 1;
-    assign request$zsay4__RDY = 1;
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication$heard__ENA = ( v_type == 32'd1 ) & ( busy_delay != 32'd0 );
+    assign request$say2__RDY = busy == 32'd0;
+    assign request$say__RDY = busy == 32'd0;
+    assign request$setLeds__RDY = 1;
+    assign request$zsay4__RDY = 1;
     // Extra assigments, not to output wires
+    assign RULEdelay_rule__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
     assign RULEdelay_rule__RDY = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
+    assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
     assign RULErespond_rule__RDY = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 
     always @( posedge CLK) begin
@@ -73,23 +73,23 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (RULEdelay_rule__ENA & RULEdelay_rule__RDY) begin
+        if (RULEdelay_rule__ENA & RULEdelay_rule__RDY) begin // RULEdelay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
         end; // End of RULEdelay_rule__ENA
-        if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin
+        if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin // RULErespond_rule__ENA
             busy_delay <= 0;
         end; // End of RULErespond_rule__ENA
-        if (request$say2__ENA & request$say2__RDY) begin
+        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
         end; // End of request$say2__ENA
-        if (request$say__ENA & request$say__RDY) begin
+        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;

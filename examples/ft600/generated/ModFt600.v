@@ -19,11 +19,6 @@ module ModFt600 (
     wire RULEiobufs__RDY;
     wire iobufs0$IO;
     wire nRST;
-    assign RULEhandshake__ENA = 1;
-    assign RULEiobufs__ENA = 1;
-    assign usb_oe_n = usb_rxf_delay[ 0 ];
-    assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     IOBUF iobufs0 (
         .IO(iobufs0$IO),
         .I(0),
@@ -106,8 +101,13 @@ module ModFt600 (
         .T(0));
     assign iobufs0$IO = ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : ( ( 32'd0 == 32'd0 ) ? ( usb_ad >> 32'd0 ) : 0 ) ) ) ) ) ) ) ) ) ) ) ) ) ) );
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign usb_oe_n = usb_rxf_delay[ 0 ];
+    assign usb_rd_n = usb_rxf_delay != 2'd0;
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
     // Extra assigments, not to output wires
+    assign RULEhandshake__ENA = 1;
     assign RULEhandshake__RDY = 1;
+    assign RULEiobufs__ENA = 1;
     assign RULEiobufs__RDY = 1;
 
     always @( posedge CLK) begin
@@ -117,7 +117,7 @@ module ModFt600 (
         usb_txe_delay <= 0;
       end // nRST
       else begin
-        if (RULEhandshake__ENA & RULEhandshake__RDY) begin
+        if (RULEhandshake__ENA & RULEhandshake__RDY) begin // RULEhandshake__ENA
             usb_fifo_empty <= 0;
             usb_rxf_delay <= ( usb_rxf_delay << 1 ) | usb_rxf;
             usb_txe_delay <= usb_txe;

@@ -55,7 +55,6 @@ module ZynqTopNew (
     wire test$MAXIGP0_O$AW__RDY;
     wire test$MAXIGP0_O$W__RDY;
     wire test$interrupt;
-    assign RULEinit__ENA = 1;
     P7Wrap ps7_ps7_foo (
         .MAXIGP0_O$AR__ENA(ps7_ps7_foo$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(ps7_ps7_foo$MAXIGP0_O$AR$addr),
@@ -145,6 +144,7 @@ module ZynqTopNew (
         .I(ps7_ps7_foo$FCLKRESETN[ 0 ]),
         .O(ps7_freset_0_r$O));
     // Extra assigments, not to output wires
+    assign RULEinit__ENA = 1;
     assign RULEinit__RDY = 1;
 endmodule 
 

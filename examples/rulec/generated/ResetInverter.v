@@ -9,8 +9,8 @@ module ResetInverter (
     wire RULEinit__RDY;
     wire nRST;
     assign RESET_OUT = !RESET_IN;
-    assign RULEinit__ENA = 1;
     // Extra assigments, not to output wires
+    assign RULEinit__ENA = 1;
     assign RULEinit__RDY = 1;
 endmodule 
 

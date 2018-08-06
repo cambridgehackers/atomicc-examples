@@ -25,7 +25,7 @@ module EchoRequestInput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (pipe$enq__ENA & pipe$enq__RDY) begin
+        if (pipe$enq__ENA & pipe$enq__RDY) begin // pipe$enq__ENA
             $display( "entered EchoRequestInput::enq tag %d" , pipe$enq$v[ 31 : 0 ] );
         end; // End of pipe$enq__ENA
       end

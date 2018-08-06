@@ -64,16 +64,9 @@ module P7Wrap (
     wire RULEinit__RDY;
     wire pps$MAXIGP0ARVALID;
     wire pps$MAXIGP0AWVALID;
+    wire pps$MAXIGP0RREADY;
     wire pps$MAXIGP0WLAST;
     wire pps$MAXIGP0WVALID;
-    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
-    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
-    assign MAXIGP0_O$W$last = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
-    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
-    assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
-    assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
-    assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
-    assign RULEinit__ENA = 1;
     PS7 pps (
         .DDRA(DDR_Addr),
         .DDRARB(4'd0),
@@ -335,8 +328,8 @@ module P7Wrap (
         .MAXIGP0BVALID(MAXIGP0_I$B__ENA),
         .MAXIGP0RDATA(MAXIGP0_I$R$data),
         .MAXIGP0RID(MAXIGP0_I$R$id),
-        .MAXIGP0RLAST(MAXIGP0_I$R__RDY & MAXIGP0_I$R$last),
-        .MAXIGP0RREADY(MAXIGP0_I$R__RDY),
+        .MAXIGP0RLAST(pps$MAXIGP0RREADY & MAXIGP0_I$R$last),
+        .MAXIGP0RREADY(pps$MAXIGP0RREADY),
         .MAXIGP0RRESP(MAXIGP0_I$R$resp),
         .MAXIGP0RVALID(MAXIGP0_I$R__ENA),
         .MAXIGP0WDATA(MAXIGP0_O$W$data),
@@ -699,10 +692,19 @@ module P7Wrap (
         .CLK(intrCLK),
         .nRST(intrnRST),
         .clockOut());
+    assign MAXIGP0_I$R__RDY = pps$MAXIGP0RREADY;
+    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
+    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
+    assign MAXIGP0_O$W$last = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
+    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
     // Extra assigments, not to output wires
+    assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
     assign RULEgp0ar__RDY = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
+    assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
     assign RULEgp0aw__RDY = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
+    assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
     assign RULEgp0w__RDY = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+    assign RULEinit__ENA = 1;
     assign RULEinit__RDY = 1;
 endmodule 
 
