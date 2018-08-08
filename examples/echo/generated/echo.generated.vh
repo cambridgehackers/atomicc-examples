@@ -14,10 +14,12 @@
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; 1;
 //METASTART; Fifo1_OC_3
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;

@@ -13,30 +13,36 @@
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_10
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_12
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_14
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_16
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_18
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;

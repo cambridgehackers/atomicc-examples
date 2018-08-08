@@ -6,11 +6,13 @@
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; 1;
 //METASTART; Fifo1_OC_3
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; FifoPong
 //METAINTERNAL; element1; Fifo1_OC_3;
 //METAINTERNAL; element2; Fifo1_OC_3;
@@ -19,6 +21,7 @@
 //METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;
 //METAGUARD; out$deq; ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
 //METAINVOKE; out$first; pong ^ 1:element1$out$first;pong:element2$out$first;
+//METAGUARD; out$first; 1;
 //METASTART; IVector
 //METAEXTERNAL; out; l_ainterface_OC_IVectorIndication;
 //METAINTERNAL; fifo0; FifoPong;

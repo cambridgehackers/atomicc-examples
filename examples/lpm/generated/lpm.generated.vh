@@ -6,15 +6,18 @@
 //METAGUARD; in$enq; 1;
 //METAGUARD; out$deq; 1;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; 1;
 //METASTART; Fifo1_OC_2
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
+//METAGUARD; out$first; full;
 //METASTART; Fifo2
 //METAGUARD; in$enq; ( ( windex + 1 ) % 2 ) != rindex;
 //METAGUARD; out$deq; rindex != windex;
 //METABEFORE; out$first; :in$enq__ENA; :out$deq__ENA
+//METAGUARD; out$first; rindex != windex;
 //METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
 //METAINTERNAL; inQ; Fifo1_OC_2;

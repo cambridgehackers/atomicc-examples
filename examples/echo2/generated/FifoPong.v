@@ -57,7 +57,7 @@ module FifoPong (input wire CLK, input wire nRST,
     assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
     assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
     assign out$first = { out$first$retval$c19 , out$first$retval$c18 , out$first$retval$c17 , out$first$retval$c16 , out$first$retval$c15 , out$first$retval$c14 , out$first$retval$c13 , out$first$retval$c12 , out$first$retval$c11 , out$first$retval$c10 , out$first$retval$c9 , out$first$retval$c8 , out$first$retval$c7 , out$first$retval$c6 , out$first$retval$c5 , out$first$retval$c4 , out$first$retval$c3 , out$first$retval$c2 , out$first$retval$c1 , out$first$retval$c0 , out$first$retval$b , out$first$retval$a };
-    assign out$first__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign out$first__RDY = 1;
     // Extra assigments, not to output wires
     assign out$first$retval$a = ( out$deq__RDY & pong ) ? element2$out$first[ 31 : 0 ] : element1$out$first[ 31 : 0 ];
     assign out$first$retval$b = ( out$deq__RDY & pong ) ? element2$out$first[ 63 : 32 ] : element1$out$first[ 63 : 32 ];

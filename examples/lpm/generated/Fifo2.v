@@ -21,7 +21,7 @@ module Fifo2 (input wire CLK, input wire nRST,
     assign in$enq__RDY = ( ( windex + 1 ) % 2 ) != rindex;
     assign out$deq__RDY = rindex != windex;
     assign out$first = out$first$retval;
-    assign out$first__RDY = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign out$first__RDY = rindex != windex;
     // Extra assigments, not to output wires
     assign out$first$retval = ( rindex == 32'd0 ) ? { element0$c , element0$b , element0$a } : { element1$c , element1$b , element1$a };
 
