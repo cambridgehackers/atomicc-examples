@@ -15,8 +15,6 @@ module ModFt600 (
     wire CLK;
     wire RULEhandshake__ENA;
     wire RULEhandshake__RDY;
-    wire RULEiobufs__ENA;
-    wire RULEiobufs__RDY;
     wire iobufs0$IO;
     wire nRST;
     IOBUF iobufs0 (
@@ -107,8 +105,6 @@ module ModFt600 (
     // Extra assigments, not to output wires
     assign RULEhandshake__ENA = 1;
     assign RULEhandshake__RDY = 1;
-    assign RULEiobufs__ENA = 1;
-    assign RULEiobufs__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin

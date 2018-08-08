@@ -54,16 +54,6 @@ module P7Wrap (
     output wire [3:0]FCLKCLK,
     input wire [3:0]FCLKCLKTRIGN,
     output wire [3:0]FCLKRESETN);
-    wire RULEgp0ar__ENA;
-    wire RULEgp0ar__RDY;
-    wire RULEgp0aw__ENA;
-    wire RULEgp0aw__RDY;
-    wire RULEgp0w__ENA;
-    wire RULEgp0w__RDY;
-    wire RULEinit__ENA;
-    wire RULEinit__RDY;
-    wire pps$MAXIGP0ARVALID;
-    wire pps$MAXIGP0AWVALID;
     wire pps$MAXIGP0RREADY;
     wire pps$MAXIGP0WLAST;
     wire pps$MAXIGP0WVALID;
@@ -310,7 +300,7 @@ module P7Wrap (
         .MAXIGP0ARQOS(),
         .MAXIGP0ARREADY(MAXIGP0_O$AR__RDY),
         .MAXIGP0ARSIZE(),
-        .MAXIGP0ARVALID(pps$MAXIGP0ARVALID),
+        .MAXIGP0ARVALID(MAXIGP0_O$AR__ENA),
         .MAXIGP0AWADDR(MAXIGP0_O$AW$addr),
         .MAXIGP0AWBURST(),
         .MAXIGP0AWCACHE(),
@@ -321,7 +311,7 @@ module P7Wrap (
         .MAXIGP0AWQOS(),
         .MAXIGP0AWREADY(MAXIGP0_O$AW__RDY),
         .MAXIGP0AWSIZE(),
-        .MAXIGP0AWVALID(pps$MAXIGP0AWVALID),
+        .MAXIGP0AWVALID(MAXIGP0_O$AW__ENA),
         .MAXIGP0BID(MAXIGP0_I$B$id),
         .MAXIGP0BREADY(MAXIGP0_I$B__RDY),
         .MAXIGP0BRESP(MAXIGP0_I$B$resp),
@@ -693,19 +683,8 @@ module P7Wrap (
         .nRST(intrnRST),
         .clockOut());
     assign MAXIGP0_I$R__RDY = pps$MAXIGP0RREADY;
-    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
-    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
     assign MAXIGP0_O$W$last = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY & pps$MAXIGP0WLAST;
     assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
-    // Extra assigments, not to output wires
-    assign RULEgp0ar__ENA = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
-    assign RULEgp0ar__RDY = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
-    assign RULEgp0aw__ENA = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
-    assign RULEgp0aw__RDY = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
-    assign RULEgp0w__ENA = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
-    assign RULEgp0w__RDY = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
-    assign RULEinit__ENA = 1;
-    assign RULEinit__RDY = 1;
 endmodule 
 
 `default_nettype wire    // set back to default value

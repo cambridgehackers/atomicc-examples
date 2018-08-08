@@ -7,14 +7,9 @@ module CONNECTNET2 (
     output wire OUT1,
     output wire OUT2);
     wire CLK;
-    wire RULEassign__ENA;
-    wire RULEassign__RDY;
     wire nRST;
     assign OUT1 = IN1;
     assign OUT2 = IN2;
-    // Extra assigments, not to output wires
-    assign RULEassign__ENA = 1;
-    assign RULEassign__RDY = 1;
 endmodule 
 
 `default_nettype wire    // set back to default value

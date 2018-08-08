@@ -23,8 +23,6 @@ module ZynqTopNew (
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
     inout wire [53:0]MIO);
-    wire RULEinit__ENA;
-    wire RULEinit__RDY;
     wire ps7_fclk_0_c$O;
     wire ps7_freset_0_r$O;
     wire [3:0]ps7_ps7_foo$FCLKCLK;
@@ -143,9 +141,6 @@ module ZynqTopNew (
     BUFG ps7_freset_0_r (
         .I(ps7_ps7_foo$FCLKRESETN[ 0 ]),
         .O(ps7_freset_0_r$O));
-    // Extra assigments, not to output wires
-    assign RULEinit__ENA = 1;
-    assign RULEinit__RDY = 1;
 endmodule 
 
 `default_nettype wire    // set back to default value

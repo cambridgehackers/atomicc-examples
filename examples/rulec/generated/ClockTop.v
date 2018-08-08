@@ -6,8 +6,6 @@ module ClockTop #(
     input wire CLK,
     input wire nRST,
     output wire clockOut);
-    wire RULEinit__ENA;
-    wire RULEinit__RDY;
     wire clkbuf$O;
     wire ps7_clockGen_pll$CLKFBOUT;
     wire ps7_clockGen_pll$CLKOUT0;
@@ -55,9 +53,6 @@ module ClockTop #(
     BUFG clkbuf0 (
         .I(ps7_clockGen_pll$CLKOUT0),
         .O(clockOut));
-    // Extra assigments, not to output wires
-    assign RULEinit__ENA = 1;
-    assign RULEinit__RDY = 1;
 endmodule 
 
 `default_nettype wire    // set back to default value
