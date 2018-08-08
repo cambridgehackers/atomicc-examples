@@ -12,16 +12,12 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     reg busy_delay;
     reg [31:0]meth_delay;
     reg [31:0]v_delay;
-    wire RULEinput_rule__ENA;
-    wire RULEinput_rule__RDY;
     wire [31:0]pipe$enq__ENA$v_2e_addr$tag;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = busy_delay;
     assign pipe$enq__RDY = !busy_delay;
     // Extra assigments, not to output wires
-    assign RULEinput_rule__ENA = busy_delay & indication$heard__RDY;
-    assign RULEinput_rule__RDY = busy_delay & indication$heard__RDY;
     assign pipe$enq__ENA$v_2e_addr$tag = pipe$enq$v[ 31 : 0 ];
 
     always @( posedge CLK) begin
@@ -31,11 +27,11 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
         v_delay <= 0;
       end // nRST
       else begin
-        if (RULEinput_rule__ENA & RULEinput_rule__RDY) begin // RULEinput_rule__ENA
+        if (busy_delay & indication$heard__RDY) begin // RULEinput_rule__ENA
             busy_delay <= 0;
             $display( "input_rule: EchoIndicationInput" );
         end; // End of RULEinput_rule__ENA
-        if (pipe$enq__ENA & pipe$enq__RDY) begin // pipe$enq__ENA
+        if (pipe$enq__ENA & ( !busy_delay )) begin // pipe$enq__ENA
             $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe$enq$v[ 31 : 0 ] );
             if (pipe$enq__ENA$v_2e_addr$tag == 1) begin
             meth_delay <= pipe$enq$v[ 63 : 32 ];

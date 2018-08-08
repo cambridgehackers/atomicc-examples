@@ -83,13 +83,13 @@ module Echo (input wire CLK, input wire nRST,
         if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin // RULErespond_rule__ENA
             busy_delay <= 0;
         end; // End of RULErespond_rule__ENA
-        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
+        if (request$say2__ENA & ( busy == 32'd0 )) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
         end; // End of request$say2__ENA
-        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
+        if (request$say__ENA & ( busy == 32'd0 )) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;

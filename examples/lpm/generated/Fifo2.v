@@ -44,7 +44,7 @@ module Fifo2 (input wire CLK, input wire nRST,
             if (windex == 1)
             { element1$c , element1$b , element1$a } <= in$enq$v;
         end; // End of in$enq__ENA
-        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
+        if (out$deq__ENA & ( rindex != windex )) begin // out$deq__ENA
             rindex <= ( rindex + 1 ) % 2;
         end; // End of out$deq__ENA
       end

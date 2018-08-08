@@ -30,8 +30,6 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]y;
     wire RULEdelay_rule__ENA;
     wire RULEdelay_rule__RDY;
-    wire RULErespond_rule__ENA;
-    wire RULErespond_rule__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = busy_delay;
@@ -43,8 +41,6 @@ module Echo (input wire CLK, input wire nRST,
     // Extra assigments, not to output wires
     assign RULEdelay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULEdelay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
-    assign RULErespond_rule__ENA = busy_delay & indication$heard__RDY;
-    assign RULErespond_rule__RDY = busy_delay & indication$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -65,31 +61,31 @@ module Echo (input wire CLK, input wire nRST,
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of RULEdelay_rule__ENA
-        if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin // RULErespond_rule__ENA
+        if (busy_delay & indication$heard__RDY) begin // RULErespond_rule__ENA
             busy_delay <= 0;
             $display( "respond_rule: Echo" );
         end; // End of RULErespond_rule__ENA
-        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
+        if (request$say2__ENA & ( !busy )) begin // request$say2__ENA
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;
             busy <= 1;
             $display( "[%s:%d]Echo" , "request$say2" , 192 );
         end; // End of request$say2__ENA
-        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
+        if (request$say__ENA & ( !busy )) begin // request$say__ENA
             meth_temp <= request$say$meth;
             v_temp <= request$say$v;
             busy <= 1;
             $display( "[%s:%d]Echo" , "request$say" , 186 );
         end; // End of request$say__ENA
-        if (swap$x2y__ENA & swap$x2y__RDY) begin // swap$x2y__ENA
+        if (swap$x2y__ENA) begin // swap$x2y__ENA
             y <= x;
             $display( "[%s:%d]Echo" , "swap$x2y" , 206 );
         end; // End of swap$x2y__ENA
-        if (swap$y2x__ENA & swap$y2x__RDY) begin // swap$y2x__ENA
+        if (swap$y2x__ENA) begin // swap$y2x__ENA
             x <= y;
             $display( "[%s:%d]Echo" , "swap$y2x" , 198 );
         end; // End of swap$y2x__ENA
-        if (swap$y2xnull__ENA & swap$y2xnull__RDY) begin // swap$y2xnull__ENA
+        if (swap$y2xnull__ENA) begin // swap$y2xnull__ENA
             $display( "[%s:%d]Echo" , "swap$y2xnull" , 202 );
         end; // End of swap$y2xnull__ENA
       end

@@ -40,8 +40,6 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
-    wire RULEclockRule__ENA;
-    wire RULEclockRule__RDY;
     wire RULEdelay_rule__ENA;
     wire RULEdelay_rule__RDY;
     wire RULErespond_rule__ENA;
@@ -63,8 +61,6 @@ module Echo (input wire CLK, input wire nRST,
     assign request$setLeds__RDY = printfp$enq__RDY;
     assign request$zsay4__RDY = printfp$enq__RDY;
     // Extra assigments, not to output wires
-    assign RULEclockRule__ENA = 1;
-    assign RULEclockRule__RDY = 1;
     assign RULEdelay_rule__ENA = ( ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0 ) & printfp$enq__RDY;
     assign RULEdelay_rule__RDY = ( ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0 ) & printfp$enq__RDY;
     assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
@@ -84,9 +80,9 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (RULEclockRule__ENA & RULEclockRule__RDY) begin // RULEclockRule__ENA
+        // RULEclockRule__ENA
             clockReg <= clockReg + 1;
-        end; // End of RULEclockRule__ENA
+        // End of RULEclockRule__ENA
         if (RULEdelay_rule__ENA & RULEdelay_rule__RDY) begin // RULEdelay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
@@ -97,13 +93,13 @@ module Echo (input wire CLK, input wire nRST,
         if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin // RULErespond_rule__ENA
             busy_delay <= 0;
         end; // End of RULErespond_rule__ENA
-        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
+        if (request$say2__ENA & ( busy == 32'd0 ) & printfp$enq__RDY) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
         end; // End of request$say2__ENA
-        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
+        if (request$say__ENA & ( busy == 32'd0 ) & printfp$enq__RDY) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;

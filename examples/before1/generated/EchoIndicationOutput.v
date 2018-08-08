@@ -48,7 +48,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         if (RULEoutput_ruleo__ENA & RULEoutput_ruleo__RDY) begin // RULEoutput_ruleo__ENA
             ind_busy <= 0;
         end; // End of RULEoutput_ruleo__ENA
-        if (indication$heard__ENA & indication$heard__RDY) begin // indication$heard__ENA
+        if (indication$heard__ENA & ( !ind_busy )) begin // indication$heard__ENA
             ind_busy <= 1;
             even <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 114 , even );

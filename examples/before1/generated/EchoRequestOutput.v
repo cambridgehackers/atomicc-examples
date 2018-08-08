@@ -32,12 +32,12 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
+        if (request$say2__ENA & pipe$enq__RDY) begin // request$say2__ENA
             request$say2__ENA$ind$data$say2$meth <= request$say2$meth;
             request$say2__ENA$ind$data$say2$v <= request$say2$v;
             $display( "entered EchoRequestOutput::say2" );
         end; // End of request$say2__ENA
-        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
+        if (request$say__ENA & pipe$enq__RDY) begin // request$say__ENA
             request$say__ENA$ind$data$say$meth <= request$say$meth;
             request$say__ENA$ind$data$say$v <= request$say$v;
             $display( "entered EchoRequestOutput::say" );
