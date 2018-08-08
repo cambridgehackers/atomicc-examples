@@ -261,13 +261,10 @@ __module TestTop {
         requestLength = length;
     }
     __connect readUser = user.read;
-    __uint(32) portNum;
 
     TestTop() {
         __rule init {
            _.interrupt = (requestLength != 0) && intEnable;
-           writeReady = __ready(user.write.enq);
-           portNum = selectRIndReq ? 6 : 5;
         }
         __rule lread {
             auto temp = readBeat.out.first();
@@ -280,14 +277,13 @@ __module TestTop {
               case 0: portalCtrlInfo = zzIntrChannel; break;
               case 8: portalCtrlInfo = 1; break;
               case 0xc: portalCtrlInfo = zzIntrChannel; break;
-              case 0x10: portalCtrlInfo = portNum; break;
-              //case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
+              case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
               case 0x14: portalCtrlInfo = 2; break;
               default: portalCtrlInfo = 0; break;
             }
             switch (temp.ac.addr) {
               case 0: res = requestValue; break;
-              case 4: res = writeReady; break; //__ready(user.write.enq);
+              case 4: res = __ready(user.write.enq); break;
               default: res = 0; break;
             }
             readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : res});

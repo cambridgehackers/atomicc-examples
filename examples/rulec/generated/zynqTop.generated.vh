@@ -93,7 +93,7 @@
 //METAGUARD; RULElR; readData$out$deq__RDY & MAXIGP0_I$R__RDY;
 //METAINVOKE; RULElread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;1:readData$in$enq__ENA;
 //METAEXCLUSIVE; RULElread__ENA; readUser$enq__ENA
-//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA; :RULEinit__ENA; :readUser$enq__ENA
+//METABEFORE; RULElread__ENA; :MAXIGP0_O$AR__ENA; :readUser$enq__ENA
 //METAINVOKE; RULElreadNext__ENA; :readBeat$in$enq__ENA;RULElreadNext__ENA$readLastNext != 0:reqArs$out$deq__ENA;:reqArs$out$first;
 //METAGUARD; RULElreadNext; reqArs$out$deq__RDY & readBeat$in$enq__RDY;
 //METAGUARD; RULElread; readBeat$out$deq__RDY & readData$in$enq__RDY;
