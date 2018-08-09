@@ -11,10 +11,10 @@
 //METARULES; RULErespond_rule
 //METASTART; Fifo1
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; 1;
-//METAGUARD; out$deq; 1;
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; 1;
+//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_3
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;

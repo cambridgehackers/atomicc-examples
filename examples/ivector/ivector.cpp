@@ -18,9 +18,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#define FIFO_NO_DUMMY_INSTANTIATION
-#include <fifo.cpp>
-//#include <fifo.h>
+#include "atomicc.h"
+#include "fifo.h"
+#include "mux.h"
 
 typedef struct {
     int a;

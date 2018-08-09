@@ -18,7 +18,9 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <atomicc.h>
+#include "atomicc.h"
+#include "fifo.h"
+#include "mux.h"
 
 typedef struct {
     int a;

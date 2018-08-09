@@ -32,23 +32,6 @@
 //METAGUARD; request$setLeds; 1;
 //METAGUARD; request$zsay4; 1;
 //METARULES; RULEdelay_rule; RULErespond_rule
-//METASTART; Fifo1
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; full;
-//METASTART; MuxPipe
-//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
-//METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
-//METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
-//METAGUARD; RULEfifoRule; forwardFifo$out$deq__RDY & out$enq__RDY;
-//METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
-//METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
-//METAINVOKE; in$enq__ENA; :out$enq__ENA;
-//METAGUARD; in$enq; out$enq__RDY;
-//METARULES; RULEfifoRule
 //METASTART; UserTop
 //METAEXTERNAL; read; l_ainterface_OC_PipeInB;
 //METAINTERNAL; radapter_0; AdapterToBus;

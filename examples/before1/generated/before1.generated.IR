@@ -112,27 +112,27 @@ MODULE Echo {
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",192}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",194}
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     }
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say",186}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say",188}
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
         STORE :busy = 1
     }
     METHOD swap$x2y__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",206}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",208}
         STORE :y = x
     }
     METHOD swap$y2x__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$y2x",198}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2x",200}
         STORE :x = y
     }
     METHOD swap$y2xnull__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",202}
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",204}
     }
 }
 MODULE EchoIndicationInput {
@@ -175,7 +175,7 @@ MODULE EchoIndicationOutput {
         CALL/Action :pipe$enq__ENA{RULEoutput_ruleo__ENA$agg_2e_tmp}
     }
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",114,even}
+        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",116,even}
         STORE (even):ind1$tag = 1
         STORE (even):ind1$data$heard$meth = indication$heard$meth
         STORE (even):ind1$data$heard$v = indication$heard$v

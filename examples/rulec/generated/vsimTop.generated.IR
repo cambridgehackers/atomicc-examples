@@ -11,10 +11,6 @@ EMODULE l_ainterface_OC_PipeIn {
 EMODULE l_ainterface_OC_PipeInB {
     METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
-    METHOD first l_struct_OC_NOCData
-}
 EMODULE l_ainterface_OC_VBeat {
     METHOD beat__ENA ( INTEGER_32 v , INTEGER_1 last )
 }
@@ -25,10 +21,6 @@ EMODULE l_ainterface_OC_VsimInterface {
     FIELD/input INTEGER_1 nRST_derivedReset
     FIELD/input INTEGER_1 CLK_sys_clk
 }
-EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-}
 EMODULE UserTop {
     INTERFACE l_ainterface_OC_PipeInB write
     INTERFACE/Ptr l_ainterface_OC_PipeInB read
@@ -38,42 +30,6 @@ EMODULE VsimReceive {
 }
 EMODULE VsimSend {
     INTERFACE l_ainterface_OC_VBeat _
-}
-MODULE Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD l_struct_OC_NOCData element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
-    }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
-    }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
-        ALLOCA l_struct_OC_NOCData out$first$retval
-        LET l_struct_OC_NOCData :out$first$retval = element
-    }
-}
-MODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeIn forward
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD Fifo1 forwardFifo
-    METHOD/Rule RULEfifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
-        CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :RULEfifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
-        CALL/Action :out$enq__ENA{RULEfifoRule__ENA$agg_2e_tmp}
-        CALL/Action :forwardFifo$out$deq__ENA{}
-    }
-    METHOD forward$enq__ENA ( l_struct_OC_NOCData v ) {
-        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
-    }
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
-        CALL/Action :out$enq__ENA{in$enq$v}
-    }
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _

@@ -19,6 +19,8 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
+#include "fifo.h"
+#include "mux.h"
 #include "adapter.h"
 
 //typedef __int(32) aint32;

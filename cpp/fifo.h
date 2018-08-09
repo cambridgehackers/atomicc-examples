@@ -29,14 +29,21 @@ __emodule Fifo {
     PipeOut<T> out;
 };
 
-#ifndef FIFODEFINE
-#define FIFODEFINE __emodule
-#endif
+//#define FIFODEFINE __emodule
+#define FIFODEFINE __module
 
 template<class T>
 FIFODEFINE Fifo1 : public Fifo<T> {
-#ifdef FIFODATA
-    FIFODATA
-#endif
+  T element;
+  bool full;
+  void in.enq(const T v) if (notFull()) {
+    element = v;
+    full = true;
+  };
+  void out.deq(void) if (notEmpty()) { full = false; };
+  T out.first(void) if (notEmpty()) { return element; };
+  bool notEmpty() const { return full; };
+  bool notFull() const { return !full; };
+  Fifo1(): full(false) { };
 };
 #endif

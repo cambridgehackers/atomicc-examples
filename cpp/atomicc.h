@@ -107,7 +107,7 @@ __interface PipeInB {
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
 
-#ifndef __FIFO_CPP__
-#include "mux.h"
-#endif
+//#ifndef __FIFO_CPP__
+//#include "mux.h"
+//#endif
 #endif // _ATOMICC_H_

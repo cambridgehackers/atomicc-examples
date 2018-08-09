@@ -18,9 +18,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#define FIFO_NO_DUMMY_INSTANTIATION
-#include <fifo.cpp>
 #include <math.h>
+#include "atomicc.h"
+#include "fifo.h"
+#include "mux.h"
 
 //typedef FixedPoint<6> myint6;
 //typedef FixedPoint<4> myint4;

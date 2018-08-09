@@ -22,9 +22,8 @@
 #ifndef _MUX_H_
 #define _MUX_H_
 #include "atomicc.h"
+#include "fifo.h"
 
-#define FIFO_NO_DUMMY_INSTANTIATION
-#include "fifo.cpp"
 __module MuxPipe {
 public:
     NOCPipe           in;

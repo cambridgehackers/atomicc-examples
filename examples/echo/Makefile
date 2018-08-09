@@ -18,7 +18,6 @@ include ../makefile.in
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/echo.ll echo.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/fifo.ll ../../cpp/fifo.cpp
 
 run:
 	clang++ -std=c++11 -I.. -g testecho.cpp

@@ -54,14 +54,14 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD l_struct_OC_NOCData element
     FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA {
+    METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
         ALLOCA l_struct_OC_NOCData out$first$retval
         LET l_struct_OC_NOCData :out$first$retval = element
     }

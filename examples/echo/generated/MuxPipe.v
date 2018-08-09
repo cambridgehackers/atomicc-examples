@@ -1,4 +1,4 @@
-`include "fifo.generated.vh"
+`include "echo.generated.vh"
 
 `default_nettype none
 module MuxPipe (input wire CLK, input wire nRST,
