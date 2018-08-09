@@ -59,28 +59,28 @@ module FifoPong (input wire CLK, input wire nRST,
     assign out$first = { out$first$retval$c19 , out$first$retval$c18 , out$first$retval$c17 , out$first$retval$c16 , out$first$retval$c15 , out$first$retval$c14 , out$first$retval$c13 , out$first$retval$c12 , out$first$retval$c11 , out$first$retval$c10 , out$first$retval$c9 , out$first$retval$c8 , out$first$retval$c7 , out$first$retval$c6 , out$first$retval$c5 , out$first$retval$c4 , out$first$retval$c3 , out$first$retval$c2 , out$first$retval$c1 , out$first$retval$c0 , out$first$retval$b , out$first$retval$a };
     assign out$first__RDY = 1;
     // Extra assigments, not to output wires
-    assign out$first$retval$a = ( out$deq__RDY & pong ) ? element2$out$first[ 31 : 0 ] : element1$out$first[ 31 : 0 ];
-    assign out$first$retval$b = ( out$deq__RDY & pong ) ? element2$out$first[ 63 : 32 ] : element1$out$first[ 63 : 32 ];
-    assign out$first$retval$c0 = ( out$deq__RDY & pong ) ? element2$out$first[ 95 : 64 ] : element1$out$first[ 95 : 64 ];
-    assign out$first$retval$c1 = ( out$deq__RDY & pong ) ? element2$out$first[ 127 : 96 ] : element1$out$first[ 127 : 96 ];
-    assign out$first$retval$c10 = ( out$deq__RDY & pong ) ? element2$out$first[ 415 : 384 ] : element1$out$first[ 415 : 384 ];
-    assign out$first$retval$c11 = ( out$deq__RDY & pong ) ? element2$out$first[ 447 : 416 ] : element1$out$first[ 447 : 416 ];
-    assign out$first$retval$c12 = ( out$deq__RDY & pong ) ? element2$out$first[ 479 : 448 ] : element1$out$first[ 479 : 448 ];
-    assign out$first$retval$c13 = ( out$deq__RDY & pong ) ? element2$out$first[ 511 : 480 ] : element1$out$first[ 511 : 480 ];
-    assign out$first$retval$c14 = ( out$deq__RDY & pong ) ? element2$out$first[ 543 : 512 ] : element1$out$first[ 543 : 512 ];
-    assign out$first$retval$c15 = ( out$deq__RDY & pong ) ? element2$out$first[ 575 : 544 ] : element1$out$first[ 575 : 544 ];
-    assign out$first$retval$c16 = ( out$deq__RDY & pong ) ? element2$out$first[ 607 : 576 ] : element1$out$first[ 607 : 576 ];
-    assign out$first$retval$c17 = ( out$deq__RDY & pong ) ? element2$out$first[ 639 : 608 ] : element1$out$first[ 639 : 608 ];
-    assign out$first$retval$c18 = ( out$deq__RDY & pong ) ? element2$out$first[ 671 : 640 ] : element1$out$first[ 671 : 640 ];
-    assign out$first$retval$c19 = ( out$deq__RDY & pong ) ? element2$out$first[ 703 : 672 ] : element1$out$first[ 703 : 672 ];
-    assign out$first$retval$c2 = ( out$deq__RDY & pong ) ? element2$out$first[ 159 : 128 ] : element1$out$first[ 159 : 128 ];
-    assign out$first$retval$c3 = ( out$deq__RDY & pong ) ? element2$out$first[ 191 : 160 ] : element1$out$first[ 191 : 160 ];
-    assign out$first$retval$c4 = ( out$deq__RDY & pong ) ? element2$out$first[ 223 : 192 ] : element1$out$first[ 223 : 192 ];
-    assign out$first$retval$c5 = ( out$deq__RDY & pong ) ? element2$out$first[ 255 : 224 ] : element1$out$first[ 255 : 224 ];
-    assign out$first$retval$c6 = ( out$deq__RDY & pong ) ? element2$out$first[ 287 : 256 ] : element1$out$first[ 287 : 256 ];
-    assign out$first$retval$c7 = ( out$deq__RDY & pong ) ? element2$out$first[ 319 : 288 ] : element1$out$first[ 319 : 288 ];
-    assign out$first$retval$c8 = ( out$deq__RDY & pong ) ? element2$out$first[ 351 : 320 ] : element1$out$first[ 351 : 320 ];
-    assign out$first$retval$c9 = ( out$deq__RDY & pong ) ? element2$out$first[ 383 : 352 ] : element1$out$first[ 383 : 352 ];
+    assign out$first$retval$a = ( ( out$deq__RDY & pong ) ? element2$out$first[ 31 : 0 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 31 : 0 ] : 0 );
+    assign out$first$retval$b = ( ( out$deq__RDY & pong ) ? element2$out$first[ 63 : 32 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 63 : 32 ] : 0 );
+    assign out$first$retval$c0 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 95 : 64 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 95 : 64 ] : 0 );
+    assign out$first$retval$c1 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 127 : 96 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 127 : 96 ] : 0 );
+    assign out$first$retval$c10 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 415 : 384 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 415 : 384 ] : 0 );
+    assign out$first$retval$c11 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 447 : 416 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 447 : 416 ] : 0 );
+    assign out$first$retval$c12 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 479 : 448 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 479 : 448 ] : 0 );
+    assign out$first$retval$c13 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 511 : 480 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 511 : 480 ] : 0 );
+    assign out$first$retval$c14 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 543 : 512 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 543 : 512 ] : 0 );
+    assign out$first$retval$c15 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 575 : 544 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 575 : 544 ] : 0 );
+    assign out$first$retval$c16 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 607 : 576 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 607 : 576 ] : 0 );
+    assign out$first$retval$c17 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 639 : 608 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 639 : 608 ] : 0 );
+    assign out$first$retval$c18 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 671 : 640 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 671 : 640 ] : 0 );
+    assign out$first$retval$c19 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 703 : 672 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 703 : 672 ] : 0 );
+    assign out$first$retval$c2 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 159 : 128 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 159 : 128 ] : 0 );
+    assign out$first$retval$c3 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 191 : 160 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 191 : 160 ] : 0 );
+    assign out$first$retval$c4 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 223 : 192 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 223 : 192 ] : 0 );
+    assign out$first$retval$c5 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 255 : 224 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 255 : 224 ] : 0 );
+    assign out$first$retval$c6 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 287 : 256 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 287 : 256 ] : 0 );
+    assign out$first$retval$c7 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 319 : 288 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 319 : 288 ] : 0 );
+    assign out$first$retval$c8 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 351 : 320 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 351 : 320 ] : 0 );
+    assign out$first$retval$c9 = ( ( out$deq__RDY & pong ) ? element2$out$first[ 383 : 352 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 383 : 352 ] : 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

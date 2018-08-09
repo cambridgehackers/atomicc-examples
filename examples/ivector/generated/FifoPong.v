@@ -40,9 +40,9 @@ module FifoPong (input wire CLK, input wire nRST,
     assign out$first = { out$first$retval$c , out$first$retval$b , out$first$retval$a };
     assign out$first__RDY = 1;
     // Extra assigments, not to output wires
-    assign out$first$retval$a = ( out$deq__RDY & pong ) ? element2$out$first[ 31 : 0 ] : element1$out$first[ 31 : 0 ];
-    assign out$first$retval$b = ( out$deq__RDY & pong ) ? element2$out$first[ 63 : 32 ] : element1$out$first[ 63 : 32 ];
-    assign out$first$retval$c = ( out$deq__RDY & pong ) ? element2$out$first[ 95 : 64 ] : element1$out$first[ 95 : 64 ];
+    assign out$first$retval$a = ( ( out$deq__RDY & pong ) ? element2$out$first[ 31 : 0 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 31 : 0 ] : 0 );
+    assign out$first$retval$b = ( ( out$deq__RDY & pong ) ? element2$out$first[ 63 : 32 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 63 : 32 ] : 0 );
+    assign out$first$retval$c = ( ( out$deq__RDY & pong ) ? element2$out$first[ 95 : 64 ] : 0 ) | ( ( out$deq__RDY & ( pong ^ 1 ) ) ? element1$out$first[ 95 : 64 ] : 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

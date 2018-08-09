@@ -22,7 +22,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     wire RULEoutput_ruleo__ENA;
     wire RULEoutput_ruleo__RDY;
     assign indication$heard__RDY = !ind_busy;
-    assign pipe$enq$v = ( ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY ) ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag };
+    assign pipe$enq$v = ( ( ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY ) ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : 0 ) | ( ( ( ( ind_busy & ( !even ) ) != 0 ) & pipe$enq__RDY ) ? { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag } : 0 );
     assign pipe$enq__ENA = ( ( ind_busy & even ) != 0 ) || ( ( ind_busy & ( !even ) ) != 0 );
     // Extra assigments, not to output wires
     assign RULEoutput_rulee__ENA = ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY;

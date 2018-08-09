@@ -32,7 +32,7 @@ module VsimTop (
     VsimSend source_0 (.CLK(CLK), .nRST(nRST),
         .beat__ENA(user$read$enq__ENA),
         .beat$v(user$read$enq$v),
-        .beat$last(user$read$enq__ENA & ( user$read$enq$length == 16'd1 )),
+        .beat$last(user$read$enq$length == 16'd1),
         .beat__RDY(source_0$beat__RDY));
 endmodule 
 
