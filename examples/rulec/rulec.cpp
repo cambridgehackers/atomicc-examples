@@ -69,10 +69,9 @@ __module Echo {
     __software EchoRequest                     request;
     __software EchoIndication                 *indication;
     //__printf;
-    int busy;
+    __uint(1) busy, busy_delay;
     aint32 v_temp, v_delay;
     aint16 a_temp, b_temp, a_delay, b_delay;
-    int busy_delay;
     int v_type;
     void request.say(aint32 v) if(!busy) {
 //printf("EEEEEEEE say: %d\n", v);

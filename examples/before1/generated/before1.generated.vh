@@ -32,7 +32,7 @@
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA
-//METAGUARD; RULEdelay_rule; ( busy & ( !busy_delay ) ) != 0;
+//METAGUARD; RULEdelay_rule; busy & ( !busy_delay );
 //METAINVOKE; RULErespond_rule__ENA; :indication$heard__ENA;
 //METAGUARD; RULErespond_rule; busy_delay & indication$heard__RDY;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
@@ -53,10 +53,10 @@
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_1;
 //METAINVOKE; RULEoutput_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULEoutput_rulee__ENA; RULEoutput_ruleo__ENA; indication$heard__ENA
-//METAGUARD; RULEoutput_rulee; ( ( ind_busy & even ) != 0 ) & pipe$enq__RDY;
+//METAGUARD; RULEoutput_rulee; ind_busy & even & pipe$enq__RDY;
 //METAINVOKE; RULEoutput_ruleo__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULEoutput_ruleo__ENA; indication$heard__ENA
-//METAGUARD; RULEoutput_ruleo; ( ( ind_busy & ( !even ) ) != 0 ) & pipe$enq__RDY;
+//METAGUARD; RULEoutput_ruleo; ind_busy & ( !even ) & pipe$enq__RDY;
 //METAGUARD; indication$heard; !ind_busy;
 //METARULES; RULEoutput_rulee; RULEoutput_ruleo
 //METASTART; EchoRequestInput

@@ -28,8 +28,6 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_temp;
     reg [31:0]x;
     reg [31:0]y;
-    wire RULEdelay_rule__ENA;
-    wire RULEdelay_rule__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = busy_delay;
@@ -38,9 +36,6 @@ module Echo (input wire CLK, input wire nRST,
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
-    // Extra assigments, not to output wires
-    assign RULEdelay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
-    assign RULEdelay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -54,7 +49,7 @@ module Echo (input wire CLK, input wire nRST,
         y <= 0;
       end // nRST
       else begin
-        if (RULEdelay_rule__ENA & RULEdelay_rule__RDY) begin // RULEdelay_rule__ENA
+        if (busy & ( !busy_delay )) begin // RULEdelay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             meth_delay <= meth_temp;

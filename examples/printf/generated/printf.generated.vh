@@ -7,7 +7,7 @@
 //METAGUARD; RULEclockRule; 1;
 //METAINVOKE; RULEdelay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
-//METAGUARD; RULEdelay_rule; ( ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0 ) & printfp$enq__RDY;
+//METAGUARD; RULEdelay_rule; ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
 //METAINVOKE; RULErespond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
 //METAEXCLUSIVE; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
 //METABEFORE; RULErespond_rule__ENA; :RULEdelay_rule__ENA

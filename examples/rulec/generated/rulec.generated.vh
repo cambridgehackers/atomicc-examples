@@ -22,13 +22,13 @@
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA
-//METAGUARD; RULEdelay_rule; ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) != 0;
+//METAGUARD; RULEdelay_rule; busy & ( !busy_delay );
 //METAINVOKE; RULErespond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;
 //METABEFORE; RULErespond_rule__ENA; :RULEdelay_rule__ENA
-//METAGUARD; RULErespond_rule; ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+//METAGUARD; RULErespond_rule; busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
-//METAGUARD; request$say2; busy == 32'd0;
-//METAGUARD; request$say; busy == 32'd0;
+//METAGUARD; request$say2; !busy;
+//METAGUARD; request$say; !busy;
 //METAGUARD; request$setLeds; 1;
 //METAGUARD; request$zsay4; 1;
 //METARULES; RULEdelay_rule; RULErespond_rule

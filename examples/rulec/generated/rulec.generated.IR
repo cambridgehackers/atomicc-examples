@@ -82,14 +82,14 @@ MODULE Echo {
     SOFTWARE indication
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    FIELD INTEGER_32 busy
+    FIELD INTEGER_1 busy
+    FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 v_temp
     FIELD INTEGER_32 v_delay
     FIELD INTEGER_16 a_temp
     FIELD INTEGER_16 b_temp
     FIELD INTEGER_16 a_delay
     FIELD INTEGER_16 b_delay
-    FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
     METHOD/Rule RULEdelay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
