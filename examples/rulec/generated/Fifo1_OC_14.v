@@ -3,29 +3,33 @@
 `default_nettype none
 module Fifo1_OC_14 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [37:0]in$enq$v,
+    input wire [15:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [37:0]out$first,
+    output wire [15:0]out$first,
     output wire out$first__RDY);
-    reg [31:0]element$data;
-    reg [5:0]element$id;
+    reg [4:0]element$ac$addr;
+    reg [3:0]element$ac$count;
+    reg [5:0]element$ac$id;
+    reg element$last;
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
-    assign out$first = { element$data , element$id };
+    assign out$first = { element$ac$addr , element$ac$count , element$ac$id , element$last };
     assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element$data <= 0;
-        element$id <= 0;
+        element$ac$addr <= 0;
+        element$ac$count <= 0;
+        element$ac$id <= 0;
+        element$last <= 0;
         full <= 0;
       end // nRST
       else begin
         if (in$enq__ENA & ( !full )) begin // in$enq__ENA
-            { element$data , element$id } <= in$enq$v;
+            { element$ac$addr , element$ac$count , element$ac$id , element$last } <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA & full) begin // out$deq__ENA

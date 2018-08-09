@@ -8,7 +8,7 @@ module Echo (input wire CLK, input wire nRST,
     output wire ind$heard__ENA,
     output wire [31:0]ind$heard$v,
     input wire ind$heard__RDY);
-    Fifo1_OC_3 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_5 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(sout$say__ENA),
         .in$enq$v(sout$say$v),
         .in$enq__RDY(sout$say__RDY),

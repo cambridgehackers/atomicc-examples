@@ -7,7 +7,7 @@
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_2
+//METASTART; Fifo1_OC_4
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -15,7 +15,7 @@
 //METAGUARD; out$first; full;
 //METASTART; IVector
 //METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;
-//METAINTERNAL; fifo; Fifo1_OC_2;
+//METAINTERNAL; fifo; Fifo1_OC_4;
 //METAINVOKE; RULErespond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
 //METAGUARD; RULErespond; fifo$out$deq__RDY & ind$heard__RDY;
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;

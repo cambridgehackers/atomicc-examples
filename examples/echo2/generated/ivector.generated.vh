@@ -7,15 +7,15 @@
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_3
+//METASTART; Fifo1_OC_5
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
 //METASTART; FifoPong
-//METAINTERNAL; element1; Fifo1_OC_3;
-//METAINTERNAL; element2; Fifo1_OC_3;
+//METAINTERNAL; element1; Fifo1_OC_5;
+//METAINTERNAL; element2; Fifo1_OC_5;
 //METAINVOKE; in$enq__ENA; pong ^ 1:element1$in$enq__ENA;pong:element2$in$enq__ENA;
 //METAGUARD; in$enq; ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
 //METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;

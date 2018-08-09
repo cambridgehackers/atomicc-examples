@@ -17,11 +17,18 @@ EMODULE l_ainterface_OC_PipeIn {
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( INTEGER_32 v )
 }
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
+    METHOD enq__ENA ( INTEGER_32 v )
+}
 EMODULE l_ainterface_OC_PipeOut {
+    METHOD deq__ENA
+    METHOD first INTEGER_32
+}
+EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_1 {
+EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
     METHOD first INTEGER_32
 }
@@ -30,16 +37,16 @@ EMODULE EchoInd {
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-}
-EMODULE Fifo_OC_2 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+}
+EMODULE Fifo_OC_4 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
 MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
     INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
-    FIELD Fifo1_OC_3 fifo
+    FIELD Fifo1_OC_5 fifo
     METHOD/Rule RULErespond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
@@ -51,7 +58,7 @@ MODULE Echo {
 }
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD l_struct_OC_NOCData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
@@ -66,9 +73,9 @@ MODULE Fifo1 {
         LET l_struct_OC_NOCData :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+MODULE Fifo1_OC_5 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD INTEGER_32 element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_32 v ) if (((full) ^ (1))) {

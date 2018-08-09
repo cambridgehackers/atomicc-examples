@@ -7,7 +7,7 @@
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_2
+//METASTART; Fifo1_OC_4
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -20,9 +20,9 @@
 //METAGUARD; out$first; rindex != windex;
 //METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
-//METAINTERNAL; inQ; Fifo1_OC_2;
+//METAINTERNAL; inQ; Fifo1_OC_4;
 //METAINTERNAL; fifo; Fifo2;
-//METAINTERNAL; outQ; Fifo1_OC_2;
+//METAINTERNAL; outQ; Fifo1_OC_4;
 //METAINTERNAL; mem; LpmMemory;
 //METAINVOKE; RULEenter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; RULEenter__ENA; RULErecirc__ENA

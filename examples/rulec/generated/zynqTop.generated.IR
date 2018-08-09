@@ -129,44 +129,44 @@ EMODULE l_ainterface_OC_PipeIn {
 EMODULE l_ainterface_OC_PipeInB {
     METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( l_struct_OC_AddrCount v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_2 {
-    METHOD enq__ENA ( l_struct_OC_PortalInfo v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_4 {
-    METHOD enq__ENA ( l_struct_OC_ReadResp v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_6 {
-    METHOD enq__ENA ( l_struct_OC_BusData v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_8 {
+EMODULE l_ainterface_OC_PipeIn_OC_10 {
     METHOD enq__ENA ( INTEGER_6 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
-    METHOD first l_struct_OC_NOCData
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
+    METHOD enq__ENA ( l_struct_OC_AddrCount v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
+    METHOD enq__ENA ( l_struct_OC_PortalInfo v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_6 {
+    METHOD enq__ENA ( l_struct_OC_ReadResp v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_8 {
+    METHOD enq__ENA ( l_struct_OC_BusData v )
 }
 EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_AddrCount
+    METHOD first l_struct_OC_NOCData
+}
+EMODULE l_ainterface_OC_PipeOut_OC_11 {
+    METHOD deq__ENA
+    METHOD first INTEGER_6
 }
 EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_PortalInfo
+    METHOD first l_struct_OC_AddrCount
 }
 EMODULE l_ainterface_OC_PipeOut_OC_5 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_ReadResp
+    METHOD first l_struct_OC_PortalInfo
 }
 EMODULE l_ainterface_OC_PipeOut_OC_7 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_BusData
+    METHOD first l_struct_OC_ReadResp
 }
 EMODULE l_ainterface_OC_PipeOut_OC_9 {
     METHOD deq__ENA
-    METHOD first INTEGER_6
+    METHOD first l_struct_OC_BusData
 }
 EMODULE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
@@ -608,10 +608,6 @@ EMODULE BUFG {
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-}
-EMODULE Fifo_OC_11 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
 EMODULE Fifo_OC_13 {
@@ -629,6 +625,10 @@ EMODULE Fifo_OC_17 {
 EMODULE Fifo_OC_19 {
     INTERFACE l_ainterface_OC_PipeIn_OC_8 in
     INTERFACE l_ainterface_OC_PipeOut_OC_9 out
+}
+EMODULE Fifo_OC_21 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
 }
 EMODULE MMCME2_ADV {
     INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
@@ -670,7 +670,7 @@ MODULE ClockTop {
 }
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD l_struct_OC_NOCData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
@@ -685,9 +685,9 @@ MODULE Fifo1 {
         LET l_struct_OC_NOCData :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_10 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+MODULE Fifo1_OC_12 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD l_struct_OC_AddrCount element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) if (((full) ^ (1))) {
@@ -702,9 +702,9 @@ MODULE Fifo1_OC_10 {
         LET l_struct_OC_AddrCount :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_12 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
+MODULE Fifo1_OC_14 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
     FIELD l_struct_OC_PortalInfo element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) if (((full) ^ (1))) {
@@ -719,9 +719,9 @@ MODULE Fifo1_OC_12 {
         LET l_struct_OC_PortalInfo :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_14 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+MODULE Fifo1_OC_16 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
     FIELD l_struct_OC_ReadResp element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) if (((full) ^ (1))) {
@@ -736,9 +736,9 @@ MODULE Fifo1_OC_14 {
         LET l_struct_OC_ReadResp :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_16 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_6 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+MODULE Fifo1_OC_18 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
     FIELD l_struct_OC_BusData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_BusData v ) if (((full) ^ (1))) {
@@ -753,9 +753,9 @@ MODULE Fifo1_OC_16 {
         LET l_struct_OC_BusData :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_18 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_8 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_9 out
+MODULE Fifo1_OC_20 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_10 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_11 out
     FIELD INTEGER_6 element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_6 v ) if (((full) ^ (1))) {
@@ -876,13 +876,13 @@ MODULE TestTop {
     FIELD INTEGER_4 writeCount
     FIELD INTEGER_5 readAddr
     FIELD INTEGER_5 writeAddr
-    FIELD Fifo1_OC_10 reqArs
-    FIELD Fifo1_OC_10 reqAws
-    FIELD Fifo1_OC_12 readBeat
-    FIELD Fifo1_OC_12 writeBeat
-    FIELD Fifo1_OC_14 readData
-    FIELD Fifo1_OC_16 writeData
-    FIELD Fifo1_OC_18 writeDone
+    FIELD Fifo1_OC_12 reqArs
+    FIELD Fifo1_OC_12 reqAws
+    FIELD Fifo1_OC_14 readBeat
+    FIELD Fifo1_OC_14 writeBeat
+    FIELD Fifo1_OC_16 readData
+    FIELD Fifo1_OC_18 writeData
+    FIELD Fifo1_OC_20 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD INTEGER_32 requestValue

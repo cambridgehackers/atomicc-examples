@@ -38,7 +38,7 @@ module FifoPong (input wire CLK, input wire nRST,
     wire [31:0]out$first$retval$c7;
     wire [31:0]out$first$retval$c8;
     wire [31:0]out$first$retval$c9;
-    Fifo1_OC_3 element1 (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_5 element1 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
@@ -46,7 +46,7 @@ module FifoPong (input wire CLK, input wire nRST,
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY());
-    Fifo1_OC_3 element2 (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_5 element2 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(pong & in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),

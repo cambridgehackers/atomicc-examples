@@ -14,7 +14,7 @@ module IVector (input wire CLK, input wire nRST,
     reg [7:0]fcounter;
     reg [8:0]gcounter;
     wire [9:0]fifo$out$first;
-    Fifo1_OC_2 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_4 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
         .in$enq__RDY(request$say__RDY),

@@ -18,23 +18,30 @@ EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
+    METHOD enq__ENA ( INTEGER_32 v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_2 {
     METHOD enq__ENA ( l_struct_OC_ValueType v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
-    METHOD first l_struct_OC_NOCData
+    METHOD first INTEGER_32
 }
 EMODULE l_ainterface_OC_PipeOut_OC_1 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_NOCData
+}
+EMODULE l_ainterface_OC_PipeOut_OC_3 {
     METHOD deq__ENA
     METHOD first l_struct_OC_ValueType
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-}
-EMODULE Fifo_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+}
+EMODULE Fifo_OC_5 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
 }
 EMODULE IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
@@ -44,7 +51,7 @@ EMODULE IVectorInd {
 }
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD l_struct_OC_NOCData element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
@@ -59,9 +66,9 @@ MODULE Fifo1 {
         LET l_struct_OC_NOCData :out$first$retval = element
     }
 }
-MODULE Fifo1_OC_2 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+MODULE Fifo1_OC_4 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_3 out
     FIELD l_struct_OC_ValueType element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( l_struct_OC_ValueType v ) if (((full) ^ (1))) {
@@ -79,7 +86,7 @@ MODULE Fifo1_OC_2 {
 MODULE IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
     INTERFACE/Ptr l_ainterface_OC_IVectorIndication ind
-    FIELD Fifo1_OC_2 fifo
+    FIELD Fifo1_OC_4 fifo
     FIELD INTEGER_8 fcounter
     FIELD INTEGER_9 counter
     FIELD INTEGER_9 gcounter
