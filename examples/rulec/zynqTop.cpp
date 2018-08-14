@@ -130,15 +130,13 @@ __interface MaxiI {
 __module P7Wrap {
     ZynqClock        _;
     ZynqInterrupt    intr;
-    Pps7m            M;
-    Pps7fclk         FCLK;
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
 
     PS7 pps;
     ClockTop pclockTop;
-    __forward M = pps._.M;
-    __forward FCLK = pps._.FCLK;
+    Pps7m            M = pps._.M;
+    Pps7fclk         FCLK = pps._.FCLK;
 
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp) if (pps._.MAXIGP0.RREADY) {
         pps._.MAXIGP0.RDATA = data;
@@ -341,16 +339,14 @@ __module TestTop {
 };
 
 __module ZynqTopNew {
-    ZynqClock        _;
-    Pps7m            M;
     P7Wrap           ps7_ps7_foo;
     TestTop          test;
     BUFG ps7_fclk_0_c;
     BUFG ps7_freset_0_r;
     __connect test.MAXIGP0_O = ps7_ps7_foo.MAXIGP0_O;
     __connect test.MAXIGP0_I = ps7_ps7_foo.MAXIGP0_I;
-    __forward _ = ps7_ps7_foo._;
-    __forward M = ps7_ps7_foo.M;
+    ZynqClock        _ = ps7_ps7_foo._;
+    Pps7m            M = ps7_ps7_foo.M;
     ZynqTopNew() {
         __rule init {
             ps7_fclk_0_c._.I = ps7_ps7_foo.FCLK.CLK; // [0]

@@ -18,10 +18,10 @@
 //METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
 //METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
 //METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
-//METACONNECT; lEII_test$indication$heard__ENA; indication$heard__ENA
-//METACONNECT; lEII_test$indication$heard__RDY; indication$heard__RDY
 //METACONNECT; request$say__ENA; lERO_test$request$say__ENA
 //METACONNECT; request$say__RDY; lERO_test$request$say__RDY
+//METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
+//METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAINVOKE; request$say__ENA; :indication$heard__ENA;

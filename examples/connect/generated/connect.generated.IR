@@ -62,15 +62,15 @@ MODULE Connect {
     INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_3
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn_OC_2
-    INTERFACECONNECT/Forward lEII_test$indication indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT/Forward request lERO_test$request l_ainterface_OC_EchoRequest
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACECONNECT/Forward indication lEII_test$indication l_ainterface_OC_EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
     FIELD Echo lEcho
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
+    INTERFACE l_ainterface_OC_EchoRequest request
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
     }

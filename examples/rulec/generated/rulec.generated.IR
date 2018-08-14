@@ -110,14 +110,14 @@ MODULE Echo {
     METHOD request$zsay4__ENA
 }
 MODULE UserTop {
-    INTERFACECONNECT/Forward radapter_0$out read l_ainterface_OC_PipeInB
-    INTERFACECONNECT/Forward wadapter_0$in write l_ainterface_OC_PipeInB
     INTERFACECONNECT ctop$indication indication l_ainterface_OC_PipeIn
     INTERFACECONNECT wadapter_0$out wad l_ainterface_OC_PipeInH
-    INTERFACE l_ainterface_OC_PipeInB write
-    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+    INTERFACECONNECT/Forward write wadapter_0$in l_ainterface_OC_PipeInB
+    INTERFACECONNECT/Forward read radapter_0$out l_ainterface_OC_PipeInB
     FIELD AdapterToBus radapter_0
     FIELD AdapterFromBus wadapter_0
+    INTERFACE l_ainterface_OC_PipeInB write
+    INTERFACE/Ptr l_ainterface_OC_PipeInB read
     INTERFACE l_ainterface_OC_PipeInH wad
     INTERFACE l_ainterface_OC_PipeIn indication
     FIELD l_top ctop

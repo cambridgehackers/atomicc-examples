@@ -120,12 +120,10 @@ Echo test;
 
 #define IfcNames_EchoIndicationH2S 5
 __module UserTop {
-    PipeInB<BusType> write;
-    PipeInB<BusType> *read;
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;
-    __forward radapter_0.out = read;
-    __forward wadapter_0.in = write;
+    PipeInB<BusType> write = wadapter_0.in;
+    PipeInB<BusType> *read = radapter_0.out;
 
     PipeInH<NOCData> wad;
     void wad.enq(NOCData v, __int(16) length) {

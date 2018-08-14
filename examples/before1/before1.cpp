@@ -227,7 +227,6 @@ printf("respond_rule: Echo\n");
 
 __module Connect {
     EchoRequest request;
-    EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
@@ -247,7 +246,7 @@ __module Connect {
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    __forward lEII_test.indication = indication; // user indication
+    EchoIndication *indication = lEII_test.indication; // user indication
 
     Connect() {
         __rule swap_rule {

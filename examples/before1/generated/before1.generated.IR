@@ -70,14 +70,14 @@ MODULE Connect {
     INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_3
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn_OC_2
-    INTERFACECONNECT/Forward lEII_test$indication indication l_ainterface_OC_EchoIndication
+    INTERFACECONNECT/Forward indication lEII_test$indication l_ainterface_OC_EchoIndication
     INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
     FIELD Echo lEcho
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
+    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD/Rule RULEswap2_rule__ENA {
         PRINTF :printf{"swap2_rule:Connect\n"}
         CALL/Action :lEcho$swap$y2xnull__ENA{}

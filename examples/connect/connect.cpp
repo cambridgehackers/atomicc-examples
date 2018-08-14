@@ -127,8 +127,6 @@ __module Echo {
 };
 
 __module Connect {
-    EchoRequest request;
-    EchoIndication *indication;
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
@@ -140,8 +138,8 @@ __module Connect {
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    __forward lEII_test.indication = indication; // user indication
-    __forward request = lERO_test.request; // user request
+    EchoRequest request = lERO_test.request; // user request
+    EchoIndication *indication = lEII_test.indication; // user indication
 };
 
 Connect connectTest;
