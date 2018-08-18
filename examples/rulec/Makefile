@@ -5,6 +5,7 @@ CONNECTALSDIR=$(DTOP)/../../connectal
 SIMMAKE=$(CONNECTALDIR)/../atomicc/simulation/Makefile.verilator
 
 include ../makefile.in
+#CPPFLAGS += -mllvm -dtrace
 
 all:
 	mkdir -p generated

@@ -13,3 +13,4 @@ CPPFLAGS += -I/usr/include/x86_64-linux-gnu/
 #   set follow-fork-mode child
 
 #CPPFLAGS += -emit-llvm
+#CPPFLAGS += -mllvm -dtrace
