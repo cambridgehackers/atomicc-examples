@@ -63,83 +63,93 @@ module TestTop (
     wire readBeat$in$enq__RDY;
     wire readBeat$out$deq__RDY;
     wire [15:0]readBeat$out$first;
+    wire readBeat$out$first__RDY;
     wire readData$in$enq__RDY;
+    wire readData$out$deq__RDY;
     wire [37:0]readData$out$first;
+    wire readData$out$first__RDY;
     wire reqArs$in$enq__RDY;
-    wire reqArs$out$deq__RDY;
     wire [14:0]reqArs$out$first;
+    wire reqArs$out$first__RDY;
     wire reqAws$in$enq__RDY;
-    wire reqAws$out$deq__RDY;
     wire [14:0]reqAws$out$first;
+    wire reqAws$out$first__RDY;
     wire [15:0]user$read$enq$length;
     wire [31:0]user$read$enq$v;
     wire user$read$enq__ENA;
     wire [15:0]user$write$enq$length;
+    wire user$write$enq__ENA;
     wire user$write$enq__RDY;
     wire writeBeat$in$enq__RDY;
+    wire writeBeat$out$deq__ENA;
     wire writeBeat$out$deq__RDY;
     wire [15:0]writeBeat$out$first;
+    wire writeBeat$out$first__RDY;
+    wire writeData$out$deq__ENA;
     wire writeData$out$deq__RDY;
     wire [31:0]writeData$out$first;
+    wire writeData$out$first__RDY;
     wire writeDone$in$enq__ENA;
+    wire writeDone$out$deq__RDY;
+    wire writeDone$out$first__RDY;
     Fifo1_OC_12 reqArs (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AR__ENA),
         .in$enq$v({ MAXIGP0_O$AR$addr[ 4 : 0 ] , MAXIGP0_O$AR$len + 4'd1 , MAXIGP0_O$AR$id[ 5 : 0 ] }),
         .in$enq__RDY(reqArs$in$enq__RDY),
-        .out$deq__ENA(RULElreadNext__ENA$readLastNext & readBeat$in$enq__RDY),
-        .out$deq__RDY(reqArs$out$deq__RDY),
+        .out$deq__ENA(RULElreadNext__ENA$readLastNext & reqArs$out$first__RDY & readBeat$in$enq__RDY),
+        .out$deq__RDY(),
         .out$first(reqArs$out$first),
-        .out$first__RDY());
+        .out$first__RDY(reqArs$out$first__RDY));
     Fifo1_OC_12 reqAws (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AW__ENA),
         .in$enq$v({ MAXIGP0_O$AW$addr[ 4 : 0 ] , MAXIGP0_O$AW$len + 4'd1 , MAXIGP0_O$AW$id[ 5 : 0 ] }),
         .in$enq__RDY(reqAws$in$enq__RDY),
-        .out$deq__ENA(RULElwriteNext__ENA$writeLastNext & writeBeat$in$enq__RDY),
-        .out$deq__RDY(reqAws$out$deq__RDY),
+        .out$deq__ENA(RULElwriteNext__ENA$writeLastNext & reqAws$out$first__RDY & writeBeat$in$enq__RDY),
+        .out$deq__RDY(),
         .out$first(reqAws$out$first),
-        .out$first__RDY());
+        .out$first__RDY(reqAws$out$first__RDY));
     Fifo1_OC_14 readBeat (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqArs$out$deq__RDY),
+        .in$enq__ENA(reqArs$out$first__RDY),
         .in$enq$v({ RULElreadNext__ENA$readAddrupdate , RULElreadNext__ENA$readburstCount , reqArs$out$first[ 5 : 0 ] , RULElreadNext__ENA$readLastNext }),
         .in$enq__RDY(readBeat$in$enq__RDY),
-        .out$deq__ENA(readData$in$enq__RDY),
+        .out$deq__ENA(readBeat$out$first__RDY & readData$in$enq__RDY),
         .out$deq__RDY(readBeat$out$deq__RDY),
         .out$first(readBeat$out$first),
-        .out$first__RDY());
+        .out$first__RDY(readBeat$out$first__RDY));
     Fifo1_OC_14 writeBeat (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(reqAws$out$deq__RDY),
+        .in$enq__ENA(reqAws$out$first__RDY),
         .in$enq$v({ RULElwriteNext__ENA$writeAddrupdate , RULElwriteNext__ENA$writeburstCount , reqAws$out$first[ 5 : 0 ] , RULElwriteNext__ENA$writeLastNext }),
         .in$enq__RDY(writeBeat$in$enq__RDY),
-        .out$deq__ENA(writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY )),
+        .out$deq__ENA(writeBeat$out$deq__ENA),
         .out$deq__RDY(writeBeat$out$deq__RDY),
         .out$first(writeBeat$out$first),
-        .out$first__RDY());
+        .out$first__RDY(writeBeat$out$first__RDY));
     Fifo1_OC_16 readData (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(readBeat$out$deq__RDY),
+        .in$enq__ENA(readBeat$out$first__RDY & readBeat$out$deq__RDY),
         .in$enq$v({ portalRControl ? RULElread__ENA$portalCtrlInfo : RULElread__ENA$res , readBeat$out$first[ 6 : 1 ] }),
         .in$enq__RDY(readData$in$enq__RDY),
-        .out$deq__ENA(MAXIGP0_I$R__RDY),
-        .out$deq__RDY(MAXIGP0_I$R__ENA),
+        .out$deq__ENA(readData$out$first__RDY & MAXIGP0_I$R__RDY),
+        .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
-        .out$first__RDY());
+        .out$first__RDY(readData$out$first__RDY));
     Fifo1_OC_18 writeData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v({ MAXIGP0_O$W$data }),
         .in$enq__RDY(MAXIGP0_O$W__RDY),
-        .out$deq__ENA(writeBeat$out$deq__RDY & ( portalWControl | user$write$enq__RDY )),
+        .out$deq__ENA(writeData$out$deq__ENA),
         .out$deq__RDY(writeData$out$deq__RDY),
         .out$first(writeData$out$first),
-        .out$first__RDY());
+        .out$first__RDY(writeData$out$first__RDY));
     Fifo1_OC_20 writeDone (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(writeDone$in$enq__ENA),
         .in$enq$v(writeBeat$out$first[ 6 : 1 ]),
         .in$enq__RDY(),
-        .out$deq__ENA(MAXIGP0_I$B__RDY),
-        .out$deq__RDY(MAXIGP0_I$B__ENA),
+        .out$deq__ENA(writeDone$out$first__RDY & MAXIGP0_I$B__RDY),
+        .out$deq__RDY(writeDone$out$deq__RDY),
         .out$first(MAXIGP0_I$B$id),
-        .out$first__RDY());
+        .out$first__RDY(writeDone$out$first__RDY));
     UserTop user (.CLK(CLK), .nRST(nRST),
-        .write$enq__ENA(( !portalWControl ) & writeBeat$out$deq__RDY & writeData$out$deq__RDY),
+        .write$enq__ENA(user$write$enq__ENA),
         .write$enq$v(writeData$out$first[ 31 : 0 ]),
         .write$enq$length(user$write$enq$length),
         .write$enq__RDY(user$write$enq__RDY),
@@ -148,30 +158,35 @@ module TestTop (
         .read$enq$length(user$read$enq$length),
         .read$enq__RDY(requestLength == 16'd0));
     assign MAXIGP0_I$B$resp = 0;
+    assign MAXIGP0_I$B__ENA = writeDone$out$first__RDY & writeDone$out$deq__RDY;
     assign MAXIGP0_I$R$data = readData$out$first[ 37 : 6 ];
     assign MAXIGP0_I$R$id = readData$out$first[ 5 : 0 ];
     assign MAXIGP0_I$R$last = 1;
     assign MAXIGP0_I$R$resp = 0;
+    assign MAXIGP0_I$R__ENA = readData$out$first__RDY & readData$out$deq__RDY;
     assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
     assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
     assign interrupt = ( requestLength != 16'd0 ) & intEnable;
     assign user$write$enq$length = writeBeat$out$first[ 15 : 11 ] != 5'd0;
-    assign writeDone$in$enq__ENA = writeBeat$out$first[ 0 : 0 ] & writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
+    assign user$write$enq__ENA = ( !portalWControl ) & writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY;
+    assign writeBeat$out$deq__ENA = writeBeat$out$first__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
+    assign writeData$out$deq__ENA = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & ( portalWControl | user$write$enq__RDY );
+    assign writeDone$in$enq__ENA = writeBeat$out$first[ 0 : 0 ] & writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     // Extra assigments, not to output wires
     assign RULElreadNext__ENA$readAddrupdate = readNotFirst ? readAddr : reqArs$out$first[ 14 : 10 ];
     assign RULElreadNext__ENA$readLastNext = readNotFirst ? readLast : ( reqArs$out$first[ 9 : 6 ] == 4'd1 );
     assign RULElreadNext__ENA$readburstCount = readNotFirst ? readCount : reqArs$out$first[ 9 : 6 ];
-    assign RULElread__ENA$portalCtrlInfo = ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd0 ) ) ? RULElread__ENA$zzIntrChannel : 0 ) | ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd8 ) ) | ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd12 ) ) ? RULElread__ENA$zzIntrChannel : 0 ) | ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd16 ) ) ? ( selectRIndReq ? 32'd6 : 5 ) : 0 ) | ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd20 ) ) ? 32'd2 : 0 ) | ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] != 5'd0 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd8 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd12 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd16 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd20 ) ) ? 32'd0 : 0 );
-    assign RULElread__ENA$res = ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd0 ) ) ? requestValue : 0 ) | ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd4 ) & user$write$enq__RDY ) | ( ( readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] != 5'd0 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd4 ) ) ? 32'd0 : 0 );
+    assign RULElread__ENA$portalCtrlInfo = ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd0 ) ) ? RULElread__ENA$zzIntrChannel : 0 ) | ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd8 ) ) | ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd12 ) ) ? RULElread__ENA$zzIntrChannel : 0 ) | ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd16 ) ) ? ( selectRIndReq ? 32'd6 : 5 ) : 0 ) | ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd20 ) ) ? 32'd2 : 0 ) | ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] != 5'd0 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd8 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd12 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd16 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd20 ) ) ? 32'd0 : 0 );
+    assign RULElread__ENA$res = ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd0 ) ) ? requestValue : 0 ) | ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] == 5'd4 ) & user$write$enq__RDY ) | ( ( readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY & ( readBeat$out$first[ 15 : 11 ] != 5'd0 ) & ( readBeat$out$first[ 15 : 11 ] != 5'd4 ) ) ? 32'd0 : 0 );
     assign RULElread__ENA$temp$ac$addr = readBeat$out$first[ 15 : 11 ];
     assign RULElread__ENA$zzIntrChannel = ( !selectRIndReq ) ? requestLength : 0;
     assign RULElwriteNext__ENA$writeAddrupdate = writeNotFirst ? writeAddr : reqAws$out$first[ 14 : 10 ];
     assign RULElwriteNext__ENA$writeLastNext = writeNotFirst ? writeLast : ( reqAws$out$first[ 9 : 6 ] == 4'd1 );
     assign RULElwriteNext__ENA$writeburstCount = writeNotFirst ? writeCount : reqAws$out$first[ 9 : 6 ];
-    assign RULElwrite__ENA = writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
+    assign RULElwrite__ENA = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
     assign RULElwrite__ENA$temp$data = writeData$out$first[ 31 : 0 ];
     assign RULElwrite__ENA$wb$ac$addr = writeBeat$out$first[ 15 : 11 ];
-    assign RULElwrite__RDY = writeBeat$out$deq__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
+    assign RULElwrite__RDY = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -201,17 +216,17 @@ module TestTop (
             portalWControl <= MAXIGP0_O$AW$addr[ 11 : 5 ] == 7'd0;
             selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ];
         end; // End of MAXIGP0_O$AW__ENA
-        if (reqArs$out$deq__RDY & readBeat$in$enq__RDY) begin // RULElreadNext__ENA
+        if (reqArs$out$first__RDY & readBeat$in$enq__RDY) begin // RULElreadNext__ENA
             readAddr <= RULElreadNext__ENA$readAddrupdate + 4;
             readCount <= RULElreadNext__ENA$readburstCount - 1;
             readNotFirst <= !RULElreadNext__ENA$readLastNext;
             readLast <= RULElreadNext__ENA$readburstCount == 4'd2;
         end; // End of RULElreadNext__ENA
-        if (readBeat$out$deq__RDY & readData$in$enq__RDY) begin // RULElread__ENA
+        if (readBeat$out$first__RDY & readBeat$out$deq__RDY & readData$in$enq__RDY) begin // RULElread__ENA
             if (( RULElread__ENA$temp$ac$addr == 0 ) & ( portalRControl == 0 ))
             requestLength <= 0;
         end; // End of RULElread__ENA
-        if (reqAws$out$deq__RDY & writeBeat$in$enq__RDY) begin // RULElwriteNext__ENA
+        if (reqAws$out$first__RDY & writeBeat$in$enq__RDY) begin // RULElwriteNext__ENA
             writeAddr <= RULElwriteNext__ENA$writeAddrupdate + 4;
             writeCount <= RULElwriteNext__ENA$writeburstCount - 1;
             writeNotFirst <= !RULElwriteNext__ENA$writeLastNext;
