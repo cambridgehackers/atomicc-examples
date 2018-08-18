@@ -17,7 +17,7 @@
 //METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;
 //METAINTERNAL; fifo; Fifo1_OC_4;
 //METAINVOKE; RULErespond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
-//METAGUARD; RULErespond; fifo$out$deq__RDY & ind$heard__RDY;
+//METAGUARD; RULErespond; fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY;
 //METARULES; RULErespond
@@ -26,7 +26,7 @@
 //METAINTERNAL; forwardFifo; Fifo1;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
-//METAGUARD; RULEfifoRule; forwardFifo$out$deq__RDY & out$enq__RDY;
+//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
