@@ -8,44 +8,75 @@
 //METAINTERNAL; clkbuf0; BUFG;
 //METAGUARD; RULEinit; 1;
 //METARULES; RULEinit
-//METASTART; Fifo1
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1Base_OC_15
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1Base_OC_18
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1Base_OC_21
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1Base_OC_26
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1old
+//METAINTERNAL; fifo; Fifo1Base;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_12
+//METASTART; Fifo1old_OC_13
+//METAINTERNAL; fifo; Fifo1Base_OC_15;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_14
+//METASTART; Fifo1old_OC_16
+//METAINTERNAL; fifo; Fifo1Base_OC_18;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_16
+//METASTART; Fifo1old_OC_19
+//METAINTERNAL; fifo; Fifo1Base_OC_21;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_18
+//METASTART; Fifo1old_OC_22
+//METAINTERNAL; fifo; Fifo1Base_OC_18;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METABEFORE; out$first; :in$enq__ENA
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_20
+//METASTART; Fifo1old_OC_24
+//METAINTERNAL; fifo; Fifo1Base_OC_26;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1old;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
@@ -73,13 +104,13 @@
 //METARULES; RULEinit
 //METASTART; TestTop
 //METAEXTERNAL; MAXIGP0_I; l_ainterface_OC_MaxiI;
-//METAINTERNAL; reqArs; Fifo1_OC_12;
-//METAINTERNAL; reqAws; Fifo1_OC_12;
-//METAINTERNAL; readBeat; Fifo1_OC_14;
-//METAINTERNAL; writeBeat; Fifo1_OC_14;
-//METAINTERNAL; readData; Fifo1_OC_16;
-//METAINTERNAL; writeData; Fifo1_OC_18;
-//METAINTERNAL; writeDone; Fifo1_OC_20;
+//METAINTERNAL; reqArs; Fifo1old_OC_13;
+//METAINTERNAL; reqAws; Fifo1old_OC_13;
+//METAINTERNAL; readBeat; Fifo1old_OC_16;
+//METAINTERNAL; writeBeat; Fifo1old_OC_16;
+//METAINTERNAL; readData; Fifo1old_OC_19;
+//METAINTERNAL; writeData; Fifo1old_OC_22;
+//METAINTERNAL; writeDone; Fifo1old_OC_24;
 //METAINTERNAL; user; UserTop;
 //METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$AR; reqArs$in$enq__RDY;

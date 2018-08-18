@@ -50,7 +50,7 @@
 //METAGUARD; pipe$enq; !busy_delay;
 //METARULES; RULEinput_rule
 //METASTART; EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_3;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_4;
 //METAINVOKE; RULEoutput_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULEoutput_rulee__ENA; RULEoutput_ruleo__ENA; indication$heard__ENA
 //METAGUARD; RULEoutput_rulee; ind_busy & even & pipe$enq__RDY;
@@ -64,13 +64,19 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag == 2:request$say2__ENA;pipe$enq__ENA$v_2e_addr$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_2;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_3;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say2; pipe$enq__RDY;
 //METAGUARD; request$say; pipe$enq__RDY;
-//METASTART; Fifo1
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1old
+//METAINTERNAL; fifo; Fifo1Base;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -78,7 +84,7 @@
 //METAGUARD; out$first; full;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1old;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;

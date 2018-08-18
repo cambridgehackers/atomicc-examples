@@ -1,7 +1,13 @@
 `ifndef __clock_GENERATED__VH__
 `define __clock_GENERATED__VH__
 
-//METASTART; Fifo1
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1old
+//METAINTERNAL; fifo; Fifo1Base;
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
@@ -44,7 +50,7 @@
 //METARULES; RULEhandshake; RULEiobufs_0; RULEiobufs_1; RULEiobufs_10; RULEiobufs_11; RULEiobufs_12; RULEiobufs_13; RULEiobufs_14; RULEiobufs_15; RULEiobufs_2; RULEiobufs_3; RULEiobufs_4; RULEiobufs_5; RULEiobufs_6; RULEiobufs_7; RULEiobufs_8; RULEiobufs_9
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1old;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;

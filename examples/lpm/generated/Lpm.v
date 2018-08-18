@@ -38,7 +38,7 @@ module Lpm (input wire CLK, input wire nRST,
     wire [95:0]outQ$out$first;
     wire outQ$out$first__RDY;
     wire [31:0]request$say__ENA$temp$c;
-    Fifo1_OC_4 inQ (.CLK(CLK), .nRST(nRST),
+    Fifo1old_OC_5 inQ (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say__ENA$temp$c , request$say$v , request$say$meth }),
         .in$enq__RDY(inQ$in$enq__RDY),
@@ -54,7 +54,7 @@ module Lpm (input wire CLK, input wire nRST,
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    Fifo1_OC_4 outQ (.CLK(CLK), .nRST(nRST),
+    Fifo1old_OC_5 outQ (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY),
         .in$enq$v({ fifo$out$first[ 95 : 64 ] , fifo$out$first[ 63 : 32 ] , fifo$out$first[ 31 : 0 ] }),
         .in$enq__RDY(outQ$in$enq__RDY),

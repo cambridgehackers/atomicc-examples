@@ -10,7 +10,7 @@ module Echo (input wire CLK, input wire nRST,
     input wire ind$heard__RDY);
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
-    Fifo1_OC_5 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1old_OC_6 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(sout$say__ENA),
         .in$enq$v(sout$say$v),
         .in$enq__RDY(sout$say__RDY),
