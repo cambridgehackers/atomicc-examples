@@ -749,116 +749,105 @@ MODULE Fifo1Base_OC_26 {
     }
     METHOD out$first INTEGER_6 = ((element)) if ((full))
 }
-MODULE Fifo1old {
+MODULE Fifo1new {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD Fifo1Base fifo
-    FIELD l_struct_OC_NOCData element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
         ALLOCA l_struct_OC_NOCData out$first$retval
-        LET l_struct_OC_NOCData :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1old_OC_13 {
+MODULE Fifo1new_OC_13 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
     INTERFACE l_ainterface_OC_PipeOut_OC_4 out
     FIELD Fifo1Base_OC_15 fifo
-    FIELD l_struct_OC_AddrCount element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_AddrCount = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_AddrCount = ((out$first$retval)) {
         ALLOCA l_struct_OC_AddrCount out$first$retval
-        LET l_struct_OC_AddrCount :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1old_OC_16 {
+MODULE Fifo1new_OC_16 {
     INTERFACE l_ainterface_OC_PipeIn_OC_5 in
     INTERFACE l_ainterface_OC_PipeOut_OC_6 out
     FIELD Fifo1Base_OC_18 fifo
-    FIELD l_struct_OC_PortalInfo element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_PortalInfo = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_PortalInfo = ((out$first$retval)) {
         ALLOCA l_struct_OC_PortalInfo out$first$retval
-        LET l_struct_OC_PortalInfo :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1old_OC_19 {
+MODULE Fifo1new_OC_19 {
     INTERFACE l_ainterface_OC_PipeIn_OC_7 in
     INTERFACE l_ainterface_OC_PipeOut_OC_8 out
     FIELD Fifo1Base_OC_21 fifo
-    FIELD l_struct_OC_ReadResp element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_ReadResp = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_ReadResp = ((out$first$retval)) {
         ALLOCA l_struct_OC_ReadResp out$first$retval
-        LET l_struct_OC_ReadResp :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1old_OC_22 {
+MODULE Fifo1new_OC_22 {
     INTERFACE l_ainterface_OC_PipeIn_OC_9 in
     INTERFACE l_ainterface_OC_PipeOut_OC_10 out
     FIELD Fifo1Base_OC_18 fifo
-    FIELD l_struct_OC_BusData element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_BusData v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_BusData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_BusData = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_BusData = ((out$first$retval)) {
         ALLOCA l_struct_OC_BusData out$first$retval
-        LET l_struct_OC_BusData :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1old_OC_24 {
+MODULE Fifo1new_OC_24 {
     INTERFACE l_ainterface_OC_PipeIn_OC_11 in
     INTERFACE l_ainterface_OC_PipeOut_OC_12 out
     FIELD Fifo1Base_OC_26 fifo
-    FIELD INTEGER_6 element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( INTEGER_6 v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( INTEGER_6 v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first INTEGER_6 = ((element)) if ((full))
+    METHOD out$first INTEGER_6 = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
 }
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD Fifo1old forwardFifo
+    FIELD Fifo1new forwardFifo
     METHOD/Rule RULEfifoRule__ENA {
         ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
@@ -963,13 +952,13 @@ MODULE TestTop {
     FIELD INTEGER_4 writeCount
     FIELD INTEGER_5 readAddr
     FIELD INTEGER_5 writeAddr
-    FIELD Fifo1old_OC_13 reqArs
-    FIELD Fifo1old_OC_13 reqAws
-    FIELD Fifo1old_OC_16 readBeat
-    FIELD Fifo1old_OC_16 writeBeat
-    FIELD Fifo1old_OC_19 readData
-    FIELD Fifo1old_OC_22 writeData
-    FIELD Fifo1old_OC_24 writeDone
+    FIELD Fifo1new_OC_13 reqArs
+    FIELD Fifo1new_OC_13 reqAws
+    FIELD Fifo1new_OC_16 readBeat
+    FIELD Fifo1new_OC_16 writeBeat
+    FIELD Fifo1new_OC_19 readData
+    FIELD Fifo1new_OC_22 writeData
+    FIELD Fifo1new_OC_24 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD INTEGER_32 requestValue
