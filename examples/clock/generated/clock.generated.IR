@@ -57,22 +57,20 @@ MODULE Fifo1Base {
     }
     METHOD out$first INTEGER_128 = ((element)) if ((full))
 }
-MODULE Fifo1old {
+MODULE Fifo1new {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD Fifo1Base fifo
-    FIELD l_struct_OC_NOCData element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) if ((full)) {
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
         ALLOCA l_struct_OC_NOCData out$first$retval
-        LET l_struct_OC_NOCData :out$first$retval = element
+        CALL :fifo$out$first{}
+        LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
 MODULE ModFt600 {
@@ -174,7 +172,7 @@ MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD Fifo1old forwardFifo
+    FIELD Fifo1new forwardFifo
     METHOD/Rule RULEfifoRule__ENA {
         ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}

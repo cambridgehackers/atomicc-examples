@@ -6,13 +6,14 @@
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
-//METASTART; Fifo1old
+//METASTART; Fifo1new
 //METAINTERNAL; fifo; Fifo1Base;
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; full;
+//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
+//METAGUARD; in$enq; fifo$in$enq__RDY;
+//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
+//METAGUARD; out$deq; fifo$out$deq__RDY;
+//METAINVOKE; out$first; :fifo$out$first;
+//METAGUARD; out$first; fifo$out$first__RDY;
 //METASTART; ModFt600
 //METAINTERNAL; iobufs0; IOBUF;
 //METAINTERNAL; iobufs1; IOBUF;
@@ -50,7 +51,7 @@
 //METARULES; RULEhandshake; RULEiobufs_0; RULEiobufs_1; RULEiobufs_10; RULEiobufs_11; RULEiobufs_12; RULEiobufs_13; RULEiobufs_14; RULEiobufs_15; RULEiobufs_2; RULEiobufs_3; RULEiobufs_4; RULEiobufs_5; RULEiobufs_6; RULEiobufs_7; RULEiobufs_8; RULEiobufs_9
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1old;
+//METAINTERNAL; forwardFifo; Fifo1new;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
