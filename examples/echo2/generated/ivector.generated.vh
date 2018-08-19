@@ -11,23 +11,25 @@
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
-//METASTART; Fifo1old
+//METASTART; Fifo1new
 //METAINTERNAL; fifo; Fifo1Base;
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; full;
-//METASTART; Fifo1old_OC_6
+//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
+//METAGUARD; in$enq; fifo$in$enq__RDY;
+//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
+//METAGUARD; out$deq; fifo$out$deq__RDY;
+//METAINVOKE; out$first; :fifo$out$first;
+//METAGUARD; out$first; fifo$out$first__RDY;
+//METASTART; Fifo1new_OC_6
 //METAINTERNAL; fifo; Fifo1Base_OC_7;
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METABEFORE; out$first; :in$enq__ENA
-//METAGUARD; out$first; full;
+//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
+//METAGUARD; in$enq; fifo$in$enq__RDY;
+//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
+//METAGUARD; out$deq; fifo$out$deq__RDY;
+//METAINVOKE; out$first; :fifo$out$first;
+//METAGUARD; out$first; fifo$out$first__RDY;
 //METASTART; FifoPong
-//METAINTERNAL; element1; Fifo1old_OC_6;
-//METAINTERNAL; element2; Fifo1old_OC_6;
+//METAINTERNAL; element1; Fifo1new_OC_6;
+//METAINTERNAL; element2; Fifo1new_OC_6;
 //METAINVOKE; in$enq__ENA; pong ^ 1:element1$in$enq__ENA;pong:element2$in$enq__ENA;
 //METAGUARD; in$enq; ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
 //METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;
@@ -44,7 +46,7 @@
 //METARULES; RULErespond
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1old;
+//METAINTERNAL; forwardFifo; Fifo1new;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;

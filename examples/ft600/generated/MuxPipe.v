@@ -14,7 +14,7 @@ module MuxPipe (input wire CLK, input wire nRST,
     wire forwardFifo$out$deq__RDY;
     wire [127:0]forwardFifo$out$first;
     wire forwardFifo$out$first__RDY;
-    Fifo1old forwardFifo (.CLK(CLK), .nRST(nRST),
+    Fifo1new forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA),
         .in$enq$v(forward$enq$v),
         .in$enq__RDY(forward$enq__RDY),
