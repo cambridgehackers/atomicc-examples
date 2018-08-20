@@ -70,6 +70,6 @@ FIFODEFINE Fifo1new : public Fifo<T> {
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
 #define Fifo1 Fifo1old
-#define Fifo1 Fifo1new
+//#define Fifo1 Fifo1new
 
 #endif

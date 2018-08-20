@@ -23,11 +23,9 @@
 #include "fifo.h"
 #include "mux.h"
 
-//typedef FixedPoint<6> myint6;
-//typedef FixedPoint<4> myint4;
-typedef int __attribute__(( atomicc_width(6) )) myint6;
-typedef int __attribute__(( atomicc_width(4) )) myint4;
-typedef int __attribute__(( atomicc_width(14 / 7 + 3 * 2) )) myint23;
+typedef __uint(6) myint6;
+typedef __uint(4) myint4;
+typedef __uint(14 / 7 + 3 * 2) myint23;
 
 typedef struct {
     myint6 a;
@@ -54,7 +52,7 @@ __module IVector {
     Fifo1<ValueType> fifo;
     myint23          fcounter;
     static int       intcWidth;
-    typedef int __attribute__(( atomicc_width(intcWidth) )) Myintc;
+    typedef __uint(intcWidth) Myintc;
     Myintc      counter;    // the precision of these members is set by the constructor
     Myintc      gcounter;
     void request.say(myint6 meth, myint4 v) if(true) {
