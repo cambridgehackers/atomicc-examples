@@ -1,24 +1,16 @@
-`include "echo.generated.vh"
+`include "ivector.generated.vh"
 
 `default_nettype none
-module Fifo1old_OC_6 (input wire CLK, input wire nRST,
+module Fifo1Base_OC_9 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [31:0]in$enq$v,
+    input wire [95:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [31:0]out$first,
+    output wire [95:0]out$first,
     output wire out$first__RDY);
-    reg [31:0]element;
+    reg [95:0]element;
     reg full;
-    Fifo1Base_OC_7 fifo (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(0),
-        .in$enq$v(0),
-        .in$enq__RDY(),
-        .out$deq__ENA(0),
-        .out$deq__RDY(),
-        .out$first(),
-        .out$first__RDY());
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
     assign out$first = element;

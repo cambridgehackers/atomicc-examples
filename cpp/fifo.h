@@ -48,28 +48,10 @@ __module Fifo1Base : public Fifo<__uint(width)> {
 };
 
 template<class T>
-FIFODEFINE Fifo1old : public Fifo<T> {
-  Fifo1Base<__bitsize(T)> fifo;
-  T element;
-  bool full;
-  void in.enq(const T v) if (notFull()) {
-    element = v;
-    full = true;
-  };
-  void out.deq(void) if (notEmpty()) { full = false; };
-  T out.first(void) if (notEmpty()) { return element; };
-  bool notEmpty() const { return full; };
-  bool notFull() const { return !full; };
-  Fifo1old(): full(false) { };
-};
-template<class T>
-FIFODEFINE Fifo1new : public Fifo<T> {
+FIFODEFINE Fifo1 : public Fifo<T> {
   Fifo1Base<__bitsize(T)> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
-#define Fifo1 Fifo1old
-//#define Fifo1 Fifo1new
-
 #endif

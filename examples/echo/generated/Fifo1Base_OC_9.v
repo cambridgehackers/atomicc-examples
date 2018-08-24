@@ -1,7 +1,7 @@
-`include "lpm.generated.vh"
+`include "echo.generated.vh"
 
 `default_nettype none
-module Fifo1Base_OC_7 (input wire CLK, input wire nRST,
+module Fifo1Base_OC_9 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [31:0]in$enq$v,
     output wire in$enq__RDY,
@@ -9,7 +9,7 @@ module Fifo1Base_OC_7 (input wire CLK, input wire nRST,
     output wire out$deq__RDY,
     output wire [31:0]out$first,
     output wire out$first__RDY);
-    reg [95:0]element;
+    reg [31:0]element;
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;

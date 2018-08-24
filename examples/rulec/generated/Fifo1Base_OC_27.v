@@ -1,43 +1,29 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
-module Fifo1old (input wire CLK, input wire nRST,
+module Fifo1Base_OC_27 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [127:0]in$enq$v,
+    input wire [31:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [127:0]out$first,
+    output wire [31:0]out$first,
     output wire out$first__RDY);
-    reg [31:0]element$data0;
-    reg [31:0]element$data1;
-    reg [31:0]element$data2;
-    reg [31:0]element$data3;
+    reg [31:0]element;
     reg full;
-    Fifo1Base fifo (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(0),
-        .in$enq$v(0),
-        .in$enq__RDY(),
-        .out$deq__ENA(0),
-        .out$deq__RDY(),
-        .out$first(),
-        .out$first__RDY());
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
-    assign out$first = { element$data3 , element$data2 , element$data1 , element$data0 };
+    assign out$first = element;
     assign out$first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element$data0 <= 0;
-        element$data1 <= 0;
-        element$data2 <= 0;
-        element$data3 <= 0;
+        element <= 0;
         full <= 0;
       end // nRST
       else begin
         if (in$enq__ENA & ( !full )) begin // in$enq__ENA
-            { element$data3 , element$data2 , element$data1 , element$data0 } <= in$enq$v;
+            element <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA
         if (out$deq__ENA & full) begin // out$deq__ENA

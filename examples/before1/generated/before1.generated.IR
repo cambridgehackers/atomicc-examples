@@ -40,7 +40,7 @@ EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( INTEGER_32 v )
+    METHOD enq__ENA ( INTEGER_128 v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_3 {
     METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
@@ -50,11 +50,11 @@ EMODULE l_ainterface_OC_PipeIn_OC_4 {
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
-    METHOD first INTEGER_32
+    METHOD first l_struct_OC_NOCData
 }
 EMODULE l_ainterface_OC_PipeOut_OC_1 {
     METHOD deq__ENA
-    METHOD first l_struct_OC_NOCData
+    METHOD first INTEGER_128
 }
 EMODULE l_ainterface_OC_Swap {
     METHOD x2y__ENA
@@ -63,11 +63,11 @@ EMODULE l_ainterface_OC_Swap {
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+    INTERFACE l_ainterface_OC_PipeOut out
 }
 EMODULE Fifo_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
 MODULE Connect {
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
@@ -228,9 +228,25 @@ MODULE EchoRequestOutput {
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     }
 }
+MODULE Fifo1 {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeOut out
+    FIELD Fifo1Base fifo
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
+        ALLOCA l_struct_OC_NOCData out$first$retval
+        CALL :fifo$out$first{}
+        LET INTEGER_128 :out$first$retval = fifo$out$first
+    }
+}
 MODULE Fifo1Base {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_128 element
     FIELD INTEGER_1 full
     METHOD in$enq__ENA ( INTEGER_128 v ) if (((full) ^ (1))) {
@@ -242,27 +258,11 @@ MODULE Fifo1Base {
     }
     METHOD out$first INTEGER_128 = ((element)) if ((full))
 }
-MODULE Fifo1new {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
-    FIELD Fifo1Base fifo
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
-        ALLOCA l_struct_OC_NOCData out$first$retval
-        CALL :fifo$out$first{}
-        LET INTEGER_32 :out$first$retval = fifo$out$first
-    }
-}
 MODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
-    FIELD Fifo1new forwardFifo
+    FIELD Fifo1 forwardFifo
     METHOD/Rule RULEfifoRule__ENA {
         ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
