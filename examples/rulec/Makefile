@@ -6,6 +6,7 @@ SIMMAKE=$(CONNECTALDIR)/../atomicc/simulation/Makefile.verilator
 
 include ../makefile.in
 #CPPFLAGS += -mllvm -dtrace
+CPPFLAGS += -mllvm -rgentrace
 
 all:
 	mkdir -p generated

@@ -1,15 +1,15 @@
-`include "precision.generated.vh"
+`include "zynqTop.generated.vh"
 
 `default_nettype none
-module Fifo1Base_OC_9 (input wire CLK, input wire nRST,
+module Fifo1Base_OC_33 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [9:0]in$enq$v,
+    input wire [37:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [9:0]out$first,
+    output wire [37:0]out$first,
     output wire out$first__RDY);
-    reg [9:0]element;
+    reg [37:0]element;
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;

@@ -24,7 +24,7 @@ EMODULE l_ainterface_OC_PipeIn_OC_3 {
     METHOD enq__ENA ( l_struct_OC_ValueType v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_5 {
-    METHOD enq__ENA ( INTEGER_16 v )
+    METHOD enq__ENA ( INTEGER_10 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
@@ -40,7 +40,7 @@ EMODULE l_ainterface_OC_PipeOut_OC_4 {
 }
 EMODULE l_ainterface_OC_PipeOut_OC_6 {
     METHOD deq__ENA
-    METHOD first INTEGER_16
+    METHOD first INTEGER_10
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -97,16 +97,16 @@ MODULE Fifo1Base {
 MODULE Fifo1Base_OC_9 {
     INTERFACE l_ainterface_OC_PipeIn_OC_5 in
     INTERFACE l_ainterface_OC_PipeOut_OC_6 out
-    FIELD INTEGER_16 element
+    FIELD INTEGER_10 element
     FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( INTEGER_16 v ) if (((full) ^ (1))) {
+    METHOD in$enq__ENA ( INTEGER_10 v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
     METHOD out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first INTEGER_16 = ((element)) if ((full))
+    METHOD out$first INTEGER_10 = ((element)) if ((full))
 }
 MODULE Fifo1_OC_7 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
@@ -121,7 +121,7 @@ MODULE Fifo1_OC_7 {
     METHOD out$first l_struct_OC_ValueType = ((out$first$retval)) {
         ALLOCA l_struct_OC_ValueType out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_16 :out$first$retval = fifo$out$first
+        LET INTEGER_10 :out$first$retval = fifo$out$first
     }
 }
 MODULE IVector {
