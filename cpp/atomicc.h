@@ -37,6 +37,8 @@
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 
+#define GENERIC_INT_TEMPLATE_FLAG 999999
+
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
 template<class T>
@@ -104,8 +106,4 @@ __interface PipeInB {
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
-
-//#ifndef __FIFO_CPP__
-//#include "mux.h"
-//#endif
 #endif // _ATOMICC_H_

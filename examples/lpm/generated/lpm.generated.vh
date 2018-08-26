@@ -2,25 +2,30 @@
 `define __lpm_GENERATED__VH__
 
 //METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base__PARAM__width__128;
+//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$128;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
 //METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base__PARAM__width__128
+//METASTART; Fifo1Base$__PARAM__$width$128
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
-//METASTART; Fifo1Base__PARAM__width__96
+//METASTART; Fifo1Base$__PARAM__$width$96
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
-//METASTART; Fifo1_OC_7
-//METAINTERNAL; fifo; Fifo1Base__PARAM__width__96;
+//METASTART; Fifo1Base$__PARAM__$width$999999
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
+//METASTART; Fifo1_OC_10
+//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$96;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
 //METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
@@ -34,9 +39,9 @@
 //METAGUARD; out$first; rindex != windex;
 //METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
-//METAINTERNAL; inQ; Fifo1_OC_7;
+//METAINTERNAL; inQ; Fifo1_OC_10;
 //METAINTERNAL; fifo; Fifo2;
-//METAINTERNAL; outQ; Fifo1_OC_7;
+//METAINTERNAL; outQ; Fifo1_OC_10;
 //METAINTERNAL; mem; LpmMemory;
 //METAINVOKE; RULEenter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; RULEenter__ENA; RULErecirc__ENA
