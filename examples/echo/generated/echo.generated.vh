@@ -10,25 +10,25 @@
 //METAGUARD; sout$say; fifo$in$enq__RDY;
 //METARULES; RULErespond_rule
 //METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base;
+//METAINTERNAL; fifo; Fifo1Base__PARAM__width__128;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
 //METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base
+//METASTART; Fifo1Base__PARAM__width__128
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
-//METASTART; Fifo1Base_OC_9
+//METASTART; Fifo1Base__PARAM__width__32
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;
 //METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_8
-//METAINTERNAL; fifo; Fifo1Base_OC_9;
+//METAINTERNAL; fifo; Fifo1Base__PARAM__width__32;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
 //METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;

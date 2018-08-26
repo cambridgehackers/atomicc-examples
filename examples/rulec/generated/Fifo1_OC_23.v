@@ -9,7 +9,7 @@ module Fifo1_OC_23 (input wire CLK, input wire nRST,
     output wire out$deq__RDY,
     output wire [14:0]out$first,
     output wire out$first__RDY);
-    Fifo1Base_OC_25 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1Base__PARAM__width__15 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(in$enq__RDY),

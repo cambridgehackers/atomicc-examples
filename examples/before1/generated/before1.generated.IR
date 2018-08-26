@@ -231,7 +231,7 @@ MODULE EchoRequestOutput {
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base fifo
+    FIELD Fifo1Base__PARAM__width__128 fifo
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -244,7 +244,7 @@ MODULE Fifo1 {
         LET INTEGER_128 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1Base {
+MODULE Fifo1Base__PARAM__width__128 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_128 element

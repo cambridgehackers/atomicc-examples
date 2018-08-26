@@ -108,7 +108,7 @@ module TestTop (
         .out$deq__RDY(),
         .out$first(reqAws$out$first),
         .out$first__RDY(reqAws$out$first__RDY));
-    Fifo1_OC_27 readBeat (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_26 readBeat (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(reqArs$out$first__RDY),
         .in$enq$v({ RULElreadNext__ENA$readAddrupdate , RULElreadNext__ENA$readburstCount , reqArs$out$first[ 5 : 0 ] , RULElreadNext__ENA$readLastNext }),
         .in$enq__RDY(readBeat$in$enq__RDY),
@@ -116,7 +116,7 @@ module TestTop (
         .out$deq__RDY(readBeat$out$deq__RDY),
         .out$first(readBeat$out$first),
         .out$first__RDY(readBeat$out$first__RDY));
-    Fifo1_OC_27 writeBeat (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_26 writeBeat (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(reqAws$out$first__RDY),
         .in$enq$v({ RULElwriteNext__ENA$writeAddrupdate , RULElwriteNext__ENA$writeburstCount , reqAws$out$first[ 5 : 0 ] , RULElwriteNext__ENA$writeLastNext }),
         .in$enq__RDY(writeBeat$in$enq__RDY),
@@ -124,7 +124,7 @@ module TestTop (
         .out$deq__RDY(writeBeat$out$deq__RDY),
         .out$first(writeBeat$out$first),
         .out$first__RDY(writeBeat$out$first__RDY));
-    Fifo1_OC_31 readData (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_29 readData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(readBeat$out$first__RDY & readBeat$out$deq__RDY),
         .in$enq$v({ portalRControl ? RULElread__ENA$portalCtrlInfo : RULElread__ENA$res , readBeat$out$first[ 6 : 1 ] }),
         .in$enq__RDY(readData$in$enq__RDY),
@@ -132,7 +132,7 @@ module TestTop (
         .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
-    Fifo1_OC_35 writeData (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_32 writeData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v({ MAXIGP0_O$W$data }),
         .in$enq__RDY(MAXIGP0_O$W__RDY),
@@ -140,7 +140,7 @@ module TestTop (
         .out$deq__RDY(writeData$out$deq__RDY),
         .out$first(writeData$out$first),
         .out$first__RDY(writeData$out$first__RDY));
-    Fifo1_OC_39 writeDone (.CLK(CLK), .nRST(nRST),
+    Fifo1_OC_35 writeDone (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(writeDone$in$enq__ENA),
         .in$enq$v(writeBeat$out$first[ 6 : 1 ]),
         .in$enq__RDY(),

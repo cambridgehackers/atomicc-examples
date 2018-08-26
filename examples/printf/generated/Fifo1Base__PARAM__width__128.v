@@ -1,15 +1,15 @@
-`include "echo.generated.vh"
+`include "printf.generated.vh"
 
 `default_nettype none
-module Fifo1Base_OC_9 (input wire CLK, input wire nRST,
+module Fifo1Base__PARAM__width__128 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [31:0]in$enq$v,
+    input wire [127:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [31:0]out$first,
+    output wire [127:0]out$first,
     output wire out$first__RDY);
-    reg [31:0]element;
+    reg [127:0]element;
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;

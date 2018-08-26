@@ -1,15 +1,15 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
-module Fifo1_OC_31 (input wire CLK, input wire nRST,
+module Fifo1_OC_26 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [37:0]in$enq$v,
+    input wire [15:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [37:0]out$first,
+    output wire [15:0]out$first,
     output wire out$first__RDY);
-    Fifo1Base_OC_33 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1Base__PARAM__width__16 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(in$enq__RDY),

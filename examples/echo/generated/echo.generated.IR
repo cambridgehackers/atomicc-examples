@@ -46,10 +46,6 @@ EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE Fifo_OC_10 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_5 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
-}
 EMODULE Fifo_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
@@ -57,6 +53,10 @@ EMODULE Fifo_OC_2 {
 EMODULE Fifo_OC_6 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
     INTERFACE l_ainterface_OC_PipeOut_OC_4 out
+}
+EMODULE Fifo_OC_9 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_5 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
 }
 MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
@@ -74,7 +74,7 @@ MODULE Echo {
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base fifo
+    FIELD Fifo1Base__PARAM__width__128 fifo
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -87,7 +87,7 @@ MODULE Fifo1 {
         LET INTEGER_128 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1Base {
+MODULE Fifo1Base__PARAM__width__128 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_128 element
@@ -101,7 +101,7 @@ MODULE Fifo1Base {
     }
     METHOD out$first INTEGER_128 = ((element)) if ((full))
 }
-MODULE Fifo1Base_OC_9 {
+MODULE Fifo1Base__PARAM__width__32 {
     INTERFACE l_ainterface_OC_PipeIn_OC_5 in
     INTERFACE l_ainterface_OC_PipeOut_OC_7 out
     FIELD INTEGER_32 element
@@ -118,7 +118,7 @@ MODULE Fifo1Base_OC_9 {
 MODULE Fifo1_OC_8 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
     INTERFACE l_ainterface_OC_PipeOut_OC_4 out
-    FIELD Fifo1Base_OC_9 fifo
+    FIELD Fifo1Base__PARAM__width__32 fifo
     METHOD in$enq__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }

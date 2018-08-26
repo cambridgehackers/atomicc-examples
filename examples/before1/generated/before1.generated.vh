@@ -71,14 +71,14 @@
 //METAGUARD; request$say2; pipe$enq__RDY;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base;
+//METAINTERNAL; fifo; Fifo1Base__PARAM__width__128;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
 //METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base
+//METASTART; Fifo1Base__PARAM__width__128
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
 //METAGUARD; in$enq; !full;
 //METAGUARD; out$deq; full;

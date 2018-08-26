@@ -1,7 +1,7 @@
-`include "zynqTop.generated.vh"
+`include "echo.generated.vh"
 
 `default_nettype none
-module Fifo1Base (input wire CLK, input wire nRST,
+module Fifo1Base__PARAM__width__128 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [127:0]in$enq$v,
     output wire in$enq__RDY,

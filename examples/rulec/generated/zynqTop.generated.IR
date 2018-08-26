@@ -660,39 +660,39 @@ EMODULE Fifo_OC_24 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
     INTERFACE l_ainterface_OC_PipeOut_OC_4 out
 }
-EMODULE Fifo_OC_26 {
+EMODULE Fifo_OC_25 {
     INTERFACE l_ainterface_OC_PipeIn_OC_5 in
     INTERFACE l_ainterface_OC_PipeOut_OC_6 out
 }
-EMODULE Fifo_OC_28 {
+EMODULE Fifo_OC_27 {
     INTERFACE l_ainterface_OC_PipeIn_OC_7 in
     INTERFACE l_ainterface_OC_PipeOut_OC_8 out
 }
-EMODULE Fifo_OC_30 {
+EMODULE Fifo_OC_28 {
     INTERFACE l_ainterface_OC_PipeIn_OC_9 in
     INTERFACE l_ainterface_OC_PipeOut_OC_10 out
 }
-EMODULE Fifo_OC_32 {
+EMODULE Fifo_OC_30 {
     INTERFACE l_ainterface_OC_PipeIn_OC_11 in
     INTERFACE l_ainterface_OC_PipeOut_OC_12 out
 }
-EMODULE Fifo_OC_34 {
+EMODULE Fifo_OC_31 {
     INTERFACE l_ainterface_OC_PipeIn_OC_13 in
     INTERFACE l_ainterface_OC_PipeOut_OC_14 out
 }
-EMODULE Fifo_OC_36 {
+EMODULE Fifo_OC_33 {
     INTERFACE l_ainterface_OC_PipeIn_OC_15 in
     INTERFACE l_ainterface_OC_PipeOut_OC_16 out
 }
-EMODULE Fifo_OC_38 {
+EMODULE Fifo_OC_34 {
     INTERFACE l_ainterface_OC_PipeIn_OC_17 in
     INTERFACE l_ainterface_OC_PipeOut_OC_18 out
 }
-EMODULE Fifo_OC_40 {
+EMODULE Fifo_OC_36 {
     INTERFACE l_ainterface_OC_PipeIn_OC_19 in
     INTERFACE l_ainterface_OC_PipeOut_OC_20 out
 }
-EMODULE Fifo_OC_42 {
+EMODULE Fifo_OC_37 {
     INTERFACE l_ainterface_OC_PipeIn_OC_21 in
     INTERFACE l_ainterface_OC_PipeOut_OC_22 out
 }
@@ -737,7 +737,7 @@ MODULE ClockTop {
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base fifo
+    FIELD Fifo1Base__PARAM__width__128 fifo
     METHOD in$enq__ENA ( l_struct_OC_NOCData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -750,7 +750,7 @@ MODULE Fifo1 {
         LET INTEGER_128 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1Base {
+MODULE Fifo1Base__PARAM__width__128 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
     FIELD INTEGER_128 element
@@ -764,7 +764,7 @@ MODULE Fifo1Base {
     }
     METHOD out$first INTEGER_128 = ((element)) if ((full))
 }
-MODULE Fifo1Base_OC_25 {
+MODULE Fifo1Base__PARAM__width__15 {
     INTERFACE l_ainterface_OC_PipeIn_OC_5 in
     INTERFACE l_ainterface_OC_PipeOut_OC_6 out
     FIELD INTEGER_15 element
@@ -778,7 +778,7 @@ MODULE Fifo1Base_OC_25 {
     }
     METHOD out$first INTEGER_15 = ((element)) if ((full))
 }
-MODULE Fifo1Base_OC_29 {
+MODULE Fifo1Base__PARAM__width__16 {
     INTERFACE l_ainterface_OC_PipeIn_OC_9 in
     INTERFACE l_ainterface_OC_PipeOut_OC_10 out
     FIELD INTEGER_16 element
@@ -792,21 +792,7 @@ MODULE Fifo1Base_OC_29 {
     }
     METHOD out$first INTEGER_16 = ((element)) if ((full))
 }
-MODULE Fifo1Base_OC_33 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_13 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_14 out
-    FIELD INTEGER_38 element
-    FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( INTEGER_38 v ) if (((full) ^ (1))) {
-        STORE :element = in$enq$v
-        STORE :full = 1
-    }
-    METHOD out$deq__ENA if ((full)) {
-        STORE :full = 0
-    }
-    METHOD out$first INTEGER_38 = ((element)) if ((full))
-}
-MODULE Fifo1Base_OC_37 {
+MODULE Fifo1Base__PARAM__width__32 {
     INTERFACE l_ainterface_OC_PipeIn_OC_17 in
     INTERFACE l_ainterface_OC_PipeOut_OC_18 out
     FIELD INTEGER_32 element
@@ -820,7 +806,21 @@ MODULE Fifo1Base_OC_37 {
     }
     METHOD out$first INTEGER_32 = ((element)) if ((full))
 }
-MODULE Fifo1Base_OC_41 {
+MODULE Fifo1Base__PARAM__width__38 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_13 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_14 out
+    FIELD INTEGER_38 element
+    FIELD INTEGER_1 full
+    METHOD in$enq__ENA ( INTEGER_38 v ) if (((full) ^ (1))) {
+        STORE :element = in$enq$v
+        STORE :full = 1
+    }
+    METHOD out$deq__ENA if ((full)) {
+        STORE :full = 0
+    }
+    METHOD out$first INTEGER_38 = ((element)) if ((full))
+}
+MODULE Fifo1Base__PARAM__width__6 {
     INTERFACE l_ainterface_OC_PipeIn_OC_21 in
     INTERFACE l_ainterface_OC_PipeOut_OC_22 out
     FIELD INTEGER_6 element
@@ -837,7 +837,7 @@ MODULE Fifo1Base_OC_41 {
 MODULE Fifo1_OC_23 {
     INTERFACE l_ainterface_OC_PipeIn_OC_3 in
     INTERFACE l_ainterface_OC_PipeOut_OC_4 out
-    FIELD Fifo1Base_OC_25 fifo
+    FIELD Fifo1Base__PARAM__width__15 fifo
     METHOD in$enq__ENA ( l_struct_OC_AddrCount v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -850,10 +850,10 @@ MODULE Fifo1_OC_23 {
         LET INTEGER_15 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_27 {
+MODULE Fifo1_OC_26 {
     INTERFACE l_ainterface_OC_PipeIn_OC_7 in
     INTERFACE l_ainterface_OC_PipeOut_OC_8 out
-    FIELD Fifo1Base_OC_29 fifo
+    FIELD Fifo1Base__PARAM__width__16 fifo
     METHOD in$enq__ENA ( l_struct_OC_PortalInfo v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -866,10 +866,10 @@ MODULE Fifo1_OC_27 {
         LET INTEGER_16 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_31 {
+MODULE Fifo1_OC_29 {
     INTERFACE l_ainterface_OC_PipeIn_OC_11 in
     INTERFACE l_ainterface_OC_PipeOut_OC_12 out
-    FIELD Fifo1Base_OC_33 fifo
+    FIELD Fifo1Base__PARAM__width__38 fifo
     METHOD in$enq__ENA ( l_struct_OC_ReadResp v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -882,10 +882,10 @@ MODULE Fifo1_OC_31 {
         LET INTEGER_38 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_35 {
+MODULE Fifo1_OC_32 {
     INTERFACE l_ainterface_OC_PipeIn_OC_15 in
     INTERFACE l_ainterface_OC_PipeOut_OC_16 out
-    FIELD Fifo1Base_OC_37 fifo
+    FIELD Fifo1Base__PARAM__width__32 fifo
     METHOD in$enq__ENA ( l_struct_OC_BusData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -898,10 +898,10 @@ MODULE Fifo1_OC_35 {
         LET INTEGER_32 :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_39 {
+MODULE Fifo1_OC_35 {
     INTERFACE l_ainterface_OC_PipeIn_OC_19 in
     INTERFACE l_ainterface_OC_PipeOut_OC_20 out
-    FIELD Fifo1Base_OC_41 fifo
+    FIELD Fifo1Base__PARAM__width__6 fifo
     METHOD in$enq__ENA ( INTEGER_6 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -1023,11 +1023,11 @@ MODULE TestTop {
     FIELD INTEGER_5 writeAddr
     FIELD Fifo1_OC_23 reqArs
     FIELD Fifo1_OC_23 reqAws
-    FIELD Fifo1_OC_27 readBeat
-    FIELD Fifo1_OC_27 writeBeat
-    FIELD Fifo1_OC_31 readData
-    FIELD Fifo1_OC_35 writeData
-    FIELD Fifo1_OC_39 writeDone
+    FIELD Fifo1_OC_26 readBeat
+    FIELD Fifo1_OC_26 writeBeat
+    FIELD Fifo1_OC_29 readData
+    FIELD Fifo1_OC_32 writeData
+    FIELD Fifo1_OC_35 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
     FIELD INTEGER_32 requestValue

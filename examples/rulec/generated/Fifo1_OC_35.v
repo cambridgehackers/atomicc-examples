@@ -3,13 +3,13 @@
 `default_nettype none
 module Fifo1_OC_35 (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [31:0]in$enq$v,
+    input wire [5:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [31:0]out$first,
+    output wire [5:0]out$first,
     output wire out$first__RDY);
-    Fifo1Base_OC_37 fifo (.CLK(CLK), .nRST(nRST),
+    Fifo1Base__PARAM__width__6 fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(in$enq__RDY),
