@@ -9,16 +9,6 @@
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base$__PARAM__$width$128
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$999999
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 //METASTART; ModFt600
 //METAINTERNAL; iobufs0; IOBUF;
 //METAINTERNAL; iobufs1; IOBUF;
@@ -50,4 +40,9 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY;
 //METARULES; RULEfifoRule
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
 `endif

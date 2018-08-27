@@ -16,41 +16,6 @@
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base$__PARAM__$width$128
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$15
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$16
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$32
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$38
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$6
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$999999
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 //METASTART; Fifo1_OC_26
 //METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$15;
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
@@ -172,4 +137,9 @@
 //METACONNECT; test$MAXIGP0_I$B__RDY; ps7_ps7_foo$MAXIGP0_I$B__RDY
 //METACONNECT; test$MAXIGP0_I$R__ENA; ps7_ps7_foo$MAXIGP0_I$R__ENA
 //METACONNECT; test$MAXIGP0_I$R__RDY; ps7_ps7_foo$MAXIGP0_I$R__RDY
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
 `endif

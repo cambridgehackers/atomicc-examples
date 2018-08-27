@@ -32,16 +32,6 @@
 //METAGUARD; out$deq; fifo$out$deq__RDY;
 //METAINVOKE; out$first; :fifo$out$first;
 //METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1Base$__PARAM__$width$128
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
-//METASTART; Fifo1Base$__PARAM__$width$999999
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
 //METAINTERNAL; forwardFifo; Fifo1;
@@ -95,4 +85,9 @@
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:16] == 16'd1:method$say2__ENA;pipe$enq$v[31:16] == 16'd0:method$say__ENA;pipe$enq$v[31:16] == 16'd2:method$setLeds__ENA;pipe$enq$v[31:16] == 16'd3:method$zsay4__ENA;
 //METAGUARD; pipe$enq; method$say__RDY & method$say2__RDY & method$setLeds__RDY & method$zsay4__RDY;
+//METASTART; Fifo1Base
+//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
+//METAGUARD; in$enq; !full;
+//METAGUARD; out$deq; full;
+//METAGUARD; out$first; full;
 `endif
