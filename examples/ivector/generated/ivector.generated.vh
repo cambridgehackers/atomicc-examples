@@ -1,25 +1,9 @@
 `ifndef __ivector_GENERATED__VH__
 `define __ivector_GENERATED__VH__
 
-//METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$128;
-//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
-//METAGUARD; in$enq; fifo$in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
-//METAGUARD; out$deq; fifo$out$deq__RDY;
-//METAINVOKE; out$first; :fifo$out$first;
-//METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1_OC_11
-//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$96;
-//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
-//METAGUARD; in$enq; fifo$in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
-//METAGUARD; out$deq; fifo$out$deq__RDY;
-//METAINVOKE; out$first; :fifo$out$first;
-//METAGUARD; out$first; fifo$out$first__RDY;
 //METASTART; FifoPong
-//METAINTERNAL; element1; Fifo1_OC_11;
-//METAINTERNAL; element2; Fifo1_OC_11;
+//METAINTERNAL; element1; Fifo1Base$__PARAM__$width$96;
+//METAINTERNAL; element2; Fifo1Base$__PARAM__$width$96;
 //METAINVOKE; in$enq__ENA; pong ^ 1:element1$in$enq__ENA;pong:element2$in$enq__ENA;
 //METAGUARD; in$enq; ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
 //METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;
@@ -72,7 +56,7 @@
 //METARULES; RULErespond_rule_0; RULErespond_rule_1; RULErespond_rule_2; RULErespond_rule_3; RULErespond_rule_4; RULErespond_rule_5; RULErespond_rule_6; RULErespond_rule_7; RULErespond_rule_8; RULErespond_rule_9
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1Base$__PARAM__$width$128;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;

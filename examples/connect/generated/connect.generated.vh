@@ -42,17 +42,9 @@
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_6;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
-//METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$128;
-//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
-//METAGUARD; in$enq; fifo$in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
-//METAGUARD; out$deq; fifo$out$deq__RDY;
-//METAINVOKE; out$first; :fifo$out$first;
-//METAGUARD; out$first; fifo$out$first__RDY;
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1Base$__PARAM__$width$128;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;

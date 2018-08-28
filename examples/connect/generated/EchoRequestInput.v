@@ -9,10 +9,13 @@ module EchoRequestInput (input wire CLK, input wire nRST,
     output wire [31:0]request$say$meth,
     output wire [31:0]request$say$v,
     input wire request$say__RDY);
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$meth;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$data$say$v;
+    wire [31:0]pipe$enq__ENA$v_2e_addr$tag;
     assign pipe$enq__RDY = request$say__RDY;
-    assign request$say$meth = pipe$enq$v[ 63 : 32 ];
-    assign request$say$v = pipe$enq$v[ 95 : 64 ];
-    assign request$say__ENA = ( pipe$enq$v[ 31 : 0 ] == 32'd1 ) & pipe$enq__ENA;
+    assign request$say$meth = pipe$enq__ENA$v_2e_addr$data$say$meth;
+    assign request$say$v = pipe$enq__ENA$v_2e_addr$data$say$v;
+    assign request$say__ENA = ( pipe$enq__ENA$v_2e_addr$tag == 32'd1 ) & pipe$enq__ENA;
 
     always @( posedge CLK) begin
       if (!nRST) begin

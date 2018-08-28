@@ -1,25 +1,9 @@
 `ifndef __precision_GENERATED__VH__
 `define __precision_GENERATED__VH__
 
-//METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$128;
-//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
-//METAGUARD; in$enq; fifo$in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
-//METAGUARD; out$deq; fifo$out$deq__RDY;
-//METAINVOKE; out$first; :fifo$out$first;
-//METAGUARD; out$first; fifo$out$first__RDY;
-//METASTART; Fifo1_OC_10
-//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$10;
-//METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
-//METAGUARD; in$enq; fifo$in$enq__RDY;
-//METAINVOKE; out$deq__ENA; :fifo$out$deq__ENA;
-//METAGUARD; out$deq; fifo$out$deq__RDY;
-//METAINVOKE; out$first; :fifo$out$first;
-//METAGUARD; out$first; fifo$out$first__RDY;
 //METASTART; IVector
 //METAEXTERNAL; ind; l_ainterface_OC_IVectorIndication;
-//METAINTERNAL; fifo; Fifo1_OC_10;
+//METAINTERNAL; fifo; Fifo1Base$__PARAM__$width$10;
 //METAINVOKE; RULErespond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
 //METAGUARD; RULErespond; fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
@@ -27,7 +11,7 @@
 //METARULES; RULErespond
 //METASTART; MuxPipe
 //METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1;
+//METAINTERNAL; forwardFifo; Fifo1Base$__PARAM__$width$128;
 //METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
 //METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
 //METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
