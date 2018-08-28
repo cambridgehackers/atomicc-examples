@@ -70,7 +70,7 @@ module Lpm (input wire CLK, input wire nRST,
         .ifc$resAccept__RDY(mem$ifc$resAccept__RDY),
         .ifc$resValue(mem$ifc$resValue),
         .ifc$resValue__RDY(mem$ifc$resValue__RDY));
-    assign fifo$in$enq$v = ( ( inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { inQ$out$first[ 95 : 64 ] , inQ$out$first[ 63 : 32 ] , inQ$out$first[ 31 : 0 ] } : 0 ) | ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { mem$ifc$resValue[ 95 : 64 ] , mem$ifc$resValue[ 63 : 32 ] , mem$ifc$resValue[ 31 : 0 ] } : 0 );
+    assign fifo$in$enq$v = ( ( inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { inQ$out$first[ 95 : 64 ] , inQ$out$first[ 63 : 32 ] , inQ$out$first[ 31 : 0 ] } : 0 ) | ( ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? mem$ifc$resValue : 0 );
     assign fifo$in$enq__ENA = ( ( inQ$out$first__RDY & inQ$out$deq__RDY ) | ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY ) ) & mem$ifc$req__RDY;
     assign fifo$out$deq__ENA = ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & outQ$in$enq__RDY ) | ( fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY );
     assign ind$heard$meth = outQ$out$first[ 31 : 0 ];

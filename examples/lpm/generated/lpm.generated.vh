@@ -20,7 +20,6 @@
 //METASTART; Fifo2
 //METAGUARD; in$enq; ( ( windex + 1 ) % 2 ) != rindex;
 //METAGUARD; out$deq; rindex != windex;
-//METABEFORE; out$first; :in$enq__ENA; :out$deq__ENA
 //METAGUARD; out$first; rindex != windex;
 //METASTART; Lpm
 //METAEXTERNAL; ind; l_ainterface_OC_LpmIndication;
@@ -48,7 +47,6 @@
 //METAEXCLUSIVE; ifc$req__ENA; ifc$resAccept__ENA
 //METAGUARD; ifc$req; delayCount == 32'd0;
 //METAGUARD; ifc$resAccept; delayCount == 32'd1;
-//METABEFORE; ifc$resValue; :ifc$req__ENA
 //METAGUARD; ifc$resValue; delayCount == 32'd1;
 //METARULES; RULEmemdelay_rule
 //METASTART; MuxPipe

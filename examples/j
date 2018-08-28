@@ -11,4 +11,4 @@ cd ../connect ;make
 cd ../precision ;make
 cd ../printf ;make
 cd ../clock ;make
-cd ../ft600 ;make
+#cd ../ft600 ;make
