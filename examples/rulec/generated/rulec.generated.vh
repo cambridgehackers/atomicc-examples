@@ -5,7 +5,6 @@
 //METAEXTERNAL; out; l_ainterface_OC_PipeInH;
 //METAINVOKE; RULEpushValue__ENA; :out$enq__ENA;
 //METAEXCLUSIVE; RULEpushValue__ENA; in$enq__ENA
-//METABEFORE; RULEpushValue__ENA; :in$enq__ENA
 //METAGUARD; RULEpushValue; waitForEnq & out$enq__RDY;
 //METAGUARD; in$enq; !waitForEnq;
 //METARULES; RULEpushValue

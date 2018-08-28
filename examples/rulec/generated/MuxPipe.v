@@ -23,7 +23,7 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out$first(forwardFifo$out$first),
         .out$first__RDY(forwardFifo$out$first__RDY));
     assign in$enq__RDY = out$enq__RDY;
-    assign out$enq$v = ( ( forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY ) ? { forwardFifo$out$first[ 127 : 96 ] , forwardFifo$out$first[ 95 : 64 ] , forwardFifo$out$first[ 63 : 32 ] , forwardFifo$out$first[ 31 : 0 ] } : 0 ) | ( in$enq__ENA ? in$enq$v : 0 );
+    assign out$enq$v = ( ( forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY ) ? forwardFifo$out$first : 0 ) | ( in$enq__ENA ? in$enq$v : 0 );
     assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifo$out$deq__RDY ) | in$enq__ENA;
 endmodule 
 
