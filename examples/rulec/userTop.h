@@ -27,9 +27,7 @@ __emodule l_top {
     PipeIn<NOCData> *indication;
 };
 
-#ifndef __DONT_DEFINE_USER_TOP__
 __emodule UserTop {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
 };
-#endif

@@ -20,7 +20,6 @@
  */
 #include "atomicc.h"
 #include "adapter.h"
-#define __DONT_DEFINE_USER_TOP__
 #include "userTop.h"
 #define IfcNames_EchoIndicationH2S 5
 
