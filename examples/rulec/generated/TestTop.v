@@ -159,7 +159,7 @@ module TestTop (
         .out$first__RDY(writeDone$out$first__RDY));
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write$enq__ENA(user$write$enq__ENA),
-        .write$enq$v(writeData$out$first[ 31 : 0 ]),
+        .write$enq$v(writeData$out$first),
         .write$enq$length(user$write$enq$length),
         .write$enq__RDY(user$write$enq__RDY),
         .read$enq__ENA(user$read$enq__ENA),
@@ -200,7 +200,7 @@ module TestTop (
     assign RULElwriteNext__ENA$agg_2e_tmp$last = writeNotFirst ? writeLast : ( reqAws$out$first[ 9 : 6 ] == 4'd1 );
     assign RULElwriteNext__RDY = reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( ( ( writeNotFirst ? writeLast : ( 1 ) ) ^ 1 ) | reqAws$out$deq__RDY );
     assign RULElwrite__ENA = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
-    assign RULElwrite__ENA$temp$data = writeData$out$first[ 31 : 0 ];
+    assign RULElwrite__ENA$temp$data = writeData$out$first;
     assign RULElwrite__ENA$wb$ac$addr = writeBeat$out$first[ 15 : 11 ];
     assign RULElwrite__RDY = writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & ( portalWControl | user$write$enq__RDY );
 

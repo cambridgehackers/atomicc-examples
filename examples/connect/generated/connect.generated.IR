@@ -86,9 +86,6 @@ MODULE Connect {
     FIELD EchoIndicationInput lEII_test
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
-        CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
-    }
 }
 MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest request

@@ -132,7 +132,6 @@ __module Connect {
     Echo lEcho;
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
-    void request.say(int meth, int v) { lERO_test.request.say(meth, v); }
 
     __connect lERI.request = lEcho.request;
     __connect lEIO.pipe = lEII_test.pipe;
