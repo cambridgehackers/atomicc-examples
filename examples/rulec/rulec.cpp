@@ -22,24 +22,20 @@
 #include "adapter.h"
 #define __DONT_DEFINE_USER_TOP__
 #include "userTop.h"
+#define IfcNames_EchoIndicationH2S 5
 
-//typedef __int(32) aint32;
-typedef __int(16) aint16;
-//typedef __int(8) aint8;
-#define aint32 __int(32)
-//#define aint16 __int(16)
-#define aint8 __int(8)
 __interface EchoRequest {
-    void say(aint32 v);
-    void say2(aint16 a, aint16 b);
-    //void say3(aint32 a, aint32 b, aint32 c);
-    void zsay4(void);
-    void setLeds(aint8 v);
-    //__input int readme;
-    //__output int writeme;
-    //__inout int readwriteme;
+    void say(__int(32) v);
+    void say2(__int(16) a, __int(16) b);
+    void setLeds(__int(8) v);
+};
+__interface EchoIndication {
+    void heard(__int(32) v);
+    void heard2(__int(16) a, __int(16) b);
+    void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
+#if 0
 __interface CNCONNECTNET2 {
     __input  __int(1)         IN1;
     __input  __int(1)         IN2;
@@ -56,12 +52,8 @@ __module CONNECTNET2 {
     }
 };
 CONNECTNET2 cntest;
+#endif
 
-__interface EchoIndication {
-    void heard(aint32 v);
-    void heard2(aint16 a, aint16 b);
-    void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
-};
 typedef __serialize(EchoRequest) fooReq;
 typedef __serialize(EchoIndication) fooInd;
 
@@ -70,35 +62,24 @@ __module Echo {
     __software EchoIndication                 *indication;
     //__printf;
     __uint(1) busy, busy_delay;
-    aint32 v_temp, v_delay;
-    aint16 a_temp, b_temp, a_delay, b_delay;
+    __int(32) v_temp, v_delay;
+    __int(16) a_temp, b_temp, a_delay, b_delay;
     int v_type;
-    void request.say(aint32 v) if(!busy) {
-//printf("EEEEEEEE say: %d\n", v);
+    void request.say(__int(32) v) if(!busy) {
         v_temp = v;
         busy = 1;
         v_type = 1;
     }
-    void request.say2(aint16 a, aint16 b) if(!busy) {
-//printf("EEEEEEEE say2: a %d b %d\n", a, b);
+    void request.say2(__int(16) a, __int(16) b) if(!busy) {
         a_temp = a;
         b_temp = b;
         busy = 1;
         v_type = 2;
     }
-#if 0
-    void request.say3(aint32 a, aint32 b, aint32 c) if (!busy) {
-//printf("EEEEEEEE say3: a %d b %d c %d\n", a, b, c);
-    }
-#endif
-    void request.zsay4(void) {
-//printf("EEEEEEEE zsay4:%d]Echo\n", 4);
-    }
-    void request.setLeds(aint8 v) {
+    void request.setLeds(__int(8) v) {
     }
     Echo() {
         __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
-//printf("EEEEEEEE delay_rule: v_temp %d a_temp %d b_temp %d\n", v_temp, a_temp, b_temp);
              busy = 0;
              busy_delay = 1;
              v_delay = v_temp;
@@ -106,7 +87,6 @@ __module Echo {
              b_delay = b_temp;
            };
         __rule respond_rule if(busy_delay != 0) {
-//printf("EEEEEEEE respond_rule: v_type %d v_delay %d a_delay %d b_delay %d\n", v_type, v_delay, a_delay, b_delay);
              busy_delay = 0;
              if (v_type == 1)
              indication->heard(v_delay);
@@ -118,7 +98,6 @@ __module Echo {
 
 Echo test;
 
-#define IfcNames_EchoIndicationH2S 5
 __module UserTop {
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;

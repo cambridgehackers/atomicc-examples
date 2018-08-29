@@ -21,7 +21,6 @@ module l_top (input wire CLK, input wire nRST,
     wire DUT__Echo$request$say2__RDY;
     wire DUT__Echo$request$say__RDY;
     wire DUT__Echo$request$setLeds__RDY;
-    wire DUT__Echo$request$zsay4__RDY;
     wire M2P__indication$method$heard2__RDY;
     wire M2P__indication$method$heard3__RDY;
     wire M2P__indication$method$heard__RDY;
@@ -32,7 +31,6 @@ module l_top (input wire CLK, input wire nRST,
     wire P2M__request$method$say__ENA;
     wire [7:0]P2M__request$method$setLeds$v;
     wire P2M__request$method$setLeds__ENA;
-    wire P2M__request$method$zsay4__ENA;
     Echo DUT__Echo (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(P2M__request$method$say__ENA),
         .request$say$v(P2M__request$method$say$v),
@@ -44,8 +42,6 @@ module l_top (input wire CLK, input wire nRST,
         .request$setLeds__ENA(P2M__request$method$setLeds__ENA),
         .request$setLeds$v(P2M__request$method$setLeds$v),
         .request$setLeds__RDY(DUT__Echo$request$setLeds__RDY),
-        .request$zsay4__ENA(P2M__request$method$zsay4__ENA),
-        .request$zsay4__RDY(DUT__Echo$request$zsay4__RDY),
         .indication$heard__ENA(DUT__Echo$indication$heard__ENA),
         .indication$heard$v(DUT__Echo$indication$heard$v),
         .indication$heard2__ENA(DUT__Echo$indication$heard2__ENA),
@@ -87,8 +83,6 @@ module l_top (input wire CLK, input wire nRST,
         .method$setLeds__ENA(P2M__request$method$setLeds__ENA),
         .method$setLeds$v(P2M__request$method$setLeds$v),
         .method$setLeds__RDY(DUT__Echo$request$setLeds__RDY),
-        .method$zsay4__ENA(P2M__request$method$zsay4__ENA),
-        .method$zsay4__RDY(DUT__Echo$request$zsay4__RDY),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));

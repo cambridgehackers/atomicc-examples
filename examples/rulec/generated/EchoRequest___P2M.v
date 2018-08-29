@@ -12,8 +12,6 @@ module EchoRequest___P2M (input wire CLK, input wire nRST,
     output wire method$setLeds__ENA,
     output wire [7:0]method$setLeds$v,
     input wire method$setLeds__RDY,
-    output wire method$zsay4__ENA,
-    input wire method$zsay4__RDY,
     input wire pipe$enq__ENA,
     input wire [127:0]pipe$enq$v,
     output wire pipe$enq__RDY);
@@ -24,8 +22,7 @@ module EchoRequest___P2M (input wire CLK, input wire nRST,
     assign method$say__ENA = ( pipe$enq$v[31:16] == 16'd0 ) & pipe$enq__ENA;
     assign method$setLeds$v = pipe$enq$v[39:32];
     assign method$setLeds__ENA = ( pipe$enq$v[31:16] == 16'd2 ) & pipe$enq__ENA;
-    assign method$zsay4__ENA = ( pipe$enq$v[31:16] == 16'd3 ) & pipe$enq__ENA;
-    assign pipe$enq__RDY = method$say__RDY & method$say2__RDY & method$setLeds__RDY & method$zsay4__RDY;
+    assign pipe$enq__RDY = method$say__RDY & method$say2__RDY & method$setLeds__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value

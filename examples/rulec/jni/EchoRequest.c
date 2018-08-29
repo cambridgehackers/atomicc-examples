@@ -24,21 +24,12 @@ int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v )
     return 0;
 };
 
-int EchoRequest_zsay4 ( struct PortalInternal *p )
-{
-    unsigned int temp_working_addr_start[1 + 1] = {0, (CHAN_NUM_EchoRequest_zsay4 << 16) | 1,
-    };
-    p->transport->send(p, temp_working_addr_start + 2, (CHAN_NUM_EchoRequest_zsay4 << 16) | 1, -1);
-    return 0;
-};
-
 EchoRequestCb EchoRequestProxyReq = {
     portal_disconnect,
     EchoRequest_say,
     EchoRequest_say2,
     EchoRequest_setLeds,
-    EchoRequest_zsay4,
 };
 EchoRequestCb *pEchoRequestProxyReq = &EchoRequestProxyReq;
 
-const uint32_t EchoRequest_reqinfo = 0x40008;
+const uint32_t EchoRequest_reqinfo = 0x30008;

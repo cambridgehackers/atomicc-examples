@@ -15,6 +15,5 @@ public:
     int say ( const uint32_t v ) { return cb->say (&pint, v); };
     int say2 ( const uint16_t a, const uint16_t b ) { return cb->say2 (&pint, a, b); };
     int setLeds ( const uint8_t v ) { return cb->setLeds (&pint, v); };
-    int zsay4 (  ) { return cb->zsay4 (&pint); };
 };
 #endif // _ECHOREQUEST_H_
