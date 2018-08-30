@@ -4,7 +4,7 @@ CONNECTALDIR=$(PWD)/../../../connectal
 CONNECTALSDIR=$(DTOP)/../../connectal
 SIMMAKE=$(CONNECTALDIR)/../atomicc/simulation/Makefile.verilator
 
-include ../makefile.in
+include ../../makefile.in
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace
 

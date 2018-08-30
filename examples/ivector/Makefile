@@ -1,5 +1,5 @@
 
-include ../makefile.in
+include ../../makefile.in
 #CPPFLAGS += -emit-llvm
 
 all:
