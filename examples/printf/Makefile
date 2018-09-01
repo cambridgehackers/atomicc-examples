@@ -1,5 +1,9 @@
 
 include ../../makefile.in
+#CPPFLAGS += -emit-llvm
+#CPPFLAGS += -fdump-record-layouts
+#CPPFLAGS += -mllvm -dtrace
+#CPPFLAGS += -mllvm -rgentrace
 
 all:
 	mkdir -p generated

@@ -65,6 +65,7 @@ __emodule Fifo {
 
 typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
 typedef PipeIn<NOCData>                   NOCPipe;
+typedef __uint(32)                        BusType;
 #if 0
 template<class T> __emodule M2P { // method -> pipe
 public:

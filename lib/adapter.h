@@ -21,51 +21,15 @@
 // SOFTWARE.
 #ifndef _ADAPTER_H_
 #define _ADAPTER_H_
-#include <atomicc.h>
-
 template<class T, class BusType>
-__module AdapterToBus {
+__emodule AdapterToBus {
    PipeInH<T>        in;
    PipeInB<BusType> *out;
-   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   __int(16)        remain;
-   __uint(__bitsize(T)) buffer;
-
-   void in.enq(T v, LenType length) if (remain == 0) {
-      //printf("TTTTTT in.enq: v %x length %x\n", v, length);
-      buffer = __bit_cast<decltype(buffer)>(v);
-      remain = length + 1;
-   }
-   AdapterToBus() {
-      __rule copyRule if (remain != 0) {
-         //printf("TTTTTT copyRule: buffer %x remain %x\n", buffer, remain);
-         out->enq(buffer, remain);
-         remain--;
-         buffer >>= __bitsize(BusType);
-      }
-   }
 };
 
 template<class BusType, class T>
-__module AdapterFromBus {
+__emodule AdapterFromBus {
    PipeInB<BusType>  in;
    PipeInH<T>       *out;
-   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   bool             waitForEnq;
-   __uint(__bitsize(T)) buffer;
-
-   void in.enq(BusType v, LenType length) if (!waitForEnq) {
-      //printf("FFFFFFFF in.enq: v %d last %d buffer %x\n", v, last, buffer);
-      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(BusType) - 1, 0), v);
-      if (length == 1)  // this is the last beat
-          waitForEnq = 1;
-   }
-   AdapterFromBus() {
-      __rule pushValue if (waitForEnq) {
-          //printf("FFFFFFFF pushValue: buffer %x\n", buffer);
-          out->enq(__bit_cast<T>(buffer), 0);
-          waitForEnq = 0;
-      }
-   }
 };
 #endif

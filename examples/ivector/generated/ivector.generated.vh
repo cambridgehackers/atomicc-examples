@@ -54,15 +54,4 @@
 //METAINVOKE; in$say__ENA; in$say$meth == 0:fifo0$in$enq__ENA;in$say$meth == 1:fifo1$in$enq__ENA;in$say$meth == 2:fifo2$in$enq__ENA;in$say$meth == 3:fifo3$in$enq__ENA;in$say$meth == 4:fifo4$in$enq__ENA;in$say$meth == 5:fifo5$in$enq__ENA;in$say$meth == 6:fifo6$in$enq__ENA;in$say$meth == 7:fifo7$in$enq__ENA;in$say$meth == 8:fifo8$in$enq__ENA;in$say$meth == 9:fifo9$in$enq__ENA;
 //METAGUARD; in$say; fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
 //METARULES; RULErespond_rule_0; RULErespond_rule_1; RULErespond_rule_2; RULErespond_rule_3; RULErespond_rule_4; RULErespond_rule_5; RULErespond_rule_6; RULErespond_rule_7; RULErespond_rule_8; RULErespond_rule_9
-//METASTART; MuxPipe
-//METAEXTERNAL; out; l_ainterface_OC_PipeIn;
-//METAINTERNAL; forwardFifo; Fifo1Base$__PARAM__$width$128;
-//METAINVOKE; RULEfifoRule__ENA; :forwardFifo$out$deq__ENA;:forwardFifo$out$first;:out$enq__ENA;
-//METAEXCLUSIVE; RULEfifoRule__ENA; in$enq__ENA
-//METAGUARD; RULEfifoRule; forwardFifo$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY;
-//METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;
-//METAGUARD; forward$enq; forwardFifo$in$enq__RDY;
-//METAINVOKE; in$enq__ENA; :out$enq__ENA;
-//METAGUARD; in$enq; out$enq__RDY;
-//METARULES; RULEfifoRule
 `endif

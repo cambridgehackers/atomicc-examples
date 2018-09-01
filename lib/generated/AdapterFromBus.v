@@ -1,4 +1,4 @@
-`include "rulec.generated.vh"
+`include "adapter.generated.vh"
 
 `default_nettype none
 module AdapterFromBus (input wire CLK, input wire nRST,

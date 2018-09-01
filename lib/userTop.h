@@ -18,10 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
-
-typedef __uint(32) BusType;
-
+#ifndef __USER_TOP_H__
+#define __USER_TOP_H__
 __emodule l_top {
     PipeIn<NOCData> request;
     PipeIn<NOCData> *indication;
@@ -31,3 +29,4 @@ __emodule UserTop {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
 };
+#endif // __USER_TOP_H__

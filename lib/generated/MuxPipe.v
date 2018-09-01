@@ -1,4 +1,4 @@
-`include "ivector.generated.vh"
+`include "mux.generated.vh"
 
 `default_nettype none
 module MuxPipe (input wire CLK, input wire nRST,

@@ -20,6 +20,7 @@
  */
 #include "atomicc.h"
 #include "fifo.h"
+#include "userTop.h"
 #include "mux.h"
 
 //typedef __int(32) aint32;

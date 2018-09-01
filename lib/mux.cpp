@@ -19,15 +19,28 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef _MUX_H_
-#define _MUX_H_
-__emodule MuxPipe {
+#include "atomicc.h"
+#include "fifo.h"
+#define MUXHACK
+#include "mux.h"
+
+__module MuxPipe {
+public:
     NOCPipe           in;
     NOCPipe      forward;
     NOCPipe         *out;
-#ifndef MUXHACK
-    MuxPipe() { }
-#endif
+    Fifo1<NOCData>   forwardFifo;
+    void in.enq(NOCData v) {
+        out->enq(v);
+    }
+    void forward.enq(NOCData v) {
+        forwardFifo.in.enq(v);
+    }
+    MuxPipe() {
+        __rule fifoRule {
+            out->enq(forwardFifo.out.first());
+            forwardFifo.out.deq();
+        }
+    }
 };
-static MuxPipe dummyMux;
-#endif // _MUX_H_
+static MuxPipe unusedMuxPipe;
