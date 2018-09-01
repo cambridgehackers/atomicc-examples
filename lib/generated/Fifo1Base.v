@@ -1,4 +1,4 @@
-`include "zynqTop.generated.vh"
+`include "fifo.generated.vh"
 
 `default_nettype none
 module Fifo1Base #(

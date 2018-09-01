@@ -37,12 +37,4 @@ __module Fifo1Base : public Fifo<__uint(width)> {
   Fifo1Base(): full(false) { };
 };
 
-template<class T>
-__module Fifo1 : public Fifo<T> {
-  Fifo1Base<__bitsize(T)> fifo;
-  void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
-  void out.deq(void) { fifo.out.deq(); }
-  T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
-};
-
 static Fifo1Base<GENERIC_INT_TEMPLATE_FLAG> dummy;

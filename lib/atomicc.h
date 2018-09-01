@@ -54,6 +54,12 @@ __interface PipeOut {
     T first(void);
 };
 
+template<class T>
+__emodule Fifo {
+    PipeIn<T> in;
+    PipeOut<T> out;
+};
+
 #define MAX_NOC_WIDTH                  4//100
 #define PRINTF_PORT    (uint16_t) 0x7fff
 

@@ -43,10 +43,8 @@ zybo:
 	PhysAddrWidth=32 \
 	CONNECTAL_BITS_DEPENDENCES=zybo/hw/mkTop.bit \
 	CONNECTAL_EXENAME=android.exe \
-	VERILOG_PATH=verilog $(BLUESPEC_VERILOG) \
+	VERILOG_PATH=verilog $(VERILOG_LIB) \
 	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
-
-#	VERILOG_PATH=verilog $(CONNECTALDIR)/verilog/xilinx $(BLUESPEC_VERILOG) \
 
 clean:
 	rm -rf *.bc *.o *.ll *.s rulec.exe.* rulec.tmp verilator zybo SWSOCK*

@@ -89,9 +89,4 @@
 //METACONNECT; test$MAXIGP0_I$B__RDY; ps7_ps7_foo$MAXIGP0_I$B__RDY
 //METACONNECT; test$MAXIGP0_I$R__ENA; ps7_ps7_foo$MAXIGP0_I$R__ENA
 //METACONNECT; test$MAXIGP0_I$R__RDY; ps7_ps7_foo$MAXIGP0_I$R__RDY
-//METASTART; Fifo1Base
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 `endif

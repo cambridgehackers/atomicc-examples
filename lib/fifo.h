@@ -23,26 +23,8 @@
 #define _FIFO_H_
 #include <atomicc.h>
 
-template<class T>
-__emodule Fifo {
-    PipeIn<T> in;
-    PipeOut<T> out;
-};
-
 template<int width>
-__module Fifo1Base : public Fifo<__uint(width)> {
-  __uint(width) element;
-  bool full;
-  void in.enq(const __uint(width) v) if (notFull()) {
-    element = v;
-    full = true;
-  };
-  void out.deq(void) if (notEmpty()) { full = false; };
-  __uint(width) out.first(void) if (notEmpty()) { return element; };
-  bool notEmpty() const { return full; };
-  bool notFull() const { return !full; };
-  Fifo1Base(): full(false) { };
-};
+__emodule Fifo1Base : public Fifo<__uint(width)> { };
 
 template<class T>
 __module Fifo1 : public Fifo<T> {
@@ -51,6 +33,4 @@ __module Fifo1 : public Fifo<T> {
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
-
-static Fifo1Base<GENERIC_INT_TEMPLATE_FLAG> dummy;
 #endif
