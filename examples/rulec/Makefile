@@ -43,7 +43,7 @@ zybo:
 	PhysAddrWidth=32 \
 	CONNECTAL_BITS_DEPENDENCES=zybo/hw/mkTop.bit \
 	CONNECTAL_EXENAME=android.exe \
-	VERILOG_PATH=verilog $(VERILOG_LIB) \
+	VERILOG_PATH=verilog:$(VERILOG_LIB) \
 	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
 
 clean:

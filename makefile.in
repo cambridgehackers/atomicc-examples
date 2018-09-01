@@ -1,6 +1,6 @@
 #
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
-VERILOG_LIB := $(TOPDIR)/lib/
+VERILOG_LIB := $(TOPDIR)/lib/generated/
 CLANGBASE = $(TOPDIR)/../llvm/build/bin/
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc

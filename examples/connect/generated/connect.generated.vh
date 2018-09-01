@@ -29,7 +29,7 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag == 1:indication$heard__ENA;
 //METAGUARD; pipe$enq; indication$heard__RDY;
 //METASTART; EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_7;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_4;
 //METAINVOKE; indication$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; EchoRequestInput
@@ -37,7 +37,7 @@
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v_2e_addr$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_6;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_3;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
 //METASTART; MuxPipe
@@ -51,9 +51,4 @@
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
 //METAGUARD; in$enq; out$enq__RDY;
 //METARULES; RULEfifoRule
-//METASTART; Fifo1Base
-//METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
 `endif

@@ -16,7 +16,7 @@ REPORT_NWORST_TIMING_PATHS?=
 include $(TCLDIR)/Makefile.fpgamake.common
 
 ZynqTopNew_HEADERFILES = 
-ZynqTopNew_VFILES = $(wildcard ../generated/*.v)
+ZynqTopNew_VFILES = $(wildcard ../generated/*.v ../../../lib/generated/*.v)
 
 ZynqTopNew_VHDFILES = 
 ZynqTopNew_VHDL_LIBRARIES = 
