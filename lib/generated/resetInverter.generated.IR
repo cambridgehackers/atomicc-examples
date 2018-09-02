@@ -1,0 +1,16 @@
+EMODULE l_struct_OC_NOCData {
+    FIELD/Count 4  INTEGER_32 data
+}
+EMODULE l_ainterface_OC_MResetInverterResetInverter {
+    FIELD/input INTEGER_1 RESET_IN
+    FIELD/output INTEGER_1 RESET_OUT
+}
+EMODULE l_ainterface_OC_PipeIn {
+    METHOD enq__ENA ( l_struct_OC_NOCData v )
+}
+EMODULE ResetInverter {
+    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+}
+MODULE ResetInverter {
+    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+}

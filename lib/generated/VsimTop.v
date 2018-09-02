@@ -24,12 +24,12 @@ module VsimTop (
         .read$enq$v(user$read$enq$v),
         .read$enq$length(user$read$enq$length),
         .read$enq__RDY(source_0$beat__RDY));
-    VsimReceive sink_0 (.CLK(CLK), .nRST(nRST),
+    VsimReceive#(32) sink_0 (.CLK(CLK), .nRST(nRST),
         .beat__ENA(sink_0$beat__ENA),
         .beat$v(sink_0$beat$v),
         .beat$last(sink_0$beat$last),
         .beat__RDY(user$write$enq__RDY));
-    VsimSend source_0 (.CLK(CLK), .nRST(nRST),
+    VsimSend#(32) source_0 (.CLK(CLK), .nRST(nRST),
         .beat__ENA(user$read$enq__ENA),
         .beat$v(user$read$enq$v),
         .beat$last(user$read$enq$length == 16'd1),

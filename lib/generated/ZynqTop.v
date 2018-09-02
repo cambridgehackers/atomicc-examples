@@ -1,7 +1,7 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
-module ZynqTopNew (
+module ZynqTop (
     inout wire [14:0]DDR_Addr,
     inout wire [2:0]DDR_BankAddr,
     inout wire DDR_CAS_n,

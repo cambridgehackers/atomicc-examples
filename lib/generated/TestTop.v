@@ -1,4 +1,4 @@
-`include "zynqTop.generated.vh"
+`include "testTop.generated.vh"
 
 `default_nettype none
 module TestTop (

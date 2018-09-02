@@ -1,102 +1,27 @@
 EMODULE l_struct_OC_NOCData {
     FIELD/Count 4  INTEGER_32 data
 }
-EMODULE l_ainterface_OC_MResetInverterResetInverter {
-    FIELD/input INTEGER_1 RESET_IN
-    FIELD/output INTEGER_1 RESET_OUT
+EMODULE l_ainterface_OC_ClockIfc {
+    FIELD/parameter FLOAT CLKIN1_PERIOD
+    FIELD/input INTEGER_1 CLK
+    FIELD/input INTEGER_1 nRST
+    FIELD/output INTEGER_1 clockOut
+}
+EMODULE l_ainterface_OC_MaxiI {
+    METHOD B__ENA ( INTEGER_12 id , INTEGER_2 resp )
+    METHOD R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
+}
+EMODULE l_ainterface_OC_MaxiO {
+    METHOD AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 EMODULE l_ainterface_OC_MbufgBUFG {
     FIELD/input INTEGER_1 I
     FIELD/output INTEGER_1 O
 }
-EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
-    FIELD/Ptr/parameter INTEGER_8 BANDWIDTH
-    FIELD/input INTEGER_1 CLKFBIN
-    FIELD/output INTEGER_1 CLKFBOUT
-    FIELD/output INTEGER_1 CLKFBOUTB
-    FIELD/parameter FLOAT CLKFBOUT_MULT_F
-    FIELD/parameter FLOAT CLKFBOUT_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKFBOUT_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKFBSTOPPED
-    FIELD/input INTEGER_1 CLKIN1
-    FIELD/parameter FLOAT CLKIN1_PERIOD
-    FIELD/input INTEGER_1 CLKIN2
-    FIELD/parameter FLOAT CLKIN2_PERIOD
-    FIELD/input INTEGER_1 CLKINSEL
-    FIELD/output INTEGER_1 CLKINSTOPPED
-    FIELD/output INTEGER_1 CLKOUT0
-    FIELD/output INTEGER_1 CLKOUT0B
-    FIELD/parameter FLOAT CLKOUT0_DIVIDE_F
-    FIELD/parameter FLOAT CLKOUT0_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT0_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT0_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT1
-    FIELD/output INTEGER_1 CLKOUT1B
-    FIELD/parameter INTEGER_32 CLKOUT1_DIVIDE
-    FIELD/parameter FLOAT CLKOUT1_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT1_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT1_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT2
-    FIELD/output INTEGER_1 CLKOUT2B
-    FIELD/parameter INTEGER_32 CLKOUT2_DIVIDE
-    FIELD/parameter FLOAT CLKOUT2_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT2_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT2_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT3
-    FIELD/output INTEGER_1 CLKOUT3B
-    FIELD/parameter INTEGER_32 CLKOUT3_DIVIDE
-    FIELD/parameter FLOAT CLKOUT3_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT3_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT3_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT4
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_CASCADE
-    FIELD/parameter INTEGER_32 CLKOUT4_DIVIDE
-    FIELD/parameter FLOAT CLKOUT4_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT4_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT5
-    FIELD/parameter INTEGER_32 CLKOUT5_DIVIDE
-    FIELD/parameter FLOAT CLKOUT5_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT5_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT5_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT6
-    FIELD/parameter INTEGER_32 CLKOUT6_DIVIDE
-    FIELD/parameter FLOAT CLKOUT6_DUTY_CYCLE
-    FIELD/parameter FLOAT CLKOUT6_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT6_USE_FINE_PS
-    FIELD/Ptr/parameter INTEGER_8 COMPENSATION
-    FIELD/input INTEGER_7 DADDR
-    FIELD/input INTEGER_1 DCLK
-    FIELD/input INTEGER_1 DEN
-    FIELD/input INTEGER_16 DI
-    FIELD/parameter INTEGER_32 DIVCLK_DIVIDE
-    FIELD/output INTEGER_16 DO
-    FIELD/output INTEGER_1 DRDY
-    FIELD/input INTEGER_1 DWE
-    FIELD/parameter INTEGER_32 IS_CLKINSEL_INVERTED
-    FIELD/parameter INTEGER_32 IS_PSEN_INVERTED
-    FIELD/parameter INTEGER_32 IS_PSINCDEC_INVERTED
-    FIELD/parameter INTEGER_32 IS_PWRDWN_INVERTED
-    FIELD/parameter INTEGER_32 IS_RST_INVERTED
-    FIELD/output INTEGER_1 LOCKED
-    FIELD/input INTEGER_1 PSCLK
-    FIELD/output INTEGER_1 PSDONE
-    FIELD/input INTEGER_1 PSEN
-    FIELD/input INTEGER_1 PSINCDEC
-    FIELD/input INTEGER_1 PWRDWN
-    FIELD/parameter FLOAT REF_JITTER1
-    FIELD/parameter FLOAT REF_JITTER2
-    FIELD/input INTEGER_1 RST
-    FIELD/Ptr/parameter INTEGER_8 SS_EN
-    FIELD/Ptr/parameter INTEGER_8 SS_MODE
-    FIELD/parameter INTEGER_32 SS_MOD_PERIOD
-    FIELD/Ptr/parameter INTEGER_8 STARTUP_WAIT
-}
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
-}
-EMODULE l_ainterface_OC_PipeInB {
-    METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
@@ -501,55 +426,138 @@ EMODULE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_VBeat {
-    METHOD beat__ENA ( INTEGER_32 v , INTEGER_1 last )
+EMODULE l_ainterface_OC_ZynqClock {
+    FIELD/inout INTEGER_15 DDR_Addr
+    FIELD/inout INTEGER_3 DDR_BankAddr
+    FIELD/inout INTEGER_1 DDR_CAS_n
+    FIELD/inout INTEGER_1 DDR_CKE
+    FIELD/inout INTEGER_1 DDR_Clk_n
+    FIELD/inout INTEGER_1 DDR_Clk_p
+    FIELD/inout INTEGER_1 DDR_CS_n
+    FIELD/inout INTEGER_4 DDR_DM
+    FIELD/inout INTEGER_32 DDR_DQ
+    FIELD/inout INTEGER_4 DDR_DQS_n
+    FIELD/inout INTEGER_4 DDR_DQS_p
+    FIELD/inout INTEGER_1 DDR_DRSTB
+    FIELD/inout INTEGER_1 DDR_ODT
+    FIELD/inout INTEGER_1 DDR_RAS_n
+    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrn
+    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrp
+    FIELD/inout INTEGER_1 DDR_WEB
+    FIELD/inout INTEGER_1 FIXED_IO_ps_clk
+    FIELD/inout INTEGER_1 FIXED_IO_ps_porb
+    FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
 }
-EMODULE l_ainterface_OC_VsimInterface {
+EMODULE l_ainterface_OC_ZynqInterrupt {
+    FIELD/input INTEGER_1 interrupt
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
-    FIELD/input INTEGER_1 CLK_derivedClock
-    FIELD/input INTEGER_1 nRST_derivedReset
-    FIELD/input INTEGER_1 CLK_sys_clk
+}
+EMODULE l_ainterface_OC_ZynqInterruptT {
+    FIELD/output INTEGER_1 interrupt
+    FIELD/input INTEGER_1 CLK
+    FIELD/input INTEGER_1 nRST
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
 }
-EMODULE MMCME2_ADV {
-    INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV _
+EMODULE ClockTop {
+    INTERFACE l_ainterface_OC_ClockIfc _
 }
 EMODULE PS7 {
     INTERFACE l_ainterface_OC_Pps7PS7 _
 }
-EMODULE UserTop {
-    INTERFACE l_ainterface_OC_PipeInB write
-    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+EMODULE TestTop {
+    INTERFACE l_ainterface_OC_ZynqInterruptT _
+    INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
 }
-EMODULE VsimReceive {
-    INTERFACE/Ptr l_ainterface_OC_VBeat _
-}
-EMODULE VsimSend {
-    INTERFACE l_ainterface_OC_VBeat _
-}
-EMODULE l_top {
-    INTERFACE l_ainterface_OC_PipeIn request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn indication
-}
-MODULE ResetInverter {
-    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-}
-MODULE VsimTop {
-    INTERFACECONNECT readUser user$read l_ainterface_OC_PipeInB
-    INTERFACECONNECT sink_0$_ writeUser l_ainterface_OC_VBeat
-    INTERFACE l_ainterface_OC_VsimInterface _
-    INTERFACE l_ainterface_OC_PipeInB readUser
-    FIELD UserTop user
-    INTERFACE l_ainterface_OC_VBeat writeUser
-    FIELD VsimReceive sink_0
-    FIELD VsimSend source_0
-    METHOD readUser$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) {
-        CALL/Action :source_0$beat__ENA{readUser$enq$v,(readUser$enq$length) == (1)}
+MODULE P7Wrap {
+    INTERFACECONNECT/Forward M pps$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT/Forward FCLK pps$FCLK l_ainterface_OC_Pps7fclk
+    INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_ZynqInterrupt intr
+    INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
+    INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+    FIELD PS7 pps
+    FIELD ClockTop pclockTop
+    INTERFACE l_ainterface_OC_Pps7m M
+    INTERFACE l_ainterface_OC_Pps7fclk FCLK
+    METHOD MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
+        LET INTEGER_12 :pps$MAXIGP0BID = MAXIGP0_I$B$id
+        LET INTEGER_2 :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
-    METHOD writeUser$beat__ENA ( INTEGER_32 v , INTEGER_1 last ) {
-        CALL/Action :user$write$enq__ENA{writeUser$beat$v,(writeUser$beat$last) ? (1) : (2)}
+    METHOD MAXIGP0_I$R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp ) if ((pps$MAXIGP0RREADY)) {
+        LET INTEGER_32 :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
+        LET INTEGER_12 :pps$MAXIGP0RID = MAXIGP0_I$R$id
+        LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
+        LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
+    }
+    METHOD/Rule RULEgp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
+        CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
+    }
+    METHOD/Rule RULEgp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
+        CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
+    }
+    METHOD/Rule RULEgp0w__ENA if ((pps$MAXIGP0WVALID)) {
+        CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
+    }
+    METHOD/Rule RULEinit__ENA {
+        LET INTEGER_1 :pps$FPGAIDLEN = 1
+        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
+        LET INTEGER_1 :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
+        LET INTEGER_1 :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
+        LET INTEGER_1 :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
+        LET INTEGER_1 :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
+        LET INTEGER_1 :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
+        LET INTEGER_15 :DDR_Addr = pps$DDRA
+        LET INTEGER_3 :DDR_BankAddr = pps$DDRBA
+        LET INTEGER_1 :DDR_CAS_n = pps$DDRCASB
+        LET INTEGER_1 :DDR_CKE = pps$DDRCKE
+        LET INTEGER_1 :DDR_Clk_n = pps$DDRCKN
+        LET INTEGER_1 :DDR_Clk_p = pps$DDRCKP
+        LET INTEGER_1 :DDR_CS_n = pps$DDRCSB
+        LET INTEGER_4 :DDR_DM = pps$DDRDM
+        LET INTEGER_32 :DDR_DQ = pps$DDRDQ
+        LET INTEGER_4 :DDR_DQS_n = pps$DDRDQSN
+        LET INTEGER_4 :DDR_DQS_p = pps$DDRDQSP
+        LET INTEGER_1 :DDR_DRSTB = pps$DDRDRSTB
+        LET INTEGER_1 :DDR_ODT = pps$DDRODT
+        LET INTEGER_1 :DDR_RAS_n = pps$DDRRASB
+        LET INTEGER_1 :FIXED_IO_ddr_vrn = pps$DDRVRN
+        LET INTEGER_1 :FIXED_IO_ddr_vrp = pps$DDRVRP
+        LET INTEGER_1 :DDR_WEB = pps$DDRWEB
+        LET INTEGER_1 :FIXED_IO_ps_clk = pps$PSCLK
+        LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
+        LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
+        LET INTEGER_4 :pps$DDRARB = 0
+        LET INTEGER_20 :pps$IRQF2P = intr$interrupt
+        LET INTEGER_1 :__defaultClock = intr$CLK
+        LET INTEGER_1 :__defaultnReset = intr$nRST
+        LET INTEGER_1 :pclockTop$CLK = __defaultClock
+        LET INTEGER_1 :pclockTop$nRST = __defaultnReset
+    }
+}
+MODULE ZynqTop {
+    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O l_ainterface_OC_MaxiO
+    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I l_ainterface_OC_MaxiI
+    INTERFACECONNECT/Forward _ ps7_ps7_foo$_ l_ainterface_OC_ZynqClock
+    INTERFACECONNECT/Forward M ps7_ps7_foo$M l_ainterface_OC_Pps7m
+    FIELD P7Wrap ps7_ps7_foo
+    FIELD TestTop test
+    FIELD BUFG ps7_fclk_0_c
+    FIELD BUFG ps7_freset_0_r
+    INTERFACE l_ainterface_OC_ZynqClock _
+    INTERFACE l_ainterface_OC_Pps7m M
+    METHOD/Rule RULEinit__ENA {
+        LET INTEGER_1 :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
+        LET INTEGER_1 :__defaultClock = ps7_fclk_0_c$O
+        LET INTEGER_1 :ps7_freset_0_r$I = ps7_ps7_foo$FCLK$RESETN
+        LET INTEGER_1 :__defaultnReset = ps7_freset_0_r$O
+        LET INTEGER_1 :ps7_ps7_foo$intr$interrupt = test$interrupt
+        LET INTEGER_1 :ps7_ps7_foo$intr$CLK = __defaultClock
+        LET INTEGER_1 :ps7_ps7_foo$intr$nRST = __defaultnReset
+        LET INTEGER_1 :test$CLK = __defaultClock
+        LET INTEGER_1 :test$nRST = __defaultnReset
     }
 }

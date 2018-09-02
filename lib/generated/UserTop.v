@@ -1,4 +1,4 @@
-`include "rulec.generated.vh"
+`include "userTop.generated.vh"
 
 `default_nettype none
 module UserTop (input wire CLK, input wire nRST,
@@ -38,12 +38,12 @@ module UserTop (input wire CLK, input wire nRST,
         .out$enq$length(wadapter_0$out$enq$length),
         .out$enq__RDY(ctop$request$enq__RDY));
     l_top ctop (.CLK(CLK), .nRST(nRST),
-        .indication$enq__ENA(ctop$indication$enq__ENA),
-        .indication$enq$v(ctop$indication$enq$v),
-        .indication$enq__RDY(radapter_0$in$enq__RDY),
         .request$enq__ENA(wadapter_0$out$enq__ENA),
         .request$enq$v(wadapter_0$out$enq$v),
-        .request$enq__RDY(ctop$request$enq__RDY));
+        .request$enq__RDY(ctop$request$enq__RDY),
+        .indication$enq__ENA(ctop$indication$enq__ENA),
+        .indication$enq$v(ctop$indication$enq$v),
+        .indication$enq__RDY(radapter_0$in$enq__RDY));
     assign indication$enq$v = ctop$indication$enq$v;
     assign radapter_0$in$enq$length = indication$enq$v[ 15 : 0 ] - 16'd1;
 

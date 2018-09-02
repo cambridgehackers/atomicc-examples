@@ -1,4 +1,4 @@
-`include "zynqTop.generated.vh"
+`include "resetInverter.generated.vh"
 
 `default_nettype none
 module ResetInverter (
@@ -6,7 +6,7 @@ module ResetInverter (
     output wire RESET_OUT);
     wire CLK;
     wire nRST;
-    assign RESET_OUT = !RESET_IN;
+    assign RESET_OUT = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 endmodule 
 
 `default_nettype wire    // set back to default value

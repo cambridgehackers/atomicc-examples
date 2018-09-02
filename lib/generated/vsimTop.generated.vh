@@ -1,11 +1,10 @@
 `ifndef __vsimTop_GENERATED__VH__
 `define __vsimTop_GENERATED__VH__
 
-//METASTART; ResetInverter
 //METASTART; VsimTop
 //METAINTERNAL; user; UserTop;
-//METAINTERNAL; sink_0; VsimReceive;
-//METAINTERNAL; source_0; VsimSend;
+//METAINTERNAL; sink_0; VsimReceive$__PARAM__$width$32;
+//METAINTERNAL; source_0; VsimSend$__PARAM__$width$32;
 //METAINVOKE; readUser$enq__ENA; :source_0$beat__ENA;
 //METAGUARD; readUser$enq; source_0$beat__RDY;
 //METAINVOKE; writeUser$beat__ENA; :user$write$enq__ENA;

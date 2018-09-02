@@ -18,62 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
-#include "VMMCME2_ADV.h"
-#include "VPPS7.h"
-#include "VBUFG.h"
 #include "VResetInverter.h"
-#include "userTop.h"
-
-__interface VsimInterface {
-   __input  __uint(1)  CLK;
-   __input  __uint(1)  nRST;
-   __input  __uint(1)  CLK_derivedClock;
-   __input  __uint(1)  nRST_derivedReset;
-   __input  __uint(1)  CLK_sys_clk;
-};
-
-__module ResetInverter {
+__emodule ResetInverter {
     MResetInverterResetInverter _;
-    ResetInverter() {
-    __rule init {
-        _.RESET_OUT = !_.RESET_IN;
-    }
-    }
-};
-
-__interface VBeat {
-    //__parameter int width;
-    void beat(int v, bool last);
-};
-
-__emodule VsimReceive {
-    VBeat *_;
-};
-__emodule VsimSend {
-    VBeat _;
-};
-
-#define MAX_BUS_WIDTH 32
-__module VsimTop {
-    VsimInterface    _;
-    PipeInB<BusType> readUser;
-    UserTop          user;
-    VBeat            writeUser;
-    VsimReceive/*#(width=MAX_BUS_WIDTH)*/ sink_0;
-    VsimSend/*#(width=MAX_BUS_WIDTH)*/ source_0;
-
-    void readUser.enq(BusType v, LenType length) {
-        source_0._.beat(v, length == 1);
-    }
-    void writeUser.beat(int v, bool last) {
-        user.write.enq(v, last ? 1 : 2);
-    }
-    __connect readUser = user.read;
-    __connect sink_0._ = writeUser;
-
-    VsimTop() {
-        __rule init {
-        }
-    }
 };

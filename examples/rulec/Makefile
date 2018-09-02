@@ -10,9 +10,7 @@ include ../../makefile.in
 
 all:
 	mkdir -p generated
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/vsimTop.ll vsimTop.cpp
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/zynqTop.ll zynqTop.cpp
 
 ############################# for running verilator
 #

@@ -1,4 +1,4 @@
-`include "zynqTop.generated.vh"
+`include "clockTop.generated.vh"
 
 `default_nettype none
 module ClockTop #(
