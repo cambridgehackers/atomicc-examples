@@ -20,11 +20,6 @@
  */
 #include "atomicc.h"
 #include "fifo.h"
-//#include "mux.h"
-//#include "VMMCME2_ADV.h"
-//#include "VPPS7.h"
-//#include "VBUFG.h"
-//#include "resetInverter.h"
 #include "testTop.h"
 #include "userTop.h"
 

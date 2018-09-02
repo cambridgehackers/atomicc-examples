@@ -18,11 +18,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
-
+#ifndef _CONNECTNET2_H_
+#define _CONNECTNET2_H_
 __interface CNCONNECTNET2 {
     __input  __int(1)         IN1;
     __input  __int(1)         IN2;
     __output __int(1)         OUT1;
     __output __int(1)         OUT2;
 };
+#endif

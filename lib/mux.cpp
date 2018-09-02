@@ -20,9 +20,8 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include "atomicc.h"
-#include "fifo.h"
-#define MUXHACK
 #include "mux.h"
+#include "fifo.h"
 
 __module MuxPipe {
 public:

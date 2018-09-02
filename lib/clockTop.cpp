@@ -19,13 +19,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-//#include "fifo.h"
-//#include "mux.h"
 #include "VMMCME2_ADV.h"
-//#include "VPPS7.h"
 #include "VBUFG.h"
 #include "resetInverter.h"
-//#include "userTop.h"
 #include "clockTop.h"
 
 __module ClockTop {

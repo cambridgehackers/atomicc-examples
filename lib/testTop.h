@@ -18,6 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#ifndef _TESTTOP_H_
+#define _TESTTOP_H_
 __interface ZynqInterruptT {
     __output __uint(1)  interrupt;
     __input __uint(1)  CLK;
@@ -40,3 +42,4 @@ __emodule TestTop {
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
 };
+#endif

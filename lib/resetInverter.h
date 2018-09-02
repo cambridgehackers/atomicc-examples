@@ -18,7 +18,10 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#ifndef _RESETINVERTER_H_
+#define _RESETINVERTER_H_
 #include "VResetInverter.h"
 __emodule ResetInverter {
     MResetInverterResetInverter _;
 };
+#endif

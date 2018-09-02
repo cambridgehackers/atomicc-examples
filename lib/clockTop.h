@@ -18,6 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#ifndef _CLOCKTOP_H_
+#define _CLOCKTOP_H_
 __interface ClockIfc {
    __parameter float   CLKIN1_PERIOD;
    __input  __uint(1)  CLK;
@@ -28,3 +30,4 @@ __interface ClockIfc {
 __emodule ClockTop {
     ClockIfc _;
 };
+#endif

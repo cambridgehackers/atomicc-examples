@@ -21,8 +21,6 @@
 // SOFTWARE.
 #ifndef _FIFO_H_
 #define _FIFO_H_
-#include <atomicc.h>
-
 template<int width>
 __emodule Fifo1Base : public Fifo<__uint(width)> { };
 
