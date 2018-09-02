@@ -33,9 +33,6 @@ __interface EchoIndication {
     void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
-typedef __serialize(EchoRequest) fooReq;
-typedef __serialize(EchoIndication) fooInd;
-
 __module Echo {
     __software EchoRequest                     request;
     __software EchoIndication                 *indication;
