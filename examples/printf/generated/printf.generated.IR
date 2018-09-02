@@ -23,6 +23,14 @@ EMODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeIn forward
     INTERFACE/Ptr l_ainterface_OC_PipeIn out
 }
+EMODULE UserTop {
+    INTERFACE l_ainterface_OC_PipeInB write
+    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+}
+EMODULE l_top {
+    INTERFACE l_ainterface_OC_PipeIn request
+    INTERFACE/Ptr l_ainterface_OC_PipeIn indication
+}
 MODULE Echo {
     SOFTWARE request
     SOFTWARE indication

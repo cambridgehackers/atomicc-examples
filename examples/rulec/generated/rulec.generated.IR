@@ -28,6 +28,10 @@ EMODULE AdapterToBus {
     INTERFACE l_ainterface_OC_PipeInH in
     INTERFACE/Ptr l_ainterface_OC_PipeInB out
 }
+EMODULE UserTop {
+    INTERFACE l_ainterface_OC_PipeInB write
+    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+}
 EMODULE l_top {
     INTERFACE l_ainterface_OC_PipeIn request
     INTERFACE/Ptr l_ainterface_OC_PipeIn indication

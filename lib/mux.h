@@ -25,9 +25,6 @@ __emodule MuxPipe {
     NOCPipe           in;
     NOCPipe      forward;
     NOCPipe         *out;
-#ifndef MUXHACK
-    MuxPipe() { }
-#endif
 };
 static MuxPipe dummyMux;
 #endif // _MUX_H_

@@ -27,6 +27,11 @@ EMODULE Fifo_OC_2 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
     INTERFACE l_ainterface_OC_PipeOut_OC_1 out
 }
+EMODULE MuxPipe {
+    INTERFACE l_ainterface_OC_PipeIn in
+    INTERFACE l_ainterface_OC_PipeIn forward
+    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+}
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
