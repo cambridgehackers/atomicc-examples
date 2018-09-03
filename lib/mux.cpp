@@ -23,22 +23,29 @@
 #include "mux.h"
 #include "fifo.h"
 
+typedef struct {
+    NOCData data;
+    __uint(16) length;
+} FifoItem;
 __module MuxPipe {
 public:
-    NOCPipe           in;
-    NOCPipe      forward;
-    NOCPipe         *out;
+    NOCPipeH           in;
+    NOCPipeH      forward;
+    NOCPipeH         *out;
     Fifo1<NOCData>   forwardFifo;
-    void in.enq(NOCData v) {
-        out->enq(v);
+    Fifo1<__uint(16)>   forwardFifol;
+    void in.enq(NOCData v, __uint(16) length) {
+        out->enq(v, length);
     }
-    void forward.enq(NOCData v) {
+    void forward.enq(NOCData v, __uint(16) length) {
         forwardFifo.in.enq(v);
+        forwardFifol.in.enq(length);
     }
     MuxPipe() {
         __rule fifoRule {
-            out->enq(forwardFifo.out.first());
+            out->enq(forwardFifo.out.first(), forwardFifol.out.first());
             forwardFifo.out.deq();
+            forwardFifol.out.deq();
         }
     }
 };

@@ -3,7 +3,7 @@
 
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
-//METAEXTERNAL; printfp; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; printfp; l_ainterface_OC_PipeInH;
 //METAGUARD; RULEclockRule; 1;
 //METAINVOKE; RULEdelay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
@@ -25,7 +25,7 @@
 //METAGUARD; request$zsay4; printfp$enq__RDY;
 //METARULES; RULEclockRule; RULEdelay_rule; RULErespond_rule
 //METASTART; l_top
-//METAEXTERNAL; indication; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; indication; l_ainterface_OC_PipeInH;
 //METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; mux; MuxPipe;
 //METAINTERNAL; M2P__indication; EchoIndication___M2P;
@@ -53,7 +53,7 @@
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
 //METASTART; EchoIndication___M2P
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; pipe; l_ainterface_OC_PipeInH;
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard__ENA; method$heard2__ENA; method$heard3__ENA
 //METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;

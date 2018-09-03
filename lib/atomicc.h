@@ -33,7 +33,7 @@
 #define __emodule class __attribute__(( atomicc_emodule ))
 #define __software __attribute__(( atomicc_software ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
-#define __printf    NOCPipe *printfp
+#define __printf    NOCPipeH *printfp
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 

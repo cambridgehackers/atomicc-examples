@@ -18,6 +18,9 @@ EMODULE l_ainterface_OC_IVectorRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeInH {
+    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+}
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( l_struct_OC_ValuePair v )
 }
@@ -49,9 +52,9 @@ EMODULE IVectorInd {
     METHOD ind$heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeIn forward
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    INTERFACE l_ainterface_OC_PipeInH in
+    INTERFACE l_ainterface_OC_PipeInH forward
+    INTERFACE/Ptr l_ainterface_OC_PipeInH out
 }
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in

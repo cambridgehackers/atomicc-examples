@@ -22,9 +22,9 @@
 #ifndef _MUX_H_
 #define _MUX_H_
 __emodule MuxPipe {
-    NOCPipe           in;
-    NOCPipe      forward;
-    NOCPipe         *out;
+    NOCPipeH           in;
+    NOCPipeH      forward;
+    NOCPipeH         *out;
 };
 static MuxPipe dummyMux;
 #endif // _MUX_H_

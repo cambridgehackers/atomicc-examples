@@ -21,13 +21,16 @@ EMODULE l_ainterface_OC_I_IOBUF {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeInH {
+    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+}
 EMODULE IOBUF {
     INTERFACE l_ainterface_OC_I_IOBUF _
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeIn forward
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    INTERFACE l_ainterface_OC_PipeInH in
+    INTERFACE l_ainterface_OC_PipeInH forward
+    INTERFACE/Ptr l_ainterface_OC_PipeInH out
 }
 MODULE ModFt600 {
     INTERFACE l_ainterface_OC_Ft600 _

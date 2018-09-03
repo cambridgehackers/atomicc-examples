@@ -36,6 +36,9 @@ EMODULE l_ainterface_OC_EchoRequest {
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( l_struct_OC_NOCData v )
 }
+EMODULE l_ainterface_OC_PipeInH {
+    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+}
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
     METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
 }
@@ -43,9 +46,9 @@ EMODULE l_ainterface_OC_PipeIn_OC_1 {
     METHOD enq__ENA ( l_struct_OC_EchoIndication_data v )
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeIn forward
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    INTERFACE l_ainterface_OC_PipeInH in
+    INTERFACE l_ainterface_OC_PipeInH forward
+    INTERFACE/Ptr l_ainterface_OC_PipeInH out
 }
 MODULE Connect {
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest

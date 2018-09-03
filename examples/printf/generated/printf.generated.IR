@@ -18,10 +18,13 @@ EMODULE l_ainterface_OC_PipeIn {
 EMODULE l_ainterface_OC_PipeInB {
     METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
+EMODULE l_ainterface_OC_PipeInH {
+    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+}
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeIn forward
-    INTERFACE/Ptr l_ainterface_OC_PipeIn out
+    INTERFACE l_ainterface_OC_PipeInH in
+    INTERFACE l_ainterface_OC_PipeInH forward
+    INTERFACE/Ptr l_ainterface_OC_PipeInH out
 }
 EMODULE UserTop {
     INTERFACE l_ainterface_OC_PipeInB write
@@ -29,14 +32,14 @@ EMODULE UserTop {
 }
 EMODULE l_top {
     INTERFACE l_ainterface_OC_PipeIn request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn indication
+    INTERFACE/Ptr l_ainterface_OC_PipeInH indication
 }
 MODULE Echo {
     SOFTWARE request
     SOFTWARE indication
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    INTERFACE/Ptr l_ainterface_OC_PipeIn printfp
+    INTERFACE/Ptr l_ainterface_OC_PipeInH printfp
     FIELD INTEGER_32 busy
     FIELD INTEGER_32 v_temp
     FIELD INTEGER_32 v_delay

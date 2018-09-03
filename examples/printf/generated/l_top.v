@@ -4,6 +4,7 @@
 module l_top (input wire CLK, input wire nRST,
     output wire indication$enq__ENA,
     output wire [127:0]indication$enq$v,
+    output wire [15:0]indication$enq$length,
     input wire indication$enq__RDY,
     input wire request$enq__ENA,
     input wire [127:0]request$enq$v,
@@ -18,6 +19,7 @@ module l_top (input wire CLK, input wire nRST,
     wire [15:0]DUT__Echo$indication$heard3$d;
     wire DUT__Echo$indication$heard3__ENA;
     wire DUT__Echo$indication$heard__ENA;
+    wire [15:0]DUT__Echo$printfp$enq$length;
     wire [127:0]DUT__Echo$printfp$enq$v;
     wire DUT__Echo$printfp$enq__ENA;
     wire DUT__Echo$request$say2__RDY;
@@ -27,6 +29,7 @@ module l_top (input wire CLK, input wire nRST,
     wire M2P__indication$method$heard2__RDY;
     wire M2P__indication$method$heard3__RDY;
     wire M2P__indication$method$heard__RDY;
+    wire [15:0]M2P__indication$pipe$enq$length;
     wire [127:0]M2P__indication$pipe$enq$v;
     wire M2P__indication$pipe$enq__ENA;
     wire [31:0]P2M__request$method$say$v;
@@ -67,16 +70,20 @@ module l_top (input wire CLK, input wire nRST,
         .indication$heard__RDY(M2P__indication$method$heard__RDY),
         .printfp$enq__ENA(DUT__Echo$printfp$enq__ENA),
         .printfp$enq$v(DUT__Echo$printfp$enq$v),
+        .printfp$enq$length(DUT__Echo$printfp$enq$length),
         .printfp$enq__RDY(mux$forward$enq__RDY));
     MuxPipe mux (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(M2P__indication$pipe$enq__ENA),
         .in$enq$v(M2P__indication$pipe$enq$v),
+        .in$enq$length(M2P__indication$pipe$enq$length),
         .in$enq__RDY(mux$in$enq__RDY),
         .forward$enq__ENA(DUT__Echo$printfp$enq__ENA),
         .forward$enq$v(DUT__Echo$printfp$enq$v),
+        .forward$enq$length(DUT__Echo$printfp$enq$length),
         .forward$enq__RDY(mux$forward$enq__RDY),
         .out$enq__ENA(indication$enq__ENA),
         .out$enq$v(indication$enq$v),
+        .out$enq$length(indication$enq$length),
         .out$enq__RDY(indication$enq__RDY));
     EchoIndication___M2P M2P__indication (.CLK(CLK), .nRST(nRST),
         .method$heard__ENA(DUT__Echo$indication$heard__ENA),
@@ -94,6 +101,7 @@ module l_top (input wire CLK, input wire nRST,
         .method$heard__RDY(M2P__indication$method$heard__RDY),
         .pipe$enq__ENA(M2P__indication$pipe$enq__ENA),
         .pipe$enq$v(M2P__indication$pipe$enq$v),
+        .pipe$enq$length(M2P__indication$pipe$enq$length),
         .pipe$enq__RDY(mux$in$enq__RDY));
     EchoRequest___P2M P2M__request (.CLK(CLK), .nRST(nRST),
         .method$say__ENA(P2M__request$method$say__ENA),
