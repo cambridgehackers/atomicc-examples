@@ -22,7 +22,7 @@
 #define __USER_TOP_H__
 __emodule l_top {
     PipeIn<NOCData> request;
-    PipeIn<NOCData> *indication;
+    PipeInH<NOCData> *indication;
 };
 
 __emodule UserTop {

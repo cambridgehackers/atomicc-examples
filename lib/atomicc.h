@@ -54,6 +54,18 @@ __interface PipeOut {
     T first(void);
 };
 
+typedef __int(16) LenType;
+template<class T>
+__interface PipeInH {
+    typedef T Data;
+    void enq(T v, LenType length);
+};
+template<class T>
+__interface PipeInB {
+    typedef T Data;
+    void enq(T v, LenType length); // last item in packet has (length == 1)
+};
+
 template<class T>
 __emodule Fifo {
     PipeIn<T> in;
@@ -65,12 +77,13 @@ __emodule Fifo {
 
 typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
 typedef PipeIn<NOCData>                   NOCPipe;
+typedef PipeInH<NOCData>                  NOCPipeH;
 typedef __uint(32)                        BusType;
 #if 0
 template<class T> __emodule M2P { // method -> pipe
 public:
     typedef __serialize(T) Data;
-    typedef NOCPipe   Pipe;
+    typedef NOCPipeH   Pipe;
     //typedef PipeIn<Data>   Pipe;
     T                      method;
     Pipe                  *pipe;
@@ -97,18 +110,6 @@ static inline std::string utostr(uint64_t X) {
   }
   return std::string(BufPtr, Buffer+21);
 }
-
-typedef __int(16) LenType;
-template<class T>
-__interface PipeInH {
-    typedef T Data;
-    void enq(T v, LenType length);
-};
-template<class T>
-__interface PipeInB {
-    typedef T Data;
-    void enq(T v, LenType length); // last item in packet has (length == 1)
-};
 
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
