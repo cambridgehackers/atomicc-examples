@@ -54,21 +54,18 @@ __module Echo {
     }
     void request.setLeds(__int(8) v) {
     }
-    Echo() {
-        __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
-             busy = 0;
-             busy_delay = 1;
-             v_delay = v_temp;
-             a_delay = a_temp;
-             b_delay = b_temp;
-           };
-        __rule respond_rule if(busy_delay != 0) {
-             busy_delay = 0;
-             if (v_type == 1)
-             indication->heard(v_delay);
-             else
-             indication->heard2(a_delay, b_delay);
-           };
-    }
+    __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
+        busy = 0;
+        busy_delay = 1;
+        v_delay = v_temp;
+        a_delay = a_temp;
+        b_delay = b_temp;
+    };
+    __rule respond_rule if(busy_delay != 0) {
+        busy_delay = 0;
+        if (v_type == 1)
+            indication->heard(v_delay);
+        else
+            indication->heard2(a_delay, b_delay);
+   };
 };
-Echo test;
