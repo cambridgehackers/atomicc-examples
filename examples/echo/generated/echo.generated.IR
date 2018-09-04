@@ -55,7 +55,7 @@ MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
     INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
     FIELD Fifo1 fifo
-    METHOD/Rule RULErespond_rule__ENA {
+    METHOD/Rule RULE$respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         CALL/Action :ind$heard__ENA{fifo$out$first}

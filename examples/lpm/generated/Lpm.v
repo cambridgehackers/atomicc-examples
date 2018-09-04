@@ -11,10 +11,10 @@ module Lpm (input wire CLK, input wire nRST,
     input wire [31:0]request$say$v,
     output wire request$say__RDY);
     reg [31:0]doneCount;
-    wire RULEexit_rule__ENA;
-    wire RULEexit_rule__RDY;
-    wire RULErecirc__ENA;
-    wire RULErecirc__RDY;
+    wire RULE$exit_rule__ENA;
+    wire RULE$exit_rule__RDY;
+    wire RULE$recirc__ENA;
+    wire RULE$recirc__RDY;
     wire [95:0]fifo$in$enq$v;
     wire fifo$in$enq__ENA;
     wire fifo$in$enq__RDY;
@@ -81,28 +81,28 @@ module Lpm (input wire CLK, input wire nRST,
     assign mem$ifc$resAccept__ENA = ( fifo$out$first__RDY & mem$ifc$resValue__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY ) | ( fifo$out$first__RDY & mem$ifc$resValue__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY );
     assign request$say__RDY = inQ$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign RULEexit_rule__ENA = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
-    assign RULEexit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
-    assign RULErecirc__ENA = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign RULErecirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign RULE$exit_rule__ENA = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+    assign RULE$exit_rule__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$in$enq__RDY;
+    assign RULE$recirc__ENA = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+    assign RULE$recirc__RDY = fifo$out$first__RDY & mem$ifc$resValue__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         doneCount <= 0;
       end // nRST
       else begin
-        if (inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY) begin // RULEenter__ENA
+        if (inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY) begin // RULE$enter__ENA
             $display( "enter: (%d, %d)" , inQ$out$first[ 31 : 0 ] , inQ$out$first[ 63 : 32 ] );
-        end; // End of RULEenter__ENA
-        if (RULEexit_rule__ENA & RULEexit_rule__RDY) begin // RULEexit_rule__ENA
+        end; // End of RULE$enter__ENA
+        if (RULE$exit_rule__ENA & RULE$exit_rule__RDY) begin // RULE$exit_rule__ENA
             $display( "exit: (%d, %d)" , fifo$out$first[ 31 : 0 ] , fifo$out$first[ 63 : 32 ] );
-        end; // End of RULEexit_rule__ENA
-        if (RULErecirc__ENA & RULErecirc__RDY) begin // RULErecirc__ENA
+        end; // End of RULE$exit_rule__ENA
+        if (RULE$recirc__ENA & RULE$recirc__RDY) begin // RULE$recirc__ENA
             $display( "recirc: (%d, %d)" , fifo$out$first[ 31 : 0 ] , fifo$out$first[ 63 : 32 ] );
-        end; // End of RULErecirc__ENA
-        if (outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY) begin // RULErespond__ENA
+        end; // End of RULE$recirc__ENA
+        if (outQ$out$first__RDY & outQ$out$deq__RDY & ind$heard__RDY) begin // RULE$respond__ENA
             $display( "respond: (%d, %d)" , outQ$out$first[ 31 : 0 ] , outQ$out$first[ 63 : 32 ] );
-        end; // End of RULErespond__ENA
+        end; // End of RULE$respond__ENA
         if (request$say__ENA & inQ$in$enq__RDY) begin // request$say__ENA
             $display( "[%s:%d] (%d, %d)" , "request$say" , 90 , request$say$meth , request$say$v );
         end; // End of request$say__ENA

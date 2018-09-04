@@ -49,17 +49,17 @@ module Echo (input wire CLK, input wire nRST,
         y <= 0;
       end // nRST
       else begin
-        if (busy & ( !busy_delay )) begin // RULEdelay_rule__ENA
+        if (busy & ( !busy_delay )) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             meth_delay <= meth_temp;
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
-        end; // End of RULEdelay_rule__ENA
-        if (busy_delay & indication$heard__RDY) begin // RULErespond_rule__ENA
+        end; // End of RULE$delay_rule__ENA
+        if (busy_delay & indication$heard__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
             $display( "respond_rule: Echo" );
-        end; // End of RULErespond_rule__ENA
+        end; // End of RULE$respond_rule__ENA
         if (request$say2__ENA & ( !busy )) begin // request$say2__ENA
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;

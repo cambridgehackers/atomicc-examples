@@ -15,10 +15,10 @@ MODULE AdapterFromBus {
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
     FIELD INTEGER_1 waitForEnq
     FIELD INTEGER_128 buffer
-    METHOD/Rule RULEpushValue__ENA if ((waitForEnq)) {
-        ALLOCA l_struct_OC_NOCData RULEpushValue__ENA$agg_2e_tmp
-        LET INTEGER_128 :RULEpushValue__ENA$agg_2e_tmp = buffer
-        CALL/Action :out$enq__ENA{RULEpushValue__ENA$agg_2e_tmp,0}
+    METHOD/Rule RULE$pushValue__ENA if ((waitForEnq)) {
+        ALLOCA l_struct_OC_NOCData RULE$pushValue__ENA$agg_2e_tmp
+        LET INTEGER_128 :RULE$pushValue__ENA$agg_2e_tmp = buffer
+        CALL/Action :out$enq__ENA{RULE$pushValue__ENA$agg_2e_tmp,0}
         STORE :waitForEnq = 0
     }
     METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((waitForEnq) ^ (1))) {
@@ -31,7 +31,7 @@ MODULE AdapterToBus {
     INTERFACE/Ptr l_ainterface_OC_PipeInB out
     FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
-    METHOD/Rule RULEcopyRule__ENA if (((remain) != (0))) {
+    METHOD/Rule RULE$copyRule__ENA if (((remain) != (0))) {
         CALL/Action :out$enq__ENA{buffer,remain}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)

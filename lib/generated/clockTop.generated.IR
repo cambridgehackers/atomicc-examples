@@ -120,7 +120,7 @@ MODULE ClockTop {
     FIELD ResetInverter rinverter
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
-    METHOD/Rule RULEinit__ENA {
+    METHOD/Rule RULE$init__ENA {
         LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
         LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
         LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0

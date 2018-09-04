@@ -18,22 +18,22 @@
 //METAINTERNAL; iobufs13; IOBUF;
 //METAINTERNAL; iobufs14; IOBUF;
 //METAINTERNAL; iobufs15; IOBUF;
-//METAGUARD; RULEhandshake; 1;
-//METAGUARD; RULEiobufs_0; 1;
-//METAGUARD; RULEiobufs_10; 1;
-//METAGUARD; RULEiobufs_11; 1;
-//METAGUARD; RULEiobufs_12; 1;
-//METAGUARD; RULEiobufs_13; 1;
-//METAGUARD; RULEiobufs_14; 1;
-//METAGUARD; RULEiobufs_15; 1;
-//METAGUARD; RULEiobufs_1; 1;
-//METAGUARD; RULEiobufs_2; 1;
-//METAGUARD; RULEiobufs_3; 1;
-//METAGUARD; RULEiobufs_4; 1;
-//METAGUARD; RULEiobufs_5; 1;
-//METAGUARD; RULEiobufs_6; 1;
-//METAGUARD; RULEiobufs_7; 1;
-//METAGUARD; RULEiobufs_8; 1;
-//METAGUARD; RULEiobufs_9; 1;
-//METARULES; RULEhandshake; RULEiobufs_0; RULEiobufs_1; RULEiobufs_10; RULEiobufs_11; RULEiobufs_12; RULEiobufs_13; RULEiobufs_14; RULEiobufs_15; RULEiobufs_2; RULEiobufs_3; RULEiobufs_4; RULEiobufs_5; RULEiobufs_6; RULEiobufs_7; RULEiobufs_8; RULEiobufs_9
+//METAGUARD; RULE$handshake; 1;
+//METAGUARD; RULE$iobufs_0; 1;
+//METAGUARD; RULE$iobufs_10; 1;
+//METAGUARD; RULE$iobufs_11; 1;
+//METAGUARD; RULE$iobufs_12; 1;
+//METAGUARD; RULE$iobufs_13; 1;
+//METAGUARD; RULE$iobufs_14; 1;
+//METAGUARD; RULE$iobufs_15; 1;
+//METAGUARD; RULE$iobufs_1; 1;
+//METAGUARD; RULE$iobufs_2; 1;
+//METAGUARD; RULE$iobufs_3; 1;
+//METAGUARD; RULE$iobufs_4; 1;
+//METAGUARD; RULE$iobufs_5; 1;
+//METAGUARD; RULE$iobufs_6; 1;
+//METAGUARD; RULE$iobufs_7; 1;
+//METAGUARD; RULE$iobufs_8; 1;
+//METAGUARD; RULE$iobufs_9; 1;
+//METARULES; RULE$handshake; RULE$iobufs_0; RULE$iobufs_1; RULE$iobufs_10; RULE$iobufs_11; RULE$iobufs_12; RULE$iobufs_13; RULE$iobufs_14; RULE$iobufs_15; RULE$iobufs_2; RULE$iobufs_3; RULE$iobufs_4; RULE$iobufs_5; RULE$iobufs_6; RULE$iobufs_7; RULE$iobufs_8; RULE$iobufs_9
 `endif

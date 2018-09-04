@@ -3,16 +3,16 @@
 
 //METASTART; AdapterFromBus
 //METAEXTERNAL; out; l_ainterface_OC_PipeInH;
-//METAINVOKE; RULEpushValue__ENA; :out$enq__ENA;
-//METAEXCLUSIVE; RULEpushValue__ENA; in$enq__ENA
-//METAGUARD; RULEpushValue; waitForEnq & out$enq__RDY;
+//METAINVOKE; RULE$pushValue__ENA; :out$enq__ENA;
+//METAEXCLUSIVE; RULE$pushValue__ENA; in$enq__ENA
+//METAGUARD; RULE$pushValue; waitForEnq & out$enq__RDY;
 //METAGUARD; in$enq; !waitForEnq;
-//METARULES; RULEpushValue
+//METARULES; RULE$pushValue
 //METASTART; AdapterToBus
 //METAEXTERNAL; out; l_ainterface_OC_PipeInB;
-//METAINVOKE; RULEcopyRule__ENA; :out$enq__ENA;
-//METAEXCLUSIVE; RULEcopyRule__ENA; in$enq__ENA
-//METAGUARD; RULEcopyRule; ( remain != 16'd0 ) & out$enq__RDY;
+//METAINVOKE; RULE$copyRule__ENA; :out$enq__ENA;
+//METAEXCLUSIVE; RULE$copyRule__ENA; in$enq__ENA
+//METAGUARD; RULE$copyRule; ( remain != 16'd0 ) & out$enq__RDY;
 //METAGUARD; in$enq; remain == 16'd0;
-//METARULES; RULEcopyRule
+//METARULES; RULE$copyRule
 `endif

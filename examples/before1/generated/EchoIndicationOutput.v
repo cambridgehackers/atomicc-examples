@@ -33,12 +33,12 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         ind_busy <= 0;
       end // nRST
       else begin
-        if (ind_busy & even & pipe$enq__RDY) begin // RULEoutput_rulee__ENA
+        if (ind_busy & even & pipe$enq__RDY) begin // RULE$output_rulee__ENA
             ind_busy <= 0;
-        end; // End of RULEoutput_rulee__ENA
-        if (ind_busy & ( !even ) & pipe$enq__RDY) begin // RULEoutput_ruleo__ENA
+        end; // End of RULE$output_rulee__ENA
+        if (ind_busy & ( !even ) & pipe$enq__RDY) begin // RULE$output_ruleo__ENA
             ind_busy <= 0;
-        end; // End of RULEoutput_ruleo__ENA
+        end; // End of RULE$output_ruleo__ENA
         if (indication$heard__ENA & ( !ind_busy )) begin // indication$heard__ENA
             ind_busy <= 1;
             even <= even ^ 1;

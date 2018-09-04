@@ -42,14 +42,14 @@ MODULE Echo {
     FIELD INTEGER_16 a_delay
     FIELD INTEGER_16 b_delay
     FIELD INTEGER_32 v_type
-    METHOD/Rule RULEdelay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+    METHOD/Rule RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
         STORE :a_delay = a_temp
         STORE :b_delay = b_temp
     }
-    METHOD/Rule RULErespond_rule__ENA if (((busy_delay) != (0))) {
+    METHOD/Rule RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}

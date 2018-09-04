@@ -4,14 +4,14 @@
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXTERNAL; printfp; l_ainterface_OC_PipeInH;
-//METAGUARD; RULEclockRule; 1;
-//METAINVOKE; RULEdelay_rule__ENA; :printfp$enq__ENA;
-//METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
-//METAGUARD; RULEdelay_rule; ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
-//METAINVOKE; RULErespond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
-//METAEXCLUSIVE; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
-//METABEFORE; RULErespond_rule__ENA; :RULEdelay_rule__ENA
-//METAGUARD; RULErespond_rule; ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
+//METAGUARD; RULE$clockRule; 1;
+//METAINVOKE; RULE$delay_rule__ENA; :printfp$enq__ENA;
+//METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
+//METAGUARD; RULE$delay_rule; ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
+//METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
+//METAEXCLUSIVE; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
+//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
+//METAGUARD; RULE$respond_rule; ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
 //METAINVOKE; request$say__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$setLeds__ENA; request$zsay4__ENA
 //METAINVOKE; request$say2__ENA; :printfp$enq__ENA;
@@ -23,7 +23,7 @@
 //METAGUARD; request$setLeds; printfp$enq__RDY;
 //METAINVOKE; request$zsay4__ENA; :printfp$enq__ENA;
 //METAGUARD; request$zsay4; printfp$enq__RDY;
-//METARULES; RULEclockRule; RULEdelay_rule; RULErespond_rule
+//METARULES; RULE$clockRule; RULE$delay_rule; RULE$respond_rule
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeInH;
 //METAINTERNAL; DUT__Echo; Echo;

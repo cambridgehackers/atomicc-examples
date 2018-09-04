@@ -12,7 +12,7 @@ EMODULE l_ainterface_OC_PipeIn {
 }
 MODULE CONNECTNET2 {
     INTERFACE l_ainterface_OC_CNCONNECTNET2 _
-    METHOD/Rule RULEassign__ENA {
+    METHOD/Rule RULE$assign__ENA {
         LET INTEGER_1 :OUT1 = IN1
         LET INTEGER_1 :OUT2 = IN2
     }

@@ -26,9 +26,9 @@ module LpmMemory (input wire CLK, input wire nRST,
         saved$c <= 0;
       end // nRST
       else begin
-        if (delayCount > 1) begin // RULEmemdelay_rule__ENA
+        if (delayCount > 1) begin // RULE$memdelay_rule__ENA
             delayCount <= delayCount - 1;
-        end; // End of RULEmemdelay_rule__ENA
+        end; // End of RULE$memdelay_rule__ENA
         if (ifc$req__ENA & ( delayCount == 32'd0 )) begin // ifc$req__ENA
             delayCount <= 4;
             { saved$c , saved$b , saved$a } <= ifc$req$v;

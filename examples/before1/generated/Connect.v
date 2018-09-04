@@ -99,12 +99,12 @@ module Connect (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (lEcho$swap$y2xnull__RDY) begin // RULEswap2_rule__ENA
+        if (lEcho$swap$y2xnull__RDY) begin // RULE$swap2_rule__ENA
             $display( "swap2_rule:Connect" );
-        end; // End of RULEswap2_rule__ENA
-        if (lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin // RULEswap_rule__ENA
+        end; // End of RULE$swap2_rule__ENA
+        if (lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin // RULE$swap_rule__ENA
             $display( "swap_rule:Connect" );
-        end; // End of RULEswap_rule__ENA
+        end; // End of RULE$swap_rule__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

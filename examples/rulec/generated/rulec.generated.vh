@@ -3,16 +3,16 @@
 
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
-//METAEXCLUSIVE; RULEdelay_rule__ENA; RULErespond_rule__ENA; request$say2__ENA; request$say__ENA
-//METAGUARD; RULEdelay_rule; busy & ( !busy_delay );
-//METAINVOKE; RULErespond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;
-//METABEFORE; RULErespond_rule__ENA; :RULEdelay_rule__ENA
-//METAGUARD; RULErespond_rule; busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+//METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA
+//METAGUARD; RULE$delay_rule; busy & ( !busy_delay );
+//METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;
+//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
+//METAGUARD; RULE$respond_rule; busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; !busy;
 //METAGUARD; request$say; !busy;
 //METAGUARD; request$setLeds; 1;
-//METARULES; RULEdelay_rule; RULErespond_rule
+//METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeInH;
 //METAINTERNAL; DUT__Echo; Echo;

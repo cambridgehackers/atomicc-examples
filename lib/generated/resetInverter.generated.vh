@@ -2,6 +2,6 @@
 `define __resetInverter_GENERATED__VH__
 
 //METASTART; ResetInverter
-//METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METAGUARD; RULE$init; 1;
+//METARULES; RULE$init
 `endif

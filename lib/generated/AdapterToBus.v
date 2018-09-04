@@ -23,10 +23,10 @@ module AdapterToBus (input wire CLK, input wire nRST,
         remain <= 0;
       end // nRST
       else begin
-        if (( remain != 16'd0 ) & out$enq__RDY) begin // RULEcopyRule__ENA
+        if (( remain != 16'd0 ) & out$enq__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
             buffer <= buffer >> 32;
-        end; // End of RULEcopyRule__ENA
+        end; // End of RULE$copyRule__ENA
         if (in$enq__ENA & ( remain == 16'd0 )) begin // in$enq__ENA
             buffer <= in$enq$v;
             remain <= in$enq$length + 1;

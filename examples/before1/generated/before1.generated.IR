@@ -71,11 +71,11 @@ MODULE Connect {
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD/Rule RULEswap2_rule__ENA {
+    METHOD/Rule RULE$swap2_rule__ENA {
         PRINTF :printf{"swap2_rule:Connect\n"}
         CALL/Action :lEcho$swap$y2xnull__ENA{}
     }
-    METHOD/Rule RULEswap_rule__ENA {
+    METHOD/Rule RULE$swap_rule__ENA {
         PRINTF :printf{"swap_rule:Connect\n"}
         CALL/Action :lEcho$swap$x2y__ENA{}
         CALL/Action :lEcho$swap$y2x__ENA{}
@@ -99,14 +99,14 @@ MODULE Echo {
     FIELD INTEGER_32 x
     FIELD INTEGER_32 y
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD/Rule RULEdelay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+    METHOD/Rule RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"delay_rule: Echo\n"}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
     }
-    METHOD/Rule RULErespond_rule__ENA if (((busy_delay) != (0))) {
+    METHOD/Rule RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"respond_rule: Echo\n"}
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
@@ -141,7 +141,7 @@ MODULE EchoIndicationInput {
     FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 meth_delay
     FIELD INTEGER_32 v_delay
-    METHOD/Rule RULEinput_rule__ENA if (((busy_delay) != (0))) {
+    METHOD/Rule RULE$input_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
@@ -162,17 +162,17 @@ MODULE EchoIndicationOutput {
     FIELD l_struct_OC_EchoIndication_data ind1
     FIELD INTEGER_1 ind_busy
     FIELD INTEGER_1 even
-    METHOD/Rule RULEoutput_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
-        ALLOCA l_struct_OC_EchoIndication_data RULEoutput_rulee__ENA$agg_2e_tmp
+    METHOD/Rule RULE$output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
+        ALLOCA l_struct_OC_EchoIndication_data RULE$output_rulee__ENA$agg_2e_tmp
         STORE :ind_busy = 0
-        LET l_struct_OC_EchoIndication_data :RULEoutput_rulee__ENA$agg_2e_tmp = ind0
-        CALL/Action :pipe$enq__ENA{RULEoutput_rulee__ENA$agg_2e_tmp}
+        LET l_struct_OC_EchoIndication_data :RULE$output_rulee__ENA$agg_2e_tmp = ind0
+        CALL/Action :pipe$enq__ENA{RULE$output_rulee__ENA$agg_2e_tmp}
     }
-    METHOD/Rule RULEoutput_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
-        ALLOCA l_struct_OC_EchoIndication_data RULEoutput_ruleo__ENA$agg_2e_tmp
+    METHOD/Rule RULE$output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
+        ALLOCA l_struct_OC_EchoIndication_data RULE$output_ruleo__ENA$agg_2e_tmp
         STORE :ind_busy = 0
-        LET l_struct_OC_EchoIndication_data :RULEoutput_ruleo__ENA$agg_2e_tmp = ind1
-        CALL/Action :pipe$enq__ENA{RULEoutput_ruleo__ENA$agg_2e_tmp}
+        LET l_struct_OC_EchoIndication_data :RULE$output_ruleo__ENA$agg_2e_tmp = ind1
+        CALL/Action :pipe$enq__ENA{RULE$output_ruleo__ENA$agg_2e_tmp}
     }
     METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",116,even}

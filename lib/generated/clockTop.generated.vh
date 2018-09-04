@@ -6,6 +6,6 @@
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
-//METAGUARD; RULEinit; 1;
-//METARULES; RULEinit
+//METAGUARD; RULE$init; 1;
+//METARULES; RULE$init
 `endif

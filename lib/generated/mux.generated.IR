@@ -97,12 +97,12 @@ MODULE MuxPipe {
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
     FIELD Fifo1 forwardFifo
     FIELD Fifo1_OC_9 forwardFifol
-    METHOD/Rule RULEfifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData RULEfifoRule__ENA$agg_2e_tmp
+    METHOD/Rule RULE$fifoRule__ENA {
+        ALLOCA l_struct_OC_NOCData RULE$fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :RULEfifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        LET l_struct_OC_NOCData :RULE$fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
         CALL :forwardFifol$out$first{}
-        CALL/Action :out$enq__ENA{RULEfifoRule__ENA$agg_2e_tmp,forwardFifol$out$first}
+        CALL/Action :out$enq__ENA{RULE$fifoRule__ENA$agg_2e_tmp,forwardFifol$out$first}
         CALL/Action :forwardFifo$out$deq__ENA{}
         CALL/Action :forwardFifol$out$deq__ENA{}
     }

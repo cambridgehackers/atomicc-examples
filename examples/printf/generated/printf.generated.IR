@@ -50,10 +50,10 @@ MODULE Echo {
     FIELD INTEGER_32 busy_delay
     FIELD INTEGER_32 v_type
     FIELD INTEGER_32 clockReg
-    METHOD/Rule RULEclockRule__ENA {
+    METHOD/Rule RULE$clockRule__ENA {
         STORE :clockReg = (clockReg) + (1)
     }
-    METHOD/Rule RULEdelay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+    METHOD/Rule RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"[delay_rule:%d]Echo\n",82}
         STORE :busy = 0
         STORE :busy_delay = 1
@@ -61,7 +61,7 @@ MODULE Echo {
         STORE :a_delay = a_temp
         STORE :b_delay = b_temp
     }
-    METHOD/Rule RULErespond_rule__ENA if (((busy_delay) != (0))) {
+    METHOD/Rule RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"[respond_rule:%d]Echo\n",90}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}

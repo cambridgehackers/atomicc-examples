@@ -41,10 +41,10 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
-    wire RULEdelay_rule__ENA;
-    wire RULEdelay_rule__RDY;
-    wire RULErespond_rule__ENA;
-    wire RULErespond_rule__RDY;
+    wire RULE$delay_rule__ENA;
+    wire RULE$delay_rule__RDY;
+    wire RULE$respond_rule__ENA;
+    wire RULE$respond_rule__RDY;
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
@@ -63,10 +63,10 @@ module Echo (input wire CLK, input wire nRST,
     assign request$setLeds__RDY = printfp$enq__RDY;
     assign request$zsay4__RDY = printfp$enq__RDY;
     // Extra assigments, not to output wires
-    assign RULEdelay_rule__ENA = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
-    assign RULEdelay_rule__RDY = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
-    assign RULErespond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
-    assign RULErespond_rule__RDY = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
+    assign RULE$delay_rule__ENA = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
+    assign RULE$delay_rule__RDY = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
+    assign RULE$respond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
+    assign RULE$respond_rule__RDY = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -82,19 +82,19 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        // RULEclockRule__ENA
+        // RULE$clockRule__ENA
             clockReg <= clockReg + 1;
-        // End of RULEclockRule__ENA
-        if (RULEdelay_rule__ENA & RULEdelay_rule__RDY) begin // RULEdelay_rule__ENA
+        // End of RULE$clockRule__ENA
+        if (RULE$delay_rule__ENA & RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
-        end; // End of RULEdelay_rule__ENA
-        if (RULErespond_rule__ENA & RULErespond_rule__RDY) begin // RULErespond_rule__ENA
+        end; // End of RULE$delay_rule__ENA
+        if (RULE$respond_rule__ENA & RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
-        end; // End of RULErespond_rule__ENA
+        end; // End of RULE$respond_rule__ENA
         if (request$say2__ENA & ( busy == 32'd0 ) & printfp$enq__RDY) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;

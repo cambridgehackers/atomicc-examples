@@ -80,12 +80,12 @@ MODULE IVector {
     FIELD INTEGER_8 fcounter
     FIELD INTEGER_9 counter
     FIELD INTEGER_9 gcounter
-    METHOD/Rule RULErespond__ENA {
-        ALLOCA l_struct_OC_ValueType RULErespond__ENA$temp
+    METHOD/Rule RULE$respond__ENA {
+        ALLOCA l_struct_OC_ValueType RULE$respond__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValueType :RULErespond__ENA$temp = fifo$out$first
+        LET l_struct_OC_ValueType :RULE$respond__ENA$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{RULErespond__ENA$temp$a,RULErespond__ENA$temp$b}
+        CALL/Action :ind$heard__ENA{RULE$respond__ENA$temp$a,RULE$respond__ENA$temp$b}
     }
     METHOD request$say__ENA ( INTEGER_6 meth , INTEGER_4 v ) if ((1)) {
         ALLOCA l_struct_OC_ValueType request$say__ENA$temp

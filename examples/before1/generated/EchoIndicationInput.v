@@ -27,10 +27,10 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
         v_delay <= 0;
       end // nRST
       else begin
-        if (busy_delay & indication$heard__RDY) begin // RULEinput_rule__ENA
+        if (busy_delay & indication$heard__RDY) begin // RULE$input_rule__ENA
             busy_delay <= 0;
             $display( "input_rule: EchoIndicationInput" );
-        end; // End of RULEinput_rule__ENA
+        end; // End of RULE$input_rule__ENA
         if (pipe$enq__ENA & ( !busy_delay )) begin // pipe$enq__ENA
             $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe$enq$v[ 31 : 0 ] );
             if (pipe$enq__ENA$v_2e_addr$tag == 1) begin
