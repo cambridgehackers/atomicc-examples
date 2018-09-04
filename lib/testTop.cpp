@@ -82,7 +82,6 @@ __module TestTop {
     }
     __connect readUser = user.read;
 
-    TestTop() {
         __rule init {
            _.interrupt = (requestLength != 0) && intEnable;
         }
@@ -155,6 +154,4 @@ __module TestTop {
             MAXIGP0_I->B(writeDone.out.first(), 0);
             writeDone.out.deq();
         }
-    }
 };
-static TestTop          test;

@@ -46,8 +46,7 @@ __module ClockTop {
     ResetInverter rinverter;
     BUFG clkbuf;
     BUFG clkbuf0;
-    ClockTop() {
-        __rule init {
+    __rule init {
         ps7_clockGen_pll._.CLKIN2 = 0;
         ps7_clockGen_pll._.CLKINSEL = 1;
         ps7_clockGen_pll._.DADDR = 0;
@@ -66,7 +65,5 @@ __module ClockTop {
         ps7_clockGen_pll._.RST = rinverter._.RESET_OUT;
         clkbuf0._.I = ps7_clockGen_pll._.CLKOUT0;
         ps7_clockGen_pll._.CLKIN1 = _.CLK;
-        };
-    }
+    };
 };
-static ClockTop test;

@@ -49,4 +49,3 @@ v, length);
     __connect ctop.indication = indication;
     __connect wadapter_0.out = wad;
 };
-UserTop ttest;

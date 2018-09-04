@@ -41,12 +41,10 @@ public:
         forwardFifo.in.enq(v);
         forwardFifol.in.enq(length);
     }
-    MuxPipe() {
-        __rule fifoRule {
-            out->enq(forwardFifo.out.first(), forwardFifol.out.first());
-            forwardFifo.out.deq();
-            forwardFifol.out.deq();
-        }
+    __rule fifoRule {
+        out->enq(forwardFifo.out.first(), forwardFifol.out.first());
+        forwardFifo.out.deq();
+        forwardFifol.out.deq();
     }
 };
-static MuxPipe unusedMuxPipe;
+//static MuxPipe unusedMuxPipe;

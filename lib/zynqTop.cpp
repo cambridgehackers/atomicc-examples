@@ -72,7 +72,6 @@ __module P7Wrap {
         pps._.MAXIGP0.BID = id;
         pps._.MAXIGP0.BRESP = resp;
     }
-    P7Wrap() {
        __rule init {
             pps._.FPGAID.LEN = 1;
             pps._.MAXIGP0.ACLK = __defaultClock;
@@ -119,7 +118,6 @@ __module P7Wrap {
        __rule gp0w if (pps._.MAXIGP0.WVALID) {
            MAXIGP0_O->W(pps._.MAXIGP0.WDATA, pps._.MAXIGP0.WID, pps._.MAXIGP0.WLAST);
        }
-    }
 };
 
 __module ZynqTop {
@@ -131,19 +129,15 @@ __module ZynqTop {
     __connect test.MAXIGP0_I = ps7_ps7_foo.MAXIGP0_I;
     ZynqClock        _ = ps7_ps7_foo._;
     Pps7m            M = ps7_ps7_foo.M;
-    ZynqTop() {
-        __rule init {
-            ps7_fclk_0_c._.I = ps7_ps7_foo.FCLK.CLK; // [0]
-            __defaultClock = ps7_fclk_0_c._.O;
-            ps7_freset_0_r._.I = ps7_ps7_foo.FCLK.RESETN; // [0]
-            __defaultnReset = ps7_freset_0_r._.O;
-            ps7_ps7_foo.intr.interrupt = test._.interrupt;
-            ps7_ps7_foo.intr.CLK = __defaultClock;
-            ps7_ps7_foo.intr.nRST = __defaultnReset;
-            test._.CLK = __defaultClock;
-            test._.nRST = __defaultnReset;
-        }
+    __rule init {
+        ps7_fclk_0_c._.I = ps7_ps7_foo.FCLK.CLK; // [0]
+        __defaultClock = ps7_fclk_0_c._.O;
+        ps7_freset_0_r._.I = ps7_ps7_foo.FCLK.RESETN; // [0]
+        __defaultnReset = ps7_freset_0_r._.O;
+        ps7_ps7_foo.intr.interrupt = test._.interrupt;
+        ps7_ps7_foo.intr.CLK = __defaultClock;
+        ps7_ps7_foo.intr.nRST = __defaultnReset;
+        test._.CLK = __defaultClock;
+        test._.nRST = __defaultnReset;
     }
 };
-
-ZynqTop Ttest;

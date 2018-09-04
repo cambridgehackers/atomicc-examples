@@ -23,11 +23,8 @@
 
 __module CONNECTNET2 {
     CNCONNECTNET2 _;
-    CONNECTNET2() {
-        __rule assign {
-            _.OUT1 = _.IN1;
-            _.OUT2 = _.IN2;
-        }
+    __rule assign {
+        _.OUT1 = _.IN1;
+        _.OUT2 = _.IN2;
     }
 };
-CONNECTNET2 cntest;

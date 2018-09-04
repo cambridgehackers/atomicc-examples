@@ -493,13 +493,13 @@ MODULE P7Wrap {
         LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
         LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
     }
-    METHOD/Rule RULEgp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
+    METHOD/Rule RULEgp0ar__ENA if (((pps$MAXIGP0ARVALID) != (0))) {
         CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
     }
-    METHOD/Rule RULEgp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
+    METHOD/Rule RULEgp0aw__ENA if (((pps$MAXIGP0AWVALID) != (0))) {
         CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
-    METHOD/Rule RULEgp0w__ENA if ((pps$MAXIGP0WVALID)) {
+    METHOD/Rule RULEgp0w__ENA if (((pps$MAXIGP0WVALID) != (0))) {
         CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
     }
     METHOD/Rule RULEinit__ENA {

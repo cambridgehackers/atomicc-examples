@@ -23,9 +23,7 @@
 
 __module ResetInverter {
     MResetInverterResetInverter _;
-    ResetInverter() {
     __rule init {
         _.RESET_OUT = !_.RESET_IN;
-    }
     }
 };
