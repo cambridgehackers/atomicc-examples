@@ -51,13 +51,24 @@ __emodule IOBUF {
   I_IOBUF _;
 };
 
+__interface ifcdef {
+  void me(void);
+};
 __module ModFt600 {
     Ft600 _;
     __int(1) usb_fifo_empty;
     __int(2) usb_rxf_delay;
     __int(1) usb_txe_delay;
 
+ifcdef bozo;
     IOBUF iobufs[16];
+void bozo$me(void) {
+            for (int i = 0; i < 3; i += 1) {
+                iobufs[i]._.IO = _.usb_ad >> i;
+                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
+                //iobufs[i]._.T = _.usb_oe_n;
+            }
+}
 
     ModFt600() {
         __rule handshake {
@@ -77,12 +88,22 @@ __module ModFt600 {
         }
 #else
         __rule iobufs {
+#if 0
             int i = 0;
             do {
                 iobufs[i]._.IO = _.usb_ad >> i;
                 //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
                 //iobufs[i]._.T = _.usb_oe_n;
             } while(++i < 16);  // for loop unrolling to work, block must end in conditional
+#else
+#if 1
+            for (int i = 0; i < 16; i += 1) {
+                iobufs[i]._.IO = _.usb_ad >> i;
+                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
+                //iobufs[i]._.T = _.usb_oe_n;
+            }
+#endif
+#endif
         }
 #endif
     }
