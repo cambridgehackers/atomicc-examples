@@ -1,6 +1,8 @@
 
 include ../../makefile.in
 #CPPFLAGS += -emit-llvm
+#CPPFLAGS += -mllvm -dtrace
+#CPPFLAGS += -mllvm -rgentrace
 #CPPFLAGS += -fdump-record-layouts
 
 all:

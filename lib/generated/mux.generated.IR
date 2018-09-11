@@ -7,28 +7,28 @@ EMODULE l_ainterface_OC_PipeIn {
 EMODULE l_ainterface_OC_PipeInH {
     METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
+EMODULE l_ainterface_OC_PipeIn_OC_1 {
     METHOD enq__ENA ( INTEGER_128 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_2 {
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
     METHOD enq__ENA ( INTEGER_16 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_5 {
+EMODULE l_ainterface_OC_PipeIn_OC_7 {
     METHOD enq__ENA ( INTEGER_16 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_1 {
+EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD deq__ENA
     METHOD first INTEGER_128
 }
-EMODULE l_ainterface_OC_PipeOut_OC_4 {
+EMODULE l_ainterface_OC_PipeOut_OC_5 {
     METHOD deq__ENA
     METHOD first INTEGER_16
 }
-EMODULE l_ainterface_OC_PipeOut_OC_7 {
+EMODULE l_ainterface_OC_PipeOut_OC_8 {
     METHOD deq__ENA
     METHOD first INTEGER_16
 }
@@ -37,24 +37,24 @@ EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeOut out
 }
 EMODULE Fifo1Base$__PARAM__$width$128 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
 }
 EMODULE Fifo1Base$__PARAM__$width$16 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_5 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
+}
+EMODULE Fifo_OC_0 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
 }
 EMODULE Fifo_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_1 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
 }
 EMODULE Fifo_OC_6 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_4 out
-}
-EMODULE Fifo_OC_8 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_5 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_7 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
 }
 EMODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeInH in
@@ -78,8 +78,8 @@ MODULE Fifo1 {
     }
 }
 MODULE Fifo1_OC_9 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_2 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_4 out
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
     FIELD Fifo1Base$__PARAM__$width$16 fifo
     METHOD in$enq__ENA ( INTEGER_16 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}

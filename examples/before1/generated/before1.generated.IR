@@ -37,15 +37,12 @@ EMODULE l_ainterface_OC_EchoRequest {
     METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_NOCData v )
+    METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
 }
 EMODULE l_ainterface_OC_PipeInH {
     METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
-}
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
     METHOD enq__ENA ( l_struct_OC_EchoIndication_data v )
 }
 EMODULE l_ainterface_OC_Swap {
@@ -60,9 +57,9 @@ EMODULE MuxPipe {
 }
 MODULE Connect {
     INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_1
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
     INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn_OC_0
+    INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
     INTERFACECONNECT/Forward indication lEII_test$indication l_ainterface_OC_EchoIndication
     INTERFACE l_ainterface_OC_EchoRequest request
     FIELD EchoIndicationOutput lEIO
@@ -136,7 +133,7 @@ MODULE Echo {
     }
 }
 MODULE EchoIndicationInput {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 pipe
+    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 meth_delay
@@ -157,7 +154,7 @@ MODULE EchoIndicationInput {
 }
 MODULE EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication indication
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_1 pipe
+    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
     FIELD l_struct_OC_EchoIndication_data ind0
     FIELD l_struct_OC_EchoIndication_data ind1
     FIELD INTEGER_1 ind_busy
@@ -187,7 +184,7 @@ MODULE EchoIndicationOutput {
     }
 }
 MODULE EchoRequestInput {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE l_ainterface_OC_PipeIn pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest request
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
         ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v_2e_addr
@@ -199,7 +196,7 @@ MODULE EchoRequestInput {
 }
 MODULE EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
     METHOD request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_EchoRequest_data request$say2__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say2\n"}

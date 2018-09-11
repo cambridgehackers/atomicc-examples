@@ -18,9 +18,6 @@ EMODULE l_ainterface_OC_I_IOBUF {
     FIELD/output INTEGER_1 O
     FIELD/input INTEGER_1 T
 }
-EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_NOCData v )
-}
 EMODULE l_ainterface_OC_PipeInH {
     METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
