@@ -60,52 +60,24 @@ __module ModFt600 {
     __int(2) usb_rxf_delay;
     __int(1) usb_txe_delay;
 
-ifcdef bozo;
     IOBUF iobufs[16];
-void bozo$me(void) {
-            for (int i = 0; i < 3; i += 1) {
-                iobufs[i]._.IO = _.usb_ad >> i;
-                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
-                //iobufs[i]._.T = _.usb_oe_n;
-            }
-}
 
-    ModFt600() {
-        __rule handshake {
-	  _.usb_rd_n = (usb_rxf_delay != 0);
-	  _.usb_oe_n = (usb_rxf_delay & 1);
-	  _.usb_wr_n = usb_txe_delay | usb_fifo_empty | ~(usb_rxf_delay & 1);
-	  
-	  usb_fifo_empty = 0;
-	  usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
-	  usb_txe_delay = _.usb_txe;
+    __rule handshake {
+        _.usb_rd_n = (usb_rxf_delay != 0);
+        _.usb_oe_n = (usb_rxf_delay & 1);
+        _.usb_wr_n = usb_txe_delay | usb_fifo_empty | ~(usb_rxf_delay & 1);
+        usb_fifo_empty = 0;
+        usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
+        usb_txe_delay = _.usb_txe;
+    }
+    __rule iobufs {
+        int j;
+        for (j = 0; j <= 15; j += 1)
+            iobufs[j]._.T = _.usb_oe_n;
+        for (int i = 0; i < 16; i = i + 1) {
+            iobufs[i]._.IO = _.usb_ad >> i;
+            //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
         }
-#if 0
-	for (int i = 0; i < 16; i++) {
-	    __rule iobufs {
-	        iobufs[i]._.IO = _.usb_ad >> i;
-	    }
-        }
-#else
-        __rule iobufs {
-#if 0
-            int i = 0;
-            do {
-                iobufs[i]._.IO = _.usb_ad >> i;
-                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
-                //iobufs[i]._.T = _.usb_oe_n;
-            } while(++i < 16);  // for loop unrolling to work, block must end in conditional
-#else
-#if 1
-            for (int i = 0; i < 16; i += 1) {
-                iobufs[i]._.IO = _.usb_ad >> i;
-                //iobufs[i]._.IO = __bitsubstr(_.usb_ad, i, i);
-                //iobufs[i]._.T = _.usb_oe_n;
-            }
-#endif
-#endif
-        }
-#endif
     }
 };
 
