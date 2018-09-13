@@ -1,6 +1,3 @@
-EMODULE l_struct_OC_NOCData {
-    FIELD/Count 4  INTEGER_32 data
-}
 EMODULE l_ainterface_OC_Ft600 {
     FIELD/input INTEGER_1 usb_clk
     FIELD/input INTEGER_1 usb_rxf
@@ -10,29 +7,21 @@ EMODULE l_ainterface_OC_Ft600 {
     FIELD/output INTEGER_1 usb_oe_n
     FIELD/inout INTEGER_16 usb_ad
 }
-EMODULE l_ainterface_OC_I_IOBUF {
-    FIELD/inout INTEGER_1 IO
-    FIELD/input INTEGER_1 I
-    FIELD/output INTEGER_1 O
+EMODULE l_ainterface_OC_IobufVecPins {
+    FIELD/inout INTEGER_16 IO
+    FIELD/input INTEGER_16 I
+    FIELD/output INTEGER_16 O
     FIELD/input INTEGER_1 T
 }
-EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
-}
-EMODULE IOBUF {
-    INTERFACE l_ainterface_OC_I_IOBUF _
-}
-EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+EMODULE IobufVec {
+    INTERFACE l_ainterface_OC_IobufVecPins _
 }
 MODULE ModFt600 {
     INTERFACE l_ainterface_OC_Ft600 _
     FIELD INTEGER_1 usb_fifo_empty
     FIELD INTEGER_2 usb_rxf_delay
     FIELD INTEGER_1 usb_txe_delay
-    FIELD/Count 16  IOBUF iobufs
+    FIELD IobufVec iov
     METHOD/Rule RULE$handshake__ENA {
         LET INTEGER_1 :usb_rd_n = (usb_rxf_delay) != (0)
         LET INTEGER_1 :usb_oe_n = (usb_rxf_delay) & (1)
@@ -40,39 +29,7 @@ MODULE ModFt600 {
         STORE :usb_fifo_empty = 0
         STORE :usb_rxf_delay = ((usb_rxf_delay) << (1)) | (usb_rxf)
         STORE :usb_txe_delay = usb_txe
-    }
-    METHOD/Rule RULE$iobufs__ENA {
-        LET INTEGER_1 :iobufs[0]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[1]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[2]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[3]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[4]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[5]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[6]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[7]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[8]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[9]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[10]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[11]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[12]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[13]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[14]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[15]$T = usb_oe_n
-        LET INTEGER_1 :iobufs[0]$IO = (usb_ad)  >>  (0)
-        LET INTEGER_1 :iobufs[1]$IO = (usb_ad)  >>  (1)
-        LET INTEGER_1 :iobufs[2]$IO = (usb_ad)  >>  (2)
-        LET INTEGER_1 :iobufs[3]$IO = (usb_ad)  >>  (3)
-        LET INTEGER_1 :iobufs[4]$IO = (usb_ad)  >>  (4)
-        LET INTEGER_1 :iobufs[5]$IO = (usb_ad)  >>  (5)
-        LET INTEGER_1 :iobufs[6]$IO = (usb_ad)  >>  (6)
-        LET INTEGER_1 :iobufs[7]$IO = (usb_ad)  >>  (7)
-        LET INTEGER_1 :iobufs[8]$IO = (usb_ad)  >>  (8)
-        LET INTEGER_1 :iobufs[9]$IO = (usb_ad)  >>  (9)
-        LET INTEGER_1 :iobufs[10]$IO = (usb_ad)  >>  (10)
-        LET INTEGER_1 :iobufs[11]$IO = (usb_ad)  >>  (11)
-        LET INTEGER_1 :iobufs[12]$IO = (usb_ad)  >>  (12)
-        LET INTEGER_1 :iobufs[13]$IO = (usb_ad)  >>  (13)
-        LET INTEGER_1 :iobufs[14]$IO = (usb_ad)  >>  (14)
-        LET INTEGER_1 :iobufs[15]$IO = (usb_ad)  >>  (15)
+        LET INTEGER_16 :usb_ad = iov$IO
+        LET INTEGER_1 :iov$T = usb_oe_n
     }
 }

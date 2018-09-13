@@ -1,4 +1,4 @@
-/* Copyright (c) 2016,2018 The Connectal Project
+/* Copyright (c) 2018 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,32 +20,38 @@
  */
 #include "atomicc.h"
 #include "iobufVec.h"
+#include "VIOBUF.h"
 
-__interface Ft600 {
-  __input __int(1) usb_clk;
-  __input __int(1) usb_rxf;
-  __input __int(1) usb_txe;
-  __output __int(1) usb_rd_n;
-  __output __int(1) usb_wr_n;
-  __output __int(1) usb_oe_n;
-  __inout __int(16) usb_ad;
-};
-
-__module ModFt600 {
-    Ft600 _;
-    __int(1) usb_fifo_empty;
-    __int(2) usb_rxf_delay;
-    __int(1) usb_txe_delay;
-    IobufVec iov;
-
-    __rule handshake {
-        _.usb_rd_n = (usb_rxf_delay != 0);
-        _.usb_oe_n = (usb_rxf_delay & 1);
-        _.usb_wr_n = usb_txe_delay | usb_fifo_empty | ~(usb_rxf_delay & 1);
-        usb_fifo_empty = 0;
-        usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
-        usb_txe_delay = _.usb_txe;
-        _.usb_ad = iov._.IO;
-        iov._.T = _.usb_oe_n;
+//template<int iovecWidth>
+__module IobufVec {
+    IobufVecPins/*<iovecWidth>*/ _;
+    IOBUF iobufs[iovecWidth];
+    __rule iobufs {
+        int j;
+        for (j = 0; j < iovecWidth; j += 1)
+            iobufs[j]._.T = _.T;
+        for (int i = 0; i < iovecWidth; i = i + 1) {
+            iobufs[i]._.IO = __bitsubstr(_.IO, i, 1);
+            iobufs[i]._.I = __bitsubstr(_.I, i, 1);
+            iobufs[i]._.O = __bitsubstr(_.O, i, 1);
+        }
     }
 };
+#if 0
+__module IobufVec2 {
+    IobufVecPins/*<iovecWidth>*/ _;
+    IOBUF iobufs[iovecWidth];
+    void callME(int i) {
+        iobufs[i]._.T = _.T;
+        iobufs[i]._.IO = __bitsubstr(_.IO, i, 1);
+        iobufs[i]._.I = __bitsubstr(_.I, i, 1);
+        iobufs[i]._.O = __bitsubstr(_.O, i, 1);
+    }
+    __rule iobufs {
+extern void generateMe(int init, int limit, int inc, void (IobufVec2::*cb)(int));
+        generateMe(0, iovecWidth, 1, &IobufVec2::callME);
+    }
+};
+#endif
+
+//static IobufVec<GENERIC_INT_TEMPLATE_FLAG> dummy;

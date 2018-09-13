@@ -1,0 +1,92 @@
+EMODULE l_ainterface_OC_IobufVecPins {
+    FIELD/inout INTEGER_16 IO
+    FIELD/input INTEGER_16 I
+    FIELD/output INTEGER_16 O
+    FIELD/input INTEGER_1 T
+}
+EMODULE l_ainterface_OC_MIOBUF {
+    FIELD/parameter INTEGER_32 DRIVE
+    FIELD/input INTEGER_1 I
+    FIELD/Ptr/parameter INTEGER_8 IBUF_LOW_PWR
+    FIELD/inout INTEGER_1 IO
+    FIELD/Ptr/parameter INTEGER_8 IOSTANDARD
+    FIELD/output INTEGER_1 O
+    FIELD/Ptr/parameter INTEGER_8 SLEW
+    FIELD/input INTEGER_1 T
+}
+EMODULE IOBUF {
+    INTERFACE l_ainterface_OC_MIOBUF _
+}
+EMODULE IobufVec {
+    INTERFACE l_ainterface_OC_IobufVecPins _
+}
+MODULE IobufVec {
+    INTERFACE l_ainterface_OC_IobufVecPins _
+    FIELD/Count 16  IOBUF iobufs
+    METHOD/Rule RULE$iobufs__ENA {
+        LET INTEGER_1 :iobufs[0]$T = T
+        LET INTEGER_1 :iobufs[1]$T = T
+        LET INTEGER_1 :iobufs[2]$T = T
+        LET INTEGER_1 :iobufs[3]$T = T
+        LET INTEGER_1 :iobufs[4]$T = T
+        LET INTEGER_1 :iobufs[5]$T = T
+        LET INTEGER_1 :iobufs[6]$T = T
+        LET INTEGER_1 :iobufs[7]$T = T
+        LET INTEGER_1 :iobufs[8]$T = T
+        LET INTEGER_1 :iobufs[9]$T = T
+        LET INTEGER_1 :iobufs[10]$T = T
+        LET INTEGER_1 :iobufs[11]$T = T
+        LET INTEGER_1 :iobufs[12]$T = T
+        LET INTEGER_1 :iobufs[13]$T = T
+        LET INTEGER_1 :iobufs[14]$T = T
+        LET INTEGER_1 :iobufs[15]$T = T
+        LET INTEGER_1 :iobufs[0]$IO = __bitsubstr{IO,0,1}
+        LET INTEGER_1 :iobufs[0]$I = __bitsubstr{I,0,1}
+        LET INTEGER_1 :iobufs[0]$O = __bitsubstr{O,0,1}
+        LET INTEGER_1 :iobufs[1]$IO = __bitsubstr{IO,1,1}
+        LET INTEGER_1 :iobufs[1]$I = __bitsubstr{I,1,1}
+        LET INTEGER_1 :iobufs[1]$O = __bitsubstr{O,1,1}
+        LET INTEGER_1 :iobufs[2]$IO = __bitsubstr{IO,2,1}
+        LET INTEGER_1 :iobufs[2]$I = __bitsubstr{I,2,1}
+        LET INTEGER_1 :iobufs[2]$O = __bitsubstr{O,2,1}
+        LET INTEGER_1 :iobufs[3]$IO = __bitsubstr{IO,3,1}
+        LET INTEGER_1 :iobufs[3]$I = __bitsubstr{I,3,1}
+        LET INTEGER_1 :iobufs[3]$O = __bitsubstr{O,3,1}
+        LET INTEGER_1 :iobufs[4]$IO = __bitsubstr{IO,4,1}
+        LET INTEGER_1 :iobufs[4]$I = __bitsubstr{I,4,1}
+        LET INTEGER_1 :iobufs[4]$O = __bitsubstr{O,4,1}
+        LET INTEGER_1 :iobufs[5]$IO = __bitsubstr{IO,5,1}
+        LET INTEGER_1 :iobufs[5]$I = __bitsubstr{I,5,1}
+        LET INTEGER_1 :iobufs[5]$O = __bitsubstr{O,5,1}
+        LET INTEGER_1 :iobufs[6]$IO = __bitsubstr{IO,6,1}
+        LET INTEGER_1 :iobufs[6]$I = __bitsubstr{I,6,1}
+        LET INTEGER_1 :iobufs[6]$O = __bitsubstr{O,6,1}
+        LET INTEGER_1 :iobufs[7]$IO = __bitsubstr{IO,7,1}
+        LET INTEGER_1 :iobufs[7]$I = __bitsubstr{I,7,1}
+        LET INTEGER_1 :iobufs[7]$O = __bitsubstr{O,7,1}
+        LET INTEGER_1 :iobufs[8]$IO = __bitsubstr{IO,8,1}
+        LET INTEGER_1 :iobufs[8]$I = __bitsubstr{I,8,1}
+        LET INTEGER_1 :iobufs[8]$O = __bitsubstr{O,8,1}
+        LET INTEGER_1 :iobufs[9]$IO = __bitsubstr{IO,9,1}
+        LET INTEGER_1 :iobufs[9]$I = __bitsubstr{I,9,1}
+        LET INTEGER_1 :iobufs[9]$O = __bitsubstr{O,9,1}
+        LET INTEGER_1 :iobufs[10]$IO = __bitsubstr{IO,10,1}
+        LET INTEGER_1 :iobufs[10]$I = __bitsubstr{I,10,1}
+        LET INTEGER_1 :iobufs[10]$O = __bitsubstr{O,10,1}
+        LET INTEGER_1 :iobufs[11]$IO = __bitsubstr{IO,11,1}
+        LET INTEGER_1 :iobufs[11]$I = __bitsubstr{I,11,1}
+        LET INTEGER_1 :iobufs[11]$O = __bitsubstr{O,11,1}
+        LET INTEGER_1 :iobufs[12]$IO = __bitsubstr{IO,12,1}
+        LET INTEGER_1 :iobufs[12]$I = __bitsubstr{I,12,1}
+        LET INTEGER_1 :iobufs[12]$O = __bitsubstr{O,12,1}
+        LET INTEGER_1 :iobufs[13]$IO = __bitsubstr{IO,13,1}
+        LET INTEGER_1 :iobufs[13]$I = __bitsubstr{I,13,1}
+        LET INTEGER_1 :iobufs[13]$O = __bitsubstr{O,13,1}
+        LET INTEGER_1 :iobufs[14]$IO = __bitsubstr{IO,14,1}
+        LET INTEGER_1 :iobufs[14]$I = __bitsubstr{I,14,1}
+        LET INTEGER_1 :iobufs[14]$O = __bitsubstr{O,14,1}
+        LET INTEGER_1 :iobufs[15]$IO = __bitsubstr{IO,15,1}
+        LET INTEGER_1 :iobufs[15]$I = __bitsubstr{I,15,1}
+        LET INTEGER_1 :iobufs[15]$O = __bitsubstr{O,15,1}
+    }
+}
