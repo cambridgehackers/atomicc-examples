@@ -7,7 +7,7 @@ EMODULE l_struct_OC_EchoRequest_data {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
 EMODULE l_struct_OC_NOCData {
-    FIELD/Count 4  INTEGER_32 data
+    FIELD INTEGER_128 data
 }
 EMODULE l_struct_OC_ValueType {
     FIELD INTEGER_32 a
@@ -73,9 +73,9 @@ MODULE EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
-        ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v_2e_addr
-        LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        CALL/Action ((pipe$enq__ENA$v_2e_addr$tag) == 1):indication$heard__ENA{pipe$enq__ENA$v_2e_addr$data$heard$meth,pipe$enq__ENA$v_2e_addr$data$heard$v}
+        ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v
+        LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
+        CALL/Action ((pipe$enq__ENA$v$tag) == 1):indication$heard__ENA{pipe$enq__ENA$v$data$heard$meth,pipe$enq__ENA$v$data$heard$v}
     }
 }
 MODULE EchoIndicationOutput {
@@ -93,10 +93,10 @@ MODULE EchoRequestInput {
     INTERFACE l_ainterface_OC_PipeIn pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest request
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
-        ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v_2e_addr
-        LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
+        ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v
+        LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
-        CALL/Action ((pipe$enq__ENA$v_2e_addr$tag) == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
+        CALL/Action ((pipe$enq__ENA$v$tag) == 1):request$say__ENA{pipe$enq__ENA$v$data$say$meth,pipe$enq__ENA$v$data$say$v}
     }
 }
 MODULE EchoRequestOutput {

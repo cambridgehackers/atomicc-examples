@@ -7,7 +7,7 @@ EMODULE l_struct_OC_EchoRequest_data {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
 EMODULE l_struct_OC_NOCData {
-    FIELD/Count 4  INTEGER_32 data
+    FIELD INTEGER_128 data
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
@@ -144,12 +144,12 @@ MODULE EchoIndicationInput {
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) if (((busy_delay) ^ (1))) {
-        ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v_2e_addr
-        LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq__ENA$v_2e_addr$tag}
-        STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):meth_delay = pipe$enq__ENA$v_2e_addr$data$heard$meth
-        STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):v_delay = pipe$enq__ENA$v_2e_addr$data$heard$v
-        STORE ((pipe$enq__ENA$v_2e_addr$tag) == 1):busy_delay = 1
+        ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v
+        LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
+        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq__ENA$v$tag}
+        STORE ((pipe$enq__ENA$v$tag) == 1):meth_delay = pipe$enq__ENA$v$data$heard$meth
+        STORE ((pipe$enq__ENA$v$tag) == 1):v_delay = pipe$enq__ENA$v$data$heard$v
+        STORE ((pipe$enq__ENA$v$tag) == 1):busy_delay = 1
     }
 }
 MODULE EchoIndicationOutput {
@@ -187,11 +187,11 @@ MODULE EchoRequestInput {
     INTERFACE l_ainterface_OC_PipeIn pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest request
     METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
-        ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v_2e_addr
-        LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v_2e_addr = pipe$enq$v
-        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",pipe$enq__ENA$v_2e_addr$tag}
-        CALL/Action ((pipe$enq__ENA$v_2e_addr$tag) == 1):request$say__ENA{pipe$enq__ENA$v_2e_addr$data$say$meth,pipe$enq__ENA$v_2e_addr$data$say$v}
-        CALL/Action ((pipe$enq__ENA$v_2e_addr$tag) == 2):request$say2__ENA{pipe$enq__ENA$v_2e_addr$data$say2$meth,pipe$enq__ENA$v_2e_addr$data$say2$v}
+        ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v
+        LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
+        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",pipe$enq__ENA$v$tag}
+        CALL/Action ((pipe$enq__ENA$v$tag) == 1):request$say__ENA{pipe$enq__ENA$v$data$say$meth,pipe$enq__ENA$v$data$say$v}
+        CALL/Action ((pipe$enq__ENA$v$tag) == 2):request$say2__ENA{pipe$enq__ENA$v$data$say2$meth,pipe$enq__ENA$v$data$say2$v}
     }
 }
 MODULE EchoRequestOutput {

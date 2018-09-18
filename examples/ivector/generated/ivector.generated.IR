@@ -1,5 +1,5 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD/Count 4  INTEGER_32 data
+    FIELD INTEGER_128 data
 }
 EMODULE l_struct_OC_ValuePair {
     FIELD INTEGER_32 a

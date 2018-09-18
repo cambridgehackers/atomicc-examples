@@ -37,21 +37,5 @@ __module IobufVec {
         }
     }
 };
-#if 0
-__module IobufVec2 {
-    IobufVecPins/*<iovecWidth>*/ _;
-    IOBUF iobufs[iovecWidth];
-    void callME(int i) {
-        iobufs[i]._.T = _.T;
-        iobufs[i]._.IO = __bitsubstr(_.IO, i, 1);
-        iobufs[i]._.I = __bitsubstr(_.I, i, 1);
-        iobufs[i]._.O = __bitsubstr(_.O, i, 1);
-    }
-    __rule iobufs {
-extern void generateMe(int init, int limit, int inc, void (IobufVec2::*cb)(int));
-        generateMe(0, iovecWidth, 1, &IobufVec2::callME);
-    }
-};
-#endif
 
 //static IobufVec<GENERIC_INT_TEMPLATE_FLAG> dummy;

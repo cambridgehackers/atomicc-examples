@@ -75,7 +75,7 @@ __emodule Fifo {
 #define MAX_NOC_WIDTH                  4//100
 #define PRINTF_PORT    (uint16_t) 0x7fff
 
-typedef struct {int data[MAX_NOC_WIDTH];} NOCData;
+typedef struct {__uint(128) data;} NOCData;
 typedef PipeIn<NOCData>                   NOCPipe;
 typedef PipeInH<NOCData>                  NOCPipeH;
 typedef __uint(32)                        BusType;
