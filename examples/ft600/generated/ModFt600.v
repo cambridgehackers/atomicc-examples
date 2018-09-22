@@ -14,7 +14,7 @@ module ModFt600 (
     reg usb_txe_delay;
     wire CLK;
     wire nRST;
-    IobufVec iov (
+    IobufVec#(16) iov (
         .IO(usb_ad),
         .I(0),
         .O(),

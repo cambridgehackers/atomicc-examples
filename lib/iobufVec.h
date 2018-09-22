@@ -18,8 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#define iovecWidth 16
-//template <int iovecWidth>
+//#define iovecWidth 2//16
+template <int iovecWidth>
 __interface IobufVecPins {
     __inout  __uint(iovecWidth) IO;
     __input  __uint(iovecWidth)  I;
@@ -27,7 +27,7 @@ __interface IobufVecPins {
     __input  __uint(1)   T;
 };
 
-//template <int iovecWidth>
+template <int iovecWidth>
 __emodule IobufVec {
-    IobufVecPins/*<iovecWidth>*/ _;
+    IobufVecPins<iovecWidth> _;
 };

@@ -36,7 +36,7 @@ __module ModFt600 {
     __int(1) usb_fifo_empty;
     __int(2) usb_rxf_delay;
     __int(1) usb_txe_delay;
-    IobufVec iov;
+    IobufVec<16> iov;
 
     __rule handshake {
         _.usb_rd_n = (usb_rxf_delay != 0);

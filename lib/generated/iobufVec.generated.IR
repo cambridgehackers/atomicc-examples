@@ -1,7 +1,7 @@
-EMODULE l_ainterface_OC_IobufVecPins {
-    FIELD/inout INTEGER_16 IO
-    FIELD/input INTEGER_16 I
-    FIELD/output INTEGER_16 O
+EMODULE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 {
+    FIELD/inout INTEGER_999999 IO
+    FIELD/input INTEGER_999999 I
+    FIELD/output INTEGER_999999 O
     FIELD/input INTEGER_1 T
 }
 EMODULE l_ainterface_OC_MIOBUF {
@@ -17,22 +17,16 @@ EMODULE l_ainterface_OC_MIOBUF {
 EMODULE IOBUF {
     INTERFACE l_ainterface_OC_MIOBUF _
 }
-EMODULE IobufVec {
-    INTERFACE l_ainterface_OC_IobufVecPins _
-}
-MODULE IobufVec {
-    INTERFACE l_ainterface_OC_IobufVecPins _
-    FIELD/Count 16  IOBUF iobufs
-    METHOD FOR$0Body__ENA ( INTEGER_32 j ) {
-        LET INTEGER_1 :iobufs[FOR$0Body$j]$T = T
-    }
-    METHOD FOR$1Body__ENA ( INTEGER_32 i ) {
-        LET INTEGER_1 :iobufs[FOR$1Body$i]$IO = __bitsubstr{IO,FOR$1Body$i,1}
-        LET INTEGER_1 :iobufs[FOR$1Body$i]$I = __bitsubstr{I,FOR$1Body$i,1}
-        LET INTEGER_1 :iobufs[FOR$1Body$i]$O = __bitsubstr{O,FOR$1Body$i,1}
+MODULE IobufVec$__PARAM__$iovecWidth$999999 {
+    INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 _
+    FIELD/Count 999999  IOBUF iobufs
+    METHOD FOR$0Body__ENA ( INTEGER_32 __inst$Genvar1 ) {
+        LET INTEGER_1 :iobufs[__inst$Genvar1]$T = T
+        LET INTEGER_1 :iobufs[__inst$Genvar1]$IO = __bitsubstr{IO,__inst$Genvar1,1}
+        LET INTEGER_1 :iobufs[__inst$Genvar1]$I = __bitsubstr{I,__inst$Genvar1,1}
+        LET INTEGER_1 :iobufs[__inst$Genvar1]$O = __bitsubstr{O,__inst$Genvar1,1}
     }
     METHOD/Rule RULE$iobufs__ENA {
-        GENERATE :j,(0),((j) < (16)),((j) + (1)),FOR$0Body__ENA
-        GENERATE :i,(0),((i) < (16)),((i) + (1)),FOR$1Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
     }
 }
