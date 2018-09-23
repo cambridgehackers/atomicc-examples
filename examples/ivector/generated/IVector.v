@@ -10,133 +10,68 @@ module IVector (input wire CLK, input wire nRST,
     input wire [31:0]in$say$meth,
     input wire [31:0]in$say$v,
     output wire in$say__RDY);
+    genvar  __inst$Genvar1;
     reg [31:0]vsize;
-    wire fifo0$in$enq__RDY;
-    wire fifo0$out$deq__RDY;
-    wire [95:0]fifo0$out$first;
-    wire fifo0$out$first__RDY;
-    wire fifo1$in$enq__RDY;
-    wire fifo1$out$deq__RDY;
-    wire [95:0]fifo1$out$first;
-    wire fifo1$out$first__RDY;
-    wire fifo2$in$enq__RDY;
-    wire fifo2$out$deq__RDY;
-    wire [95:0]fifo2$out$first;
-    wire fifo2$out$first__RDY;
-    wire fifo3$in$enq__RDY;
-    wire fifo3$out$deq__RDY;
-    wire [95:0]fifo3$out$first;
-    wire fifo3$out$first__RDY;
-    wire fifo4$in$enq__RDY;
-    wire fifo4$out$deq__RDY;
-    wire [95:0]fifo4$out$first;
-    wire fifo4$out$first__RDY;
-    wire fifo5$in$enq__RDY;
-    wire fifo5$out$deq__RDY;
-    wire [95:0]fifo5$out$first;
-    wire fifo5$out$first__RDY;
-    wire fifo6$in$enq__RDY;
-    wire fifo6$out$deq__RDY;
-    wire [95:0]fifo6$out$first;
-    wire fifo6$out$first__RDY;
-    wire fifo7$in$enq__RDY;
-    wire fifo7$out$deq__RDY;
-    wire [95:0]fifo7$out$first;
-    wire fifo7$out$first__RDY;
-    wire fifo8$in$enq__RDY;
-    wire fifo8$out$deq__RDY;
-    wire [95:0]fifo8$out$first;
-    wire fifo8$out$first__RDY;
-    wire fifo9$in$enq__RDY;
-    wire fifo9$out$deq__RDY;
-    wire [95:0]fifo9$out$first;
-    wire fifo9$out$first__RDY;
+    wire [95:0]in$enq$v;
+    wire [31:0]in$enq$v$a;
+    wire [31:0]in$enq$v$b;
+    wire [31:0]in$enq$v$c;
     wire [31:0]in$say__ENA$temp$a;
     wire [31:0]in$say__ENA$temp$c;
-    FifoPong fifo0 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd0 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo0$in$enq__RDY),
-        .out$deq__ENA(fifo0$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo0$out$deq__RDY),
-        .out$first(fifo0$out$first),
-        .out$first__RDY(fifo0$out$first__RDY));
-    FifoPong fifo1 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd1 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo1$in$enq__RDY),
-        .out$deq__ENA(fifo1$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo1$out$deq__RDY),
-        .out$first(fifo1$out$first),
-        .out$first__RDY(fifo1$out$first__RDY));
-    FifoPong fifo2 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd2 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo2$in$enq__RDY),
-        .out$deq__ENA(fifo2$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo2$out$deq__RDY),
-        .out$first(fifo2$out$first),
-        .out$first__RDY(fifo2$out$first__RDY));
-    FifoPong fifo3 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd3 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo3$in$enq__RDY),
-        .out$deq__ENA(fifo3$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo3$out$deq__RDY),
-        .out$first(fifo3$out$first),
-        .out$first__RDY(fifo3$out$first__RDY));
-    FifoPong fifo4 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd4 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo4$in$enq__RDY),
-        .out$deq__ENA(fifo4$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo4$out$deq__RDY),
-        .out$first(fifo4$out$first),
-        .out$first__RDY(fifo4$out$first__RDY));
-    FifoPong fifo5 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd5 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo5$in$enq__RDY),
-        .out$deq__ENA(fifo5$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo5$out$deq__RDY),
-        .out$first(fifo5$out$first),
-        .out$first__RDY(fifo5$out$first__RDY));
-    FifoPong fifo6 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd6 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo6$in$enq__RDY),
-        .out$deq__ENA(fifo6$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo6$out$deq__RDY),
-        .out$first(fifo6$out$first),
-        .out$first__RDY(fifo6$out$first__RDY));
-    FifoPong fifo7 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd7 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo7$in$enq__RDY),
-        .out$deq__ENA(fifo7$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo7$out$deq__RDY),
-        .out$first(fifo7$out$first),
-        .out$first__RDY(fifo7$out$first__RDY));
-    FifoPong fifo8 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd8 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo8$in$enq__RDY),
-        .out$deq__ENA(fifo8$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo8$out$deq__RDY),
-        .out$first(fifo8$out$first),
-        .out$first__RDY(fifo8$out$first__RDY));
-    FifoPong fifo9 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( in$say$meth == 32'd9 ) & in$say__ENA),
-        .in$enq$v({ in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a }),
-        .in$enq__RDY(fifo9$in$enq__RDY),
-        .out$deq__ENA(fifo9$out$first__RDY & out$heard__RDY),
-        .out$deq__RDY(fifo9$out$deq__RDY),
-        .out$first(fifo9$out$first),
-        .out$first__RDY(fifo9$out$first__RDY));
-    assign in$say__RDY = fifo0$in$enq__RDY & fifo1$in$enq__RDY & fifo2$in$enq__RDY & fifo3$in$enq__RDY & fifo4$in$enq__RDY & fifo5$in$enq__RDY & fifo6$in$enq__RDY & fifo7$in$enq__RDY & fifo8$in$enq__RDY & fifo9$in$enq__RDY;
-    assign out$heard$meth = ( ( fifo0$out$first__RDY & fifo0$out$deq__RDY & out$heard__RDY ) ? 0 : 0 ) | ( fifo1$out$first__RDY & fifo1$out$deq__RDY & out$heard__RDY ) | ( ( fifo2$out$first__RDY & fifo2$out$deq__RDY & out$heard__RDY ) ? 2 : 0 ) | ( ( fifo3$out$first__RDY & fifo3$out$deq__RDY & out$heard__RDY ) ? 3 : 0 ) | ( ( fifo4$out$first__RDY & fifo4$out$deq__RDY & out$heard__RDY ) ? 4 : 0 ) | ( ( fifo5$out$first__RDY & fifo5$out$deq__RDY & out$heard__RDY ) ? 5 : 0 ) | ( ( fifo6$out$first__RDY & fifo6$out$deq__RDY & out$heard__RDY ) ? 6 : 0 ) | ( ( fifo7$out$first__RDY & fifo7$out$deq__RDY & out$heard__RDY ) ? 7 : 0 ) | ( ( fifo8$out$first__RDY & fifo8$out$deq__RDY & out$heard__RDY ) ? 8 : 0 ) | ( ( fifo9$out$first__RDY & fifo9$out$deq__RDY & out$heard__RDY ) ? 9 : 0 );
-    assign out$heard$v = ( ( fifo0$out$first__RDY & fifo0$out$deq__RDY & out$heard__RDY ) ? fifo0$out$first[ 63 : 32 ] : 0 ) | ( ( fifo1$out$first__RDY & fifo1$out$deq__RDY & out$heard__RDY ) ? fifo1$out$first[ 63 : 32 ] : 0 ) | ( ( fifo2$out$first__RDY & fifo2$out$deq__RDY & out$heard__RDY ) ? fifo2$out$first[ 63 : 32 ] : 0 ) | ( ( fifo3$out$first__RDY & fifo3$out$deq__RDY & out$heard__RDY ) ? fifo3$out$first[ 63 : 32 ] : 0 ) | ( ( fifo4$out$first__RDY & fifo4$out$deq__RDY & out$heard__RDY ) ? fifo4$out$first[ 63 : 32 ] : 0 ) | ( ( fifo5$out$first__RDY & fifo5$out$deq__RDY & out$heard__RDY ) ? fifo5$out$first[ 63 : 32 ] : 0 ) | ( ( fifo6$out$first__RDY & fifo6$out$deq__RDY & out$heard__RDY ) ? fifo6$out$first[ 63 : 32 ] : 0 ) | ( ( fifo7$out$first__RDY & fifo7$out$deq__RDY & out$heard__RDY ) ? fifo7$out$first[ 63 : 32 ] : 0 ) | ( ( fifo8$out$first__RDY & fifo8$out$deq__RDY & out$heard__RDY ) ? fifo8$out$first[ 63 : 32 ] : 0 ) | ( ( fifo9$out$first__RDY & fifo9$out$deq__RDY & out$heard__RDY ) ? fifo9$out$first[ 63 : 32 ] : 0 );
-    assign out$heard__ENA = ( fifo0$out$first__RDY & fifo0$out$deq__RDY ) | ( fifo1$out$first__RDY & fifo1$out$deq__RDY ) | ( fifo2$out$first__RDY & fifo2$out$deq__RDY ) | ( fifo3$out$first__RDY & fifo3$out$deq__RDY ) | ( fifo4$out$first__RDY & fifo4$out$deq__RDY ) | ( fifo5$out$first__RDY & fifo5$out$deq__RDY ) | ( fifo6$out$first__RDY & fifo6$out$deq__RDY ) | ( fifo7$out$first__RDY & fifo7$out$deq__RDY ) | ( fifo8$out$first__RDY & fifo8$out$deq__RDY ) | ( fifo9$out$first__RDY & fifo9$out$deq__RDY );
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin : fifo
+      wire in$enq__ENA;
+      wire [95:0]in$enq$v;
+      wire in$enq__RDY;
+      wire out$deq__ENA;
+      wire out$deq__RDY;
+      wire [95:0]out$first;
+      wire out$first__RDY;
+      FifoPong data (.CLK(CLK), .nRST(nRST),
+        .in$enq__ENA(in$enq__ENA),
+        .in$enq$v(in$enq$v),
+        .in$enq__RDY(in$enq__RDY),
+        .out$deq__ENA(out$deq__ENA),
+        .out$deq__RDY(out$deq__RDY),
+        .out$first(out$first),
+        .out$first__RDY(out$first__RDY));
+    end;
+    assign fifo[0].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[0].in$enq__ENA = ( in$say$meth == 32'd0 ) & in$say__ENA;
+    assign fifo[0].out$deq__ENA = fifo[0].out$first__RDY & out$heard__RDY;
+    assign fifo[1].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[1].in$enq__ENA = ( in$say$meth == 32'd1 ) & in$say__ENA;
+    assign fifo[1].out$deq__ENA = fifo[1].out$first__RDY & out$heard__RDY;
+    assign fifo[2].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[2].in$enq__ENA = ( in$say$meth == 32'd2 ) & in$say__ENA;
+    assign fifo[2].out$deq__ENA = fifo[2].out$first__RDY & out$heard__RDY;
+    assign fifo[3].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[3].in$enq__ENA = ( in$say$meth == 32'd3 ) & in$say__ENA;
+    assign fifo[3].out$deq__ENA = fifo[3].out$first__RDY & out$heard__RDY;
+    assign fifo[4].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[4].in$enq__ENA = ( in$say$meth == 32'd4 ) & in$say__ENA;
+    assign fifo[4].out$deq__ENA = fifo[4].out$first__RDY & out$heard__RDY;
+    assign fifo[5].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[5].in$enq__ENA = ( in$say$meth == 32'd5 ) & in$say__ENA;
+    assign fifo[5].out$deq__ENA = fifo[5].out$first__RDY & out$heard__RDY;
+    assign fifo[6].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[6].in$enq__ENA = ( in$say$meth == 32'd6 ) & in$say__ENA;
+    assign fifo[6].out$deq__ENA = fifo[6].out$first__RDY & out$heard__RDY;
+    assign fifo[7].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[7].in$enq__ENA = ( in$say$meth == 32'd7 ) & in$say__ENA;
+    assign fifo[7].out$deq__ENA = fifo[7].out$first__RDY & out$heard__RDY;
+    assign fifo[8].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[8].in$enq__ENA = ( in$say$meth == 32'd8 ) & in$say__ENA;
+    assign fifo[8].out$deq__ENA = fifo[8].out$first__RDY & out$heard__RDY;
+    assign fifo[9].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
+    assign fifo[9].in$enq__ENA = ( in$say$meth == 32'd9 ) & in$say__ENA;
+    assign fifo[9].out$deq__ENA = fifo[9].out$first__RDY & out$heard__RDY;
+    assign in$enq$v = { in$enq$v$c , in$enq$v$b , in$enq$v$a };
+    assign in$say__RDY = fifo[0].in$enq__RDY & fifo[1].in$enq__RDY & fifo[2].in$enq__RDY & fifo[3].in$enq__RDY & fifo[4].in$enq__RDY & fifo[5].in$enq__RDY & fifo[6].in$enq__RDY & fifo[7].in$enq__RDY & fifo[8].in$enq__RDY & fifo[9].in$enq__RDY;
+    assign out$heard$meth = ( ( fifo[0].out$first__RDY & fifo[0].out$deq__RDY & out$heard__RDY ) ? 0 : 0 ) | ( fifo[1].out$first__RDY & fifo[1].out$deq__RDY & out$heard__RDY ) | ( ( fifo[2].out$first__RDY & fifo[2].out$deq__RDY & out$heard__RDY ) ? 2 : 0 ) | ( ( fifo[3].out$first__RDY & fifo[3].out$deq__RDY & out$heard__RDY ) ? 3 : 0 ) | ( ( fifo[4].out$first__RDY & fifo[4].out$deq__RDY & out$heard__RDY ) ? 4 : 0 ) | ( ( fifo[5].out$first__RDY & fifo[5].out$deq__RDY & out$heard__RDY ) ? 5 : 0 ) | ( ( fifo[6].out$first__RDY & fifo[6].out$deq__RDY & out$heard__RDY ) ? 6 : 0 ) | ( ( fifo[7].out$first__RDY & fifo[7].out$deq__RDY & out$heard__RDY ) ? 7 : 0 ) | ( ( fifo[8].out$first__RDY & fifo[8].out$deq__RDY & out$heard__RDY ) ? 8 : 0 ) | ( ( fifo[9].out$first__RDY & fifo[9].out$deq__RDY & out$heard__RDY ) ? 9 : 0 );
+    assign out$heard$v = ( ( fifo[0].out$first__RDY & fifo[0].out$deq__RDY & out$heard__RDY ) ? fifo[0].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[1].out$first__RDY & fifo[1].out$deq__RDY & out$heard__RDY ) ? fifo[1].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[2].out$first__RDY & fifo[2].out$deq__RDY & out$heard__RDY ) ? fifo[2].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[3].out$first__RDY & fifo[3].out$deq__RDY & out$heard__RDY ) ? fifo[3].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[4].out$first__RDY & fifo[4].out$deq__RDY & out$heard__RDY ) ? fifo[4].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[5].out$first__RDY & fifo[5].out$deq__RDY & out$heard__RDY ) ? fifo[5].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[6].out$first__RDY & fifo[6].out$deq__RDY & out$heard__RDY ) ? fifo[6].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[7].out$first__RDY & fifo[7].out$deq__RDY & out$heard__RDY ) ? fifo[7].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[8].out$first__RDY & fifo[8].out$deq__RDY & out$heard__RDY ) ? fifo[8].out$first[ 63 : 32 ] : 0 ) | ( ( fifo[9].out$first__RDY & fifo[9].out$deq__RDY & out$heard__RDY ) ? fifo[9].out$first[ 63 : 32 ] : 0 );
+    assign out$heard__ENA = ( fifo[0].out$first__RDY & fifo[0].out$deq__RDY ) | ( fifo[1].out$first__RDY & fifo[1].out$deq__RDY ) | ( fifo[2].out$first__RDY & fifo[2].out$deq__RDY ) | ( fifo[3].out$first__RDY & fifo[3].out$deq__RDY ) | ( fifo[4].out$first__RDY & fifo[4].out$deq__RDY ) | ( fifo[5].out$first__RDY & fifo[5].out$deq__RDY ) | ( fifo[6].out$first__RDY & fifo[6].out$deq__RDY ) | ( fifo[7].out$first__RDY & fifo[7].out$deq__RDY ) | ( fifo[8].out$first__RDY & fifo[8].out$deq__RDY ) | ( fifo[9].out$first__RDY & fifo[9].out$deq__RDY );
+    // Extra assigments, not to output wires
+    assign fifo[0].in$enq$v = { in$say__ENA$temp$c , in$say$v , in$say__ENA$temp$a };
 
     always @( posedge CLK) begin
       if (!nRST) begin

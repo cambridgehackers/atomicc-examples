@@ -7,10 +7,10 @@ module IobufVec #(
     input wire [iovecWidth- 1:0]I,
     output wire [iovecWidth- 1:0]O,
     input wire T);
+    genvar  __inst$Genvar1;
     wire CLK;
     wire nRST;
-    genvar __inst$Genvar1;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin iobufs:
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
       wire I;
       wire IO;
       wire O;
