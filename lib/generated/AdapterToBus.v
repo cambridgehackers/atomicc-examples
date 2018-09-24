@@ -14,7 +14,7 @@ module AdapterToBus (input wire CLK, input wire nRST,
     reg [15:0]remain;
     assign in$enq__RDY = remain == 16'd0;
     assign out$enq$length = remain;
-    assign out$enq$v = buffer;
+    assign out$enq$v = buffer[ 31 : 0 ];
     assign out$enq__ENA = remain != 16'd0;
 
     always @( posedge CLK) begin

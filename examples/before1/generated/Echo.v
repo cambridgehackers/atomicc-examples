@@ -33,9 +33,9 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard__ENA = busy_delay;
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
-    assign swap$x2y__RDY = 1;
-    assign swap$y2x__RDY = 1;
-    assign swap$y2xnull__RDY = 1;
+    assign swap$x2y__RDY = 1'd1;
+    assign swap$y2x__RDY = 1'd1;
+    assign swap$y2xnull__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin

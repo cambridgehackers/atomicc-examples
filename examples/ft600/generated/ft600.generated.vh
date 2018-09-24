@@ -3,6 +3,6 @@
 
 //METASTART; ModFt600
 //METAINTERNAL; iov; IobufVec$__PARAM__$iovecWidth$16;
-//METAGUARD; RULE$handshake; 1;
+//METAGUARD; RULE$handshake; 1'd1;
 //METARULES; RULE$handshake
 `endif

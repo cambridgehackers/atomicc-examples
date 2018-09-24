@@ -13,7 +13,7 @@ module AdapterFromBus (input wire CLK, input wire nRST,
     reg [127:0]buffer;
     reg waitForEnq;
     assign in$enq__RDY = !waitForEnq;
-    assign out$enq$length = 0;
+    assign out$enq$length = 16'd0;
     assign out$enq$v = buffer;
     assign out$enq__ENA = waitForEnq;
 

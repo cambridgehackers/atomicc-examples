@@ -48,7 +48,7 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard__ENA = ( v_type == 32'd1 ) & busy_delay;
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
-    assign request$setLeds__RDY = 1;
+    assign request$setLeds__RDY = 1'd1;
     // Extra assigments, not to output wires
     assign RULE$respond_rule__ENA = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
     assign RULE$respond_rule__RDY = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );

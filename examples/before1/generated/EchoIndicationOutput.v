@@ -18,7 +18,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     reg [31:0]ind1$tag;
     reg ind_busy;
     assign indication$heard__RDY = !ind_busy;
-    assign pipe$enq$v = ( ( ind_busy & even & pipe$enq__RDY ) ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : 0 ) | ( ( ind_busy & ( !even ) & pipe$enq__RDY ) ? { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag } : 0 );
+    assign pipe$enq$v = ( ( ind_busy & even & pipe$enq__RDY ) ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : 96'd0 ) | ( ( ind_busy & ( !even ) & pipe$enq__RDY ) ? { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag } : 96'd0 );
     assign pipe$enq__ENA = ( ind_busy & even ) | ( ind_busy & ( !even ) );
 
     always @( posedge CLK) begin

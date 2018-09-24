@@ -11,7 +11,7 @@
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; !busy;
 //METAGUARD; request$say; !busy;
-//METAGUARD; request$setLeds; 1;
+//METAGUARD; request$setLeds; 1'd1;
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; l_top
 //METAEXTERNAL; indication; l_ainterface_OC_PipeInH;

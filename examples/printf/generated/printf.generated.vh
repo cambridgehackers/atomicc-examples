@@ -4,7 +4,7 @@
 //METASTART; Echo
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
 //METAEXTERNAL; printfp; l_ainterface_OC_PipeInH;
-//METAGUARD; RULE$clockRule; 1;
+//METAGUARD; RULE$clockRule; 1'd1;
 //METAINVOKE; RULE$delay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA; request$zsay4__ENA
 //METAGUARD; RULE$delay_rule; ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
