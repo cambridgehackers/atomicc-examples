@@ -9,127 +9,27 @@ module ModFt600 (
     output wire usb_wr_n,
     output wire usb_oe_n,
     inout wire [15:0]usb_ad);
+    genvar  __inst$Genvar1;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
     wire CLK;
     wire nRST;
-    IOBUF iobufs0 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 0),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs1 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 1),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs2 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 2),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs3 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 3),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs4 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 4),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs5 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 5),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs6 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 6),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs7 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 7),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs8 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 8),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs9 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 9),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs10 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 10),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs11 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 11),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs12 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 12),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs13 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 13),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs14 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 14),
-        .I(0),
-        .O(),
-        .T(0));
-    IOBUF iobufs15 (
-        .CLK(CLK),
-        .RST_N(nRST),
-        .IO(usb_ad >> 15),
-        .I(0),
-        .O(),
-        .T(0));
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
+      wire I;
+      wire IO;
+      wire O;
+      wire T;
+      IOBUF data (
+        .I(I),
+        .IO(IO),
+        .O(O),
+        .T(T));
+    end;
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay ^ ( -1 ) );
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay[ 0 ] ^ ( -1'd1 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -145,6 +45,11 @@ module ModFt600 (
         // End of RULE$handshake__ENA
       end
     end // always @ (posedge CLK)
+// start RULE$iobufs__ENA
+    for (__inst$Genvar1 = 0; __inst$Genvar1 < 16; 1) begin
+        assign iobufs[__inst$Genvar1].IO = usb_ad >> __inst$Genvar1;
+    end;
+// end RULE$iobufs__ENA
 endmodule 
 
 `default_nettype wire    // set back to default value

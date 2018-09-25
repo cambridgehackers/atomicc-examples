@@ -19,16 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "fifo.h"
-#include "mux.h"
-#include "adapter.h"
-
-//typedef __int(32) aint32;
-typedef __int(16) aint16;
-//typedef __int(8) aint8;
-#define aint32 __int(32)
-//#define aint16 __int(16)
-#define aint8 __int(8)
+#include "VIOBUF.h"
 
 __interface Ft600 {
   //changed __input __int(1) CLK;
@@ -40,19 +31,6 @@ __interface Ft600 {
   __output __int(1) usb_wr_n;
   __output __int(1) usb_oe_n;
   __inout __int(16) usb_ad;
-};
-
-__interface I_IOBUF {
-  __output __int(1) CLK;
-  __output __int(1) RST_N;
-  __inout __int(1) IO;
-  __input __int(1) I;
-  __output __int(1) O;
-  __input __int(1) T;
-};
-
-__emodule IOBUF {
-  I_IOBUF _;
 };
 
 __module ModFt600 {
@@ -73,14 +51,10 @@ __module ModFt600 {
 	  usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
 	  usb_txe_delay = _.usb_txe;
         }
-	for (int i = 0; i < 16; i++) {
-	    __rule iobufs {
+	__rule iobufs {
+	    for (int i = 0; i < 16; i++)
 	        iobufs[i]._.IO = _.usb_ad >> i;
-	        iobufs[i]._.CLK = __defaultClock; //changed _.CLK;
-	        iobufs[i]._.RST_N = __defaultnReset; //changed _.nRST;
-            }
         }
     }
 };
-
-ModFt600 modft600;
+static ModFt600 dummy;  // need to run constructor
