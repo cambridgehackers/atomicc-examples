@@ -1,6 +1,5 @@
-"[delay_rule:82]Echo\n" 
-"[respond_rule:90]Echo\n" 
-"[request$say:57]Echo %x %x\n" 16 16 
-"[request$say2:63]Echo\n" 
-"[request$setLeds:78]Echo\n" 
-"[request$zsay4:75]Echo\n" 
+"[delay_rule:63]Echo\n" 
+"[respond_rule:71]Echo\n" 
+"[request$say:47]Echo %x %x\n" 16 16 
+"[request$say2:53]Echo\n" 
+"[request$setLeds:60]Echo\n" 

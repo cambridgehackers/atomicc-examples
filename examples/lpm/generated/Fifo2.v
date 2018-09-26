@@ -10,15 +10,9 @@ module Fifo2 (input wire CLK, input wire nRST,
     output wire [95:0]out$first,
     output wire out$first__RDY);
     genvar  __inst$Genvar1;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 2; __inst$Genvar1 = __inst$Genvar1 + 1) begin : element$a
-    reg [31:0]data;
-    end;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 2; __inst$Genvar1 = __inst$Genvar1 + 1) begin : element$b
-    reg [31:0]data;
-    end;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 2; __inst$Genvar1 = __inst$Genvar1 + 1) begin : element$c
-    reg [31:0]data;
-    end;
+    reg [31:0]element$a [2:0];
+    reg [31:0]element$b [2:0];
+    reg [31:0]element$c [2:0];
     reg [31:0]rindex;
     reg [31:0]windex;
     wire [95:0]element;
