@@ -38,6 +38,7 @@ MODULE Echo {
     SOFTWARE indication
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACE/Ptr l_ainterface_OC_PipeInH printfp
     FIELD INTEGER_1 busy
     FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 v_temp

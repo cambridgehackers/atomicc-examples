@@ -46,7 +46,7 @@ module ModFt600 (
       end
     end // always @ (posedge CLK)
 // start RULE$iobufs__ENA
-    for (__inst$Genvar1 = 0; __inst$Genvar1 < 16; 1) begin
+    for (__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
         assign iobufs[__inst$Genvar1].IO = usb_ad >> __inst$Genvar1;
     end;
 // end RULE$iobufs__ENA
