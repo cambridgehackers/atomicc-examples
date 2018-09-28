@@ -19,7 +19,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "fifo.h"
 #include "userTop.h"
 #include "mux.h"
 
@@ -61,23 +60,21 @@ printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
     }
     __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
 printf("[delay_rule:%d]Echo\n", __LINE__);
-         busy = 0;
-         busy_delay = 1;
-         v_delay = v_temp;
-         a_delay = a_temp;
-         b_delay = b_temp;
-       };
+        busy = 0;
+        busy_delay = 1;
+        v_delay = v_temp;
+        a_delay = a_temp;
+        b_delay = b_temp;
+    };
     __rule respond_rule if(busy_delay != 0) {
 printf("[respond_rule:%d]Echo\n", __LINE__);
-         busy_delay = 0;
-         if (v_type == 1)
-         indication->heard(v_delay);
-         else
-         indication->heard2(a_delay, b_delay);
-       };
+        busy_delay = 0;
+        if (v_type == 1)
+            indication->heard(v_delay);
+        else
+            indication->heard2(a_delay, b_delay);
+    };
     __rule clockRule {
        clockReg++;
     }
 };
-//
-//Echo test;

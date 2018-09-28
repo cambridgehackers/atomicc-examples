@@ -21,7 +21,6 @@
 #include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
-//#include "portal.h"
 #include "EchoIndication.h"
 #include "EchoRequest.h"
 #include "GeneratedTypes.h"

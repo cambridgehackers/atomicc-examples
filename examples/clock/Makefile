@@ -1,9 +1,4 @@
 
-export DTOP=$(PWD)
-CONNECTALDIR=$(PWD)/../../../connectal
-CONNECTALSDIR=$(DTOP)/../../connectal
-SIMMAKE=$(CONNECTALDIR)/../atomicc/simulation/Makefile.verilator
-
 include ../../makefile.in
 
 all:

@@ -38,7 +38,6 @@ MODULE Echo {
     SOFTWARE indication
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    INTERFACE/Ptr l_ainterface_OC_PipeInH printfp
     FIELD INTEGER_1 busy
     FIELD INTEGER_1 busy_delay
     FIELD INTEGER_32 v_temp
@@ -53,7 +52,7 @@ MODULE Echo {
         STORE :clockReg = (clockReg) + (1)
     }
     METHOD/Rule RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",63}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",62}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -61,25 +60,25 @@ MODULE Echo {
         STORE :b_delay = b_temp
     }
     METHOD/Rule RULE$respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",71}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",70}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
     }
     METHOD request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",53}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",52}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",47,busy_delay,clockReg}
+        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",46,busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
     METHOD request$setLeds__ENA ( INTEGER_8 v ) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",60}
+        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",59}
     }
 }

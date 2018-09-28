@@ -1,5 +1,4 @@
 
-TOPDIR ?= ..
 include ../makefile.in
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace

@@ -12,8 +12,6 @@ module Echo (input wire CLK, input wire nRST,
     input wire request$setLeds__ENA,
     input wire [7:0]request$setLeds$v,
     output wire request$setLeds__RDY,
-    input wire request$zsay4__ENA,
-    output wire request$zsay4__RDY,
     output wire indication$heard__ENA,
     output wire [31:0]indication$heard$v,
     output wire indication$heard2__ENA,
@@ -26,47 +24,35 @@ module Echo (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard3$c,
     output wire [15:0]indication$heard3$d,
     input wire indication$heard3__RDY,
-    input wire indication$heard__RDY,
-    output wire printfp$enq__ENA,
-    output wire [127:0]printfp$enq$v,
-    output wire [15:0]printfp$enq$length,
-    input wire printfp$enq__RDY);
+    input wire indication$heard__RDY);
     reg [15:0]a_delay;
     reg [15:0]a_temp;
     reg [15:0]b_delay;
     reg [15:0]b_temp;
-    reg [31:0]busy;
-    reg [31:0]busy_delay;
+    reg busy;
+    reg busy_delay;
     reg [31:0]clockReg;
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
-    wire RULE$delay_rule__ENA;
-    wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__ENA;
     wire RULE$respond_rule__RDY;
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
-    assign indication$heard2__ENA = ( v_type != 32'd1 ) & ( busy_delay != 32'd0 ) & printfp$enq__RDY;
+    assign indication$heard2__ENA = ( v_type != 32'd1 ) & busy_delay;
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard__ENA = ( v_type == 32'd1 ) & ( busy_delay != 32'd0 ) & printfp$enq__RDY;
-    assign printfp$enq$length = ( ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY ) ? 16'd2 : 16'd0 ) | ( ( ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY ) ? 16'd2 : 16'd0 ) | ( request$say__ENA ? 16'd3 : 16'd0 ) | ( request$say2__ENA ? 16'd2 : 16'd0 ) | ( request$setLeds__ENA ? 16'd2 : 16'd0 ) | ( request$zsay4__ENA ? 16'd2 : 16'd0 );
-    assign printfp$enq$v = ( ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY ) ? { 16'd1 , 16'd32767 , 16'd2 } : 128'd0 ) | ( ( ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY ) ? { 16'd2 , 16'd32767 , 16'd2 } : 128'd0 ) | ( request$say__ENA ? { busy_delay , clockReg , 16'd3 , 16'd32767 , 16'd3 } : 128'd0 ) | ( request$say2__ENA ? { 16'd4 , 16'd32767 , 16'd2 } : 128'd0 ) | ( request$setLeds__ENA ? { 16'd5 , 16'd32767 , 16'd2 } : 128'd0 ) | ( request$zsay4__ENA ? { 16'd6 , 16'd32767 , 16'd2 } : 128'd0 );
-    assign printfp$enq__ENA = ( ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) ) | ( ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | request$say__ENA | request$say2__ENA | request$setLeds__ENA | request$zsay4__ENA;
-    assign request$say2__RDY = ( busy == 32'd0 ) & printfp$enq__RDY;
-    assign request$say__RDY = ( busy == 32'd0 ) & printfp$enq__RDY;
-    assign request$setLeds__RDY = printfp$enq__RDY;
-    assign request$zsay4__RDY = printfp$enq__RDY;
+    assign indication$heard__ENA = ( v_type == 32'd1 ) & busy_delay;
+    assign request$say2__RDY = !busy;
+    assign request$say__RDY = !busy;
+    assign request$setLeds__RDY = 1'd1;
     // Extra assigments, not to output wires
-    assign RULE$delay_rule__ENA = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
-    assign RULE$delay_rule__RDY = ( busy != 32'd0 ) & ( busy_delay == 32'd0 ) & printfp$enq__RDY;
-    assign RULE$respond_rule__ENA = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
-    assign RULE$respond_rule__RDY = ( busy_delay != 32'd0 ) & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
+    assign RULE$respond_rule__ENA = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+    assign RULE$respond_rule__RDY = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -85,27 +71,34 @@ module Echo (input wire CLK, input wire nRST,
         // RULE$clockRule__ENA
             clockReg <= clockReg + 1;
         // End of RULE$clockRule__ENA
-        if (RULE$delay_rule__ENA & RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
+        if (busy & ( !busy_delay )) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
+            $display( "[delay_rule:%d]Echo" , 62 );
         end; // End of RULE$delay_rule__ENA
         if (RULE$respond_rule__ENA & RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
+            $display( "[respond_rule:%d]Echo" , 70 );
         end; // End of RULE$respond_rule__ENA
-        if (request$say2__ENA & ( busy == 32'd0 ) & printfp$enq__RDY) begin // request$say2__ENA
+        if (request$say2__ENA & ( !busy )) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
+            $display( "[%s:%d]Echo" , "request$say2" , 52 );
         end; // End of request$say2__ENA
-        if (request$say__ENA & ( busy == 32'd0 ) & printfp$enq__RDY) begin // request$say__ENA
+        if (request$say__ENA & ( !busy )) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;
+            $display( "[%s:%d]Echo %x %x" , "request$say" , 46 , busy_delay , clockReg );
         end; // End of request$say__ENA
+        if (request$setLeds__ENA) begin // request$setLeds__ENA
+            $display( "[%s:%d]Echo" , "request$setLeds" , 59 );
+        end; // End of request$setLeds__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

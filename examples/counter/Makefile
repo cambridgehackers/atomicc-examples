@@ -7,6 +7,3 @@ all:
 	$(CPP) -c $(CPPFLAGS) $(LLVMFLAGS) -S -o generated/atomicc.ll ../../cpp/atomicc.cpp
 	$(CPP) -c $(CPPFLAGS) -o generated/counter.o counter.cpp
 	$(CPP) -c $(CPPFLAGS) -o generated/atomicc.o ../../cpp/atomicc.cpp
-
-clean:
-	rm -f counter.ll counter.s counter.tmp
