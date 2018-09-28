@@ -34,7 +34,7 @@ public:
     NOCPipeH         *out;
     Fifo1<NOCData>   forwardFifo;
     Fifo1<__uint(16)>   forwardFifol;
-    void in.enq(NOCData v, __uint(16) length) {
+    void in.enq(NOCData v, __uint(16) length) if (!__ready(forwardFifo.out.first)) {
         out->enq(v, length);
     }
     void forward.enq(NOCData v, __uint(16) length) {

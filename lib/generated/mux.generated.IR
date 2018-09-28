@@ -110,7 +110,7 @@ MODULE MuxPipe {
         CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
         CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
     }
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+    METHOD in$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v,in$enq$length}
     }
 }
