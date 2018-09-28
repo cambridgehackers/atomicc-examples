@@ -22,8 +22,8 @@ module EchoIndication___M2P (input wire CLK, input wire nRST,
     assign method$heard2__RDY = pipe$enq__RDY;
     assign method$heard3__RDY = pipe$enq__RDY;
     assign method$heard__RDY = pipe$enq__RDY;
-    assign pipe$enq$length = ( method$heard__ENA ? 16'd2 : 16'd0 ) | ( method$heard2__ENA ? 16'd2 : 16'd0 ) | ( method$heard3__ENA ? 16'd4 : 16'd0 );
-    assign pipe$enq$v = ( method$heard__ENA ? ( { 64'd0, method$heard$v, 16'd0, 16'd5} ) : 128'd0 ) | ( method$heard2__ENA ? ( { 64'd0, method$heard2$b, method$heard2$a, 16'd1, 16'd5} ) : 128'd0 ) | ( method$heard3__ENA ? ( { method$heard3$d, method$heard3$c, method$heard3$b, method$heard3$a, 16'd2, 16'd5} ) : 128'd0 );
+    assign pipe$enq$length = ( ( method$heard__ENA & pipe$enq__RDY ) ? 16'd2 : 16'd0 ) | ( ( method$heard2__ENA & pipe$enq__RDY ) ? 16'd2 : 16'd0 ) | ( ( method$heard3__ENA & pipe$enq__RDY ) ? 16'd4 : 16'd0 );
+    assign pipe$enq$v = ( ( method$heard__ENA & pipe$enq__RDY ) ? ( { 64'd0, method$heard$v, 16'd0, 16'd5} ) : 128'd0 ) | ( ( method$heard2__ENA & pipe$enq__RDY ) ? ( { 64'd0, method$heard2$b, method$heard2$a, 16'd1, 16'd5} ) : 128'd0 ) | ( ( method$heard3__ENA & pipe$enq__RDY ) ? ( { method$heard3$d, method$heard3$c, method$heard3$b, method$heard3$a, 16'd2, 16'd5} ) : 128'd0 );
     assign pipe$enq__ENA = method$heard__ENA | method$heard2__ENA | method$heard3__ENA;
 endmodule 
 

@@ -23,7 +23,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     wire [31:0]request$say__ENA$ind$data$say2$meth;
     wire [31:0]request$say__ENA$ind$data$say2$v;
     wire [31:0]request$say__ENA$ind$data$say2$v2;
-    assign pipe$enq$v = ( request$say__ENA ? { request$say__ENA$ind$data$say2$v2 , request$say__ENA$ind$data$say2$v , request$say__ENA$ind$data$say2$meth , request$say__ENA$ind$data$say$v , request$say__ENA$ind$data$say$meth , 32'd1 } : 192'd0 ) | ( request$say2__ENA ? { request$say2__ENA$ind$data$say2$v2 , request$say2__ENA$ind$data$say2$v , request$say2__ENA$ind$data$say2$meth , request$say2__ENA$ind$data$say$v , request$say2__ENA$ind$data$say$meth , 32'd2 } : 192'd0 );
+    assign pipe$enq$v = ( ( request$say__ENA & pipe$enq__RDY ) ? { request$say__ENA$ind$data$say2$v2 , request$say__ENA$ind$data$say2$v , request$say__ENA$ind$data$say2$meth , request$say__ENA$ind$data$say$v , request$say__ENA$ind$data$say$meth , 32'd1 } : 192'd0 ) | ( ( request$say2__ENA & pipe$enq__RDY ) ? { request$say2__ENA$ind$data$say2$v2 , request$say2__ENA$ind$data$say2$v , request$say2__ENA$ind$data$say2$meth , request$say2__ENA$ind$data$say$v , request$say2__ENA$ind$data$say$meth , 32'd2 } : 192'd0 );
     assign pipe$enq__ENA = request$say__ENA | request$say2__ENA;
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;

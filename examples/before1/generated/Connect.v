@@ -27,6 +27,8 @@ module Connect (input wire CLK, input wire nRST,
     wire lERI$request$say__ENA;
     wire [191:0]lERO_test$pipe$enq$v;
     wire lERO_test$pipe$enq__ENA;
+    wire lERO_test$request$say2__RDY;
+    wire lERO_test$request$say__RDY;
     wire [31:0]lEcho$indication$heard$meth;
     wire [31:0]lEcho$indication$heard$v;
     wire lEcho$indication$heard__ENA;
@@ -81,8 +83,8 @@ module Connect (input wire CLK, input wire nRST,
         .request$say2__ENA(request$say2__ENA),
         .request$say2$meth(request$say2$meth),
         .request$say2$v(request$say2$v),
-        .request$say2__RDY(request$say2__RDY),
-        .request$say__RDY(request$say__RDY),
+        .request$say2__RDY(lERO_test$request$say2__RDY),
+        .request$say__RDY(lERO_test$request$say__RDY),
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
         .pipe$enq__RDY(lERI$pipe$enq__RDY));
@@ -94,6 +96,8 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard$meth(indication$heard$meth),
         .indication$heard$v(indication$heard$v),
         .indication$heard__RDY(indication$heard__RDY));
+    assign request$say2__RDY = lERO_test$request$say2__RDY;
+    assign request$say__RDY = lERO_test$request$say__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

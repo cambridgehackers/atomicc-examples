@@ -10,7 +10,9 @@ module FifoPong (input wire CLK, input wire nRST,
     output wire [703:0]out$first,
     output wire out$first__RDY);
     reg pong;
+    wire element1$in$enq__ENA;
     wire element1$in$enq__RDY;
+    wire element1$out$deq__ENA;
     wire element1$out$deq__RDY;
     wire [703:0]element1$out$first;
     wire element1$out$first__RDY;
@@ -41,21 +43,23 @@ module FifoPong (input wire CLK, input wire nRST,
     wire [31:0]out$first$retval$c8;
     wire [31:0]out$first$retval$c9;
     Fifo1Base#(704) element1 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(( pong ^ 1 ) & in$enq__ENA),
+        .in$enq__ENA(element1$in$enq__ENA),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
-        .out$deq__ENA(( pong ^ 1 ) & out$deq__ENA),
+        .out$deq__ENA(element1$out$deq__ENA),
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
     Fifo1Base#(704) element2 (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(pong & in$enq__ENA),
+        .in$enq__ENA(in$enq__ENA & in$enq__RDY & pong),
         .in$enq$v(in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),
-        .out$deq__ENA(pong & out$deq__ENA),
+        .out$deq__ENA(out$deq__ENA & out$deq__RDY & pong),
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));
+    assign element1$in$enq__ENA = in$enq__ENA & in$enq__RDY & ( pong ^ 1 );
+    assign element1$out$deq__ENA = out$deq__ENA & out$deq__RDY & ( pong ^ 1 );
     assign in$enq__RDY = ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
     assign out$deq__RDY = ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
     assign out$first = { out$first$retval$c19 , out$first$retval$c18 , out$first$retval$c17 , out$first$retval$c16 , out$first$retval$c15 , out$first$retval$c14 , out$first$retval$c13 , out$first$retval$c12 , out$first$retval$c11 , out$first$retval$c10 , out$first$retval$c9 , out$first$retval$c8 , out$first$retval$c7 , out$first$retval$c6 , out$first$retval$c5 , out$first$retval$c4 , out$first$retval$c3 , out$first$retval$c2 , out$first$retval$c1 , out$first$retval$c0 , out$first$retval$b , out$first$retval$a };

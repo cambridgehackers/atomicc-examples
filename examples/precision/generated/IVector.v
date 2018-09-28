@@ -13,13 +13,14 @@ module IVector (input wire CLK, input wire nRST,
     reg [8:0]counter;
     reg [7:0]fcounter;
     reg [8:0]gcounter;
+    wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [9:0]fifo$out$first;
     wire fifo$out$first__RDY;
     Fifo1Base#(10) fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
-        .in$enq__RDY(request$say__RDY),
+        .in$enq__RDY(fifo$in$enq__RDY),
         .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
@@ -27,6 +28,7 @@ module IVector (input wire CLK, input wire nRST,
     assign ind$heard$meth = fifo$out$first[ 5 : 0 ];
     assign ind$heard$v = fifo$out$first[ 9 : 6 ];
     assign ind$heard__ENA = fifo$out$first__RDY & fifo$out$deq__RDY;
+    assign request$say__RDY = fifo$in$enq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
