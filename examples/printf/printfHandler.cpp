@@ -16,11 +16,10 @@
 */
 #include <stdio.h>
 #include <assert.h>
-#include <ctype.h>
 #include "portal.h"
-//#include <string>
-//#include <list>
-//#include <map>
+#include <string>
+#include <list>
+#include <map>
 #define MAX_READ_LINE 1024
 
 static void memdump(unsigned char *p, int len, const char *title)
@@ -40,11 +39,11 @@ int i;
     }
     fprintf(stderr, "\n");
 }
-//typedef struct {
-    //std::string format;
-    //std::list<int> width;
-//} PrintfInfo;
-//std::map<int, PrintfInfo> printfFormat;
+typedef struct {
+    std::string format;
+    std::list<int> width;
+} PrintfInfo;
+std::map<int, PrintfInfo> printfFormat;
 
 static void atomiccPrintfHandler(struct PortalInternal *p, unsigned int header)
 {
@@ -54,8 +53,6 @@ static void atomiccPrintfHandler(struct PortalInternal *p, unsigned int header)
     unsigned short *data = ((unsigned short *)p->map_base) + 2;
     int printfNumber = *data++;
     assert(printfNumber >= 0);
-printf("[%s:%d] RUNTIME format %x\n", __FUNCTION__, __LINE__, printfNumber);
-#if 0
     std::string forstr = "RUNTIME: " + printfFormat[printfNumber].format;
     const char *format = forstr.c_str();
     //printf("[%s:%d] header %x format %d = '%s'\n", __FUNCTION__, __LINE__, header, printfNumber, format);
@@ -68,7 +65,6 @@ printf("[%s:%d] RUNTIME format %x\n", __FUNCTION__, __LINE__, printfNumber);
     }
     printf(format, params[0], params[1], params[2], params[3],
         params[4], params[5], params[6]);
-#endif
 }
 
 void atomiccPrintfInit(const char *filename)
@@ -79,7 +75,6 @@ printf("[%s:%d] %s\n", __FUNCTION__, __LINE__, filename);
     int lineNumber = 0;
     int printfNumber = 1;
     connectalPrintfHandler = atomiccPrintfHandler;
-#if 0
     FILE *fp = fopen(filename, "r");
     if (!fp) {
         printf("atomiccPrintfInit: unable to open '%s'\n", filename);
@@ -124,5 +119,4 @@ printf("[%s:%d] %s\n", __FUNCTION__, __LINE__, filename);
         printfNumber++;
     }
     fclose(fp);
-#endif
 }
