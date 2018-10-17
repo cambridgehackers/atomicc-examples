@@ -40,6 +40,7 @@ uint8_t inbuf[BUFFER_SIZE];
 const char header[] = "Xilinx_Design_Exchange_Format";
 const char placerHeader[] = "Xilinx Placer Database, Copyright 2014 All rights reserved.";
 const char deviceCacheHeader[] = "Xilinx Device Cache, Copyright 2014 All rights reserved.";
+const char xnHeader[] = "XLNX:NTLP";
 int ttrace = 0;
 int trace = 0;
 int mtrace = 0;
@@ -47,6 +48,7 @@ int messageLen;
 std::string tagStringValue;
 int tagLength;
 int tagLine;
+const char *stripPrefix;
 void traceString(std::string str);
 
 void memdump(const unsigned char *p, int len, const char *title)
@@ -224,7 +226,7 @@ int readTag(uint8_t const **ptr = &bufp, bool internal = false)
         tagError = 1;
         if (!internal) {
         printf("[%s:%d] ERRORTAG: line %d tag 0x%x offset %lx\n", __FUNCTION__, __LINE__, line, tag, start - inbuf);
-memdump(start - 16, 128, "BUF16");
+memdump(start - 32, 128, "BUF16");
 exit(-1);
         }
         return -1;
@@ -255,17 +257,10 @@ void traceString(std::string str)
                 break;
             }
             if (tagStringValue != "") {
-                bool allPrintable = true;
-                uint8_t const *lstrp = (uint8_t const *)tagStringValue.c_str();
-                for (auto ch : tagStringValue)
-                    if (!isprint(ch))
-                        allPrintable = false;
-                if (allPrintable)
-                    printf(" '%s'", lstrp);
-                else {
-                    int llen = tagStringValue.length();
-                    memdump(lstrp, llen > 64 ? 64 : llen, "");
-                }
+                std::string lstr = tagStringValue;
+                if (stripPrefix && lstr.substr(0, strlen(stripPrefix)) == stripPrefix)
+                    lstr = lstr.substr(strlen(stripPrefix));
+                traceString(lstr);
             }
             else
                 printf("%x", tagVal);
@@ -537,168 +532,105 @@ if (cind > cval - 5) mtrace = 1;
     }
 }
 
-void readCMessage(void)
+int readCMessage(void)
 {
-    int vari = readVarint();
+    int vari = readVarint(&bufp, true); // dont trace, since 'assert' will check value
     int tagVal = readMessage();
     if(ttrace || vari != tagVal)
         printf("[%s:%d] var %d mes %d\n", __FUNCTION__, __LINE__, vari, tagVal);
     assert(vari == tagVal);
+    if (!vari)
+        checkByte(0);
+    return vari;
 }
 
-void readCPair(void)
+void readPairList()
 {
-    int tagVal = readMessage();
-    if (ttrace)
-        printf("[%s:%d] %d ", __FUNCTION__, __LINE__, tagVal);
-    readCMessage();
-}
-
-void readMlist(int prefix, int limit)
-{
-    for (int i = 0; i < prefix; i++) {
-        readCPair();
+    while (messageDataIndex == 2 || messageDataIndex == 3) {
         readCMessage();
-        readCMessage();
-    }
-    for (int i = 0; i < limit; i++)
-        for (int j = 0; j < 4; j++) { // 6, 0, 0, 0
-            int tagVal = readMessage();
-            if (ttrace)
-                printf("%s: [%d:%d] %d\n", __FUNCTION__, i, j, tagVal);
-        }
-}
-
-void readPairList(int len)
-{
-    for (int i = 0; i < len; i++)
-        readCPair(); // 3, 1
-    int tagVal = readMessage(); // 4
-    if (tagVal != 4)
-        printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    assert(tagVal == 4);
-}
-
-void readFive(int pairLen, int returnLen, int fiveLen)
-{
-    for (int i = 0; i < pairLen; i++)
-        readCPair();
-    int tagVal = readMessage(); // == 'returnLen'
-//printf("[%s:%d] FIVETAG %d\n", __FUNCTION__, __LINE__, tagVal);
-    for (int i = 0; i < fiveLen; i++) {
-        tagVal = readMessage();
-        assert(tagVal == 5);
+        readMessage();
     }
 }
 
-const char xnHeader[] = "XLNX:NTLP";
-uint8_t nullstr[100];
 void dumpXn()
 {
 //jca
     printf("Parse header\n");
     checkStr(std::string(bufp, bufp + strlen(xnHeader)), xnHeader);
     bufp += strlen(xnHeader);
-#if 0
-int count = 0, ncount = 10000000;
-uint8_t *next = bufp + 0x100000;
-int off1, off2;
-trace = 1;
-    while (memcmp(bufp, nullstr, sizeof(nullstr))) {
-        if (bufp[0] == 0x86 //|| count >= ncount// || bufp >= next 
-        || (bufp[0] & 0x7) == 0x4
-        || (bufp[0] & 0x7) == 0x6
-        || (bufp[0] & 0x7) == 0x7
-           ) {
-int off = bufp - inbuf;
-printf("[%s:%d] count %d=0x%x ncount %d OFF %lx next %ld %p\n", __FUNCTION__, __LINE__, count, count, ncount, bufp - inbuf, bufp - next, next);
-memdump(bufp - 16, 64, "BREAK");
-if (bufp[0] == 0x1e
-        //|| (bufp[0] & 0x7) == 0x4
-   ) {
-    bufp++;
-    off1 = 1000000;
-    off2 = 0;
-}
-else {
-    off1 = readVarint();
-    off2 = readVarint();
-    printf("[%s:%d] off1 %x %p off2 %x %p sum %x\n", __FUNCTION__, __LINE__, off1, bufp + off1, off2, bufp + off2, off2 + off);
-    //memdump(bufp + off1 - 16, 32, "OFF1");
-    //memdump(bufp + off2 - 16, 32, "OFF2");
-}
-if (off2)
-    next = bufp + off2;
-else
-    next = bufp + 0x100000;
-ncount = off1;
-count = 0;
-        }
-        else {
-            count++;
-            readTag();
+    skipBuf(0x52);
+    int tagVal = readMessage();
+    printf("[%s:%d] stringCount %d\n", __FUNCTION__, __LINE__, tagVal);
+//mtrace = 1;
+    tagVal = readMessage();
+    int listCount = messageData[0].val;
+printf("[%s:%d] %d val %d\n", __FUNCTION__, __LINE__, tagVal, listCount);
+    for (int i = 0; i < listCount - 1; i++) {
+        readMessage();
+//printf("[%s:%d] %d index %d\n", __FUNCTION__, __LINE__, tagVal, messageDataIndex);
+        assert(messageDataIndex == 6);
+        int tagVal = readCMessage();
+        if (tagVal) {
+            readCMessage();
+            readCMessage();
         }
     }
-return;
-    exit(-1);
-#endif
-    skipBuf(0x52);
-memdump(bufp, 32, "START");
-    int tagVal = readMessage();
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    printf("[%s:%d] count %d=0x%x\n", __FUNCTION__, __LINE__, messageDataIndex, messageDataIndex);
-    //mtrace = 1;
-    int vari = readVarint();
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, vari);
-    vari = readVarint();
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, vari);
-    vari = readVarint();
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, vari);
-    readMlist(0, 1);
-    readMlist(1, 2);
-    readMlist(1, 5);
-    readMlist(1, 4);
-    readMlist(3, 1);
-    readMlist(5, 1);
-    readMlist(4, 13);
+uint8_t const *zstart = bufp;
+mtrace = 1;
     tagVal = readMessage(); // 6
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    readCPair();
-    for (int i = 0; i < 9; i++) {
+    tagVal = readMessage(); // 0
+printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
+    tagVal = readCMessage();
+printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
+    tagVal = readMessage(); // 0
+printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
+    tagVal = readMessage();
+printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
+    assert(tagVal == 5);
+printf("[%s:%d] 27914 len %ld\n", __FUNCTION__, __LINE__, bufp - zstart);
+mtrace =0;
+    for (int i = 0; i < 7; i++) {
         tagVal = readMessage();
 printf("[%s:%d] [%d] %d\n", __FUNCTION__, __LINE__, i, tagVal);
     }
-    readFive(0, 63, 10);
-    readPairList(34);
-    readPairList(11);
-    readPairList(15);
-    readPairList(3);
-    readPairList(4);
-    readPairList(32);
-    readPairList(4);
-    readPairList(4);
-    for (int i = 0; i < 5; i++)
-        readPairList(1);
-    for (int i = 0; i < 2; i++)
-        readPairList(4);
-    for (int j = 0; j < 2; j++) {
-        for (int i = 0; i < 7; i++)
-            readCPair(); // 2, 2
-        for (int i = 0; i < 19 + j; i++) {
-            tagVal = readMessage(); // 2
-            tagVal = readMessage(); // 0
+    readMessage();
+    readPairList();
+printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, messageDataIndex);
+    do {
+        readMessage();
+    } while (messageDataIndex == 5);
+    do {
+        readPairList();
+        assert(messageDataIndex == 4);
+//mtrace = 1;
+//memdump(bufp, 16, "EE");
+        readMessage();
+//mtrace = 0;
+    } while (messageDataIndex == 3);
+printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, messageDataIndex);
+memdump(bufp-32, 128, "TT");
+    while (messageDataIndex == 2) {
+        if (!*bufp)
+            checkByte(0);
+        else
+            readTag();
+        tagVal = readMessage();
+        //printf(" nexxx %d", tagVal);
+        if (tagVal == 4) {
+            tagVal = readMessage();
+            //printf(" WAS4 %d", tagVal);
         }
-        tagVal = readMessage(); // 4
+        //printf("\n");
     }
-    readPairList(54);
-    readPairList(6);
-    readPairList(1);
-    readPairList(1);
-    readPairList(11);
-    readPairList(32);
-    for (int i = 0; i < 38; i++)
-        readCPair(); // 3, 1
-    tagVal = readMessage(); // c
+printf("[%s:%d] overindex %d\n", __FUNCTION__, __LINE__, messageDataIndex);
+    while (1) {
+       readPairList();
+       if (messageDataIndex == 0xc)
+           break;
+       assert(messageDataIndex == 4);
+       readMessage();
+    }
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
     tagVal = readMessage(); // 9
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
@@ -708,186 +640,21 @@ printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
     tagVal = readMessage(); // d
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    readFive(0, 0x20, 38);
-    readPairList(23);
-    readPairList(3);
-    readPairList(1);
-    readPairList(3);
-    readPairList(1);
-    readPairList(8);
-    readPairList(3);
-    readPairList(1);
-    readPairList(15);
-    readPairList(3);
-    readPairList(4);
-    readFive(4, 0x22, 39);
-    readPairList(28);
-    readPairList(3);
-    readPairList(1);
-    readPairList(3);
-    readPairList(1);
-    readPairList(2);
-    readPairList(10);
-    readPairList(1);
-    readPairList(15);
-    readPairList(4);
-    readFive(4, 0x22, 60);
-    readPairList(27);
-    readPairList(9);
-    readPairList(1);
-    readPairList(32);
-    readPairList(5);
-    readPairList(1);
-    readPairList(2);
-    readPairList(38);
-    readPairList(1);
-    readPairList(2);
-    readFive(14, 0x21, 23);
-    readPairList(21);
-    readPairList(10);
-    readPairList(1);
-    readPairList(1);
-    readPairList(5);
-    readPairList(1);
-    readPairList(1);
-    readPairList(2);
-    readPairList(1);
-    readFive(6, 0x19, 45);
-    readPairList(12);
-    readPairList(38);
-    readPairList(1);
-    readPairList(2);
-    tagVal = readMessage(); // 3
+    tagVal = readMessage(); // 32.
 printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    tagVal = readMessage(); // 7
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    for (int i = 0; i < 35; i++) {
-        int vari = readVarint();
-        int tagVal = readMessage();
-        if (mtrace)
-            printf("[%s:%d] [%d] vari %d tag %d\n", __FUNCTION__, __LINE__, i, vari, tagVal);
-    }
-    tagVal = readMessage(); // 4
-    readFive(38, 0x15, 37);
-    readPairList(9);
-    readPairList(32);
-    readPairList(1);
-    readPairList(1);
-    readFive(32, 0x11, 9);
-    readPairList(5);
-    readPairList(6);
-    readPairList(1);
-    readPairList(1);
-    readFive(6, 0x1e, 75);
-    readPairList(34);
-    readPairList(1);
-    readPairList(33);
-    readPairList(1);
-    readPairList(32);
-    readPairList(15);
-    readPairList(1);
-    for (int i = 0; i < 1; i++)
-        readCPair();
-    tagVal = readMessage(); // d
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    readFive(0, 0x1a, 160);
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-    readPairList(86);
-    readPairList(16);
-    readPairList(1);
-    readPairList(32);
-    readPairList(32);
-    readPairList(32);
-    readPairList(16);
-    readFive(4, 0x1b, 171);
-    readPairList(17);
-    readPairList(32);
-    readPairList(1);
-    readPairList(33);
-    readPairList(1);
-    readPairList(16);
-    readPairList(16);
-    readPairList(16);
-    readPairList(16);
-    readPairList(1);
-    readPairList(32);
-    for (int i = 0; i < 32; i++)
-        readCPair();
-    tagVal = readMessage(); // 1b
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    tagVal = readMessage(); // 5
-printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    readPairList(12);
-    readPairList(32);
-    readPairList(1);
-    readPairList(33);
-    readFive(1, 0x1f, 3);
-    readPairList(56);
-    readPairList(16);
-    readPairList(1);
-    readPairList(32);
-    readPairList(1);
-    readPairList(32);
-    readPairList(1);
-    readPairList(32);
-    readPairList(4);
-    readFive(1, 0x29, 92);
-    readPairList(141);
-    readPairList(6);
-    readPairList(1);
-    readPairList(1);
-    readPairList(4);
-    readPairList(4);
-    readPairList(38);
-    readPairList(1);
-    readPairList(32);
-    readPairList(6);
-    readPairList(1);
-    readPairList(11);
-    readPairList(1);
-    readPairList(32);
-    readPairList(4);
-    readPairList(3);
-    readPairList(2);
-    readPairList(3);
-    readPairList(16);
-    readPairList(32);
-    readPairList(3);
-    readPairList(6);
-    readPairList(3);
-    readPairList(3);
-    readPairList(4);
-    readPairList(32);
-    readPairList(3);
-    readPairList(3);
-    readFive(4, 0x1f, 134);
-    readPairList(167);
-    readPairList(15);
-    readPairList(3);
-    readPairList(4);
-    readPairList(32);
-    readPairList(4);
-    readPairList(4);
-    readPairList(54);
-    readPairList(6);
-    readPairList(6);
-    readPairList(4);
-    readPairList(5);
-    readPairList(6);
-    readPairList(4);
-    readPairList(32);
-    readPairList(6);
-    readPairList(32);
-    for (int i = 0; i < 6; i++)
-        readCPair();
-    printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-    tagVal = readMessage();
-    tagVal = readMessage();
     do {
-        tagVal = readMessage();
-        //if (mtrace)
-            //printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, tagVal);
-    } while (tagVal >= 4);
+        readPairList();
+        //printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, messageDataIndex);
+        do {
+            readMessage();
+        } while (messageDataIndex == 5);
+    } while(messageDataIndex != 4);
+    printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, messageDataIndex);
+    do {
+        readMessage();
+        //printf("[%s:%d] %d ", __FUNCTION__, __LINE__, messageDataIndex);
+        //memdump(bufp, 16, "");
+    } while (messageDataIndex >= 4);
     memdump(bufp, 16, "OVER");
 }
 
@@ -896,6 +663,7 @@ int main(int argc, char *argv[])
     const char *filename = "xx.xdef";
     int bflag, ch;
 
+    stripPrefix = getenv("STRIP_PREFIX");
     bflag = 0;
     while ((ch = getopt(argc, argv, "bf:")) != -1) {
         switch (ch) {
