@@ -28,11 +28,13 @@
 #include <sys/uio.h>
 #include <unistd.h>
 #include <string>
+#include <map>
 
 #define BUFFER_SIZE 16384000
 #define MAX_MESSAGE 40000
+#define STRING -2
 struct {
-    int val;
+    int val, tag;
     std::string str;
 } messageData[MAX_MESSAGE];
 int messageDataIndex;
@@ -48,8 +50,45 @@ int messageLen;
 std::string tagStringValue;
 int tagLength;
 int tagLine;
+int tagValue;
 const char *stripPrefix;
 void traceString(std::string str);
+
+inline std::string autostr(uint64_t X, bool isNeg = false)
+{
+  char Buffer[21];
+  char *BufPtr = std::end(Buffer);
+
+  if (X == 0) *--BufPtr = '0';  // Handle special case...
+
+  while (X) {
+    *--BufPtr = '0' + char(X % 10);
+    X /= 10;
+  }
+
+  if (isNeg) *--BufPtr = '-';   // Add negative sign...
+  return std::string(BufPtr, std::end(Buffer));
+}
+
+std::string translateName(const char *prefix, int index)
+{
+    char buffer[1000];
+    static struct {
+        const char *key;
+        const char *val;
+    } lookupMap[] = {
+#include "cacheData.h"
+        { nullptr, nullptr } };
+    int lookupIndex = 0;
+
+    sprintf(buffer, "%s_%03x", prefix, index);
+    while (lookupMap[lookupIndex].key)
+        if (!strcmp(lookupMap[lookupIndex].key, buffer))
+            return lookupMap[lookupIndex].val;
+        else
+            lookupIndex++;
+    return buffer;
+}
 
 void memdump(const unsigned char *p, int len, const char *title)
 {
@@ -86,6 +125,8 @@ void checkByte(int byte)
 
 void checkId(int val, int expected)
 {
+    if (val != expected)
+        printf("[%s:%d] value was %x, expected %x\n", __FUNCTION__, __LINE__, val, expected);
 assert (val == expected);
 }
 
@@ -110,6 +151,8 @@ int readInteger()
             break;
         bufp++;
     }
+if (start == bufp)
+     memdump(bufp-16, 64, "BADREADINT");
     assert(start != bufp);
     std::string temp(start, bufp);
 //printf("[%s:%d] readint %s start %p bufp %p isneg %d\n", __FUNCTION__, __LINE__, temp.c_str(), start, bufp, isNeg);
@@ -125,6 +168,7 @@ std::string readString()
     int len = readInteger();
     assert(*bufp == ' ');
     bufp++;
+    assert(len < 1000);
     std::string temp(bufp, bufp + len);
     bufp += len;
 if (trace)
@@ -169,6 +213,7 @@ int readTag(uint8_t const **ptr = &bufp, bool internal = false)
     int tag = ch >> 3;
     //printf("[%s:%d] buf %x line %x tag %d=0x%x\n", __FUNCTION__, __LINE__, ch, line, tag, tag);
     tagLine = line;
+    tagValue = tag;
     switch (line) {
     case 0: { // varint
         long ret = readVarint(ptr, true);
@@ -193,7 +238,7 @@ int readTag(uint8_t const **ptr = &bufp, bool internal = false)
             traceString(tagStringValue);
         }
         (*ptr) += tagLength;
-        return -2;
+        return STRING;
         break;
         }
     case 3: { // start group -- deprecated
@@ -274,20 +319,37 @@ void traceString(std::string str)
 }
 
 int deviceColumns = 0x1000000;
-void readNodeList(int count)
+void readNodeList(bool &first)
 {
+    int count = readInteger();
     int param = readInteger();
-    if (trace)
-        printf("[%s:%d] count  %d param %d\n", __FUNCTION__, __LINE__, count, param);
+    if (param)
+        printf("param %d: ", param);
+    if (first) {
+        int extra = readInteger();
+        checkId(extra, 0);
+        extra = readInteger();
+        checkId(extra, 0);
+        first = false;
+    }
+    int nodeWrap = 5;
     for (int i = 0; i < count; i++) {
         int tile = readInteger();
         int sitePin = readInteger();
-        int pinType = (sitePin >> 16) & 0xffff;
-        sitePin &= 0xffff;
-        int row = tile/deviceColumns;
-        int column = tile % deviceColumns;
-        if (trace)
-            printf("[%s:%d] row %x column %x pin %x type %x\n", __FUNCTION__, __LINE__, row, column, sitePin, pinType);
+        //int pinType = (sitePin >> 16) & 0xffff;
+        //sitePin &= 0xffff;
+        //int row = tile/deviceColumns;
+        //int column = tile % deviceColumns;
+        int t1 = (tile >> 29) & 1;
+        int t2 = (tile >> 28) & 1;
+        tile &= 0x3fffff;
+        printf("[tile %03x %x:%x] ", tile, sitePin >> 16, sitePin & 0xffff);
+        checkId(t1, 0);
+        checkId(t2, 0);
+        if (--nodeWrap == 0) {
+            printf("\n        ");
+            nodeWrap = 5;
+        }
     }
 }
 
@@ -303,8 +365,9 @@ int readMessage()
         int val = readTag();
         messageData[messageDataIndex].val = val;
         messageData[messageDataIndex].str = tagStringValue;
+        messageData[messageDataIndex].tag = tagValue;
         if (mtrace) {
-            printf("%s", sep);
+            printf("%s %x:", sep, tagValue);
             if (tagStringValue != "")
                 traceString(tagStringValue);
             else
@@ -323,8 +386,31 @@ int readMessage()
     return messageDataIndex;
 }
 
+void dumpQuad(const char *sep, const char *end)
+{
+    checkId(messageDataIndex, 4);
+    for (int msgIndex = 0; msgIndex < 4; msgIndex++) {
+        if (messageData[msgIndex].val == STRING)
+            printf("%s'%s'", sep, messageData[msgIndex].str.c_str());
+        else
+            printf("%s%x", sep, messageData[msgIndex].val);
+        sep = ", ";
+    }
+    printf("%s", end);
+}
+
+bool lineValid;
+void belStart(int elementNumber)
+{
+    if (!lineValid) {
+        lineValid = true;
+        printf("    BEL %s", translateName("Element", elementNumber).c_str());
+    }
+}
+
 void dumpXdef(void)
 {
+//jca
     printf("Parse header\n");
     checkStr(std::string(bufp, bufp + strlen(header)), header);
     bufp += strlen(header);
@@ -360,129 +446,318 @@ printf("[%s:%d] head5 %d device '%s' package '%s' limit %d str1 '%s': %x %x\n", 
     int head9 = readInteger();
     printf("Parse place %x, %x\n", head8, head9);
     int mlen = readMessage();
-printf("[%s:%d] mlen %d\n", __FUNCTION__, __LINE__, mlen);
-memdump(bufp, 64, "PLACE");
+    checkId(mlen, 2);
+    int head11 = messageData[0].val;
+    int head12 = messageData[1].val;
+    printf("[%s:%d] head11 %x head12 %x\n", __FUNCTION__, __LINE__, head11, head12);
 //trace = 1;
     mlen = readMessage();
+    checkId(mlen, 1);
+    checkId(messageData[0].val, 0);
     mlen = readMessage();
     checkId(mlen, 3);
     checkId(messageData[0].val, 0xdead0000);
-    printf("Parse QDesign\n");
     checkStr(messageData[1].str, placerHeader);
+    checkId(messageData[2].val, 2);
+    printf("Parse QDesign\n");
     mlen = readMessage();
-    int designLen = messageData[0].val;
-printf("[%s:%d] designLen %x offset %ld\n", __FUNCTION__, __LINE__, designLen, bufp - inbuf);
-    for (int designIndex = 0; designIndex < designLen; designIndex++) {
+    int sitetypeLen = messageData[0].val;
+    std::map<int, std::map<int, int>> offsetMap;
+int lastSiteId = 0;
+    for (int sitetypeIndex = 0; sitetypeIndex < sitetypeLen; sitetypeIndex++) {
         mlen = readMessage();
         checkId(messageData[0].val, 0xdead3333);
         checkId(mlen, 4); // site info
+        int siteTypeId = messageData[1].val;
+        std::string siteTypeName = messageData[2].str;
+        int sitetypeInfo = messageData[3].val;
         mlen = readMessage();
+        checkId(mlen, 1);
+        int IOpipType = messageData[0].val;
         mlen = readMessage();
+        checkId(mlen, 1);
+        int pipType = messageData[0].val;
         mlen = readMessage();
-        checkId(messageData[0].val, 0xdead4444); // details
+        checkId(mlen, 1);
+        checkId(messageData[0].val, 0xdead4444); // loop for BEL
         mlen = readMessage();
-        int count44 = messageData[0].val;
-        for (int kk = 0; kk < count44; kk++) {
+        int belCount = messageData[0].val;
+        printf("sitetype %s id %x diff %x", siteTypeName.c_str(), siteTypeId, siteTypeId - lastSiteId);
+        int ind = siteTypeName.find("_X");
+        if (ind > 0) {
+            std::string temp = siteTypeName.substr(ind+2);
+            int xoff = atoi(temp.c_str());
+            ind = temp.find("Y");
+            if (ind > 0) {
+                int yoff = atoi(temp.substr(ind+1).c_str());
+                offsetMap[xoff][yoff] = siteTypeId;
+            }
+        }
+        lastSiteId = siteTypeId;
+        printf(" %s", translateName("SiteType", sitetypeInfo).c_str());
+        printf(" piptype %x\n", pipType ? pipType : IOpipType);
+        for (int belIndex = 0; belIndex < belCount; belIndex++) {
             mlen = readMessage();
+            checkId(mlen, 1);
+            int belNumber = messageData[0].val;
             mlen = readMessage();
-            int count55 = messageData[0].val;
+            checkId(mlen, 1);
+            int cellCount = messageData[0].val;
+            int lineId = -1;
             mlen = readMessage();
             checkId(messageData[0].val, 0xdead5555);
-            for (int mm = 0; mm < count55; mm++) {
-                mlen = readMessage(); // reference
+            lineValid = false;
+            bool hasCell = false;
+            int cell1, cell2, cell3;
+            //belStart(belNumber); // always output
+            if (cellCount) {
+                checkId(cellCount, 1);
+                belStart(belNumber);
+                for (int cellIndex = 0; cellIndex < cellCount; cellIndex++) {
+                    readMessage(); // cell info
+                    if (lineId == -1)
+                        lineId = messageData[0].val;
+                    assert(lineId == messageData[0].val);
+                    cell1 = messageData[1].val;
+                    cell2 = messageData[2].val;
+                    cell3 = messageData[3].val;
+                    hasCell = true;
+                    printf(" [%x %x %x]", cell1, cell2, cell3);
+                }
+                printf("");
             }
             mlen = readMessage();
+            checkId(mlen, 1);
             checkId(messageData[0].val, 0xdead6666);
             mlen = readMessage();
-            int count66 = messageData[0].val;
-            for (int mm = 0; mm < count66; mm++) {
-                mlen = readMessage();
-                mlen = readMessage();
-                int val = messageData[0].val;
-                for (int mopt = 0; mopt < val; mopt++)
-                    mlen = readMessage(); // pin info
+            checkId(mlen, 1);
+            const char *sep = "";
+            if (int nameCount = messageData[0].val) {
+                belStart(belNumber);
+                printf(" pins {");
+                bool hasData = false;
+                int save1, save3;
+                int pinWrap = 4;
+                for (int nameIndex = 0; nameIndex < nameCount; nameIndex++) {
+                    mlen = readMessage();
+                    //int pinId = messageData[0].val;
+                    checkId(mlen, 1);
+                    mlen = readMessage();
+                    checkId(mlen, 1);
+                    if (int pinCount = messageData[0].val) {
+                    bool putPinId = false;
+                    printf("%s", sep);
+                    for (int pinIndex = 0; pinIndex < pinCount; pinIndex++) {
+                        readMessage(); // pin info
+                        checkId(messageDataIndex, 4);
+                        if (lineId == -1)
+                            lineId = messageData[0].val;
+                        assert(lineId == messageData[0].val);
+                        int val1 = messageData[1].val;
+                        int val3 = messageData[3].val;
+                        assert(!hasCell || cell1 == val1);
+                        if (!hasData || save1 != val1 || save3 != val3) {
+                            printf("[");
+                            if (!hasCell)
+                                printf("%x ", val1);
+                            printf("%x] ", val3);
+                        }
+                        //if (!putPinId)
+                            //printf("%x ", pinId);
+                        putPinId = true;
+                        printf("%s", messageData[2].str.c_str());
+                        hasData = true;
+                        save1 = val1;
+                        save3 = val3;
+                    }
+                    sep = ", ";
+                    if (--pinWrap == 0 && nameCount > 20) {
+                        pinWrap = 4;
+                        sep = ",\n        ";
+                    }
+                    }
+                }
+                printf("}");
+            }
+            if (lineValid) {
+                if (lineId == -1)
+                    printf("\n");
+                else
+                    printf(" BEL_%03x\n", lineId);
             }
         }
         mlen = readMessage();
+        checkId(mlen, 1);
+        checkId(messageData[0].val, 0);
         mlen = readMessage();
+        int thisPip = messageData[0].val;
+        checkId(mlen, 1);
         mlen = readMessage();
+        checkId(mlen, 1);
         checkId(messageData[0].val, 0xdead7777); // PIP
         mlen = readMessage();
-        int count7777 = messageData[0].val;
-        for (int mm = 0; mm < count7777; mm++) {
-            mlen = readMessage();
+        checkId(mlen, 1);
+        int pipCount = messageData[0].val;
+        assert((!IOpipType && thisPip == pipType) || (!pipType && IOpipType == thisPip && !pipCount));
+        if (pipCount) {
+        printf("    PIP_%x ", thisPip);
+        int pipWrap = 7;
+        const char *sep = "";
+        for (int pipIndex = 0; pipIndex < pipCount; pipIndex++) {
+            readMessage();
+            checkId(messageDataIndex, 4);
+            int val1, val3, val;
+            val1 = messageData[0].val;
+            val = messageData[1].val;
+            val3 = messageData[3].val;
+            assert(val3 == 0 || val3 == 1);
+            if (!val3)
+                continue; // unused
+            checkId(messageData[2].val, 0x0f); // always "OUT"
+            printf("%s", sep);
+            if (--pipWrap == 0) {
+                printf("\n        ");
+                pipWrap = 7;
+            }
+            printf("%s:%s", translateName("Element", val1).c_str(),
+                translateName("ElementPin", val).c_str());
+            sep = ", ";
+        }
+        printf("\n");
         }
         mlen = readMessage();
+        checkId(mlen, 1);
         checkId(messageData[0].val, 0xdead8888); // net
         mlen = readMessage();
-        int count8888 = messageData[0].val;
-        for (int mm = 0; mm < count8888; mm++) {
-            mlen = readMessage();
-            mlen = readMessage();
-            int inner88 = messageData[0].val;
-            for (int rr = 0; rr < inner88; rr++) {
+        checkId(mlen, 1);
+        if (int netCount = messageData[0].val) {
+            const char *sep = "";
+            printf("    SITETYPENET ");
+            int swWrap = 3;
+            for (int netIndex = 0; netIndex < netCount; netIndex++) {
                 mlen = readMessage();
+                checkId(mlen, 1);
+                int pinNetId = messageData[0].val;
+                mlen = readMessage();
+                checkId(mlen, 1);
+                if (int connCount = messageData[0].val) {
+                    printf("%s %s {", sep, translateName("SiteTypeNet", pinNetId).c_str());
+                    const char *sep2 = "";
+                    for (int connIndex = 0; connIndex < connCount; connIndex++) {
+                        mlen = readMessage();
+                        checkId(mlen, 1);
+                        printf("%sSW_%03x", sep2, messageData[0].val);
+                        sep2 = ", ";
+                    }
+                    printf("}");
+                    sep = ",";
+                    if (--swWrap == 0) {
+                        sep = ",\n        ";
+                        swWrap = 3;
+                    }
+                }
             }
+            printf("\n");
         }
         mlen = readMessage();
+        checkId(mlen, 1);
         checkId(messageData[0].val, 0xdead9999); // port
+        checkId(mlen, 1);
         mlen = readMessage();
-        int count9999 = messageData[0].val;
-        for (int mm = 0; mm < count9999; mm++) {
-            mlen = readMessage();
+        if (int portCount = messageData[0].val) {
+            printf("    port");
+            for (int portIndex = 0; portIndex < portCount; portIndex++) {
+                mlen = readMessage();
+                checkId(mlen, 4);
+                printf(" {%s %s}", messageData[0].str.c_str(), translateName("Element", messageData[1].val).c_str());
+                checkId(messageData[2].val, 1);
+                checkId(messageData[3].val, 0);
+            }
+            printf("\n");
         }
     }
-    readMessage();
-    checkId(messageData[0].val, 0xdeaddddd); // site instance
-    readMessage();
+    mlen = readMessage();
+    checkId(mlen, 1);
+    checkId(messageData[0].val, 0xdeaddddd); // locked
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 0);
-    readMessage();
-#define STRING -2
-printf("[%s:%d] '%s'\n", __FUNCTION__, __LINE__, tagStringValue.c_str());
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, STRING);
-    readMessage();
+    checkStr(messageData[0].str, "");
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 0xdeadeeee);
-    readMessage();
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 0);
-    readMessage();
-printf("[%s:%d] '%s'\n", __FUNCTION__, __LINE__, tagStringValue.c_str());
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, STRING);
-    readMessage();
+    checkStr(messageData[0].str, "");
+    mlen = readMessage();
+    checkId(mlen, 2);
     checkId(messageData[0].val, 0xdeadcccc);
-    readMessage();
+    checkId(messageData[1].val, 1);
+    mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 1);
 
     printf("Parse design Q\n");
     checkId(readInteger(), 3); // routing version
-    int groupCount = readInteger();
-    for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+    int tileCount = readInteger();
+    for (int tileIndex = 0; tileIndex < tileCount; tileIndex++) {
         std::string gname = readString();
+        printf("tiletype %s [%x]: \n        ", gname.c_str(), tileIndex);
         int listCount = readInteger();
-        //printf("[%s:%d] [%d] group %s\n", __FUNCTION__, __LINE__, groupIndex, gname.c_str());
+        int tileWrap = 3;
         for (int listIndex = 0; listIndex < listCount; listIndex++) {
             std::string name = readString();
-            //printf("[%s:%d] [%d:%d] %s\n", __FUNCTION__, __LINE__, groupIndex, listIndex, name.c_str());
+            printf("%s ", name.c_str());
+            if (--tileWrap == 0) {
+                printf("\n        ");
+                tileWrap = 3;
+            }
         }
+        printf("\n");
     }
     checkStr(readString(), "END_HEADER");
+    bool first = true;
     int nameCount = readInteger();
     int vv2 = readInteger();
     int vv3 = readInteger();
-    printf("Parse design2 %d, %d, %d\n", nameCount, vv2, vv3);
-    int nameIndex = 0;
-    while(nameIndex++ < nameCount + 1) {
-       std::string temp = readString();
-       int first = readInteger();
-       int sec = readInteger();
-       int third = readInteger();
-       int fourth = readInteger();
-       int count = readInteger();
-int origc = count;
-if (count == 0) count = third;
-       readNodeList(count);
-       if (count != origc || trace)
-           printf("[%s:%d] [%d] count %d '%s' param %x, %x, %x, %x, origc %d\n", __FUNCTION__, __LINE__,
-               nameIndex, count, temp.c_str(), first, sec, third, fourth, origc);
+    printf("Read nets %d, %d, %d\n", nameCount, vv2, vv3);
+    for (int nameIndex = 0; nameIndex < nameCount; nameIndex++) {
+        std::string temp = readString();
+        int desId = readInteger();
+        printf("NET_%x %s: ", desId, temp.c_str());
+        if (first) {
+            int extra = readInteger();
+            checkId(extra, 0);
+        }
+        int sec = readInteger();
+        checkId(sec, 0);
+        if (first) {
+            int extra = readInteger();
+            checkId(extra, 0);
+            extra = readInteger();
+            checkId(extra, 0);
+            extra = readInteger();
+            checkId(extra, 0);
+        }
+        int groupCount = readInteger();
+        int fourth = readInteger();
+        checkId(fourth, 0);
+        if (first) {
+            int extra = readInteger();
+            checkId(extra, 0);
+            extra = readInteger();
+            checkId(extra, 0);
+        }
+        readNodeList(first);
+        printf("\n");
+        assert(groupCount == 1);
     }
     int netCount = readInteger();
     printf("Global nets %d\n", netCount);
@@ -491,45 +766,93 @@ if (count == 0) count = third;
         std::string netName = readString();
         int val = readInteger();
         int val2 = readInteger();
-        int nodeCount = readInteger();
-        printf("[%s:%d] %s [%d] nodeCount %x %x, %x\n", __FUNCTION__, __LINE__, netName.c_str(), netNumber, nodeCount, val, val2);
-        checkId(readInteger(), 0);
-        int nodeIndex = 0;
-        while(nodeIndex++ < nodeCount) {
-            int count = readInteger();
-            readNodeList(count);
+        int groupCount = readInteger();
+        printf("global %s: %x, %x\n", netName.c_str(), val, val2);
+        int fourth = readInteger();
+        checkId(fourth, 0);
+        for (int groupIndex = 0; groupIndex < groupCount; groupIndex++) {
+            printf("    list: ");
+            readNodeList(first);
+            printf("\n");
         }
         netNumber++;
     }
     mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 0xdeadaaaa);
     mlen = readMessage();
+    checkId(mlen, 1);
     int lval = messageData[0].val;
-    printf("[%s:%d] lval %d\n", __FUNCTION__, __LINE__, lval);
     for (int lind = 0; lind < lval; lind++) {
         mlen = readMessage();
+        checkId(mlen, 3);
+        printf("Site2Net %s SW_%03x NET_%x\n", messageData[0].str.c_str(), messageData[1].val, messageData[2].val);
     };
     mlen = readMessage();
+    checkId(mlen, 1);
     checkId(messageData[0].val, 0xdeadbbbb);
     mlen = readMessage();
+    checkId(mlen, 1);
     int sval = messageData[0].val;
-    printf("[%s:%d] sval %d\n", __FUNCTION__, __LINE__, sval);
     for (int sind = 0; sind < sval; sind++) {
         mlen = readMessage();
+        checkId(mlen, 3);
+        printf("SVAL %s BEL_%03x %x\n", messageData[0].str.c_str(), messageData[1].val, messageData[2].val);
     };
-mtrace = 1;
     printf("Parse device cache\n");
     mlen = readMessage();
+    checkId(mlen, 3);
     checkId(messageData[0].val, 0xdead1111);
     checkStr(messageData[1].str, deviceCacheHeader);
-    int cval = 7698;
-printf("[%s:%d] cval %d\n", __FUNCTION__, __LINE__, cval);
-mtrace = 0;
-    for (int cind = 0; cind < cval; cind++) {
-//printf("[%s:%d] %d/%d\n", __FUNCTION__, __LINE__, cind, cval);
-if (cind > cval - 5) mtrace = 1;
+    checkId(messageData[2].val, 1);
+    typedef struct {
+         int         val;
+         std::map<int, std::string> cacheMap;
+    } CacheType;
+    std::map<std::string, CacheType> cache;
+    std::string sectionIndex;
+    do {
         mlen = readMessage();
+        if (mlen == 2) {
+            std::string name = messageData[0].str;
+            int val = messageData[1].val;
+            for (auto ch: name)
+                if (islower(ch)) {
+                    sectionIndex = name;
+                    cache[sectionIndex].val = val;
+                    goto next;
+                }
+            if (cache[sectionIndex].cacheMap.find(val) != cache[sectionIndex].cacheMap.end()) {
+                printf("duplicate cache %s %x\n", name.c_str(), val);
+                exit(-1);
+            }
+            else
+                cache[sectionIndex].cacheMap[val] = name;
+        }
+next:;
+    } while(mlen == 2);
+    FILE *fcache;
+    fcache = fopen("cacheData.h", "w");
+    for (auto citem: cache)
+    for (auto item: citem.second.cacheMap)
+        fprintf(fcache, "    {\"%s_%03x\", \"%s\"},\n", citem.first.c_str(), item.first, item.second.c_str());
+    fclose(fcache);
+#if 0
+    for (auto xitem: offsetMap) {
+        for (auto yitem: xitem.second) {
+            int x = xitem.first, y = yitem.first;
+            printf("[%s:%d] JJJ x %2d y %2d %5x", __FUNCTION__, __LINE__, x, y, offsetMap[x][y]);
+            if (offsetMap.find(x+1) != offsetMap.end()
+              && offsetMap[x+1].find(y) != offsetMap[x+1].end())
+                printf(" deltax %5x %d", offsetMap[x+1][y], offsetMap[x+1][y] - offsetMap[x][y]);
+            else
+                printf("                    ");
+            if (offsetMap[x].find(y+1) != offsetMap[x].end())
+                printf(" deltay %5x %d", offsetMap[x][y+1], offsetMap[x][y+1] - offsetMap[x][y]);
+            printf("\n");
+        }
     }
+#endif
 }
 
 int readCMessage(void)
@@ -554,7 +877,6 @@ void readPairList()
 
 void dumpXn()
 {
-//jca
     printf("Parse header\n");
     checkStr(std::string(bufp, bufp + strlen(xnHeader)), xnHeader);
     bufp += strlen(xnHeader);

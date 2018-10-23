@@ -2,6 +2,7 @@
 CPPFLAGS += -std=c++11
 
 all:
-	gcc -g -o inflateEdf inflateEdf.c zlib-1.2.11/libz.a 
+	touch cacheData.h
+	gcc -g -o unzipme unzipme.c -lz
 	g++ $(CPPFLAGS) -Wall -g -o dumpXdef dumpXdef.cpp
 
