@@ -31,12 +31,6 @@
 
 #define BUFFER_SIZE 16384000
 uint8_t inbuf[BUFFER_SIZE], outbuf[BUFFER_SIZE];
-const char *header = "XlxV37EB    fa00    ";
-const char *eeader = "XlxV37EB    734d    ";
-const char *feader = "XlxV37EB    7abd    ";
-const char *geader = "XlxV37EB    4e80    ";
-const char *ieader = "XlxV37EB     a06    ";
-const char *jeader = "XlxV37EB     c05    ";
 void memdump(unsigned char *p, int len, const char *title)
 {
 int i;
@@ -77,35 +71,12 @@ int main(int argc, char *argv[])
     strm.next_out = outbuf;
     while(strm.avail_in > 0) {
         memdump(strm.next_in, 32, "before");
-        if (!memcmp(header, strm.next_in, strlen(header))) {
+        Bytef *buf = strm.next_in;
+        if (buf[0] == 'X' && buf[1] == 'l' && buf[2] == (buf[0] | 0x20) && buf[3] == 'V') {
             printf("[%s:%d]found header\n", __FUNCTION__, __LINE__);
             strm.avail_in -= 24;
             strm.next_in += 24;
-        }
-        else if (!memcmp(eeader, strm.next_in, strlen(eeader))) {
-            printf("[%s:%d]found eeader\n", __FUNCTION__, __LINE__);
-            strm.avail_in -= 24;
-            strm.next_in += 24;
-        }
-        else if (!memcmp(feader, strm.next_in, strlen(feader))) {
-            printf("[%s:%d]found feader\n", __FUNCTION__, __LINE__);
-            strm.avail_in -= 24;
-            strm.next_in += 24;
-        }
-        else if (!memcmp(geader, strm.next_in, strlen(geader))) {
-            printf("[%s:%d]found geader\n", __FUNCTION__, __LINE__);
-            strm.avail_in -= 24;
-            strm.next_in += 24;
-        }
-        else if (!memcmp(ieader, strm.next_in, strlen(ieader))) {
-            printf("[%s:%d]found ieader\n", __FUNCTION__, __LINE__);
-            strm.avail_in -= 24;
-            strm.next_in += 24;
-        }
-        else if (!memcmp(jeader, strm.next_in, strlen(jeader))) {
-            printf("[%s:%d]found jeader\n", __FUNCTION__, __LINE__);
-            strm.avail_in -= 24;
-            strm.next_in += 24;
+        memdump(strm.next_in, 32, "before1");
         }
         long before = strm.avail_in;
         rc = inflateInit(&strm);
@@ -113,12 +84,12 @@ int main(int argc, char *argv[])
             printf("[%s:%d] error %d\n", __FUNCTION__, __LINE__, rc);
             return -1;
         }
-        rc = inflate(&strm, Z_FINISH); //Z_NO_FLUSH);
+        rc = inflate(&strm, Z_FINISH);
         before -= strm.avail_in;
         memdump(strm.next_in, 32, "after");
-        printf("[%s:%d] return %d END %d availin %d availout %d processed %ld./0x%lx\n", __FUNCTION__, __LINE__, rc, Z_STREAM_END, strm.avail_in, strm.avail_out, before, before);
+        printf("[%s:%d] return %d END %d availin %d availout %d processed %ld./0x%lx offset %lx\n", __FUNCTION__, __LINE__, rc, Z_STREAM_END, strm.avail_in, strm.avail_out, before, before, inlen - strm.avail_in);
 if (rc != Z_STREAM_END) {
-memdump(strm.next_in, strm.avail_in, "resid");
+memdump(strm.next_in, strm.avail_in < 128 ? strm.avail_in : 128, "resid");
 }
         assert(rc == Z_STREAM_END);
         (void)inflateEnd(&strm);
