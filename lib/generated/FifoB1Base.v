@@ -14,10 +14,10 @@ module FifoB1Base #(
     reg [width- 1:0]element;
     reg [width- 1:0]enq_v;
     reg full;
-    assign in$enq__RDY = full & ( out$deq__ENA != 0 );
-    assign out$deq__RDY = ( __default | ( ( full ^ 1 ) ? in$enq__ENA : 0 ) ) != 0;
+    assign in$enq__RDY = ( ( full ^ 1 ) | out$deq__ENA ) != 0;
+    assign out$deq__RDY = full | in$enq__ENA;
     assign out$first = full ? element : enq_v;
-    assign out$first__RDY = ( __default | ( ( full ^ 1 ) ? in$enq__ENA : 0 ) ) != 0;
+    assign out$first__RDY = full | in$enq__ENA;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -26,13 +26,13 @@ module FifoB1Base #(
         full <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA & full & ( out$deq__ENA != 0 )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             enq_v <= in$enq$v;
             element <= in$enq$v;
             if (out$deq__ENA == 0)
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
+        if (out$deq__ENA & ( full | in$enq__ENA )) begin // out$deq__ENA
             full <= 0;
         end; // End of out$deq__ENA
       end
