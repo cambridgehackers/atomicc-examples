@@ -1,4 +1,4 @@
-// Copyright (c) 2015 The Connectal Project
+// Copyright (c) 2015-2019 The Connectal Project
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -22,6 +22,9 @@
 #include <atomicc.h>
 #include <fifo.h>
 
+/*
+ * Standard fifo: enq() and deq() are exclusive
+ */
 template<int width>
 __module Fifo1Base : public Fifo<__uint(width)> {
   __uint(width) element;
@@ -38,3 +41,26 @@ __module Fifo1Base : public Fifo<__uint(width)> {
 };
 
 static Fifo1Base<GENERIC_INT_TEMPLATE_FLAG> dummy;
+
+/*
+ * Bypass/pipeline fifo: enq() and deq() are allowed on same cycle
+ */
+template<int width>
+__module FifoB1Base : public Fifo<__uint(width)> {
+  __uint(width) element;
+  bool full;
+  __shared __uint(width) enq_v;
+  void in.enq(const __uint(width) v) if (notFull() || __valid(this->out.deq)) {
+    enq_v = v;
+    element = v;
+    if (!__valid(this->out.deq))
+        full = true;
+  };
+  void out.deq(void) if (notEmpty()) { full = false; };
+  __uint(width) out.first(void) if (notEmpty()) { return full ? element : enq_v; };
+  bool notEmpty() const { return full || __valid(this->in.enq); };
+  bool notFull() const { return !full; };
+  FifoB1Base(): full(false) { };
+};
+
+static FifoB1Base<GENERIC_INT_TEMPLATE_FLAG> dummyb;

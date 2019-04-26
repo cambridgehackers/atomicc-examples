@@ -31,4 +31,15 @@ __module Fifo1 : public Fifo<T> {
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
+
+template<int width>
+__emodule FifoB1Base : public Fifo<__uint(width)> { };
+
+template<class T>
+__module FifoB1 : public Fifo<T> {
+  FifoB1Base<__bitsize(T)> fifo;
+  void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
+  void out.deq(void) { fifo.out.deq(); }
+  T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
+};
 #endif
