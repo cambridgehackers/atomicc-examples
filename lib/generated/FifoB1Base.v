@@ -13,10 +13,9 @@ module FifoB1Base #(
     output wire out$first__RDY);
     reg [width- 1:0]element;
     reg full;
-    wire [width- 1:0]enq_v;
     assign in$enq__RDY = ( ( full ^ 1 ) | out$deq__ENA ) != 0;
     assign out$deq__RDY = full | in$enq__ENA;
-    assign out$first = full ? element : enq_v;
+    assign out$first = full ? element : in$enq$v;
     assign out$first__RDY = full | in$enq__ENA;
 
     always @( posedge CLK) begin
@@ -26,7 +25,6 @@ module FifoB1Base #(
       end // nRST
       else begin
         if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
-            enq_v <= in$enq$v;
             element <= in$enq$v;
             if (out$deq__ENA == 0)
             full <= 1;
