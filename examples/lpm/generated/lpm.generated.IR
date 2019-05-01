@@ -1,47 +1,80 @@
-EMODULE l_struct_OC_LookupItem {
-    FIELD INTEGER_32 addr
-    FIELD INTEGER_32 b
-    FIELD INTEGER_32 c
-}
 EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
+EMODULE l_struct_OC_ProcessData {
+    FIELD INTEGER_4 ticket
+    FIELD INTEGER_16 IPA
+    FIELD INTEGER_3 state
+}
 EMODULE l_ainterface_OC_LpmMem {
-    METHOD req__ENA ( l_struct_OC_LookupItem v )
+    METHOD req__ENA ( INTEGER_32 v )
     METHOD resAccept__ENA
-    METHOD resValue l_struct_OC_LookupItem
+    METHOD resValue INTEGER_32
 }
 EMODULE l_ainterface_OC_LpmRequest {
-    METHOD enter__ENA ( INTEGER_32 addr )
+    METHOD enter__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_LookupItem v )
+    METHOD enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeInH {
     METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( INTEGER_96 v )
+    METHOD enq__ENA ( INTEGER_32 v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_4 {
+    METHOD enq__ENA ( l_struct_OC_ProcessData v )
+}
+EMODULE l_ainterface_OC_PipeIn_OC_7 {
+    METHOD enq__ENA ( INTEGER_23 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
     METHOD deq__ENA
-    METHOD first l_struct_OC_LookupItem
+    METHOD first INTEGER_32
 }
 EMODULE l_ainterface_OC_PipeOut_OC_2 {
     METHOD deq__ENA
-    METHOD first INTEGER_96
+    METHOD first INTEGER_32
+}
+EMODULE l_ainterface_OC_PipeOut_OC_5 {
+    METHOD deq__ENA
+    METHOD first l_struct_OC_ProcessData
+}
+EMODULE l_ainterface_OC_PipeOut_OC_8 {
+    METHOD deq__ENA
+    METHOD first INTEGER_23
+}
+EMODULE l_ainterface_OC_TickIfc {
+    METHOD allocateTicket__ENA
+    METHOD getTicket INTEGER_4
+}
+EMODULE BufTicket {
+    INTERFACE l_ainterface_OC_TickIfc tickIfc
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE Fifo1Base$__PARAM__$width$96 {
+EMODULE Fifo1Base$__PARAM__$width$32 {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+}
+EMODULE FifoB1Base$__PARAM__$width$23 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
 }
 EMODULE Fifo_OC_0 {
     INTERFACE l_ainterface_OC_PipeIn_OC_1 in
     INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+}
+EMODULE Fifo_OC_3 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+}
+EMODULE Fifo_OC_6 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
 }
 EMODULE LpmMemory {
     INTERFACE l_ainterface_OC_LpmMem ifc
@@ -54,82 +87,85 @@ EMODULE MuxPipe {
 MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base$__PARAM__$width$96 fifo
-    METHOD in$enq__ENA ( l_struct_OC_LookupItem v ) {
+    FIELD Fifo1Base$__PARAM__$width$32 fifo
+    METHOD in$enq__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_LookupItem = ((out$first$retval)) {
-        ALLOCA l_struct_OC_LookupItem out$first$retval
+    METHOD out$first INTEGER_32 = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET INTEGER_96 :out$first$retval = fifo$out$first
+    }
+}
+MODULE FifoB1 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+    FIELD FifoB1Base$__PARAM__$width$23 fifo
+    METHOD in$enq__ENA ( l_struct_OC_ProcessData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first l_struct_OC_ProcessData = ((out$first$retval)) {
+        ALLOCA l_struct_OC_ProcessData out$first$retval
+        CALL :fifo$out$first{}
+        LET INTEGER_23 :out$first$retval = fifo$out$first
     }
 }
 MODULE Lpm {
-    PRIORITY recirc enter;exit
+    PRIORITY recirc exitr;enter
     INTERFACE l_ainterface_OC_LpmRequest request
+    FIELD BufTicket compBuf
     FIELD Fifo1 inQ
-    FIELD Fifo1 fifo
+    FIELD FifoB1 fifo
     INTERFACE/Ptr l_ainterface_OC_PipeIn outQ
     FIELD LpmMemory mem
     METHOD/Rule RULE$enter__ENA {
-        ALLOCA l_struct_OC_LookupItem RULE$enter__ENA$temp
+        ALLOCA l_struct_OC_ProcessData RULE$enter__ENA$agg_2e_tmp
+        ALLOCA INTEGER_4 RULE$enter__ENA$ticket
+        ALLOCA INTEGER_32 RULE$enter__ENA$x
         CALL :inQ$out$first{}
-        LET l_struct_OC_LookupItem :RULE$enter__ENA$temp = inQ$out$first
-        PRINTF :printf{"enter: (%d, %d)\n",RULE$enter__ENA$temp$addr,RULE$enter__ENA$temp$b}
+        LET INTEGER_32 :RULE$enter__ENA$x = inQ$out$first
+        CALL :compBuf$tickIfc$getTicket{}
+        LET INTEGER_4 :RULE$enter__ENA$ticket = compBuf$tickIfc$getTicket
+        CALL/Action :compBuf$tickIfc$allocateTicket__ENA{}
         CALL/Action :inQ$out$deq__ENA{}
-        CALL/Action :fifo$in$enq__ENA{RULE$enter__ENA$temp}
-        CALL/Action :mem$ifc$req__ENA{RULE$enter__ENA$temp}
+        LET INTEGER_4 :RULE$enter__ENA$agg_2e_tmp$ticket = RULE$enter__ENA$ticket
+        LET INTEGER_16 :RULE$enter__ENA$agg_2e_tmp$IPA = __bitsubstr{RULE$enter__ENA$x,15,0}
+        LET INTEGER_3 :RULE$enter__ENA$agg_2e_tmp$state = 0
+        CALL/Action :fifo$in$enq__ENA{RULE$enter__ENA$agg_2e_tmp}
+        CALL/Action :mem$ifc$req__ENA{(0) + (__bitsubstr{RULE$enter__ENA$x,31,16})}
     }
-    METHOD/Rule RULE$exit_rule__ENA {
-        ALLOCA l_struct_OC_LookupItem RULE$exit_rule__ENA$mtemp
-        ALLOCA l_struct_OC_LookupItem RULE$exit_rule__ENA$temp
-        CALL :fifo$out$first{}
-        LET l_struct_OC_LookupItem :RULE$exit_rule__ENA$temp = fifo$out$first
+    METHOD/Rule RULE$exitr__ENA if ((((mem$ifc$resValue) & (1)) == (1))) {
+        ALLOCA INTEGER_32 RULE$exitr__ENA$x
+        ALLOCA l_struct_OC_ProcessData RULE$exitr__ENA$y
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_LookupItem :RULE$exit_rule__ENA$mtemp = mem$ifc$resValue
+        LET INTEGER_32 :RULE$exitr__ENA$x = mem$ifc$resValue
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ProcessData :RULE$exitr__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
-        PRINTF :printf{"exit: (%d, %d)\n",RULE$exit_rule__ENA$temp$addr,RULE$exit_rule__ENA$temp$b}
-        CALL/Action :outQ$enq__ENA{RULE$exit_rule__ENA$temp}
+        CALL/Action :outQ$enq__ENA{RULE$exitr__ENA$x}
     }
-    METHOD/Rule RULE$recirc__ENA {
-        ALLOCA l_struct_OC_LookupItem RULE$recirc__ENA$mtemp
-        ALLOCA l_struct_OC_LookupItem RULE$recirc__ENA$temp
-        CALL :fifo$out$first{}
-        LET l_struct_OC_LookupItem :RULE$recirc__ENA$temp = fifo$out$first
+    METHOD/Rule RULE$recirc__ENA if (((((mem$ifc$resValue) & (1)) == (1)) ^ (1))) {
+        ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$agg_2e_tmp
+        ALLOCA INTEGER_32 RULE$recirc__ENA$x
+        ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$y
         CALL :mem$ifc$resValue{}
-        LET l_struct_OC_LookupItem :RULE$recirc__ENA$mtemp = mem$ifc$resValue
+        LET INTEGER_32 :RULE$recirc__ENA$x = mem$ifc$resValue
+        CALL :fifo$out$first{}
+        LET l_struct_OC_ProcessData :RULE$recirc__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
+        CALL/Action :mem$ifc$req__ENA{__phi((((RULE$recirc__ENA$x) + (RULE$recirc__ENA$y$state)) == (1)):(__bitsubstr{RULE$recirc__ENA$y$IPA,15,8}), ((((RULE$recirc__ENA$x) + (RULE$recirc__ENA$y$state)) == (1)) ^ 1):(__bitsubstr{RULE$recirc__ENA$y$IPA,7,0}))}
         CALL/Action :fifo$out$deq__ENA{}
-        PRINTF :printf{"recirc: (%d, %d)\n",RULE$recirc__ENA$temp$addr,RULE$recirc__ENA$temp$b}
-        CALL/Action :fifo$in$enq__ENA{RULE$recirc__ENA$mtemp}
-        CALL/Action :mem$ifc$req__ENA{RULE$recirc__ENA$temp}
+        LET INTEGER_4 :RULE$recirc__ENA$agg_2e_tmp$ticket = RULE$recirc__ENA$y$ticket
+        LET INTEGER_16 :RULE$recirc__ENA$agg_2e_tmp$IPA = RULE$recirc__ENA$y$IPA
+        LET INTEGER_3 :RULE$recirc__ENA$agg_2e_tmp$state = (RULE$recirc__ENA$y$state) + (1)
+        CALL/Action :fifo$in$enq__ENA{RULE$recirc__ENA$agg_2e_tmp}
     }
-    METHOD request$enter__ENA ( INTEGER_32 addr ) {
-        ALLOCA l_struct_OC_LookupItem request$enter__ENA$temp
-        LET INTEGER_32 :request$enter__ENA$temp$addr = request$enter$addr
-        CALL/Action :inQ$in$enq__ENA{request$enter__ENA$temp}
-    }
-}
-MODULE LpmMemory {
-    INTERFACE l_ainterface_OC_LpmMem ifc
-    FIELD INTEGER_32 delayCount
-    FIELD l_struct_OC_LookupItem saved
-    METHOD/Rule RULE$memdelay_rule__ENA if (((delayCount) > (1))) {
-        STORE :delayCount = (delayCount) - (1)
-    }
-    METHOD ifc$req__ENA ( l_struct_OC_LookupItem v ) if (((delayCount) == (0))) {
-        STORE :delayCount = 4
-        STORE :saved = ifc$req$v
-    }
-    METHOD ifc$resAccept__ENA if (((delayCount) == (1))) {
-        STORE :delayCount = 0
-    }
-    METHOD ifc$resValue l_struct_OC_LookupItem = ((ifc$resValue$retval)) if (((delayCount) == (1))) {
-        ALLOCA l_struct_OC_LookupItem ifc$resValue$retval
-        LET l_struct_OC_LookupItem :ifc$resValue$retval = saved
+    METHOD request$enter__ENA ( INTEGER_32 x ) {
+        CALL/Action :inQ$in$enq__ENA{request$enter$x}
     }
 }

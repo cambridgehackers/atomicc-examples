@@ -1,5 +1,4 @@
-/* Copyright (c) 2014 Quanta Research Cambridge, Inc
- * Copyright (c) 2019 The Connectal Project
+/* Copyright (c) 2019 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -25,80 +24,61 @@
  */
 #include "fifo.h"
 #include "mux.h"
+#include "lpmdef.h"
 
-typedef int LookupAddr;
-typedef int LookupResult;
-typedef struct {
-    LookupAddr addr;
-    LookupResult b;
-    int c; // for c++ , need to generate std::copy [20];
-} LookupItem;
+/* For reference, s/w implementation of LPM:
+int lpm(IPA ipa)
+{
+    int p;
+    p = RAM[rootTableBase + ipa[31:16]];
+    if (isLeaf(p) return p;
+    p = RAM[p + ipa[15:8]];
+    if (isLeaf(p) return p;
+    p = RAM[p + ipa[7:0]];
+    return p;    // must be a leaf
+}
+*/
 
 __interface LpmRequest {
-    void enter(int addr);
-};
-
-__interface LpmMem {
-    void req(LookupItem v);
-    void resAccept(void);
-    LookupItem resValue(void);
-};
-
-__emodule LpmMemory {
-    LpmMem ifc;
-};
-
-__module LpmMemory {
-    LpmMem ifc;
-    int delayCount;
-    LookupItem saved;
-    void ifc.req(LookupItem v) if (delayCount == 0) { delayCount = 4; saved = v; }
-    void ifc.resAccept(void) if (delayCount == 1) { delayCount = 0;}
-    LookupItem ifc.resValue(void) if (delayCount == 1) { return saved; }
-    LpmMemory() {
-        __rule memdelay_rule if (delayCount > 1) { delayCount = delayCount - 1; };
-    }
+    void       enter(IPA v);
 };
 
 __module Lpm {
-    LpmRequest request;
-    Fifo1<LookupItem> inQ;
-    Fifo1<LookupItem> fifo;
-    PipeIn<LookupItem> *outQ;
-    LpmMemory        mem;
-    void request.enter(LookupAddr addr) {
-        LookupItem temp;
-        temp.addr = addr;
-        inQ.in.enq(temp);
-    }
+    LpmRequest          request;
+    BufTicket    compBuf;
+    Fifo1<IPA>   inQ;
+    FifoB1<ProcessData>   fifo;
+    PipeIn<IPA> *outQ;
+    LpmMemory           mem;
     Lpm() {
-        printf("Lpm: this %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(Lpm));
-            __rule recirc {
-                LookupItem temp = fifo.out.first();
-                LookupItem mtemp = mem.ifc.resValue();
-                mem.ifc.resAccept();
-	        fifo.out.deq();
-printf("recirc: (%d, %d)\n", temp.addr, temp.b);
-	        fifo.in.enq(mtemp);
-	        mem.ifc.req(temp);
-                };
-            __rule exit_rule {
-                LookupItem temp = fifo.out.first();
-                LookupItem mtemp = mem.ifc.resValue();
-                mem.ifc.resAccept();
-	        fifo.out.deq();
-printf("exit: (%d, %d)\n", temp.addr, temp.b);
-	        outQ->enq(temp);
-                };
-            __rule enter {
-                LookupItem temp = inQ.out.first();
-printf("enter: (%d, %d)\n", temp.addr, temp.b);
-	        inQ.out.deq();
-	        fifo.in.enq(temp);
-	        mem.ifc.req(temp);
-                };
-            atomiccSchedulePriority("recirc", "enter;exit", 0);
+        __rule recirc if (!p(mem.ifc.resValue())) {
+            auto x = mem.ifc.resValue();
+            auto y = fifo.out.first();
+            mem.ifc.resAccept();
+	    mem.ifc.req(compute_addr(x, y.state, y.IPA));
+	    fifo.out.deq();
+	    fifo.in.enq(ProcessData{y.ticket, y.IPA, y.state + 1});
+        };
+        __rule exitr if (p(mem.ifc.resValue())) {
+            auto x = mem.ifc.resValue();
+            auto y = fifo.out.first();
+            mem.ifc.resAccept();
+	    fifo.out.deq();
+	    outQ->enq(f1(x,y));
+        };
+        __rule enter {
+            auto x = inQ.out.first();
+            auto ticket = compBuf.tickIfc.getTicket();
+            compBuf.tickIfc.allocateTicket();
+            inQ.out.deq();
+	    fifo.in.enq(ProcessData{ticket, static_cast<__uint(16)>(__bitsubstr(x, 15, 0)), 0});
+	    mem.ifc.req(addr(x));
+        };
+        atomiccSchedulePriority("recirc", "exitr;enter", 0);
     };
+    void request.enter(IPA x) {
+	inQ.in.enq(x);
+    }
 };
 
-Lpm lpmbase;
+Lpm test;
