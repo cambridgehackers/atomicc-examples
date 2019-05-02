@@ -5,7 +5,7 @@ CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
 SIMMAKE=$(TOPDIR)/../atomicc/simulation/Makefile.verilator
 
-VERILOG_LIB := $(TOPDIR)/lib/generated/
+export VERILOG_LIB := $(TOPDIR)/lib/generated/
 CLANGBASE = $(TOPDIR)/../llvm/build/bin/
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc
