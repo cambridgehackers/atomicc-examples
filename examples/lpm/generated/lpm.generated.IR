@@ -12,7 +12,7 @@ EMODULE l_ainterface_OC_LpmMem {
     METHOD resValue INTEGER_32
 }
 EMODULE l_ainterface_OC_LpmRequest {
-    METHOD enter__ENA ( INTEGER_32 v )
+    METHOD enter__ENA ( INTEGER_32 x )
 }
 EMODULE l_ainterface_OC_PipeIn {
     METHOD enq__ENA ( INTEGER_32 v )
@@ -115,14 +115,13 @@ MODULE FifoB1 {
     }
 }
 MODULE Lpm {
-    PRIORITY recirc exitr;enter
     INTERFACE l_ainterface_OC_LpmRequest request
     FIELD BufTicket compBuf
     FIELD Fifo1 inQ
     FIELD FifoB1 fifo
     INTERFACE/Ptr l_ainterface_OC_PipeIn outQ
     FIELD LpmMemory mem
-    METHOD/Rule RULE$enter__ENA {
+    METHOD/Rule RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
         ALLOCA l_struct_OC_ProcessData RULE$enter__ENA$agg_2e_tmp
         ALLOCA INTEGER_4 RULE$enter__ENA$ticket
         ALLOCA INTEGER_32 RULE$enter__ENA$x
@@ -138,7 +137,7 @@ MODULE Lpm {
         CALL/Action :fifo$in$enq__ENA{RULE$enter__ENA$agg_2e_tmp}
         CALL/Action :mem$ifc$req__ENA{(0) + (__bitsubstr{RULE$enter__ENA$x,31,16})}
     }
-    METHOD/Rule RULE$exitr__ENA if ((((mem$ifc$resValue) & (1)) == (1))) {
+    METHOD/Rule RULE$exitr__ENA if (((((mem$ifc$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
         ALLOCA INTEGER_32 RULE$exitr__ENA$x
         ALLOCA l_struct_OC_ProcessData RULE$exitr__ENA$y
         CALL :mem$ifc$resValue{}

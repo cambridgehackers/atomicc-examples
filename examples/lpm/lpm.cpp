@@ -40,7 +40,7 @@ int lpm(IPA ipa)
 */
 
 __interface LpmRequest {
-    void       enter(IPA v);
+    void       enter(IPA x);
 };
 
 __module Lpm {
@@ -59,14 +59,14 @@ __module Lpm {
 	    fifo.out.deq();
 	    fifo.in.enq(ProcessData{y.ticket, y.IPA, y.state + 1});
         };
-        __rule exitr if (p(mem.ifc.resValue())) {
+        __rule exitr if (p(mem.ifc.resValue()) & !__valid(RULE$recirc)) {
             auto x = mem.ifc.resValue();
             auto y = fifo.out.first();
             mem.ifc.resAccept();
 	    fifo.out.deq();
 	    outQ->enq(f1(x,y));
         };
-        __rule enter {
+        __rule enter if (!__valid(RULE$recirc)) {
             auto x = inQ.out.first();
             auto ticket = compBuf.tickIfc.getTicket();
             compBuf.tickIfc.allocateTicket();
@@ -74,7 +74,6 @@ __module Lpm {
 	    fifo.in.enq(ProcessData{ticket, static_cast<__uint(16)>(__bitsubstr(x, 15, 0)), 0});
 	    mem.ifc.req(addr(x));
         };
-        atomiccSchedulePriority("recirc", "exitr;enter", 0);
     };
     void request.enter(IPA x) {
 	inQ.in.enq(x);
