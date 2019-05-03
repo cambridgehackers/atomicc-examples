@@ -31,7 +31,7 @@ typedef struct {
 #define f1(A,B) A
 #define f2(A,B) A
 #define addr(IPA) (0/*base_addr*/ + __bitsubstr(IPA, 31, 16))
-#define compute_addr(P, S, IPA) ((P) + (S) == 1 ? __bitsubstr(IPA, 15, 8) : __bitsubstr(IPA, 7, 0))
+#define compute_addr(P, S, IPA) ((P) + ((S) == 1 ? __bitsubstr(IPA, 15, 8) : __bitsubstr(IPA, 7, 0)))
 #define p(X) ((X & 1) == 1)
 
 __interface TickIfc {

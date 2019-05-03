@@ -127,9 +127,7 @@ MODULE Lpm {
         ALLOCA INTEGER_32 RULE$enter__ENA$x
         CALL :inQ$out$first{}
         LET INTEGER_32 :RULE$enter__ENA$x = inQ$out$first
-        CALL :compBuf$tickIfc$getTicket{}
-        LET INTEGER_4 :RULE$enter__ENA$ticket = compBuf$tickIfc$getTicket
-        CALL/Action :compBuf$tickIfc$allocateTicket__ENA{}
+        LET INTEGER_4 :RULE$enter__ENA$ticket = 0
         CALL/Action :inQ$out$deq__ENA{}
         LET INTEGER_4 :RULE$enter__ENA$agg_2e_tmp$ticket = RULE$enter__ENA$ticket
         LET INTEGER_16 :RULE$enter__ENA$agg_2e_tmp$IPA = __bitsubstr{RULE$enter__ENA$x,15,0}
@@ -157,7 +155,7 @@ MODULE Lpm {
         CALL :fifo$out$first{}
         LET l_struct_OC_ProcessData :RULE$recirc__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
-        CALL/Action :mem$ifc$req__ENA{__phi((((RULE$recirc__ENA$x) + (RULE$recirc__ENA$y$state)) == (1)):(__bitsubstr{RULE$recirc__ENA$y$IPA,15,8}), ((((RULE$recirc__ENA$x) + (RULE$recirc__ENA$y$state)) == (1)) ^ 1):(__bitsubstr{RULE$recirc__ENA$y$IPA,7,0}))}
+        CALL/Action :mem$ifc$req__ENA{(RULE$recirc__ENA$x) + (__phi(((RULE$recirc__ENA$y$state) == (1)):(__bitsubstr{RULE$recirc__ENA$y$IPA,15,8}), (((RULE$recirc__ENA$y$state) == (1)) ^ 1):(__bitsubstr{RULE$recirc__ENA$y$IPA,7,0})))}
         CALL/Action :fifo$out$deq__ENA{}
         LET INTEGER_4 :RULE$recirc__ENA$agg_2e_tmp$ticket = RULE$recirc__ENA$y$ticket
         LET INTEGER_16 :RULE$recirc__ENA$agg_2e_tmp$IPA = RULE$recirc__ENA$y$IPA

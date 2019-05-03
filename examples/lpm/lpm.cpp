@@ -68,8 +68,8 @@ __module Lpm {
         };
         __rule enter if (!__valid(RULE$recirc)) {
             auto x = inQ.out.first();
-            auto ticket = compBuf.tickIfc.getTicket();
-            compBuf.tickIfc.allocateTicket();
+            __uint(4) ticket = 0; //compBuf.tickIfc.getTicket();
+            //compBuf.tickIfc.allocateTicket();
             inQ.out.deq();
 	    fifo.in.enq(ProcessData{ticket, static_cast<__uint(16)>(__bitsubstr(x, 15, 0)), 0});
 	    mem.ifc.req(addr(x));

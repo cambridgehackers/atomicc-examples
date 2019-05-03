@@ -9,22 +9,9 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     output wire pipe$enq__ENA,
     output wire [95:0]pipe$enq$v,
     input wire pipe$enq__RDY);
-    wire [31:0]indication$heard__ENA$ind$data$heard$meth;
-    wire [31:0]indication$heard__ENA$ind$data$heard$v;
     assign indication$heard__RDY = pipe$enq__RDY;
-    assign pipe$enq$v = { indication$heard__ENA$ind$data$heard$v , indication$heard__ENA$ind$data$heard$meth , 32'd1 };
+    assign pipe$enq$v = { indication$heard$v , indication$heard$meth , 32'd1 };
     assign pipe$enq__ENA = indication$heard__ENA;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-      end // nRST
-      else begin
-        if (indication$heard__ENA & pipe$enq__RDY) begin // indication$heard__ENA
-            indication$heard__ENA$ind$data$heard$meth <= indication$heard$meth;
-            indication$heard__ENA$ind$data$heard$v <= indication$heard$v;
-        end; // End of indication$heard__ENA
-      end
-    end // always @ (posedge CLK)
 endmodule 
 
 `default_nettype wire    // set back to default value
