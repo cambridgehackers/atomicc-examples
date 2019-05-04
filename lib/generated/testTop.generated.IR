@@ -315,7 +315,7 @@ MODULE TestTop {
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
     METHOD/Rule RULE$init__ENA {
-        LET INTEGER_1 :interrupt = __phi(__default:(0), ((requestLength) != (0)):((intEnable) != (0)))
+        LET INTEGER_1 :interrupt = ((requestLength) != (0)) && ((intEnable) != (0))
     }
     METHOD/Rule RULE$lR__ENA {
         ALLOCA l_struct_OC_ReadResp RULE$lR__ENA$temp
