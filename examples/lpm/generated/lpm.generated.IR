@@ -7,46 +7,46 @@ EMODULE l_struct_OC_ProcessData {
     FIELD INTEGER_3 state
 }
 EMODULE l_ainterface_OC_LpmMem {
-    METHOD req__ENA ( INTEGER_32 v )
-    METHOD resAccept__ENA
+    METHOD/Action req__ENA ( INTEGER_32 v )
+    METHOD/Action resAccept__ENA
     METHOD resValue INTEGER_32
 }
 EMODULE l_ainterface_OC_LpmRequest {
-    METHOD enter__ENA ( INTEGER_32 x )
+    METHOD/Action enter__ENA ( INTEGER_32 x )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_4 {
-    METHOD enq__ENA ( l_struct_OC_ProcessData v )
+    METHOD/Action enq__ENA ( l_struct_OC_ProcessData v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_7 {
-    METHOD enq__ENA ( INTEGER_23 v )
+    METHOD/Action enq__ENA ( INTEGER_23 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
 EMODULE l_ainterface_OC_PipeOut_OC_2 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
 EMODULE l_ainterface_OC_PipeOut_OC_5 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first l_struct_OC_ProcessData
 }
 EMODULE l_ainterface_OC_PipeOut_OC_8 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_23
 }
 EMODULE l_ainterface_OC_TickIfc {
-    METHOD allocateTicket__ENA
+    METHOD/Action allocateTicket__ENA
     METHOD getTicket INTEGER_4
 }
 EMODULE BufTicket {
@@ -88,10 +88,10 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1Base$__PARAM__$width$32 fifo
-    METHOD in$enq__ENA ( INTEGER_32 v ) {
+    METHOD/Action in$enq__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA {
+    METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
     METHOD out$first INTEGER_32 = ((fifo$out$first)) {
@@ -102,10 +102,10 @@ MODULE FifoB1 {
     INTERFACE l_ainterface_OC_PipeIn_OC_4 in
     INTERFACE l_ainterface_OC_PipeOut_OC_5 out
     FIELD FifoB1Base$__PARAM__$width$23 fifo
-    METHOD in$enq__ENA ( l_struct_OC_ProcessData v ) {
+    METHOD/Action in$enq__ENA ( l_struct_OC_ProcessData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA {
+    METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
     METHOD out$first l_struct_OC_ProcessData = ((out$first$retval)) {
@@ -121,7 +121,7 @@ MODULE Lpm {
     FIELD FifoB1 fifo
     INTERFACE/Ptr l_ainterface_OC_PipeIn outQ
     FIELD LpmMemory mem
-    METHOD/Rule RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
+    METHOD/Rule/Action RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
         ALLOCA l_struct_OC_ProcessData RULE$enter__ENA$agg_2e_tmp
         ALLOCA INTEGER_4 RULE$enter__ENA$ticket
         ALLOCA INTEGER_32 RULE$enter__ENA$x
@@ -135,7 +135,7 @@ MODULE Lpm {
         CALL/Action :fifo$in$enq__ENA{RULE$enter__ENA$agg_2e_tmp}
         CALL/Action :mem$ifc$req__ENA{(0) + (__bitsubstr{RULE$enter__ENA$x,31,16})}
     }
-    METHOD/Rule RULE$exitr__ENA if (((((mem$ifc$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
+    METHOD/Rule/Action RULE$exitr__ENA if (((((mem$ifc$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
         ALLOCA INTEGER_32 RULE$exitr__ENA$x
         ALLOCA l_struct_OC_ProcessData RULE$exitr__ENA$y
         CALL :mem$ifc$resValue{}
@@ -146,7 +146,7 @@ MODULE Lpm {
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :outQ$enq__ENA{RULE$exitr__ENA$x}
     }
-    METHOD/Rule RULE$recirc__ENA if (((((mem$ifc$resValue) & (1)) == (1)) ^ (1))) {
+    METHOD/Rule/Action RULE$recirc__ENA if (((((mem$ifc$resValue) & (1)) == (1)) ^ (1))) {
         ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$agg_2e_tmp
         ALLOCA INTEGER_32 RULE$recirc__ENA$x
         ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$y
@@ -162,7 +162,7 @@ MODULE Lpm {
         LET INTEGER_3 :RULE$recirc__ENA$agg_2e_tmp$state = (RULE$recirc__ENA$y$state) + (1)
         CALL/Action :fifo$in$enq__ENA{RULE$recirc__ENA$agg_2e_tmp}
     }
-    METHOD request$enter__ENA ( INTEGER_32 x ) {
+    METHOD/Action request$enter__ENA ( INTEGER_32 x ) {
         CALL/Action :inQ$in$enq__ENA{request$enter$x}
     }
 }

@@ -2,13 +2,13 @@ EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_NOCData v )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 EMODULE l_ainterface_OC_PipeInB {
-    METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
@@ -38,7 +38,7 @@ MODULE UserTop {
     INTERFACE l_ainterface_OC_PipeInH wad
     INTERFACE l_ainterface_OC_PipeInH indication
     FIELD l_top ctop
-    METHOD indication$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+    METHOD/Action indication$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
         ALLOCA INTEGER_16 indication$enq__ENA$len
         ALLOCA INTEGER_16 indication$enq__ENA$port
         ALLOCA INTEGER_128 indication$enq__ENA$vint
@@ -48,7 +48,7 @@ MODULE UserTop {
         PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq__ENA$len}
         CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq$length}
     }
-    METHOD wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+    METHOD/Action wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
         CALL/Action :ctop$request$enq__ENA{wad$enq$v}
     }

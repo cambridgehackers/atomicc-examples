@@ -7,7 +7,7 @@ EMODULE ResetInverter {
 }
 MODULE ResetInverter {
     INTERFACE l_ainterface_OC_MResetInverterResetInverter _
-    METHOD/Rule RULE$init__ENA {
+    METHOD/Rule/Action RULE$init__ENA {
         LET INTEGER_1 :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }
 }

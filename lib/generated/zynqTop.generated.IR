@@ -5,13 +5,13 @@ EMODULE l_ainterface_OC_ClockIfc {
     FIELD/output INTEGER_1 clockOut
 }
 EMODULE l_ainterface_OC_MaxiI {
-    METHOD B__ENA ( INTEGER_12 id , INTEGER_2 resp )
-    METHOD R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
+    METHOD/Action B__ENA ( INTEGER_12 id , INTEGER_2 resp )
+    METHOD/Action R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
 }
 EMODULE l_ainterface_OC_MaxiO {
-    METHOD AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+    METHOD/Action AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD/Action AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
+    METHOD/Action W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
 EMODULE l_ainterface_OC_MbufgBUFG {
     FIELD/input INTEGER_1 I
@@ -477,26 +477,26 @@ MODULE P7Wrap {
     FIELD ClockTop pclockTop
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    METHOD MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
+    METHOD/Action MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
         LET INTEGER_12 :pps$MAXIGP0BID = MAXIGP0_I$B$id
         LET INTEGER_2 :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
-    METHOD MAXIGP0_I$R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp ) if ((pps$MAXIGP0RREADY)) {
+    METHOD/Action MAXIGP0_I$R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp ) if ((pps$MAXIGP0RREADY)) {
         LET INTEGER_32 :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
         LET INTEGER_12 :pps$MAXIGP0RID = MAXIGP0_I$R$id
         LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
         LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
     }
-    METHOD/Rule RULE$gp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
+    METHOD/Rule/Action RULE$gp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
         CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
     }
-    METHOD/Rule RULE$gp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
+    METHOD/Rule/Action RULE$gp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
         CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
     }
-    METHOD/Rule RULE$gp0w__ENA if ((pps$MAXIGP0WVALID)) {
+    METHOD/Rule/Action RULE$gp0w__ENA if ((pps$MAXIGP0WVALID)) {
         CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
     }
-    METHOD/Rule RULE$init__ENA {
+    METHOD/Rule/Action RULE$init__ENA {
         LET INTEGER_1 :pps$FPGAIDLEN = 1
         LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
         LET INTEGER_1 :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
@@ -543,7 +543,7 @@ MODULE ZynqTop {
     FIELD BUFG ps7_freset_0_r
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
-    METHOD/Rule RULE$init__ENA {
+    METHOD/Rule/Action RULE$init__ENA {
         LET INTEGER_1 :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
         LET INTEGER_1 :__defaultClock = ps7_fclk_0_c$O
         LET INTEGER_1 :ps7_freset_0_r$I = ps7_ps7_foo$FCLK$RESETN

@@ -1,15 +1,15 @@
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( INTEGER_999999 v )
+    METHOD/Action enq__ENA ( INTEGER_999999 v )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( INTEGER_999999 v )
+    METHOD/Action enq__ENA ( INTEGER_999999 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_999999
 }
 EMODULE l_ainterface_OC_PipeOut_OC_2 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_999999
 }
 EMODULE Fifo {
@@ -25,11 +25,11 @@ MODULE Fifo1Base$__PARAM__$width$999999 {
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD INTEGER_999999 element
     FIELD INTEGER_1 full
-    METHOD in$enq__ENA ( INTEGER_999999 v ) if (((full) ^ (1))) {
+    METHOD/Action in$enq__ENA ( INTEGER_999999 v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE :full = 1
     }
-    METHOD out$deq__ENA if ((full)) {
+    METHOD/Action out$deq__ENA if ((full)) {
         STORE :full = 0
     }
     METHOD out$first INTEGER_999999 = ((element)) if ((full))
@@ -40,12 +40,12 @@ MODULE FifoB1Base$__PARAM__$width$999999 {
     FIELD INTEGER_999999 element
     FIELD INTEGER_1 full
     FIELD/shared INTEGER_999999 enq_v
-    METHOD in$enq__ENA ( INTEGER_999999 v ) if (((((full) ^ (1)) | (out$deq__ENA)) != (0))) {
+    METHOD/Action in$enq__ENA ( INTEGER_999999 v ) if (((((full) ^ (1)) | (out$deq__ENA)) != (0))) {
         STORE :enq_v = in$enq$v
         STORE :element = in$enq$v
         STORE (((out$deq__ENA) != (0)) ^ 1):full = 1
     }
-    METHOD out$deq__ENA if (((full) | (in$enq__ENA))) {
+    METHOD/Action out$deq__ENA if (((full) | (in$enq__ENA))) {
         STORE :full = 0
     }
     METHOD out$first INTEGER_999999 = ((__phi((full):(element), ((full) ^ 1):(enq_v)))) if (((full) | (in$enq__ENA)))

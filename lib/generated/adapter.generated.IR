@@ -2,23 +2,23 @@ EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
 EMODULE l_ainterface_OC_PipeInB {
-    METHOD enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 MODULE AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
     INTERFACE/Ptr l_ainterface_OC_PipeInH out
     FIELD INTEGER_1 waitForEnq
     FIELD INTEGER_128 buffer
-    METHOD/Rule RULE$pushValue__ENA if ((waitForEnq)) {
+    METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
         ALLOCA l_struct_OC_NOCData RULE$pushValue__ENA$agg_2e_tmp
         LET INTEGER_128 :RULE$pushValue__ENA$agg_2e_tmp = buffer
         CALL/Action :out$enq__ENA{RULE$pushValue__ENA$agg_2e_tmp,0}
         STORE :waitForEnq = 0
     }
-    METHOD in$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((waitForEnq) ^ (1))) {
+    METHOD/Action in$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((waitForEnq) ^ (1))) {
         STORE :buffer = __bitconcat{__bitsubstr{buffer,95,0},in$enq$v}
         STORE ((in$enq$length) == (1)):waitForEnq = 1
     }
@@ -28,12 +28,12 @@ MODULE AdapterToBus {
     INTERFACE/Ptr l_ainterface_OC_PipeInB out
     FIELD INTEGER_16 remain
     FIELD INTEGER_128 buffer
-    METHOD/Rule RULE$copyRule__ENA if (((remain) != (0))) {
+    METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
         CALL/Action :out$enq__ENA{buffer,remain}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)
     }
-    METHOD in$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) if (((remain) == (0))) {
+    METHOD/Action in$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) if (((remain) == (0))) {
         STORE :buffer = in$enq$v
         STORE :remain = (in$enq$length) + (1)
     }

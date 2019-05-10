@@ -6,26 +6,26 @@ EMODULE l_class_OC_EchoTest {
     FIELD INTEGER_32 x
 }
 EMODULE l_ainterface_OC_EchoIndication {
-    METHOD heard__ENA ( INTEGER_32 v )
+    METHOD/Action heard__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_EchoRequest {
-    METHOD say__ENA ( INTEGER_32 v )
+    METHOD/Action say__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
 EMODULE l_ainterface_OC_PipeOut_OC_2 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
 EMODULE EchoInd {
@@ -52,12 +52,12 @@ MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest sout
     INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
     FIELD Fifo1 fifo
-    METHOD/Rule RULE$respond_rule__ENA {
+    METHOD/Rule/Action RULE$respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         CALL/Action :ind$heard__ENA{fifo$out$first}
     }
-    METHOD sout$say__ENA ( INTEGER_32 v ) {
+    METHOD/Action sout$say__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
 }
@@ -65,10 +65,10 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1Base$__PARAM__$width$32 fifo
-    METHOD in$enq__ENA ( INTEGER_32 v ) {
+    METHOD/Action in$enq__ENA ( INTEGER_32 v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA {
+    METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
     METHOD out$first INTEGER_32 = ((fifo$out$first)) {

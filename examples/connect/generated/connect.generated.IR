@@ -28,19 +28,19 @@ EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_
     FIELD INTEGER_32 v
 }
 EMODULE l_ainterface_OC_EchoIndication {
-    METHOD heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD/Action heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_EchoRequest {
-    METHOD say__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD/Action say__ENA ( INTEGER_32 meth , INTEGER_32 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_EchoRequest_data v )
+    METHOD/Action enq__ENA ( l_struct_OC_EchoRequest_data v )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD enq__ENA ( l_struct_OC_EchoIndication_data v )
+    METHOD/Action enq__ENA ( l_struct_OC_EchoIndication_data v )
 }
 EMODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeInH in
@@ -65,14 +65,14 @@ MODULE Connect {
 MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         CALL/Action :indication$heard__ENA{request$say$meth,request$say$v}
     }
 }
 MODULE EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
+    METHOD/Action pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
         ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v
         LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
         CALL/Action ((pipe$enq__ENA$v$tag) == 1):indication$heard__ENA{pipe$enq__ENA$v$data$heard$meth,pipe$enq__ENA$v$data$heard$v}
@@ -81,7 +81,7 @@ MODULE EchoIndicationInput {
 MODULE EchoIndicationOutput {
     INTERFACE l_ainterface_OC_EchoIndication indication
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
-    METHOD indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_EchoIndication_data indication$heard__ENA$ind
         LET INTEGER_32 :indication$heard__ENA$ind$tag = 1
         STORE :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
@@ -92,7 +92,7 @@ MODULE EchoIndicationOutput {
 MODULE EchoRequestInput {
     INTERFACE l_ainterface_OC_PipeIn pipe
     INTERFACE/Ptr l_ainterface_OC_EchoRequest request
-    METHOD pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
+    METHOD/Action pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
         ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v
         LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
@@ -102,7 +102,7 @@ MODULE EchoRequestInput {
 MODULE EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
-    METHOD request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
         ALLOCA l_struct_OC_EchoRequest_data request$say__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
         LET INTEGER_32 :request$say__ENA$ind$tag = 1

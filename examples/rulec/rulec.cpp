@@ -43,6 +43,19 @@ __module Echo {
     int v_type;
     void request.say(__int(32) v) if(!busy) {
         v_temp = v;
+#if 0
+        v_delay = v_temp; /// testing jca
+@"_ZN4Echo11request$sayEiACCS32ACCE"(%module.Echo* %this, i32 %v)
+      %0 = load i32, i32* %v.addr, align 1
+  %v_temp = getelementptr inbounds %module.Echo, %module.Echo* %this1, i32 0, i32 7
+  store i32 %0, i32* %v_temp, align 2
+
+      %v_temp2 = getelementptr inbounds %module.Echo, %module.Echo* %this1, i32 0, i32 7
+      %1 = load i32, i32* %v_temp2, align 2
+      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ error
+  %v_delay = getelementptr inbounds %module.Echo, %module.Echo* %this1, i32 0, i32 8
+  store i32 %1, i32* %v_delay, align 2
+#endif
         busy = 1;
         v_type = 1;
     }

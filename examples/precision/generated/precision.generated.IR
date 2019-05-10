@@ -9,26 +9,26 @@ EMODULE l_class_OC_IVectorTest {
     FIELD IVector ivector
 }
 EMODULE l_ainterface_OC_IVectorIndication {
-    METHOD heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
+    METHOD/Action heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
 }
 EMODULE l_ainterface_OC_IVectorRequest {
-    METHOD say__ENA ( INTEGER_6 meth , INTEGER_4 v )
+    METHOD/Action say__ENA ( INTEGER_6 meth , INTEGER_4 v )
 }
 EMODULE l_ainterface_OC_PipeIn {
-    METHOD enq__ENA ( l_struct_OC_ValueType v )
+    METHOD/Action enq__ENA ( l_struct_OC_ValueType v )
 }
 EMODULE l_ainterface_OC_PipeInH {
-    METHOD enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD enq__ENA ( INTEGER_10 v )
+    METHOD/Action enq__ENA ( INTEGER_10 v )
 }
 EMODULE l_ainterface_OC_PipeOut {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first l_struct_OC_ValueType
 }
 EMODULE l_ainterface_OC_PipeOut_OC_2 {
-    METHOD deq__ENA
+    METHOD/Action deq__ENA
     METHOD first INTEGER_10
 }
 EMODULE Fifo {
@@ -45,7 +45,7 @@ EMODULE Fifo_OC_0 {
 }
 EMODULE IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
-    METHOD ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
+    METHOD/Action ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
         PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
     }
 }
@@ -58,10 +58,10 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1Base$__PARAM__$width$10 fifo
-    METHOD in$enq__ENA ( l_struct_OC_ValueType v ) {
+    METHOD/Action in$enq__ENA ( l_struct_OC_ValueType v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
-    METHOD out$deq__ENA {
+    METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
     METHOD out$first l_struct_OC_ValueType = ((out$first$retval)) {
@@ -77,14 +77,14 @@ MODULE IVector {
     FIELD INTEGER_8 fcounter
     FIELD INTEGER_9 counter
     FIELD INTEGER_9 gcounter
-    METHOD/Rule RULE$respond__ENA {
+    METHOD/Rule/Action RULE$respond__ENA {
         ALLOCA l_struct_OC_ValueType RULE$respond__ENA$temp
         CALL :fifo$out$first{}
         LET l_struct_OC_ValueType :RULE$respond__ENA$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{RULE$respond__ENA$temp$a,RULE$respond__ENA$temp$b}
     }
-    METHOD request$say__ENA ( INTEGER_6 meth , INTEGER_4 v ) if ((1)) {
+    METHOD/Action request$say__ENA ( INTEGER_6 meth , INTEGER_4 v ) if ((1)) {
         ALLOCA l_struct_OC_ValueType request$say__ENA$temp
         LET INTEGER_6 :request$say__ENA$temp$a = request$say$meth
         LET INTEGER_4 :request$say__ENA$temp$b = request$say$v

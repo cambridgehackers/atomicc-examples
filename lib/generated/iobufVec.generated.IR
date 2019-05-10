@@ -20,13 +20,13 @@ EMODULE IOBUF {
 MODULE IobufVec$__PARAM__$iovecWidth$999999 {
     INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 _
     FIELD/Count 999999  IOBUF iobufs
-    METHOD FOR$0Body__ENA ( INTEGER_32 __inst$Genvar1 ) {
+    METHOD/Action FOR$0Body__ENA ( INTEGER_32 __inst$Genvar1 ) {
         LET INTEGER_1 :iobufs[__inst$Genvar1]$T = T
         LET INTEGER_1 :iobufs[__inst$Genvar1]$IO = __bitsubstr{IO,__inst$Genvar1,1}
         LET INTEGER_1 :iobufs[__inst$Genvar1]$I = __bitsubstr{I,__inst$Genvar1,1}
         LET INTEGER_1 :iobufs[__inst$Genvar1]$O = __bitsubstr{O,__inst$Genvar1,1}
     }
-    METHOD/Rule RULE$iobufs__ENA {
+    METHOD/Rule/Action RULE$iobufs__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
     }
 }
