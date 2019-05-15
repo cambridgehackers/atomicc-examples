@@ -38,9 +38,9 @@
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; !busy;
 //METAGUARD; request$say; !busy;
-//METAGUARD; swap$x2y; 1'd1;
-//METAGUARD; swap$y2x; 1'd1;
-//METAGUARD; swap$y2xnull; 1'd1;
+//METAGUARD; swap$x2y; 1;
+//METAGUARD; swap$y2x; 1;
+//METAGUARD; swap$y2xnull; 1;
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; EchoIndicationInput
 //METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
