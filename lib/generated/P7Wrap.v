@@ -272,7 +272,7 @@ module P7Wrap (
         .FCLKCLK(FCLKCLK),
         .FCLKCLKTRIGN(FCLKCLKTRIGN),
         .FCLKRESETN(FCLKRESETN),
-        .FPGAIDLEN(1'd1),
+        .FPGAIDLEN(1),
         .FTMDTRACEINATID(0),
         .FTMDTRACEINCLOCK(0),
         .FTMDTRACEINDATA(0),

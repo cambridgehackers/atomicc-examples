@@ -18,7 +18,6 @@ module Lpm (input wire CLK, input wire nRST,
     wire [22:0]fifo$out$first;
     wire fifo$out$first__RDY;
     wire inQ$in$enq__RDY;
-    wire inQ$out$deq__ENA;
     wire inQ$out$deq__RDY;
     wire [31:0]inQ$out$first;
     wire inQ$out$first__RDY;
@@ -38,7 +37,7 @@ module Lpm (input wire CLK, input wire nRST,
         .in$enq__ENA(request$enter__ENA),
         .in$enq$v(request$enter$x),
         .in$enq__RDY(inQ$in$enq__RDY),
-        .out$deq__ENA(inQ$out$deq__ENA),
+        .out$deq__ENA(fifo$in$enq__RDY & inQ$out$first__RDY & mem$ifc$req__RDY),
         .out$deq__RDY(inQ$out$deq__RDY),
         .out$first(inQ$out$first),
         .out$first__RDY(inQ$out$first__RDY));
@@ -58,15 +57,14 @@ module Lpm (input wire CLK, input wire nRST,
         .ifc$resAccept__RDY(mem$ifc$resAccept__RDY),
         .ifc$resValue(mem$ifc$resValue),
         .ifc$resValue__RDY(mem$ifc$resValue__RDY));
-    assign fifo$in$enq$v = ( ( ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? { 3'd0 , inQ$out$first[ 15 : 0 ] , 4'd0 } : 23'd0 ) | ( ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ? { RULE$recirc__ENA$agg_2e_tmp$state , fifo$out$first[ 19 : 4 ] , fifo$out$first[ 3 : 0 ] } : 23'd0 );
-    assign fifo$in$enq__ENA = ( ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY ) ) & inQ$out$first__RDY & inQ$out$deq__RDY & mem$ifc$req__RDY ) | ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY );
-    assign fifo$out$deq__ENA = ( ( mem$ifc$resValue == 32'd1 ) & ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$in$enq__RDY ) ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & outQ$enq__RDY ) | ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$in$enq__RDY );
-    assign inQ$out$deq__ENA = ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & inQ$out$first__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
-    assign mem$ifc$req$v = ( ( ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ? ( 32'd0 + inQ$out$first[ 31 : 16 ] inQ$out$first [ 18446744073709551615 ] ) : 32'd0 ) | ( ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ? ( mem$ifc$resValue[ 18446744073709551615 ] + ( ( fifo$out$first[ 22 : 20 ] == 3'd1 ) ? RULE$recirc__ENA$y$IPA[ 15 : 8 ] RULE$recirc__ENA$y$IPA [ 18446744073709551615 ] : RULE$recirc__ENA$y$IPA[ 7 : 0 ] RULE$recirc__ENA$y$IPA [ 18446744073709551615 ] ) ) : 32'd0 );
-    assign mem$ifc$req__ENA = ( ( ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & inQ$out$first__RDY & inQ$out$deq__RDY ) | ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY ) ) & fifo$in$enq__RDY;
-    assign mem$ifc$resAccept__ENA = ( ( mem$ifc$resValue == 32'd1 ) & ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & fifo$out$deq__RDY & outQ$enq__RDY ) | ( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY );
+    assign fifo$in$enq$v = ( ( fifo$in$enq__RDY & inQ$out$first__RDY & inQ$out$deq__RDY & mem$ifc$req__RDY ) ? { 3'd0 , inQ$out$first[ 15 : 0 ] , 4'd0 } : 23'd0 ) | ( ( ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ? { RULE$recirc__ENA$agg_2e_tmp$state , fifo$out$first[ 19 : 4 ] , fifo$out$first[ 3 : 0 ] } : 23'd0 );
+    assign fifo$in$enq__ENA = mem$ifc$req__RDY & ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY;
+    assign fifo$out$deq__ENA = mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$req__RDY & fifo$in$enq__RDY;
+    assign mem$ifc$req$v = ( ( fifo$in$enq__RDY & inQ$out$first__RDY & inQ$out$deq__RDY & mem$ifc$req__RDY ) ? ( 32'd0 + inQ$out$first[ 31 : 16 ] inQ$out$first [ 18446744073709551615 ] ) : 32'd0 ) | ( ( ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ? ( mem$ifc$resValue[ 18446744073709551615 ] + ( ( fifo$out$first[ 22 : 20 ] == 3'd1 ) ? RULE$recirc__ENA$y$IPA[ 15 : 8 ] RULE$recirc__ENA$y$IPA [ 18446744073709551615 ] : RULE$recirc__ENA$y$IPA[ 7 : 0 ] RULE$recirc__ENA$y$IPA [ 18446744073709551615 ] ) ) : 32'd0 );
+    assign mem$ifc$req__ENA = fifo$in$enq__RDY & ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY;
+    assign mem$ifc$resAccept__ENA = mem$ifc$resValue__RDY & fifo$out$first__RDY & fifo$out$deq__RDY & ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$req__RDY & fifo$in$enq__RDY;
     assign outQ$enq$v = mem$ifc$resValue;
-    assign outQ$enq__ENA = ( mem$ifc$resValue == 32'd1 ) & ( !( ( mem$ifc$resValue != 32'd1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY;
+    assign outQ$enq__ENA = fifo$out$deq__RDY & mem$ifc$resAccept__RDY & fifo$out$first__RDY & mem$ifc$resValue__RDY & ( ( mem$ifc$resValue & 1 ) == 1 );
     assign request$enter__RDY = inQ$in$enq__RDY;
     // Extra assigments, not to output wires
     assign RULE$recirc__ENA$agg_2e_tmp$state = fifo$out$first[ 22 : 20 ] + 3'd1;
