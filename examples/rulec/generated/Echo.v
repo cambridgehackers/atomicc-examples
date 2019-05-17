@@ -48,10 +48,10 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard__ENA = busy_delay & ( v_type == 32'd1 );
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
-    assign request$setLeds__RDY = 1'd1;
+    assign request$setLeds__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$respond_rule__ENA = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
-    assign RULE$respond_rule__RDY = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+    assign RULE$respond_rule__ENA = busy_delay & ( ( ( v_type != 32'd1 ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & indication$heard2__RDY & indication$heard__RDY ) ) ) );
+    assign RULE$respond_rule__RDY = busy_delay & ( ( ( v_type != 32'd1 ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & indication$heard2__RDY & indication$heard__RDY ) ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -66,7 +66,7 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (busy & ( !busy_delay )) begin // RULE$delay_rule__ENA
+        if (!( busy_delay | ( !busy ) )) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
@@ -76,13 +76,13 @@ module Echo (input wire CLK, input wire nRST,
         if (RULE$respond_rule__ENA & RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
         end; // End of RULE$respond_rule__ENA
-        if (request$say2__ENA & ( !busy )) begin // request$say2__ENA
+        if (!( busy | ( !request$say2__ENA ) )) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
         end; // End of request$say2__ENA
-        if (request$say__ENA & ( !busy )) begin // request$say__ENA
+        if (!( busy | ( !request$say__ENA ) )) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;

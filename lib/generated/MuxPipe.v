@@ -39,10 +39,10 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out$first(forwardFifol$out$first),
         .out$first__RDY(forwardFifol$out$first__RDY));
     assign forward$enq__RDY = forwardFifo$in$enq__RDY & forwardFifol$in$enq__RDY;
-    assign in$enq__RDY = ( !forwardFifo$out$first__RDY ) & out$enq__RDY;
-    assign out$enq$length = ( ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) ? forwardFifol$out$first : 16'd0 ) | ( ( in$enq__ENA & ( !forwardFifo$out$first__RDY ) & out$enq__RDY ) ? in$enq$length : 16'd0 );
-    assign out$enq$v = ( ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) ? forwardFifo$out$first : 128'd0 ) | ( ( in$enq__ENA & ( !forwardFifo$out$first__RDY ) & out$enq__RDY ) ? in$enq$v : 128'd0 );
-    assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) | ( in$enq__ENA & ( !forwardFifo$out$first__RDY ) );
+    assign in$enq__RDY = !( forwardFifo$out$first__RDY | ( !out$enq__RDY ) );
+    assign out$enq$length = ( ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) ? forwardFifol$out$first : 16'd0 ) | ( ( !( forwardFifo$out$first__RDY | ( !( out$enq__RDY & in$enq__ENA ) ) ) ) ? in$enq$length : 16'd0 );
+    assign out$enq$v = ( ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) ? forwardFifo$out$first : 128'd0 ) | ( ( !( forwardFifo$out$first__RDY | ( !( out$enq__RDY & in$enq__ENA ) ) ) ) ? in$enq$v : 128'd0 );
+    assign out$enq__ENA = ( forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY ) | ( ( !forwardFifo$out$first__RDY ) & in$enq__ENA );
 endmodule 
 
 `default_nettype wire    // set back to default value

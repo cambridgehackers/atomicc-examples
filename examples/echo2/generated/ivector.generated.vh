@@ -4,12 +4,12 @@
 //METASTART; FifoPong
 //METAINTERNAL; element1; Fifo1Base$__PARAM__$width$704;
 //METAINTERNAL; element2; Fifo1Base$__PARAM__$width$704;
-//METAINVOKE; in$enq__ENA; pong ^ 1:element1$in$enq__ENA;pong:element2$in$enq__ENA;
-//METAGUARD; in$enq; ( ( pong ^ 1 ) | element2$in$enq__RDY ) & ( pong | element1$in$enq__RDY );
-//METAINVOKE; out$deq__ENA; pong ^ 1:element1$out$deq__ENA;pong:element2$out$deq__ENA;
-//METAGUARD; out$deq; ( ( pong ^ 1 ) | element2$out$deq__RDY ) & ( pong | element1$out$deq__RDY );
-//METAINVOKE; out$first; pong ^ 1:element1$out$first;pong:element2$out$first;
-//METAGUARD; out$first; ( ( pong ^ 1 ) | element2$out$first__RDY ) & ( pong | element1$out$first__RDY );
+//METAINVOKE; in$enq__ENA; !pong:element1$in$enq__ENA;pong:element2$in$enq__ENA;
+//METAGUARD; in$enq; ( element2$in$enq__RDY & ( pong | element1$in$enq__RDY ) ) | ( ( !element2$in$enq__RDY ) & ( !( pong | ( !element1$in$enq__RDY ) ) ) );
+//METAINVOKE; out$deq__ENA; !pong:element1$out$deq__ENA;pong:element2$out$deq__ENA;
+//METAGUARD; out$deq; ( element2$out$deq__RDY & ( pong | element1$out$deq__RDY ) ) | ( ( !element2$out$deq__RDY ) & ( !( pong | ( !element1$out$deq__RDY ) ) ) );
+//METAINVOKE; out$first; !pong:element1$out$first;pong:element2$out$first;
+//METAGUARD; out$first; ( element2$out$first__RDY & ( pong | element1$out$first__RDY ) ) | ( ( !element2$out$first__RDY ) & ( !( pong | ( !element1$out$first__RDY ) ) ) );
 //METASTART; IVector
 //METAEXTERNAL; ind; l_ainterface_OC_IndIF;
 //METAINTERNAL; fifo; FifoPong;

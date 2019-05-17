@@ -7,17 +7,17 @@
 //METAGUARD; RULE$clockRule; 1;
 //METAINVOKE; RULE$delay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA
-//METAGUARD; RULE$delay_rule; busy & ( !busy_delay ) & printfp$enq__RDY;
+//METAGUARD; RULE$delay_rule; !( busy_delay | ( !printfp$enq__RDY ) | ( !busy ) );
 //METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
 //METAEXCLUSIVE; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA
 //METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
-//METAGUARD; RULE$respond_rule; busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) & printfp$enq__RDY;
+//METAGUARD; RULE$respond_rule; busy_delay & ( ( ( v_type != 32'd1 ) & ( ( ( v_type == 32'd1 ) & printfp$enq__RDY ) | ( ( !( v_type == 32'd1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & printfp$enq__RDY & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & printfp$enq__RDY & indication$heard2__RDY & indication$heard__RDY ) ) ) );
 //METAINVOKE; request$say__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$setLeds__ENA
 //METAINVOKE; request$say2__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$say2__ENA; request$setLeds__ENA
-//METAGUARD; request$say2; ( !busy ) & printfp$enq__RDY;
-//METAGUARD; request$say; ( !busy ) & printfp$enq__RDY;
+//METAGUARD; request$say2; !( busy | ( !printfp$enq__RDY ) );
+//METAGUARD; request$say; !( busy | ( !printfp$enq__RDY ) );
 //METAINVOKE; request$setLeds__ENA; :printfp$enq__ENA;
 //METAGUARD; request$setLeds; printfp$enq__RDY;
 //METARULES; RULE$clockRule; RULE$delay_rule; RULE$respond_rule
@@ -59,6 +59,6 @@
 //METAGUARD; method$heard; pipe$enq__RDY;
 //METASTART; EchoRequest___P2M
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:16] == 16'd1:method$say2__ENA;pipe$enq$v[31:16] == 16'd0:method$say__ENA;pipe$enq$v[31:16] == 16'd2:method$setLeds__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd1:method$say2__ENA;pipe$enq$v[ 31 : 16 ] == 16'd0:method$say__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:method$setLeds__ENA;
 //METAGUARD; pipe$enq; method$say__RDY & method$say2__RDY & method$setLeds__RDY;
 `endif

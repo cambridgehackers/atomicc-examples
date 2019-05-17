@@ -21,7 +21,7 @@ module ModFt600 (
         .T(usb_rxf_delay[ 0 ]));
     assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = usb_rxf_delay != 2'd0;
-    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( usb_rxf_delay[ 0 ] ^ ( -1'd1 ) );
+    assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( !usb_rxf_delay[ 0 ] );
 
     always @( posedge CLK) begin
       if (!nRST) begin

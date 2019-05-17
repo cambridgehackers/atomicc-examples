@@ -7,7 +7,7 @@
 //METAGUARD; RULE$delay_rule; busy & ( !busy_delay );
 //METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;
 //METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
-//METAGUARD; RULE$respond_rule; busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+//METAGUARD; RULE$respond_rule; busy_delay & ( ( ( v_type != 32'd1 ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & indication$heard2__RDY & indication$heard__RDY ) ) ) );
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAGUARD; request$say2; !busy;
 //METAGUARD; request$say; !busy;
@@ -46,6 +46,6 @@
 //METAGUARD; method$heard; pipe$enq__RDY;
 //METASTART; EchoRequest___P2M
 //METAEXTERNAL; method; l_ainterface_OC_EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[31:16] == 16'd1:method$say2__ENA;pipe$enq$v[31:16] == 16'd0:method$say__ENA;pipe$enq$v[31:16] == 16'd2:method$setLeds__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd1:method$say2__ENA;pipe$enq$v[ 31 : 16 ] == 16'd0:method$say__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:method$setLeds__ENA;
 //METAGUARD; pipe$enq; method$say__RDY & method$say2__RDY & method$setLeds__RDY;
 `endif
