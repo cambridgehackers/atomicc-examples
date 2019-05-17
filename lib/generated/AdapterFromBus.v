@@ -26,7 +26,7 @@ module AdapterFromBus (input wire CLK, input wire nRST,
         if (waitForEnq & out$enq__RDY) begin // RULE$pushValue__ENA
             waitForEnq <= 0;
         end; // End of RULE$pushValue__ENA
-        if (!( waitForEnq | ( !in$enq__ENA ) )) begin // in$enq__ENA
+        if (in$enq__ENA & ( !waitForEnq )) begin // in$enq__ENA
             buffer <= { buffer[ 95 : 0 ] , in$enq$v };
             if (in$enq$length == 1)
             waitForEnq <= 1;

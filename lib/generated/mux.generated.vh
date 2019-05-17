@@ -11,6 +11,6 @@
 //METAINVOKE; forward$enq__ENA; :forwardFifo$in$enq__ENA;:forwardFifol$in$enq__ENA;
 //METAGUARD; forward$enq; forwardFifo$in$enq__RDY & forwardFifol$in$enq__RDY;
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;
-//METAGUARD; in$enq; !( forwardFifo$out$first__RDY | ( !out$enq__RDY ) );
+//METAGUARD; in$enq; ( !forwardFifo$out$first__RDY ) & out$enq__RDY;
 //METARULES; RULE$fifoRule
 `endif

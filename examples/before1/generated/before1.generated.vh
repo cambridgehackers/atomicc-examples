@@ -56,7 +56,7 @@
 //METAGUARD; RULE$output_rulee; ind_busy & even & pipe$enq__RDY;
 //METAINVOKE; RULE$output_ruleo__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULE$output_ruleo__ENA; indication$heard__ENA
-//METAGUARD; RULE$output_ruleo; !( even | ( !pipe$enq__RDY ) | ( !ind_busy ) );
+//METAGUARD; RULE$output_ruleo; ind_busy & ( !even ) & pipe$enq__RDY;
 //METAGUARD; indication$heard; !ind_busy;
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput

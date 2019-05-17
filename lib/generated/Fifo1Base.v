@@ -24,7 +24,7 @@ module Fifo1Base #(
         full <= 0;
       end // nRST
       else begin
-        if (!( full | ( !in$enq__ENA ) )) begin // in$enq__ENA
+        if (in$enq__ENA & ( !full )) begin // in$enq__ENA
             element <= in$enq$v;
             full <= 1;
         end; // End of in$enq__ENA

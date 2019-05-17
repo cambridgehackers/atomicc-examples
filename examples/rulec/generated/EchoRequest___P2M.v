@@ -18,10 +18,10 @@ module EchoRequest___P2M (input wire CLK, input wire nRST,
     assign method$say$v = pipe$enq$v[63:32];
     assign method$say2$a = pipe$enq$v[47:32];
     assign method$say2$b = pipe$enq$v[63:48];
-    assign method$say2__ENA = pipe$enq__ENA & method$say__RDY & method$setLeds__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd1 );
-    assign method$say__ENA = pipe$enq__ENA & method$say2__RDY & method$setLeds__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd0 );
+    assign method$say2__ENA = pipe$enq__ENA & method$say__RDY & method$setLeds__RDY & ( pipe$enq$v[31:16] == 16'd1 );
+    assign method$say__ENA = pipe$enq__ENA & method$say2__RDY & method$setLeds__RDY & ( pipe$enq$v[31:16] == 16'd0 );
     assign method$setLeds$v = pipe$enq$v[39:32];
-    assign method$setLeds__ENA = pipe$enq__ENA & method$say__RDY & method$say2__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd2 );
+    assign method$setLeds__ENA = pipe$enq__ENA & method$say__RDY & method$say2__RDY & ( pipe$enq$v[31:16] == 16'd2 );
     assign pipe$enq__RDY = method$say__RDY & method$say2__RDY & method$setLeds__RDY;
 endmodule 
 

@@ -34,19 +34,24 @@ module Echo (input wire CLK, input wire nRST,
     reg [31:0]v_delay;
     reg [31:0]v_temp;
     reg [31:0]v_type;
+    wire RULE$respond_rule__ENA;
+    wire RULE$respond_rule__RDY;
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
-    assign indication$heard2__ENA = busy_delay & indication$heard__RDY & ( v_type != 32'd1 );
+    assign indication$heard2__ENA = busy_delay & ( v_type != 32'd1 );
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard__ENA = busy_delay & indication$heard2__RDY & ( v_type == 32'd1 );
+    assign indication$heard__ENA = busy_delay & ( v_type == 32'd1 );
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
-    assign request$setLeds__RDY = 1;
+    assign request$setLeds__RDY = 1'd1;
+    // Extra assigments, not to output wires
+    assign RULE$respond_rule__ENA = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
+    assign RULE$respond_rule__RDY = busy_delay & ( ( v_type != 32'd1 ) | indication$heard__RDY ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -61,23 +66,23 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (!( busy_delay | ( !busy ) )) begin // RULE$delay_rule__ENA
+        if (busy & ( !busy_delay )) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
         end; // End of RULE$delay_rule__ENA
-        if (busy_delay & indication$heard__RDY & indication$heard2__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__ENA & RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
         end; // End of RULE$respond_rule__ENA
-        if (!( busy | ( !request$say2__ENA ) )) begin // request$say2__ENA
+        if (request$say2__ENA & ( !busy )) begin // request$say2__ENA
             a_temp <= request$say2$a;
             b_temp <= request$say2$b;
             busy <= 1;
             v_type <= 2;
         end; // End of request$say2__ENA
-        if (!( busy | ( !request$say__ENA ) )) begin // request$say__ENA
+        if (request$say__ENA & ( !busy )) begin // request$say__ENA
             v_temp <= request$say$v;
             busy <= 1;
             v_type <= 1;
