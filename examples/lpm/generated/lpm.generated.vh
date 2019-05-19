@@ -14,7 +14,7 @@
 //METAEXCLUSIVE; RULE$exitr__ENA; RULE$recirc__ENA
 //METAGUARD; RULE$exitr; ( ( mem$ifc$resValue & 1 ) == 1 ) & ( RULE$recirc__ENA == 0 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$enq__RDY;
 //METAINVOKE; RULE$recirc__ENA; :fifo$in$enq__ENA;:fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$req__ENA;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;
-//METAGUARD; RULE$recirc; ( ( mem$ifc$resValue & 1 ) != 1 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY;
+//METAGUARD; RULE$recirc; !( ( ( mem$ifc$resValue & 1 ) == 1 ) | ( !( mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) );
 //METAINVOKE; request$enter__ENA; :inQ$in$enq__ENA;
 //METAGUARD; request$enter; inQ$in$enq__RDY;
 //METARULES; RULE$enter; RULE$exitr; RULE$recirc

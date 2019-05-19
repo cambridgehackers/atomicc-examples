@@ -39,7 +39,7 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
-    assign indication$heard2__ENA = busy_delay & ( v_type != 32'd1 );
+    assign indication$heard2__ENA = !( ( v_type == 32'd1 ) | ( !busy_delay ) );
     assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -50,8 +50,8 @@ module Echo (input wire CLK, input wire nRST,
     assign request$say__RDY = !busy;
     assign request$setLeds__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$respond_rule__ENA = busy_delay & ( ( ( v_type != 32'd1 ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & indication$heard2__RDY & indication$heard__RDY ) ) ) );
-    assign RULE$respond_rule__RDY = busy_delay & ( ( ( v_type != 32'd1 ) & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & indication$heard2__RDY & indication$heard__RDY ) ) ) );
+    assign RULE$respond_rule__ENA = busy_delay & ( ( indication$heard__RDY & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 32'd1 ) | ( !indication$heard2__RDY ) ) ) ) );
+    assign RULE$respond_rule__RDY = busy_delay & ( ( indication$heard__RDY & ( ( v_type == 32'd1 ) | indication$heard2__RDY ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 32'd1 ) | ( !indication$heard2__RDY ) ) ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin

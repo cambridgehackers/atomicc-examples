@@ -7,11 +7,11 @@
 //METAGUARD; RULE$clockRule; 1;
 //METAINVOKE; RULE$delay_rule__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA
-//METAGUARD; RULE$delay_rule; !( busy_delay | ( !printfp$enq__RDY ) | ( !busy ) );
-//METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
+//METAGUARD; RULE$delay_rule; !( busy_delay | ( !( printfp$enq__RDY & busy ) ) );
+//METAINVOKE; RULE$respond_rule__ENA; !( v_type == 1 ):indication$heard2__ENA;v_type == 1:indication$heard__ENA;:printfp$enq__ENA;
 //METAEXCLUSIVE; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA; request$setLeds__ENA
 //METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
-//METAGUARD; RULE$respond_rule; busy_delay & ( ( ( v_type != 32'd1 ) & ( ( ( v_type == 32'd1 ) & printfp$enq__RDY ) | ( ( !( v_type == 32'd1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !( v_type != 32'd1 ) ) & ( ( ( v_type == 32'd1 ) & printfp$enq__RDY & indication$heard__RDY ) | ( ( !( v_type == 32'd1 ) ) & printfp$enq__RDY & indication$heard2__RDY & indication$heard__RDY ) ) ) );
+//METAGUARD; RULE$respond_rule; busy_delay & ( ( indication$heard__RDY & ( ( ( v_type == 32'd1 ) & printfp$enq__RDY ) | ( ( !( v_type == 32'd1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 32'd1 ) | ( !( printfp$enq__RDY & indication$heard2__RDY ) ) ) ) ) );
 //METAINVOKE; request$say__ENA; :printfp$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA; request$setLeds__ENA
 //METAINVOKE; request$say2__ENA; :printfp$enq__ENA;

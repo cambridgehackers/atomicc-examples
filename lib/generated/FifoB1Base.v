@@ -13,7 +13,7 @@ module FifoB1Base #(
     output wire out$first__RDY);
     reg [width- 1:0]element;
     reg full;
-    assign in$enq__RDY = ( ( full ^ 1 ) | out$deq__ENA ) != 0;
+    assign in$enq__RDY = !( ( ( full ^ 1 ) | out$deq__ENA ) == 0 );
     assign out$deq__RDY = full | in$enq__ENA;
     assign out$first = full ? element : in$enq$v;
     assign out$first__RDY = full | in$enq__ENA;
