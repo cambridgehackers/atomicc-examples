@@ -28,7 +28,7 @@ module ModFt600 (
     end;
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_oe_n = usb_rxf_delay[ 0 ];
-    assign usb_rd_n = !( usb_rxf_delay == 2'd0 );
+    assign usb_rd_n = !( usb_rxf_delay == 0 );
     assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( !usb_rxf_delay[ 0 ] );
 
     always @( posedge CLK) begin

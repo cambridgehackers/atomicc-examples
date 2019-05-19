@@ -33,7 +33,7 @@
 //METAGUARD; RULE$lwrite; writeBeat$out$first__RDY & writeBeat$out$deq__RDY & writeData$out$first__RDY & writeData$out$deq__RDY & writeDone$in$enq__RDY & ( portalWControl | user$write$enq__RDY );
 //METAINVOKE; RULE$writeResponse__ENA; :MAXIGP0_I$B__ENA;:writeDone$out$deq__ENA;:writeDone$out$first;
 //METAGUARD; RULE$writeResponse; writeDone$out$first__RDY & MAXIGP0_I$B__RDY & writeDone$out$deq__RDY;
-//METAGUARD; readUser$enq; requestLength == 16'd0;
+//METAGUARD; readUser$enq; requestLength == 0;
 //METARULES; RULE$init; RULE$lR; RULE$lread; RULE$lreadNext; RULE$lwrite; RULE$lwriteNext; RULE$writeResponse
 //METACONNECT; readUser$enq__ENA; user$read$enq__ENA
 //METACONNECT; readUser$enq__RDY; user$read$enq__RDY

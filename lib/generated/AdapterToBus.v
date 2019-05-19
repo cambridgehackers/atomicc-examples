@@ -14,13 +14,13 @@ module AdapterToBus (input wire CLK, input wire nRST,
     reg [15:0]remain;
     wire RULE$copyRule__ENA;
     wire RULE$copyRule__RDY;
-    assign in$enq__RDY = remain == 16'd0;
+    assign in$enq__RDY = remain == 0;
     assign out$enq$length = remain;
     assign out$enq$v = buffer[ 31 : 0 ];
-    assign out$enq__ENA = !( remain == 16'd0 );
+    assign out$enq__ENA = !( remain == 0 );
     // Extra assigments, not to output wires
-    assign RULE$copyRule__ENA = !( ( remain == 16'd0 ) | ( !out$enq__RDY ) );
-    assign RULE$copyRule__RDY = !( ( remain == 16'd0 ) | ( !out$enq__RDY ) );
+    assign RULE$copyRule__ENA = !( ( remain == 0 ) | ( !out$enq__RDY ) );
+    assign RULE$copyRule__RDY = !( ( remain == 0 ) | ( !out$enq__RDY ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -32,7 +32,7 @@ module AdapterToBus (input wire CLK, input wire nRST,
             remain <= remain + ( -1 );
             buffer <= buffer >> 32;
         end; // End of RULE$copyRule__ENA
-        if (in$enq__ENA & ( remain == 16'd0 )) begin // in$enq__ENA
+        if (in$enq__ENA & ( remain == 0 )) begin // in$enq__ENA
             buffer <= in$enq$v;
             remain <= in$enq$length + 1;
         end; // End of in$enq__ENA

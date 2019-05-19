@@ -12,7 +12,7 @@
 //METAEXTERNAL; out; l_ainterface_OC_PipeInB;
 //METAINVOKE; RULE$copyRule__ENA; :out$enq__ENA;
 //METAEXCLUSIVE; RULE$copyRule__ENA; in$enq__ENA
-//METAGUARD; RULE$copyRule; !( ( remain == 16'd0 ) | ( !out$enq__RDY ) );
-//METAGUARD; in$enq; remain == 16'd0;
+//METAGUARD; RULE$copyRule; !( ( remain == 0 ) | ( !out$enq__RDY ) );
+//METAGUARD; in$enq; remain == 0;
 //METARULES; RULE$copyRule
 `endif
