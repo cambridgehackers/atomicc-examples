@@ -1,34 +1,34 @@
 EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE l_ainterface_OC_PipeIn_OC_1 {
     METHOD/Action enq__ENA ( INTEGER_128 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_4 {
+INTERFACE l_ainterface_OC_PipeIn_OC_4 {
     METHOD/Action enq__ENA ( INTEGER_16 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_7 {
+INTERFACE l_ainterface_OC_PipeIn_OC_7 {
     METHOD/Action enq__ENA ( INTEGER_16 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
+INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_NOCData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_128
 }
-EMODULE l_ainterface_OC_PipeOut_OC_5 {
+INTERFACE l_ainterface_OC_PipeOut_OC_5 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_16
 }
-EMODULE l_ainterface_OC_PipeOut_OC_8 {
+INTERFACE l_ainterface_OC_PipeOut_OC_8 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_16
 }

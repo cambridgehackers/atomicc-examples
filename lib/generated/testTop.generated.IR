@@ -17,95 +17,95 @@ EMODULE l_struct_OC_ReadResp {
     FIELD INTEGER_6 id
     FIELD INTEGER_32 data
 }
-EMODULE l_ainterface_OC_MaxiI {
+INTERFACE l_ainterface_OC_MaxiI {
     METHOD/Action B__ENA ( INTEGER_12 id , INTEGER_2 resp )
     METHOD/Action R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
 }
-EMODULE l_ainterface_OC_MaxiO {
+INTERFACE l_ainterface_OC_MaxiO {
     METHOD/Action AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD/Action AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD/Action W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeInB {
+INTERFACE l_ainterface_OC_PipeInB {
     METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_0 {
+INTERFACE l_ainterface_OC_PipeIn_OC_0 {
     METHOD/Action enq__ENA ( l_struct_OC_AddrCount v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_12 {
+INTERFACE l_ainterface_OC_PipeIn_OC_12 {
     METHOD/Action enq__ENA ( l_struct_OC_ReadResp v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_15 {
+INTERFACE l_ainterface_OC_PipeIn_OC_15 {
     METHOD/Action enq__ENA ( INTEGER_38 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_19 {
+INTERFACE l_ainterface_OC_PipeIn_OC_19 {
     METHOD/Action enq__ENA ( l_struct_OC_BusData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_2 {
+INTERFACE l_ainterface_OC_PipeIn_OC_2 {
     METHOD/Action enq__ENA ( INTEGER_15 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_22 {
+INTERFACE l_ainterface_OC_PipeIn_OC_22 {
     METHOD/Action enq__ENA ( INTEGER_32 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_26 {
+INTERFACE l_ainterface_OC_PipeIn_OC_26 {
     METHOD/Action enq__ENA ( INTEGER_6 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_29 {
+INTERFACE l_ainterface_OC_PipeIn_OC_29 {
     METHOD/Action enq__ENA ( INTEGER_6 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_5 {
+INTERFACE l_ainterface_OC_PipeIn_OC_5 {
     METHOD/Action enq__ENA ( l_struct_OC_PortalInfo v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_8 {
+INTERFACE l_ainterface_OC_PipeIn_OC_8 {
     METHOD/Action enq__ENA ( INTEGER_16 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
+INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_AddrCount
 }
-EMODULE l_ainterface_OC_PipeOut_OC_13 {
+INTERFACE l_ainterface_OC_PipeOut_OC_13 {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_ReadResp
 }
-EMODULE l_ainterface_OC_PipeOut_OC_16 {
+INTERFACE l_ainterface_OC_PipeOut_OC_16 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_38
 }
-EMODULE l_ainterface_OC_PipeOut_OC_20 {
+INTERFACE l_ainterface_OC_PipeOut_OC_20 {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_BusData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_23 {
+INTERFACE l_ainterface_OC_PipeOut_OC_23 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
-EMODULE l_ainterface_OC_PipeOut_OC_27 {
+INTERFACE l_ainterface_OC_PipeOut_OC_27 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_6
 }
-EMODULE l_ainterface_OC_PipeOut_OC_3 {
+INTERFACE l_ainterface_OC_PipeOut_OC_3 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_15
 }
-EMODULE l_ainterface_OC_PipeOut_OC_30 {
+INTERFACE l_ainterface_OC_PipeOut_OC_30 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_6
 }
-EMODULE l_ainterface_OC_PipeOut_OC_6 {
+INTERFACE l_ainterface_OC_PipeOut_OC_6 {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_PortalInfo
 }
-EMODULE l_ainterface_OC_PipeOut_OC_9 {
+INTERFACE l_ainterface_OC_PipeOut_OC_9 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_16
 }
-EMODULE l_ainterface_OC_ZynqInterruptT {
+INTERFACE l_ainterface_OC_ZynqInterruptT {
     FIELD/output INTEGER_1 interrupt
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST

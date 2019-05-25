@@ -9,26 +9,26 @@ EMODULE l_struct_OC_ValuePair {
 EMODULE l_class_OC_IVectorTest {
     FIELD IVector ivector
 }
-EMODULE l_ainterface_OC_IVectorRequest {
+INTERFACE l_ainterface_OC_IVectorRequest {
     METHOD/Action say__ENA ( l_struct_OC_ValuePair v )
 }
-EMODULE l_ainterface_OC_IndIF {
+INTERFACE l_ainterface_OC_IndIF {
     METHOD/Action heard__ENA ( l_struct_OC_ValuePair v )
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_ValuePair v )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE l_ainterface_OC_PipeIn_OC_1 {
     METHOD/Action enq__ENA ( INTEGER_704 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
+INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_ValuePair
 }
-EMODULE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_704
 }

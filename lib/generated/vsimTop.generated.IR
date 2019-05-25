@@ -1,19 +1,19 @@
 EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeInB {
+INTERFACE l_ainterface_OC_PipeInB {
     METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_VBeat$__PARAM__$width$32 {
+INTERFACE l_ainterface_OC_VBeat$__PARAM__$width$32 {
     METHOD/Action beat__ENA ( INTEGER_32 v , INTEGER_1 last )
 }
-EMODULE l_ainterface_OC_VsimInterface {
+INTERFACE l_ainterface_OC_VsimInterface {
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
     FIELD/input INTEGER_1 CLK_derivedClock

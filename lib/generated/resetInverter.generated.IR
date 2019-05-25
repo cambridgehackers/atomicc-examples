@@ -1,4 +1,4 @@
-EMODULE l_ainterface_OC_MResetInverterResetInverter {
+INTERFACE l_ainterface_OC_MResetInverterResetInverter {
     FIELD/input INTEGER_1 RESET_IN
     FIELD/output INTEGER_1 RESET_OUT
 }

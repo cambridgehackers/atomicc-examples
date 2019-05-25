@@ -1,10 +1,10 @@
 EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
-EMODULE l_ainterface_OC_PipeInB {
+INTERFACE l_ainterface_OC_PipeInB {
     METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 MODULE AdapterFromBus {

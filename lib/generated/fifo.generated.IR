@@ -1,14 +1,14 @@
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( INTEGER_999999 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE l_ainterface_OC_PipeIn_OC_1 {
     METHOD/Action enq__ENA ( INTEGER_999999 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
+INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
     METHOD first INTEGER_999999
 }
-EMODULE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_999999
 }

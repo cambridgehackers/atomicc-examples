@@ -1,23 +1,23 @@
-EMODULE l_ainterface_OC_ClockIfc {
+INTERFACE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
     FIELD/output INTEGER_1 clockOut
 }
-EMODULE l_ainterface_OC_MaxiI {
+INTERFACE l_ainterface_OC_MaxiI {
     METHOD/Action B__ENA ( INTEGER_12 id , INTEGER_2 resp )
     METHOD/Action R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
 }
-EMODULE l_ainterface_OC_MaxiO {
+INTERFACE l_ainterface_OC_MaxiO {
     METHOD/Action AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD/Action AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
     METHOD/Action W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
 }
-EMODULE l_ainterface_OC_MbufgBUFG {
+INTERFACE l_ainterface_OC_MbufgBUFG {
     FIELD/input INTEGER_1 I
     FIELD/output INTEGER_1 O
 }
-EMODULE l_ainterface_OC_Pps7PS7 {
+INTERFACE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
     INTERFACE l_ainterface_OC_Pps7dma DMA0
     INTERFACE l_ainterface_OC_Pps7dma DMA1
@@ -62,7 +62,7 @@ EMODULE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP2
     INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP3
 }
-EMODULE l_ainterface_OC_Pps7ddr {
+INTERFACE l_ainterface_OC_Pps7ddr {
     FIELD/inout INTEGER_15 A
     FIELD/input INTEGER_4 ARB
     FIELD/inout INTEGER_3 BA
@@ -82,7 +82,7 @@ EMODULE l_ainterface_OC_Pps7ddr {
     FIELD/inout INTEGER_1 VRP
     FIELD/inout INTEGER_1 WEB
 }
-EMODULE l_ainterface_OC_Pps7dma {
+INTERFACE l_ainterface_OC_Pps7dma {
     FIELD/input INTEGER_1 ACLK
     FIELD/input INTEGER_1 DAREADY
     FIELD/output INTEGER_2 DATYPE
@@ -93,11 +93,11 @@ EMODULE l_ainterface_OC_Pps7dma {
     FIELD/input INTEGER_1 DRVALID
     FIELD/output INTEGER_1 RSTN
 }
-EMODULE l_ainterface_OC_Pps7emiocan {
+INTERFACE l_ainterface_OC_Pps7emiocan {
     FIELD/input INTEGER_1 PHYRX
     FIELD/output INTEGER_1 PHYTX
 }
-EMODULE l_ainterface_OC_Pps7emioenet {
+INTERFACE l_ainterface_OC_Pps7emioenet {
     FIELD/input INTEGER_1 EXTINTIN
     FIELD/input INTEGER_1 GMIICOL
     FIELD/input INTEGER_1 GMIICRS
@@ -124,12 +124,12 @@ EMODULE l_ainterface_OC_Pps7emioenet {
     FIELD/output INTEGER_1 SOFRX
     FIELD/output INTEGER_1 SOFTX
 }
-EMODULE l_ainterface_OC_Pps7emiogpio {
+INTERFACE l_ainterface_OC_Pps7emiogpio {
     FIELD/input INTEGER_64 I
     FIELD/output INTEGER_64 O
     FIELD/output INTEGER_64 TN
 }
-EMODULE l_ainterface_OC_Pps7emioi2c {
+INTERFACE l_ainterface_OC_Pps7emioi2c {
     FIELD/input INTEGER_1 SCLI
     FIELD/output INTEGER_1 SCLO
     FIELD/output INTEGER_1 SCLTN
@@ -137,14 +137,14 @@ EMODULE l_ainterface_OC_Pps7emioi2c {
     FIELD/output INTEGER_1 SDAO
     FIELD/output INTEGER_1 SDATN
 }
-EMODULE l_ainterface_OC_Pps7emiopjtag {
+INTERFACE l_ainterface_OC_Pps7emiopjtag {
     FIELD/input INTEGER_1 TCK
     FIELD/input INTEGER_1 TDI
     FIELD/output INTEGER_1 TDO
     FIELD/output INTEGER_1 TDTN
     FIELD/input INTEGER_1 TMS
 }
-EMODULE l_ainterface_OC_Pps7emiosdio {
+INTERFACE l_ainterface_OC_Pps7emiosdio {
     FIELD/output INTEGER_1 BUSPOW
     FIELD/output INTEGER_3 BUSVOLT
     FIELD/input INTEGER_1 CDN
@@ -159,7 +159,7 @@ EMODULE l_ainterface_OC_Pps7emiosdio {
     FIELD/output INTEGER_1 LED
     FIELD/input INTEGER_1 WP
 }
-EMODULE l_ainterface_OC_Pps7emiospi {
+INTERFACE l_ainterface_OC_Pps7emiospi {
     FIELD/input INTEGER_1 MI
     FIELD/output INTEGER_1 MO
     FIELD/output INTEGER_1 MOTN
@@ -173,19 +173,19 @@ EMODULE l_ainterface_OC_Pps7emiospi {
     FIELD/output INTEGER_3 SSON
     FIELD/output INTEGER_1 STN
 }
-EMODULE l_ainterface_OC_Pps7emiosramint {
+INTERFACE l_ainterface_OC_Pps7emiosramint {
     FIELD/input INTEGER_1 IN
 }
-EMODULE l_ainterface_OC_Pps7emiotrace {
+INTERFACE l_ainterface_OC_Pps7emiotrace {
     FIELD/input INTEGER_1 CLK
     FIELD/output INTEGER_1 CTL
     FIELD/output INTEGER_32 DATA
 }
-EMODULE l_ainterface_OC_Pps7emiottc {
+INTERFACE l_ainterface_OC_Pps7emiottc {
     FIELD/input INTEGER_3 CLKI
     FIELD/output INTEGER_3 WAVEO
 }
-EMODULE l_ainterface_OC_Pps7emiouart {
+INTERFACE l_ainterface_OC_Pps7emiouart {
     FIELD/input INTEGER_1 CTSN
     FIELD/input INTEGER_1 DCDN
     FIELD/input INTEGER_1 DSRN
@@ -195,36 +195,36 @@ EMODULE l_ainterface_OC_Pps7emiouart {
     FIELD/input INTEGER_1 RX
     FIELD/output INTEGER_1 TX
 }
-EMODULE l_ainterface_OC_Pps7emiousb {
+INTERFACE l_ainterface_OC_Pps7emiousb {
     FIELD/output INTEGER_2 PORTINDCTL
     FIELD/input INTEGER_1 VBUSPWRFAULT
     FIELD/output INTEGER_1 VBUSPWRSELECT
 }
-EMODULE l_ainterface_OC_Pps7emiowdt {
+INTERFACE l_ainterface_OC_Pps7emiowdt {
     FIELD/input INTEGER_1 CLKI
     FIELD/output INTEGER_1 RSTO
 }
-EMODULE l_ainterface_OC_Pps7event {
+INTERFACE l_ainterface_OC_Pps7event {
     FIELD/input INTEGER_1 EVENTI
     FIELD/output INTEGER_1 EVENTO
     FIELD/output INTEGER_2 STANDBYWFE
     FIELD/output INTEGER_2 STANDBYWFI
 }
-EMODULE l_ainterface_OC_Pps7fclk {
+INTERFACE l_ainterface_OC_Pps7fclk {
     FIELD/output INTEGER_4 CLK
     FIELD/input INTEGER_4 CLKTRIGN
     FIELD/output INTEGER_4 RESETN
 }
-EMODULE l_ainterface_OC_Pps7fpgaid {
+INTERFACE l_ainterface_OC_Pps7fpgaid {
     FIELD/input INTEGER_1 LEN
 }
-EMODULE l_ainterface_OC_Pps7ftmd {
+INTERFACE l_ainterface_OC_Pps7ftmd {
     FIELD/input INTEGER_4 TRACEINATID
     FIELD/input INTEGER_1 TRACEINCLOCK
     FIELD/input INTEGER_32 TRACEINDATA
     FIELD/input INTEGER_1 TRACEINVALID
 }
-EMODULE l_ainterface_OC_Pps7ftmt {
+INTERFACE l_ainterface_OC_Pps7ftmt {
     FIELD/input INTEGER_32 F2PDEBUG
     FIELD/input INTEGER_4 F2PTRIG
     FIELD/output INTEGER_4 F2PTRIGACK
@@ -232,14 +232,14 @@ EMODULE l_ainterface_OC_Pps7ftmt {
     FIELD/output INTEGER_4 P2FTRIG
     FIELD/input INTEGER_4 P2FTRIGACK
 }
-EMODULE l_ainterface_OC_Pps7irq {
+INTERFACE l_ainterface_OC_Pps7irq {
     FIELD/input INTEGER_20 F2P
     FIELD/output INTEGER_29 P2F
 }
-EMODULE l_ainterface_OC_Pps7m {
+INTERFACE l_ainterface_OC_Pps7m {
     FIELD/inout INTEGER_54 IO
 }
-EMODULE l_ainterface_OC_Pps7maxigp {
+INTERFACE l_ainterface_OC_Pps7maxigp {
     FIELD/input INTEGER_1 ACLK
     FIELD/output INTEGER_32 ARADDR
     FIELD/output INTEGER_2 ARBURST
@@ -281,12 +281,12 @@ EMODULE l_ainterface_OC_Pps7maxigp {
     FIELD/output INTEGER_4 WSTRB
     FIELD/output INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_Pps7ps {
+INTERFACE l_ainterface_OC_Pps7ps {
     FIELD/inout INTEGER_1 CLK
     FIELD/inout INTEGER_1 PORB
     FIELD/inout INTEGER_1 SRSTB
 }
-EMODULE l_ainterface_OC_Pps7saxiacp {
+INTERFACE l_ainterface_OC_Pps7saxiacp {
     FIELD/input INTEGER_1 ACLK
     FIELD/input INTEGER_32 ARADDR
     FIELD/input INTEGER_2 ARBURST
@@ -330,7 +330,7 @@ EMODULE l_ainterface_OC_Pps7saxiacp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_Pps7saxigp {
+INTERFACE l_ainterface_OC_Pps7saxigp {
     FIELD/input INTEGER_1 ACLK
     FIELD/input INTEGER_32 ARADDR
     FIELD/input INTEGER_2 ARBURST
@@ -372,7 +372,7 @@ EMODULE l_ainterface_OC_Pps7saxigp {
     FIELD/input INTEGER_4 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_Pps7saxihp {
+INTERFACE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_1 ACLK
     FIELD/input INTEGER_32 ARADDR
     FIELD/input INTEGER_2 ARBURST
@@ -420,7 +420,7 @@ EMODULE l_ainterface_OC_Pps7saxihp {
     FIELD/input INTEGER_8 WSTRB
     FIELD/input INTEGER_1 WVALID
 }
-EMODULE l_ainterface_OC_ZynqClock {
+INTERFACE l_ainterface_OC_ZynqClock {
     FIELD/inout INTEGER_15 DDR_Addr
     FIELD/inout INTEGER_3 DDR_BankAddr
     FIELD/inout INTEGER_1 DDR_CAS_n
@@ -442,12 +442,12 @@ EMODULE l_ainterface_OC_ZynqClock {
     FIELD/inout INTEGER_1 FIXED_IO_ps_porb
     FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
 }
-EMODULE l_ainterface_OC_ZynqInterrupt {
+INTERFACE l_ainterface_OC_ZynqInterrupt {
     FIELD/input INTEGER_1 interrupt
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
 }
-EMODULE l_ainterface_OC_ZynqInterruptT {
+INTERFACE l_ainterface_OC_ZynqInterruptT {
     FIELD/output INTEGER_1 interrupt
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST

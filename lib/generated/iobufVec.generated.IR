@@ -1,10 +1,10 @@
-EMODULE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 {
+INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 {
     FIELD/inout INTEGER_999999 IO
     FIELD/input INTEGER_999999 I
     FIELD/output INTEGER_999999 O
     FIELD/input INTEGER_1 T
 }
-EMODULE l_ainterface_OC_MIOBUF {
+INTERFACE l_ainterface_OC_MIOBUF {
     FIELD/parameter INTEGER_32 DRIVE
     FIELD/input INTEGER_1 I
     FIELD/Ptr/parameter INTEGER_8 IBUF_LOW_PWR

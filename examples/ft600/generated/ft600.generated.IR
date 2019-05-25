@@ -1,4 +1,4 @@
-EMODULE l_ainterface_OC_Ft600 {
+INTERFACE l_ainterface_OC_Ft600 {
     FIELD/input INTEGER_1 usb_clk
     FIELD/input INTEGER_1 usb_rxf
     FIELD/input INTEGER_1 usb_txe
@@ -7,7 +7,7 @@ EMODULE l_ainterface_OC_Ft600 {
     FIELD/output INTEGER_1 usb_oe_n
     FIELD/inout INTEGER_16 usb_ad
 }
-EMODULE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$16 {
+INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$16 {
     FIELD/inout INTEGER_16 IO
     FIELD/input INTEGER_16 I
     FIELD/output INTEGER_16 O

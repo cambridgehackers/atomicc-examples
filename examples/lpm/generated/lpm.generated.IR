@@ -6,46 +6,46 @@ EMODULE l_struct_OC_ProcessData {
     FIELD INTEGER_16 IPA
     FIELD INTEGER_3 state
 }
-EMODULE l_ainterface_OC_LpmMem {
+INTERFACE l_ainterface_OC_LpmMem {
     METHOD/Action req__ENA ( INTEGER_32 v )
     METHOD/Action resAccept__ENA
     METHOD resValue INTEGER_32
 }
-EMODULE l_ainterface_OC_LpmRequest {
+INTERFACE l_ainterface_OC_LpmRequest {
     METHOD/Action enter__ENA ( INTEGER_32 x )
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( INTEGER_32 v )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE l_ainterface_OC_PipeIn_OC_1 {
     METHOD/Action enq__ENA ( INTEGER_32 v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_4 {
+INTERFACE l_ainterface_OC_PipeIn_OC_4 {
     METHOD/Action enq__ENA ( l_struct_OC_ProcessData v )
 }
-EMODULE l_ainterface_OC_PipeIn_OC_7 {
+INTERFACE l_ainterface_OC_PipeIn_OC_7 {
     METHOD/Action enq__ENA ( INTEGER_23 v )
 }
-EMODULE l_ainterface_OC_PipeOut {
+INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
-EMODULE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_32
 }
-EMODULE l_ainterface_OC_PipeOut_OC_5 {
+INTERFACE l_ainterface_OC_PipeOut_OC_5 {
     METHOD/Action deq__ENA
     METHOD first l_struct_OC_ProcessData
 }
-EMODULE l_ainterface_OC_PipeOut_OC_8 {
+INTERFACE l_ainterface_OC_PipeOut_OC_8 {
     METHOD/Action deq__ENA
     METHOD first INTEGER_23
 }
-EMODULE l_ainterface_OC_TickIfc {
+INTERFACE l_ainterface_OC_TickIfc {
     METHOD/Action allocateTicket__ENA
     METHOD getTicket INTEGER_4
 }

@@ -1,23 +1,23 @@
 EMODULE l_struct_OC_NOCData {
     FIELD INTEGER_128 data
 }
-EMODULE l_ainterface_OC_EchoIndication {
+INTERFACE l_ainterface_OC_EchoIndication {
     METHOD/Action heard2__ENA ( INTEGER_16 a , INTEGER_16 b )
     METHOD/Action heard3__ENA ( INTEGER_16 a , INTEGER_32 b , INTEGER_32 c , INTEGER_16 d )
     METHOD/Action heard__ENA ( INTEGER_32 v )
 }
-EMODULE l_ainterface_OC_EchoRequest {
+INTERFACE l_ainterface_OC_EchoRequest {
     METHOD/Action say2__ENA ( INTEGER_16 a , INTEGER_16 b )
     METHOD/Action say__ENA ( INTEGER_32 v )
     METHOD/Action setLeds__ENA ( INTEGER_8 v )
 }
-EMODULE l_ainterface_OC_PipeIn {
+INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
-EMODULE l_ainterface_OC_PipeInB {
+INTERFACE l_ainterface_OC_PipeInB {
     METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
 }
-EMODULE l_ainterface_OC_PipeInH {
+INTERFACE l_ainterface_OC_PipeInH {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
 }
 EMODULE UserTop {

@@ -1,18 +1,18 @@
-EMODULE l_ainterface_OC_ClockIfc {
+INTERFACE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input INTEGER_1 CLK
     FIELD/input INTEGER_1 nRST
     FIELD/output INTEGER_1 clockOut
 }
-EMODULE l_ainterface_OC_MResetInverterResetInverter {
+INTERFACE l_ainterface_OC_MResetInverterResetInverter {
     FIELD/input INTEGER_1 RESET_IN
     FIELD/output INTEGER_1 RESET_OUT
 }
-EMODULE l_ainterface_OC_MbufgBUFG {
+INTERFACE l_ainterface_OC_MbufgBUFG {
     FIELD/input INTEGER_1 I
     FIELD/output INTEGER_1 O
 }
-EMODULE l_ainterface_OC_Mmcme2MMCME2_ADV {
+INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV {
     FIELD/Ptr/parameter INTEGER_8 BANDWIDTH
     FIELD/input INTEGER_1 CLKFBIN
     FIELD/output INTEGER_1 CLKFBOUT
