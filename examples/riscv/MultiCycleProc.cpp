@@ -29,6 +29,11 @@ __interface IMem {
   int read(int pc);
 };
 
+__interface DMem {
+  void request(int write_en, int addr, int data);
+  int response();
+};
+
 __interface Decoder {
   int getOp(int inst);
   int getArithOp(int inst);
@@ -53,6 +58,7 @@ __module MultiCycleProc {
   Executer *exec;
   RegFile *rf;
   IMem *pgm;
+  DMem *dmem;
 
   int pc;
   // registers passing info from decode stage to exec stage
@@ -70,7 +76,8 @@ __module MultiCycleProc {
   int e2w_addr;
   int e2w_nextPC;
 
-  MultiCycleProc(Decoder *dec, Executer *exec, RegFile *rf, IMem *pgm) : dec(dec), exec(exec), rf(rf), pgm(pgm) {
+  MultiCycleProc(Decoder *dec, Executer *exec, RegFile *rf, IMem *pgm, DMem *dmem)
+    : dec(dec), exec(exec), rf(rf), pgm(pgm), dmem(dmem) {
     pc = 0;
     d2e_valid = 0;
     e2w_valid = 0;
@@ -97,10 +104,32 @@ __module MultiCycleProc {
     e2w_nextPC = val.nextPC;
     e2w_addr = val.addr;
     e2w_valid = 1;
+
+    // if HAS_DMEM is defined, then compilation fails
+#ifdef HAS_DMEM
+    int isMemOp = 0;
+    if (isMemOp) {
+      int isWrite = 0;
+      dmem->request(isWrite, val.addr, val.data);
+    }
+#endif
+
   }
 
   __rule writeBack if (e2w_valid == 1) {
-    rf->write(e2w_dst, e2w_val);
+    int wbval = e2w_val;
+
+#ifdef HAS_DMEM
+    int isMemOp = 0;
+    if (isMemOp) {
+      int isWrite = 0;
+      int response = dmem->response();
+      if (isWrite == 0)
+	wbval = response;
+    }
+#endif
+
+    rf->write(e2w_dst, wbval);
     e2w_valid = 0;
     pc = e2w_nextPC;
   }
