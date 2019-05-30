@@ -1,32 +1,32 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_class_OC_EchoTest {
     FIELD Echo echo
-    FIELD INTEGER_32 x
+    FIELD Bit(32) x
 }
 INTERFACE l_ainterface_OC_EchoIndication {
-    METHOD/Action heard__ENA ( INTEGER_32 v )
+    METHOD/Action heard__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_EchoRequest {
-    METHOD/Action say__ENA ( INTEGER_32 v )
+    METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD/Action enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_32
+    METHOD first Bit(32)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_32
+    METHOD first Bit(32)
 }
 EMODULE EchoInd {
     INTERFACE l_ainterface_OC_EchoIndication hout
@@ -57,7 +57,7 @@ MODULE Echo {
         CALL :fifo$out$first{}
         CALL/Action :ind$heard__ENA{fifo$out$first}
     }
-    METHOD/Action sout$say__ENA ( INTEGER_32 v ) {
+    METHOD/Action sout$say__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
 }
@@ -65,13 +65,13 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1Base$__PARAM__$width$32 fifo
-    METHOD/Action in$enq__ENA ( INTEGER_32 v ) {
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first INTEGER_32 = ((fifo$out$first)) {
+    METHOD out$first Bit(32) = ((fifo$out$first)) {
         CALL :fifo$out$first{}
     }
 }

@@ -1,27 +1,27 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_struct_OC_ValueType {
-    FIELD INTEGER_6 a
-    FIELD INTEGER_4 b
+    FIELD Bit(6) a
+    FIELD Bit(4) b
 }
 EMODULE l_class_OC_IVectorTest {
     FIELD IVector ivector
 }
 INTERFACE l_ainterface_OC_IVectorIndication {
-    METHOD/Action heard__ENA ( INTEGER_6 meth , INTEGER_4 v )
+    METHOD/Action heard__ENA ( Bit(6) meth , Bit(4) v )
 }
 INTERFACE l_ainterface_OC_IVectorRequest {
-    METHOD/Action say__ENA ( INTEGER_6 meth , INTEGER_4 v )
+    METHOD/Action say__ENA ( Bit(6) meth , Bit(4) v )
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_ValueType v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD/Action enq__ENA ( INTEGER_10 v )
+    METHOD/Action enq__ENA ( Bit(10) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
@@ -29,7 +29,7 @@ INTERFACE l_ainterface_OC_PipeOut {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_10
+    METHOD first Bit(10)
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -45,7 +45,7 @@ EMODULE Fifo_OC_0 {
 }
 EMODULE IVectorInd {
     INTERFACE l_ainterface_OC_IVectorIndication ind
-    METHOD/Action ind$heard__ENA ( INTEGER_6 meth , INTEGER_4 v ) {
+    METHOD/Action ind$heard__ENA ( Bit(6) meth , Bit(4) v ) {
         PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
     }
 }
@@ -67,16 +67,16 @@ MODULE Fifo1 {
     METHOD out$first l_struct_OC_ValueType = ((out$first$retval)) {
         ALLOCA l_struct_OC_ValueType out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_10 :out$first$retval = fifo$out$first
+        LET Bit(10) :out$first$retval = fifo$out$first
     }
 }
 MODULE IVector {
     INTERFACE l_ainterface_OC_IVectorRequest request
     INTERFACE/Ptr l_ainterface_OC_IVectorIndication ind
     FIELD Fifo1 fifo
-    FIELD INTEGER_8 fcounter
-    FIELD INTEGER_9 counter
-    FIELD INTEGER_9 gcounter
+    FIELD Bit(8) fcounter
+    FIELD Bit(9) counter
+    FIELD Bit(9) gcounter
     METHOD/Rule/Action RULE$respond__ENA {
         ALLOCA l_struct_OC_ValueType RULE$respond__ENA$temp
         CALL :fifo$out$first{}
@@ -84,10 +84,10 @@ MODULE IVector {
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{RULE$respond__ENA$temp$a,RULE$respond__ENA$temp$b}
     }
-    METHOD/Action request$say__ENA ( INTEGER_6 meth , INTEGER_4 v ) if ((1)) {
+    METHOD/Action request$say__ENA ( Bit(6) meth , Bit(4) v ) if ((1)) {
         ALLOCA l_struct_OC_ValueType request$say__ENA$temp
-        LET INTEGER_6 :request$say__ENA$temp$a = request$say$meth
-        LET INTEGER_4 :request$say__ENA$temp$b = request$say$v
+        LET Bit(6) :request$say__ENA$temp$a = request$say$meth
+        LET Bit(4) :request$say__ENA$temp$b = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
     }
 }

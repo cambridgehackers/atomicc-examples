@@ -1,11 +1,11 @@
 INTERFACE l_ainterface_OC_LpmMem {
-    METHOD/Action req__ENA ( INTEGER_32 v )
+    METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
-    METHOD resValue INTEGER_32
+    METHOD resValue Bit(32)
 }
 INTERFACE l_ainterface_OC_TickIfc {
     METHOD/Action allocateTicket__ENA
-    METHOD getTicket INTEGER_4
+    METHOD getTicket Bit(4)
 }
 EMODULE BufTicket {
     INTERFACE l_ainterface_OC_TickIfc tickIfc
@@ -15,17 +15,17 @@ EMODULE LpmMemory {
 }
 MODULE LpmMemory {
     INTERFACE l_ainterface_OC_LpmMem ifc
-    FIELD INTEGER_32 delayCount
-    FIELD INTEGER_32 saved
+    FIELD Bit(32) delayCount
+    FIELD Bit(32) saved
     METHOD/Rule/Action RULE$memdelay_rule__ENA if (((delayCount) > (1))) {
         STORE :delayCount = (delayCount) - (1)
     }
-    METHOD/Action ifc$req__ENA ( INTEGER_32 v ) if (((delayCount) == (0))) {
+    METHOD/Action ifc$req__ENA ( Bit(32) v ) if (((delayCount) == (0))) {
         STORE :delayCount = 4
         STORE :saved = ifc$req$v
     }
     METHOD/Action ifc$resAccept__ENA if (((delayCount) == (1))) {
         STORE :delayCount = 0
     }
-    METHOD ifc$resValue INTEGER_32 = ((saved)) if (((delayCount) == (1)))
+    METHOD ifc$resValue Bit(32) = ((saved)) if (((delayCount) == (1)))
 }

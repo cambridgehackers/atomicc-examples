@@ -1,24 +1,24 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 INTERFACE l_ainterface_OC_EchoIndication {
-    METHOD/Action heard2__ENA ( INTEGER_16 a , INTEGER_16 b )
-    METHOD/Action heard3__ENA ( INTEGER_16 a , INTEGER_32 b , INTEGER_32 c , INTEGER_16 d )
-    METHOD/Action heard__ENA ( INTEGER_32 v )
+    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
+    METHOD/Action heard__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_EchoRequest {
-    METHOD/Action say2__ENA ( INTEGER_16 a , INTEGER_16 b )
-    METHOD/Action say__ENA ( INTEGER_32 v )
-    METHOD/Action setLeds__ENA ( INTEGER_8 v )
+    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action say__ENA ( Bit(32) v )
+    METHOD/Action setLeds__ENA ( Bit(8) v )
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 INTERFACE l_ainterface_OC_PipeInB {
-    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 EMODULE MuxPipe {
     INTERFACE l_ainterface_OC_PipeInH in
@@ -39,16 +39,16 @@ MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     INTERFACE/Ptr l_ainterface_OC_PipeInH printfp
-    FIELD INTEGER_1 busy
-    FIELD INTEGER_1 busy_delay
-    FIELD INTEGER_32 v_temp
-    FIELD INTEGER_32 v_delay
-    FIELD INTEGER_16 a_temp
-    FIELD INTEGER_16 b_temp
-    FIELD INTEGER_16 a_delay
-    FIELD INTEGER_16 b_delay
-    FIELD INTEGER_32 v_type
-    FIELD INTEGER_32 clockReg
+    FIELD Bit(1) busy
+    FIELD Bit(1) busy_delay
+    FIELD Bit(32) v_temp
+    FIELD Bit(32) v_delay
+    FIELD Bit(16) a_temp
+    FIELD Bit(16) b_temp
+    FIELD Bit(16) a_delay
+    FIELD Bit(16) b_delay
+    FIELD Bit(32) v_type
+    FIELD Bit(32) clockReg
     METHOD/Rule/Action RULE$clockRule__ENA {
         STORE :clockReg = (clockReg) + (1)
     }
@@ -66,20 +66,20 @@ MODULE Echo {
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
     }
-    METHOD/Action request$say2__ENA ( INTEGER_16 a , INTEGER_16 b ) if ((((busy) != (0)) ^ (1))) {
+    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say2",52}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
-    METHOD/Action request$say__ENA ( INTEGER_32 v ) if ((((busy) != (0)) ^ (1))) {
+    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",46,busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
-    METHOD/Action request$setLeds__ENA ( INTEGER_8 v ) {
+    METHOD/Action request$setLeds__ENA ( Bit(8) v ) {
         PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",59}
     }
 }

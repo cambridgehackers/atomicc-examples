@@ -1,24 +1,24 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 INTERFACE l_ainterface_OC_PipeInB {
-    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_VBeat$__PARAM__$width$32 {
-    METHOD/Action beat__ENA ( INTEGER_32 v , INTEGER_1 last )
+    METHOD/Action beat__ENA ( Bit(32) v , Bit(1) last )
 }
 INTERFACE l_ainterface_OC_VsimInterface {
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
-    FIELD/input INTEGER_1 CLK_derivedClock
-    FIELD/input INTEGER_1 nRST_derivedReset
-    FIELD/input INTEGER_1 CLK_sys_clk
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) CLK_derivedClock
+    FIELD/input Bit(1) nRST_derivedReset
+    FIELD/input Bit(1) CLK_sys_clk
 }
 EMODULE UserTop {
     INTERFACE l_ainterface_OC_PipeInB write
@@ -43,10 +43,10 @@ MODULE VsimTop {
     INTERFACE l_ainterface_OC_VBeat$__PARAM__$width$32 writeUser
     FIELD VsimReceive$__PARAM__$width$32 sink_0
     FIELD VsimSend$__PARAM__$width$32 source_0
-    METHOD/Action readUser$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) {
+    METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(16) length ) {
         CALL/Action :source_0$beat__ENA{readUser$enq$v,(readUser$enq$length) == (1)}
     }
-    METHOD/Action writeUser$beat__ENA ( INTEGER_32 v , INTEGER_1 last ) {
+    METHOD/Action writeUser$beat__ENA ( Bit(32) v , Bit(1) last ) {
         CALL/Action :user$write$enq__ENA{writeUser$beat$v,(writeUser$beat$last) ? (1) : (2)}
     }
 }

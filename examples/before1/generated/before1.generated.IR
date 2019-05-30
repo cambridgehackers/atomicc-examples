@@ -1,46 +1,46 @@
 EMODULE l_struct_OC_EchoIndication_data {
-    FIELD INTEGER_32 tag
+    FIELD Bit(32) tag
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
 }
 EMODULE l_struct_OC_EchoRequest_data {
-    FIELD INTEGER_32 tag
+    FIELD Bit(32) tag
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
 }
 EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 {
-    FIELD INTEGER_32 meth
-    FIELD INTEGER_32 v
-    FIELD INTEGER_32 v2
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
+    FIELD Bit(32) v2
 }
 INTERFACE l_ainterface_OC_EchoIndication {
-    METHOD/Action heard__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE l_ainterface_OC_EchoRequest {
-    METHOD/Action say2__ENA ( INTEGER_32 meth , INTEGER_32 v )
-    METHOD/Action say__ENA ( INTEGER_32 meth , INTEGER_32 v )
+    METHOD/Action say2__ENA ( Bit(32) meth , Bit(32) v )
+    METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_EchoRequest_data v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_0 {
     METHOD/Action enq__ENA ( l_struct_OC_EchoIndication_data v )
@@ -77,24 +77,24 @@ MODULE Connect {
         CALL/Action :lEcho$swap$x2y__ENA{}
         CALL/Action :lEcho$swap$y2x__ENA{}
     }
-    METHOD/Action request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
         CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
     }
-    METHOD/Action request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
     }
 }
 MODULE Echo {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE l_ainterface_OC_Swap swap
-    FIELD INTEGER_1 busy
-    FIELD INTEGER_32 meth_temp
-    FIELD INTEGER_32 v_temp
-    FIELD INTEGER_1 busy_delay
-    FIELD INTEGER_32 meth_delay
-    FIELD INTEGER_32 v_delay
-    FIELD INTEGER_32 x
-    FIELD INTEGER_32 y
+    FIELD Bit(1) busy
+    FIELD Bit(32) meth_temp
+    FIELD Bit(32) v_temp
+    FIELD Bit(1) busy_delay
+    FIELD Bit(32) meth_delay
+    FIELD Bit(32) v_delay
+    FIELD Bit(32) x
+    FIELD Bit(32) y
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"delay_rule: Echo\n"}
@@ -108,13 +108,13 @@ MODULE Echo {
         STORE :busy_delay = 0
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
-    METHOD/Action request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say2",194}
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
         STORE :busy = 1
     }
-    METHOD/Action request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((busy) ^ (1))) {
+    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say",188}
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
@@ -135,9 +135,9 @@ MODULE Echo {
 MODULE EchoIndicationInput {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
     INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    FIELD INTEGER_1 busy_delay
-    FIELD INTEGER_32 meth_delay
-    FIELD INTEGER_32 v_delay
+    FIELD Bit(1) busy_delay
+    FIELD Bit(32) meth_delay
+    FIELD Bit(32) v_delay
     METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
         STORE :busy_delay = 0
@@ -157,8 +157,8 @@ MODULE EchoIndicationOutput {
     INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
     FIELD l_struct_OC_EchoIndication_data ind0
     FIELD l_struct_OC_EchoIndication_data ind1
-    FIELD INTEGER_1 ind_busy
-    FIELD INTEGER_1 even
+    FIELD Bit(1) ind_busy
+    FIELD Bit(1) even
     METHOD/Rule/Action RULE$output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
         ALLOCA l_struct_OC_EchoIndication_data RULE$output_rulee__ENA$agg_2e_tmp
         STORE :ind_busy = 0
@@ -171,7 +171,7 @@ MODULE EchoIndicationOutput {
         LET l_struct_OC_EchoIndication_data :RULE$output_ruleo__ENA$agg_2e_tmp = ind1
         CALL/Action :pipe$enq__ENA{RULE$output_ruleo__ENA$agg_2e_tmp}
     }
-    METHOD/Action indication$heard__ENA ( INTEGER_32 meth , INTEGER_32 v ) if (((ind_busy) ^ (1))) {
+    METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) if (((ind_busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",116,even}
         STORE (even):ind1$tag = 1
         STORE (even):ind1$data$heard$meth = indication$heard$meth
@@ -197,18 +197,18 @@ MODULE EchoRequestInput {
 MODULE EchoRequestOutput {
     INTERFACE l_ainterface_OC_EchoRequest request
     INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
-    METHOD/Action request$say2__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA l_struct_OC_EchoRequest_data request$say2__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say2\n"}
-        LET INTEGER_32 :request$say2__ENA$ind$tag = 2
+        LET Bit(32) :request$say2__ENA$ind$tag = 2
         STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
         STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
     }
-    METHOD/Action request$say__ENA ( INTEGER_32 meth , INTEGER_32 v ) {
+    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA l_struct_OC_EchoRequest_data request$say__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET INTEGER_32 :request$say__ENA$ind$tag = 1
+        LET Bit(32) :request$say__ENA$ind$tag = 1
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth
         STORE :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}

@@ -1,35 +1,35 @@
 INTERFACE l_ainterface_OC_Ft600 {
-    FIELD/input INTEGER_1 usb_clk
-    FIELD/input INTEGER_1 usb_rxf
-    FIELD/input INTEGER_1 usb_txe
-    FIELD/output INTEGER_1 usb_rd_n
-    FIELD/output INTEGER_1 usb_wr_n
-    FIELD/output INTEGER_1 usb_oe_n
-    FIELD/inout INTEGER_16 usb_ad
+    FIELD/input Bit(1) usb_clk
+    FIELD/input Bit(1) usb_rxf
+    FIELD/input Bit(1) usb_txe
+    FIELD/output Bit(1) usb_rd_n
+    FIELD/output Bit(1) usb_wr_n
+    FIELD/output Bit(1) usb_oe_n
+    FIELD/inout Bit(16) usb_ad
 }
 INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$16 {
-    FIELD/inout INTEGER_16 IO
-    FIELD/input INTEGER_16 I
-    FIELD/output INTEGER_16 O
-    FIELD/input INTEGER_1 T
+    FIELD/inout Bit(16) IO
+    FIELD/input Bit(16) I
+    FIELD/output Bit(16) O
+    FIELD/input Bit(1) T
 }
 EMODULE IobufVec$__PARAM__$iovecWidth$16 {
     INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$16 _
 }
 MODULE ModFt600 {
     INTERFACE l_ainterface_OC_Ft600 _
-    FIELD INTEGER_1 usb_fifo_empty
-    FIELD INTEGER_2 usb_rxf_delay
-    FIELD INTEGER_1 usb_txe_delay
+    FIELD Bit(1) usb_fifo_empty
+    FIELD Bit(2) usb_rxf_delay
+    FIELD Bit(1) usb_txe_delay
     FIELD IobufVec$__PARAM__$iovecWidth$16 iov
     METHOD/Rule/Action RULE$handshake__ENA {
-        LET INTEGER_1 :usb_rd_n = (usb_rxf_delay) != (0)
-        LET INTEGER_1 :usb_oe_n = (usb_rxf_delay) & (1)
-        LET INTEGER_1 :usb_wr_n = ((usb_txe_delay) | (usb_fifo_empty)) | (((usb_rxf_delay) & (1)) ^ (-1))
+        LET Bit(1) :usb_rd_n = (usb_rxf_delay) != (0)
+        LET Bit(1) :usb_oe_n = (usb_rxf_delay) & (1)
+        LET Bit(1) :usb_wr_n = ((usb_txe_delay) | (usb_fifo_empty)) | (((usb_rxf_delay) & (1)) ^ (-1))
         STORE :usb_fifo_empty = 0
         STORE :usb_rxf_delay = ((usb_rxf_delay) << (1)) | (usb_rxf)
         STORE :usb_txe_delay = usb_txe
-        LET INTEGER_16 :usb_ad = iov$IO
-        LET INTEGER_1 :iov$T = usb_oe_n
+        LET Bit(16) :usb_ad = iov$IO
+        LET Bit(1) :iov$T = usb_oe_n
     }
 }

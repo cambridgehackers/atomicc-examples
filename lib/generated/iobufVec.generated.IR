@@ -1,18 +1,18 @@
 INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 {
-    FIELD/inout INTEGER_999999 IO
-    FIELD/input INTEGER_999999 I
-    FIELD/output INTEGER_999999 O
-    FIELD/input INTEGER_1 T
+    FIELD/inout Bit(999999) IO
+    FIELD/input Bit(999999) I
+    FIELD/output Bit(999999) O
+    FIELD/input Bit(1) T
 }
 INTERFACE l_ainterface_OC_MIOBUF {
-    FIELD/parameter INTEGER_32 DRIVE
-    FIELD/input INTEGER_1 I
-    FIELD/Ptr/parameter INTEGER_8 IBUF_LOW_PWR
-    FIELD/inout INTEGER_1 IO
-    FIELD/Ptr/parameter INTEGER_8 IOSTANDARD
-    FIELD/output INTEGER_1 O
-    FIELD/Ptr/parameter INTEGER_8 SLEW
-    FIELD/input INTEGER_1 T
+    FIELD/parameter Bit(32) DRIVE
+    FIELD/input Bit(1) I
+    FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
+    FIELD/inout Bit(1) IO
+    FIELD/Ptr/parameter Bit(8) IOSTANDARD
+    FIELD/output Bit(1) O
+    FIELD/Ptr/parameter Bit(8) SLEW
+    FIELD/input Bit(1) T
 }
 EMODULE IOBUF {
     INTERFACE l_ainterface_OC_MIOBUF _
@@ -20,11 +20,11 @@ EMODULE IOBUF {
 MODULE IobufVec$__PARAM__$iovecWidth$999999 {
     INTERFACE l_ainterface_OC_IobufVecPins$__PARAM__$iovecWidth$999999 _
     FIELD/Count 999999  IOBUF iobufs
-    METHOD/Action FOR$0Body__ENA ( INTEGER_32 __inst$Genvar1 ) {
-        LET INTEGER_1 :iobufs[__inst$Genvar1]$T = T
-        LET INTEGER_1 :iobufs[__inst$Genvar1]$IO = __bitsubstr{IO,__inst$Genvar1,1}
-        LET INTEGER_1 :iobufs[__inst$Genvar1]$I = __bitsubstr{I,__inst$Genvar1,1}
-        LET INTEGER_1 :iobufs[__inst$Genvar1]$O = __bitsubstr{O,__inst$Genvar1,1}
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        LET Bit(1) :iobufs[__inst$Genvar1]$T = T
+        LET Bit(1) :iobufs[__inst$Genvar1]$IO = __bitsubstr{IO,__inst$Genvar1,1}
+        LET Bit(1) :iobufs[__inst$Genvar1]$I = __bitsubstr{I,__inst$Genvar1,1}
+        LET Bit(1) :iobufs[__inst$Genvar1]$O = __bitsubstr{O,__inst$Genvar1,1}
     }
     METHOD/Rule/Action RULE$iobufs__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$0Body__ENA

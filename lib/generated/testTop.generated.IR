@@ -1,39 +1,39 @@
 EMODULE l_struct_OC_AddrCount {
-    FIELD INTEGER_6 id
-    FIELD INTEGER_4 count
-    FIELD INTEGER_5 addr
+    FIELD Bit(6) id
+    FIELD Bit(4) count
+    FIELD Bit(5) addr
 }
 EMODULE l_struct_OC_BusData {
-    FIELD INTEGER_32 data
+    FIELD Bit(32) data
 }
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_struct_OC_PortalInfo {
-    FIELD INTEGER_1 last
+    FIELD Bit(1) last
     FIELD l_struct_OC_AddrCount ac
 }
 EMODULE l_struct_OC_ReadResp {
-    FIELD INTEGER_6 id
-    FIELD INTEGER_32 data
+    FIELD Bit(6) id
+    FIELD Bit(32) data
 }
 INTERFACE l_ainterface_OC_MaxiI {
-    METHOD/Action B__ENA ( INTEGER_12 id , INTEGER_2 resp )
-    METHOD/Action R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
+    METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
+    METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
 }
 INTERFACE l_ainterface_OC_MaxiO {
-    METHOD/Action AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD/Action AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD/Action W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+    METHOD/Action AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
+    METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
+    METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 INTERFACE l_ainterface_OC_PipeInB {
-    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_0 {
     METHOD/Action enq__ENA ( l_struct_OC_AddrCount v )
@@ -42,28 +42,28 @@ INTERFACE l_ainterface_OC_PipeIn_OC_12 {
     METHOD/Action enq__ENA ( l_struct_OC_ReadResp v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_15 {
-    METHOD/Action enq__ENA ( INTEGER_38 v )
+    METHOD/Action enq__ENA ( Bit(38) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_19 {
     METHOD/Action enq__ENA ( l_struct_OC_BusData v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_2 {
-    METHOD/Action enq__ENA ( INTEGER_15 v )
+    METHOD/Action enq__ENA ( Bit(15) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_22 {
-    METHOD/Action enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_26 {
-    METHOD/Action enq__ENA ( INTEGER_6 v )
+    METHOD/Action enq__ENA ( Bit(6) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_29 {
-    METHOD/Action enq__ENA ( INTEGER_6 v )
+    METHOD/Action enq__ENA ( Bit(6) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_5 {
     METHOD/Action enq__ENA ( l_struct_OC_PortalInfo v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_8 {
-    METHOD/Action enq__ENA ( INTEGER_16 v )
+    METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
@@ -75,7 +75,7 @@ INTERFACE l_ainterface_OC_PipeOut_OC_13 {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_16 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_38
+    METHOD first Bit(38)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_20 {
     METHOD/Action deq__ENA
@@ -83,19 +83,19 @@ INTERFACE l_ainterface_OC_PipeOut_OC_20 {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_23 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_32
+    METHOD first Bit(32)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_27 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_6
+    METHOD first Bit(6)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_3 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_15
+    METHOD first Bit(15)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_30 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_6
+    METHOD first Bit(6)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_6 {
     METHOD/Action deq__ENA
@@ -103,12 +103,12 @@ INTERFACE l_ainterface_OC_PipeOut_OC_6 {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_9 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_16
+    METHOD first Bit(16)
 }
 INTERFACE l_ainterface_OC_ZynqInterruptT {
-    FIELD/output INTEGER_1 interrupt
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
+    FIELD/output Bit(1) interrupt
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn_OC_0 in
@@ -196,7 +196,7 @@ MODULE Fifo1 {
     METHOD out$first l_struct_OC_AddrCount = ((out$first$retval)) {
         ALLOCA l_struct_OC_AddrCount out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_15 :out$first$retval = fifo$out$first
+        LET Bit(15) :out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1_OC_10 {
@@ -212,7 +212,7 @@ MODULE Fifo1_OC_10 {
     METHOD out$first l_struct_OC_PortalInfo = ((out$first$retval)) {
         ALLOCA l_struct_OC_PortalInfo out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_16 :out$first$retval = fifo$out$first
+        LET Bit(16) :out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1_OC_17 {
@@ -228,7 +228,7 @@ MODULE Fifo1_OC_17 {
     METHOD out$first l_struct_OC_ReadResp = ((out$first$retval)) {
         ALLOCA l_struct_OC_ReadResp out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_38 :out$first$retval = fifo$out$first
+        LET Bit(38) :out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1_OC_24 {
@@ -244,20 +244,20 @@ MODULE Fifo1_OC_24 {
     METHOD out$first l_struct_OC_BusData = ((out$first$retval)) {
         ALLOCA l_struct_OC_BusData out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_32 :out$first$retval = fifo$out$first
+        LET Bit(32) :out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1_OC_31 {
     INTERFACE l_ainterface_OC_PipeIn_OC_26 in
     INTERFACE l_ainterface_OC_PipeOut_OC_27 out
     FIELD Fifo1Base$__PARAM__$width$6 fifo
-    METHOD/Action in$enq__ENA ( INTEGER_6 v ) {
+    METHOD/Action in$enq__ENA ( Bit(6) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first INTEGER_6 = ((fifo$out$first)) {
+    METHOD out$first Bit(6) = ((fifo$out$first)) {
         CALL :fifo$out$first{}
     }
 }
@@ -266,19 +266,19 @@ MODULE TestTop {
     INTERFACE l_ainterface_OC_ZynqInterruptT _
     INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
     INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
-    FIELD INTEGER_1 intEnable
-    FIELD INTEGER_1 writeNotFirst
-    FIELD INTEGER_1 writeLast
-    FIELD INTEGER_1 readNotFirst
-    FIELD INTEGER_1 readLast
-    FIELD INTEGER_1 selectRIndReq
-    FIELD INTEGER_1 portalRControl
-    FIELD INTEGER_1 selectWIndReq
-    FIELD INTEGER_1 portalWControl
-    FIELD INTEGER_4 readCount
-    FIELD INTEGER_4 writeCount
-    FIELD INTEGER_5 readAddr
-    FIELD INTEGER_5 writeAddr
+    FIELD Bit(1) intEnable
+    FIELD Bit(1) writeNotFirst
+    FIELD Bit(1) writeLast
+    FIELD Bit(1) readNotFirst
+    FIELD Bit(1) readLast
+    FIELD Bit(1) selectRIndReq
+    FIELD Bit(1) portalRControl
+    FIELD Bit(1) selectWIndReq
+    FIELD Bit(1) portalWControl
+    FIELD Bit(4) readCount
+    FIELD Bit(4) writeCount
+    FIELD Bit(5) readAddr
+    FIELD Bit(5) writeAddr
     FIELD Fifo1 reqArs
     FIELD Fifo1 reqAws
     FIELD Fifo1_OC_10 readBeat
@@ -288,34 +288,34 @@ MODULE TestTop {
     FIELD Fifo1_OC_31 writeDone
     FIELD UserTop user
     INTERFACE l_ainterface_OC_PipeInB readUser
-    FIELD INTEGER_32 requestValue
-    FIELD INTEGER_16 requestLength
-    FIELD INTEGER_1 writeReady
-    METHOD/Action MAXIGP0_O$AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
+    FIELD Bit(32) requestValue
+    FIELD Bit(16) requestLength
+    FIELD Bit(1) writeReady
+    METHOD/Action MAXIGP0_O$AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AR__ENA$agg_2e_tmp
-        LET INTEGER_6 :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
-        LET INTEGER_4 :MAXIGP0_O$AR__ENA$agg_2e_tmp$count = (MAXIGP0_O$AR$len) + (1)
-        LET INTEGER_5 :MAXIGP0_O$AR__ENA$agg_2e_tmp$addr = MAXIGP0_O$AR$addr
+        LET Bit(6) :MAXIGP0_O$AR__ENA$agg_2e_tmp$id = MAXIGP0_O$AR$id
+        LET Bit(4) :MAXIGP0_O$AR__ENA$agg_2e_tmp$count = (MAXIGP0_O$AR$len) + (1)
+        LET Bit(5) :MAXIGP0_O$AR__ENA$agg_2e_tmp$addr = MAXIGP0_O$AR$addr
         CALL/Action :reqArs$in$enq__ENA{MAXIGP0_O$AR__ENA$agg_2e_tmp}
         STORE :portalRControl = (__bitsubstr{MAXIGP0_O$AR$addr,11,5}) == (0)
         STORE :selectRIndReq = __bitsubstr{MAXIGP0_O$AR$addr,12}
     }
-    METHOD/Action MAXIGP0_O$AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len ) {
+    METHOD/Action MAXIGP0_O$AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len ) {
         ALLOCA l_struct_OC_AddrCount MAXIGP0_O$AW__ENA$agg_2e_tmp
-        LET INTEGER_6 :MAXIGP0_O$AW__ENA$agg_2e_tmp$id = MAXIGP0_O$AW$id
-        LET INTEGER_4 :MAXIGP0_O$AW__ENA$agg_2e_tmp$count = (MAXIGP0_O$AW$len) + (1)
-        LET INTEGER_5 :MAXIGP0_O$AW__ENA$agg_2e_tmp$addr = MAXIGP0_O$AW$addr
+        LET Bit(6) :MAXIGP0_O$AW__ENA$agg_2e_tmp$id = MAXIGP0_O$AW$id
+        LET Bit(4) :MAXIGP0_O$AW__ENA$agg_2e_tmp$count = (MAXIGP0_O$AW$len) + (1)
+        LET Bit(5) :MAXIGP0_O$AW__ENA$agg_2e_tmp$addr = MAXIGP0_O$AW$addr
         CALL/Action :reqAws$in$enq__ENA{MAXIGP0_O$AW__ENA$agg_2e_tmp}
         STORE :portalWControl = (__bitsubstr{MAXIGP0_O$AW$addr,11,5}) == (0)
         STORE :selectWIndReq = __bitsubstr{MAXIGP0_O$AW$addr,12}
     }
-    METHOD/Action MAXIGP0_O$W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last ) {
+    METHOD/Action MAXIGP0_O$W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last ) {
         ALLOCA l_struct_OC_BusData MAXIGP0_O$W__ENA$agg_2e_tmp
-        LET INTEGER_32 :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
+        LET Bit(32) :MAXIGP0_O$W__ENA$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W__ENA$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$init__ENA {
-        LET INTEGER_1 :interrupt = ((requestLength) != (0)) && ((intEnable) != (0))
+        LET Bit(1) :interrupt = ((requestLength) != (0)) && ((intEnable) != (0))
     }
     METHOD/Rule/Action RULE$lR__ENA {
         ALLOCA l_struct_OC_ReadResp RULE$lR__ENA$temp
@@ -326,19 +326,19 @@ MODULE TestTop {
     }
     METHOD/Rule/Action RULE$lreadNext__ENA {
         ALLOCA l_struct_OC_PortalInfo RULE$lreadNext__ENA$agg_2e_tmp
-        ALLOCA INTEGER_5 RULE$lreadNext__ENA$readAddrupdate
-        ALLOCA INTEGER_1 RULE$lreadNext__ENA$readLastNext
-        ALLOCA INTEGER_4 RULE$lreadNext__ENA$readburstCount
+        ALLOCA Bit(5) RULE$lreadNext__ENA$readAddrupdate
+        ALLOCA Bit(1) RULE$lreadNext__ENA$readLastNext
+        ALLOCA Bit(4) RULE$lreadNext__ENA$readburstCount
         ALLOCA l_struct_OC_AddrCount RULE$lreadNext__ENA$temp
         CALL :reqArs$out$first{}
         LET l_struct_OC_AddrCount :RULE$lreadNext__ENA$temp = reqArs$out$first
-        LET INTEGER_5 :RULE$lreadNext__ENA$readAddrupdate = __phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULE$lreadNext__ENA$temp$addr))
-        LET INTEGER_4 :RULE$lreadNext__ENA$readburstCount = __phi(((readNotFirst) != (0)):(readCount), (((readNotFirst) != (0)) ^ 1):(RULE$lreadNext__ENA$temp$count))
-        LET INTEGER_1 :RULE$lreadNext__ENA$readLastNext = __phi(((readNotFirst) != (0)):(readLast), (((readNotFirst) != (0)) ^ 1):((RULE$lreadNext__ENA$temp$count) == (1)))
-        LET INTEGER_1 :RULE$lreadNext__ENA$agg_2e_tmp$last = RULE$lreadNext__ENA$readLastNext
-        LET INTEGER_6 :RULE$lreadNext__ENA$agg_2e_tmp$ac$id = RULE$lreadNext__ENA$temp$id
-        LET INTEGER_4 :RULE$lreadNext__ENA$agg_2e_tmp$ac$count = RULE$lreadNext__ENA$readburstCount
-        LET INTEGER_5 :RULE$lreadNext__ENA$agg_2e_tmp$ac$addr = RULE$lreadNext__ENA$readAddrupdate
+        LET Bit(5) :RULE$lreadNext__ENA$readAddrupdate = __phi(((readNotFirst) != (0)):(readAddr), (((readNotFirst) != (0)) ^ 1):(RULE$lreadNext__ENA$temp$addr))
+        LET Bit(4) :RULE$lreadNext__ENA$readburstCount = __phi(((readNotFirst) != (0)):(readCount), (((readNotFirst) != (0)) ^ 1):(RULE$lreadNext__ENA$temp$count))
+        LET Bit(1) :RULE$lreadNext__ENA$readLastNext = __phi(((readNotFirst) != (0)):(readLast), (((readNotFirst) != (0)) ^ 1):((RULE$lreadNext__ENA$temp$count) == (1)))
+        LET Bit(1) :RULE$lreadNext__ENA$agg_2e_tmp$last = RULE$lreadNext__ENA$readLastNext
+        LET Bit(6) :RULE$lreadNext__ENA$agg_2e_tmp$ac$id = RULE$lreadNext__ENA$temp$id
+        LET Bit(4) :RULE$lreadNext__ENA$agg_2e_tmp$ac$count = RULE$lreadNext__ENA$readburstCount
+        LET Bit(5) :RULE$lreadNext__ENA$agg_2e_tmp$ac$addr = RULE$lreadNext__ENA$readAddrupdate
         CALL/Action :readBeat$in$enq__ENA{RULE$lreadNext__ENA$agg_2e_tmp}
         STORE :readAddr = (RULE$lreadNext__ENA$readAddrupdate) + (4)
         STORE :readCount = (RULE$lreadNext__ENA$readburstCount) - (1)
@@ -348,43 +348,43 @@ MODULE TestTop {
     }
     METHOD/Rule/Action RULE$lread__ENA {
         ALLOCA l_struct_OC_ReadResp RULE$lread__ENA$agg_2e_tmp
-        ALLOCA INTEGER_32 RULE$lread__ENA$portalCtrlInfo
-        ALLOCA INTEGER_32 RULE$lread__ENA$res
+        ALLOCA Bit(32) RULE$lread__ENA$portalCtrlInfo
+        ALLOCA Bit(32) RULE$lread__ENA$res
         ALLOCA l_struct_OC_PortalInfo RULE$lread__ENA$temp
-        ALLOCA INTEGER_16 RULE$lread__ENA$zzIntrChannel
+        ALLOCA Bit(16) RULE$lread__ENA$zzIntrChannel
         CALL :readBeat$out$first{}
         LET l_struct_OC_PortalInfo :RULE$lread__ENA$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
-        LET INTEGER_16 :RULE$lread__ENA$zzIntrChannel = __phi((((selectRIndReq) != (0)) ^ 1):(requestLength), ((selectRIndReq) != (0)):(0))
+        LET Bit(16) :RULE$lread__ENA$zzIntrChannel = __phi((((selectRIndReq) != (0)) ^ 1):(requestLength), ((selectRIndReq) != (0)):(0))
         STORE (((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)):requestLength = 0
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = RULE$lread__ENA$zzIntrChannel
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 1
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = RULE$lread__ENA$zzIntrChannel
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = ((selectRIndReq) != (0)) ? (6) : (5)
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 2
-        LET INTEGER_32 (((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 0
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = requestValue
-        LET INTEGER_32 (((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = user$write$enq__RDY
-        LET INTEGER_32 (((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = 0
-        LET INTEGER_6 ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))))):RULE$lread__ENA$agg_2e_tmp$id = RULE$lread__ENA$temp$ac$id
-        LET INTEGER_32 :RULE$lread__ENA$agg_2e_tmp$data = __phi((((portalRControl) != (0)) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0)))))))))))))):(RULE$lread__ENA$portalCtrlInfo), ((((portalRControl) != (0)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0)))))))))))))):(RULE$lread__ENA$res))
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = RULE$lread__ENA$zzIntrChannel
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 1
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = RULE$lread__ENA$zzIntrChannel
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = ((selectRIndReq) != (0)) ? (6) : (5)
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 2
+        LET Bit(32) (((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread__ENA$portalCtrlInfo = 0
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = requestValue
+        LET Bit(32) (((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = user$write$enq__RDY
+        LET Bit(32) (((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))):RULE$lread__ENA$res = 0
+        LET Bit(6) ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))))):RULE$lread__ENA$agg_2e_tmp$id = RULE$lread__ENA$temp$ac$id
+        LET Bit(32) :RULE$lread__ENA$agg_2e_tmp$data = __phi((((portalRControl) != (0)) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0)))))))))))))):(RULE$lread__ENA$portalCtrlInfo), ((((portalRControl) != (0)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0)))))))))))))):(RULE$lread__ENA$res))
         CALL/Action (((((portalRControl) != (0)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0)))))))))))))) | (((portalRControl) != (0)) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 4)) ^ 1) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | ((((RULE$lread__ENA$temp$ac$addr) == 4) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((((RULE$lread__ENA$temp$ac$addr) == 0) | ((RULE$lread__ENA$temp$ac$addr) == 8) | ((RULE$lread__ENA$temp$ac$addr) == 12) | ((RULE$lread__ENA$temp$ac$addr) == 16) | ((RULE$lread__ENA$temp$ac$addr) == 20)) ^ 1) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 20) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 16) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 12) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | ((((RULE$lread__ENA$temp$ac$addr) == 8) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))) | (((RULE$lread__ENA$temp$ac$addr) == 0) & ((((RULE$lread__ENA$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread__ENA$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))))))))))))):readData$in$enq__ENA{RULE$lread__ENA$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$lwriteNext__ENA {
         ALLOCA l_struct_OC_PortalInfo RULE$lwriteNext__ENA$agg_2e_tmp
         ALLOCA l_struct_OC_AddrCount RULE$lwriteNext__ENA$temp
-        ALLOCA INTEGER_5 RULE$lwriteNext__ENA$writeAddrupdate
-        ALLOCA INTEGER_1 RULE$lwriteNext__ENA$writeLastNext
-        ALLOCA INTEGER_4 RULE$lwriteNext__ENA$writeburstCount
+        ALLOCA Bit(5) RULE$lwriteNext__ENA$writeAddrupdate
+        ALLOCA Bit(1) RULE$lwriteNext__ENA$writeLastNext
+        ALLOCA Bit(4) RULE$lwriteNext__ENA$writeburstCount
         CALL :reqAws$out$first{}
         LET l_struct_OC_AddrCount :RULE$lwriteNext__ENA$temp = reqAws$out$first
-        LET INTEGER_5 :RULE$lwriteNext__ENA$writeAddrupdate = __phi(((writeNotFirst) != (0)):(writeAddr), (((writeNotFirst) != (0)) ^ 1):(RULE$lwriteNext__ENA$temp$addr))
-        LET INTEGER_4 :RULE$lwriteNext__ENA$writeburstCount = __phi(((writeNotFirst) != (0)):(writeCount), (((writeNotFirst) != (0)) ^ 1):(RULE$lwriteNext__ENA$temp$count))
-        LET INTEGER_1 :RULE$lwriteNext__ENA$writeLastNext = __phi(((writeNotFirst) != (0)):(writeLast), (((writeNotFirst) != (0)) ^ 1):((RULE$lwriteNext__ENA$temp$count) == (1)))
-        LET INTEGER_1 :RULE$lwriteNext__ENA$agg_2e_tmp$last = RULE$lwriteNext__ENA$writeLastNext
-        LET INTEGER_6 :RULE$lwriteNext__ENA$agg_2e_tmp$ac$id = RULE$lwriteNext__ENA$temp$id
-        LET INTEGER_4 :RULE$lwriteNext__ENA$agg_2e_tmp$ac$count = RULE$lwriteNext__ENA$writeburstCount
-        LET INTEGER_5 :RULE$lwriteNext__ENA$agg_2e_tmp$ac$addr = RULE$lwriteNext__ENA$writeAddrupdate
+        LET Bit(5) :RULE$lwriteNext__ENA$writeAddrupdate = __phi(((writeNotFirst) != (0)):(writeAddr), (((writeNotFirst) != (0)) ^ 1):(RULE$lwriteNext__ENA$temp$addr))
+        LET Bit(4) :RULE$lwriteNext__ENA$writeburstCount = __phi(((writeNotFirst) != (0)):(writeCount), (((writeNotFirst) != (0)) ^ 1):(RULE$lwriteNext__ENA$temp$count))
+        LET Bit(1) :RULE$lwriteNext__ENA$writeLastNext = __phi(((writeNotFirst) != (0)):(writeLast), (((writeNotFirst) != (0)) ^ 1):((RULE$lwriteNext__ENA$temp$count) == (1)))
+        LET Bit(1) :RULE$lwriteNext__ENA$agg_2e_tmp$last = RULE$lwriteNext__ENA$writeLastNext
+        LET Bit(6) :RULE$lwriteNext__ENA$agg_2e_tmp$ac$id = RULE$lwriteNext__ENA$temp$id
+        LET Bit(4) :RULE$lwriteNext__ENA$agg_2e_tmp$ac$count = RULE$lwriteNext__ENA$writeburstCount
+        LET Bit(5) :RULE$lwriteNext__ENA$agg_2e_tmp$ac$addr = RULE$lwriteNext__ENA$writeAddrupdate
         CALL/Action :writeBeat$in$enq__ENA{RULE$lwriteNext__ENA$agg_2e_tmp}
         STORE :writeAddr = (RULE$lwriteNext__ENA$writeAddrupdate) + (4)
         STORE :writeCount = (RULE$lwriteNext__ENA$writeburstCount) - (1)
@@ -410,7 +410,7 @@ MODULE TestTop {
         CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
         CALL/Action :writeDone$out$deq__ENA{}
     }
-    METHOD/Action readUser$enq__ENA ( INTEGER_32 v , INTEGER_16 length ) if (((requestLength) == (0))) {
+    METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(16) length ) if (((requestLength) == (0))) {
         STORE :requestValue = readUser$enq$v
         STORE :requestLength = readUser$enq$length
     }

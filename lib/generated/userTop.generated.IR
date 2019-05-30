@@ -1,14 +1,14 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 INTERFACE l_ainterface_OC_PipeInB {
-    METHOD/Action enq__ENA ( INTEGER_32 v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 EMODULE AdapterFromBus {
     INTERFACE l_ainterface_OC_PipeInB in
@@ -38,17 +38,17 @@ MODULE UserTop {
     INTERFACE l_ainterface_OC_PipeInH wad
     INTERFACE l_ainterface_OC_PipeInH indication
     FIELD l_top ctop
-    METHOD/Action indication$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
-        ALLOCA INTEGER_16 indication$enq__ENA$len
-        ALLOCA INTEGER_16 indication$enq__ENA$port
-        ALLOCA INTEGER_128 indication$enq__ENA$vint
-        LET INTEGER_128 :indication$enq__ENA$vint = indication$enq$v
-        LET INTEGER_16 :indication$enq__ENA$len = (__bitsubstr{indication$enq__ENA$vint,15,0}) - (1)
-        LET INTEGER_16 :indication$enq__ENA$port = 5
+    METHOD/Action indication$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) {
+        ALLOCA Bit(16) indication$enq__ENA$len
+        ALLOCA Bit(16) indication$enq__ENA$port
+        ALLOCA Bit(128) indication$enq__ENA$vint
+        LET Bit(128) :indication$enq__ENA$vint = indication$enq$v
+        LET Bit(16) :indication$enq__ENA$len = (__bitsubstr{indication$enq__ENA$vint,15,0}) - (1)
+        LET Bit(16) :indication$enq__ENA$port = 5
         PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq__ENA$len}
         CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq$length}
     }
-    METHOD/Action wad$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+    METHOD/Action wad$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
         CALL/Action :ctop$request$enq__ENA{wad$enq$v}
     }

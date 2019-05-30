@@ -1,20 +1,20 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD/Action enq__ENA ( INTEGER_128 v )
+    METHOD/Action enq__ENA ( Bit(128) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_4 {
-    METHOD/Action enq__ENA ( INTEGER_16 v )
+    METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_7 {
-    METHOD/Action enq__ENA ( INTEGER_16 v )
+    METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
@@ -22,15 +22,15 @@ INTERFACE l_ainterface_OC_PipeOut {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_128
+    METHOD first Bit(128)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_5 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_16
+    METHOD first Bit(16)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_8 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_16
+    METHOD first Bit(16)
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -74,20 +74,20 @@ MODULE Fifo1 {
     METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
         ALLOCA l_struct_OC_NOCData out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_128 :out$first$retval = fifo$out$first
+        LET Bit(128) :out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1_OC_9 {
     INTERFACE l_ainterface_OC_PipeIn_OC_4 in
     INTERFACE l_ainterface_OC_PipeOut_OC_5 out
     FIELD Fifo1Base$__PARAM__$width$16 fifo
-    METHOD/Action in$enq__ENA ( INTEGER_16 v ) {
+    METHOD/Action in$enq__ENA ( Bit(16) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first INTEGER_16 = ((fifo$out$first)) {
+    METHOD out$first Bit(16) = ((fifo$out$first)) {
         CALL :fifo$out$first{}
     }
 }
@@ -106,11 +106,11 @@ MODULE MuxPipe {
         CALL/Action :forwardFifo$out$deq__ENA{}
         CALL/Action :forwardFifol$out$deq__ENA{}
     }
-    METHOD/Action forward$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) {
+    METHOD/Action forward$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) {
         CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
         CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
     }
-    METHOD/Action in$enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
+    METHOD/Action in$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v,in$enq$length}
     }
 }

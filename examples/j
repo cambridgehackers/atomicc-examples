@@ -12,4 +12,5 @@ cd ../precision ;make
 cd ../printf ;make
 cd ../clock ;make
 cd ../ft600 ;make
+cd ../riscv ;make
 cd ../../lib; make

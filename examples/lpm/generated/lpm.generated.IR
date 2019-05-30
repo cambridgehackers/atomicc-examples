@@ -1,41 +1,41 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_struct_OC_ProcessData {
-    FIELD INTEGER_4 ticket
-    FIELD INTEGER_16 IPA
-    FIELD INTEGER_3 state
+    FIELD Bit(4) ticket
+    FIELD Bit(16) IPA
+    FIELD Bit(3) state
 }
 INTERFACE l_ainterface_OC_LpmMem {
-    METHOD/Action req__ENA ( INTEGER_32 v )
+    METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
-    METHOD resValue INTEGER_32
+    METHOD resValue Bit(32)
 }
 INTERFACE l_ainterface_OC_LpmRequest {
-    METHOD/Action enter__ENA ( INTEGER_32 x )
+    METHOD/Action enter__ENA ( Bit(32) x )
 }
 INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD/Action enq__ENA ( INTEGER_32 v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_4 {
     METHOD/Action enq__ENA ( l_struct_OC_ProcessData v )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_7 {
-    METHOD/Action enq__ENA ( INTEGER_23 v )
+    METHOD/Action enq__ENA ( Bit(23) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_32
+    METHOD first Bit(32)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_32
+    METHOD first Bit(32)
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_5 {
     METHOD/Action deq__ENA
@@ -43,11 +43,11 @@ INTERFACE l_ainterface_OC_PipeOut_OC_5 {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_8 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_23
+    METHOD first Bit(23)
 }
 INTERFACE l_ainterface_OC_TickIfc {
     METHOD/Action allocateTicket__ENA
-    METHOD getTicket INTEGER_4
+    METHOD getTicket Bit(4)
 }
 EMODULE BufTicket {
     INTERFACE l_ainterface_OC_TickIfc tickIfc
@@ -88,13 +88,13 @@ MODULE Fifo1 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1Base$__PARAM__$width$32 fifo
-    METHOD/Action in$enq__ENA ( INTEGER_32 v ) {
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first INTEGER_32 = ((fifo$out$first)) {
+    METHOD out$first Bit(32) = ((fifo$out$first)) {
         CALL :fifo$out$first{}
     }
 }
@@ -111,7 +111,7 @@ MODULE FifoB1 {
     METHOD out$first l_struct_OC_ProcessData = ((out$first$retval)) {
         ALLOCA l_struct_OC_ProcessData out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_23 :out$first$retval = fifo$out$first
+        LET Bit(23) :out$first$retval = fifo$out$first
     }
 }
 MODULE Lpm {
@@ -123,23 +123,23 @@ MODULE Lpm {
     FIELD LpmMemory mem
     METHOD/Rule/Action RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
         ALLOCA l_struct_OC_ProcessData RULE$enter__ENA$agg_2e_tmp
-        ALLOCA INTEGER_4 RULE$enter__ENA$ticket
-        ALLOCA INTEGER_32 RULE$enter__ENA$x
+        ALLOCA Bit(4) RULE$enter__ENA$ticket
+        ALLOCA Bit(32) RULE$enter__ENA$x
         CALL :inQ$out$first{}
-        LET INTEGER_32 :RULE$enter__ENA$x = inQ$out$first
-        LET INTEGER_4 :RULE$enter__ENA$ticket = 0
+        LET Bit(32) :RULE$enter__ENA$x = inQ$out$first
+        LET Bit(4) :RULE$enter__ENA$ticket = 0
         CALL/Action :inQ$out$deq__ENA{}
-        LET INTEGER_4 :RULE$enter__ENA$agg_2e_tmp$ticket = RULE$enter__ENA$ticket
-        LET INTEGER_16 :RULE$enter__ENA$agg_2e_tmp$IPA = __bitsubstr{RULE$enter__ENA$x,15,0}
-        LET INTEGER_3 :RULE$enter__ENA$agg_2e_tmp$state = 0
+        LET Bit(4) :RULE$enter__ENA$agg_2e_tmp$ticket = RULE$enter__ENA$ticket
+        LET Bit(16) :RULE$enter__ENA$agg_2e_tmp$IPA = __bitsubstr{RULE$enter__ENA$x,15,0}
+        LET Bit(3) :RULE$enter__ENA$agg_2e_tmp$state = 0
         CALL/Action :fifo$in$enq__ENA{RULE$enter__ENA$agg_2e_tmp}
         CALL/Action :mem$ifc$req__ENA{(0) + (__bitsubstr{RULE$enter__ENA$x,31,16})}
     }
     METHOD/Rule/Action RULE$exitr__ENA if (((((mem$ifc$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
-        ALLOCA INTEGER_32 RULE$exitr__ENA$x
+        ALLOCA Bit(32) RULE$exitr__ENA$x
         ALLOCA l_struct_OC_ProcessData RULE$exitr__ENA$y
         CALL :mem$ifc$resValue{}
-        LET INTEGER_32 :RULE$exitr__ENA$x = mem$ifc$resValue
+        LET Bit(32) :RULE$exitr__ENA$x = mem$ifc$resValue
         CALL :fifo$out$first{}
         LET l_struct_OC_ProcessData :RULE$exitr__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
@@ -148,21 +148,21 @@ MODULE Lpm {
     }
     METHOD/Rule/Action RULE$recirc__ENA if (((((mem$ifc$resValue) & (1)) == (1)) ^ (1))) {
         ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$agg_2e_tmp
-        ALLOCA INTEGER_32 RULE$recirc__ENA$x
+        ALLOCA Bit(32) RULE$recirc__ENA$x
         ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$y
         CALL :mem$ifc$resValue{}
-        LET INTEGER_32 :RULE$recirc__ENA$x = mem$ifc$resValue
+        LET Bit(32) :RULE$recirc__ENA$x = mem$ifc$resValue
         CALL :fifo$out$first{}
         LET l_struct_OC_ProcessData :RULE$recirc__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :mem$ifc$req__ENA{(RULE$recirc__ENA$x) + (__phi(((RULE$recirc__ENA$y$state) == (1)):(__bitsubstr{RULE$recirc__ENA$y$IPA,15,8}), (((RULE$recirc__ENA$y$state) == (1)) ^ 1):(__bitsubstr{RULE$recirc__ENA$y$IPA,7,0})))}
         CALL/Action :fifo$out$deq__ENA{}
-        LET INTEGER_4 :RULE$recirc__ENA$agg_2e_tmp$ticket = RULE$recirc__ENA$y$ticket
-        LET INTEGER_16 :RULE$recirc__ENA$agg_2e_tmp$IPA = RULE$recirc__ENA$y$IPA
-        LET INTEGER_3 :RULE$recirc__ENA$agg_2e_tmp$state = (RULE$recirc__ENA$y$state) + (1)
+        LET Bit(4) :RULE$recirc__ENA$agg_2e_tmp$ticket = RULE$recirc__ENA$y$ticket
+        LET Bit(16) :RULE$recirc__ENA$agg_2e_tmp$IPA = RULE$recirc__ENA$y$IPA
+        LET Bit(3) :RULE$recirc__ENA$agg_2e_tmp$state = (RULE$recirc__ENA$y$state) + (1)
         CALL/Action :fifo$in$enq__ENA{RULE$recirc__ENA$agg_2e_tmp}
     }
-    METHOD/Action request$enter__ENA ( INTEGER_32 x ) {
+    METHOD/Action request$enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{request$enter$x}
     }
 }

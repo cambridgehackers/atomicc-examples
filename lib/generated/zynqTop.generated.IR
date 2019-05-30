@@ -1,21 +1,21 @@
 INTERFACE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
-    FIELD/output INTEGER_1 clockOut
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) clockOut
 }
 INTERFACE l_ainterface_OC_MaxiI {
-    METHOD/Action B__ENA ( INTEGER_12 id , INTEGER_2 resp )
-    METHOD/Action R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp )
+    METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
+    METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
 }
 INTERFACE l_ainterface_OC_MaxiO {
-    METHOD/Action AR__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD/Action AW__ENA ( INTEGER_32 addr , INTEGER_12 id , INTEGER_4 len )
-    METHOD/Action W__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last )
+    METHOD/Action AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
+    METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
+    METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
 INTERFACE l_ainterface_OC_MbufgBUFG {
-    FIELD/input INTEGER_1 I
-    FIELD/output INTEGER_1 O
+    FIELD/input Bit(1) I
+    FIELD/output Bit(1) O
 }
 INTERFACE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7ddr DDR
@@ -63,394 +63,394 @@ INTERFACE l_ainterface_OC_Pps7PS7 {
     INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP3
 }
 INTERFACE l_ainterface_OC_Pps7ddr {
-    FIELD/inout INTEGER_15 A
-    FIELD/input INTEGER_4 ARB
-    FIELD/inout INTEGER_3 BA
-    FIELD/inout INTEGER_1 CASB
-    FIELD/inout INTEGER_1 CKE
-    FIELD/inout INTEGER_1 CKN
-    FIELD/inout INTEGER_1 CKP
-    FIELD/inout INTEGER_1 CSB
-    FIELD/inout INTEGER_4 DM
-    FIELD/inout INTEGER_32 DQ
-    FIELD/inout INTEGER_4 DQSN
-    FIELD/inout INTEGER_4 DQSP
-    FIELD/inout INTEGER_1 DRSTB
-    FIELD/inout INTEGER_1 ODT
-    FIELD/inout INTEGER_1 RASB
-    FIELD/inout INTEGER_1 VRN
-    FIELD/inout INTEGER_1 VRP
-    FIELD/inout INTEGER_1 WEB
+    FIELD/inout Bit(15) A
+    FIELD/input Bit(4) ARB
+    FIELD/inout Bit(3) BA
+    FIELD/inout Bit(1) CASB
+    FIELD/inout Bit(1) CKE
+    FIELD/inout Bit(1) CKN
+    FIELD/inout Bit(1) CKP
+    FIELD/inout Bit(1) CSB
+    FIELD/inout Bit(4) DM
+    FIELD/inout Bit(32) DQ
+    FIELD/inout Bit(4) DQSN
+    FIELD/inout Bit(4) DQSP
+    FIELD/inout Bit(1) DRSTB
+    FIELD/inout Bit(1) ODT
+    FIELD/inout Bit(1) RASB
+    FIELD/inout Bit(1) VRN
+    FIELD/inout Bit(1) VRP
+    FIELD/inout Bit(1) WEB
 }
 INTERFACE l_ainterface_OC_Pps7dma {
-    FIELD/input INTEGER_1 ACLK
-    FIELD/input INTEGER_1 DAREADY
-    FIELD/output INTEGER_2 DATYPE
-    FIELD/output INTEGER_1 DAVALID
-    FIELD/input INTEGER_1 DRLAST
-    FIELD/output INTEGER_1 DRREADY
-    FIELD/input INTEGER_2 DRTYPE
-    FIELD/input INTEGER_1 DRVALID
-    FIELD/output INTEGER_1 RSTN
+    FIELD/input Bit(1) ACLK
+    FIELD/input Bit(1) DAREADY
+    FIELD/output Bit(2) DATYPE
+    FIELD/output Bit(1) DAVALID
+    FIELD/input Bit(1) DRLAST
+    FIELD/output Bit(1) DRREADY
+    FIELD/input Bit(2) DRTYPE
+    FIELD/input Bit(1) DRVALID
+    FIELD/output Bit(1) RSTN
 }
 INTERFACE l_ainterface_OC_Pps7emiocan {
-    FIELD/input INTEGER_1 PHYRX
-    FIELD/output INTEGER_1 PHYTX
+    FIELD/input Bit(1) PHYRX
+    FIELD/output Bit(1) PHYTX
 }
 INTERFACE l_ainterface_OC_Pps7emioenet {
-    FIELD/input INTEGER_1 EXTINTIN
-    FIELD/input INTEGER_1 GMIICOL
-    FIELD/input INTEGER_1 GMIICRS
-    FIELD/input INTEGER_1 GMIIRXCLK
-    FIELD/input INTEGER_8 GMIIRXD
-    FIELD/input INTEGER_1 GMIIRXDV
-    FIELD/input INTEGER_1 GMIIRXER
-    FIELD/input INTEGER_1 GMIITXCLK
-    FIELD/output INTEGER_8 GMIITXD
-    FIELD/output INTEGER_1 GMIITXEN
-    FIELD/output INTEGER_1 GMIITXER
-    FIELD/input INTEGER_1 MDIOI
-    FIELD/output INTEGER_1 MDIOMDC
-    FIELD/output INTEGER_1 MDIOO
-    FIELD/output INTEGER_1 MDIOTN
-    FIELD/output INTEGER_1 PTPDELAYREQRX
-    FIELD/output INTEGER_1 PTPDELAYREQTX
-    FIELD/output INTEGER_1 PTPPDELAYREQRX
-    FIELD/output INTEGER_1 PTPPDELAYREQTX
-    FIELD/output INTEGER_1 PTPPDELAYRESPRX
-    FIELD/output INTEGER_1 PTPPDELAYRESPTX
-    FIELD/output INTEGER_1 PTPSYNCFRAMERX
-    FIELD/output INTEGER_1 PTPSYNCFRAMETX
-    FIELD/output INTEGER_1 SOFRX
-    FIELD/output INTEGER_1 SOFTX
+    FIELD/input Bit(1) EXTINTIN
+    FIELD/input Bit(1) GMIICOL
+    FIELD/input Bit(1) GMIICRS
+    FIELD/input Bit(1) GMIIRXCLK
+    FIELD/input Bit(8) GMIIRXD
+    FIELD/input Bit(1) GMIIRXDV
+    FIELD/input Bit(1) GMIIRXER
+    FIELD/input Bit(1) GMIITXCLK
+    FIELD/output Bit(8) GMIITXD
+    FIELD/output Bit(1) GMIITXEN
+    FIELD/output Bit(1) GMIITXER
+    FIELD/input Bit(1) MDIOI
+    FIELD/output Bit(1) MDIOMDC
+    FIELD/output Bit(1) MDIOO
+    FIELD/output Bit(1) MDIOTN
+    FIELD/output Bit(1) PTPDELAYREQRX
+    FIELD/output Bit(1) PTPDELAYREQTX
+    FIELD/output Bit(1) PTPPDELAYREQRX
+    FIELD/output Bit(1) PTPPDELAYREQTX
+    FIELD/output Bit(1) PTPPDELAYRESPRX
+    FIELD/output Bit(1) PTPPDELAYRESPTX
+    FIELD/output Bit(1) PTPSYNCFRAMERX
+    FIELD/output Bit(1) PTPSYNCFRAMETX
+    FIELD/output Bit(1) SOFRX
+    FIELD/output Bit(1) SOFTX
 }
 INTERFACE l_ainterface_OC_Pps7emiogpio {
-    FIELD/input INTEGER_64 I
-    FIELD/output INTEGER_64 O
-    FIELD/output INTEGER_64 TN
+    FIELD/input Bit(64) I
+    FIELD/output Bit(64) O
+    FIELD/output Bit(64) TN
 }
 INTERFACE l_ainterface_OC_Pps7emioi2c {
-    FIELD/input INTEGER_1 SCLI
-    FIELD/output INTEGER_1 SCLO
-    FIELD/output INTEGER_1 SCLTN
-    FIELD/input INTEGER_1 SDAI
-    FIELD/output INTEGER_1 SDAO
-    FIELD/output INTEGER_1 SDATN
+    FIELD/input Bit(1) SCLI
+    FIELD/output Bit(1) SCLO
+    FIELD/output Bit(1) SCLTN
+    FIELD/input Bit(1) SDAI
+    FIELD/output Bit(1) SDAO
+    FIELD/output Bit(1) SDATN
 }
 INTERFACE l_ainterface_OC_Pps7emiopjtag {
-    FIELD/input INTEGER_1 TCK
-    FIELD/input INTEGER_1 TDI
-    FIELD/output INTEGER_1 TDO
-    FIELD/output INTEGER_1 TDTN
-    FIELD/input INTEGER_1 TMS
+    FIELD/input Bit(1) TCK
+    FIELD/input Bit(1) TDI
+    FIELD/output Bit(1) TDO
+    FIELD/output Bit(1) TDTN
+    FIELD/input Bit(1) TMS
 }
 INTERFACE l_ainterface_OC_Pps7emiosdio {
-    FIELD/output INTEGER_1 BUSPOW
-    FIELD/output INTEGER_3 BUSVOLT
-    FIELD/input INTEGER_1 CDN
-    FIELD/output INTEGER_1 CLK
-    FIELD/input INTEGER_1 CLKFB
-    FIELD/input INTEGER_1 CMDI
-    FIELD/output INTEGER_1 CMDO
-    FIELD/output INTEGER_1 CMDTN
-    FIELD/input INTEGER_4 DATAI
-    FIELD/output INTEGER_4 DATAO
-    FIELD/output INTEGER_4 DATATN
-    FIELD/output INTEGER_1 LED
-    FIELD/input INTEGER_1 WP
+    FIELD/output Bit(1) BUSPOW
+    FIELD/output Bit(3) BUSVOLT
+    FIELD/input Bit(1) CDN
+    FIELD/output Bit(1) CLK
+    FIELD/input Bit(1) CLKFB
+    FIELD/input Bit(1) CMDI
+    FIELD/output Bit(1) CMDO
+    FIELD/output Bit(1) CMDTN
+    FIELD/input Bit(4) DATAI
+    FIELD/output Bit(4) DATAO
+    FIELD/output Bit(4) DATATN
+    FIELD/output Bit(1) LED
+    FIELD/input Bit(1) WP
 }
 INTERFACE l_ainterface_OC_Pps7emiospi {
-    FIELD/input INTEGER_1 MI
-    FIELD/output INTEGER_1 MO
-    FIELD/output INTEGER_1 MOTN
-    FIELD/input INTEGER_1 SCLKI
-    FIELD/output INTEGER_1 SCLKO
-    FIELD/output INTEGER_1 SCLKTN
-    FIELD/input INTEGER_1 SI
-    FIELD/output INTEGER_1 SO
-    FIELD/input INTEGER_1 SSIN
-    FIELD/output INTEGER_1 SSNTN
-    FIELD/output INTEGER_3 SSON
-    FIELD/output INTEGER_1 STN
+    FIELD/input Bit(1) MI
+    FIELD/output Bit(1) MO
+    FIELD/output Bit(1) MOTN
+    FIELD/input Bit(1) SCLKI
+    FIELD/output Bit(1) SCLKO
+    FIELD/output Bit(1) SCLKTN
+    FIELD/input Bit(1) SI
+    FIELD/output Bit(1) SO
+    FIELD/input Bit(1) SSIN
+    FIELD/output Bit(1) SSNTN
+    FIELD/output Bit(3) SSON
+    FIELD/output Bit(1) STN
 }
 INTERFACE l_ainterface_OC_Pps7emiosramint {
-    FIELD/input INTEGER_1 IN
+    FIELD/input Bit(1) IN
 }
 INTERFACE l_ainterface_OC_Pps7emiotrace {
-    FIELD/input INTEGER_1 CLK
-    FIELD/output INTEGER_1 CTL
-    FIELD/output INTEGER_32 DATA
+    FIELD/input Bit(1) CLK
+    FIELD/output Bit(1) CTL
+    FIELD/output Bit(32) DATA
 }
 INTERFACE l_ainterface_OC_Pps7emiottc {
-    FIELD/input INTEGER_3 CLKI
-    FIELD/output INTEGER_3 WAVEO
+    FIELD/input Bit(3) CLKI
+    FIELD/output Bit(3) WAVEO
 }
 INTERFACE l_ainterface_OC_Pps7emiouart {
-    FIELD/input INTEGER_1 CTSN
-    FIELD/input INTEGER_1 DCDN
-    FIELD/input INTEGER_1 DSRN
-    FIELD/output INTEGER_1 DTRN
-    FIELD/input INTEGER_1 RIN
-    FIELD/output INTEGER_1 RTSN
-    FIELD/input INTEGER_1 RX
-    FIELD/output INTEGER_1 TX
+    FIELD/input Bit(1) CTSN
+    FIELD/input Bit(1) DCDN
+    FIELD/input Bit(1) DSRN
+    FIELD/output Bit(1) DTRN
+    FIELD/input Bit(1) RIN
+    FIELD/output Bit(1) RTSN
+    FIELD/input Bit(1) RX
+    FIELD/output Bit(1) TX
 }
 INTERFACE l_ainterface_OC_Pps7emiousb {
-    FIELD/output INTEGER_2 PORTINDCTL
-    FIELD/input INTEGER_1 VBUSPWRFAULT
-    FIELD/output INTEGER_1 VBUSPWRSELECT
+    FIELD/output Bit(2) PORTINDCTL
+    FIELD/input Bit(1) VBUSPWRFAULT
+    FIELD/output Bit(1) VBUSPWRSELECT
 }
 INTERFACE l_ainterface_OC_Pps7emiowdt {
-    FIELD/input INTEGER_1 CLKI
-    FIELD/output INTEGER_1 RSTO
+    FIELD/input Bit(1) CLKI
+    FIELD/output Bit(1) RSTO
 }
 INTERFACE l_ainterface_OC_Pps7event {
-    FIELD/input INTEGER_1 EVENTI
-    FIELD/output INTEGER_1 EVENTO
-    FIELD/output INTEGER_2 STANDBYWFE
-    FIELD/output INTEGER_2 STANDBYWFI
+    FIELD/input Bit(1) EVENTI
+    FIELD/output Bit(1) EVENTO
+    FIELD/output Bit(2) STANDBYWFE
+    FIELD/output Bit(2) STANDBYWFI
 }
 INTERFACE l_ainterface_OC_Pps7fclk {
-    FIELD/output INTEGER_4 CLK
-    FIELD/input INTEGER_4 CLKTRIGN
-    FIELD/output INTEGER_4 RESETN
+    FIELD/output Bit(4) CLK
+    FIELD/input Bit(4) CLKTRIGN
+    FIELD/output Bit(4) RESETN
 }
 INTERFACE l_ainterface_OC_Pps7fpgaid {
-    FIELD/input INTEGER_1 LEN
+    FIELD/input Bit(1) LEN
 }
 INTERFACE l_ainterface_OC_Pps7ftmd {
-    FIELD/input INTEGER_4 TRACEINATID
-    FIELD/input INTEGER_1 TRACEINCLOCK
-    FIELD/input INTEGER_32 TRACEINDATA
-    FIELD/input INTEGER_1 TRACEINVALID
+    FIELD/input Bit(4) TRACEINATID
+    FIELD/input Bit(1) TRACEINCLOCK
+    FIELD/input Bit(32) TRACEINDATA
+    FIELD/input Bit(1) TRACEINVALID
 }
 INTERFACE l_ainterface_OC_Pps7ftmt {
-    FIELD/input INTEGER_32 F2PDEBUG
-    FIELD/input INTEGER_4 F2PTRIG
-    FIELD/output INTEGER_4 F2PTRIGACK
-    FIELD/output INTEGER_32 P2FDEBUG
-    FIELD/output INTEGER_4 P2FTRIG
-    FIELD/input INTEGER_4 P2FTRIGACK
+    FIELD/input Bit(32) F2PDEBUG
+    FIELD/input Bit(4) F2PTRIG
+    FIELD/output Bit(4) F2PTRIGACK
+    FIELD/output Bit(32) P2FDEBUG
+    FIELD/output Bit(4) P2FTRIG
+    FIELD/input Bit(4) P2FTRIGACK
 }
 INTERFACE l_ainterface_OC_Pps7irq {
-    FIELD/input INTEGER_20 F2P
-    FIELD/output INTEGER_29 P2F
+    FIELD/input Bit(20) F2P
+    FIELD/output Bit(29) P2F
 }
 INTERFACE l_ainterface_OC_Pps7m {
-    FIELD/inout INTEGER_54 IO
+    FIELD/inout Bit(54) IO
 }
 INTERFACE l_ainterface_OC_Pps7maxigp {
-    FIELD/input INTEGER_1 ACLK
-    FIELD/output INTEGER_32 ARADDR
-    FIELD/output INTEGER_2 ARBURST
-    FIELD/output INTEGER_4 ARCACHE
-    FIELD/output INTEGER_1 ARESETN
-    FIELD/output INTEGER_12 ARID
-    FIELD/output INTEGER_4 ARLEN
-    FIELD/output INTEGER_2 ARLOCK
-    FIELD/output INTEGER_3 ARPROT
-    FIELD/output INTEGER_4 ARQOS
-    FIELD/input INTEGER_1 ARREADY
-    FIELD/output INTEGER_2 ARSIZE
-    FIELD/output INTEGER_1 ARVALID
-    FIELD/output INTEGER_32 AWADDR
-    FIELD/output INTEGER_2 AWBURST
-    FIELD/output INTEGER_4 AWCACHE
-    FIELD/output INTEGER_12 AWID
-    FIELD/output INTEGER_4 AWLEN
-    FIELD/output INTEGER_2 AWLOCK
-    FIELD/output INTEGER_3 AWPROT
-    FIELD/output INTEGER_4 AWQOS
-    FIELD/input INTEGER_1 AWREADY
-    FIELD/output INTEGER_2 AWSIZE
-    FIELD/output INTEGER_1 AWVALID
-    FIELD/input INTEGER_12 BID
-    FIELD/output INTEGER_1 BREADY
-    FIELD/input INTEGER_2 BRESP
-    FIELD/input INTEGER_1 BVALID
-    FIELD/input INTEGER_32 RDATA
-    FIELD/input INTEGER_12 RID
-    FIELD/input INTEGER_1 RLAST
-    FIELD/output INTEGER_1 RREADY
-    FIELD/input INTEGER_2 RRESP
-    FIELD/input INTEGER_1 RVALID
-    FIELD/output INTEGER_32 WDATA
-    FIELD/output INTEGER_12 WID
-    FIELD/output INTEGER_1 WLAST
-    FIELD/input INTEGER_1 WREADY
-    FIELD/output INTEGER_4 WSTRB
-    FIELD/output INTEGER_1 WVALID
+    FIELD/input Bit(1) ACLK
+    FIELD/output Bit(32) ARADDR
+    FIELD/output Bit(2) ARBURST
+    FIELD/output Bit(4) ARCACHE
+    FIELD/output Bit(1) ARESETN
+    FIELD/output Bit(12) ARID
+    FIELD/output Bit(4) ARLEN
+    FIELD/output Bit(2) ARLOCK
+    FIELD/output Bit(3) ARPROT
+    FIELD/output Bit(4) ARQOS
+    FIELD/input Bit(1) ARREADY
+    FIELD/output Bit(2) ARSIZE
+    FIELD/output Bit(1) ARVALID
+    FIELD/output Bit(32) AWADDR
+    FIELD/output Bit(2) AWBURST
+    FIELD/output Bit(4) AWCACHE
+    FIELD/output Bit(12) AWID
+    FIELD/output Bit(4) AWLEN
+    FIELD/output Bit(2) AWLOCK
+    FIELD/output Bit(3) AWPROT
+    FIELD/output Bit(4) AWQOS
+    FIELD/input Bit(1) AWREADY
+    FIELD/output Bit(2) AWSIZE
+    FIELD/output Bit(1) AWVALID
+    FIELD/input Bit(12) BID
+    FIELD/output Bit(1) BREADY
+    FIELD/input Bit(2) BRESP
+    FIELD/input Bit(1) BVALID
+    FIELD/input Bit(32) RDATA
+    FIELD/input Bit(12) RID
+    FIELD/input Bit(1) RLAST
+    FIELD/output Bit(1) RREADY
+    FIELD/input Bit(2) RRESP
+    FIELD/input Bit(1) RVALID
+    FIELD/output Bit(32) WDATA
+    FIELD/output Bit(12) WID
+    FIELD/output Bit(1) WLAST
+    FIELD/input Bit(1) WREADY
+    FIELD/output Bit(4) WSTRB
+    FIELD/output Bit(1) WVALID
 }
 INTERFACE l_ainterface_OC_Pps7ps {
-    FIELD/inout INTEGER_1 CLK
-    FIELD/inout INTEGER_1 PORB
-    FIELD/inout INTEGER_1 SRSTB
+    FIELD/inout Bit(1) CLK
+    FIELD/inout Bit(1) PORB
+    FIELD/inout Bit(1) SRSTB
 }
 INTERFACE l_ainterface_OC_Pps7saxiacp {
-    FIELD/input INTEGER_1 ACLK
-    FIELD/input INTEGER_32 ARADDR
-    FIELD/input INTEGER_2 ARBURST
-    FIELD/input INTEGER_4 ARCACHE
-    FIELD/output INTEGER_1 ARESETN
-    FIELD/input INTEGER_3 ARID
-    FIELD/input INTEGER_4 ARLEN
-    FIELD/input INTEGER_2 ARLOCK
-    FIELD/input INTEGER_3 ARPROT
-    FIELD/input INTEGER_4 ARQOS
-    FIELD/output INTEGER_1 ARREADY
-    FIELD/input INTEGER_2 ARSIZE
-    FIELD/input INTEGER_5 ARUSER
-    FIELD/input INTEGER_1 ARVALID
-    FIELD/input INTEGER_32 AWADDR
-    FIELD/input INTEGER_2 AWBURST
-    FIELD/input INTEGER_4 AWCACHE
-    FIELD/input INTEGER_3 AWID
-    FIELD/input INTEGER_4 AWLEN
-    FIELD/input INTEGER_2 AWLOCK
-    FIELD/input INTEGER_3 AWPROT
-    FIELD/input INTEGER_4 AWQOS
-    FIELD/output INTEGER_1 AWREADY
-    FIELD/input INTEGER_2 AWSIZE
-    FIELD/input INTEGER_5 AWUSER
-    FIELD/input INTEGER_1 AWVALID
-    FIELD/output INTEGER_3 BID
-    FIELD/input INTEGER_1 BREADY
-    FIELD/output INTEGER_2 BRESP
-    FIELD/output INTEGER_1 BVALID
-    FIELD/output INTEGER_64 RDATA
-    FIELD/output INTEGER_3 RID
-    FIELD/output INTEGER_1 RLAST
-    FIELD/input INTEGER_1 RREADY
-    FIELD/output INTEGER_2 RRESP
-    FIELD/output INTEGER_1 RVALID
-    FIELD/input INTEGER_64 WDATA
-    FIELD/input INTEGER_3 WID
-    FIELD/input INTEGER_1 WLAST
-    FIELD/output INTEGER_1 WREADY
-    FIELD/input INTEGER_8 WSTRB
-    FIELD/input INTEGER_1 WVALID
+    FIELD/input Bit(1) ACLK
+    FIELD/input Bit(32) ARADDR
+    FIELD/input Bit(2) ARBURST
+    FIELD/input Bit(4) ARCACHE
+    FIELD/output Bit(1) ARESETN
+    FIELD/input Bit(3) ARID
+    FIELD/input Bit(4) ARLEN
+    FIELD/input Bit(2) ARLOCK
+    FIELD/input Bit(3) ARPROT
+    FIELD/input Bit(4) ARQOS
+    FIELD/output Bit(1) ARREADY
+    FIELD/input Bit(2) ARSIZE
+    FIELD/input Bit(5) ARUSER
+    FIELD/input Bit(1) ARVALID
+    FIELD/input Bit(32) AWADDR
+    FIELD/input Bit(2) AWBURST
+    FIELD/input Bit(4) AWCACHE
+    FIELD/input Bit(3) AWID
+    FIELD/input Bit(4) AWLEN
+    FIELD/input Bit(2) AWLOCK
+    FIELD/input Bit(3) AWPROT
+    FIELD/input Bit(4) AWQOS
+    FIELD/output Bit(1) AWREADY
+    FIELD/input Bit(2) AWSIZE
+    FIELD/input Bit(5) AWUSER
+    FIELD/input Bit(1) AWVALID
+    FIELD/output Bit(3) BID
+    FIELD/input Bit(1) BREADY
+    FIELD/output Bit(2) BRESP
+    FIELD/output Bit(1) BVALID
+    FIELD/output Bit(64) RDATA
+    FIELD/output Bit(3) RID
+    FIELD/output Bit(1) RLAST
+    FIELD/input Bit(1) RREADY
+    FIELD/output Bit(2) RRESP
+    FIELD/output Bit(1) RVALID
+    FIELD/input Bit(64) WDATA
+    FIELD/input Bit(3) WID
+    FIELD/input Bit(1) WLAST
+    FIELD/output Bit(1) WREADY
+    FIELD/input Bit(8) WSTRB
+    FIELD/input Bit(1) WVALID
 }
 INTERFACE l_ainterface_OC_Pps7saxigp {
-    FIELD/input INTEGER_1 ACLK
-    FIELD/input INTEGER_32 ARADDR
-    FIELD/input INTEGER_2 ARBURST
-    FIELD/input INTEGER_4 ARCACHE
-    FIELD/output INTEGER_1 ARESETN
-    FIELD/input INTEGER_6 ARID
-    FIELD/input INTEGER_4 ARLEN
-    FIELD/input INTEGER_2 ARLOCK
-    FIELD/input INTEGER_3 ARPROT
-    FIELD/input INTEGER_4 ARQOS
-    FIELD/output INTEGER_1 ARREADY
-    FIELD/input INTEGER_2 ARSIZE
-    FIELD/input INTEGER_1 ARVALID
-    FIELD/input INTEGER_32 AWADDR
-    FIELD/input INTEGER_2 AWBURST
-    FIELD/input INTEGER_4 AWCACHE
-    FIELD/input INTEGER_6 AWID
-    FIELD/input INTEGER_4 AWLEN
-    FIELD/input INTEGER_2 AWLOCK
-    FIELD/input INTEGER_3 AWPROT
-    FIELD/input INTEGER_4 AWQOS
-    FIELD/output INTEGER_1 AWREADY
-    FIELD/input INTEGER_2 AWSIZE
-    FIELD/input INTEGER_1 AWVALID
-    FIELD/output INTEGER_6 BID
-    FIELD/input INTEGER_1 BREADY
-    FIELD/output INTEGER_2 BRESP
-    FIELD/output INTEGER_1 BVALID
-    FIELD/output INTEGER_32 RDATA
-    FIELD/output INTEGER_6 RID
-    FIELD/output INTEGER_1 RLAST
-    FIELD/input INTEGER_1 RREADY
-    FIELD/output INTEGER_2 RRESP
-    FIELD/output INTEGER_1 RVALID
-    FIELD/input INTEGER_32 WDATA
-    FIELD/input INTEGER_6 WID
-    FIELD/input INTEGER_1 WLAST
-    FIELD/output INTEGER_1 WREADY
-    FIELD/input INTEGER_4 WSTRB
-    FIELD/input INTEGER_1 WVALID
+    FIELD/input Bit(1) ACLK
+    FIELD/input Bit(32) ARADDR
+    FIELD/input Bit(2) ARBURST
+    FIELD/input Bit(4) ARCACHE
+    FIELD/output Bit(1) ARESETN
+    FIELD/input Bit(6) ARID
+    FIELD/input Bit(4) ARLEN
+    FIELD/input Bit(2) ARLOCK
+    FIELD/input Bit(3) ARPROT
+    FIELD/input Bit(4) ARQOS
+    FIELD/output Bit(1) ARREADY
+    FIELD/input Bit(2) ARSIZE
+    FIELD/input Bit(1) ARVALID
+    FIELD/input Bit(32) AWADDR
+    FIELD/input Bit(2) AWBURST
+    FIELD/input Bit(4) AWCACHE
+    FIELD/input Bit(6) AWID
+    FIELD/input Bit(4) AWLEN
+    FIELD/input Bit(2) AWLOCK
+    FIELD/input Bit(3) AWPROT
+    FIELD/input Bit(4) AWQOS
+    FIELD/output Bit(1) AWREADY
+    FIELD/input Bit(2) AWSIZE
+    FIELD/input Bit(1) AWVALID
+    FIELD/output Bit(6) BID
+    FIELD/input Bit(1) BREADY
+    FIELD/output Bit(2) BRESP
+    FIELD/output Bit(1) BVALID
+    FIELD/output Bit(32) RDATA
+    FIELD/output Bit(6) RID
+    FIELD/output Bit(1) RLAST
+    FIELD/input Bit(1) RREADY
+    FIELD/output Bit(2) RRESP
+    FIELD/output Bit(1) RVALID
+    FIELD/input Bit(32) WDATA
+    FIELD/input Bit(6) WID
+    FIELD/input Bit(1) WLAST
+    FIELD/output Bit(1) WREADY
+    FIELD/input Bit(4) WSTRB
+    FIELD/input Bit(1) WVALID
 }
 INTERFACE l_ainterface_OC_Pps7saxihp {
-    FIELD/input INTEGER_1 ACLK
-    FIELD/input INTEGER_32 ARADDR
-    FIELD/input INTEGER_2 ARBURST
-    FIELD/input INTEGER_4 ARCACHE
-    FIELD/output INTEGER_1 ARESETN
-    FIELD/input INTEGER_6 ARID
-    FIELD/input INTEGER_4 ARLEN
-    FIELD/input INTEGER_2 ARLOCK
-    FIELD/input INTEGER_3 ARPROT
-    FIELD/input INTEGER_4 ARQOS
-    FIELD/output INTEGER_1 ARREADY
-    FIELD/input INTEGER_2 ARSIZE
-    FIELD/input INTEGER_1 ARVALID
-    FIELD/input INTEGER_32 AWADDR
-    FIELD/input INTEGER_2 AWBURST
-    FIELD/input INTEGER_4 AWCACHE
-    FIELD/input INTEGER_6 AWID
-    FIELD/input INTEGER_4 AWLEN
-    FIELD/input INTEGER_2 AWLOCK
-    FIELD/input INTEGER_3 AWPROT
-    FIELD/input INTEGER_4 AWQOS
-    FIELD/output INTEGER_1 AWREADY
-    FIELD/input INTEGER_2 AWSIZE
-    FIELD/input INTEGER_1 AWVALID
-    FIELD/output INTEGER_6 BID
-    FIELD/input INTEGER_1 BREADY
-    FIELD/output INTEGER_2 BRESP
-    FIELD/output INTEGER_1 BVALID
-    FIELD/output INTEGER_3 RACOUNT
-    FIELD/output INTEGER_8 RCOUNT
-    FIELD/output INTEGER_64 RDATA
-    FIELD/input INTEGER_1 RDISSUECAP1EN
-    FIELD/output INTEGER_6 RID
-    FIELD/output INTEGER_1 RLAST
-    FIELD/input INTEGER_1 RREADY
-    FIELD/output INTEGER_2 RRESP
-    FIELD/output INTEGER_1 RVALID
-    FIELD/output INTEGER_6 WACOUNT
-    FIELD/output INTEGER_8 WCOUNT
-    FIELD/input INTEGER_64 WDATA
-    FIELD/input INTEGER_6 WID
-    FIELD/input INTEGER_1 WLAST
-    FIELD/output INTEGER_1 WREADY
-    FIELD/input INTEGER_1 WRISSUECAP1EN
-    FIELD/input INTEGER_8 WSTRB
-    FIELD/input INTEGER_1 WVALID
+    FIELD/input Bit(1) ACLK
+    FIELD/input Bit(32) ARADDR
+    FIELD/input Bit(2) ARBURST
+    FIELD/input Bit(4) ARCACHE
+    FIELD/output Bit(1) ARESETN
+    FIELD/input Bit(6) ARID
+    FIELD/input Bit(4) ARLEN
+    FIELD/input Bit(2) ARLOCK
+    FIELD/input Bit(3) ARPROT
+    FIELD/input Bit(4) ARQOS
+    FIELD/output Bit(1) ARREADY
+    FIELD/input Bit(2) ARSIZE
+    FIELD/input Bit(1) ARVALID
+    FIELD/input Bit(32) AWADDR
+    FIELD/input Bit(2) AWBURST
+    FIELD/input Bit(4) AWCACHE
+    FIELD/input Bit(6) AWID
+    FIELD/input Bit(4) AWLEN
+    FIELD/input Bit(2) AWLOCK
+    FIELD/input Bit(3) AWPROT
+    FIELD/input Bit(4) AWQOS
+    FIELD/output Bit(1) AWREADY
+    FIELD/input Bit(2) AWSIZE
+    FIELD/input Bit(1) AWVALID
+    FIELD/output Bit(6) BID
+    FIELD/input Bit(1) BREADY
+    FIELD/output Bit(2) BRESP
+    FIELD/output Bit(1) BVALID
+    FIELD/output Bit(3) RACOUNT
+    FIELD/output Bit(8) RCOUNT
+    FIELD/output Bit(64) RDATA
+    FIELD/input Bit(1) RDISSUECAP1EN
+    FIELD/output Bit(6) RID
+    FIELD/output Bit(1) RLAST
+    FIELD/input Bit(1) RREADY
+    FIELD/output Bit(2) RRESP
+    FIELD/output Bit(1) RVALID
+    FIELD/output Bit(6) WACOUNT
+    FIELD/output Bit(8) WCOUNT
+    FIELD/input Bit(64) WDATA
+    FIELD/input Bit(6) WID
+    FIELD/input Bit(1) WLAST
+    FIELD/output Bit(1) WREADY
+    FIELD/input Bit(1) WRISSUECAP1EN
+    FIELD/input Bit(8) WSTRB
+    FIELD/input Bit(1) WVALID
 }
 INTERFACE l_ainterface_OC_ZynqClock {
-    FIELD/inout INTEGER_15 DDR_Addr
-    FIELD/inout INTEGER_3 DDR_BankAddr
-    FIELD/inout INTEGER_1 DDR_CAS_n
-    FIELD/inout INTEGER_1 DDR_CKE
-    FIELD/inout INTEGER_1 DDR_Clk_n
-    FIELD/inout INTEGER_1 DDR_Clk_p
-    FIELD/inout INTEGER_1 DDR_CS_n
-    FIELD/inout INTEGER_4 DDR_DM
-    FIELD/inout INTEGER_32 DDR_DQ
-    FIELD/inout INTEGER_4 DDR_DQS_n
-    FIELD/inout INTEGER_4 DDR_DQS_p
-    FIELD/inout INTEGER_1 DDR_DRSTB
-    FIELD/inout INTEGER_1 DDR_ODT
-    FIELD/inout INTEGER_1 DDR_RAS_n
-    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrn
-    FIELD/inout INTEGER_1 FIXED_IO_ddr_vrp
-    FIELD/inout INTEGER_1 DDR_WEB
-    FIELD/inout INTEGER_1 FIXED_IO_ps_clk
-    FIELD/inout INTEGER_1 FIXED_IO_ps_porb
-    FIELD/inout INTEGER_1 FIXED_IO_ps_srstb
+    FIELD/inout Bit(15) DDR_Addr
+    FIELD/inout Bit(3) DDR_BankAddr
+    FIELD/inout Bit(1) DDR_CAS_n
+    FIELD/inout Bit(1) DDR_CKE
+    FIELD/inout Bit(1) DDR_Clk_n
+    FIELD/inout Bit(1) DDR_Clk_p
+    FIELD/inout Bit(1) DDR_CS_n
+    FIELD/inout Bit(4) DDR_DM
+    FIELD/inout Bit(32) DDR_DQ
+    FIELD/inout Bit(4) DDR_DQS_n
+    FIELD/inout Bit(4) DDR_DQS_p
+    FIELD/inout Bit(1) DDR_DRSTB
+    FIELD/inout Bit(1) DDR_ODT
+    FIELD/inout Bit(1) DDR_RAS_n
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrn
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrp
+    FIELD/inout Bit(1) DDR_WEB
+    FIELD/inout Bit(1) FIXED_IO_ps_clk
+    FIELD/inout Bit(1) FIXED_IO_ps_porb
+    FIELD/inout Bit(1) FIXED_IO_ps_srstb
 }
 INTERFACE l_ainterface_OC_ZynqInterrupt {
-    FIELD/input INTEGER_1 interrupt
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
+    FIELD/input Bit(1) interrupt
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
 }
 INTERFACE l_ainterface_OC_ZynqInterruptT {
-    FIELD/output INTEGER_1 interrupt
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
+    FIELD/output Bit(1) interrupt
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
@@ -477,15 +477,15 @@ MODULE P7Wrap {
     FIELD ClockTop pclockTop
     INTERFACE l_ainterface_OC_Pps7m M
     INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    METHOD/Action MAXIGP0_I$B__ENA ( INTEGER_12 id , INTEGER_2 resp ) if ((pps$MAXIGP0BREADY)) {
-        LET INTEGER_12 :pps$MAXIGP0BID = MAXIGP0_I$B$id
-        LET INTEGER_2 :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
+    METHOD/Action MAXIGP0_I$B__ENA ( Bit(12) id , Bit(2) resp ) if ((pps$MAXIGP0BREADY)) {
+        LET Bit(12) :pps$MAXIGP0BID = MAXIGP0_I$B$id
+        LET Bit(2) :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
-    METHOD/Action MAXIGP0_I$R__ENA ( INTEGER_32 data , INTEGER_12 id , INTEGER_1 last , INTEGER_2 resp ) if ((pps$MAXIGP0RREADY)) {
-        LET INTEGER_32 :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
-        LET INTEGER_12 :pps$MAXIGP0RID = MAXIGP0_I$R$id
-        LET INTEGER_1 :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
-        LET INTEGER_2 :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
+    METHOD/Action MAXIGP0_I$R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp ) if ((pps$MAXIGP0RREADY)) {
+        LET Bit(32) :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
+        LET Bit(12) :pps$MAXIGP0RID = MAXIGP0_I$R$id
+        LET Bit(1) :pps$MAXIGP0RLAST = MAXIGP0_I$R$last
+        LET Bit(2) :pps$MAXIGP0RRESP = MAXIGP0_I$R$resp
     }
     METHOD/Rule/Action RULE$gp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
         CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
@@ -497,39 +497,39 @@ MODULE P7Wrap {
         CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
     }
     METHOD/Rule/Action RULE$init__ENA {
-        LET INTEGER_1 :pps$FPGAIDLEN = 1
-        LET INTEGER_1 :pps$MAXIGP0ACLK = __defaultClock
-        LET INTEGER_1 :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
-        LET INTEGER_1 :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
-        LET INTEGER_1 :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
-        LET INTEGER_1 :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
-        LET INTEGER_1 :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
-        LET INTEGER_15 :DDR_Addr = pps$DDRA
-        LET INTEGER_3 :DDR_BankAddr = pps$DDRBA
-        LET INTEGER_1 :DDR_CAS_n = pps$DDRCASB
-        LET INTEGER_1 :DDR_CKE = pps$DDRCKE
-        LET INTEGER_1 :DDR_Clk_n = pps$DDRCKN
-        LET INTEGER_1 :DDR_Clk_p = pps$DDRCKP
-        LET INTEGER_1 :DDR_CS_n = pps$DDRCSB
-        LET INTEGER_4 :DDR_DM = pps$DDRDM
-        LET INTEGER_32 :DDR_DQ = pps$DDRDQ
-        LET INTEGER_4 :DDR_DQS_n = pps$DDRDQSN
-        LET INTEGER_4 :DDR_DQS_p = pps$DDRDQSP
-        LET INTEGER_1 :DDR_DRSTB = pps$DDRDRSTB
-        LET INTEGER_1 :DDR_ODT = pps$DDRODT
-        LET INTEGER_1 :DDR_RAS_n = pps$DDRRASB
-        LET INTEGER_1 :FIXED_IO_ddr_vrn = pps$DDRVRN
-        LET INTEGER_1 :FIXED_IO_ddr_vrp = pps$DDRVRP
-        LET INTEGER_1 :DDR_WEB = pps$DDRWEB
-        LET INTEGER_1 :FIXED_IO_ps_clk = pps$PSCLK
-        LET INTEGER_1 :FIXED_IO_ps_porb = pps$PSPORB
-        LET INTEGER_1 :FIXED_IO_ps_srstb = pps$PSSRSTB
-        LET INTEGER_4 :pps$DDRARB = 0
-        LET INTEGER_20 :pps$IRQF2P = intr$interrupt
-        LET INTEGER_1 :__defaultClock = intr$CLK
-        LET INTEGER_1 :__defaultnReset = intr$nRST
-        LET INTEGER_1 :pclockTop$CLK = __defaultClock
-        LET INTEGER_1 :pclockTop$nRST = __defaultnReset
+        LET Bit(1) :pps$FPGAIDLEN = 1
+        LET Bit(1) :pps$MAXIGP0ACLK = __defaultClock
+        LET Bit(1) :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
+        LET Bit(1) :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
+        LET Bit(1) :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
+        LET Bit(1) :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
+        LET Bit(1) :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
+        LET Bit(15) :DDR_Addr = pps$DDRA
+        LET Bit(3) :DDR_BankAddr = pps$DDRBA
+        LET Bit(1) :DDR_CAS_n = pps$DDRCASB
+        LET Bit(1) :DDR_CKE = pps$DDRCKE
+        LET Bit(1) :DDR_Clk_n = pps$DDRCKN
+        LET Bit(1) :DDR_Clk_p = pps$DDRCKP
+        LET Bit(1) :DDR_CS_n = pps$DDRCSB
+        LET Bit(4) :DDR_DM = pps$DDRDM
+        LET Bit(32) :DDR_DQ = pps$DDRDQ
+        LET Bit(4) :DDR_DQS_n = pps$DDRDQSN
+        LET Bit(4) :DDR_DQS_p = pps$DDRDQSP
+        LET Bit(1) :DDR_DRSTB = pps$DDRDRSTB
+        LET Bit(1) :DDR_ODT = pps$DDRODT
+        LET Bit(1) :DDR_RAS_n = pps$DDRRASB
+        LET Bit(1) :FIXED_IO_ddr_vrn = pps$DDRVRN
+        LET Bit(1) :FIXED_IO_ddr_vrp = pps$DDRVRP
+        LET Bit(1) :DDR_WEB = pps$DDRWEB
+        LET Bit(1) :FIXED_IO_ps_clk = pps$PSCLK
+        LET Bit(1) :FIXED_IO_ps_porb = pps$PSPORB
+        LET Bit(1) :FIXED_IO_ps_srstb = pps$PSSRSTB
+        LET Bit(4) :pps$DDRARB = 0
+        LET Bit(20) :pps$IRQF2P = intr$interrupt
+        LET Bit(1) :__defaultClock = intr$CLK
+        LET Bit(1) :__defaultnReset = intr$nRST
+        LET Bit(1) :pclockTop$CLK = __defaultClock
+        LET Bit(1) :pclockTop$nRST = __defaultnReset
     }
 }
 MODULE ZynqTop {
@@ -544,14 +544,14 @@ MODULE ZynqTop {
     INTERFACE l_ainterface_OC_ZynqClock _
     INTERFACE l_ainterface_OC_Pps7m M
     METHOD/Rule/Action RULE$init__ENA {
-        LET INTEGER_1 :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
-        LET INTEGER_1 :__defaultClock = ps7_fclk_0_c$O
-        LET INTEGER_1 :ps7_freset_0_r$I = ps7_ps7_foo$FCLK$RESETN
-        LET INTEGER_1 :__defaultnReset = ps7_freset_0_r$O
-        LET INTEGER_1 :ps7_ps7_foo$intr$interrupt = test$interrupt
-        LET INTEGER_1 :ps7_ps7_foo$intr$CLK = __defaultClock
-        LET INTEGER_1 :ps7_ps7_foo$intr$nRST = __defaultnReset
-        LET INTEGER_1 :test$CLK = __defaultClock
-        LET INTEGER_1 :test$nRST = __defaultnReset
+        LET Bit(1) :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
+        LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
+        LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLK$RESETN
+        LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
+        LET Bit(1) :ps7_ps7_foo$intr$interrupt = test$interrupt
+        LET Bit(1) :ps7_ps7_foo$intr$CLK = __defaultClock
+        LET Bit(1) :ps7_ps7_foo$intr$nRST = __defaultnReset
+        LET Bit(1) :test$CLK = __defaultClock
+        LET Bit(1) :test$nRST = __defaultnReset
     }
 }

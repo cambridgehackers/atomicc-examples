@@ -1,10 +1,10 @@
 EMODULE l_struct_OC_NOCData {
-    FIELD INTEGER_128 data
+    FIELD Bit(128) data
 }
 EMODULE l_struct_OC_ValuePair {
-    FIELD INTEGER_32 a
-    FIELD INTEGER_32 b
-    FIELD/Count 20  INTEGER_32 c
+    FIELD Bit(32) a
+    FIELD Bit(32) b
+    FIELD/Count 20  Bit(32) c
 }
 EMODULE l_class_OC_IVectorTest {
     FIELD IVector ivector
@@ -19,10 +19,10 @@ INTERFACE l_ainterface_OC_PipeIn {
     METHOD/Action enq__ENA ( l_struct_OC_ValuePair v )
 }
 INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , INTEGER_16 length )
+    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
 }
 INTERFACE l_ainterface_OC_PipeIn_OC_1 {
-    METHOD/Action enq__ENA ( INTEGER_704 v )
+    METHOD/Action enq__ENA ( Bit(704) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
@@ -30,7 +30,7 @@ INTERFACE l_ainterface_OC_PipeOut {
 }
 INTERFACE l_ainterface_OC_PipeOut_OC_2 {
     METHOD/Action deq__ENA
-    METHOD first INTEGER_704
+    METHOD first Bit(704)
 }
 EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
@@ -65,7 +65,7 @@ MODULE Fifo1 {
     METHOD out$first l_struct_OC_ValuePair = ((out$first$retval)) {
         ALLOCA l_struct_OC_ValuePair out$first$retval
         CALL :fifo$out$first{}
-        LET INTEGER_704 :out$first$retval = fifo$out$first
+        LET Bit(704) :out$first$retval = fifo$out$first
     }
 }
 MODULE FifoPong {
@@ -73,7 +73,7 @@ MODULE FifoPong {
     INTERFACE l_ainterface_OC_PipeOut out
     FIELD Fifo1 element1
     FIELD Fifo1 element2
-    FIELD INTEGER_1 pong
+    FIELD Bit(1) pong
     METHOD/Action in$enq__ENA ( l_struct_OC_ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
         CALL/Action ((pong) ^ 1):element1$in$enq__ENA{in$enq$v}

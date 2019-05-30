@@ -1,99 +1,99 @@
 INTERFACE l_ainterface_OC_ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
-    FIELD/input INTEGER_1 CLK
-    FIELD/input INTEGER_1 nRST
-    FIELD/output INTEGER_1 clockOut
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) clockOut
 }
 INTERFACE l_ainterface_OC_MResetInverterResetInverter {
-    FIELD/input INTEGER_1 RESET_IN
-    FIELD/output INTEGER_1 RESET_OUT
+    FIELD/input Bit(1) RESET_IN
+    FIELD/output Bit(1) RESET_OUT
 }
 INTERFACE l_ainterface_OC_MbufgBUFG {
-    FIELD/input INTEGER_1 I
-    FIELD/output INTEGER_1 O
+    FIELD/input Bit(1) I
+    FIELD/output Bit(1) O
 }
 INTERFACE l_ainterface_OC_Mmcme2MMCME2_ADV {
-    FIELD/Ptr/parameter INTEGER_8 BANDWIDTH
-    FIELD/input INTEGER_1 CLKFBIN
-    FIELD/output INTEGER_1 CLKFBOUT
-    FIELD/output INTEGER_1 CLKFBOUTB
+    FIELD/Ptr/parameter Bit(8) BANDWIDTH
+    FIELD/input Bit(1) CLKFBIN
+    FIELD/output Bit(1) CLKFBOUT
+    FIELD/output Bit(1) CLKFBOUTB
     FIELD/parameter FLOAT CLKFBOUT_MULT_F
     FIELD/parameter FLOAT CLKFBOUT_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKFBOUT_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKFBSTOPPED
-    FIELD/input INTEGER_1 CLKIN1
+    FIELD/Ptr/parameter Bit(8) CLKFBOUT_USE_FINE_PS
+    FIELD/output Bit(1) CLKFBSTOPPED
+    FIELD/input Bit(1) CLKIN1
     FIELD/parameter FLOAT CLKIN1_PERIOD
-    FIELD/input INTEGER_1 CLKIN2
+    FIELD/input Bit(1) CLKIN2
     FIELD/parameter FLOAT CLKIN2_PERIOD
-    FIELD/input INTEGER_1 CLKINSEL
-    FIELD/output INTEGER_1 CLKINSTOPPED
-    FIELD/output INTEGER_1 CLKOUT0
-    FIELD/output INTEGER_1 CLKOUT0B
+    FIELD/input Bit(1) CLKINSEL
+    FIELD/output Bit(1) CLKINSTOPPED
+    FIELD/output Bit(1) CLKOUT0
+    FIELD/output Bit(1) CLKOUT0B
     FIELD/parameter FLOAT CLKOUT0_DIVIDE_F
     FIELD/parameter FLOAT CLKOUT0_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT0_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT0_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT1
-    FIELD/output INTEGER_1 CLKOUT1B
-    FIELD/parameter INTEGER_32 CLKOUT1_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT0_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT1
+    FIELD/output Bit(1) CLKOUT1B
+    FIELD/parameter Bit(32) CLKOUT1_DIVIDE
     FIELD/parameter FLOAT CLKOUT1_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT1_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT1_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT2
-    FIELD/output INTEGER_1 CLKOUT2B
-    FIELD/parameter INTEGER_32 CLKOUT2_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT1_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT2
+    FIELD/output Bit(1) CLKOUT2B
+    FIELD/parameter Bit(32) CLKOUT2_DIVIDE
     FIELD/parameter FLOAT CLKOUT2_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT2_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT2_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT3
-    FIELD/output INTEGER_1 CLKOUT3B
-    FIELD/parameter INTEGER_32 CLKOUT3_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT2_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT3
+    FIELD/output Bit(1) CLKOUT3B
+    FIELD/parameter Bit(32) CLKOUT3_DIVIDE
     FIELD/parameter FLOAT CLKOUT3_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT3_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT3_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT4
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_CASCADE
-    FIELD/parameter INTEGER_32 CLKOUT4_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT3_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT4
+    FIELD/Ptr/parameter Bit(8) CLKOUT4_CASCADE
+    FIELD/parameter Bit(32) CLKOUT4_DIVIDE
     FIELD/parameter FLOAT CLKOUT4_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT4_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT4_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT5
-    FIELD/parameter INTEGER_32 CLKOUT5_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT4_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT5
+    FIELD/parameter Bit(32) CLKOUT5_DIVIDE
     FIELD/parameter FLOAT CLKOUT5_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT5_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT5_USE_FINE_PS
-    FIELD/output INTEGER_1 CLKOUT6
-    FIELD/parameter INTEGER_32 CLKOUT6_DIVIDE
+    FIELD/Ptr/parameter Bit(8) CLKOUT5_USE_FINE_PS
+    FIELD/output Bit(1) CLKOUT6
+    FIELD/parameter Bit(32) CLKOUT6_DIVIDE
     FIELD/parameter FLOAT CLKOUT6_DUTY_CYCLE
     FIELD/parameter FLOAT CLKOUT6_PHASE
-    FIELD/Ptr/parameter INTEGER_8 CLKOUT6_USE_FINE_PS
-    FIELD/Ptr/parameter INTEGER_8 COMPENSATION
-    FIELD/input INTEGER_7 DADDR
-    FIELD/input INTEGER_1 DCLK
-    FIELD/input INTEGER_1 DEN
-    FIELD/input INTEGER_16 DI
-    FIELD/parameter INTEGER_32 DIVCLK_DIVIDE
-    FIELD/output INTEGER_16 DO
-    FIELD/output INTEGER_1 DRDY
-    FIELD/input INTEGER_1 DWE
-    FIELD/parameter INTEGER_32 IS_CLKINSEL_INVERTED
-    FIELD/parameter INTEGER_32 IS_PSEN_INVERTED
-    FIELD/parameter INTEGER_32 IS_PSINCDEC_INVERTED
-    FIELD/parameter INTEGER_32 IS_PWRDWN_INVERTED
-    FIELD/parameter INTEGER_32 IS_RST_INVERTED
-    FIELD/output INTEGER_1 LOCKED
-    FIELD/input INTEGER_1 PSCLK
-    FIELD/output INTEGER_1 PSDONE
-    FIELD/input INTEGER_1 PSEN
-    FIELD/input INTEGER_1 PSINCDEC
-    FIELD/input INTEGER_1 PWRDWN
+    FIELD/Ptr/parameter Bit(8) CLKOUT6_USE_FINE_PS
+    FIELD/Ptr/parameter Bit(8) COMPENSATION
+    FIELD/input Bit(7) DADDR
+    FIELD/input Bit(1) DCLK
+    FIELD/input Bit(1) DEN
+    FIELD/input Bit(16) DI
+    FIELD/parameter Bit(32) DIVCLK_DIVIDE
+    FIELD/output Bit(16) DO
+    FIELD/output Bit(1) DRDY
+    FIELD/input Bit(1) DWE
+    FIELD/parameter Bit(32) IS_CLKINSEL_INVERTED
+    FIELD/parameter Bit(32) IS_PSEN_INVERTED
+    FIELD/parameter Bit(32) IS_PSINCDEC_INVERTED
+    FIELD/parameter Bit(32) IS_PWRDWN_INVERTED
+    FIELD/parameter Bit(32) IS_RST_INVERTED
+    FIELD/output Bit(1) LOCKED
+    FIELD/input Bit(1) PSCLK
+    FIELD/output Bit(1) PSDONE
+    FIELD/input Bit(1) PSEN
+    FIELD/input Bit(1) PSINCDEC
+    FIELD/input Bit(1) PWRDWN
     FIELD/parameter FLOAT REF_JITTER1
     FIELD/parameter FLOAT REF_JITTER2
-    FIELD/input INTEGER_1 RST
-    FIELD/Ptr/parameter INTEGER_8 SS_EN
-    FIELD/Ptr/parameter INTEGER_8 SS_MODE
-    FIELD/parameter INTEGER_32 SS_MOD_PERIOD
-    FIELD/Ptr/parameter INTEGER_8 STARTUP_WAIT
+    FIELD/input Bit(1) RST
+    FIELD/Ptr/parameter Bit(8) SS_EN
+    FIELD/Ptr/parameter Bit(8) SS_MODE
+    FIELD/parameter Bit(32) SS_MOD_PERIOD
+    FIELD/Ptr/parameter Bit(8) STARTUP_WAIT
 }
 EMODULE BUFG {
     INTERFACE l_ainterface_OC_MbufgBUFG _
@@ -115,23 +115,23 @@ MODULE ClockTop {
     FIELD BUFG clkbuf
     FIELD BUFG clkbuf0
     METHOD/Rule/Action RULE$init__ENA {
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN2 = 0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKINSEL = 1
-        LET INTEGER_7 :ps7_clockGen_pll$DADDR = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DEN = 0
-        LET INTEGER_16 :ps7_clockGen_pll$DI = 0
-        LET INTEGER_1 :ps7_clockGen_pll$DWE = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSCLK = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSEN = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PSINCDEC = 0
-        LET INTEGER_1 :ps7_clockGen_pll$PWRDWN = 0
-        LET INTEGER_1 :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
-        LET INTEGER_1 :clockOut = clkbuf0$O
-        LET INTEGER_1 :ps7_clockGen_pll$CLKFBIN = clkbuf$O
-        LET INTEGER_1 :rinverter$RESET_IN = nRST
-        LET INTEGER_1 :ps7_clockGen_pll$RST = rinverter$RESET_OUT
-        LET INTEGER_1 :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
-        LET INTEGER_1 :ps7_clockGen_pll$CLKIN1 = CLK
+        LET Bit(1) :ps7_clockGen_pll$CLKIN2 = 0
+        LET Bit(1) :ps7_clockGen_pll$CLKINSEL = 1
+        LET Bit(7) :ps7_clockGen_pll$DADDR = 0
+        LET Bit(1) :ps7_clockGen_pll$DCLK = 0
+        LET Bit(1) :ps7_clockGen_pll$DEN = 0
+        LET Bit(16) :ps7_clockGen_pll$DI = 0
+        LET Bit(1) :ps7_clockGen_pll$DWE = 0
+        LET Bit(1) :ps7_clockGen_pll$PSCLK = 0
+        LET Bit(1) :ps7_clockGen_pll$PSEN = 0
+        LET Bit(1) :ps7_clockGen_pll$PSINCDEC = 0
+        LET Bit(1) :ps7_clockGen_pll$PWRDWN = 0
+        LET Bit(1) :clkbuf$I = ps7_clockGen_pll$CLKFBOUT
+        LET Bit(1) :clockOut = clkbuf0$O
+        LET Bit(1) :ps7_clockGen_pll$CLKFBIN = clkbuf$O
+        LET Bit(1) :rinverter$RESET_IN = nRST
+        LET Bit(1) :ps7_clockGen_pll$RST = rinverter$RESET_OUT
+        LET Bit(1) :clkbuf0$I = ps7_clockGen_pll$CLKOUT0
+        LET Bit(1) :ps7_clockGen_pll$CLKIN1 = CLK
     }
 }
