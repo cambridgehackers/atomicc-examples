@@ -1,29 +1,29 @@
-EMODULE l_struct_OC_EchoIndication_data {
+STRUCT l_struct_OC_EchoIndication_data {
     FIELD Bit(32) tag
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
 }
-EMODULE l_struct_OC_EchoRequest_data {
+STRUCT l_struct_OC_EchoRequest_data {
     FIELD Bit(32) tag
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
-EMODULE l_struct_OC_NOCData {
+STRUCT l_struct_OC_NOCData {
     FIELD Bit(128) data
 }
-EMODULE l_struct_OC_ValueType {
+STRUCT l_struct_OC_ValueType {
     FIELD Bit(32) a
     FIELD Bit(32) b
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
+STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
+STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
     FIELD Bit(32) meth
     FIELD Bit(32) v
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
+STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
     FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
 }
-EMODULE l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
+STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
     FIELD Bit(32) meth
     FIELD Bit(32) v
 }

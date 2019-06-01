@@ -1,19 +1,19 @@
-EMODULE l_struct_OC_AddrCount {
+STRUCT l_struct_OC_AddrCount {
     FIELD Bit(6) id
     FIELD Bit(4) count
     FIELD Bit(5) addr
 }
-EMODULE l_struct_OC_BusData {
+STRUCT l_struct_OC_BusData {
     FIELD Bit(32) data
 }
-EMODULE l_struct_OC_NOCData {
+STRUCT l_struct_OC_NOCData {
     FIELD Bit(128) data
 }
-EMODULE l_struct_OC_PortalInfo {
+STRUCT l_struct_OC_PortalInfo {
     FIELD Bit(1) last
     FIELD l_struct_OC_AddrCount ac
 }
-EMODULE l_struct_OC_ReadResp {
+STRUCT l_struct_OC_ReadResp {
     FIELD Bit(6) id
     FIELD Bit(32) data
 }

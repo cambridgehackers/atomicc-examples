@@ -1,4 +1,4 @@
-EMODULE l_struct_OC_NOCData {
+STRUCT l_struct_OC_NOCData {
     FIELD Bit(128) data
 }
 INTERFACE l_ainterface_OC_EchoIndication {

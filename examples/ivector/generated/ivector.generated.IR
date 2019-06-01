@@ -1,7 +1,7 @@
-EMODULE l_struct_OC_NOCData {
+STRUCT l_struct_OC_NOCData {
     FIELD Bit(128) data
 }
-EMODULE l_struct_OC_ValuePair {
+STRUCT l_struct_OC_ValuePair {
     FIELD Bit(32) a
     FIELD Bit(32) b
     FIELD Bit(32) c
