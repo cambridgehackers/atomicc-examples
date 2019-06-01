@@ -2,18 +2,16 @@
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [31:0]request$say$v,
     input wire request$say2__ENA,
     input wire [15:0]request$say2$a,
     input wire [15:0]request$say2$b,
     output wire request$say2__RDY,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$v,
     output wire request$say__RDY,
     input wire request$setLeds__ENA,
     input wire [7:0]request$setLeds$v,
     output wire request$setLeds__RDY,
-    output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$v,
     output wire indication$heard2__ENA,
     output wire [15:0]indication$heard2$a,
     output wire [15:0]indication$heard2$b,
@@ -24,6 +22,8 @@ module Echo (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard3$c,
     output wire [15:0]indication$heard3$d,
     input wire indication$heard3__RDY,
+    output wire indication$heard__ENA,
+    output wire [31:0]indication$heard$v,
     input wire indication$heard__RDY);
     reg [15:0]a_delay;
     reg [15:0]a_temp;

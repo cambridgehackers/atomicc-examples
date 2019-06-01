@@ -2,13 +2,13 @@
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [31:0]request$say$meth,
-    input wire [31:0]request$say$v,
     input wire request$say2__ENA,
     input wire [31:0]request$say2$meth,
     input wire [31:0]request$say2$v,
     output wire request$say2__RDY,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$meth,
+    input wire [31:0]request$say$v,
     output wire request$say__RDY,
     input wire swap$x2y__ENA,
     output wire swap$x2y__RDY,

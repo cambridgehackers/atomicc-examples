@@ -12,14 +12,14 @@
 //METAGUARD; RULE$swap2_rule; lEcho$swap$y2xnull__RDY;
 //METAINVOKE; RULE$swap_rule__ENA; :lEcho$swap$x2y__ENA;:lEcho$swap$y2x__ENA;
 //METAGUARD; RULE$swap_rule; lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
-//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
 //METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
 //METAGUARD; request$say2; lERO_test$request$say2__RDY;
+//METAINVOKE; request$say__ENA; :lERO_test$request$say__ENA;
 //METAGUARD; request$say; lERO_test$request$say__RDY;
 //METARULES; RULE$swap2_rule; RULE$swap_rule
-//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
 //METACONNECT; lERI$request$say2__RDY; lEcho$request$say2__RDY
+//METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
 //METACONNECT; lEIO$pipe$enq__ENA; lEII_test$pipe$enq__ENA
 //METACONNECT; lEIO$pipe$enq__RDY; lEII_test$pipe$enq__RDY
@@ -35,7 +35,7 @@
 //METAGUARD; RULE$delay_rule; !( busy_delay | ( !busy ) );
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;
 //METAGUARD; RULE$respond_rule; busy_delay & indication$heard__RDY;
-//METAEXCLUSIVE; request$say__ENA; request$say2__ENA
+//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
 //METAGUARD; request$say2; !busy;
 //METAGUARD; request$say; !busy;
 //METAGUARD; swap$x2y; 1;
@@ -65,9 +65,9 @@
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; EchoRequestOutput
 //METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
-//METAINVOKE; request$say__ENA; :pipe$enq__ENA;
-//METAEXCLUSIVE; request$say__ENA; request$say2__ENA
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
+//METAEXCLUSIVE; request$say2__ENA; request$say__ENA
 //METAGUARD; request$say2; pipe$enq__RDY;
+//METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
 `endif

@@ -1,5 +1,5 @@
 "[delay_rule:62]Echo\n" 
 "[respond_rule:70]Echo\n" 
-"[request$say:46]Echo %x %x\n" 1 32 
 "[request$say2:52]Echo\n" 
+"[request$say:46]Echo %x %x\n" 1 32 
 "[request$setLeds:59]Echo\n" 

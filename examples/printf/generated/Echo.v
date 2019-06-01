@@ -2,18 +2,16 @@
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [31:0]request$say$v,
     input wire request$say2__ENA,
     input wire [15:0]request$say2$a,
     input wire [15:0]request$say2$b,
     output wire request$say2__RDY,
+    input wire request$say__ENA,
+    input wire [31:0]request$say$v,
     output wire request$say__RDY,
     input wire request$setLeds__ENA,
     input wire [7:0]request$setLeds$v,
     output wire request$setLeds__RDY,
-    output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$v,
     output wire indication$heard2__ENA,
     output wire [15:0]indication$heard2$a,
     output wire [15:0]indication$heard2$b,
@@ -24,6 +22,8 @@ module Echo (input wire CLK, input wire nRST,
     output wire [31:0]indication$heard3$c,
     output wire [15:0]indication$heard3$d,
     input wire indication$heard3__RDY,
+    output wire indication$heard__ENA,
+    output wire [31:0]indication$heard$v,
     input wire indication$heard__RDY,
     output wire printfp$enq__ENA,
     output wire [127:0]printfp$enq$v,
@@ -53,9 +53,9 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard__ENA = busy_delay & ( v_type == 1 ) & printfp$enq__RDY;
-    assign printfp$enq$length = ( ( !( busy_delay | ( !( printfp$enq__RDY & busy ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( busy_delay & ( ( indication$heard__RDY & ( ( ( v_type == 1 ) & printfp$enq__RDY ) | ( ( !( v_type == 1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 1 ) | ( !( printfp$enq__RDY & indication$heard2__RDY ) ) ) ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say__ENA ) ) ) ) ? 16'd3 : 16'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say2__ENA ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( request$setLeds__ENA & printfp$enq__RDY ) ? 16'd2 : 16'd0 );
-    assign printfp$enq$v = ( ( !( busy_delay | ( !( printfp$enq__RDY & busy ) ) ) ) ? { 80'd0 , 16'd1 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( busy_delay & ( ( indication$heard__RDY & ( ( ( v_type == 1 ) & printfp$enq__RDY ) | ( ( !( v_type == 1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 1 ) | ( !( printfp$enq__RDY & indication$heard2__RDY ) ) ) ) ) ) ) ? { 80'd0 , 16'd2 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say__ENA ) ) ) ) ? { 47'd0 , busy_delay , clockReg , 16'd3 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say2__ENA ) ) ) ) ? { 80'd0 , 16'd4 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( request$setLeds__ENA & printfp$enq__RDY ) ? { 80'd0 , 16'd5 , 16'd32767 , 16'd5 } : 128'd0 );
-    assign printfp$enq__ENA = ( busy_delay & ( ( busy & ( ( indication$heard__RDY & ( ( v_type == 1 ) | indication$heard2__RDY | request$setLeds__ENA ) ) | ( ( !indication$heard__RDY ) & ( ( ( v_type == 1 ) & request$setLeds__ENA ) | ( ( !( v_type == 1 ) ) & ( indication$heard2__RDY | request$setLeds__ENA ) ) ) ) ) ) | ( ( !busy ) & ( ( indication$heard__RDY & ( ( v_type == 1 ) | indication$heard2__RDY | request$setLeds__ENA | request$say__ENA | request$say2__ENA ) ) | ( ( !indication$heard__RDY ) & ( ( ( v_type == 1 ) & ( request$setLeds__ENA | request$say__ENA | request$say2__ENA ) ) | ( ( !( v_type == 1 ) ) & ( indication$heard2__RDY | request$setLeds__ENA | request$say__ENA | request$say2__ENA ) ) ) ) ) ) ) ) | ( ( !busy_delay ) & ( busy | request$setLeds__ENA | request$say__ENA | request$say2__ENA ) );
+    assign printfp$enq$length = ( ( !( busy_delay | ( !( printfp$enq__RDY & busy ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( busy_delay & ( ( indication$heard__RDY & ( ( ( v_type == 1 ) & printfp$enq__RDY ) | ( ( !( v_type == 1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 1 ) | ( !( printfp$enq__RDY & indication$heard2__RDY ) ) ) ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say2__ENA ) ) ) ) ? 16'd2 : 16'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say__ENA ) ) ) ) ? 16'd3 : 16'd0 ) | ( ( request$setLeds__ENA & printfp$enq__RDY ) ? 16'd2 : 16'd0 );
+    assign printfp$enq$v = ( ( !( busy_delay | ( !( printfp$enq__RDY & busy ) ) ) ) ? { 80'd0 , 16'd1 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( busy_delay & ( ( indication$heard__RDY & ( ( ( v_type == 1 ) & printfp$enq__RDY ) | ( ( !( v_type == 1 ) ) & printfp$enq__RDY & indication$heard2__RDY ) ) ) | ( ( !indication$heard__RDY ) & ( !( ( v_type == 1 ) | ( !( printfp$enq__RDY & indication$heard2__RDY ) ) ) ) ) ) ) ? { 80'd0 , 16'd2 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say2__ENA ) ) ) ) ? { 80'd0 , 16'd3 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( !( busy | ( !( printfp$enq__RDY & request$say__ENA ) ) ) ) ? { 47'd0 , busy_delay , clockReg , 16'd4 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( request$setLeds__ENA & printfp$enq__RDY ) ? { 80'd0 , 16'd5 , 16'd32767 , 16'd5 } : 128'd0 );
+    assign printfp$enq__ENA = ( busy_delay & ( ( busy & ( ( indication$heard__RDY & ( ( v_type == 1 ) | indication$heard2__RDY | request$setLeds__ENA ) ) | ( ( !indication$heard__RDY ) & ( ( ( v_type == 1 ) & request$setLeds__ENA ) | ( ( !( v_type == 1 ) ) & ( indication$heard2__RDY | request$setLeds__ENA ) ) ) ) ) ) | ( ( !busy ) & ( ( indication$heard__RDY & ( ( v_type == 1 ) | indication$heard2__RDY | request$setLeds__ENA | request$say2__ENA | request$say__ENA ) ) | ( ( !indication$heard__RDY ) & ( ( ( v_type == 1 ) & ( request$setLeds__ENA | request$say2__ENA | request$say__ENA ) ) | ( ( !( v_type == 1 ) ) & ( indication$heard2__RDY | request$setLeds__ENA | request$say2__ENA | request$say__ENA ) ) ) ) ) ) ) ) | ( ( !busy_delay ) & ( busy | request$setLeds__ENA | request$say2__ENA | request$say__ENA ) );
     assign request$say2__RDY = !( busy | ( !printfp$enq__RDY ) );
     assign request$say__RDY = !( busy | ( !printfp$enq__RDY ) );
     assign request$setLeds__RDY = printfp$enq__RDY;
