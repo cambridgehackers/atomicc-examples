@@ -23,14 +23,9 @@ MODULE BRAM_PORT(addr, data) {
         INTERFACE BRAM_PORT(addr, data)
         FIELD data d
         METHOD/Action put ( Bool write,addr address,data datain ) {
-        If write then (
-        
-        STORE : d = datain ;
-        ) else (
-            Retv
-        ) as retval
 
-        Ret #retval}
+        STORE ( write ) : d = datain ;
+        }
         METHOD read data = (d) {
         }
 }
