@@ -25,8 +25,7 @@ MODULE VCount(t) {
         }
         METHOD/Action _write ( t val ) {
         }
-        METHOD _read t = () {
-QQZ 0
+        METHOD _read t = ( 0) {
         }
 }
 MODULE VCount(t) {
@@ -45,24 +44,17 @@ INTERFACE UCount {
 MODULE UCount {
         INTERFACE UCount
         METHOD/Action incr ( Integer val ) {
-QQZc.incr (fromInteger_tvar70 ($ (* Integer *) val ) )
         }
         METHOD/Action decr ( Integer val ) {
-QQZc.decr (fromInteger_tvar74 ($ (* Integer *) val ) )
         }
         METHOD/Action _write ( Integer val ) {
-QQZc._write (fromInteger_tvar78 ($ (* Integer *) val ) )
         }
         METHOD/Action update ( Integer val ) {
-QQZc.update (fromInteger_tvar82 ($ (* Integer *) val ) )
         }
-        METHOD isEqual ( Integer val ) Bool = () {
-QQZ((c . _read) == fromInteger_tvar85 ($ (* Integer *) val ))
+        METHOD isEqual ( Integer val ) Bool = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
         }
-        METHOD isLessThan ( Integer val ) Bool = () {
-QQZ((c . _read) < fromInteger_tvar87 ($ (* Integer *) val ))
+        METHOD isLessThan ( Integer val ) Bool = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
         }
-        METHOD isGreaterThan ( Integer val ) Bool = () {
-QQZ((c . _read) > fromInteger_tvar89 ($ (* Integer *) val ))
+        METHOD isGreaterThan ( Integer val ) Bool = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
         }
 }

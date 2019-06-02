@@ -77,7 +77,6 @@ MODULE getRising.
     13Definition Mod'getRising: Mod :=
          (BKMODULE {
         METHOD getRising { (ifc: EdgeDetector_a): Bool := 
-        
 
     }
     14Definition getRising := Build_Interface'getRising Mod'getRising getRising.
@@ -98,7 +97,6 @@ MODULE getFalling.
     13Definition Mod'getFalling: Mod :=
          (BKMODULE {
         METHOD getFalling { (ifc: EdgeDetector_a): Bool := 
-        
 
     }
     14Definition getFalling := Build_Interface'getFalling Mod'getFalling getFalling.

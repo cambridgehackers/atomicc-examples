@@ -63,11 +63,10 @@ MODULE Memory {
         METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
 
         LET Bit_AddrSz ( ((req . isLoad) ==  1) ) : addr = (req . addr)
-        LET Bit_DataSz : ldval = mem.sub (addr ) ;
-        
+        LET Bit_DataSz : ldval = mem.sub (addr ) 
         LET Bit_AddrSz ( !( ((req . isLoad) ==  1) ) ) : addr = (req . addr)
                 LET Bit_DataSz ( !( ((req . isLoad) ==  1) ) ) : newval = (req . data)
-        LET Bit_DataSz : placeholder = mem.sub (addr ) ;
+        LET Bit_DataSz : placeholder = mem.sub (addr ) 
         }
 }
 INTERFACE ToHost {

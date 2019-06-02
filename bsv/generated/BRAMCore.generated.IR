@@ -24,7 +24,7 @@ MODULE BRAM_PORT(addr, data) {
         FIELD data d
         METHOD/Action put ( Bool write,addr address,data datain ) {
 
-        STORE ( write ) : d = datain ;
+        STORE ( write ) : d = datain 
         }
         METHOD read data = (d) {
         }
