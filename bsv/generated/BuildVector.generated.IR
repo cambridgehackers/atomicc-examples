@@ -1,0 +1,9 @@
+
+(* interface for module wrapper for vec1 *)
+Record Interface'vec1 := {
+    Interface'vec1'mod: Mod;
+    Interface'vec1'vec1: string;
+}.
+
+MODULE vec1.
+    JJ4Variable element_t : Kind.

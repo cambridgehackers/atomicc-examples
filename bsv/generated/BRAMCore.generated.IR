@@ -1,0 +1,36 @@
+
+INTERFACE BRAM_PORT(addr, data) {
+    METHOD/Action put ( Bool write,addr address,data datain )
+    METHOD read data
+}
+
+INTERFACE BRAM_DUAL_PORT(addr, data) {
+    METHOD a BRAM_PORT;
+    METHOD b BRAM_PORT;
+}
+
+INTERFACE BRAM_PORT_BE(addr, data, n) {
+    METHOD/Action put ( Bit_n writeen,addr address,data datain )
+    METHOD read data
+}
+
+INTERFACE BRAM_DUAL_PORT_BE(addr, data, n) {
+    METHOD a BRAM_PORT_BE;
+    METHOD b BRAM_PORT_BE;
+}
+
+MODULE BRAM_PORT(addr, data) {
+        INTERFACE BRAM_PORT(addr, data)
+        FIELD data d
+        METHOD/Action put ( Bool write,addr address,data datain ) {
+        If write then (
+        
+        STORE : d = datain ;
+        ) else (
+            Retv
+        ) as retval
+
+        Ret #retval}
+        METHOD read data = (d) {
+        }
+}

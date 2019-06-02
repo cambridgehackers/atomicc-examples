@@ -1,0 +1,109 @@
+
+6Definition RecvState := (STRUCT_TYPE {
+    "$tag" :: (Bit 8);
+    "Center" JJ5:: Void;
+    "RS_Parity" JJ5:: Void;
+    "Sample" JJ5:: Void;
+    "Start" JJ5:: Void;
+    "StopFirst" JJ5:: Void;
+    "StopLast" JJ5:: Void;
+    "Wait" JJ5:: Void}).
+6Definition XmitState := (STRUCT_TYPE {
+    "$tag" :: (Bit 8);
+    "XS_Idle" JJ5:: Void;
+    "XS_Parity" JJ5:: Void;
+    "XS_Shift" JJ5:: Void;
+    "XS_Start" JJ5:: Void;
+    "XS_Stop" JJ5:: Void;
+    "XS_Stop2" JJ5:: Void;
+    "XS_Stop5" JJ5:: Void;
+    "XS_Wait" JJ5:: Void}).
+4Definition Parity : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 2) }).
+5Definition  NONE {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
+5Definition  ODD {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.
+5Definition  EVEN {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(2) })%kami_expr.
+4Definition StopBits : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 2) }).
+5Definition  STOP_1 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
+5Definition  STOP_1_5 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.
+5Definition  STOP_2 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(2) })%kami_expr.
+INTERFACE RS232 {
+    METHOD/Action sin ( Bit_1 x )
+    METHOD sout Bit_1
+}
+
+INTERFACE BaudGenerator {
+    METHOD/Action clock_enable
+    METHOD/Action clear
+    METHOD baud_tick_16x Bool
+    METHOD baud_tick_2x Bool
+}
+
+INTERFACE InputFilter(size, a) {
+    METHOD/Action clock_enable
+    METHOD _read a
+}
+
+INTERFACE EdgeDetector(a) {
+    METHOD rising Bool
+    METHOD falling Bool
+}
+
+INTERFACE Synchronizer(a) {
+    METHOD/Action _write ( a x )
+    METHOD _read a
+}
+
+INTERFACE InputMovingFilter(width, threshold, a) {
+    METHOD/Action sample
+    METHOD/Action clear
+    METHOD _read a
+}
+
+INTERFACE UART(depth) {
+    METHOD rs232 RS232;
+    METHOD tx Get;
+    METHOD rx Put;
+}
+
+(* interface for module wrapper for getRising *)
+Record Interface'getRising := {
+    Interface'getRising'mod: Mod;
+    Interface'getRising'getRising: string;
+}.
+
+MODULE getRising.
+    JJ4Variable a : Kind.
+(* FIXME: interface EdgeDetector subinterface rising *)
+    13Definition Mod'getRising: Mod :=
+         (BKMODULE {
+        METHOD getRising { (ifc: EdgeDetector_a): Bool := 
+        
+
+    }
+    14Definition getRising := Build_Interface'getRising Mod'getRising getRising.
+}
+
+15Definition function'getRising := module'getRising.getRising.
+
+
+(* interface for module wrapper for getFalling *)
+Record Interface'getFalling := {
+    Interface'getFalling'mod: Mod;
+    Interface'getFalling'getFalling: string;
+}.
+
+MODULE getFalling.
+    JJ4Variable a : Kind.
+(* FIXME: interface EdgeDetector subinterface falling *)
+    13Definition Mod'getFalling: Mod :=
+         (BKMODULE {
+        METHOD getFalling { (ifc: EdgeDetector_a): Bool := 
+        
+
+    }
+    14Definition getFalling := Build_Interface'getFalling Mod'getFalling getFalling.
+}
+
+15Definition function'getFalling := module'getFalling.getFalling.
+
+

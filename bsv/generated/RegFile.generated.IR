@@ -1,0 +1,6 @@
+
+INTERFACE RegFile(index_t, data_t) {
+    METHOD/Action upd ( index_t addr,data_t d )
+    METHOD sub ( index_t addr ) data_t
+}
+

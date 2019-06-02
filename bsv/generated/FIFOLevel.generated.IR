@@ -1,0 +1,12 @@
+
+INTERFACE FIFOLevelIfc(element_type, fifoDepth) {
+    METHOD/Action enq ( element_type x1 )
+    METHOD/Action deq
+    METHOD first element_type
+    METHOD/Action clear
+    METHOD notFull Bool
+    METHOD notEmpty Bool
+    METHOD isLessThan ( nat c1 ) Bool
+    METHOD isGreaterThan ( nat c1 ) Bool
+}
+

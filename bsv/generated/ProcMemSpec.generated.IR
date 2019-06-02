@@ -1,0 +1,114 @@
+
+2Definition DataSz := 32.
+
+2Definition AddrSz := 32.
+
+2Definition InstrSz := 32.
+
+2Definition NumRegs := 32.
+
+2Definition RegFileSz := Nat.log2 NumRegs.
+
+2Definition NumInstrs := 8.
+
+2Definition PgmSz := Nat.log2 NumInstrs.
+
+1Definition opArith : ConstT Bit_2 := ( 0)%kami.
+
+1Definition opLd : ConstT Bit_2 := ( 1)%kami.
+
+1Definition opSt : ConstT Bit_2 := ( 2)%kami.
+
+1Definition opTh : ConstT Bit_2 := ( 3)%kami.
+
+2Definition OpK := Bit_2.
+
+1Definition opArithAdd : ConstT Bit_2 := ( 0)%kami.
+
+1Definition opArithSub : ConstT Bit_2 := ( 1)%kami.
+
+1Definition opArithMul : ConstT Bit_2 := ( 2)%kami.
+
+1Definition opArithDiv : ConstT Bit_2 := ( 3)%kami.
+
+2Definition OpArithK := Bit_2.
+
+INTERFACE Decoder {
+    METHOD isOp ( Bit_InstrSz inst,OpK op ) Bool
+    METHOD getOp ( Bit_InstrSz inst ) OpK
+    METHOD getArithOp ( Bit_InstrSz inst ) OpArithK
+    METHOD getSrc1 ( Bit_InstrSz inst ) Bit_RegFileSz
+    METHOD getSrc2 ( Bit_InstrSz inst ) Bit_RegFileSz
+    METHOD getDst ( Bit_InstrSz inst ) Bit_RegFileSz
+    METHOD getAddr ( Bit_InstrSz inst ) Bit_AddrSz
+}
+
+INTERFACE Executer {
+    METHOD execArith ( OpArithK op,Bit_DataSz val1,Bit_DataSz val2 ) Bit_DataSz
+}
+
+STRUCT MemRq {
+    Bit_AddrSz addr;
+    Bit_DataSz data;
+    Bit_1 isLoad;
+}
+
+INTERFACE Memory {
+    METHOD doMem ( MemRq req ) Bit_DataSz
+}
+
+MODULE Memory {
+        INTERFACE Memory
+        FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
+        METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
+        If ((req . isLoad) ==  1) then (
+        
+        LET Bit_AddrSz : addr = (req . addr)
+        LET Bit_DataSz : ldval = mem.sub (addr ) ;
+        
+        ) else (
+        
+        LET Bit_AddrSz : addr = (req . addr)
+                LET Bit_DataSz : newval = (req . data)
+        LET Bit_DataSz : placeholder = mem.sub (addr ) ;
+        ) as retval
+
+        Ret #retval}
+}
+INTERFACE ToHost {
+    METHOD/Action toHost ( Bit_DataSz val )
+}
+
+MODULE procSpec {
+        FIELD Bit(PgmSz) pc
+        FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bit(DataSz)) rf
+        FIELD Bit(2) stage
+        FIELD OpK d2e_op
+        FIELD OpArithK d2e_arithOp
+        FIELD Bit(RegFileSz) d2e_src1
+        FIELD Bit(RegFileSz) d2e_src2
+        FIELD Bit(RegFileSz) d2e_dst
+        FIELD Bit(AddrSz) d2e_addr
+        FIELD Bit(RegFileSz) e2w_dst
+        FIELD Bit(DataSz) e2w_val
+        METHOD/Rule/Action doDecode if ((stage ==  0)) {
+       LET Bit_InstrSz : inst = pgm.sub (pc ) 
+               STORE : d2e_op = dec.getOp (inst ) 
+               STORE : d2esrc1 = dec.getSrc1 (inst ) 
+               STORE : d2e_src2 = dec.getSrc2 (inst ) 
+               STORE : d2e_dst = dec.getDst (inst ) 
+               STORE : stage =  1 
+        }
+        METHOD/Rule/Action doExec if ((stage ==  1)) {
+       LET Bit_DataSz : val1 = rf.sub (d2e_src1 ) 
+       LET Bit_DataSz : val2 = rf.sub (d2e_src2 ) 
+       LET Bit_DataSz : dval = exec.execArith (d2e_op, val1, val2 ) 
+               STORE : e2w_dst = d2e_dst 
+               STORE : e2w_val = dval 
+               STORE : stage =  2 
+        }
+        METHOD/Rule/Action doWriteBack if ((stage ==  2)) {
+               STORE : pc = (pc +  1) 
+               STORE : stage =  0 
+        }
+}

@@ -1,0 +1,11 @@
+
+INTERFACE Client(req_type, resp_type) {
+    METHOD request Get;
+    METHOD response Put;
+}
+
+INTERFACE Server(req_type, resp_type) {
+    METHOD request Put;
+    METHOD response Get;
+}
+

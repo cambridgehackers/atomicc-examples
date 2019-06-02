@@ -1,0 +1,9 @@
+
+INTERFACE Get(a) {
+    METHOD get a
+}
+
+INTERFACE Put(a) {
+    METHOD/Action put ( a v )
+}
+

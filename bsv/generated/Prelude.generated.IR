@@ -1,0 +1,61 @@
+
+4Definition Void : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 0) }).
+5Definition  VoidValue {ty} : Void @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
+INTERFACE Bit(sz) {
+}
+
+INTERFACE Empty {
+}
+
+INTERFACE Rule {
+}
+
+INTERFACE Rules {
+}
+
+MODULE addRules {
+}
+INTERFACE ReadOnly(a) {
+    METHOD _read a
+}
+
+INTERFACE Reg(a) {
+    METHOD _read a
+    METHOD/Action _write ( a v )
+}
+
+INTERFACE Wire(a) {
+    METHOD _read a
+    METHOD/Action _write ( a v )
+}
+
+MODULE Reg(data_t) {
+        INTERFACE Reg(data_t)
+        METHOD/Action _write ( data_t v ) {
+        }
+}
+MODULE Reg(data_t) {
+        INTERFACE Reg(data_t)
+        METHOD/Action _write ( data_t v ) {
+        }
+}
+MODULE Reg(data_t) {
+        INTERFACE Reg(data_t)
+}
+MODULE Wire(element_type) {
+        INTERFACE Wire(element_type)
+}
+MODULE Wire(element_type) {
+        INTERFACE Wire(element_type)
+}
+INTERFACE PulseWire {
+    METHOD/Action send
+    METHOD _read Bool
+}
+
+MODULE PulseWire {
+        INTERFACE PulseWire
+}
+4Definition Bool : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 1) }).
+5Definition  False {ty} : Bool @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
+5Definition  True {ty} : Bool @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.

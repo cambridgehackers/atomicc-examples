@@ -1,0 +1,19 @@
+
+INTERFACE Count(t) {
+    METHOD/Action incr ( t val )
+    METHOD/Action decr ( t val )
+    METHOD/Action update ( t val )
+    METHOD/Action _write ( t val )
+    METHOD _read t
+}
+
+INTERFACE VCount(t) {
+    METHOD/Action incrA ( t val )
+    METHOD/Action incrB ( t val )
+    METHOD/Action update ( t val )
+    METHOD/Action _write ( t val )
+    METHOD _read t
+}
+
+MODULE VCount(t) {
+        INTERFACE VCount(t)

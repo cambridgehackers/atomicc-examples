@@ -1,0 +1,4 @@
+
+INTERFACE Vector(len, element_type) {
+}
+

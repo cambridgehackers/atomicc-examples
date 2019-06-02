@@ -1,0 +1,57 @@
+
+INTERFACE NoMethods {
+}
+
+MODULE NoMethods {
+        INTERFACE NoMethods
+        FIELD Bit(PgmSz) pc
+        FIELD FIFO((*element_type*)E2W) e2wFifo
+        FIELD Vector(NumRegs, Bit(DataSz)) rf
+        METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), $$ (* isConstT *)opArith )) {
+       LET Bit_InstrSz : inst = pgm.sub (pc ) 
+       LET Bit_RegFileSz : src1 = dec.getSrc1 (inst ) 
+       LET Bit_RegFileSz : src2 = dec.getSrc2 (inst ) 
+       LET Bit_RegFileSz : dst = dec.getDst (inst ) 
+       LET OpArithK : arithOp = dec.getArithOp (inst ) 
+               LET Bit_DataSz : val1 = (rf $#[ src1 : 1 ])
+               LET Bit_DataSz : val2 = (rf $#[ src2 : 1 ])
+       LET Bit_DataSz : execVal = exec.execArith (arithOp, val1, val2 ) 
+               LET E2W : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }%kami_expr
+               CALL/Action : e2wFifo.enq( e2w)
+               STORE : pc = (pc +  1) 
+        }
+}
+MODULE NoMethods {
+        INTERFACE NoMethods
+        FIELD FIFOF((*element_type*)D2E) d2eFifo
+        FIELD FIFO((*element_type*)E2W) e2wFifo
+        FIELD Bit(PgmSz) decoder_pc
+        FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
+        METHOD/Rule/Action decode if (d2eFifo.notFull ( )) {
+       LET Bit_InstrSz : inst = pgm.sub (decoder_pc ) 
+       LET OpK : op = dec.getOp (inst ) 
+       LET OpArithK : arithOp = dec.getArithOp (inst ) 
+       LET Bit_RegFileSz : src1 = dec.getSrc1 (inst ) 
+       LET Bit_RegFileSz : src2 = dec.getSrc2 (inst ) 
+       LET Bit_RegFileSz : dst = dec.getDst (inst ) 
+       LET Bit_AddrSz : addr = dec.getAddr (inst ) 
+               LET D2E : decoded = D2E { "addr" ::= (addr) ; "arithOp" ::= (arithOp) ; "dst" ::= (dst) ; "op" ::= (op) ; "pc" ::= (decoder_pc) ; "src1" ::= (src1) ; "src2" ::= (src2)  }%kami_expr
+               CALL/Action : d2eFifo.enq( decoded)
+               STORE : decoder_pc = (decoder_pc +  1) 
+        }
+        METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == $$ (* isConstT *)opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
+       LET D2E : d2e = d2eFifo.first ( ) 
+       LET D2E : d2e = d2eFifo.first ( ) 
+               CALL/Action : d2eFifo.deq()
+               LET Bit_RegFileSz : src1 = (d2e . src1)
+               LET Bit_RegFileSz : src2 = (d2e . src2)
+               LET Bit_RegFileSz : dst = (d2e . dst)
+               LET OpArithK : arithOp = (d2e . arithOp)
+               LET Bit_DataSz : val1 = (rf $#[ src1 : 1 ])
+               LET Bit_DataSz : val2 = (rf $#[ src2 : 1 ])
+       LET Bit_DataSz : execVal = exec.execArith (arithOp, val1, val2 ) 
+               CALL/Action : sbFlags.upd( dst,  true)
+               LET E2W : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }%kami_expr
+               CALL/Action : e2wFifo.enq( e2w)
+        }
+}

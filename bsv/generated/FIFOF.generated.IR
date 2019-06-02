@@ -1,0 +1,96 @@
+
+INTERFACE FIFOF(element_type) {
+    METHOD first element_type
+    METHOD/Action enq ( element_type v )
+    METHOD/Action deq
+    METHOD notEmpty Bool
+    METHOD notFull Bool
+    METHOD/Action clear
+}
+
+MODULE FIFOF(element_type) {
+        INTERFACE FIFOF(element_type)
+        FIELD element_type v
+        FIELD Bit(1) valid
+        METHOD first element_type = (result) if ((valid ==  1)) {
+        LET element_type : result = v
+        }
+        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+        STORE : v = new_v 
+               STORE : valid =  1 
+        }
+        METHOD/Action deq if ((valid ==  1)) {
+        STORE : valid =  0 
+        }
+        METHOD/Action clear {
+        STORE : valid =  0 
+        }
+        METHOD notEmpty Bool = ((valid !=  0)) {
+        }
+        METHOD notFull Bool = ((valid !=  1)) {
+        }
+}
+MODULE FIFOF(element_type) {
+        INTERFACE FIFOF(element_type)
+        FIELD element_type v
+        FIELD Bit(1) valid
+        METHOD first element_type = (result) if ((valid ==  1)) {
+        LET element_type : result = v
+        }
+        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+        STORE : v = new_v 
+               STORE : valid =  1 
+        }
+        METHOD/Action deq if ((valid ==  1)) {
+        STORE : valid =  0 
+        }
+        METHOD/Action clear {
+        STORE : valid =  0 
+        }
+        METHOD notEmpty Bool = ((valid !=  0)) {
+        }
+        METHOD notFull Bool = ((valid !=  1)) {
+        }
+}
+MODULE FIFOF(element_type) {
+        INTERFACE FIFOF(element_type)
+        FIELD element_type v
+        FIELD Bit(1) valid
+        METHOD first element_type = (v) if ((valid ==  1)) {
+        }
+        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+        STORE : v = new_v 
+               STORE : valid =  1 
+        }
+        METHOD/Action deq if ((valid ==  1)) {
+        STORE : valid =  0 
+        }
+        METHOD/Action clear {
+        STORE : valid =  0 
+        }
+        METHOD notEmpty Bool = ((valid !=  0)) {
+        }
+        METHOD notFull Bool = ((valid !=  1)) {
+        }
+}
+MODULE FIFOF(element_type) {
+        INTERFACE FIFOF(element_type)
+        FIELD element_type v
+        FIELD Bit(1) valid
+        METHOD first element_type = (v) if ((valid ==  1)) {
+        }
+        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+        STORE : v = new_v 
+               STORE : valid =  1 
+        }
+        METHOD/Action deq if ((valid ==  1)) {
+        STORE : valid =  0 
+        }
+        METHOD/Action clear {
+        STORE : valid =  0 
+        }
+        METHOD notEmpty Bool = ((valid !=  0)) {
+        }
+        METHOD notFull Bool = ((valid !=  1)) {
+        }
+}
