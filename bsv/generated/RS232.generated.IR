@@ -71,8 +71,8 @@ Record Interface'getRising := {
     Interface'getRising'getRising: string;
 }.
 
-MODULE getRising.
-    JJ4Variable a : Kind.
+MODULE getRising {
+    Kind a
 (* FIXME: interface EdgeDetector subinterface rising *)
     13Definition Mod'getRising: Mod :=
          (BKMODULE {
@@ -91,8 +91,8 @@ Record Interface'getFalling := {
     Interface'getFalling'getFalling: string;
 }.
 
-MODULE getFalling.
-    JJ4Variable a : Kind.
+MODULE getFalling {
+    Kind a
 (* FIXME: interface EdgeDetector subinterface falling *)
     13Definition Mod'getFalling: Mod :=
          (BKMODULE {

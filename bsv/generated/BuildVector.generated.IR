@@ -5,5 +5,5 @@ Record Interface'vec1 := {
     Interface'vec1'vec1: string;
 }.
 
-MODULE vec1.
-    JJ4Variable element_t : Kind.
+MODULE vec1 {
+    Kind element_t
