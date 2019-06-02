@@ -17,3 +17,52 @@ INTERFACE VCount(t) {
 
 MODULE VCount(t) {
         INTERFACE VCount(t)
+        METHOD/Action incrA ( t val ) {
+        }
+        METHOD/Action incrB ( t val ) {
+        }
+        METHOD/Action update ( t val ) {
+        }
+        METHOD/Action _write ( t val ) {
+        }
+        METHOD _read t = () {
+QQZ 0
+        }
+}
+MODULE VCount(t) {
+        INTERFACE VCount(t)
+}
+INTERFACE UCount {
+    METHOD/Action update ( nat val )
+    METHOD/Action _write ( nat val )
+    METHOD/Action incr ( nat val )
+    METHOD/Action decr ( nat val )
+    METHOD isEqual ( nat val ) Bool
+    METHOD isLessThan ( nat val ) Bool
+    METHOD isGreaterThan ( nat val ) Bool
+}
+
+MODULE UCount {
+        INTERFACE UCount
+        METHOD/Action incr ( Integer val ) {
+QQZc.incr (fromInteger_tvar70 ($ (* Integer *) val ) )
+        }
+        METHOD/Action decr ( Integer val ) {
+QQZc.decr (fromInteger_tvar74 ($ (* Integer *) val ) )
+        }
+        METHOD/Action _write ( Integer val ) {
+QQZc._write (fromInteger_tvar78 ($ (* Integer *) val ) )
+        }
+        METHOD/Action update ( Integer val ) {
+QQZc.update (fromInteger_tvar82 ($ (* Integer *) val ) )
+        }
+        METHOD isEqual ( Integer val ) Bool = () {
+QQZ((c . _read) == fromInteger_tvar85 ($ (* Integer *) val ))
+        }
+        METHOD isLessThan ( Integer val ) Bool = () {
+QQZ((c . _read) < fromInteger_tvar87 ($ (* Integer *) val ))
+        }
+        METHOD isGreaterThan ( Integer val ) Bool = () {
+QQZ((c . _read) > fromInteger_tvar89 ($ (* Integer *) val ))
+        }
+}
