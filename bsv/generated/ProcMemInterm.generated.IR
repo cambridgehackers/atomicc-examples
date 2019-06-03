@@ -1,2 +1,9 @@
 
 MODULE ProcInterm {
+    FIELD Bit(PgmSz) pc
+    FIELD ProcRegs rf
+    FIELD Scoreboard sb
+    FIELD FIFO(E2W) e2wFifo
+    FIELD NoMethods decexec
+    FIELD Empty writeback
+}

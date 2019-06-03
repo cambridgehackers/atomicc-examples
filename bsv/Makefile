@@ -3,7 +3,7 @@ include ../makefile.in
 BSVTOKAMI=JAVA_OPTS=-ea $(TOPDIR)/../bsvtokami/build/install/bsvtokami/bin/bsvtokami -I . -K generated
 
 FOO =\
-     BuildVector.bsv Cntrs.bsv SpecialFIFOs.bsv Prelude.bsv ProcMemInterm.bsv
+     Cntrs.bsv Prelude.bsv
 SOURCES=\
     gcd.bsv BRAMCore.bsv BUtils.bsv BuildVector.bsv \
     ClientServer.bsv Clocks.bsv Cntrs.bsv ConfigReg.bsv \

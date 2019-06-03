@@ -7,3 +7,109 @@ Record Interface'vec1 := {
 
 MODULE vec1 {
     Kind element_t
+    13Definition Mod'vec1: Mod :=
+         (BKMODULE {
+    METHOD vec1 ( element_t v0 )  Array 1 element_t =  {
+
+    }
+    14Definition vec1 := Build_Interface'vec1 Mod'vec1 vec1.
+}
+
+15Definition function'vec1 := module'vec1.vec1.
+
+
+(* interface for module wrapper for vec2 *)
+Record Interface'vec2 := {
+    Interface'vec2'mod: Mod;
+    Interface'vec2'vec2: string;
+}.
+
+MODULE vec2 {
+    Kind element_t
+    13Definition Mod'vec2: Mod :=
+         (BKMODULE {
+    METHOD vec2 ( element_t v0, element_t v1 )  Array 2 element_t =  {
+
+    }
+    14Definition vec2 := Build_Interface'vec2 Mod'vec2 vec2.
+}
+
+15Definition function'vec2 := module'vec2.vec2.
+
+
+(* interface for module wrapper for vec3 *)
+Record Interface'vec3 := {
+    Interface'vec3'mod: Mod;
+    Interface'vec3'vec3: string;
+}.
+
+MODULE vec3 {
+    Kind element_t
+    13Definition Mod'vec3: Mod :=
+         (BKMODULE {
+    METHOD vec3 ( element_t v0, element_t v1, element_t v2 )  Array 3 element_t =  {
+
+    }
+    14Definition vec3 := Build_Interface'vec3 Mod'vec3 vec3.
+}
+
+15Definition function'vec3 := module'vec3.vec3.
+
+
+(* interface for module wrapper for vec4 *)
+Record Interface'vec4 := {
+    Interface'vec4'mod: Mod;
+    Interface'vec4'vec4: string;
+}.
+
+MODULE vec4 {
+    Kind element_t
+    13Definition Mod'vec4: Mod :=
+         (BKMODULE {
+    METHOD vec4 ( element_t v0, element_t v1, element_t v2, element_t v3 )  Array 4 element_t =  {
+
+    }
+    14Definition vec4 := Build_Interface'vec4 Mod'vec4 vec4.
+}
+
+15Definition function'vec4 := module'vec4.vec4.
+
+
+(* interface for module wrapper for vec5 *)
+Record Interface'vec5 := {
+    Interface'vec5'mod: Mod;
+    Interface'vec5'vec5: string;
+}.
+
+MODULE vec5 {
+    Kind element_t
+    13Definition Mod'vec5: Mod :=
+         (BKMODULE {
+    METHOD vec5 ( element_t v0, element_t v1, element_t v2, element_t v3, element_t v4 )  Array 5 element_t =  {
+
+    }
+    14Definition vec5 := Build_Interface'vec5 Mod'vec5 vec5.
+}
+
+15Definition function'vec5 := module'vec5.vec5.
+
+
+(* interface for module wrapper for vec6 *)
+Record Interface'vec6 := {
+    Interface'vec6'mod: Mod;
+    Interface'vec6'vec6: string;
+}.
+
+MODULE vec6 {
+    Kind element_t
+    13Definition Mod'vec6: Mod :=
+         (BKMODULE {
+    METHOD vec6 ( element_t v0, element_t v1, element_t v2, element_t v3, element_t v4, element_t v5 )  Array 6 element_t =  {
+
+    }
+    14Definition vec6 := Build_Interface'vec6 Mod'vec6 vec6.
+}
+
+15Definition function'vec6 := module'vec6.vec6.
+
+
