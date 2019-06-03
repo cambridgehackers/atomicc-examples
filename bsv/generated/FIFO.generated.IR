@@ -7,72 +7,72 @@ INTERFACE FIFO(element_type) {
 }
 
 MODULE FIFO(element_type) {
-        INTERFACE FIFO(element_type)
-        FIELD element_type v
-        FIELD Bit(1) valid
-        METHOD first element_type = (result) if ((valid ==  1)) {
-        LET element_type  : result = v
-        }
-        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
-        STORE  : v = new_v 
-               STORE  : valid =  1 
-        }
-        METHOD/Action deq if ((valid ==  1)) {
-        STORE  : valid =  0 
-        }
-        METHOD/Action clear {
-        STORE  : valid =  0 
-        }
+    INTERFACE FIFO(element_type)
+    FIELD element_type v
+    FIELD Bit(1) valid
+    METHOD first element_type = (result) if ((valid ==  1)) {
+           LET element_type  : result = v
+    }
+    METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+           STORE  : v = new_v 
+           STORE  : valid =  1 
+    }
+    METHOD/Action deq if ((valid ==  1)) {
+           STORE  : valid =  0 
+    }
+    METHOD/Action clear {
+           STORE  : valid =  0 
+    }
 }
 MODULE FIFO(element_type) {
-        INTERFACE FIFO(element_type)
-        FIELD element_type v
-        FIELD Bit(1) valid
-        METHOD first element_type = (result) if ((valid ==  1)) {
-        LET element_type  : result = v
-        }
-        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
-        STORE  : v = new_v 
-               STORE  : valid =  1 
-        }
-        METHOD/Action deq if ((valid ==  1)) {
-        STORE  : valid =  0 
-        }
-        METHOD/Action clear {
-        STORE  : valid =  0 
-        }
+    INTERFACE FIFO(element_type)
+    FIELD element_type v
+    FIELD Bit(1) valid
+    METHOD first element_type = (result) if ((valid ==  1)) {
+           LET element_type  : result = v
+    }
+    METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+           STORE  : v = new_v 
+           STORE  : valid =  1 
+    }
+    METHOD/Action deq if ((valid ==  1)) {
+           STORE  : valid =  0 
+    }
+    METHOD/Action clear {
+           STORE  : valid =  0 
+    }
 }
 MODULE FIFO(element_type) {
-        INTERFACE FIFO(element_type)
-        FIELD element_type v
-        FIELD Bit(1) valid
-        METHOD first element_type = (v) if ((valid ==  1)) {
-        }
-        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
-        STORE  : v = new_v 
-               STORE  : valid =  1 
-        }
-        METHOD/Action deq if ((valid ==  1)) {
-        STORE  : valid =  0 
-        }
-        METHOD/Action clear {
-        STORE  : valid =  0 
-        }
+    INTERFACE FIFO(element_type)
+    FIELD element_type v
+    FIELD Bit(1) valid
+    METHOD first element_type = (v) if ((valid ==  1)) {
+    }
+    METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+           STORE  : v = new_v 
+           STORE  : valid =  1 
+    }
+    METHOD/Action deq if ((valid ==  1)) {
+           STORE  : valid =  0 
+    }
+    METHOD/Action clear {
+           STORE  : valid =  0 
+    }
 }
 MODULE FIFO(element_type) {
-        INTERFACE FIFO(element_type)
-        FIELD element_type v
-        FIELD Bit(1) valid
-        METHOD first element_type = (v) if ((valid ==  1)) {
-        }
-        METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
-        STORE  : v = new_v 
-               STORE  : valid =  1 
-        }
-        METHOD/Action deq if ((valid ==  1)) {
-        STORE  : valid =  0 
-        }
-        METHOD/Action clear {
-        STORE  : valid =  0 
-        }
+    INTERFACE FIFO(element_type)
+    FIELD element_type v
+    FIELD Bit(1) valid
+    METHOD first element_type = (v) if ((valid ==  1)) {
+    }
+    METHOD/Action enq ( element_type new_v ) if ((valid ==  0)) {
+           STORE  : v = new_v 
+           STORE  : valid =  1 
+    }
+    METHOD/Action deq if ((valid ==  1)) {
+           STORE  : valid =  0 
+    }
+    METHOD/Action clear {
+           STORE  : valid =  0 
+    }
 }

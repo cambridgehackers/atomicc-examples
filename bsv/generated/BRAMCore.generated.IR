@@ -20,12 +20,12 @@ INTERFACE BRAM_DUAL_PORT_BE(addr, data, n) {
 }
 
 MODULE BRAM_PORT(addr, data) {
-        INTERFACE BRAM_PORT(addr, data)
-        FIELD data d
-        METHOD/Action put ( Bool write,addr address,data datain ) {
-
+    INTERFACE BRAM_PORT(addr, data)
+    FIELD data d
+    METHOD/Action put ( Bool write,addr address,data datain ) {
+   
         STORE ( write ) : d = datain 
-        }
-        METHOD read data = (d) {
-        }
+    }
+    METHOD read data = (d) {
+    }
 }

@@ -3,11 +3,11 @@ INTERFACE NoMethods {
 }
 
 MODULE NoMethods {
-        INTERFACE NoMethods
-        FIELD Bit(PgmSz) pc
-        FIELD FIFO((*element_type*)E2W) e2wFifo
-        FIELD Vector(NumRegs, Bit(DataSz)) rf
-        METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), $$ (* isConstT *)opArith )) {
+    INTERFACE NoMethods
+    FIELD Bit(PgmSz) pc
+    FIELD FIFO((*element_type*)E2W) e2wFifo
+    FIELD Vector(NumRegs, Bit(DataSz)) rf
+    METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), $$ (* isConstT *)opArith )) {
        LET Bit(InstrSz) : inst = pgm.sub (pc ) 
        LET Bit(RegFileSz) : src1 = dec.getSrc1 (inst ) 
        LET Bit(RegFileSz) : src2 = dec.getSrc2 (inst ) 
@@ -22,12 +22,12 @@ MODULE NoMethods {
         }
 }
 MODULE NoMethods {
-        INTERFACE NoMethods
-        FIELD FIFOF((*element_type*)D2E) d2eFifo
-        FIELD FIFO((*element_type*)E2W) e2wFifo
-        FIELD Bit(PgmSz) decoder_pc
-        FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
-        METHOD/Rule/Action decode if (d2eFifo.notFull ( )) {
+    INTERFACE NoMethods
+    FIELD FIFOF((*element_type*)D2E) d2eFifo
+    FIELD FIFO((*element_type*)E2W) e2wFifo
+    FIELD Bit(PgmSz) decoder_pc
+    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
+    METHOD/Rule/Action decode if (d2eFifo.notFull ( )) {
        LET Bit(InstrSz) : inst = pgm.sub (decoder_pc ) 
        LET OpK : op = dec.getOp (inst ) 
        LET OpArithK : arithOp = dec.getArithOp (inst ) 
@@ -39,7 +39,7 @@ MODULE NoMethods {
                CALL/Action  : d2eFifo.enq( decoded)
                STORE  : decoder_pc = (decoder_pc +  1) 
         }
-        METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == $$ (* isConstT *)opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
+    METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == $$ (* isConstT *)opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()

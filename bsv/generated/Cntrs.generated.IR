@@ -16,20 +16,20 @@ INTERFACE VCount(t) {
 }
 
 MODULE VCount(t) {
-        INTERFACE VCount(t)
-        METHOD/Action incrA ( t val ) {
-        }
-        METHOD/Action incrB ( t val ) {
-        }
-        METHOD/Action update ( t val ) {
-        }
-        METHOD/Action _write ( t val ) {
-        }
-        METHOD _read t = ( 0) {
-        }
+    INTERFACE VCount(t)
+    METHOD/Action incrA ( t val ) {
+    }
+    METHOD/Action incrB ( t val ) {
+    }
+    METHOD/Action update ( t val ) {
+    }
+    METHOD/Action _write ( t val ) {
+    }
+    METHOD _read t = ( 0) {
+    }
 }
 MODULE VCount(t) {
-        INTERFACE VCount(t)
+    INTERFACE VCount(t)
 }
 INTERFACE UCount {
     METHOD/Action update ( nat val )
@@ -42,19 +42,19 @@ INTERFACE UCount {
 }
 
 MODULE UCount {
-        INTERFACE UCount
-        METHOD/Action incr ( Integer val ) {
-        }
-        METHOD/Action decr ( Integer val ) {
-        }
-        METHOD/Action _write ( Integer val ) {
-        }
-        METHOD/Action update ( Integer val ) {
-        }
-        METHOD isEqual ( Integer val ) Bool = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
-        }
-        METHOD isLessThan ( Integer val ) Bool = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
-        }
-        METHOD isGreaterThan ( Integer val ) Bool = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
-        }
+    INTERFACE UCount
+    METHOD/Action incr ( Integer val ) {
+    }
+    METHOD/Action decr ( Integer val ) {
+    }
+    METHOD/Action _write ( Integer val ) {
+    }
+    METHOD/Action update ( Integer val ) {
+    }
+    METHOD isEqual ( Integer val ) Bool = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
+    }
+    METHOD isLessThan ( Integer val ) Bool = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
+    }
+    METHOD isGreaterThan ( Integer val ) Bool = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
+    }
 }

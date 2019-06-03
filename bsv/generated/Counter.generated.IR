@@ -10,26 +10,26 @@ INTERFACE Counter(sz) {
 }
 
 MODULE Counter(sz) {
-        INTERFACE Counter(sz)
-        FIELD Bit(sz) counter
-        METHOD/Action dec ( Bit(sz) v ) {
-        STORE  : counter = (counter - v) 
-        }
-        METHOD/Action up {
-        STORE  : counter = (counter +  1) 
-        }
-        METHOD/Action down {
-        STORE  : counter = (counter -  1) 
-        }
-        METHOD/Action inc ( Bit((*sz*)tvar235) v ) {
-        STORE  : counter = (counter + v) 
-        }
-        METHOD/Action setF ( Bit((*sz*)tvar235) v ) {
-        STORE  : counter = v 
-        }
-        METHOD/Action clear {
-        STORE  : counter = $ (* Integer *) init 
-        }
-        METHOD value Bit(sz) = (counter) {
-        }
+    INTERFACE Counter(sz)
+    FIELD Bit(sz) counter
+    METHOD/Action dec ( Bit(sz) v ) {
+           STORE  : counter = (counter - v) 
+    }
+    METHOD/Action up {
+           STORE  : counter = (counter +  1) 
+    }
+    METHOD/Action down {
+           STORE  : counter = (counter -  1) 
+    }
+    METHOD/Action inc ( Bit((*sz*)tvar235) v ) {
+           STORE  : counter = (counter + v) 
+    }
+    METHOD/Action setF ( Bit((*sz*)tvar235) v ) {
+           STORE  : counter = v 
+    }
+    METHOD/Action clear {
+           STORE  : counter = $ (* Integer *) init 
+    }
+    METHOD value Bit(sz) = (counter) {
+    }
 }

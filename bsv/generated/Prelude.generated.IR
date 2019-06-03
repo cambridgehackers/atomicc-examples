@@ -30,23 +30,23 @@ INTERFACE Wire(a) {
 }
 
 MODULE Reg(data_t) {
-        INTERFACE Reg(data_t)
-        METHOD/Action _write ( data_t v ) {
-        }
+    INTERFACE Reg(data_t)
+    METHOD/Action _write ( data_t v ) {
+    }
 }
 MODULE Reg(data_t) {
-        INTERFACE Reg(data_t)
-        METHOD/Action _write ( data_t v ) {
-        }
+    INTERFACE Reg(data_t)
+    METHOD/Action _write ( data_t v ) {
+    }
 }
 MODULE Reg(data_t) {
-        INTERFACE Reg(data_t)
+    INTERFACE Reg(data_t)
 }
 MODULE Wire(element_type) {
-        INTERFACE Wire(element_type)
+    INTERFACE Wire(element_type)
 }
 MODULE Wire(element_type) {
-        INTERFACE Wire(element_type)
+    INTERFACE Wire(element_type)
 }
 INTERFACE PulseWire {
     METHOD/Action send
@@ -54,7 +54,7 @@ INTERFACE PulseWire {
 }
 
 MODULE PulseWire {
-        INTERFACE PulseWire
+    INTERFACE PulseWire
 }
 4Definition Bool : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 1) }).
 5Definition  False {ty} : Bool @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.

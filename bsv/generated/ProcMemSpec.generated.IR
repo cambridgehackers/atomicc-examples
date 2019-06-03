@@ -58,34 +58,34 @@ INTERFACE Memory {
 }
 
 MODULE Memory {
-        INTERFACE Memory
-        FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
-        METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
-
+    INTERFACE Memory
+    FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
+    METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
+   
         LET Bit(AddrSz) ( ((req . isLoad) ==  1) ) : addr = (req . addr)
         LET Bit(DataSz) : ldval = mem.sub (addr ) 
         LET Bit(AddrSz) ( !( ((req . isLoad) ==  1) ) ) : addr = (req . addr)
                 LET Bit(DataSz) ( !( ((req . isLoad) ==  1) ) ) : newval = (req . data)
         LET Bit(DataSz) : placeholder = mem.sub (addr ) 
-        }
+    }
 }
 INTERFACE ToHost {
     METHOD/Action toHost ( Bit(DataSz) val )
 }
 
 MODULE procSpec {
-        FIELD Bit(PgmSz) pc
-        FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bit(DataSz)) rf
-        FIELD Bit(2) stage
-        FIELD OpK d2e_op
-        FIELD OpArithK d2e_arithOp
-        FIELD Bit(RegFileSz) d2e_src1
-        FIELD Bit(RegFileSz) d2e_src2
-        FIELD Bit(RegFileSz) d2e_dst
-        FIELD Bit(AddrSz) d2e_addr
-        FIELD Bit(RegFileSz) e2w_dst
-        FIELD Bit(DataSz) e2w_val
-        METHOD/Rule/Action doDecode if ((stage ==  0)) {
+    FIELD Bit(PgmSz) pc
+    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bit(DataSz)) rf
+    FIELD Bit(2) stage
+    FIELD OpK d2e_op
+    FIELD OpArithK d2e_arithOp
+    FIELD Bit(RegFileSz) d2e_src1
+    FIELD Bit(RegFileSz) d2e_src2
+    FIELD Bit(RegFileSz) d2e_dst
+    FIELD Bit(AddrSz) d2e_addr
+    FIELD Bit(RegFileSz) e2w_dst
+    FIELD Bit(DataSz) e2w_val
+    METHOD/Rule/Action doDecode if ((stage ==  0)) {
        LET Bit(InstrSz) : inst = pgm.sub (pc ) 
                STORE  : d2e_op = dec.getOp (inst ) 
                STORE  : d2esrc1 = dec.getSrc1 (inst ) 
@@ -93,7 +93,7 @@ MODULE procSpec {
                STORE  : d2e_dst = dec.getDst (inst ) 
                STORE  : stage =  1 
         }
-        METHOD/Rule/Action doExec if ((stage ==  1)) {
+    METHOD/Rule/Action doExec if ((stage ==  1)) {
        LET Bit(DataSz) : val1 = rf.sub (d2e_src1 ) 
        LET Bit(DataSz) : val2 = rf.sub (d2e_src2 ) 
        LET Bit(DataSz) : dval = exec.execArith (d2e_op, val1, val2 ) 
@@ -101,7 +101,7 @@ MODULE procSpec {
                STORE  : e2w_val = dval 
                STORE  : stage =  2 
         }
-        METHOD/Rule/Action doWriteBack if ((stage ==  2)) {
+    METHOD/Rule/Action doWriteBack if ((stage ==  2)) {
                STORE  : pc = (pc +  1) 
                STORE  : stage =  0 
         }
