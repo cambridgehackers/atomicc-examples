@@ -1,0 +1,10 @@
+
+INTERFACE SCounter {
+    METHOD/Action incr
+    METHOD/Action decr
+    METHOD isEq ( nat n ) Bit(1)
+    METHOD/Action setNext ( b value,Array n Reg(b) as )
+    METHOD/Action set ( b value,Array n Reg(b) as )
+    METHOD/Action clear
+}
+

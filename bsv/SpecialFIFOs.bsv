@@ -310,7 +310,7 @@ endmodule
 module mkSizedBypassFIFOF#(Integer n)(FIFOF#(a))
    provisos (Bits#(a,sa));
 
-   FIFOF#(a) ff <- mkUGSizedFIFOF(n);
+   FIFOF#(a) ff <- mkFIFOF(n); // undefined mkUGSizedFIFOF(n);
 
    RWire#(a) enqw <- mkRWire();
    Reg#(Bool) firstValid <- mkRevertingVirtualReg(True);
