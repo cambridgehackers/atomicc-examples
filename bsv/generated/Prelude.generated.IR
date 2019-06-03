@@ -50,7 +50,7 @@ MODULE Wire(element_type) {
 }
 INTERFACE PulseWire {
     METHOD/Action send
-    METHOD _read Bool
+    METHOD _read Bit(1)
 }
 
 MODULE PulseWire {

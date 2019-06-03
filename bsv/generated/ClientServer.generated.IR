@@ -1,11 +1,11 @@
 
 INTERFACE Client(req_type, resp_type) {
-    METHOD request Get;
-    METHOD response Put;
+    INTERFACE Get(req_type) request
+    INTERFACE Put(resp_type) response
 }
 
 INTERFACE Server(req_type, resp_type) {
-    METHOD request Put;
-    METHOD response Get;
+    INTERFACE Put(req_type) request
+    INTERFACE Get(resp_type) response
 }
 

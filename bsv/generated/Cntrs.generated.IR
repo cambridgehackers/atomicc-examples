@@ -36,9 +36,9 @@ INTERFACE UCount {
     METHOD/Action _write ( nat val )
     METHOD/Action incr ( nat val )
     METHOD/Action decr ( nat val )
-    METHOD isEqual ( nat val ) Bool
-    METHOD isLessThan ( nat val ) Bool
-    METHOD isGreaterThan ( nat val ) Bool
+    METHOD isEqual ( nat val ) Bit(1)
+    METHOD isLessThan ( nat val ) Bit(1)
+    METHOD isGreaterThan ( nat val ) Bit(1)
 }
 
 MODULE UCount {

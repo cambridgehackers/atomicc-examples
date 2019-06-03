@@ -2,11 +2,11 @@
 INTERFACE Counter(sz) {
     METHOD/Action up
     METHOD/Action down
-    METHOD/Action dec ( Bit_sz v )
-    METHOD/Action inc ( Bit_sz v )
-    METHOD/Action setF ( Bit_sz v )
+    METHOD/Action dec ( Bit(sz) v )
+    METHOD/Action inc ( Bit(sz) v )
+    METHOD/Action setF ( Bit(sz) v )
     METHOD/Action clear
-    METHOD value Bit_sz
+    METHOD value Bit(sz)
 }
 
 MODULE Counter(sz) {

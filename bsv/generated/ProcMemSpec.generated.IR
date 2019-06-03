@@ -13,48 +13,48 @@
 
 2Definition PgmSz := Nat.log2 NumInstrs.
 
-1Definition opArith : ConstT Bit_2 := ( 0)%kami.
+1Definition opArith : ConstT Bit(2) := ( 0)%kami.
 
-1Definition opLd : ConstT Bit_2 := ( 1)%kami.
+1Definition opLd : ConstT Bit(2) := ( 1)%kami.
 
-1Definition opSt : ConstT Bit_2 := ( 2)%kami.
+1Definition opSt : ConstT Bit(2) := ( 2)%kami.
 
-1Definition opTh : ConstT Bit_2 := ( 3)%kami.
+1Definition opTh : ConstT Bit(2) := ( 3)%kami.
 
-2Definition OpK := Bit_2.
+2Definition OpK := Bit(2).
 
-1Definition opArithAdd : ConstT Bit_2 := ( 0)%kami.
+1Definition opArithAdd : ConstT Bit(2) := ( 0)%kami.
 
-1Definition opArithSub : ConstT Bit_2 := ( 1)%kami.
+1Definition opArithSub : ConstT Bit(2) := ( 1)%kami.
 
-1Definition opArithMul : ConstT Bit_2 := ( 2)%kami.
+1Definition opArithMul : ConstT Bit(2) := ( 2)%kami.
 
-1Definition opArithDiv : ConstT Bit_2 := ( 3)%kami.
+1Definition opArithDiv : ConstT Bit(2) := ( 3)%kami.
 
-2Definition OpArithK := Bit_2.
+2Definition OpArithK := Bit(2).
 
 INTERFACE Decoder {
-    METHOD isOp ( Bit_InstrSz inst,OpK op ) Bool
-    METHOD getOp ( Bit_InstrSz inst ) OpK
-    METHOD getArithOp ( Bit_InstrSz inst ) OpArithK
-    METHOD getSrc1 ( Bit_InstrSz inst ) Bit_RegFileSz
-    METHOD getSrc2 ( Bit_InstrSz inst ) Bit_RegFileSz
-    METHOD getDst ( Bit_InstrSz inst ) Bit_RegFileSz
-    METHOD getAddr ( Bit_InstrSz inst ) Bit_AddrSz
+    METHOD isOp ( Bit(InstrSz) inst,OpK op ) Bit(1)
+    METHOD getOp ( Bit(InstrSz) inst ) OpK
+    METHOD getArithOp ( Bit(InstrSz) inst ) OpArithK
+    METHOD getSrc1 ( Bit(InstrSz) inst ) Bit(RegFileSz)
+    METHOD getSrc2 ( Bit(InstrSz) inst ) Bit(RegFileSz)
+    METHOD getDst ( Bit(InstrSz) inst ) Bit(RegFileSz)
+    METHOD getAddr ( Bit(InstrSz) inst ) Bit(AddrSz)
 }
 
 INTERFACE Executer {
-    METHOD execArith ( OpArithK op,Bit_DataSz val1,Bit_DataSz val2 ) Bit_DataSz
+    METHOD execArith ( OpArithK op,Bit(DataSz) val1,Bit(DataSz) val2 ) Bit(DataSz)
 }
 
 STRUCT MemRq {
-    Bit_AddrSz addr;
-    Bit_DataSz data;
-    Bit_1 isLoad;
+    Bit(AddrSz) addr;
+    Bit(DataSz) data;
+    Bit(1) isLoad;
 }
 
 INTERFACE Memory {
-    METHOD doMem ( MemRq req ) Bit_DataSz
+    METHOD doMem ( MemRq req ) Bit(DataSz)
 }
 
 MODULE Memory {
@@ -62,15 +62,15 @@ MODULE Memory {
         FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
         METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
 
-        LET Bit_AddrSz ( ((req . isLoad) ==  1) ) : addr = (req . addr)
-        LET Bit_DataSz : ldval = mem.sub (addr ) 
-        LET Bit_AddrSz ( !( ((req . isLoad) ==  1) ) ) : addr = (req . addr)
-                LET Bit_DataSz ( !( ((req . isLoad) ==  1) ) ) : newval = (req . data)
-        LET Bit_DataSz : placeholder = mem.sub (addr ) 
+        LET Bit(AddrSz) ( ((req . isLoad) ==  1) ) : addr = (req . addr)
+        LET Bit(DataSz) : ldval = mem.sub (addr ) 
+        LET Bit(AddrSz) ( !( ((req . isLoad) ==  1) ) ) : addr = (req . addr)
+                LET Bit(DataSz) ( !( ((req . isLoad) ==  1) ) ) : newval = (req . data)
+        LET Bit(DataSz) : placeholder = mem.sub (addr ) 
         }
 }
 INTERFACE ToHost {
-    METHOD/Action toHost ( Bit_DataSz val )
+    METHOD/Action toHost ( Bit(DataSz) val )
 }
 
 MODULE procSpec {
@@ -86,7 +86,7 @@ MODULE procSpec {
         FIELD Bit(RegFileSz) e2w_dst
         FIELD Bit(DataSz) e2w_val
         METHOD/Rule/Action doDecode if ((stage ==  0)) {
-       LET Bit_InstrSz : inst = pgm.sub (pc ) 
+       LET Bit(InstrSz) : inst = pgm.sub (pc ) 
                STORE  : d2e_op = dec.getOp (inst ) 
                STORE  : d2esrc1 = dec.getSrc1 (inst ) 
                STORE  : d2e_src2 = dec.getSrc2 (inst ) 
@@ -94,9 +94,9 @@ MODULE procSpec {
                STORE  : stage =  1 
         }
         METHOD/Rule/Action doExec if ((stage ==  1)) {
-       LET Bit_DataSz : val1 = rf.sub (d2e_src1 ) 
-       LET Bit_DataSz : val2 = rf.sub (d2e_src2 ) 
-       LET Bit_DataSz : dval = exec.execArith (d2e_op, val1, val2 ) 
+       LET Bit(DataSz) : val1 = rf.sub (d2e_src1 ) 
+       LET Bit(DataSz) : val2 = rf.sub (d2e_src2 ) 
+       LET Bit(DataSz) : dval = exec.execArith (d2e_op, val1, val2 ) 
                STORE  : e2w_dst = d2e_dst 
                STORE  : e2w_val = dval 
                STORE  : stage =  2 

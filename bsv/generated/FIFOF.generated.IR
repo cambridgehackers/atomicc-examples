@@ -3,8 +3,8 @@ INTERFACE FIFOF(element_type) {
     METHOD first element_type
     METHOD/Action enq ( element_type v )
     METHOD/Action deq
-    METHOD notEmpty Bool
-    METHOD notFull Bool
+    METHOD notEmpty Bit(1)
+    METHOD notFull Bit(1)
     METHOD/Action clear
 }
 

@@ -27,15 +27,15 @@
 5Definition  STOP_1_5 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.
 5Definition  STOP_2 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(2) })%kami_expr.
 INTERFACE RS232 {
-    METHOD/Action sin ( Bit_1 x )
-    METHOD sout Bit_1
+    METHOD/Action sin ( Bit(1) x )
+    METHOD sout Bit(1)
 }
 
 INTERFACE BaudGenerator {
     METHOD/Action clock_enable
     METHOD/Action clear
-    METHOD baud_tick_16x Bool
-    METHOD baud_tick_2x Bool
+    METHOD baud_tick_16x Bit(1)
+    METHOD baud_tick_2x Bit(1)
 }
 
 INTERFACE InputFilter(size, a) {
@@ -44,8 +44,8 @@ INTERFACE InputFilter(size, a) {
 }
 
 INTERFACE EdgeDetector(a) {
-    METHOD rising Bool
-    METHOD falling Bool
+    METHOD rising Bit(1)
+    METHOD falling Bit(1)
 }
 
 INTERFACE Synchronizer(a) {
@@ -60,9 +60,9 @@ INTERFACE InputMovingFilter(width, threshold, a) {
 }
 
 INTERFACE UART(depth) {
-    METHOD rs232 RS232;
-    METHOD tx Get;
-    METHOD rx Put;
+    INTERFACE RS232 rs232
+    INTERFACE Get(Bit(8)) tx
+    INTERFACE Put(Bit(8)) rx
 }
 
 (* interface for module wrapper for getRising *)
@@ -76,7 +76,7 @@ MODULE getRising {
 (* FIXME: interface EdgeDetector subinterface rising *)
     13Definition Mod'getRising: Mod :=
          (BKMODULE {
-        METHOD getRising { (ifc: EdgeDetector_a): Bool := 
+    METHOD getRising ( EdgeDetector(a) ifc )  Bit(1) =  {
 
     }
     14Definition getRising := Build_Interface'getRising Mod'getRising getRising.
@@ -96,7 +96,7 @@ MODULE getFalling {
 (* FIXME: interface EdgeDetector subinterface falling *)
     13Definition Mod'getFalling: Mod :=
          (BKMODULE {
-        METHOD getFalling { (ifc: EdgeDetector_a): Bool := 
+    METHOD getFalling ( EdgeDetector(a) ifc )  Bit(1) =  {
 
     }
     14Definition getFalling := Build_Interface'getFalling Mod'getFalling getFalling.

@@ -1,22 +1,22 @@
 
 INTERFACE BRAM_PORT(addr, data) {
-    METHOD/Action put ( Bool write,addr address,data datain )
+    METHOD/Action put ( Bit(1) write,addr address,data datain )
     METHOD read data
 }
 
 INTERFACE BRAM_DUAL_PORT(addr, data) {
-    METHOD a BRAM_PORT;
-    METHOD b BRAM_PORT;
+    INTERFACE BRAM_PORT(addr,data) a
+    INTERFACE BRAM_PORT(addr,data) b
 }
 
 INTERFACE BRAM_PORT_BE(addr, data, n) {
-    METHOD/Action put ( Bit_n writeen,addr address,data datain )
+    METHOD/Action put ( Bit(n) writeen,addr address,data datain )
     METHOD read data
 }
 
 INTERFACE BRAM_DUAL_PORT_BE(addr, data, n) {
-    METHOD a BRAM_PORT_BE;
-    METHOD b BRAM_PORT_BE;
+    INTERFACE BRAM_PORT_BE(addr,data,n) a
+    INTERFACE BRAM_PORT_BE(addr,data,n) b
 }
 
 MODULE BRAM_PORT(addr, data) {

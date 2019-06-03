@@ -4,9 +4,9 @@ INTERFACE FIFOLevelIfc(element_type, fifoDepth) {
     METHOD/Action deq
     METHOD first element_type
     METHOD/Action clear
-    METHOD notFull Bool
-    METHOD notEmpty Bool
-    METHOD isLessThan ( nat c1 ) Bool
-    METHOD isGreaterThan ( nat c1 ) Bool
+    METHOD notFull Bit(1)
+    METHOD notEmpty Bit(1)
+    METHOD isLessThan ( nat c1 ) Bit(1)
+    METHOD isGreaterThan ( nat c1 ) Bit(1)
 }
 

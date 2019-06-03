@@ -9,7 +9,7 @@ INTERFACE SyncFIFOIfc(a_type) {
     METHOD/Action enq ( a_type sendData )
     METHOD/Action deq
     METHOD first a_type
-    METHOD notFull Bool
-    METHOD notEmpty Bool
+    METHOD notFull Bit(1)
+    METHOD notEmpty Bit(1)
 }
 
