@@ -60,7 +60,7 @@ INTERFACE Memory {
 MODULE Memory {
     INTERFACE Memory
     FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
-    METHOD doMem ( MemRq req ) ActionValue(Bit(DataSz)) = (#ZZplaceholder) {
+    METHOD doMem ( MemRq req ) Bit(DataSz) = (#ZZplaceholder) {
    
         LET Bit(AddrSz) ( ((req . isLoad) ==  1) ) : addr = (req . addr)
         LET Bit(DataSz) : ldval = mem.sub (addr ) 

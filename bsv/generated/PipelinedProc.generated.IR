@@ -53,10 +53,10 @@ INTERFACE Scoreboard {
 MODULE Scoreboard {
     INTERFACE Scoreboard
     FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
-    METHOD search1 ( Bit(RegFileSz) sidx ) Bool = (flag) if (true) {
+    METHOD search1 ( Bit(RegFileSz) sidx ) Bit(1) = (flag) if (true) {
    LET Bit(1) : flag = sbFlags.sub (sidx ) 
     }
-    METHOD search2 ( Bit(RegFileSz) sidx ) Bool = (flag) {
+    METHOD search2 ( Bit(RegFileSz) sidx ) Bit(1) = (flag) {
    LET Bit(1) : flag = sbFlags.sub (sidx ) 
     }
     METHOD/Action insert ( Bit(RegFileSz) nidx ) {

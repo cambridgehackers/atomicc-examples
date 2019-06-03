@@ -51,10 +51,10 @@ MODULE UCount {
     }
     METHOD/Action update ( Integer val ) {
     }
-    METHOD isEqual ( Integer val ) Bool = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
+    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
     }
-    METHOD isLessThan ( Integer val ) Bool = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
+    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
     }
-    METHOD isGreaterThan ( Integer val ) Bool = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
+    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
     }
 }
