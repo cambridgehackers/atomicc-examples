@@ -59,7 +59,7 @@ MODULE FIFO(element_type) {
            STORE  : valid =  0 
     }
 }
-MODULE FIFO(element_type) {
+MODULE FIFO(n,element_type) {
     INTERFACE FIFO(element_type)
     FIELD element_type v
     FIELD Bit(1) valid

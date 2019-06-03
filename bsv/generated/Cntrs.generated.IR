@@ -28,7 +28,7 @@ MODULE VCount(t) {
     METHOD _read t = ( 0) {
     }
 }
-MODULE VCount(t) {
+MODULE VCount(resetVal,t) {
     INTERFACE VCount(t)
 }
 INTERFACE UCount {
@@ -41,7 +41,7 @@ INTERFACE UCount {
     METHOD isGreaterThan ( nat val ) Bit(1)
 }
 
-MODULE UCount {
+MODULE UCount(c) {
     INTERFACE UCount
     METHOD/Action incr ( Integer val ) {
     }

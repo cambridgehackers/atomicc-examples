@@ -2,10 +2,10 @@
 INTERFACE NoMethods {
 }
 
-MODULE NoMethods {
+MODULE NoMethods(pgm,dec,exec) {
     INTERFACE NoMethods
     FIELD Bit(PgmSz) pc
-    FIELD FIFO((*element_type*)E2W) e2wFifo
+    FIELD FIFO(E2W) e2wFifo
     FIELD Vector(NumRegs, Bit(DataSz)) rf
     METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), $$ (* isConstT *)opArith )) {
        LET Bit(InstrSz) : inst = pgm.sub (pc ) 
@@ -21,12 +21,12 @@ MODULE NoMethods {
                STORE  : pc = (pc +  1) 
         }
 }
-MODULE NoMethods {
+MODULE NoMethods(pgm,dec,exec,mem,rf,toHost) {
     INTERFACE NoMethods
-    FIELD FIFOF((*element_type*)D2E) d2eFifo
-    FIELD FIFO((*element_type*)E2W) e2wFifo
+    FIELD FIFOF(D2E) d2eFifo
+    FIELD FIFO(E2W) e2wFifo
     FIELD Bit(PgmSz) decoder_pc
-    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
+    FIELD RegFile(Bit(RegFileSz), Bit(1)) sbFlags
     METHOD/Rule/Action decode if (d2eFifo.notFull ( )) {
        LET Bit(InstrSz) : inst = pgm.sub (decoder_pc ) 
        LET OpK : op = dec.getOp (inst ) 

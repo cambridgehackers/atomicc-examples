@@ -59,7 +59,7 @@ INTERFACE Memory {
 
 MODULE Memory {
     INTERFACE Memory
-    FIELD RegFile((*index_t*)Bit(AddrSz), (*data_t*)Bit(DataSz)) mem
+    FIELD RegFile(Bit(AddrSz), Bit(DataSz)) mem
     METHOD doMem ( MemRq req ) Bit(DataSz) = (#ZZplaceholder) {
    
         LET Bit(AddrSz) ( ((req . isLoad) ==  1) ) : addr = (req . addr)
@@ -75,7 +75,7 @@ INTERFACE ToHost {
 
 MODULE procSpec {
     FIELD Bit(PgmSz) pc
-    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bit(DataSz)) rf
+    FIELD RegFile(Bit(RegFileSz), Bit(DataSz)) rf
     FIELD Bit(2) stage
     FIELD OpK d2e_op
     FIELD OpArithK d2e_arithOp

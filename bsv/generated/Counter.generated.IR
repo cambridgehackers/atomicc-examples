@@ -9,7 +9,7 @@ INTERFACE Counter(sz) {
     METHOD value Bit(sz)
 }
 
-MODULE Counter(sz) {
+MODULE Counter(init,sz) {
     INTERFACE Counter(sz)
     FIELD Bit(sz) counter
     METHOD/Action dec ( Bit(sz) v ) {
@@ -21,10 +21,10 @@ MODULE Counter(sz) {
     METHOD/Action down {
            STORE  : counter = (counter -  1) 
     }
-    METHOD/Action inc ( Bit((*sz*)tvar235) v ) {
+    METHOD/Action inc ( Bit(tvar235) v ) {
            STORE  : counter = (counter + v) 
     }
-    METHOD/Action setF ( Bit((*sz*)tvar235) v ) {
+    METHOD/Action setF ( Bit(tvar235) v ) {
            STORE  : counter = v 
     }
     METHOD/Action clear {

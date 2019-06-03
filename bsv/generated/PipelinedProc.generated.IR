@@ -7,7 +7,7 @@ INTERFACE ProcRegs {
 
 MODULE ProcRegs {
     INTERFACE ProcRegs
-    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bit(DataSz)) rf
+    FIELD RegFile(Bit(RegFileSz), Bit(DataSz)) rf
     METHOD read1 ( Bit(RegFileSz) r1 ) Bit(DataSz) = (val) {
    LET Bit(DataSz) : val = rf.sub (r1 ) 
     }
@@ -52,7 +52,7 @@ INTERFACE Scoreboard {
 
 MODULE Scoreboard {
     INTERFACE Scoreboard
-    FIELD RegFile((*index_t*)Bit(RegFileSz), (*data_t*)Bool) sbFlags
+    FIELD RegFile(Bit(RegFileSz), Bit(1)) sbFlags
     METHOD search1 ( Bit(RegFileSz) sidx ) Bit(1) = (flag) if (true) {
    LET Bit(1) : flag = sbFlags.sub (sidx ) 
     }
@@ -132,8 +132,8 @@ MODULE PipelinedWriteback {
         }
 }
 MODULE ProcImpl {
-    FIELD FIFO((*element_type*)D2E) d2eFifo
-    FIELD FIFO((*element_type*)E2W) e2wFifo
+    FIELD FIFO(D2E) d2eFifo
+    FIELD FIFO(E2W) e2wFifo
     FIELD Memory mem
     FIELD ProcRegs rf
     FIELD Scoreboard sb
