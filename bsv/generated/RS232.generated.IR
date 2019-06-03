@@ -1,5 +1,5 @@
 
-6Definition RecvState := (STRUCT_TYPE {
+6STRUCT RecvState {
     "$tag" :: (Bit 8);
     "Center" JJ5:: Void;
     "RS_Parity" JJ5:: Void;
@@ -8,7 +8,7 @@
     "StopFirst" JJ5:: Void;
     "StopLast" JJ5:: Void;
     "Wait" JJ5:: Void}).
-6Definition XmitState := (STRUCT_TYPE {
+6STRUCT XmitState {
     "$tag" :: (Bit 8);
     "XS_Idle" JJ5:: Void;
     "XS_Parity" JJ5:: Void;
@@ -18,14 +18,14 @@
     "XS_Stop2" JJ5:: Void;
     "XS_Stop5" JJ5:: Void;
     "XS_Wait" JJ5:: Void}).
-4Definition Parity : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 2) }).
-5Definition  NONE {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
-5Definition  ODD {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.
-5Definition  EVEN {ty} : Parity @# ty := (STRUCT { "$tag" ::= $$(2) })%kami_expr.
-4Definition StopBits : Kind := (STRUCT_TYPE { "$tag" JJ3:: (Bit 2) }).
-5Definition  STOP_1 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(0) })%kami_expr.
-5Definition  STOP_1_5 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(1) })%kami_expr.
-5Definition  STOP_2 {ty} : StopBits @# ty := (STRUCT { "$tag" ::= $$(2) })%kami_expr.
+4STRUCT Parity { "$tag" JJ3:: (Bit 2) }).
+5STRUCT  NONE {ty} : Parity @# ty := { "$tag" ::= $$(0) }
+5STRUCT  ODD {ty} : Parity @# ty := { "$tag" ::= $$(1) }
+5STRUCT  EVEN {ty} : Parity @# ty := { "$tag" ::= $$(2) }
+4STRUCT StopBits { "$tag" JJ3:: (Bit 2) }).
+5STRUCT  STOP_1 {ty} : StopBits @# ty := { "$tag" ::= $$(0) }
+5STRUCT  STOP_1_5 {ty} : StopBits @# ty := { "$tag" ::= $$(1) }
+5STRUCT  STOP_2 {ty} : StopBits @# ty := { "$tag" ::= $$(2) }
 INTERFACE RS232 {
     METHOD/Action sin ( Bit(1) x )
     METHOD sout Bit(1)

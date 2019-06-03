@@ -27,7 +27,6 @@ STRUCT D2E {
     Bit(RegFileSz) src1;
     Bit(RegFileSz) src2;
 }
-
 MODULE PipelinedDecoder {
     FIELD Bit(PgmSz) pc
     METHOD/Rule/Action decode {
@@ -38,7 +37,7 @@ MODULE PipelinedDecoder {
        LET Bit(RegFileSz) : src2 = dec.getSrc2 (inst ) 
        LET Bit(RegFileSz) : dst = dec.getDst (inst ) 
        LET Bit(AddrSz) : addr = dec.getAddr (inst ) 
-               LET D2E  : decoded = D2E { "addr" ::= (addr) ; "arithOp" ::= (arithOp) ; "dst" ::= (dst) ; "op" ::= (op) ; "pc" ::= (pc) ; "src1" ::= (src1) ; "src2" ::= (src2)  }%kami_expr
+               LET D2E  : decoded = D2E { "addr" ::= (addr) ; "arithOp" ::= (arithOp) ; "dst" ::= (dst) ; "op" ::= (op) ; "pc" ::= (pc) ; "src1" ::= (src1) ; "src2" ::= (src2)  }
                CALL/Action  : d2eFifo.enq( decoded)
                STORE  : pc = (pc +  1) 
         }
@@ -70,7 +69,6 @@ STRUCT E2W {
     Bit(RegFileSz) idx;
     Bit(DataSz) val;
 }
-
 MODULE PipelinedExecuter {
     METHOD/Rule/Action executeArith if (((((d2e . op) == $$ (* isConstT *)opArith) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . src2) )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
@@ -84,7 +82,7 @@ MODULE PipelinedExecuter {
        LET Bit(DataSz) : val2 = rf.read2 (src2 ) 
        LET Bit(DataSz) : execVal = exec.execArith (arithOp, val1, val2 ) 
                CALL/Action  : sb.insert( dst)
-               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }%kami_expr
+               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
         }
     METHOD/Rule/Action executeLoad if (((((d2e . op) == $$ (* isConstT *)opLd) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . dst) )))) {
@@ -95,10 +93,10 @@ MODULE PipelinedExecuter {
                LET Bit(RegFileSz)  : dst = (d2e . dst)
                LET Bit(AddrSz)  : addr = (d2e . addr)
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
-               LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= ( 0) ; "isLoad" ::= ( 1)  }%kami_expr
+               LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= ( 0) ; "isLoad" ::= ( 1)  }
                CALL/Action  : mem.doMem( memrq)
                CALL/Action  : sb.insert( dst)
-               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (ldVal)  }%kami_expr
+               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (ldVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
         }
     METHOD/Rule/Action executeStore if ((((d2e . op) == $$ (* isConstT *)opSt) && (!sb.search1 ((d2e . src1) )))) {
@@ -108,7 +106,7 @@ MODULE PipelinedExecuter {
                LET Bit(RegFileSz)  : src1 = (d2e . src1)
                LET Bit(AddrSz)  : addr = (d2e . addr)
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
-               LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= (val1) ; "isLoad" ::= ( 0)  }%kami_expr
+               LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= (val1) ; "isLoad" ::= ( 0)  }
                CALL/Action  : mem.doMem( memrq)
         }
     METHOD/Rule/Action executeToHost if ((((d2e . op) == $$ (* isConstT *)opTh) && (!sb.search1 ((d2e . src1) )))) {

@@ -51,10 +51,99 @@ MODULE UCount(c) {
     }
     METHOD/Action update ( Integer val ) {
     }
-    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
+    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar2207 ($ (* Integer *) val ))) {
     }
-    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
+    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar2209 ($ (* Integer *) val ))) {
     }
-    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
+    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar2211 ($ (* Integer *) val ))) {
     }
+}
+MODULE Count(resetVal,t) {
+    INTERFACE Count(t)
+            LET tvar2164  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
+    METHOD/Action incr ( t val ) {
+    }
+    METHOD/Action decr ( t val ) {
+    }
+    METHOD/Action update ( t val ) {
+    }
+    METHOD/Action _write ( t val ) {
+    }
+    METHOD _read t = ((_i . _read)) {
+    }
+}
+MODULE UCount(initValue,maxValue) {
+    INTERFACE UCount
+            LET tvar2170  : _i = Default 
+            LET tvar2171  : ii = fromInteger_tvar2171 (initValue ) 
+            LET nat  : m = maxValue 
+    
+
+FIELD Count(UInt(0)) _r
+        Assign _i <- mkUC_0 (_r )
+FIELD Count(UInt(1)) _r
+        Assign _i <- mkUC_1 (_r )
+FIELD Count(UInt(2)) _r
+        Assign _i <- mkUC_2 (_r )
+FIELD Count(UInt(3)) _r
+        Assign _i <- mkUC_3 (_r )
+FIELD Count(UInt(4)) _r
+        Assign _i <- mkUC_4 (_r )
+FIELD Count(UInt(5)) _r
+        Assign _i <- mkUC_5 (_r )
+FIELD Count(UInt(6)) _r
+        Assign _i <- mkUC_6 (_r )
+FIELD Count(UInt(7)) _r
+        Assign _i <- mkUC_7 (_r )
+FIELD Count(UInt(8)) _r
+        Assign _i <- mkUC_8 (_r )
+FIELD Count(UInt(9)) _r
+        Assign _i <- mkUC_9 (_r )
+FIELD Count(UInt(10)) _r
+        Assign _i <- mkUC_10 (_r )
+FIELD Count(UInt(11)) _r
+        Assign _i <- mkUC_11 (_r )
+FIELD Count(UInt(12)) _r
+        Assign _i <- mkUC_12 (_r )
+FIELD Count(UInt(13)) _r
+        Assign _i <- mkUC_13 (_r )
+FIELD Count(UInt(14)) _r
+        Assign _i <- mkUC_14 (_r )
+FIELD Count(UInt(15)) _r
+        Assign _i <- mkUC_15 (_r )
+FIELD Count(UInt(16)) _r
+        Assign _i <- mkUC_16 (_r )
+FIELD Count(UInt(17)) _r
+        Assign _i <- mkUC_17 (_r )
+FIELD Count(UInt(18)) _r
+        Assign _i <- mkUC_18 (_r )
+FIELD Count(UInt(19)) _r
+        Assign _i <- mkUC_19 (_r )
+FIELD Count(UInt(20)) _r
+        Assign _i <- mkUC_20 (_r )
+FIELD Count(UInt(21)) _r
+        Assign _i <- mkUC_21 (_r )
+FIELD Count(UInt(22)) _r
+        Assign _i <- mkUC_22 (_r )
+FIELD Count(UInt(23)) _r
+        Assign _i <- mkUC_23 (_r )
+FIELD Count(UInt(24)) _r
+        Assign _i <- mkUC_24 (_r )
+FIELD Count(UInt(25)) _r
+        Assign _i <- mkUC_25 (_r )
+FIELD Count(UInt(26)) _r
+        Assign _i <- mkUC_26 (_r )
+FIELD Count(UInt(27)) _r
+        Assign _i <- mkUC_27 (_r )
+FIELD Count(UInt(28)) _r
+        Assign _i <- mkUC_28 (_r )
+FIELD Count(UInt(29)) _r
+        Assign _i <- mkUC_29 (_r )
+FIELD Count(UInt(30)) _r
+        Assign _i <- mkUC_30 (_r )
+FIELD Count(UInt(31)) _r
+        Assign _i <- mkUC_31 (_r )
+FIELD Count(UInt(32)) _r
+        Assign _i <- mkUC_32 (_r )
+
 }

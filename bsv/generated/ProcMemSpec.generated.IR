@@ -52,7 +52,6 @@ STRUCT MemRq {
     Bit(DataSz) data;
     Bit(1) isLoad;
 }
-
 INTERFACE Memory {
     METHOD doMem ( MemRq req ) Bit(DataSz)
 }

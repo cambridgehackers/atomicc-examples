@@ -16,7 +16,7 @@ MODULE NoMethods(pgm,dec,exec) {
                LET Bit(DataSz)  : val1 = (rf $#[ src1 : 1 ])
                LET Bit(DataSz)  : val2 = (rf $#[ src2 : 1 ])
        LET Bit(DataSz) : execVal = exec.execArith (arithOp, val1, val2 ) 
-               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }%kami_expr
+               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
                STORE  : pc = (pc +  1) 
         }
@@ -35,7 +35,7 @@ MODULE NoMethods(pgm,dec,exec,mem,rf,toHost) {
        LET Bit(RegFileSz) : src2 = dec.getSrc2 (inst ) 
        LET Bit(RegFileSz) : dst = dec.getDst (inst ) 
        LET Bit(AddrSz) : addr = dec.getAddr (inst ) 
-               LET D2E  : decoded = D2E { "addr" ::= (addr) ; "arithOp" ::= (arithOp) ; "dst" ::= (dst) ; "op" ::= (op) ; "pc" ::= (decoder_pc) ; "src1" ::= (src1) ; "src2" ::= (src2)  }%kami_expr
+               LET D2E  : decoded = D2E { "addr" ::= (addr) ; "arithOp" ::= (arithOp) ; "dst" ::= (dst) ; "op" ::= (op) ; "pc" ::= (decoder_pc) ; "src1" ::= (src1) ; "src2" ::= (src2)  }
                CALL/Action  : d2eFifo.enq( decoded)
                STORE  : decoder_pc = (decoder_pc +  1) 
         }
@@ -51,7 +51,7 @@ MODULE NoMethods(pgm,dec,exec,mem,rf,toHost) {
                LET Bit(DataSz)  : val2 = (rf $#[ src2 : 1 ])
        LET Bit(DataSz) : execVal = exec.execArith (arithOp, val1, val2 ) 
                CALL/Action  : sbFlags.upd( dst,  true)
-               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }%kami_expr
+               LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
         }
 }
