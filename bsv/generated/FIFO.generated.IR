@@ -24,7 +24,7 @@ MODULE FIFO(element_type) {
            STORE  : valid =  0 
     }
 }
-MODULE FIFO(element_type) {
+MODULE LFIFO(element_type) {
     INTERFACE FIFO(element_type)
     FIELD element_type v
     FIELD Bit(1) valid
@@ -42,7 +42,7 @@ MODULE FIFO(element_type) {
            STORE  : valid =  0 
     }
 }
-MODULE FIFO(element_type) {
+MODULE FIFO1(element_type) {
     INTERFACE FIFO(element_type)
     FIELD element_type v
     FIELD Bit(1) valid
@@ -59,7 +59,7 @@ MODULE FIFO(element_type) {
            STORE  : valid =  0 
     }
 }
-MODULE FIFO(n,element_type) {
+MODULE SizedFIFO(n,element_type) {
     INTERFACE FIFO(element_type)
     FIELD element_type v
     FIELD Bit(1) valid

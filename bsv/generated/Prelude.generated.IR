@@ -29,23 +29,23 @@ INTERFACE Wire(a) {
     METHOD/Action _write ( a v )
 }
 
-MODULE Reg(v,data_t) {
+MODULE RegA(v,data_t) {
     INTERFACE Reg(data_t)
     METHOD/Action _write ( data_t v ) {
     }
 }
-MODULE Reg(data_t) {
+MODULE RegU(data_t) {
     INTERFACE Reg(data_t)
     METHOD/Action _write ( data_t v ) {
     }
 }
-MODULE Reg(depth,v,data_t) {
+MODULE CReg(depth,v,data_t) {
     INTERFACE Reg(data_t)
 }
-MODULE Wire(defaultval,element_type) {
+MODULE DWire(defaultval,element_type) {
     INTERFACE Wire(element_type)
 }
-MODULE Wire(defaultval,element_type) {
+MODULE UnsafeDWire(defaultval,element_type) {
     INTERFACE Wire(element_type)
 }
 INTERFACE PulseWire {
@@ -181,10 +181,10 @@ INTERFACE RWire(element_type) {
     METHOD wget Maybe(element_type)
 }
 
-MODULE RWire(element_type) {
+MODULE RWireSBR(element_type) {
     INTERFACE RWire(element_type)
 }
-MODULE RWire(element_type) {
+MODULE UnsafeRWire(element_type) {
     INTERFACE RWire(element_type)
 }
 MODULE RWire(element_type) {

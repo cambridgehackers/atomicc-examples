@@ -71,7 +71,7 @@ STRUCT E2W {
 }
 MODULE PipelinedExecuter {
     METHOD/Rule/Action executeArith if (((((d2e . op) == $$ (* isConstT *)opArith) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . src2) )))) {
-       LET D2E : d2e = d2eFifo.first ( ) 
+QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
                LET Bit(RegFileSz)  : src1 = (d2e . src1)
@@ -86,7 +86,7 @@ MODULE PipelinedExecuter {
                CALL/Action  : e2wFifo.enq( e2w)
         }
     METHOD/Rule/Action executeLoad if (((((d2e . op) == $$ (* isConstT *)opLd) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . dst) )))) {
-       LET D2E : d2e = d2eFifo.first ( ) 
+QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
                LET Bit(RegFileSz)  : src1 = (d2e . src1)
@@ -100,7 +100,7 @@ MODULE PipelinedExecuter {
                CALL/Action  : e2wFifo.enq( e2w)
         }
     METHOD/Rule/Action executeStore if ((((d2e . op) == $$ (* isConstT *)opSt) && (!sb.search1 ((d2e . src1) )))) {
-       LET D2E : d2e = d2eFifo.first ( ) 
+QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
                LET Bit(RegFileSz)  : src1 = (d2e . src1)
@@ -110,7 +110,7 @@ MODULE PipelinedExecuter {
                CALL/Action  : mem.doMem( memrq)
         }
     METHOD/Rule/Action executeToHost if ((((d2e . op) == $$ (* isConstT *)opTh) && (!sb.search1 ((d2e . src1) )))) {
-       LET D2E : d2e = d2eFifo.first ( ) 
+QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
                LET Bit(RegFileSz)  : src1 = (d2e . src1)

@@ -2,7 +2,7 @@
 INTERFACE NoMethods {
 }
 
-MODULE NoMethods(pgm,dec,exec) {
+MODULE DecExec(pgm,dec,exec) {
     INTERFACE NoMethods
     FIELD Bit(PgmSz) pc
     FIELD FIFO(E2W) e2wFifo
@@ -21,7 +21,7 @@ MODULE NoMethods(pgm,dec,exec) {
                STORE  : pc = (pc +  1) 
         }
 }
-MODULE NoMethods(pgm,dec,exec,mem,rf,toHost) {
+MODULE DecExecSep(pgm,dec,exec,mem,rf,toHost) {
     INTERFACE NoMethods
     FIELD FIFOF(D2E) d2eFifo
     FIELD FIFO(E2W) e2wFifo
@@ -40,7 +40,7 @@ MODULE NoMethods(pgm,dec,exec,mem,rf,toHost) {
                STORE  : decoder_pc = (decoder_pc +  1) 
         }
     METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == $$ (* isConstT *)opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
-       LET D2E : d2e = d2eFifo.first ( ) 
+QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
                LET Bit(RegFileSz)  : src1 = (d2e . src1)

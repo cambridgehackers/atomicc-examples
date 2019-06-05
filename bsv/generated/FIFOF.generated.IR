@@ -30,7 +30,7 @@ MODULE FIFOF(element_type) {
     METHOD notFull Bit(1) = ((valid !=  1)) {
     }
 }
-MODULE FIFOF(element_type) {
+MODULE LFIFOF(element_type) {
     INTERFACE FIFOF(element_type)
     FIELD element_type v
     FIELD Bit(1) valid
@@ -52,7 +52,7 @@ MODULE FIFOF(element_type) {
     METHOD notFull Bit(1) = ((valid !=  1)) {
     }
 }
-MODULE FIFOF(element_type) {
+MODULE FIFOF1(element_type) {
     INTERFACE FIFOF(element_type)
     FIELD element_type v
     FIELD Bit(1) valid
@@ -73,7 +73,7 @@ MODULE FIFOF(element_type) {
     METHOD notFull Bit(1) = ((valid !=  1)) {
     }
 }
-MODULE FIFOF(n,element_type) {
+MODULE SizedFIFOF(n,element_type) {
     INTERFACE FIFOF(element_type)
     FIELD element_type v
     FIELD Bit(1) valid

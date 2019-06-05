@@ -15,7 +15,7 @@ INTERFACE VCount(t) {
     METHOD _read t
 }
 
-MODULE VCount(t) {
+MODULE vCount0(t) {
     INTERFACE VCount(t)
     METHOD/Action incrA ( t val ) {
     }
@@ -28,7 +28,7 @@ MODULE VCount(t) {
     METHOD _read t = ( 0) {
     }
 }
-MODULE VCount(resetVal,t) {
+MODULE vCount(resetVal,t) {
     INTERFACE VCount(t)
 }
 INTERFACE UCount {
@@ -41,7 +41,7 @@ INTERFACE UCount {
     METHOD isGreaterThan ( nat val ) Bit(1)
 }
 
-MODULE UCount(c) {
+MODULE UC(c) {
     INTERFACE UCount
     METHOD/Action incr ( Integer val ) {
     }
@@ -51,16 +51,16 @@ MODULE UCount(c) {
     }
     METHOD/Action update ( Integer val ) {
     }
-    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar2207 ($ (* Integer *) val ))) {
+    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar2478 ($ (* Integer *) val ))) {
     }
-    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar2209 ($ (* Integer *) val ))) {
+    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar2480 ($ (* Integer *) val ))) {
     }
-    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar2211 ($ (* Integer *) val ))) {
+    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar2482 ($ (* Integer *) val ))) {
     }
 }
 MODULE Count(resetVal,t) {
     INTERFACE Count(t)
-            LET tvar2164  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
+            LET tvar2435  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
     METHOD/Action incr ( t val ) {
     }
     METHOD/Action decr ( t val ) {
@@ -74,8 +74,8 @@ MODULE Count(resetVal,t) {
 }
 MODULE UCount(initValue,maxValue) {
     INTERFACE UCount
-            LET tvar2170  : _i = Default 
-            LET tvar2171  : ii = fromInteger_tvar2171 (initValue ) 
+            LET tvar2441  : _i = Default 
+            LET tvar2442  : ii = fromInteger_tvar2442 (initValue ) 
             LET nat  : m = maxValue 
     
 
