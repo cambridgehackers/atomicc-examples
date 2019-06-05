@@ -21,10 +21,10 @@ MODULE Counter(init,sz) {
     METHOD/Action down {
            STORE  : counter = (counter -  1) 
     }
-    METHOD/Action inc ( Bit(tvar1014) v ) {
+    METHOD/Action inc ( Bit(tvar235) v ) {
            STORE  : counter = (counter + v) 
     }
-    METHOD/Action setF ( Bit(tvar1014) v ) {
+    METHOD/Action setF ( Bit(tvar235) v ) {
            STORE  : counter = v 
     }
     METHOD/Action clear {

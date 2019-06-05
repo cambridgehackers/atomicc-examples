@@ -51,16 +51,16 @@ MODULE UC(c) {
     }
     METHOD/Action update ( Integer val ) {
     }
-    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar2478 ($ (* Integer *) val ))) {
+    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar69 ($ (* Integer *) val ))) {
     }
-    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar2480 ($ (* Integer *) val ))) {
+    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar71 ($ (* Integer *) val ))) {
     }
-    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar2482 ($ (* Integer *) val ))) {
+    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar73 ($ (* Integer *) val ))) {
     }
 }
 MODULE Count(resetVal,t) {
     INTERFACE Count(t)
-            LET tvar2435  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
+            LET tvar26  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
     METHOD/Action incr ( t val ) {
     }
     METHOD/Action decr ( t val ) {
@@ -74,8 +74,8 @@ MODULE Count(resetVal,t) {
 }
 MODULE UCount(initValue,maxValue) {
     INTERFACE UCount
-            LET tvar2441  : _i = Default 
-            LET tvar2442  : ii = fromInteger_tvar2442 (initValue ) 
+            LET tvar32  : _i = Default 
+            LET tvar33  : ii = fromInteger_tvar33 (initValue ) 
             LET nat  : m = maxValue 
     
 

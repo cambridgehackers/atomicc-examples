@@ -59,71 +59,10 @@ MODULE PulseWire {
 4STRUCT Bool { "$tag" JJ3:: (Bit 1) }).
 5STRUCT  False {ty} : Bool @# ty := { "$tag" ::= $$(0) }
 5STRUCT  True {ty} : Bool @# ty := { "$tag" ::= $$(1) }
-(* interface for module wrapper for isValid *)
-Record Interface'isValid := {
-    Interface'isValid'mod: Mod;
-    Interface'isValid'isValid: string;
-}.
-
-MODULE isValid {
-    Kind data_t
-    13Definition Mod'isValid: Mod :=
-         (BKMODULE {
-    METHOD isValid ( Maybe(data_t) val )  Bit(1) =  {
-           CASEIf (val . $tag == $0) then (
-
-   ) else (
-) as retval
-    }
-    14Definition isValid := Build_Interface'isValid Mod'isValid isValid.
-}
-
-15Definition function'isValid := module'isValid.isValid.
-
-
-(* interface for module wrapper for fromMaybe *)
-Record Interface'fromMaybe := {
-    Interface'fromMaybe'mod: Mod;
-    Interface'fromMaybe'fromMaybe: string;
-}.
-
-MODULE fromMaybe {
-    Kind data_t
-    13Definition Mod'fromMaybe: Mod :=
-         (BKMODULE {
-    METHOD fromMaybe ( data_t defaultval, Maybe(data_t) val )  data_t =  {
-
-    }
-    14Definition fromMaybe := Build_Interface'fromMaybe Mod'fromMaybe fromMaybe.
-}
-
-15Definition function'fromMaybe := module'fromMaybe.fromMaybe.
-
-
 STRUCT Tuple2 (t1 EZZE: Type) (t2 EZZE: Type) {
     t1 tpl_1;
     t2 tpl_2;
 }
-(* interface for module wrapper for tuple2 *)
-Record Interface'tuple2 := {
-    Interface'tuple2'mod: Mod;
-    Interface'tuple2'tuple2: string;
-}.
-
-MODULE tuple2 {
-    Kind t1
-    Kind t2
-    13Definition Mod'tuple2: Mod :=
-         (BKMODULE {
-    METHOD tuple2 ( t1 x1, t2 x2 )  Tuple2(t1,t2) =  {
-
-    }
-    14Definition tuple2 := Build_Interface'tuple2 Mod'tuple2 tuple2.
-}
-
-15Definition function'tuple2 := module'tuple2.tuple2.
-
-
 STRUCT Tuple3 (t1 EZZE: Type) (t2 EZZE: Type) (t3 EZZE: Type) {
     t1 tpl_1;
     t2 tpl_2;
@@ -138,44 +77,8 @@ STRUCT Tuple4 (t1 EZZE: Type) (t2 EZZE: Type) (t3 EZZE: Type) (t4 EZZE: Type) {
 INTERFACE Empty {
 }
 
-(* interface for module wrapper for error *)
-Record Interface'error := {
-    Interface'error'mod: Mod;
-    Interface'error'error: string;
-}.
-
-MODULE error {
-    13Definition Mod'error: Mod :=
-         (BKMODULE {
-    METHOD error ( String msg )  Void =  {
-
-    }
-    14Definition error := Build_Interface'error Mod'error error.
-}
-
-15Definition function'error := module'error.error.
-
-
 MODULE errorM {
 }
-(* interface for module wrapper for noAction *)
-Record Interface'noAction := {
-    Interface'noAction'mod: Mod;
-    Interface'noAction'noAction: string;
-}.
-
-MODULE noAction {
-    13Definition Mod'noAction: Mod :=
-         (BKMODULE {
-    METHOD noAction  Void =  {
-
-    }
-    14Definition noAction := Build_Interface'noAction Mod'noAction noAction.
-}
-
-15Definition function'noAction := module'noAction.noAction.
-
-
 INTERFACE RWire(element_type) {
     METHOD/Action wset ( element_type datain )
     METHOD wget Maybe(element_type)
