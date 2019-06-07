@@ -6,23 +6,15 @@ DEFINITION NumRegs 32
 DEFINITION RegFileSz Nat.log2 NumRegs
 DEFINITION NumInstrs 8
 DEFINITION PgmSz Nat.log2 NumInstrs
-1Definition opArith : ConstT Bit(2) := ( 0)%kami.
-
-1Definition opLd : ConstT Bit(2) := ( 1)%kami.
-
-1Definition opSt : ConstT Bit(2) := ( 2)%kami.
-
-1Definition opTh : ConstT Bit(2) := ( 3)%kami.
-
+DEFINITION opArith  0
+DEFINITION opLd  1
+DEFINITION opSt  2
+DEFINITION opTh  3
 DEFINITION OpK Bit(2)
-1Definition opArithAdd : ConstT Bit(2) := ( 0)%kami.
-
-1Definition opArithSub : ConstT Bit(2) := ( 1)%kami.
-
-1Definition opArithMul : ConstT Bit(2) := ( 2)%kami.
-
-1Definition opArithDiv : ConstT Bit(2) := ( 3)%kami.
-
+DEFINITION opArithAdd  0
+DEFINITION opArithSub  1
+DEFINITION opArithMul  2
+DEFINITION opArithDiv  3
 DEFINITION OpArithK Bit(2)
 INTERFACE Decoder {
     METHOD isOp ( Bit(InstrSz) inst,OpK op ) Bit(1)
