@@ -7,7 +7,7 @@ MODULE DecExec(pgm,dec,exec) {
     FIELD Bit(PgmSz) pc
     FIELD FIFO(E2W) e2wFifo
     FIELD Vector(NumRegs, Bit(DataSz)) rf
-    METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), $$ (* isConstT *)opArith )) {
+    METHOD/Rule/Action decexecArith if (dec.isOp (pgm.sub (pc ), opArith )) {
        LET Bit(InstrSz) : inst = pgm.sub (pc ) 
        LET Bit(RegFileSz) : src1 = dec.getSrc1 (inst ) 
        LET Bit(RegFileSz) : src2 = dec.getSrc2 (inst ) 
@@ -39,7 +39,7 @@ MODULE DecExecSep(pgm,dec,exec,mem,rf,toHost) {
                CALL/Action  : d2eFifo.enq( decoded)
                STORE  : decoder_pc = (decoder_pc +  1) 
         }
-    METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == $$ (* isConstT *)opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
+    METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
 QQ99       LET D2E : d2e = d2eFifo.first ( ) 
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()

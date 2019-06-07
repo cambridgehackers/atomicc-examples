@@ -59,16 +59,16 @@ MODULE PulseWire {
 4STRUCT Bool { "$tag" JJ3:: (Bit 1) }).
 5STRUCT  False {ty} : Bool @# ty := { "$tag" ::= $$(0) }
 5STRUCT  True {ty} : Bool @# ty := { "$tag" ::= $$(1) }
-STRUCT Tuple2 (t1 EZZE: Type) (t2 EZZE: Type) {
+STRUCT Tuple2 ( t1, t2 )  {
     t1 tpl_1;
     t2 tpl_2;
 }
-STRUCT Tuple3 (t1 EZZE: Type) (t2 EZZE: Type) (t3 EZZE: Type) {
+STRUCT Tuple3 ( t1, t2, t3 )  {
     t1 tpl_1;
     t2 tpl_2;
     t3 tpl_3;
 }
-STRUCT Tuple4 (t1 EZZE: Type) (t2 EZZE: Type) (t3 EZZE: Type) (t4 EZZE: Type) {
+STRUCT Tuple4 ( t1, t2, t3, t4 )  {
     t1 tpl_1;
     t2 tpl_2;
     t3 tpl_3;

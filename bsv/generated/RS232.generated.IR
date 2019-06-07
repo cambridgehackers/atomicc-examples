@@ -106,28 +106,28 @@ MODULE InputFilter(initval,din,size,a) {
     FIELD a rOut
     METHOD/Action clock_enable {
    (counter . up)(counter . down)
-           STORE ( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) : rOut = unpack_Reg_tvar462__tvar471 ( 1 )         STORE ( ( !( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) ) & ( (counter.value ( ) ==  0) ) ) : rOut = unpack_Reg_tvar462__tvar476 ( 0 ) 
+           STORE ( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) : rOut = unpack_Reg_a__tvar471 ( 1 )         STORE ( ( !( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) ) & ( (counter.value ( ) ==  0) ) ) : rOut = unpack_Reg_a__tvar476 ( 0 ) 
     }
     METHOD _read a = (rOut) {
     }
 }
-MODULE EdgeDetector(initval,din,tvar462) {
-    INTERFACE EdgeDetector(tvar462)
+MODULE EdgeDetector(initval,din,a) {
+    INTERFACE EdgeDetector(a)
     REPLACE 1 = 0 + sa
-    FIELD tvar462 rDinD1
+    FIELD a rDinD1
     METHOD/Rule/Action pipeline {
-               STORE  : rDinD1 = $$ (* isVar *)din 
+               STORE  : rDinD1 = din 
         }
-    METHOD rising Bit(1) = ((($$ (* isVar *)din == unpack_tvar479_tvar480 ( 1 )) && (rDinD1 == unpack_tvar482_tvar483 ( 0 )))) {
+    METHOD rising Bit(1) = (((din == unpack_tvar479_tvar480 ( 1 )) && (rDinD1 == unpack_tvar482_tvar483 ( 0 )))) {
     }
-    METHOD falling Bit(1) = ((($$ (* isVar *)din == unpack_tvar485_tvar486 ( 0 )) && (rDinD1 == unpack_tvar488_tvar489 ( 1 )))) {
+    METHOD falling Bit(1) = (((din == unpack_tvar485_tvar486 ( 0 )) && (rDinD1 == unpack_tvar488_tvar489 ( 1 )))) {
     }
 }
-MODULE Synchronizer(initval,tvar485) {
-    INTERFACE Synchronizer(tvar485)
+MODULE Synchronizer(initval,a) {
+    INTERFACE Synchronizer(a)
     REPLACE 1 = 0 + sa
-    FIELD tvar485 d1
-    FIELD tvar485 d2
+    FIELD a d1
+    FIELD a d2
     METHOD/Action _write (  ) {
            STORE  : d1 = x 
            STORE  : d2 = d1 
@@ -135,23 +135,23 @@ MODULE Synchronizer(initval,tvar485) {
     METHOD _read a = (d2) {
     }
 }
-MODULE InputMovingFilter(din,width,threshold,tvar485) {
-    INTERFACE InputMovingFilter(width, threshold, tvar485)
+MODULE InputMovingFilter(din,width,threshold,a) {
+    INTERFACE InputMovingFilter(width, threshold, a)
     REPLACE 1 = 0 + sa
     FIELD Counter(width) counter
-    FIELD tvar485 rOut
+    FIELD a rOut
     FIELD PulseWire pwSample
     METHOD/Rule/Action threshold_compare if ((counter.value ( ) >= fromInteger_tvar493 (ERRORTYPEVALUE ))) {
-               STORE  : rOut = unpack_Reg_tvar485__tvar495 ( 1 ) 
+               STORE  : rOut = unpack_Reg_a__tvar495 ( 1 ) 
         }
-    METHOD/Rule/Action take_sample if ((pwSample && ($$ (* isVar *)din == unpack_tvar498_tvar499 ( 1 )))) {
+    METHOD/Rule/Action take_sample if ((pwSample && (din == unpack_tvar498_tvar499 ( 1 )))) {
        (counter . up)
         }
     METHOD/Action sample {
    (pwSample . send)
     }
     METHOD/Action clear {
-           STORE  : rOut = unpack_Reg_tvar498__tvar502 ( 0 ) 
+           STORE  : rOut = unpack_Reg_a__tvar502 ( 0 ) 
     }
     METHOD _read a = (rOut) {
     }
@@ -212,10 +212,10 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
 QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
        (pwRecvCellCountReset . send)
        
-        STORE ( ( (rRecvBitCount == $$ (* isConstT *)charsize) ) & ( (paritysel != NONE) ) ) : rRecvState = RS_Parity         STORE ( ( ( (rRecvBitCount == $$ (* isConstT *)charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( (stopbits != STOP_1) ) ) : rRecvState = StopFirst         STORE ( ( ( (rRecvBitCount == $$ (* isConstT *)charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( !( (stopbits != STOP_1) ) ) ) : rRecvState = StopLast 
-        STORE ( ( ( !( (rRecvBitCount == $$ (* isConstT *)charsize) ) ) & ( (rRecvBitCount == ($$ (* isConstT *)charsize +  1)) ) ) & ( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) : rRecvState = StopLast         STORE ( ( ( !( (rRecvBitCount == $$ (* isConstT *)charsize) ) ) & ( (rRecvBitCount == ($$ (* isConstT *)charsize +  1)) ) ) & ( !( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) ) : rRecvState = StopFirst 
-        STORE ( ( ( !( (rRecvBitCount == $$ (* isConstT *)charsize) ) ) & ( !( (rRecvBitCount == ($$ (* isConstT *)charsize +  1)) ) ) ) & ( (rRecvBitCount == ($$ (* isConstT *)charsize +  2)) ) ) : rRecvState = StopLast 
-        STORE ( ( ( !( (rRecvBitCount == $$ (* isConstT *)charsize) ) ) & ( !( (rRecvBitCount == ($$ (* isConstT *)charsize +  1)) ) ) ) & ( !( (rRecvBitCount == ($$ (* isConstT *)charsize +  2)) ) ) ) : rRecvState = Sample 
+        STORE ( ( (rRecvBitCount == charsize) ) & ( (paritysel != NONE) ) ) : rRecvState = RS_Parity         STORE ( ( ( (rRecvBitCount == charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( (stopbits != STOP_1) ) ) : rRecvState = StopFirst         STORE ( ( ( (rRecvBitCount == charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( !( (stopbits != STOP_1) ) ) ) : rRecvState = StopLast 
+        STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( (rRecvBitCount == (charsize +  1)) ) ) & ( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) : rRecvState = StopLast         STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( (rRecvBitCount == (charsize +  1)) ) ) & ( !( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) ) : rRecvState = StopFirst 
+        STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( !( (rRecvBitCount == (charsize +  1)) ) ) ) & ( (rRecvBitCount == (charsize +  2)) ) ) : rRecvState = StopLast 
+        STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( !( (rRecvBitCount == (charsize +  1)) ) ) ) & ( !( (rRecvBitCount == (charsize +  2)) ) ) ) : rRecvState = Sample 
         }
     METHOD/Rule/Action receive_sample_pin if (((rRecvState == Sample) && tick)) {
 QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
@@ -240,7 +240,7 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
     METHOD/Rule/Action receive_stop_last_bit if (((rRecvState == StopLast) && tick)) {
 QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
        LET Array 8 Bit(1) : data = take_a_8_n (readVReg_Bit_1__8 (vrRecvBuffer ) ) 
-               LET Bit(8)  : bitdata = (BinBit (Srl 4 4) pack_Vector_8_Bit_1___4 (data ) ( 8 - $$ (* isConstT *)charsize))
+               LET Bit(8)  : bitdata = (BinBit (Srl 4 4) pack_Vector_8_Bit_1___4 (data ) ( 8 - charsize))
                STORE  : rRecvState = Start 
        (pwRecvCellCountReset . send)
         }
@@ -285,9 +285,9 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
        
 (pwXmitCellCountReset . send)
         
-        STORE ( ( (rXmitCellCount ==  15) ) & ( ((rXmitBitCount == ($$ (* isConstT *)charsize -  1)) && (paritysel == NONE)) ) ) : rXmitState = XS_Stop 
-        STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == ($$ (* isConstT *)charsize -  1)) && (paritysel == NONE)) ) ) ) & ( ((rXmitBitCount == ($$ (* isConstT *)charsize -  1)) && (paritysel != NONE)) ) ) : rXmitState = XS_Parity 
-        STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == ($$ (* isConstT *)charsize -  1)) && (paritysel == NONE)) ) ) ) & ( !( ((rXmitBitCount == ($$ (* isConstT *)charsize -  1)) && (paritysel != NONE)) ) ) ) : rXmitState = XS_Shift 
+        STORE ( ( (rXmitCellCount ==  15) ) & ( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) : rXmitState = XS_Stop 
+        STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) ) & ( ((rXmitBitCount == (charsize -  1)) && (paritysel != NONE)) ) ) : rXmitState = XS_Parity 
+        STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel != NONE)) ) ) ) : rXmitState = XS_Shift 
         (pwXmitEnableBitCount . send)
         STORE ( !( (rXmitCellCount ==  15) ) ) : rXmitState = XS_Wait 
         }
