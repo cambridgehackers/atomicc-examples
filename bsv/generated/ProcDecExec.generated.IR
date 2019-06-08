@@ -39,14 +39,13 @@ MODULE DecExecSep(pgm,dec,exec,mem,rf,toHost) {
                CALL/Action  : d2eFifo.enq( decoded)
                STORE  : decoder_pc = (decoder_pc +  1) 
         }
-    METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && ((d2e . op) == opArith)) && (!sbFlags.sub ((d2e . src1) ))) && (!sbFlags.sub ((d2e . src2) )))) {
-QQ99       LET D2E : d2e = d2eFifo.first ( ) 
+    METHOD/Rule/Action executeArith if ((((d2eFifo.notEmpty ( ) && (d2e.op == opArith)) && (!sbFlags.sub (d2e.src1 ))) && (!sbFlags.sub (d2e.src2 )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
-               LET Bit(RegFileSz)  : src1 = (d2e . src1)
-               LET Bit(RegFileSz)  : src2 = (d2e . src2)
-               LET Bit(RegFileSz)  : dst = (d2e . dst)
-               LET OpArithK  : arithOp = (d2e . arithOp)
+               LET Bit(RegFileSz)  : src1 = d2e.src1
+               LET Bit(RegFileSz)  : src2 = d2e.src2
+               LET Bit(RegFileSz)  : dst = d2e.dst
+               LET OpArithK  : arithOp = d2e.arithOp
                LET Bit(DataSz)  : val1 = (rf $#[ src1 : 1 ])
                LET Bit(DataSz)  : val2 = (rf $#[ src2 : 1 ])
        LET Bit(DataSz) : execVal = exec.execArith (arithOp, val1, val2 ) 

@@ -73,24 +73,27 @@ MODULE BaudGenerator(divider) {
     FIELD PulseWire pwBaudTick2x
     FIELD Wire(Bit(16)) wBaudCount
     METHOD/Rule/Action baud_count_wire {
-               STORE  : wBaudCount = (rBaudCounter . value) 
+               STORE  : wBaudCount = rBaudCounter.value 
         }
     FIELD Wire(Bit(3)) wBaudTickCount
     METHOD/Rule/Action baud_tick_count_wire {
-               STORE  : wBaudTickCount = (rBaudTickCounter . value) 
+               STORE  : wBaudTickCount = rBaudTickCounter.value 
         }
     METHOD/Rule/Action count_baudtick_16x if (pwBaudTick16x) {
                LET Counter(3)  : btc = rBaudTickCounter
+               CALL/Action  : btc.up ( )
         }
     METHOD/Rule/Action assert_2x_baud_tick if (((rBaudTickCounter.value ( ) ==  0) && pwBaudTick16x)) {
-       (pwBaudTick2x . send)
+               CALL/Action  : pwBaudTick2x.send
         }
     METHOD/Action clock_enable {
    
-(pwBaudTick16x . send)
-
+        CALL/Action ( ((rBaudCounter.value ( ) +  1) >= divider) ) : pwBaudTick16x.send
+                CALL/Action ( ((rBaudCounter.value ( ) +  1) >= divider) ) : rBaudCounter.clear ( )
+        CALL/Action ( !( ((rBaudCounter.value ( ) +  1) >= divider) ) ) : rBaudCounter.up ( )
     }
     METHOD/Action clear {
+           CALL/Action  : rBaudCounter.clear ( )
     }
     METHOD baud_tick_16x Bit(1) = (pwBaudTick16x) {
     }
@@ -105,7 +108,7 @@ MODULE InputFilter(initval,din,size,a) {
     FIELD Counter(csize) counter
     FIELD a rOut
     METHOD/Action clock_enable {
-   (counter . up)(counter . down)
+           CALL/Action ( ((din == unpack_tvar456_tvar457 ( 1 )) && (counter.value ( ) != fromInteger_Bit_sz_ (ERRORTYPEVALUE ))) ) : counter.up        CALL/Action ( ( !( ((din == unpack_tvar456_tvar457 ( 1 )) && (counter.value ( ) != fromInteger_Bit_sz_ (ERRORTYPEVALUE ))) ) ) & ( ((din == unpack_tvar462_tvar463 ( 0 )) && (counter.value ( ) !=  0)) ) ) : counter.down
            STORE ( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) : rOut = unpack_Reg_a__tvar471 ( 1 )         STORE ( ( !( (counter.value ( ) == fromInteger_Bit_sz_ (ERRORTYPEVALUE )) ) ) & ( (counter.value ( ) ==  0) ) ) : rOut = unpack_Reg_a__tvar476 ( 0 ) 
     }
     METHOD _read a = (rOut) {
@@ -145,12 +148,13 @@ MODULE InputMovingFilter(din,width,threshold,a) {
                STORE  : rOut = unpack_Reg_a__tvar495 ( 1 ) 
         }
     METHOD/Rule/Action take_sample if ((pwSample && (din == unpack_tvar498_tvar499 ( 1 )))) {
-       (counter . up)
+               CALL/Action  : counter.up
         }
     METHOD/Action sample {
-   (pwSample . send)
+           CALL/Action  : pwSample.send
     }
     METHOD/Action clear {
+           CALL/Action  : counter.clear ( )
            STORE  : rOut = unpack_Reg_a__tvar502 ( 0 ) 
     }
     METHOD _read a = (rOut) {
@@ -181,36 +185,35 @@ MODULE UART(charsize,paritysel,stopbits,divider,ifc,4) {
     FIELD PulseWire pwXmitEnableBitCount
     FIELD PulseWire pwXmitLoadBuffer
     FIELD PulseWire pwXmitShiftBuffer
-            LET Bit(1)  : tick = (baudGen . baud_tick_16x) 
+            LET Bit(1)  : tick = baudGen.baud_tick_16x 
     METHOD/Rule/Action baud_generator_clock_enable {
-       (baudGen . clock_enable)
+               CALL/Action  : baudGen.clock_enable
         }
     METHOD/Rule/Action receive_bit_cell_time_counter if (tick) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE ( pwRecvCellCountReset ) : rRecvCellCount =  0         STORE ( !( pwRecvCellCountReset ) ) : rRecvCellCount = (rRecvCellCount +  1) 
         }
     METHOD/Rule/Action receive_buffer_shift if (pwRecvShiftBuffer) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                LET Array len element_type  : v = shiftInAtN_a_n (readVReg_Bit_1__8 (vrRecvBuffer ), rRecvData ) 
+               CALL/Action  : writeVReg_Bit_1__8 (vrRecvBuffer, v )
         }
     METHOD/Rule/Action receive_bit_counter {
                STORE ( pwRecvResetBitCount ) : rRecvBitCount =  0         STORE ( ( !( pwRecvResetBitCount ) ) & ( pwRecvEnableBitCount ) ) : rRecvBitCount = (rRecvBitCount +  1) 
         }
     METHOD/Rule/Action receive_wait_for_start_bit if (((rRecvState == Start) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
+               CALL/Action  : pwRecvCellCountReset.send ( )
        
         STORE ( (rRecvData ==  0) ) : rRecvState = Center 
         STORE ( !( (rRecvData ==  0) ) ) : rRecvState = Start 
+                CALL/Action ( !( (rRecvData ==  0) ) ) : pwRecvResetBitCount.send ( )
         }
     METHOD/Rule/Action receive_find_center_of_bit_cell if (((rRecvState == Center) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
        
-        STORE ( ( (rRecvCellCount ==  4) ) & ( (rRecvData ==  0) ) ) : rRecvState = Wait         STORE ( ( (rRecvCellCount ==  4) ) & ( !( (rRecvData ==  0) ) ) ) : rRecvState = Start 
+        CALL/Action ( (rRecvCellCount ==  4) ) : pwRecvCellCountReset.send ( )
+                STORE ( ( (rRecvCellCount ==  4) ) & ( (rRecvData ==  0) ) ) : rRecvState = Wait         STORE ( ( (rRecvCellCount ==  4) ) & ( !( (rRecvData ==  0) ) ) ) : rRecvState = Start 
         STORE ( !( (rRecvCellCount ==  4) ) ) : rRecvState = Center 
         }
     METHOD/Rule/Action receive_wait_bit_cell_time_for_sample if ((((rRecvState == Wait) && (rRecvCellCount ==  15)) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
-       (pwRecvCellCountReset . send)
+               CALL/Action  : pwRecvCellCountReset.send
        
         STORE ( ( (rRecvBitCount == charsize) ) & ( (paritysel != NONE) ) ) : rRecvState = RS_Parity         STORE ( ( ( (rRecvBitCount == charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( (stopbits != STOP_1) ) ) : rRecvState = StopFirst         STORE ( ( ( (rRecvBitCount == charsize) ) & ( !( (paritysel != NONE) ) ) ) & ( !( (stopbits != STOP_1) ) ) ) : rRecvState = StopLast 
         STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( (rRecvBitCount == (charsize +  1)) ) ) & ( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) : rRecvState = StopLast         STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( (rRecvBitCount == (charsize +  1)) ) ) & ( !( ((paritysel == NONE) || (stopbits == STOP_1)) ) ) ) : rRecvState = StopFirst 
@@ -218,87 +221,78 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
         STORE ( ( ( !( (rRecvBitCount == charsize) ) ) & ( !( (rRecvBitCount == (charsize +  1)) ) ) ) & ( !( (rRecvBitCount == (charsize +  2)) ) ) ) : rRecvState = Sample 
         }
     METHOD/Rule/Action receive_sample_pin if (((rRecvState == Sample) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
-       (pwRecvShiftBuffer . send)
-       (pwRecvEnableBitCount . send)
-       (pwRecvCellCountReset . send)
+               CALL/Action  : pwRecvShiftBuffer.send
+               CALL/Action  : pwRecvEnableBitCount.send
+               CALL/Action  : pwRecvCellCountReset.send
                STORE  : rRecvState = Wait 
         }
     METHOD/Rule/Action receive_parity_bit if (((rRecvState == RS_Parity) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rRecvParity = rRecvData 
-       (pwRecvEnableBitCount . send)
-       (pwRecvCellCountReset . send)
+               CALL/Action  : pwRecvEnableBitCount.send
+               CALL/Action  : pwRecvCellCountReset.send
                STORE  : rRecvState = Wait 
         }
     METHOD/Rule/Action receive_stop_first_bit if (((rRecvState == StopFirst) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
-       (pwRecvEnableBitCount . send)
-       (pwRecvCellCountReset . send)
+               CALL/Action  : pwRecvEnableBitCount.send
+               CALL/Action  : pwRecvCellCountReset.send
                STORE ( (rRecvData ==  1) ) : rRecvState = Wait         STORE ( !( (rRecvData ==  1) ) ) : rRecvState = Start 
         }
     METHOD/Rule/Action receive_stop_last_bit if (((rRecvState == StopLast) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
        LET Array 8 Bit(1) : data = take_a_8_n (readVReg_Bit_1__8 (vrRecvBuffer ) ) 
                LET Bit(8)  : bitdata = (BinBit (Srl 4 4) pack_Vector_8_Bit_1___4 (data ) ( 8 - charsize))
+               CALL/Action  : fifoRecv.enq (bitdata )
                STORE  : rRecvState = Start 
-       (pwRecvCellCountReset . send)
+               CALL/Action  : pwRecvCellCountReset.send
         }
     METHOD/Rule/Action transmit_bit_cell_time_counter if (tick) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE ( pwXmitCellCountReset ) : rXmitCellCount =  0         STORE ( !( pwXmitCellCountReset ) ) : rXmitCellCount = (rXmitCellCount +  1) 
         }
     METHOD/Rule/Action transmit_bit_counter {
                STORE ( pwXmitResetBitCount ) : rXmitBitCount =  0         STORE ( ( !( pwXmitResetBitCount ) ) & ( pwXmitEnableBitCount ) ) : rXmitBitCount = (rXmitBitCount +  1) 
         }
     METHOD/Rule/Action transmit_buffer_load if (pwXmitLoadBuffer) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
-       LET data : Bit(8) <-  pack  (fifoXmit . first)
-       (fifoXmit . deq)
+       LET data : Bit(8) <-  pack  fifoXmit.first
+               CALL/Action  : fifoXmit.deq
+               CALL/Action  : writeVReg_Bit_1__8 (vrXmitBuffer, unpack_Vector_n_a__8 (data ) )
                STORE  : rXmitParity = parity_8 (data ) 
         }
     METHOD/Rule/Action transmit_buffer_shift if (((!pwXmitLoadBuffer) && pwXmitShiftBuffer)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                LET Array len element_type  : v = shiftInAtN_a_n (readVReg_Bit_1__8 (vrXmitBuffer ),  1 ) 
+               CALL/Action  : writeVReg_Bit_1__8 (vrXmitBuffer, v )
         }
     METHOD/Rule/Action transmit_wait_for_start_command if (((rXmitState == XS_Idle) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut =  1 
-       (pwXmitResetBitCount . send)
+               CALL/Action  : pwXmitResetBitCount.send
        
-(pwXmitCellCountReset . send)
-        (pwXmitLoadBuffer . send)
-                STORE ( (fifoXmit . notEmpty) ) : rXmitState = XS_Start 
-        STORE ( !( (fifoXmit . notEmpty) ) ) : rXmitState = XS_Idle 
+        CALL/Action ( fifoXmit.notEmpty ) : pwXmitCellCountReset.send
+                CALL/Action ( fifoXmit.notEmpty ) : pwXmitLoadBuffer.send
+                STORE ( fifoXmit.notEmpty ) : rXmitState = XS_Start 
+        STORE ( !( fifoXmit.notEmpty ) ) : rXmitState = XS_Idle 
         }
     METHOD/Rule/Action transmit_send_start_bit if (((rXmitState == XS_Start) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut =  0 
        
         STORE ( (rXmitCellCount ==  15) ) : rXmitState = XS_Wait 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( (rXmitCellCount ==  15) ) : pwXmitCellCountReset.send
         STORE ( !( (rXmitCellCount ==  15) ) ) : rXmitState = XS_Start 
         }
     METHOD/Rule/Action transmit_wait_1_bit_cell_time if (((rXmitState == XS_Wait) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut = head_a_n (readVReg_Bit_1__8 (vrXmitBuffer ) ) 
        
-(pwXmitCellCountReset . send)
+        CALL/Action ( (rXmitCellCount ==  15) ) : pwXmitCellCountReset.send
         
         STORE ( ( (rXmitCellCount ==  15) ) & ( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) : rXmitState = XS_Stop 
         STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) ) & ( ((rXmitBitCount == (charsize -  1)) && (paritysel != NONE)) ) ) : rXmitState = XS_Parity 
         STORE ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel != NONE)) ) ) ) : rXmitState = XS_Shift 
-        (pwXmitEnableBitCount . send)
+                CALL/Action ( ( ( (rXmitCellCount ==  15) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel == NONE)) ) ) ) & ( !( ((rXmitBitCount == (charsize -  1)) && (paritysel != NONE)) ) ) ) : pwXmitEnableBitCount.send
         STORE ( !( (rXmitCellCount ==  15) ) ) : rXmitState = XS_Wait 
         }
     METHOD/Rule/Action transmit_shift_next_bit if (((rXmitState == XS_Shift) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut = head_a_n (readVReg_Bit_1__8 (vrXmitBuffer ) ) 
                STORE  : rXmitState = XS_Wait 
-       (pwXmitShiftBuffer . send)
+               CALL/Action  : pwXmitShiftBuffer.send
         }
     METHOD/Rule/Action transmit_send_parity_bit if (((rXmitState == XS_Parity) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
           CASEIf (paritysel . $tag == $0) then (
         STORE  : rXmitDataOut = rXmitParity 
 
@@ -312,35 +306,32 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
 ) as retval
        
         STORE ( (rXmitCellCount ==  15) ) : rXmitState = XS_Stop 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( (rXmitCellCount ==  15) ) : pwXmitCellCountReset.send
         STORE ( !( (rXmitCellCount ==  15) ) ) : rXmitState = XS_Parity 
         }
     METHOD/Rule/Action transmit_send_stop_bit if (((rXmitState == XS_Stop) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut =  1 
        
         STORE ( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) : rXmitState = XS_Idle 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) : pwXmitCellCountReset.send
         STORE ( ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) ) & ( ((rXmitCellCount ==  15) && (stopbits == STOP_2)) ) ) : rXmitState = XS_Stop2 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) ) & ( ((rXmitCellCount ==  15) && (stopbits == STOP_2)) ) ) : pwXmitCellCountReset.send
         STORE ( ( ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) ) & ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_2)) ) ) ) & ( ((rXmitCellCount ==  15) && (stopbits == STOP_1_5)) ) ) : rXmitState = XS_Stop5 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( ( ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) ) & ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_2)) ) ) ) & ( ((rXmitCellCount ==  15) && (stopbits == STOP_1_5)) ) ) : pwXmitCellCountReset.send
         STORE ( ( ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1)) ) ) & ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_2)) ) ) ) & ( !( ((rXmitCellCount ==  15) && (stopbits == STOP_1_5)) ) ) ) : rXmitState = XS_Stop 
         }
     METHOD/Rule/Action transmit_send_stop_bit1_5 if (((rXmitState == XS_Stop5) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut =  1 
        
         STORE ( (rXmitCellCount ==  7) ) : rXmitState = XS_Idle 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( (rXmitCellCount ==  7) ) : pwXmitCellCountReset.send
         STORE ( !( (rXmitCellCount ==  7) ) ) : rXmitState = XS_Stop5 
         }
     METHOD/Rule/Action transmit_send_stop_bit2 if (((rXmitState == XS_Stop2) && tick)) {
-QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
                STORE  : rXmitDataOut =  1 
        
         STORE ( (rXmitCellCount ==  15) ) : rXmitState = XS_Idle 
-        (pwXmitCellCountReset . send)
+                CALL/Action ( (rXmitCellCount ==  15) ) : pwXmitCellCountReset.send
         STORE ( !( (rXmitCellCount ==  15) ) ) : rXmitState = XS_Stop2 
         }
     METHOD sout Bit(1) = (rXmitDataOut) {
@@ -349,9 +340,10 @@ QQ99               LET nat  : fifodepth = ERRORTYPEVALUE
            STORE  : rRecvData = x 
     }
     METHOD get Bit(8) = (data) {
-   LET data : Bit(8) <-  pack  (fifoRecv . first)
-   (fifoRecv . deq)
+   LET data : Bit(8) <-  pack  fifoRecv.first
+           CALL/Action  : fifoRecv.deq
     }
     METHOD/Action put (  ) {
+           CALL/Action  : fifoXmit.enq (x )
     }
 }

@@ -70,14 +70,13 @@ STRUCT E2W {
     Bit(DataSz) val;
 }
 MODULE PipelinedExecuter {
-    METHOD/Rule/Action executeArith if (((((d2e . op) == opArith) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . src2) )))) {
-QQ99       LET D2E : d2e = d2eFifo.first ( ) 
+    METHOD/Rule/Action executeArith if ((((d2e.op == opArith) && (!sb.search1 (d2e.src1 ))) && (!sb.search2 (d2e.src2 )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
-               LET Bit(RegFileSz)  : src1 = (d2e . src1)
-               LET Bit(RegFileSz)  : src2 = (d2e . src2)
-               LET Bit(RegFileSz)  : dst = (d2e . dst)
-               LET OpArithK  : arithOp = (d2e . arithOp)
+               LET Bit(RegFileSz)  : src1 = d2e.src1
+               LET Bit(RegFileSz)  : src2 = d2e.src2
+               LET Bit(RegFileSz)  : dst = d2e.dst
+               LET OpArithK  : arithOp = d2e.arithOp
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
        LET Bit(DataSz) : val2 = rf.read2 (src2 ) 
        LET Bit(DataSz) : execVal = exec.execArith (arithOp, val1, val2 ) 
@@ -85,13 +84,12 @@ QQ99       LET D2E : d2e = d2eFifo.first ( )
                LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (execVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
         }
-    METHOD/Rule/Action executeLoad if (((((d2e . op) == opLd) && (!sb.search1 ((d2e . src1) ))) && (!sb.search2 ((d2e . dst) )))) {
-QQ99       LET D2E : d2e = d2eFifo.first ( ) 
+    METHOD/Rule/Action executeLoad if ((((d2e.op == opLd) && (!sb.search1 (d2e.src1 ))) && (!sb.search2 (d2e.dst )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
-               LET Bit(RegFileSz)  : src1 = (d2e . src1)
-               LET Bit(RegFileSz)  : dst = (d2e . dst)
-               LET Bit(AddrSz)  : addr = (d2e . addr)
+               LET Bit(RegFileSz)  : src1 = d2e.src1
+               LET Bit(RegFileSz)  : dst = d2e.dst
+               LET Bit(AddrSz)  : addr = d2e.addr
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
                LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= ( 0) ; "isLoad" ::= ( 1)  }
                CALL/Action  : mem.doMem( memrq)
@@ -99,22 +97,20 @@ QQ99       LET D2E : d2e = d2eFifo.first ( )
                LET E2W  : e2w = E2W { "idx" ::= (dst) ; "val" ::= (ldVal)  }
                CALL/Action  : e2wFifo.enq( e2w)
         }
-    METHOD/Rule/Action executeStore if ((((d2e . op) == opSt) && (!sb.search1 ((d2e . src1) )))) {
-QQ99       LET D2E : d2e = d2eFifo.first ( ) 
+    METHOD/Rule/Action executeStore if (((d2e.op == opSt) && (!sb.search1 (d2e.src1 )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
-               LET Bit(RegFileSz)  : src1 = (d2e . src1)
-               LET Bit(AddrSz)  : addr = (d2e . addr)
+               LET Bit(RegFileSz)  : src1 = d2e.src1
+               LET Bit(AddrSz)  : addr = d2e.addr
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
                LET MemRq  : memrq = MemRq { "addr" ::= (addr) ; "data" ::= (val1) ; "isLoad" ::= ( 0)  }
                CALL/Action  : mem.doMem( memrq)
         }
-    METHOD/Rule/Action executeToHost if ((((d2e . op) == opTh) && (!sb.search1 ((d2e . src1) )))) {
-QQ99       LET D2E : d2e = d2eFifo.first ( ) 
+    METHOD/Rule/Action executeToHost if (((d2e.op == opTh) && (!sb.search1 (d2e.src1 )))) {
        LET D2E : d2e = d2eFifo.first ( ) 
                CALL/Action  : d2eFifo.deq()
-               LET Bit(RegFileSz)  : src1 = (d2e . src1)
-               LET Bit(AddrSz)  : addr = (d2e . addr)
+               LET Bit(RegFileSz)  : src1 = d2e.src1
+               LET Bit(AddrSz)  : addr = d2e.addr
        LET Bit(DataSz) : val1 = rf.read1 (src1 ) 
                CALL/Action  : toHost.toHost( val1)
         }
@@ -123,8 +119,8 @@ MODULE PipelinedWriteback {
     METHOD/Rule/Action writeback {
        LET E2W : e2w = e2wFifo.first ( ) 
                CALL/Action  : e2wFifo.deq()
-               LET Bit(RegFileSz)  : idx = (e2w . idx)
-               LET Bit(DataSz)  : val = (e2w . val)
+               LET Bit(RegFileSz)  : idx = e2w.idx
+               LET Bit(DataSz)  : val = e2w.val
                CALL/Action  : rf.write( idx,  val)
                CALL/Action  : sb.remove( idx)
         }

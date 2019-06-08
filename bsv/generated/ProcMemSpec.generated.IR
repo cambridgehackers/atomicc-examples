@@ -44,10 +44,11 @@ MODULE Memory {
     FIELD RegFile(Bit(AddrSz), Bit(DataSz)) mem
     METHOD doMem ( MemRq req ) Bit(DataSz) = (#ZZplaceholder) {
    
-        LET Bit(AddrSz) ( ((req . isLoad) ==  1) ) : addr = (req . addr)
+        LET Bit(AddrSz) ( (req.isLoad ==  1) ) : addr = req.addr
         LET Bit(DataSz) : ldval = mem.sub (addr ) 
-        LET Bit(AddrSz) ( !( ((req . isLoad) ==  1) ) ) : addr = (req . addr)
-                LET Bit(DataSz) ( !( ((req . isLoad) ==  1) ) ) : newval = (req . data)
+        LET Bit(AddrSz) ( !( (req.isLoad ==  1) ) ) : addr = req.addr
+                LET Bit(DataSz) ( !( (req.isLoad ==  1) ) ) : newval = req.data
+                CALL/Action ( !( (req.isLoad ==  1) ) ) : mem.upd (addr, newval )
         LET Bit(DataSz) : placeholder = mem.sub (addr ) 
     }
 }
@@ -84,6 +85,7 @@ MODULE procSpec {
                STORE  : stage =  2 
         }
     METHOD/Rule/Action doWriteBack if ((stage ==  2)) {
+               CALL/Action  : rf.upd (e2w_dst, e2w_val )
                STORE  : pc = (pc +  1) 
                STORE  : stage =  0 
         }

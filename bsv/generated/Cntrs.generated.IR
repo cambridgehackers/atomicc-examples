@@ -51,16 +51,16 @@ MODULE UC(c) {
     }
     METHOD/Action update ( Integer val ) {
     }
-    METHOD isEqual ( Integer val ) Bit(1) = (((c . _read) == fromInteger_tvar69 (val ))) {
+    METHOD isEqual ( Integer val ) Bit(1) = ((c._read == fromInteger_tvar3073 (val ))) {
     }
-    METHOD isLessThan ( Integer val ) Bit(1) = (((c . _read) < fromInteger_tvar71 (val ))) {
+    METHOD isLessThan ( Integer val ) Bit(1) = ((c._read < fromInteger_tvar3075 (val ))) {
     }
-    METHOD isGreaterThan ( Integer val ) Bit(1) = (((c . _read) > fromInteger_tvar73 (val ))) {
+    METHOD isGreaterThan ( Integer val ) Bit(1) = ((c._read > fromInteger_tvar3077 (val ))) {
     }
 }
 MODULE Count(resetVal,t) {
     INTERFACE Count(t)
-            LET tvar26  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
+            LET tvar3030  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
     METHOD/Action incr ( t val ) {
     }
     METHOD/Action decr ( t val ) {
@@ -69,16 +69,16 @@ MODULE Count(resetVal,t) {
     }
     METHOD/Action _write ( t val ) {
     }
-    METHOD _read t = ((_i . _read)) {
+    METHOD _read t = (_i._read) {
     }
 }
 MODULE UCount(initValue,maxValue) {
     INTERFACE UCount
-            LET tvar32  : _i = Default 
-            LET tvar33  : ii = fromInteger_tvar33 (initValue ) 
+            LET tvar3036  : _i = Default 
+            LET tvar3037  : ii = fromInteger_tvar3037 (initValue ) 
             LET nat  : m = maxValue 
     
-
+        CALL/Action ( (m < $ 0) ) : errorM (((null + integerToString (m )) + null) )
 FIELD Count(UInt(0)) _r
         Assign _i <- mkUC_0 (_r )
 FIELD Count(UInt(1)) _r
@@ -145,5 +145,5 @@ FIELD Count(UInt(31)) _r
         Assign _i <- mkUC_31 (_r )
 FIELD Count(UInt(32)) _r
         Assign _i <- mkUC_32 (_r )
-
+        CALL/Action ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( ( !( (m < $ 0) ) ) & ( !( (m < ($ 2 ** $ 0)) ) ) ) & ( !( (m < ($ 2 ** $ 1)) ) ) ) & ( !( (m < ($ 2 ** $ 2)) ) ) ) & ( !( (m < ($ 2 ** $ 3)) ) ) ) & ( !( (m < ($ 2 ** $ 4)) ) ) ) & ( !( (m < ($ 2 ** $ 5)) ) ) ) & ( !( (m < ($ 2 ** $ 6)) ) ) ) & ( !( (m < ($ 2 ** $ 7)) ) ) ) & ( !( (m < ($ 2 ** $ 8)) ) ) ) & ( !( (m < ($ 2 ** $ 9)) ) ) ) & ( !( (m < ($ 2 ** $ 10)) ) ) ) & ( !( (m < ($ 2 ** $ 11)) ) ) ) & ( !( (m < ($ 2 ** $ 12)) ) ) ) & ( !( (m < ($ 2 ** $ 13)) ) ) ) & ( !( (m < ($ 2 ** $ 14)) ) ) ) & ( !( (m < ($ 2 ** $ 15)) ) ) ) & ( !( (m < ($ 2 ** $ 16)) ) ) ) & ( !( (m < ($ 2 ** $ 17)) ) ) ) & ( !( (m < ($ 2 ** $ 18)) ) ) ) & ( !( (m < ($ 2 ** $ 19)) ) ) ) & ( !( (m < ($ 2 ** $ 20)) ) ) ) & ( !( (m < ($ 2 ** $ 21)) ) ) ) & ( !( (m < ($ 2 ** $ 22)) ) ) ) & ( !( (m < ($ 2 ** $ 23)) ) ) ) & ( !( (m < ($ 2 ** $ 24)) ) ) ) & ( !( (m < ($ 2 ** $ 25)) ) ) ) & ( !( (m < ($ 2 ** $ 26)) ) ) ) & ( !( (m < ($ 2 ** $ 27)) ) ) ) & ( !( (m < ($ 2 ** $ 28)) ) ) ) & ( !( (m < ($ 2 ** $ 29)) ) ) ) & ( !( (m < ($ 2 ** $ 30)) ) ) ) & ( !( (m < ($ 2 ** $ 31)) ) ) ) & ( !( (m < ($ 2 ** $ 32)) ) ) ) : errorM (((null + integerToString (m )) + null) )
 }

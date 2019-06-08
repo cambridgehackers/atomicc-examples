@@ -7,6 +7,8 @@ INCLUDES+=-I generatedbsv -I $(CONNECTAL)/bsv -I $(CONNECTAL)/lib/bsv
 INCLUDES+=-I $(CONNECTAL)/examples/strstr
 INCLUDES+=-I $(CONNECTAL)/examples/sdcard_spi
 INCLUDES+=-I $(CONNECTAL)/examples/linking
+INCLUDES+=-I $(CONNECTAL)/lib/zedboard_robot/bsv
+INCLUDES+=-I $(CONNECTAL)/lib/strstr/bsv
 
 #BSVTOKAMI=JAVA_OPTS=-ea $(TOPDIR)/../bsvtokami/build/install/bsvtokami/bin/bsvtokami -I . -K generated
 BSVTOKAMI=JAVA_OPTS=-ea $(TOPDIR)/../bsvtokami/build/install/bsvtokami/bin/bsvtokami $(INCLUDES) -K generated
