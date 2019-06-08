@@ -20,7 +20,8 @@ SOURCES=\
     FIFO.bsv FIFOF.bsv FIFOLevel.bsv FShow.bsv SpecialFIFOs.bsv \
     GetPut.bsv Prelude.bsv RS232.bsv RegFile.bsv \
     Vector.bsv \
-    PipelinedProc.bsv ProcDecExec.bsv ProcMemInterm.bsv ProcMemSpec.bsv
+    PipelinedProc.bsv ProcDecExec.bsv ProcMemInterm.bsv ProcMemSpec.bsv \
+    field.bsv
 
 CSOURCE=\
     algo2_nandsim/Top.bsv aurora/Top.bsv bscan/Top.bsv caffe/Conv.bsv \

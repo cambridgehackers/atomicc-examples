@@ -1,0 +1,23 @@
+
+INTERFACE Count(t) {
+    METHOD/Action incr ( t val )
+}
+
+INTERFACE VCount(t) {
+    METHOD/Action incrA ( t val )
+}
+
+MODULE vCount0(t) {
+    INTERFACE VCount(t)
+    METHOD/Action incrA ( t val ) {
+    }
+}
+MODULE vCount(resetVal,t) {
+    INTERFACE VCount(t)
+}
+MODULE Count(resetVal,t) {
+    INTERFACE Count(t)
+            LET tvar15  : _i <- (IF (ERRORTYPEVALUE != $ 0) then vCount_t (resetVal ) else vCount0) 
+    METHOD/Action incr ( t val ) {
+    }
+}
