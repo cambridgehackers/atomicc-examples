@@ -21,7 +21,7 @@ SOURCES=\
     GetPut.bsv Prelude.bsv RS232.bsv RegFile.bsv \
     Vector.bsv \
     PipelinedProc.bsv ProcDecExec.bsv ProcMemInterm.bsv ProcMemSpec.bsv \
-    field.bsv
+    field.bsv array.bsv
 
 CSOURCE=\
     algo2_nandsim/Top.bsv aurora/Top.bsv bscan/Top.bsv caffe/Conv.bsv \

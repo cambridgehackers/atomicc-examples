@@ -1,0 +1,39 @@
+
+INTERFACE SCounter {
+    METHOD/Action incr
+    METHOD/Action decr
+    METHOD isEq ( nat n ) Bit(1)
+    METHOD/Action setNext ( b value,Array n Reg(b) as )
+    METHOD/Action set ( b value,Array n Reg(b) as )
+    METHOD/Action clear
+}
+
+MODULE SCtr(c) {
+    INTERFACE SCounter
+    METHOD/Action incr {
+           STORE  : c = (c +  1) 
+    }
+    METHOD/Action decr {
+           STORE  : c = (c -  1) 
+    }
+    METHOD/Action setNext ( b value,Vector(n, Reg(b)) as ) {
+           STORE  : as[c] = value 
+    }
+    METHOD/Action set ( b value,Vector(n, Reg(b)) as ) {
+           STORE  : as[(c -  1)] = value 
+    }
+    METHOD/Action clear {
+           STORE  : c =  0 
+    }
+}
+MODULE SCounter(m) {
+    INTERFACE SCounter
+            LET tvar144  : _i = Default 
+    
+        CALL/Action ( (m <  2) ) : mkReg(  0)
+                Assign _i <- mkSCtr_1 (r )
+        CALL/Action ( ( !( (m <  2) ) ) & ( (m <  4) ) ) : mkReg(  0)
+                Assign _i <- mkSCtr_2 (r )
+        CALL/Action ( ( ( !( (m <  2) ) ) & ( !( (m <  4) ) ) ) & ( (m <  8) ) ) : mkReg(  0)
+                Assign _i <- mkSCtr_3 (r )
+}
