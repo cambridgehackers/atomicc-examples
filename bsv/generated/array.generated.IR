@@ -34,6 +34,4 @@ MODULE SCounter(m) {
                 Assign _i <- mkSCtr_1 (r )
         CALL/Action ( ( !( (m <  2) ) ) & ( (m <  4) ) ) : mkReg(  0)
                 Assign _i <- mkSCtr_2 (r )
-        CALL/Action ( ( ( !( (m <  2) ) ) & ( !( (m <  4) ) ) ) & ( (m <  8) ) ) : mkReg(  0)
-                Assign _i <- mkSCtr_3 (r )
 }
