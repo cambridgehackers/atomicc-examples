@@ -51,7 +51,6 @@
 //METAGUARD; RULE$respond_rule_8; ( fifo[ 8 ] . out$first__RDY ) & ( fifo[ 8 ] . out$deq__RDY ) & out$heard__RDY;
 //METAINVOKE; RULE$respond_rule_9__ENA; :fifo[9].out$deq__ENA;:fifo[9].out$first;:out$heard__ENA;
 //METAGUARD; RULE$respond_rule_9; ( fifo[ 9 ] . out$first__RDY ) & ( fifo[ 9 ] . out$deq__RDY ) & out$heard__RDY;
-//METAINVOKE; in$say__ENA; in$say$meth == 0:fifo[0].in$enq__ENA;in$say$meth == 1:fifo[1].in$enq__ENA;in$say$meth == 2:fifo[2].in$enq__ENA;in$say$meth == 3:fifo[3].in$enq__ENA;in$say$meth == 4:fifo[4].in$enq__ENA;in$say$meth == 5:fifo[5].in$enq__ENA;in$say$meth == 6:fifo[6].in$enq__ENA;in$say$meth == 7:fifo[7].in$enq__ENA;in$say$meth == 8:fifo[8].in$enq__ENA;in$say$meth == 9:fifo[9].in$enq__ENA;
-//METAGUARD; in$say; ( fifo[ 0 ] . in$enq__RDY ) & ( fifo[ 1 ] . in$enq__RDY ) & ( fifo[ 2 ] . in$enq__RDY ) & ( fifo[ 3 ] . in$enq__RDY ) & ( fifo[ 4 ] . in$enq__RDY ) & ( fifo[ 5 ] . in$enq__RDY ) & ( fifo[ 6 ] . in$enq__RDY ) & ( fifo[ 7 ] . in$enq__RDY ) & ( fifo[ 8 ] . in$enq__RDY ) & ( fifo[ 9 ] . in$enq__RDY );
+//METAGUARD; in$say; 1;
 //METARULES; RULE$respond_rule_0; RULE$respond_rule_1; RULE$respond_rule_2; RULE$respond_rule_3; RULE$respond_rule_4; RULE$respond_rule_5; RULE$respond_rule_6; RULE$respond_rule_7; RULE$respond_rule_8; RULE$respond_rule_9
 `endif
