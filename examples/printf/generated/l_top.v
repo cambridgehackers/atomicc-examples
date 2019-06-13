@@ -3,24 +3,24 @@
 `default_nettype none
 module l_top (input wire CLK, input wire nRST,
     output wire indication$enq__ENA,
-    output wire [127:0]indication$enq$v,
-    output wire [15:0]indication$enq$length,
+    output wire [128 - 1:0]indication$enq$v,
+    output wire [16 - 1:0]indication$enq$length,
     input wire indication$enq__RDY,
     input wire request$enq__ENA,
-    input wire [127:0]request$enq$v,
+    input wire [128 - 1:0]request$enq$v,
     output wire request$enq__RDY);
-    wire [31:0]DUT__Echo$indication$heard$v;
-    wire [15:0]DUT__Echo$indication$heard2$a;
-    wire [15:0]DUT__Echo$indication$heard2$b;
+    wire [32 - 1:0]DUT__Echo$indication$heard$v;
+    wire [16 - 1:0]DUT__Echo$indication$heard2$a;
+    wire [16 - 1:0]DUT__Echo$indication$heard2$b;
     wire DUT__Echo$indication$heard2__ENA;
-    wire [15:0]DUT__Echo$indication$heard3$a;
-    wire [31:0]DUT__Echo$indication$heard3$b;
-    wire [31:0]DUT__Echo$indication$heard3$c;
-    wire [15:0]DUT__Echo$indication$heard3$d;
+    wire [16 - 1:0]DUT__Echo$indication$heard3$a;
+    wire [32 - 1:0]DUT__Echo$indication$heard3$b;
+    wire [32 - 1:0]DUT__Echo$indication$heard3$c;
+    wire [16 - 1:0]DUT__Echo$indication$heard3$d;
     wire DUT__Echo$indication$heard3__ENA;
     wire DUT__Echo$indication$heard__ENA;
-    wire [15:0]DUT__Echo$printfp$enq$length;
-    wire [127:0]DUT__Echo$printfp$enq$v;
+    wire [16 - 1:0]DUT__Echo$printfp$enq$length;
+    wire [128 - 1:0]DUT__Echo$printfp$enq$v;
     wire DUT__Echo$printfp$enq__ENA;
     wire DUT__Echo$request$say2__RDY;
     wire DUT__Echo$request$say__RDY;
@@ -28,15 +28,15 @@ module l_top (input wire CLK, input wire nRST,
     wire M2P__indication$method$heard2__RDY;
     wire M2P__indication$method$heard3__RDY;
     wire M2P__indication$method$heard__RDY;
-    wire [15:0]M2P__indication$pipe$enq$length;
-    wire [127:0]M2P__indication$pipe$enq$v;
+    wire [16 - 1:0]M2P__indication$pipe$enq$length;
+    wire [128 - 1:0]M2P__indication$pipe$enq$v;
     wire M2P__indication$pipe$enq__ENA;
-    wire [31:0]P2M__request$method$say$v;
-    wire [15:0]P2M__request$method$say2$a;
-    wire [15:0]P2M__request$method$say2$b;
+    wire [32 - 1:0]P2M__request$method$say$v;
+    wire [16 - 1:0]P2M__request$method$say2$a;
+    wire [16 - 1:0]P2M__request$method$say2$b;
     wire P2M__request$method$say2__ENA;
     wire P2M__request$method$say__ENA;
-    wire [7:0]P2M__request$method$setLeds$v;
+    wire [8 - 1:0]P2M__request$method$setLeds$v;
     wire P2M__request$method$setLeds__ENA;
     wire mux$forward$enq__RDY;
     wire mux$in$enq__RDY;

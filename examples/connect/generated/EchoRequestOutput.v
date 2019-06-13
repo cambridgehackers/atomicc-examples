@@ -3,11 +3,11 @@
 `default_nettype none
 module EchoRequestOutput (input wire CLK, input wire nRST,
     input wire request$say__ENA,
-    input wire [31:0]request$say$meth,
-    input wire [31:0]request$say$v,
+    input wire [32 - 1:0]request$say$meth,
+    input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
     output wire pipe$enq__ENA,
-    output wire [95:0]pipe$enq$v,
+    output wire [(32 + (32 + 32)) - 1:0]pipe$enq$v,
     input wire pipe$enq__RDY);
     assign pipe$enq$v = { request$say$v , request$say$meth , 32'd1 };
     assign pipe$enq__ENA = request$say__ENA;

@@ -3,12 +3,12 @@
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
     input wire request$say2__ENA,
-    input wire [31:0]request$say2$meth,
-    input wire [31:0]request$say2$v,
+    input wire [32 - 1:0]request$say2$meth,
+    input wire [32 - 1:0]request$say2$v,
     output wire request$say2__RDY,
     input wire request$say__ENA,
-    input wire [31:0]request$say$meth,
-    input wire [31:0]request$say$v,
+    input wire [32 - 1:0]request$say$meth,
+    input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
     input wire swap$x2y__ENA,
     output wire swap$x2y__RDY,
@@ -17,17 +17,17 @@ module Echo (input wire CLK, input wire nRST,
     input wire swap$y2xnull__ENA,
     output wire swap$y2xnull__RDY,
     output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$meth,
-    output wire [31:0]indication$heard$v,
+    output wire [32 - 1:0]indication$heard$meth,
+    output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY);
     reg busy;
     reg busy_delay;
-    reg [31:0]meth_delay;
-    reg [31:0]meth_temp;
-    reg [31:0]v_delay;
-    reg [31:0]v_temp;
-    reg [31:0]x;
-    reg [31:0]y;
+    reg [32 - 1:0]meth_delay;
+    reg [32 - 1:0]meth_temp;
+    reg [32 - 1:0]v_delay;
+    reg [32 - 1:0]v_temp;
+    reg [32 - 1:0]x;
+    reg [32 - 1:0]y;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
     assign indication$heard__ENA = busy_delay;

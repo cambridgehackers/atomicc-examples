@@ -3,10 +3,10 @@
 `default_nettype none
 module IVector (input wire CLK, input wire nRST,
     input wire request$say__ENA,
-    input wire [703:0]request$say$v,
+    input wire [((32 + 32) + (32 * 20)) - 1:0]request$say$v,
     output wire request$say__RDY,
     output wire ind$heard__ENA,
-    output wire [703:0]ind$heard$v,
+    output wire [((32 + 32) + (32 * 20)) - 1:0]ind$heard$v,
     input wire ind$heard__RDY);
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;

@@ -8,9 +8,9 @@ module ModFt600 (
     output wire usb_rd_n,
     output wire usb_wr_n,
     output wire usb_oe_n,
-    inout wire [15:0]usb_ad);
+    inout wire [16 - 1:0]usb_ad);
     reg usb_fifo_empty;
-    reg [1:0]usb_rxf_delay;
+    reg [2 - 1:0]usb_rxf_delay;
     reg usb_txe_delay;
     wire CLK;
     wire nRST;

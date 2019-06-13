@@ -3,11 +3,11 @@
 `default_nettype none
 module EchoIndicationOutput (input wire CLK, input wire nRST,
     input wire indication$heard__ENA,
-    input wire [31:0]indication$heard$meth,
-    input wire [31:0]indication$heard$v,
+    input wire [32 - 1:0]indication$heard$meth,
+    input wire [32 - 1:0]indication$heard$v,
     output wire indication$heard__RDY,
     output wire pipe$enq__ENA,
-    output wire [95:0]pipe$enq$v,
+    output wire [(32 + (32 + 32)) - 1:0]pipe$enq$v,
     input wire pipe$enq__RDY);
     assign indication$heard__RDY = pipe$enq__RDY;
     assign pipe$enq$v = { indication$heard$v , indication$heard$meth , 32'd1 };

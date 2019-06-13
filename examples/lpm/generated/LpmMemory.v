@@ -3,14 +3,14 @@
 `default_nettype none
 module LpmMemory (input wire CLK, input wire nRST,
     input wire ifc$req__ENA,
-    input wire [31:0]ifc$req$v,
+    input wire [32 - 1:0]ifc$req$v,
     output wire ifc$req__RDY,
     input wire ifc$resAccept__ENA,
     output wire ifc$resAccept__RDY,
-    output wire [31:0]ifc$resValue,
+    output wire [32 - 1:0]ifc$resValue,
     output wire ifc$resValue__RDY);
-    reg [31:0]delayCount;
-    reg [31:0]saved;
+    reg [32 - 1:0]delayCount;
+    reg [32 - 1:0]saved;
     assign ifc$req__RDY = delayCount == 0;
     assign ifc$resAccept__RDY = delayCount == 1;
     assign ifc$resValue = saved;

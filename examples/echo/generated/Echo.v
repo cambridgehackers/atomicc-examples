@@ -3,10 +3,10 @@
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
     input wire sout$say__ENA,
-    input wire [31:0]sout$say$v,
+    input wire [32 - 1:0]sout$say$v,
     output wire sout$say__RDY,
     output wire ind$heard__ENA,
-    output wire [31:0]ind$heard$v,
+    output wire [32 - 1:0]ind$heard$v,
     input wire ind$heard__RDY);
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;

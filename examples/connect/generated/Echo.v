@@ -3,12 +3,12 @@
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
     input wire request$say__ENA,
-    input wire [31:0]request$say$meth,
-    input wire [31:0]request$say$v,
+    input wire [32 - 1:0]request$say$meth,
+    input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
     output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$meth,
-    output wire [31:0]indication$heard$v,
+    output wire [32 - 1:0]indication$heard$meth,
+    output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY);
     assign indication$heard$meth = request$say$meth;
     assign indication$heard$v = request$say$v;

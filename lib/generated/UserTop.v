@@ -3,21 +3,21 @@
 `default_nettype none
 module UserTop (input wire CLK, input wire nRST,
     input wire write$enq__ENA,
-    input wire [31:0]write$enq$v,
-    input wire [15:0]write$enq$length,
+    input wire [32 - 1:0]write$enq$v,
+    input wire [16 - 1:0]write$enq$length,
     output wire write$enq__RDY,
     output wire read$enq__ENA,
-    output wire [31:0]read$enq$v,
-    output wire [15:0]read$enq$length,
+    output wire [32 - 1:0]read$enq$v,
+    output wire [16 - 1:0]read$enq$length,
     input wire read$enq__RDY);
-    wire [15:0]ctop$indication$enq$length;
-    wire [127:0]ctop$indication$enq$v;
+    wire [16 - 1:0]ctop$indication$enq$length;
+    wire [128 - 1:0]ctop$indication$enq$v;
     wire ctop$indication$enq__ENA;
     wire ctop$request$enq__RDY;
-    wire [127:0]indication$enq$v;
+    wire [128 - 1:0]indication$enq$v;
     wire radapter_0$in$enq__RDY;
-    wire [15:0]wadapter_0$out$enq$length;
-    wire [127:0]wadapter_0$out$enq$v;
+    wire [16 - 1:0]wadapter_0$out$enq$length;
+    wire [128 - 1:0]wadapter_0$out$enq$v;
     wire wadapter_0$out$enq__ENA;
     AdapterToBus radapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(ctop$indication$enq__ENA),

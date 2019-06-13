@@ -3,16 +3,16 @@
 `default_nettype none
 module EchoRequestInput (input wire CLK, input wire nRST,
     input wire pipe$enq__ENA,
-    input wire [95:0]pipe$enq$v,
+    input wire [(32 + (32 + 32)) - 1:0]pipe$enq$v,
     output wire pipe$enq__RDY,
     output wire request$say__ENA,
-    output wire [31:0]request$say$meth,
-    output wire [31:0]request$say$v,
+    output wire [32 - 1:0]request$say$meth,
+    output wire [32 - 1:0]request$say$v,
     input wire request$say__RDY);
     assign pipe$enq__RDY = request$say__RDY;
-    assign request$say$meth = pipe$enq$v[ 63 : 32 ];
-    assign request$say$v = pipe$enq$v[ 95 : 64 ];
-    assign request$say__ENA = pipe$enq__ENA & ( pipe$enq$v[ 31 : 0 ] == 1 );
+    assign request$say$meth = pipe$enq$v[ 32 - 1 + 32 : 32 ];
+    assign request$say$v = pipe$enq$v[ 32 - 1 + 64 : 64 ];
+    assign request$say__ENA = pipe$enq__ENA & ( pipe$enq$v[ ( 32 - 1 ) : 0 ] == 1 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

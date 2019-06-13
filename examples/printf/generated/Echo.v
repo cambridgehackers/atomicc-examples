@@ -3,42 +3,42 @@
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
     input wire request$say2__ENA,
-    input wire [15:0]request$say2$a,
-    input wire [15:0]request$say2$b,
+    input wire [16 - 1:0]request$say2$a,
+    input wire [16 - 1:0]request$say2$b,
     output wire request$say2__RDY,
     input wire request$say__ENA,
-    input wire [31:0]request$say$v,
+    input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
     input wire request$setLeds__ENA,
-    input wire [7:0]request$setLeds$v,
+    input wire [8 - 1:0]request$setLeds$v,
     output wire request$setLeds__RDY,
     output wire indication$heard2__ENA,
-    output wire [15:0]indication$heard2$a,
-    output wire [15:0]indication$heard2$b,
+    output wire [16 - 1:0]indication$heard2$a,
+    output wire [16 - 1:0]indication$heard2$b,
     input wire indication$heard2__RDY,
     output wire indication$heard3__ENA,
-    output wire [15:0]indication$heard3$a,
-    output wire [31:0]indication$heard3$b,
-    output wire [31:0]indication$heard3$c,
-    output wire [15:0]indication$heard3$d,
+    output wire [16 - 1:0]indication$heard3$a,
+    output wire [32 - 1:0]indication$heard3$b,
+    output wire [32 - 1:0]indication$heard3$c,
+    output wire [16 - 1:0]indication$heard3$d,
     input wire indication$heard3__RDY,
     output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$v,
+    output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY,
     output wire printfp$enq__ENA,
-    output wire [127:0]printfp$enq$v,
-    output wire [15:0]printfp$enq$length,
+    output wire [128 - 1:0]printfp$enq$v,
+    output wire [16 - 1:0]printfp$enq$length,
     input wire printfp$enq__RDY);
-    reg [15:0]a_delay;
-    reg [15:0]a_temp;
-    reg [15:0]b_delay;
-    reg [15:0]b_temp;
+    reg [16 - 1:0]a_delay;
+    reg [16 - 1:0]a_temp;
+    reg [16 - 1:0]b_delay;
+    reg [16 - 1:0]b_temp;
     reg busy;
     reg busy_delay;
-    reg [31:0]clockReg;
-    reg [31:0]v_delay;
-    reg [31:0]v_temp;
-    reg [31:0]v_type;
+    reg [32 - 1:0]clockReg;
+    reg [32 - 1:0]v_delay;
+    reg [32 - 1:0]v_temp;
+    reg [32 - 1:0]v_type;
     wire RULE$delay_rule__ENA;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__ENA;

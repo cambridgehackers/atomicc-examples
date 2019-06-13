@@ -2,17 +2,17 @@
 
 `default_nettype none
 module ZynqTop (
-    inout wire [14:0]DDR_Addr,
-    inout wire [2:0]DDR_BankAddr,
+    inout wire [15 - 1:0]DDR_Addr,
+    inout wire [3 - 1:0]DDR_BankAddr,
     inout wire DDR_CAS_n,
     inout wire DDR_CKE,
     inout wire DDR_Clk_n,
     inout wire DDR_Clk_p,
     inout wire DDR_CS_n,
-    inout wire [3:0]DDR_DM,
-    inout wire [31:0]DDR_DQ,
-    inout wire [3:0]DDR_DQS_n,
-    inout wire [3:0]DDR_DQS_p,
+    inout wire [4 - 1:0]DDR_DM,
+    inout wire [32 - 1:0]DDR_DQ,
+    inout wire [4 - 1:0]DDR_DQS_n,
+    inout wire [4 - 1:0]DDR_DQS_p,
     inout wire DDR_DRSTB,
     inout wire DDR_ODT,
     inout wire DDR_RAS_n,
@@ -22,32 +22,32 @@ module ZynqTop (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
-    inout wire [53:0]MIO);
+    inout wire [54 - 1:0]MIO);
     wire ps7_fclk_0_c$O;
     wire ps7_freset_0_r$O;
-    wire [3:0]ps7_ps7_foo$FCLKCLK;
-    wire [3:0]ps7_ps7_foo$FCLKRESETN;
+    wire [4 - 1:0]ps7_ps7_foo$FCLKCLK;
+    wire [4 - 1:0]ps7_ps7_foo$FCLKRESETN;
     wire ps7_ps7_foo$MAXIGP0_I$B__RDY;
     wire ps7_ps7_foo$MAXIGP0_I$R__RDY;
-    wire [31:0]ps7_ps7_foo$MAXIGP0_O$AR$addr;
-    wire [11:0]ps7_ps7_foo$MAXIGP0_O$AR$id;
-    wire [3:0]ps7_ps7_foo$MAXIGP0_O$AR$len;
+    wire [32 - 1:0]ps7_ps7_foo$MAXIGP0_O$AR$addr;
+    wire [12 - 1:0]ps7_ps7_foo$MAXIGP0_O$AR$id;
+    wire [4 - 1:0]ps7_ps7_foo$MAXIGP0_O$AR$len;
     wire ps7_ps7_foo$MAXIGP0_O$AR__ENA;
-    wire [31:0]ps7_ps7_foo$MAXIGP0_O$AW$addr;
-    wire [11:0]ps7_ps7_foo$MAXIGP0_O$AW$id;
-    wire [3:0]ps7_ps7_foo$MAXIGP0_O$AW$len;
+    wire [32 - 1:0]ps7_ps7_foo$MAXIGP0_O$AW$addr;
+    wire [12 - 1:0]ps7_ps7_foo$MAXIGP0_O$AW$id;
+    wire [4 - 1:0]ps7_ps7_foo$MAXIGP0_O$AW$len;
     wire ps7_ps7_foo$MAXIGP0_O$AW__ENA;
-    wire [31:0]ps7_ps7_foo$MAXIGP0_O$W$data;
-    wire [11:0]ps7_ps7_foo$MAXIGP0_O$W$id;
+    wire [32 - 1:0]ps7_ps7_foo$MAXIGP0_O$W$data;
+    wire [12 - 1:0]ps7_ps7_foo$MAXIGP0_O$W$id;
     wire ps7_ps7_foo$MAXIGP0_O$W$last;
     wire ps7_ps7_foo$MAXIGP0_O$W__ENA;
-    wire [11:0]test$MAXIGP0_I$B$id;
-    wire [1:0]test$MAXIGP0_I$B$resp;
+    wire [12 - 1:0]test$MAXIGP0_I$B$id;
+    wire [2 - 1:0]test$MAXIGP0_I$B$resp;
     wire test$MAXIGP0_I$B__ENA;
-    wire [31:0]test$MAXIGP0_I$R$data;
-    wire [11:0]test$MAXIGP0_I$R$id;
+    wire [32 - 1:0]test$MAXIGP0_I$R$data;
+    wire [12 - 1:0]test$MAXIGP0_I$R$id;
     wire test$MAXIGP0_I$R$last;
-    wire [1:0]test$MAXIGP0_I$R$resp;
+    wire [2 - 1:0]test$MAXIGP0_I$R$resp;
     wire test$MAXIGP0_I$R__ENA;
     wire test$MAXIGP0_O$AR__RDY;
     wire test$MAXIGP0_O$AW__RDY;

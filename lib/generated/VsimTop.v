@@ -8,11 +8,11 @@ module VsimTop (
     input wire nRST_derivedReset,
     input wire CLK_sys_clk);
     wire sink_0$beat$last;
-    wire [31:0]sink_0$beat$v;
+    wire [32 - 1:0]sink_0$beat$v;
     wire sink_0$beat__ENA;
     wire source_0$beat__RDY;
-    wire [15:0]user$read$enq$length;
-    wire [31:0]user$read$enq$v;
+    wire [16 - 1:0]user$read$enq$length;
+    wire [32 - 1:0]user$read$enq$v;
     wire user$read$enq__ENA;
     wire user$write$enq__RDY;
     UserTop user (.CLK(CLK), .nRST(nRST),

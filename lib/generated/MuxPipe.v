@@ -3,24 +3,24 @@
 `default_nettype none
 module MuxPipe (input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [127:0]in$enq$v,
-    input wire [15:0]in$enq$length,
+    input wire [128 - 1:0]in$enq$v,
+    input wire [16 - 1:0]in$enq$length,
     output wire in$enq__RDY,
     input wire forward$enq__ENA,
-    input wire [127:0]forward$enq$v,
-    input wire [15:0]forward$enq$length,
+    input wire [128 - 1:0]forward$enq$v,
+    input wire [16 - 1:0]forward$enq$length,
     output wire forward$enq__RDY,
     output wire out$enq__ENA,
-    output wire [127:0]out$enq$v,
-    output wire [15:0]out$enq$length,
+    output wire [128 - 1:0]out$enq$v,
+    output wire [16 - 1:0]out$enq$length,
     input wire out$enq__RDY);
     wire forwardFifo$in$enq__RDY;
     wire forwardFifo$out$deq__RDY;
-    wire [127:0]forwardFifo$out$first;
+    wire [128 - 1:0]forwardFifo$out$first;
     wire forwardFifo$out$first__RDY;
     wire forwardFifol$in$enq__RDY;
     wire forwardFifol$out$deq__RDY;
-    wire [15:0]forwardFifol$out$first;
+    wire [16 - 1:0]forwardFifol$out$first;
     wire forwardFifol$out$first__RDY;
     Fifo1Base#(128) forwardFifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(forward$enq__ENA & forwardFifol$in$enq__RDY),

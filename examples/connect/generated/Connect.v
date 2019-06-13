@@ -3,25 +3,25 @@
 `default_nettype none
 module Connect (input wire CLK, input wire nRST,
     input wire request$say__ENA,
-    input wire [31:0]request$say$meth,
-    input wire [31:0]request$say$v,
+    input wire [32 - 1:0]request$say$meth,
+    input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
     output wire indication$heard__ENA,
-    output wire [31:0]indication$heard$meth,
-    output wire [31:0]indication$heard$v,
+    output wire [32 - 1:0]indication$heard$meth,
+    output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY);
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
-    wire [95:0]lEIO$pipe$enq$v;
+    wire [(32 + (32 + 32)) - 1:0]lEIO$pipe$enq$v;
     wire lEIO$pipe$enq__ENA;
     wire lERI$pipe$enq__RDY;
-    wire [31:0]lERI$request$say$meth;
-    wire [31:0]lERI$request$say$v;
+    wire [32 - 1:0]lERI$request$say$meth;
+    wire [32 - 1:0]lERI$request$say$v;
     wire lERI$request$say__ENA;
-    wire [95:0]lERO_test$pipe$enq$v;
+    wire [(32 + (32 + 32)) - 1:0]lERO_test$pipe$enq$v;
     wire lERO_test$pipe$enq__ENA;
-    wire [31:0]lEcho$indication$heard$meth;
-    wire [31:0]lEcho$indication$heard$v;
+    wire [32 - 1:0]lEcho$indication$heard$meth;
+    wire [32 - 1:0]lEcho$indication$heard$v;
     wire lEcho$indication$heard__ENA;
     wire lEcho$request$say__RDY;
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
