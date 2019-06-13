@@ -25,48 +25,58 @@ __interface PulseWireIf {
     bool value();
     void send();
 };
-__emodule PulseWire {
-    PulseWireIf _;
+__module PulseWire {
+    PulseWireIf ifc;
+    bool ifc.value() { return false; }
+    void ifc.send() {}
 };
 
-template<int width, class T>
-__module SizedDFIFOF : public Fifo<T> {
+template<int depth, int width>
+__module SCounterBase : public Fifo<__uint(width)> {
 #define dflt 0
-    T q[width];
-    //__atomicc_uint(log2(width)) c;
-    __uint(width) c;
-    __shared T      x_wire;
+    __uint(width) q[depth];
+    //__atomicc_uint(log2(depth)) c;
+    __uint(depth) c;
+    __shared __uint(width)      x_wire;
     PulseWire enqueueing, dequeueing;
     bool empty() { return c == 0; };
-    bool full() { return c == width; };
-    __rule incCtr if (enqueueing._.value() && !dequeueing._.value()) {
+    bool full() { return c == depth; };
+    __rule incCtr if (enqueueing.ifc.value() && !dequeueing.ifc.value()) {
         c++;
         q[c] = x_wire;
     }
-    __rule decCtr if (dequeueing._.value() && !enqueueing._.value()) {
-        for (int i=0; i<width; i=i+1)
-            q[i] = (i==(width - 1) ? dflt : q[i + 1]);
+    __rule decCtr if (dequeueing.ifc.value() && !enqueueing.ifc.value()) {
+        for (int i=0; i<depth; i=i+1)
+            q[i] = (i==(depth - 1) ? dflt : q[i + 1]);
         c--;
     }
-    __rule both if (dequeueing._.value() && enqueueing._.value()) {
-        for (int i=0; i<width; i=i+1)
+    __rule both if (dequeueing.ifc.value() && enqueueing.ifc.value()) {
+        for (int i=0; i<depth; i=i+1)
             if (c != i + 1)
-                q[i] = (i==(width - 1) ? dflt : q[i + 1]);
+                q[i] = (i==(depth - 1) ? dflt : q[i + 1]);
         q[c-1] = x_wire;
     }
-    void out.deq() if (!empty()) { dequeueing._.send(); }
-    T out.first() { return q[0]; }
-    void in.enq(T x) if (!full()) {
-        enqueueing._.send();
+    void out.deq() if (!empty()) { dequeueing.ifc.send(); }
+    __uint(width) out.first() { return q[0]; }
+    void in.enq(__uint(width) x) if (!full()) {
+        enqueueing.ifc.send();
         x_wire = x;
     }
     bool notEmpty() { return !empty(); }
     bool notFull() { return  !full(); }
     void clear() { c = 0; }
 #undef dflt
-    SizedDFIFOF() {
+    SCounterBase() {
 printf("[%s:%d] CONSTRUCT\n", __FUNCTION__, __LINE__);
     }
 };
 
-SizedDFIFOF<GENERIC_INT_TEMPLATE_FLAG, __uint(GENERIC_INT_TEMPLATE_FLAG)> bar;
+template<int depth, class T>
+__module SCounter : public Fifo<T> {
+  SCounterBase<depth, __bitsize(T)> fifo;
+  void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
+  void out.deq(void) { fifo.out.deq(); }
+  T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
+};
+//GENERIC_INT_TEMPLATE_FLAG
+SCounter<10, __uint(999)> bar;

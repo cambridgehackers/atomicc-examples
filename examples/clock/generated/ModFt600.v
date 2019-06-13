@@ -9,12 +9,12 @@ module ModFt600 (
     output wire usb_wr_n,
     output wire usb_oe_n,
     inout wire [15:0]usb_ad);
-    genvar  __inst$Genvar1;
     reg usb_fifo_empty;
     reg [1:0]usb_rxf_delay;
     reg usb_txe_delay;
     wire CLK;
     wire nRST;
+    genvar __inst$Genvar1;
     for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
       wire I;
       wire IO;
@@ -46,7 +46,7 @@ module ModFt600 (
       end
     end // always @ (posedge CLK)
 // start RULE$iobufs__ENA
-    for (__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
         assign iobufs[__inst$Genvar1].IO = usb_ad >> __inst$Genvar1;
     end;
 // end RULE$iobufs__ENA

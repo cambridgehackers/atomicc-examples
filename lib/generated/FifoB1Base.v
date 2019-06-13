@@ -2,7 +2,7 @@
 
 `default_nettype none
 module FifoB1Base #(
-    parameter integer width = 0)(
+    parameter integer width = 999999)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [width- 1:0]in$enq$v,

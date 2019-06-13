@@ -10,7 +10,6 @@ module IVector (input wire CLK, input wire nRST,
     input wire [31:0]in$say$meth,
     input wire [31:0]in$say$v,
     output wire in$say__RDY);
-    genvar  __inst$Genvar1;
     reg [31:0]vsize;
     wire [95:0]in$enq$v;
     wire [31:0]in$enq$v$a;
@@ -18,6 +17,7 @@ module IVector (input wire CLK, input wire nRST,
     wire [31:0]in$enq$v$c;
     wire out$deq__RDY;
     wire out$first__RDY;
+    genvar __inst$Genvar1;
     for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin : fifo
       wire in$enq__ENA;
       wire [95:0]in$enq$v;
@@ -79,7 +79,8 @@ module IVector (input wire CLK, input wire nRST,
       end // nRST
     end // always @ (posedge CLK)
 // start in$say__ENA
-    for (__inst$Genvar99 = 0; __inst$Genvar99 < 10; __inst$Genvar99 = __inst$Genvar99 + 1) begin
+    genvar __inst$Genvar99;
+    for(__inst$Genvar99 = 0; __inst$Genvar99 < 10; __inst$Genvar99 = __inst$Genvar99 + 1) begin
         assign fifo[__inst$Genvar99].in$enq__ENA = in$say__ENA & in$say__RDY & ( __inst$Genvar99 == in$say$meth );
         assign fifo[__inst$Genvar99].in$enq$v = { in$say__ENA$temp$c , in$say__ENA$temp$b , in$say__ENA$temp$a };
     end;

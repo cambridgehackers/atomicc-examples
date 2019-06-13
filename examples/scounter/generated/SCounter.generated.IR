@@ -1,9 +1,16 @@
 INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( Bit(999999) v )
+    METHOD/Action enq__ENA ( Bit(999) v )
+}
+INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+    METHOD/Action enq__ENA ( Bit(999) v )
 }
 INTERFACE l_ainterface_OC_PipeOut {
     METHOD/Action deq__ENA
-    METHOD first Bit(999999)
+    METHOD first Bit(999)
+}
+INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+    METHOD/Action deq__ENA
+    METHOD first Bit(999)
 }
 INTERFACE l_ainterface_OC_PulseWireIf {
     METHOD/Action send__ENA
@@ -13,41 +20,61 @@ EMODULE Fifo {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
 }
-EMODULE PulseWire {
-    INTERFACE l_ainterface_OC_PulseWireIf _
+EMODULE Fifo_OC_0 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
 }
-MODULE SizedDFIFOF$__PARAM__$width$999999 {
+MODULE PulseWire {
+    INTERFACE l_ainterface_OC_PulseWireIf ifc
+    METHOD/Action ifc$send__ENA
+    METHOD ifc$value Bit(1) = ((0))
+}
+MODULE SCounter$__PARAM__$depth$10 {
     INTERFACE l_ainterface_OC_PipeIn in
     INTERFACE l_ainterface_OC_PipeOut out
-    FIELD/Count 999999  Bit(999999) q
-    FIELD Bit(999999) c
-    FIELD/shared Bit(999999) x_wire
+    FIELD SCounterBase$__PARAM__$depth$10$__PARAM__$width$999 fifo
+    METHOD/Action in$enq__ENA ( Bit(999) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(999) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE SCounterBase$__PARAM__$depth$10$__PARAM__$width$999 {
+    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
+    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+    FIELD/Count 10  Bit(999) q
+    FIELD Bit(10) c
+    FIELD/shared Bit(999) x_wire
     FIELD PulseWire enqueueing
     FIELD PulseWire dequeueing
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE :q[__inst$Genvar1] = __phi(((__inst$Genvar1) == (999998)):(0), (((__inst$Genvar1) == (999998)) ^ 1):(q[(__inst$Genvar1) + (1)]))
+        STORE :q[__inst$Genvar1] = __phi(((__inst$Genvar1) == (9)):(0), (((__inst$Genvar1) == (9)) ^ 1):(q[(__inst$Genvar1) + (1)]))
     }
     METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE :q[__inst$Genvar1] = __phi((((__inst$Genvar1) == (999998)) & ((c) != ((__inst$Genvar1) + (1)))):(0), ((((__inst$Genvar1) == (999998)) ^ 1) & ((c) != ((__inst$Genvar1) + (1)))):(q[(__inst$Genvar1) + (1)]))
+        STORE :q[__inst$Genvar1] = __phi((((__inst$Genvar1) == (9)) & ((c) != ((__inst$Genvar1) + (1)))):(0), ((((__inst$Genvar1) == (9)) ^ 1) & ((c) != ((__inst$Genvar1) + (1)))):(q[(__inst$Genvar1) + (1)]))
     }
-    METHOD/Rule/Action RULE$both__ENA if (((dequeueing$value) && (enqueueing$value))) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
+    METHOD/Rule/Action RULE$both__ENA if (((dequeueing$ifc$value) && (enqueueing$ifc$value))) {
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
         STORE :q[(c) - (1)] = x_wire
     }
-    METHOD/Rule/Action RULE$decCtr__ENA if (((dequeueing$value) && ((enqueueing$value) ^ (1)))) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+    METHOD/Rule/Action RULE$decCtr__ENA if (((dequeueing$ifc$value) && ((enqueueing$ifc$value) ^ (1)))) {
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
         STORE :c = (c) + (-1)
     }
-    METHOD/Rule/Action RULE$incCtr__ENA if (((enqueueing$value) && ((dequeueing$value) ^ (1)))) {
+    METHOD/Rule/Action RULE$incCtr__ENA if (((enqueueing$ifc$value) && ((dequeueing$ifc$value) ^ (1)))) {
         STORE :c = (c) + (1)
         STORE :q[c] = x_wire
     }
-    METHOD/Action in$enq__ENA ( Bit(999999) x ) if ((((c) == (999999)) ^ (1))) {
-        CALL/Action :enqueueing$send__ENA{}
+    METHOD/Action in$enq__ENA ( Bit(999) x ) if ((((c) == (10)) ^ (1))) {
+        CALL/Action :enqueueing$ifc$send__ENA{}
         STORE :x_wire = in$enq$x
     }
     METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
-        CALL/Action :dequeueing$send__ENA{}
+        CALL/Action :dequeueing$ifc$send__ENA{}
     }
-    METHOD out$first Bit(999999) = ((q[0]))
+    METHOD out$first Bit(999) = ((q[0]))
 }

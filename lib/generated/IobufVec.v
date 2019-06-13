@@ -2,14 +2,14 @@
 
 `default_nettype none
 module IobufVec #(
-    parameter integer iovecWidth = 0)(
+    parameter integer iovecWidth = 999999)(
     inout wire [iovecWidth- 1:0]IO,
     input wire [iovecWidth- 1:0]I,
     output wire [iovecWidth- 1:0]O,
     input wire T);
-    genvar  __inst$Genvar1;
     wire CLK;
     wire nRST;
+    genvar __inst$Genvar1;
     for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
       wire I;
       wire IO;
@@ -22,7 +22,7 @@ module IobufVec #(
         .T(T));
     end;
 // start RULE$iobufs__ENA
-    for (__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign iobufs[__inst$Genvar1].T = T;
         assign iobufs[__inst$Genvar1].IO = IO[ __inst$Genvar1 : 1 ];
         assign iobufs[__inst$Genvar1].I = I[ __inst$Genvar1 : 1 ];
