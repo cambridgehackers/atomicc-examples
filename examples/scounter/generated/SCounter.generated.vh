@@ -12,7 +12,7 @@
 //METAGUARD; RULE$decCtr; !( 0 == ( dequeueing$ifc$value && ( enqueueing$ifc$value ^ 1 ) ) );
 //METAGUARD; RULE$incCtr; !( 0 == ( enqueueing$ifc$value && ( dequeueing$ifc$value ^ 1 ) ) );
 //METAINVOKE; in$enq__ENA; :enqueueing$ifc$send__ENA;
-//METAGUARD; in$enq; !( ( c == 10 ) | ( !enqueueing$ifc$send__RDY ) );
+//METAGUARD; in$enq; !( ( c == depth ) | ( !enqueueing$ifc$send__RDY ) );
 //METAINVOKE; out$deq__ENA; :dequeueing$ifc$send__ENA;
 //METAGUARD; out$deq; !( ( c == 0 ) | ( !dequeueing$ifc$send__RDY ) );
 //METAGUARD; out$first; 1;

@@ -32,7 +32,7 @@ module SCounterBase #(
         .ifc$send__RDY(dequeueing$ifc$send__RDY),
         .ifc$value(dequeueing$ifc$value),
         .ifc$value__RDY());
-    assign in$enq__RDY = !( ( c == 10 ) | ( !enqueueing$ifc$send__RDY ) );
+    assign in$enq__RDY = !( ( c == depth ) | ( !enqueueing$ifc$send__RDY ) );
     assign out$deq__RDY = !( ( c == 0 ) | ( !dequeueing$ifc$send__RDY ) );
     assign out$first = q[ 0 ];
     assign out$first__RDY = 1;
@@ -65,7 +65,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if(RULE$both__RDY)
-            q[__inst$Genvar1] <= ( ( !( ( __inst$Genvar1 == 9 ) | ( c == ( __inst$Genvar1 + 1 ) ) ) ) ? q : 0 );
+            q[__inst$Genvar1] <= ( ( !( ( ( __inst$Genvar1 + 1 ) == depth ) | ( c == ( __inst$Genvar1 + 1 ) ) ) ) ? q : 0 );
       end
     end // always @ (posedge CLK)
     end;
@@ -90,7 +90,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if(RULE$decCtr__RDY)
-            q[__inst$Genvar1] <= ( __inst$Genvar1 == 9 ) ? 0 : q;
+            q[__inst$Genvar1] <= ( ( __inst$Genvar1 + 1 ) == depth ) ? 0 : q;
       end
     end // always @ (posedge CLK)
     end;

@@ -52,10 +52,10 @@ MODULE SCounterBase(depth=10,width=999) {
     FIELD PulseWire enqueueing
     FIELD PulseWire dequeueing
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE :q[__inst$Genvar1] = __phi(((__inst$Genvar1) == (9)):(0), (((__inst$Genvar1) == (9)) ^ 1):(q[(__inst$Genvar1) + (1)]))
+        STORE :q[__inst$Genvar1] = __phi((((__inst$Genvar1) + (1)) == (10)):(0), ((((__inst$Genvar1) + (1)) == (10)) ^ 1):(q[(__inst$Genvar1) + (1)]))
     }
     METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE :q[__inst$Genvar1] = __phi((((__inst$Genvar1) == (9)) & ((c) != ((__inst$Genvar1) + (1)))):(0), ((((__inst$Genvar1) == (9)) ^ 1) & ((c) != ((__inst$Genvar1) + (1)))):(q[(__inst$Genvar1) + (1)]))
+        STORE :q[__inst$Genvar1] = __phi(((((__inst$Genvar1) + (1)) == (10)) & ((c) != ((__inst$Genvar1) + (1)))):(0), (((((__inst$Genvar1) + (1)) == (10)) ^ 1) & ((c) != ((__inst$Genvar1) + (1)))):(q[(__inst$Genvar1) + (1)]))
     }
     METHOD/Rule/Action RULE$both__ENA if (((dequeueing$ifc$value) && (enqueueing$ifc$value))) {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA

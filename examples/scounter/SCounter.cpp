@@ -47,13 +47,13 @@ __module SCounterBase : public Fifo<__uint(width)> {
     }
     __rule decCtr if (dequeueing.ifc.value() && !enqueueing.ifc.value()) {
         for (int i=0; i<depth; i=i+1)
-            q[i] = (i==(depth - 1) ? dflt : q[i + 1]);
+            q[i] = ( (i+1)==depth ? dflt : q[i + 1]);
         c--;
     }
     __rule both if (dequeueing.ifc.value() && enqueueing.ifc.value()) {
         for (int i=0; i<depth; i=i+1)
             if (c != i + 1)
-                q[i] = (i==(depth - 1) ? dflt : q[i + 1]);
+                q[i] = ( (i+1) ==depth ? dflt : q[i + 1]);
         q[c-1] = x_wire;
     }
     void out.deq() if (!empty()) { dequeueing.ifc.send(); }
