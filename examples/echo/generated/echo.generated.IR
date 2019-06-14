@@ -1,56 +1,56 @@
-STRUCT l_struct_OC_NOCData {
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-EMODULE l_class_OC_EchoTest {
+STRUCT EchoTest {
     FIELD Echo echo
     FIELD Bit(32) x
 }
-INTERFACE l_ainterface_OC_EchoIndication {
+INTERFACE EchoIndication {
     METHOD/Action heard__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_EchoRequest {
+INTERFACE EchoRequest {
     METHOD/Action say__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeIn {
+INTERFACE PipeIn {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
-}
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE PipeOut {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
 EMODULE EchoInd {
-    INTERFACE l_ainterface_OC_EchoIndication hout
+    INTERFACE EchoIndication hout
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo1Base$__PARAM__$width$32 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo1Base(width=32) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
 }
 MODULE Echo {
-    INTERFACE l_ainterface_OC_EchoRequest sout
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication ind
+    INTERFACE EchoRequest sout
+    INTERFACE/Ptr EchoIndication ind
     FIELD Fifo1 fifo
     METHOD/Rule/Action RULE$respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
@@ -62,9 +62,9 @@ MODULE Echo {
     }
 }
 MODULE Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base$__PARAM__$width$32 fifo
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }

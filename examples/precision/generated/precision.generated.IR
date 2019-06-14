@@ -1,91 +1,91 @@
-STRUCT l_struct_OC_NOCData {
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-STRUCT l_struct_OC_ValueType {
+STRUCT ValueType {
     FIELD Bit(6) a
     FIELD Bit(4) b
 }
-EMODULE l_class_OC_IVectorTest {
+STRUCT IVectorTest {
     FIELD IVector ivector
 }
-INTERFACE l_ainterface_OC_IVectorIndication {
+INTERFACE IVectorIndication {
     METHOD/Action heard__ENA ( Bit(6) meth , Bit(4) v )
 }
-INTERFACE l_ainterface_OC_IVectorRequest {
+INTERFACE IVectorRequest {
     METHOD/Action say__ENA ( Bit(6) meth , Bit(4) v )
 }
-INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( l_struct_OC_ValueType v )
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( ValueType v )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
-}
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(10) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first l_struct_OC_ValueType
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut {
+    METHOD/Action deq__ENA
+    METHOD first ValueType
+}
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(10)
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo1Base$__PARAM__$width$10 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo1Base(width=10) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
 EMODULE IVectorInd {
-    INTERFACE l_ainterface_OC_IVectorIndication ind
+    INTERFACE IVectorIndication ind
     METHOD/Action ind$heard__ENA ( Bit(6) meth , Bit(4) v ) {
         PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
     }
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
 }
 MODULE Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base$__PARAM__$width$10 fifo
-    METHOD/Action in$enq__ENA ( l_struct_OC_ValueType v ) {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD Fifo1Base(width=10) fifo
+    METHOD/Action in$enq__ENA ( ValueType v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_ValueType = ((out$first$retval)) {
-        ALLOCA l_struct_OC_ValueType out$first$retval
+    METHOD out$first ValueType = ((out$first$retval)) {
+        ALLOCA ValueType out$first$retval
         CALL :fifo$out$first{}
         LET Bit(10) :out$first$retval = fifo$out$first
     }
 }
 MODULE IVector {
-    INTERFACE l_ainterface_OC_IVectorRequest request
-    INTERFACE/Ptr l_ainterface_OC_IVectorIndication ind
+    INTERFACE IVectorRequest request
+    INTERFACE/Ptr IVectorIndication ind
     FIELD Fifo1 fifo
     FIELD Bit(8) fcounter
     FIELD Bit(9) counter
     FIELD Bit(9) gcounter
     METHOD/Rule/Action RULE$respond__ENA {
-        ALLOCA l_struct_OC_ValueType RULE$respond__ENA$temp
+        ALLOCA ValueType RULE$respond__ENA$temp
         CALL :fifo$out$first{}
-        LET l_struct_OC_ValueType :RULE$respond__ENA$temp = fifo$out$first
+        LET ValueType :RULE$respond__ENA$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :ind$heard__ENA{RULE$respond__ENA$temp$a,RULE$respond__ENA$temp$b}
     }
     METHOD/Action request$say__ENA ( Bit(6) meth , Bit(4) v ) if ((1)) {
-        ALLOCA l_struct_OC_ValueType request$say__ENA$temp
+        ALLOCA ValueType request$say__ENA$temp
         LET Bit(6) :request$say__ENA$temp$a = request$say$meth
         LET Bit(4) :request$say__ENA$temp$b = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}

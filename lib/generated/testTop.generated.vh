@@ -2,14 +2,14 @@
 `define __testTop_GENERATED__VH__
 
 //METASTART; TestTop
-//METAEXTERNAL; MAXIGP0_I; l_ainterface_OC_MaxiI;
-//METAINTERNAL; reqArs; Fifo1Base$__PARAM__$width$15;
-//METAINTERNAL; reqAws; Fifo1Base$__PARAM__$width$15;
-//METAINTERNAL; readBeat; Fifo1Base$__PARAM__$width$16;
-//METAINTERNAL; writeBeat; Fifo1Base$__PARAM__$width$16;
-//METAINTERNAL; readData; Fifo1Base$__PARAM__$width$38;
-//METAINTERNAL; writeData; Fifo1Base$__PARAM__$width$32;
-//METAINTERNAL; writeDone; Fifo1Base$__PARAM__$width$6;
+//METAEXTERNAL; MAXIGP0_I; MaxiI;
+//METAINTERNAL; reqArs; Fifo1Base(width=15);
+//METAINTERNAL; reqAws; Fifo1Base(width=15);
+//METAINTERNAL; readBeat; Fifo1Base(width=16);
+//METAINTERNAL; writeBeat; Fifo1Base(width=16);
+//METAINTERNAL; readData; Fifo1Base(width=38);
+//METAINTERNAL; writeData; Fifo1Base(width=32);
+//METAINTERNAL; writeDone; Fifo1Base(width=6);
 //METAINTERNAL; user; UserTop;
 //METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$AR; reqArs$in$enq__RDY;

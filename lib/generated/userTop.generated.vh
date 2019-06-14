@@ -2,7 +2,7 @@
 `define __userTop_GENERATED__VH__
 
 //METASTART; UserTop
-//METAEXTERNAL; read; l_ainterface_OC_PipeInB;
+//METAEXTERNAL; read; PipeInB;
 //METAINTERNAL; radapter_0; AdapterToBus;
 //METAINTERNAL; wadapter_0; AdapterFromBus;
 //METAINTERNAL; ctop; l_top;

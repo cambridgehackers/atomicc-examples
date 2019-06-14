@@ -1,38 +1,38 @@
-INTERFACE l_ainterface_OC_PipeIn {
+INTERFACE PipeIn {
     METHOD/Action enq__ENA ( Bit(999) v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(999) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
+INTERFACE PipeOut {
     METHOD/Action deq__ENA
     METHOD first Bit(999)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(999)
 }
-INTERFACE l_ainterface_OC_PulseWireIf {
+INTERFACE PulseWireIf {
     METHOD/Action send__ENA
     METHOD value Bit(1)
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
 MODULE PulseWire {
-    INTERFACE l_ainterface_OC_PulseWireIf ifc
+    INTERFACE PulseWireIf ifc
     METHOD/Action ifc$send__ENA
     METHOD ifc$value Bit(1) = ((0))
 }
-MODULE SCounter$__PARAM__$depth$10 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD SCounterBase$__PARAM__$depth$10$__PARAM__$width$999 fifo
+MODULE SCounter(depth=10) {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD SCounterBase(depth=10,width=999) fifo
     METHOD/Action in$enq__ENA ( Bit(999) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -43,9 +43,9 @@ MODULE SCounter$__PARAM__$depth$10 {
         CALL :fifo$out$first{}
     }
 }
-MODULE SCounterBase$__PARAM__$depth$10$__PARAM__$width$999 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+MODULE SCounterBase(depth=10,width=999) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
     FIELD/Count 10  Bit(999) q
     FIELD Bit(10) c
     FIELD/shared Bit(999) x_wire

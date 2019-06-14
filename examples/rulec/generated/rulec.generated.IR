@@ -1,38 +1,38 @@
-STRUCT l_struct_OC_NOCData {
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-INTERFACE l_ainterface_OC_EchoIndication {
+INTERFACE EchoIndication {
     METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
     METHOD/Action heard__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_EchoRequest {
+INTERFACE EchoRequest {
     METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action say__ENA ( Bit(32) v )
     METHOD/Action setLeds__ENA ( Bit(8) v )
 }
-INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( NOCData v )
 }
-INTERFACE l_ainterface_OC_PipeInB {
+INTERFACE PipeInB {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 EMODULE UserTop {
-    INTERFACE l_ainterface_OC_PipeInB write
-    INTERFACE/Ptr l_ainterface_OC_PipeInB read
+    INTERFACE PipeInB write
+    INTERFACE/Ptr PipeInB read
 }
 EMODULE l_top {
-    INTERFACE l_ainterface_OC_PipeIn request
-    INTERFACE/Ptr l_ainterface_OC_PipeInH indication
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeInH indication
 }
 MODULE Echo {
     SOFTWARE request
     SOFTWARE indication
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACE EchoRequest request
+    INTERFACE/Ptr EchoIndication indication
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
     FIELD Bit(32) v_temp

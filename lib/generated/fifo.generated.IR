@@ -1,28 +1,28 @@
-INTERFACE l_ainterface_OC_PipeIn {
+INTERFACE PipeIn {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
+INTERFACE PipeOut {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-MODULE Fifo1Base$__PARAM__$width$999999 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+MODULE Fifo1Base(width=999999) {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
     FIELD Bit(999999) element
     FIELD Bit(1) full
     METHOD/Action in$enq__ENA ( Bit(999999) v ) if (((full) ^ (1))) {
@@ -34,9 +34,9 @@ MODULE Fifo1Base$__PARAM__$width$999999 {
     }
     METHOD out$first Bit(999999) = ((element)) if ((full))
 }
-MODULE FifoB1Base$__PARAM__$width$999999 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+MODULE FifoB1Base(width=999999) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
     FIELD Bit(999999) element
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v

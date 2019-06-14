@@ -3,8 +3,8 @@
 
 //METASTART; VsimTop
 //METAINTERNAL; user; UserTop;
-//METAINTERNAL; sink_0; VsimReceive$__PARAM__$width$32;
-//METAINTERNAL; source_0; VsimSend$__PARAM__$width$32;
+//METAINTERNAL; sink_0; VsimReceive(width=32);
+//METAINTERNAL; source_0; VsimSend(width=32);
 //METAINVOKE; readUser$enq__ENA; :source_0$beat__ENA;
 //METAGUARD; readUser$enq; source_0$beat__RDY;
 //METAINVOKE; writeUser$beat__ENA; :user$write$enq__ENA;

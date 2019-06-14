@@ -2,10 +2,10 @@
 `define __lpm_GENERATED__VH__
 
 //METASTART; Lpm
-//METAEXTERNAL; outQ; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; outQ; PipeIn;
 //METAINTERNAL; compBuf; BufTicket;
-//METAINTERNAL; inQ; Fifo1Base$__PARAM__$width$32;
-//METAINTERNAL; fifo; FifoB1Base$__PARAM__$width$23;
+//METAINTERNAL; inQ; Fifo1Base(width=32);
+//METAINTERNAL; fifo; FifoB1Base(width=23);
 //METAINTERNAL; mem; LpmMemory;
 //METAINVOKE; RULE$enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
 //METAEXCLUSIVE; RULE$enter__ENA; RULE$recirc__ENA

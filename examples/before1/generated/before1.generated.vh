@@ -2,7 +2,7 @@
 `define __before1_GENERATED__VH__
 
 //METASTART; Connect
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAINTERNAL; lEIO; EchoIndicationOutput;
 //METAINTERNAL; lERI; EchoRequestInput;
 //METAINTERNAL; lEcho; Echo;
@@ -30,7 +30,7 @@
 //METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
 //METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA
 //METAGUARD; RULE$delay_rule; !( busy_delay | ( !busy ) );
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;
@@ -43,14 +43,14 @@
 //METAGUARD; swap$y2xnull; 1;
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; EchoIndicationInput
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; RULE$input_rule__ENA; :indication$heard__ENA;
 //METAEXCLUSIVE; RULE$input_rule__ENA; pipe$enq__ENA
 //METAGUARD; RULE$input_rule; busy_delay & indication$heard__RDY;
 //METAGUARD; pipe$enq; !busy_delay;
 //METARULES; RULE$input_rule
 //METASTART; EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; PipeIn.0;
 //METAINVOKE; RULE$output_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULE$output_rulee__ENA; RULE$output_ruleo__ENA; indication$heard__ENA
 //METAGUARD; RULE$output_rulee; ind_busy & even & pipe$enq__RDY;
@@ -60,11 +60,11 @@
 //METAGUARD; indication$heard; !ind_busy;
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
-//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
+//METAEXTERNAL; request; EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v$tag == 2:request$say2__ENA;pipe$enq__ENA$v$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; pipe; PipeIn;
 //METAINVOKE; request$say2__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; request$say2__ENA; request$say__ENA
 //METAGUARD; request$say2; pipe$enq__RDY;

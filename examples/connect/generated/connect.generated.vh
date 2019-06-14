@@ -2,7 +2,7 @@
 `define __connect_GENERATED__VH__
 
 //METASTART; Connect
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAINTERNAL; lEIO; EchoIndicationOutput;
 //METAINTERNAL; lERI; EchoRequestInput;
 //METAINTERNAL; lEcho; Echo;
@@ -21,23 +21,23 @@
 //METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
 //METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; request$say__ENA; :indication$heard__ENA;
 //METAGUARD; request$say; indication$heard__RDY;
 //METASTART; EchoIndicationInput
-//METAEXTERNAL; indication; l_ainterface_OC_EchoIndication;
+//METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v$tag == 1:indication$heard__ENA;
 //METAGUARD; pipe$enq; indication$heard__RDY;
 //METASTART; EchoIndicationOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn_OC_0;
+//METAEXTERNAL; pipe; PipeIn.0;
 //METAINVOKE; indication$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; EchoRequestInput
-//METAEXTERNAL; request; l_ainterface_OC_EchoRequest;
+//METAEXTERNAL; request; EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; EchoRequestOutput
-//METAEXTERNAL; pipe; l_ainterface_OC_PipeIn;
+//METAEXTERNAL; pipe; PipeIn;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
 `endif

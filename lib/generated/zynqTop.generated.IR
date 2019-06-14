@@ -1,68 +1,68 @@
-INTERFACE l_ainterface_OC_ClockIfc {
+INTERFACE ClockIfc {
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
 }
-INTERFACE l_ainterface_OC_MaxiI {
+INTERFACE MaxiI {
     METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
 }
-INTERFACE l_ainterface_OC_MaxiO {
+INTERFACE MaxiO {
     METHOD/Action AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
-INTERFACE l_ainterface_OC_MbufgBUFG {
+INTERFACE MbufgBUFG {
     FIELD/input Bit(1) I
     FIELD/output Bit(1) O
 }
-INTERFACE l_ainterface_OC_Pps7PS7 {
-    INTERFACE l_ainterface_OC_Pps7ddr DDR
-    INTERFACE l_ainterface_OC_Pps7dma DMA0
-    INTERFACE l_ainterface_OC_Pps7dma DMA1
-    INTERFACE l_ainterface_OC_Pps7dma DMA2
-    INTERFACE l_ainterface_OC_Pps7dma DMA3
-    INTERFACE l_ainterface_OC_Pps7emiocan EMIOCAN0
-    INTERFACE l_ainterface_OC_Pps7emiocan EMIOCAN1
-    INTERFACE l_ainterface_OC_Pps7emioenet EMIOENET0
-    INTERFACE l_ainterface_OC_Pps7emioenet EMIOENET1
-    INTERFACE l_ainterface_OC_Pps7emiogpio EMIOGPIO
-    INTERFACE l_ainterface_OC_Pps7emioi2c EMIOI2C0
-    INTERFACE l_ainterface_OC_Pps7emioi2c EMIOI2C1
-    INTERFACE l_ainterface_OC_Pps7emiopjtag EMIOPJTAG
-    INTERFACE l_ainterface_OC_Pps7emiosdio EMIOSDIO0
-    INTERFACE l_ainterface_OC_Pps7emiosdio EMIOSDIO1
-    INTERFACE l_ainterface_OC_Pps7emiospi EMIOSPI0
-    INTERFACE l_ainterface_OC_Pps7emiospi EMIOSPI1
-    INTERFACE l_ainterface_OC_Pps7emiosramint EMIOSRAMINT
-    INTERFACE l_ainterface_OC_Pps7emiotrace EMIOTRACE
-    INTERFACE l_ainterface_OC_Pps7emiottc EMIOTTC0
-    INTERFACE l_ainterface_OC_Pps7emiottc EMIOTTC1
-    INTERFACE l_ainterface_OC_Pps7emiouart EMIOUART0
-    INTERFACE l_ainterface_OC_Pps7emiouart EMIOUART1
-    INTERFACE l_ainterface_OC_Pps7emiousb EMIOUSB0
-    INTERFACE l_ainterface_OC_Pps7emiousb EMIOUSB1
-    INTERFACE l_ainterface_OC_Pps7emiowdt EMIOWDT
-    INTERFACE l_ainterface_OC_Pps7event EVENT
-    INTERFACE l_ainterface_OC_Pps7fclk FCLK
-    INTERFACE l_ainterface_OC_Pps7fpgaid FPGAID
-    INTERFACE l_ainterface_OC_Pps7ftmd FTMD
-    INTERFACE l_ainterface_OC_Pps7ftmt FTMT
-    INTERFACE l_ainterface_OC_Pps7irq IRQ
-    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP0
-    INTERFACE l_ainterface_OC_Pps7maxigp MAXIGP1
-    INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7ps PS
-    INTERFACE l_ainterface_OC_Pps7saxiacp SAXIACP
-    INTERFACE l_ainterface_OC_Pps7saxigp SAXIGP0
-    INTERFACE l_ainterface_OC_Pps7saxigp SAXIGP1
-    INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP0
-    INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP1
-    INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP2
-    INTERFACE l_ainterface_OC_Pps7saxihp SAXIHP3
+INTERFACE Pps7PS7 {
+    INTERFACE Pps7ddr DDR
+    INTERFACE Pps7dma DMA0
+    INTERFACE Pps7dma DMA1
+    INTERFACE Pps7dma DMA2
+    INTERFACE Pps7dma DMA3
+    INTERFACE Pps7emiocan EMIOCAN0
+    INTERFACE Pps7emiocan EMIOCAN1
+    INTERFACE Pps7emioenet EMIOENET0
+    INTERFACE Pps7emioenet EMIOENET1
+    INTERFACE Pps7emiogpio EMIOGPIO
+    INTERFACE Pps7emioi2c EMIOI2C0
+    INTERFACE Pps7emioi2c EMIOI2C1
+    INTERFACE Pps7emiopjtag EMIOPJTAG
+    INTERFACE Pps7emiosdio EMIOSDIO0
+    INTERFACE Pps7emiosdio EMIOSDIO1
+    INTERFACE Pps7emiospi EMIOSPI0
+    INTERFACE Pps7emiospi EMIOSPI1
+    INTERFACE Pps7emiosramint EMIOSRAMINT
+    INTERFACE Pps7emiotrace EMIOTRACE
+    INTERFACE Pps7emiottc EMIOTTC0
+    INTERFACE Pps7emiottc EMIOTTC1
+    INTERFACE Pps7emiouart EMIOUART0
+    INTERFACE Pps7emiouart EMIOUART1
+    INTERFACE Pps7emiousb EMIOUSB0
+    INTERFACE Pps7emiousb EMIOUSB1
+    INTERFACE Pps7emiowdt EMIOWDT
+    INTERFACE Pps7event EVENT
+    INTERFACE Pps7fclk FCLK
+    INTERFACE Pps7fpgaid FPGAID
+    INTERFACE Pps7ftmd FTMD
+    INTERFACE Pps7ftmt FTMT
+    INTERFACE Pps7irq IRQ
+    INTERFACE Pps7maxigp MAXIGP0
+    INTERFACE Pps7maxigp MAXIGP1
+    INTERFACE Pps7m M
+    INTERFACE Pps7ps PS
+    INTERFACE Pps7saxiacp SAXIACP
+    INTERFACE Pps7saxigp SAXIGP0
+    INTERFACE Pps7saxigp SAXIGP1
+    INTERFACE Pps7saxihp SAXIHP0
+    INTERFACE Pps7saxihp SAXIHP1
+    INTERFACE Pps7saxihp SAXIHP2
+    INTERFACE Pps7saxihp SAXIHP3
 }
-INTERFACE l_ainterface_OC_Pps7ddr {
+INTERFACE Pps7ddr {
     FIELD/inout Bit(15) A
     FIELD/input Bit(4) ARB
     FIELD/inout Bit(3) BA
@@ -82,7 +82,7 @@ INTERFACE l_ainterface_OC_Pps7ddr {
     FIELD/inout Bit(1) VRP
     FIELD/inout Bit(1) WEB
 }
-INTERFACE l_ainterface_OC_Pps7dma {
+INTERFACE Pps7dma {
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(1) DAREADY
     FIELD/output Bit(2) DATYPE
@@ -93,11 +93,11 @@ INTERFACE l_ainterface_OC_Pps7dma {
     FIELD/input Bit(1) DRVALID
     FIELD/output Bit(1) RSTN
 }
-INTERFACE l_ainterface_OC_Pps7emiocan {
+INTERFACE Pps7emiocan {
     FIELD/input Bit(1) PHYRX
     FIELD/output Bit(1) PHYTX
 }
-INTERFACE l_ainterface_OC_Pps7emioenet {
+INTERFACE Pps7emioenet {
     FIELD/input Bit(1) EXTINTIN
     FIELD/input Bit(1) GMIICOL
     FIELD/input Bit(1) GMIICRS
@@ -124,12 +124,12 @@ INTERFACE l_ainterface_OC_Pps7emioenet {
     FIELD/output Bit(1) SOFRX
     FIELD/output Bit(1) SOFTX
 }
-INTERFACE l_ainterface_OC_Pps7emiogpio {
+INTERFACE Pps7emiogpio {
     FIELD/input Bit(64) I
     FIELD/output Bit(64) O
     FIELD/output Bit(64) TN
 }
-INTERFACE l_ainterface_OC_Pps7emioi2c {
+INTERFACE Pps7emioi2c {
     FIELD/input Bit(1) SCLI
     FIELD/output Bit(1) SCLO
     FIELD/output Bit(1) SCLTN
@@ -137,14 +137,14 @@ INTERFACE l_ainterface_OC_Pps7emioi2c {
     FIELD/output Bit(1) SDAO
     FIELD/output Bit(1) SDATN
 }
-INTERFACE l_ainterface_OC_Pps7emiopjtag {
+INTERFACE Pps7emiopjtag {
     FIELD/input Bit(1) TCK
     FIELD/input Bit(1) TDI
     FIELD/output Bit(1) TDO
     FIELD/output Bit(1) TDTN
     FIELD/input Bit(1) TMS
 }
-INTERFACE l_ainterface_OC_Pps7emiosdio {
+INTERFACE Pps7emiosdio {
     FIELD/output Bit(1) BUSPOW
     FIELD/output Bit(3) BUSVOLT
     FIELD/input Bit(1) CDN
@@ -159,7 +159,7 @@ INTERFACE l_ainterface_OC_Pps7emiosdio {
     FIELD/output Bit(1) LED
     FIELD/input Bit(1) WP
 }
-INTERFACE l_ainterface_OC_Pps7emiospi {
+INTERFACE Pps7emiospi {
     FIELD/input Bit(1) MI
     FIELD/output Bit(1) MO
     FIELD/output Bit(1) MOTN
@@ -173,19 +173,19 @@ INTERFACE l_ainterface_OC_Pps7emiospi {
     FIELD/output Bit(3) SSON
     FIELD/output Bit(1) STN
 }
-INTERFACE l_ainterface_OC_Pps7emiosramint {
+INTERFACE Pps7emiosramint {
     FIELD/input Bit(1) IN
 }
-INTERFACE l_ainterface_OC_Pps7emiotrace {
+INTERFACE Pps7emiotrace {
     FIELD/input Bit(1) CLK
     FIELD/output Bit(1) CTL
     FIELD/output Bit(32) DATA
 }
-INTERFACE l_ainterface_OC_Pps7emiottc {
+INTERFACE Pps7emiottc {
     FIELD/input Bit(3) CLKI
     FIELD/output Bit(3) WAVEO
 }
-INTERFACE l_ainterface_OC_Pps7emiouart {
+INTERFACE Pps7emiouart {
     FIELD/input Bit(1) CTSN
     FIELD/input Bit(1) DCDN
     FIELD/input Bit(1) DSRN
@@ -195,36 +195,36 @@ INTERFACE l_ainterface_OC_Pps7emiouart {
     FIELD/input Bit(1) RX
     FIELD/output Bit(1) TX
 }
-INTERFACE l_ainterface_OC_Pps7emiousb {
+INTERFACE Pps7emiousb {
     FIELD/output Bit(2) PORTINDCTL
     FIELD/input Bit(1) VBUSPWRFAULT
     FIELD/output Bit(1) VBUSPWRSELECT
 }
-INTERFACE l_ainterface_OC_Pps7emiowdt {
+INTERFACE Pps7emiowdt {
     FIELD/input Bit(1) CLKI
     FIELD/output Bit(1) RSTO
 }
-INTERFACE l_ainterface_OC_Pps7event {
+INTERFACE Pps7event {
     FIELD/input Bit(1) EVENTI
     FIELD/output Bit(1) EVENTO
     FIELD/output Bit(2) STANDBYWFE
     FIELD/output Bit(2) STANDBYWFI
 }
-INTERFACE l_ainterface_OC_Pps7fclk {
+INTERFACE Pps7fclk {
     FIELD/output Bit(4) CLK
     FIELD/input Bit(4) CLKTRIGN
     FIELD/output Bit(4) RESETN
 }
-INTERFACE l_ainterface_OC_Pps7fpgaid {
+INTERFACE Pps7fpgaid {
     FIELD/input Bit(1) LEN
 }
-INTERFACE l_ainterface_OC_Pps7ftmd {
+INTERFACE Pps7ftmd {
     FIELD/input Bit(4) TRACEINATID
     FIELD/input Bit(1) TRACEINCLOCK
     FIELD/input Bit(32) TRACEINDATA
     FIELD/input Bit(1) TRACEINVALID
 }
-INTERFACE l_ainterface_OC_Pps7ftmt {
+INTERFACE Pps7ftmt {
     FIELD/input Bit(32) F2PDEBUG
     FIELD/input Bit(4) F2PTRIG
     FIELD/output Bit(4) F2PTRIGACK
@@ -232,14 +232,14 @@ INTERFACE l_ainterface_OC_Pps7ftmt {
     FIELD/output Bit(4) P2FTRIG
     FIELD/input Bit(4) P2FTRIGACK
 }
-INTERFACE l_ainterface_OC_Pps7irq {
+INTERFACE Pps7irq {
     FIELD/input Bit(20) F2P
     FIELD/output Bit(29) P2F
 }
-INTERFACE l_ainterface_OC_Pps7m {
+INTERFACE Pps7m {
     FIELD/inout Bit(54) IO
 }
-INTERFACE l_ainterface_OC_Pps7maxigp {
+INTERFACE Pps7maxigp {
     FIELD/input Bit(1) ACLK
     FIELD/output Bit(32) ARADDR
     FIELD/output Bit(2) ARBURST
@@ -281,12 +281,12 @@ INTERFACE l_ainterface_OC_Pps7maxigp {
     FIELD/output Bit(4) WSTRB
     FIELD/output Bit(1) WVALID
 }
-INTERFACE l_ainterface_OC_Pps7ps {
+INTERFACE Pps7ps {
     FIELD/inout Bit(1) CLK
     FIELD/inout Bit(1) PORB
     FIELD/inout Bit(1) SRSTB
 }
-INTERFACE l_ainterface_OC_Pps7saxiacp {
+INTERFACE Pps7saxiacp {
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -330,7 +330,7 @@ INTERFACE l_ainterface_OC_Pps7saxiacp {
     FIELD/input Bit(8) WSTRB
     FIELD/input Bit(1) WVALID
 }
-INTERFACE l_ainterface_OC_Pps7saxigp {
+INTERFACE Pps7saxigp {
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -372,7 +372,7 @@ INTERFACE l_ainterface_OC_Pps7saxigp {
     FIELD/input Bit(4) WSTRB
     FIELD/input Bit(1) WVALID
 }
-INTERFACE l_ainterface_OC_Pps7saxihp {
+INTERFACE Pps7saxihp {
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -420,7 +420,7 @@ INTERFACE l_ainterface_OC_Pps7saxihp {
     FIELD/input Bit(8) WSTRB
     FIELD/input Bit(1) WVALID
 }
-INTERFACE l_ainterface_OC_ZynqClock {
+INTERFACE ZynqClock {
     FIELD/inout Bit(15) DDR_Addr
     FIELD/inout Bit(3) DDR_BankAddr
     FIELD/inout Bit(1) DDR_CAS_n
@@ -442,41 +442,41 @@ INTERFACE l_ainterface_OC_ZynqClock {
     FIELD/inout Bit(1) FIXED_IO_ps_porb
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
 }
-INTERFACE l_ainterface_OC_ZynqInterrupt {
+INTERFACE ZynqInterrupt {
     FIELD/input Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
 }
-INTERFACE l_ainterface_OC_ZynqInterruptT {
+INTERFACE ZynqInterruptT {
     FIELD/output Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
 }
 EMODULE BUFG {
-    INTERFACE l_ainterface_OC_MbufgBUFG _
+    INTERFACE MbufgBUFG _
 }
 EMODULE ClockTop {
-    INTERFACE l_ainterface_OC_ClockIfc _
+    INTERFACE ClockIfc _
 }
 EMODULE PS7 {
-    INTERFACE l_ainterface_OC_Pps7PS7 _
+    INTERFACE Pps7PS7 _
 }
 EMODULE TestTop {
-    INTERFACE l_ainterface_OC_ZynqInterruptT _
-    INTERFACE l_ainterface_OC_MaxiO MAXIGP0_O
-    INTERFACE/Ptr l_ainterface_OC_MaxiI MAXIGP0_I
+    INTERFACE ZynqInterruptT _
+    INTERFACE MaxiO MAXIGP0_O
+    INTERFACE/Ptr MaxiI MAXIGP0_I
 }
 MODULE P7Wrap {
-    INTERFACECONNECT/Forward M pps$M l_ainterface_OC_Pps7m
-    INTERFACECONNECT/Forward FCLK pps$FCLK l_ainterface_OC_Pps7fclk
-    INTERFACE l_ainterface_OC_ZynqClock _
-    INTERFACE l_ainterface_OC_ZynqInterrupt intr
-    INTERFACE/Ptr l_ainterface_OC_MaxiO MAXIGP0_O
-    INTERFACE l_ainterface_OC_MaxiI MAXIGP0_I
+    INTERFACECONNECT/Forward M pps$M Pps7m
+    INTERFACECONNECT/Forward FCLK pps$FCLK Pps7fclk
+    INTERFACE ZynqClock _
+    INTERFACE ZynqInterrupt intr
+    INTERFACE/Ptr MaxiO MAXIGP0_O
+    INTERFACE MaxiI MAXIGP0_I
     FIELD PS7 pps
     FIELD ClockTop pclockTop
-    INTERFACE l_ainterface_OC_Pps7m M
-    INTERFACE l_ainterface_OC_Pps7fclk FCLK
+    INTERFACE Pps7m M
+    INTERFACE Pps7fclk FCLK
     METHOD/Action MAXIGP0_I$B__ENA ( Bit(12) id , Bit(2) resp ) if ((pps$MAXIGP0BREADY)) {
         LET Bit(12) :pps$MAXIGP0BID = MAXIGP0_I$B$id
         LET Bit(2) :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
@@ -533,16 +533,16 @@ MODULE P7Wrap {
     }
 }
 MODULE ZynqTop {
-    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O l_ainterface_OC_MaxiO
-    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I l_ainterface_OC_MaxiI
-    INTERFACECONNECT/Forward _ ps7_ps7_foo$_ l_ainterface_OC_ZynqClock
-    INTERFACECONNECT/Forward M ps7_ps7_foo$M l_ainterface_OC_Pps7m
+    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
+    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I MaxiI
+    INTERFACECONNECT/Forward _ ps7_ps7_foo$_ ZynqClock
+    INTERFACECONNECT/Forward M ps7_ps7_foo$M Pps7m
     FIELD P7Wrap ps7_ps7_foo
     FIELD TestTop test
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
-    INTERFACE l_ainterface_OC_ZynqClock _
-    INTERFACE l_ainterface_OC_Pps7m M
+    INTERFACE ZynqClock _
+    INTERFACE Pps7m M
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK$CLK
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O

@@ -1,86 +1,86 @@
-STRUCT l_struct_OC_NOCData {
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v )
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( NOCData v )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
-}
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(128) v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_4 {
+INTERFACE PipeIn.4 {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_7 {
+INTERFACE PipeIn.7 {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE PipeOut {
     METHOD/Action deq__ENA
-    METHOD first l_struct_OC_NOCData
+    METHOD first NOCData
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_5 {
+INTERFACE PipeOut.5 {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_8 {
+INTERFACE PipeOut.8 {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo1Base$__PARAM__$width$128 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE Fifo1Base$__PARAM__$width$16 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
+EMODULE Fifo.3 {
+    INTERFACE PipeIn.4 in
+    INTERFACE PipeOut.5 out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.6 {
+    INTERFACE PipeIn.7 in
+    INTERFACE PipeOut.8 out
 }
-EMODULE Fifo_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+EMODULE Fifo1Base(width=128) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE Fifo_OC_6 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
+EMODULE Fifo1Base(width=16) {
+    INTERFACE PipeIn.7 in
+    INTERFACE PipeOut.8 out
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
 }
 MODULE Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base$__PARAM__$width$128 fifo
-    METHOD/Action in$enq__ENA ( l_struct_OC_NOCData v ) {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD Fifo1Base(width=128) fifo
+    METHOD/Action in$enq__ENA ( NOCData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_NOCData = ((out$first$retval)) {
-        ALLOCA l_struct_OC_NOCData out$first$retval
+    METHOD out$first NOCData = ((out$first$retval)) {
+        ALLOCA NOCData out$first$retval
         CALL :fifo$out$first{}
         LET Bit(128) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_9 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
-    FIELD Fifo1Base$__PARAM__$width$16 fifo
+MODULE Fifo1.9 {
+    INTERFACE PipeIn.4 in
+    INTERFACE PipeOut.5 out
+    FIELD Fifo1Base(width=16) fifo
     METHOD/Action in$enq__ENA ( Bit(16) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -92,25 +92,25 @@ MODULE Fifo1_OC_9 {
     }
 }
 MODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
     FIELD Fifo1 forwardFifo
-    FIELD Fifo1_OC_9 forwardFifol
+    FIELD Fifo1.9 forwardFifol
     METHOD/Rule/Action RULE$fifoRule__ENA {
-        ALLOCA l_struct_OC_NOCData RULE$fifoRule__ENA$agg_2e_tmp
+        ALLOCA NOCData RULE$fifoRule__ENA$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET l_struct_OC_NOCData :RULE$fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        LET NOCData :RULE$fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
         CALL :forwardFifol$out$first{}
         CALL/Action :out$enq__ENA{RULE$fifoRule__ENA$agg_2e_tmp,forwardFifol$out$first}
         CALL/Action :forwardFifo$out$deq__ENA{}
         CALL/Action :forwardFifol$out$deq__ENA{}
     }
-    METHOD/Action forward$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) {
+    METHOD/Action forward$enq__ENA ( NOCData v , Bit(16) length ) {
         CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
         CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
     }
-    METHOD/Action in$enq__ENA ( l_struct_OC_NOCData v , Bit(16) length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
+    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v,in$enq$length}
     }
 }

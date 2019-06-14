@@ -2,7 +2,7 @@
 `define __zynqTop_GENERATED__VH__
 
 //METASTART; P7Wrap
-//METAEXTERNAL; MAXIGP0_O; l_ainterface_OC_MaxiO;
+//METAEXTERNAL; MAXIGP0_O; MaxiO;
 //METAINTERNAL; pps; PS7;
 //METAINTERNAL; pclockTop; ClockTop;
 //METAGUARD; MAXIGP0_I$B; pps$MAXIGP0BREADY;

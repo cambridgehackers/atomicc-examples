@@ -1,88 +1,88 @@
-STRUCT l_struct_OC_EchoIndication_data {
+STRUCT EchoIndication_data {
     FIELD Bit(32) tag
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
+    FIELD EchoIndication_union data
 }
-STRUCT l_struct_OC_EchoRequest_data {
+STRUCT EchoIndication_union {
+    FIELD EchoIndication_union::EchoIndication_heard heard
+}
+STRUCT EchoIndication_union::EchoIndication_heard {
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
+}
+STRUCT EchoRequest_data {
     FIELD Bit(32) tag
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
+    FIELD EchoRequest_union data
 }
-STRUCT l_struct_OC_NOCData {
+STRUCT EchoRequest_union {
+    FIELD EchoRequest_union::EchoRequest_say say
+}
+STRUCT EchoRequest_union::EchoRequest_say {
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
+}
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-STRUCT l_struct_OC_ValueType {
+STRUCT ValueType {
     FIELD Bit(32) a
     FIELD Bit(32) b
 }
-STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
-}
-STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
-    FIELD Bit(32) meth
-    FIELD Bit(32) v
-}
-STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
-    FIELD l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
-}
-STRUCT l_struct_OC__IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
-    FIELD Bit(32) meth
-    FIELD Bit(32) v
-}
-INTERFACE l_ainterface_OC_EchoIndication {
+INTERFACE EchoIndication {
     METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )
 }
-INTERFACE l_ainterface_OC_EchoRequest {
+INTERFACE EchoRequest {
     METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeIn {
-    METHOD/Action enq__ENA ( l_struct_OC_EchoRequest_data v )
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( EchoRequest_data v )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
+INTERFACE PipeIn.0 {
+    METHOD/Action enq__ENA ( EchoIndication_data v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_0 {
-    METHOD/Action enq__ENA ( l_struct_OC_EchoIndication_data v )
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
 }
 MODULE Connect {
-    INTERFACECONNECT lERI$request lEcho$request l_ainterface_OC_EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe l_ainterface_OC_PipeIn_OC_0
-    INTERFACECONNECT lEcho$indication lEIO$indication l_ainterface_OC_EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe l_ainterface_OC_PipeIn
-    INTERFACECONNECT/Forward request lERO_test$request l_ainterface_OC_EchoRequest
-    INTERFACECONNECT/Forward indication lEII_test$indication l_ainterface_OC_EchoIndication
+    INTERFACECONNECT lERI$request lEcho$request EchoRequest
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.0
+    INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn
+    INTERFACECONNECT/Forward request lERO_test$request EchoRequest
+    INTERFACECONNECT/Forward indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
     FIELD Echo lEcho
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACE EchoRequest request
+    INTERFACE/Ptr EchoIndication indication
 }
 MODULE Echo {
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
+    INTERFACE EchoRequest request
+    INTERFACE/Ptr EchoIndication indication
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         CALL/Action :indication$heard__ENA{request$say$meth,request$say$v}
     }
 }
 MODULE EchoIndicationInput {
-    INTERFACE l_ainterface_OC_PipeIn_OC_0 pipe
-    INTERFACE/Ptr l_ainterface_OC_EchoIndication indication
-    METHOD/Action pipe$enq__ENA ( l_struct_OC_EchoIndication_data v ) {
-        ALLOCA l_struct_OC_EchoIndication_data pipe$enq__ENA$v
-        LET l_struct_OC_EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
+    INTERFACE PipeIn.0 pipe
+    INTERFACE/Ptr EchoIndication indication
+    METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) {
+        ALLOCA EchoIndication_data pipe$enq__ENA$v
+        LET EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
         CALL/Action ((pipe$enq__ENA$v$tag) == 1):indication$heard__ENA{pipe$enq__ENA$v$data$heard$meth,pipe$enq__ENA$v$data$heard$v}
     }
 }
 MODULE EchoIndicationOutput {
-    INTERFACE l_ainterface_OC_EchoIndication indication
-    INTERFACE/Ptr l_ainterface_OC_PipeIn_OC_0 pipe
+    INTERFACE EchoIndication indication
+    INTERFACE/Ptr PipeIn.0 pipe
     METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA l_struct_OC_EchoIndication_data indication$heard__ENA$ind
+        ALLOCA EchoIndication_data indication$heard__ENA$ind
         LET Bit(32) :indication$heard__ENA$ind$tag = 1
         STORE :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
         STORE :indication$heard__ENA$ind$data$heard$v = indication$heard$v
@@ -90,20 +90,20 @@ MODULE EchoIndicationOutput {
     }
 }
 MODULE EchoRequestInput {
-    INTERFACE l_ainterface_OC_PipeIn pipe
-    INTERFACE/Ptr l_ainterface_OC_EchoRequest request
-    METHOD/Action pipe$enq__ENA ( l_struct_OC_EchoRequest_data v ) {
-        ALLOCA l_struct_OC_EchoRequest_data pipe$enq__ENA$v
-        LET l_struct_OC_EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
+    INTERFACE PipeIn pipe
+    INTERFACE/Ptr EchoRequest request
+    METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
+        ALLOCA EchoRequest_data pipe$enq__ENA$v
+        LET EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
         CALL/Action ((pipe$enq__ENA$v$tag) == 1):request$say__ENA{pipe$enq__ENA$v$data$say$meth,pipe$enq__ENA$v$data$say$v}
     }
 }
 MODULE EchoRequestOutput {
-    INTERFACE l_ainterface_OC_EchoRequest request
-    INTERFACE/Ptr l_ainterface_OC_PipeIn pipe
+    INTERFACE EchoRequest request
+    INTERFACE/Ptr PipeIn pipe
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA l_struct_OC_EchoRequest_data request$say__ENA$ind
+        ALLOCA EchoRequest_data request$say__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
         LET Bit(32) :request$say__ENA$ind$tag = 1
         STORE :request$say__ENA$ind$data$say$meth = request$say$meth

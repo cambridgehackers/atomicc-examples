@@ -1,12 +1,12 @@
-INTERFACE l_ainterface_OC_MResetInverterResetInverter {
+INTERFACE MResetInverterResetInverter {
     FIELD/input Bit(1) RESET_IN
     FIELD/output Bit(1) RESET_OUT
 }
 EMODULE ResetInverter {
-    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    INTERFACE MResetInverterResetInverter _
 }
 MODULE ResetInverter {
-    INTERFACE l_ainterface_OC_MResetInverterResetInverter _
+    INTERFACE MResetInverterResetInverter _
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :RESET_OUT = ((RESET_IN) != (0)) ^ (1)
     }

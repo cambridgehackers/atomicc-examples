@@ -1,11 +1,11 @@
-INTERFACE l_ainterface_OC_CNCONNECTNET2 {
+INTERFACE CNCONNECTNET2 {
     FIELD/input Bit(1) IN1
     FIELD/input Bit(1) IN2
     FIELD/output Bit(1) OUT1
     FIELD/output Bit(1) OUT2
 }
 MODULE CONNECTNET2 {
-    INTERFACE l_ainterface_OC_CNCONNECTNET2 _
+    INTERFACE CNCONNECTNET2 _
     METHOD/Rule/Action RULE$assign__ENA {
         LET Bit(1) :OUT1 = IN1
         LET Bit(1) :OUT2 = IN2

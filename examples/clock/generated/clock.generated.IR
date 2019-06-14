@@ -1,4 +1,4 @@
-INTERFACE l_ainterface_OC_Ft600 {
+INTERFACE Ft600 {
     FIELD/input Bit(1) usb_clk
     FIELD/input Bit(1) usb_rxf
     FIELD/input Bit(1) usb_txe
@@ -7,7 +7,7 @@ INTERFACE l_ainterface_OC_Ft600 {
     FIELD/output Bit(1) usb_oe_n
     FIELD/inout Bit(16) usb_ad
 }
-INTERFACE l_ainterface_OC_MIOBUF {
+INTERFACE MIOBUF {
     FIELD/parameter Bit(32) DRIVE
     FIELD/input Bit(1) I
     FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
@@ -18,10 +18,10 @@ INTERFACE l_ainterface_OC_MIOBUF {
     FIELD/input Bit(1) T
 }
 EMODULE IOBUF {
-    INTERFACE l_ainterface_OC_MIOBUF _
+    INTERFACE MIOBUF _
 }
 MODULE ModFt600 {
-    INTERFACE l_ainterface_OC_Ft600 _
+    INTERFACE Ft600 _
     FIELD Bit(1) usb_fifo_empty
     FIELD Bit(2) usb_rxf_delay
     FIELD Bit(1) usb_txe_delay

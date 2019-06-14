@@ -1,93 +1,93 @@
-STRUCT l_struct_OC_NOCData {
+STRUCT NOCData {
     FIELD Bit(128) data
 }
-STRUCT l_struct_OC_ProcessData {
+STRUCT ProcessData {
     FIELD Bit(4) ticket
     FIELD Bit(16) IPA
     FIELD Bit(3) state
 }
-INTERFACE l_ainterface_OC_LpmMem {
+INTERFACE LpmMem {
     METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
 }
-INTERFACE l_ainterface_OC_LpmRequest {
+INTERFACE LpmRequest {
     METHOD/Action enter__ENA ( Bit(32) x )
 }
-INTERFACE l_ainterface_OC_PipeIn {
+INTERFACE PipeIn {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeInH {
-    METHOD/Action enq__ENA ( l_struct_OC_NOCData v , Bit(16) length )
-}
-INTERFACE l_ainterface_OC_PipeIn_OC_1 {
+INTERFACE PipeIn.1 {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_4 {
-    METHOD/Action enq__ENA ( l_struct_OC_ProcessData v )
+INTERFACE PipeIn.4 {
+    METHOD/Action enq__ENA ( ProcessData v )
 }
-INTERFACE l_ainterface_OC_PipeIn_OC_7 {
+INTERFACE PipeIn.7 {
     METHOD/Action enq__ENA ( Bit(23) v )
 }
-INTERFACE l_ainterface_OC_PipeOut {
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE PipeOut {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_2 {
+INTERFACE PipeOut.2 {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_5 {
+INTERFACE PipeOut.5 {
     METHOD/Action deq__ENA
-    METHOD first l_struct_OC_ProcessData
+    METHOD first ProcessData
 }
-INTERFACE l_ainterface_OC_PipeOut_OC_8 {
+INTERFACE PipeOut.8 {
     METHOD/Action deq__ENA
     METHOD first Bit(23)
 }
-INTERFACE l_ainterface_OC_TickIfc {
+INTERFACE TickIfc {
     METHOD/Action allocateTicket__ENA
     METHOD getTicket Bit(4)
 }
 EMODULE BufTicket {
-    INTERFACE l_ainterface_OC_TickIfc tickIfc
+    INTERFACE TickIfc tickIfc
 }
 EMODULE Fifo {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
 }
-EMODULE Fifo1Base$__PARAM__$width$32 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE FifoB1Base$__PARAM__$width$23 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
+EMODULE Fifo.3 {
+    INTERFACE PipeIn.4 in
+    INTERFACE PipeOut.5 out
 }
-EMODULE Fifo_OC_0 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_1 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_2 out
+EMODULE Fifo.6 {
+    INTERFACE PipeIn.7 in
+    INTERFACE PipeOut.8 out
 }
-EMODULE Fifo_OC_3 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
+EMODULE Fifo1Base(width=32) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
 }
-EMODULE Fifo_OC_6 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_7 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_8 out
+EMODULE FifoB1Base(width=23) {
+    INTERFACE PipeIn.7 in
+    INTERFACE PipeOut.8 out
 }
 EMODULE LpmMemory {
-    INTERFACE l_ainterface_OC_LpmMem ifc
+    INTERFACE LpmMem ifc
 }
 EMODULE MuxPipe {
-    INTERFACE l_ainterface_OC_PipeInH in
-    INTERFACE l_ainterface_OC_PipeInH forward
-    INTERFACE/Ptr l_ainterface_OC_PipeInH out
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
 }
 MODULE Fifo1 {
-    INTERFACE l_ainterface_OC_PipeIn in
-    INTERFACE l_ainterface_OC_PipeOut out
-    FIELD Fifo1Base$__PARAM__$width$32 fifo
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -99,30 +99,30 @@ MODULE Fifo1 {
     }
 }
 MODULE FifoB1 {
-    INTERFACE l_ainterface_OC_PipeIn_OC_4 in
-    INTERFACE l_ainterface_OC_PipeOut_OC_5 out
-    FIELD FifoB1Base$__PARAM__$width$23 fifo
-    METHOD/Action in$enq__ENA ( l_struct_OC_ProcessData v ) {
+    INTERFACE PipeIn.4 in
+    INTERFACE PipeOut.5 out
+    FIELD FifoB1Base(width=23) fifo
+    METHOD/Action in$enq__ENA ( ProcessData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first l_struct_OC_ProcessData = ((out$first$retval)) {
-        ALLOCA l_struct_OC_ProcessData out$first$retval
+    METHOD out$first ProcessData = ((out$first$retval)) {
+        ALLOCA ProcessData out$first$retval
         CALL :fifo$out$first{}
         LET Bit(23) :out$first$retval = fifo$out$first
     }
 }
 MODULE Lpm {
-    INTERFACE l_ainterface_OC_LpmRequest request
+    INTERFACE LpmRequest request
     FIELD BufTicket compBuf
     FIELD Fifo1 inQ
     FIELD FifoB1 fifo
-    INTERFACE/Ptr l_ainterface_OC_PipeIn outQ
+    INTERFACE/Ptr PipeIn outQ
     FIELD LpmMemory mem
     METHOD/Rule/Action RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
-        ALLOCA l_struct_OC_ProcessData RULE$enter__ENA$agg_2e_tmp
+        ALLOCA ProcessData RULE$enter__ENA$agg_2e_tmp
         ALLOCA Bit(4) RULE$enter__ENA$ticket
         ALLOCA Bit(32) RULE$enter__ENA$x
         CALL :inQ$out$first{}
@@ -137,23 +137,23 @@ MODULE Lpm {
     }
     METHOD/Rule/Action RULE$exitr__ENA if (((((mem$ifc$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
         ALLOCA Bit(32) RULE$exitr__ENA$x
-        ALLOCA l_struct_OC_ProcessData RULE$exitr__ENA$y
+        ALLOCA ProcessData RULE$exitr__ENA$y
         CALL :mem$ifc$resValue{}
         LET Bit(32) :RULE$exitr__ENA$x = mem$ifc$resValue
         CALL :fifo$out$first{}
-        LET l_struct_OC_ProcessData :RULE$exitr__ENA$y = fifo$out$first
+        LET ProcessData :RULE$exitr__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :fifo$out$deq__ENA{}
         CALL/Action :outQ$enq__ENA{RULE$exitr__ENA$x}
     }
     METHOD/Rule/Action RULE$recirc__ENA if (((((mem$ifc$resValue) & (1)) == (1)) ^ (1))) {
-        ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$agg_2e_tmp
+        ALLOCA ProcessData RULE$recirc__ENA$agg_2e_tmp
         ALLOCA Bit(32) RULE$recirc__ENA$x
-        ALLOCA l_struct_OC_ProcessData RULE$recirc__ENA$y
+        ALLOCA ProcessData RULE$recirc__ENA$y
         CALL :mem$ifc$resValue{}
         LET Bit(32) :RULE$recirc__ENA$x = mem$ifc$resValue
         CALL :fifo$out$first{}
-        LET l_struct_OC_ProcessData :RULE$recirc__ENA$y = fifo$out$first
+        LET ProcessData :RULE$recirc__ENA$y = fifo$out$first
         CALL/Action :mem$ifc$resAccept__ENA{}
         CALL/Action :mem$ifc$req__ENA{(RULE$recirc__ENA$x) + (__phi(((RULE$recirc__ENA$y$state) == (1)):(__bitsubstr{RULE$recirc__ENA$y$IPA,15,8}), (((RULE$recirc__ENA$y$state) == (1)) ^ 1):(__bitsubstr{RULE$recirc__ENA$y$IPA,7,0})))}
         CALL/Action :fifo$out$deq__ENA{}
