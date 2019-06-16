@@ -3,9 +3,9 @@
 `default_nettype none
 module IobufVec #(
     parameter integer iovecWidth = 999999)(
-    inout wire [iovecWidth- 1:0]IO,
-    input wire [iovecWidth- 1:0]I,
-    output wire [iovecWidth- 1:0]O,
+    inout wire [iovecWidth - 1:0]IO,
+    input wire [iovecWidth - 1:0]I,
+    output wire [iovecWidth - 1:0]O,
     input wire T);
     wire CLK;
     wire nRST;

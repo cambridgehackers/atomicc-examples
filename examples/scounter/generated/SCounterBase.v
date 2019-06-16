@@ -6,14 +6,14 @@ module SCounterBase #(
     parameter integer width = 999)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [width- 1:0]in$enq$v,
+    input wire [width - 1:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [width- 1:0]out$first,
+    output wire [width - 1:0]out$first,
     output wire out$first__RDY);
-    reg [depth- 1:0]c;
-    reg [width- 1:0]q;
+    reg [depth - 1:0]c;
+    reg [width - 1:0]q;
     wire RULE$decCtr__ENA;
     wire RULE$decCtr__RDY;
     wire RULE$incCtr__ENA;

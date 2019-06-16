@@ -5,13 +5,13 @@ module Fifo1Base #(
     parameter integer width = 999999)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
-    input wire [width- 1:0]in$enq$v,
+    input wire [width - 1:0]in$enq$v,
     output wire in$enq__RDY,
     input wire out$deq__ENA,
     output wire out$deq__RDY,
-    output wire [width- 1:0]out$first,
+    output wire [width - 1:0]out$first,
     output wire out$first__RDY);
-    reg [width- 1:0]element;
+    reg [width - 1:0]element;
     reg full;
     assign in$enq__RDY = !full;
     assign out$deq__RDY = full;
