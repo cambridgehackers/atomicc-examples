@@ -24,7 +24,7 @@ module SCounterBase #(
     wire dequeueing$ifc$value;
     wire enqueueing$ifc$send__RDY;
     wire enqueueing$ifc$value;
-    genvar __inst$Genvar1, __inst$Genvar99;
+    genvar __inst$Genvar1;
     PulseWire enqueueing (.CLK(CLK), .nRST(nRST),
         .ifc$send__ENA(in$enq__ENA & in$enq__RDY),
         .ifc$send__RDY(enqueueing$ifc$send__RDY),
@@ -62,7 +62,7 @@ module SCounterBase #(
       end
     end // always @ (posedge CLK)
 
-        for(__inst$Genvar1 = 0; __inst$Genvar1 < depth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < depth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -70,27 +70,15 @@ module SCounterBase #(
       else begin
         if (RULE$both__ENA & RULE$both__RDY) begin // RULE$both__ENA
             q[__inst$Genvar1] <= ( ( !( ( ( __inst$Genvar1 + 1 ) == depth ) | ( c == ( __inst$Genvar1 + 1 ) ) ) ) ? q : 0 );
+            if (RULE$both__ENA & RULE$both__RDY & ( __inst$Genvar1 == ( c - 1 ) ))
+            q[__inst$Genvar1] <= in$enq$v;
         end; // End of RULE$both__ENA
         if (RULE$decCtr__ENA & RULE$decCtr__RDY) begin // RULE$decCtr__ENA
             q[__inst$Genvar1] <= ( ( __inst$Genvar1 + 1 ) == depth ) ? 0 : q;
         end; // End of RULE$decCtr__ENA
-      end
-    end // always @ (posedge CLK)
-   end // end of generate
-
-        for(__inst$Genvar99 = 0; __inst$Genvar99 < 0; __inst$Genvar99 = __inst$Genvar99 + 1) begin
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-      end // nRST
-      else begin
-        if (RULE$both__ENA & RULE$both__RDY) begin // RULE$both__ENA
-            if (RULE$both__ENA & RULE$both__RDY & ( __inst$Genvar99 == ( c - 1 ) ))
-            q[__inst$Genvar99] <= in$enq$v;
-        end; // End of RULE$both__ENA
         if (RULE$incCtr__ENA & RULE$incCtr__RDY) begin // RULE$incCtr__ENA
-            if (RULE$incCtr__ENA & RULE$incCtr__RDY & ( __inst$Genvar99 == c ))
-            q[__inst$Genvar99] <= in$enq$v;
+            if (RULE$incCtr__ENA & RULE$incCtr__RDY & ( __inst$Genvar1 == c ))
+            q[__inst$Genvar1] <= in$enq$v;
         end; // End of RULE$incCtr__ENA
       end
     end // always @ (posedge CLK)

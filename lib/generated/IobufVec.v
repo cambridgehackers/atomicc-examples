@@ -21,7 +21,7 @@ module IobufVec #(
         .O(O),
         .T(T));
     end;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign iobufs[__inst$Genvar1].I = I[ __inst$Genvar1 : 1 ];
         assign iobufs[__inst$Genvar1].IO = IO[ __inst$Genvar1 : 1 ];
         assign iobufs[__inst$Genvar1].O = O[ __inst$Genvar1 : 1 ];
