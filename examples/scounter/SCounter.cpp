@@ -38,29 +38,21 @@ __module SCounterBase : public Fifo<__uint(width)> {
     //__atomicc_uint(log2(depth)) c;
     __uint(depth) c;
     __shared __uint(width)      x_wire;
-    PulseWire enqueueing, dequeueing;
     bool empty() { return c == 0; };
     bool full() { return c == depth; };
-    __rule incCtr if (enqueueing.ifc.value() && !dequeueing.ifc.value()) {
-        c++;
-        q[c] = x_wire;
+    void out.deq() if (!empty()) {
+        for (int i=0; (i + 1)<depth; i=i+1)
+            q[i] = ((i == c-1) & __valid(this->in.enq)) ? x_wire : q[i + 1];
+        if (!__valid(this->in.enq))
+            c--;
     }
-    __rule decCtr if (dequeueing.ifc.value() && !enqueueing.ifc.value()) {
-        for (int i=0; i<depth; i=i+1)
-            q[i] = ( (i+1)==depth ? dflt : q[i + 1]);
-        c--;
-    }
-    __rule both if (dequeueing.ifc.value() && enqueueing.ifc.value()) {
-        for (int i=0; i<depth; i=i+1)
-            if (c != i + 1)
-                q[i] = ( (i+1) ==depth ? dflt : q[i + 1]);
-        q[c-1] = x_wire;
-    }
-    void out.deq() if (!empty()) { dequeueing.ifc.send(); }
     __uint(width) out.first() { return q[0]; }
     void in.enq(__uint(width) v) if (!full()) {
-        enqueueing.ifc.send();
         x_wire = v;
+        if (!__valid(this->out.deq)) {
+            q[c] = v;
+            c++;
+        }
     }
     bool notEmpty() { return !empty(); }
     bool notFull() { return  !full(); }
