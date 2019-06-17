@@ -77,8 +77,6 @@ module TestTop (
     wire readData$out$deq__RDY;
     wire [38 - 1:0]readData$out$first;
     wire readData$out$first__RDY;
-    wire [16 - 1:0]readUser$enq$length;
-    wire [32 - 1:0]readUser$enq$v;
     wire reqArs$in$enq__RDY;
     wire reqArs$out$deq__ENA;
     wire reqArs$out$deq__RDY;
@@ -187,8 +185,6 @@ module TestTop (
     assign MAXIGP0_O$W__RDY = writeData$in$enq__RDY;
     assign interrupt = !( ( requestLength == 0 ) | ( !intEnable ) );
     assign readBeat$in$enq__ENA = reqArs$out$first__RDY & ( reqArs$out$deq__RDY | ( !( readNotFirst ? readLast : 1 ) ) );
-    assign readUser$enq$length = user$read$enq$length;
-    assign readUser$enq$v = user$read$enq$v;
     assign reqArs$out$deq__ENA = reqArs$out$first__RDY & readBeat$in$enq__RDY & ( readNotFirst ? readLast : ( reqArs$out$first[ ( ( 4 - 1 ) + 6 ) : 6 ] == 1 ) );
     assign reqAws$out$deq__ENA = reqAws$out$first__RDY & writeBeat$in$enq__RDY & ( writeNotFirst ? writeLast : ( reqAws$out$first[ ( ( 4 - 1 ) + 6 ) : 6 ] == 1 ) );
     assign user$write$enq$length = writeBeat$out$first[ 5 - 1 + 11 : 11 ] != 0;
@@ -270,8 +266,8 @@ module TestTop (
             intEnable <= RULE$lwrite__ENA$temp$data[ 0 : 0 ];
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA & ( requestLength == 0 )) begin // readUser$enq__ENA
-            requestValue <= readUser$enq$v;
-            requestLength <= readUser$enq$length;
+            requestValue <= user$read$enq$v;
+            requestLength <= user$read$enq$length;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

@@ -30,6 +30,9 @@ module ModFt600 (
     assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = !( usb_rxf_delay == 0 );
     assign usb_wr_n = usb_txe_delay | usb_fifo_empty | ( !usb_rxf_delay[ 0 ] );
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
+        assign iobufs[__inst$Genvar1].IO = usb_ad >> __inst$Genvar1;
+    end;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -45,11 +48,6 @@ module ModFt600 (
         // End of RULE$handshake__ENA
       end
     end // always @ (posedge CLK)
-// start RULE$iobufs__ENA
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
-        assign iobufs[__inst$Genvar1].IO = usb_ad >> __inst$Genvar1;
-    end;
-// end RULE$iobufs__ENA
 endmodule 
 
 `default_nettype wire    // set back to default value

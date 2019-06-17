@@ -58,9 +58,9 @@ __module SCounterBase : public Fifo<__uint(width)> {
     }
     void out.deq() if (!empty()) { dequeueing.ifc.send(); }
     __uint(width) out.first() { return q[0]; }
-    void in.enq(__uint(width) x) if (!full()) {
+    void in.enq(__uint(width) v) if (!full()) {
         enqueueing.ifc.send();
-        x_wire = x;
+        x_wire = v;
     }
     bool notEmpty() { return !empty(); }
     bool notFull() { return  !full(); }
