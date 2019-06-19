@@ -13,7 +13,7 @@ module SCounterBase #(
     output wire [width - 1:0]out$first,
     output wire out$first__RDY);
     reg [depth - 1:0]c;
-    reg [width - 1:0]q;
+    reg [width - 1:0]q [depth:0];
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c == depth );
     assign out$deq__RDY = !( c == 0 );
@@ -23,7 +23,6 @@ module SCounterBase #(
     always @( posedge CLK) begin
       if (!nRST) begin
         c <= 0;
-        q <= 0;
       end // nRST
       else begin
         if (!( ( c == depth ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
