@@ -73,6 +73,12 @@ __emodule Fifo {
     PipeOut<T> out;
 };
 
+template<class In, class Out>
+__emodule Gear {
+    PipeIn<In> in;
+    PipeOut<Out> out;
+};
+
 #define MAX_NOC_WIDTH                  4//100
 #define PRINTF_PORT    (uint16_t) 0x7fff
 

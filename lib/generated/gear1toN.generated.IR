@@ -1,0 +1,54 @@
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( Bit(128) v )
+}
+INTERFACE PipeIn.1 {
+    METHOD/Action enq__ENA ( Bit(128) v )
+}
+INTERFACE PipeOut {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.2 {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+EMODULE Gear {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+}
+EMODULE Gear.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
+}
+MODULE Gear1toN {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD Gear1toNBase(widthIn=128,widthOut=32) gear
+    METHOD/Action in$enq__ENA ( Bit(128) v ) {
+        CALL/Action :gear$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :gear$out$deq__ENA{}
+    }
+    METHOD out$first Bit(32) = ((gear$out$first)) {
+        CALL :gear$out$first{}
+    }
+}
+MODULE Gear1toNBase(widthIn=128,widthOut=32) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
+    FIELD/Count 4  Bit(32) q
+    FIELD Bit(4) c
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        STORE :q[__inst$Genvar1] = q[(__inst$Genvar1) + (1)]
+    }
+    METHOD/Action in$enq__ENA ( Bit(128) v ) if ((((c) != (0)) ^ (1))) {
+        STORE :q[c] = in$enq$v
+        STORE :c = 4
+    }
+    METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
+        GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < (4)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        STORE :c = (c) + (-1)
+    }
+    METHOD out$first Bit(32) = ((q[0])) if ((((c) == (0)) ^ (1)))
+}
