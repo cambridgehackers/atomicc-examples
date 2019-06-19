@@ -31,7 +31,7 @@ __module PulseWire {
     void ifc.send() {}
 };
 
-template<int depth, int width>
+template<int depth, int width, int bypass = 0>
 __module SCounterBase : public Fifo<__uint(width)> {
 #define dflt 0
     __uint(width) q[depth];
@@ -42,14 +42,14 @@ __module SCounterBase : public Fifo<__uint(width)> {
     bool full() { return c == depth; };
     void out.deq() if (!empty()) {
         for (int i=0; (i + 1)<depth; i=i+1)
-            q[i] = ((i == c-1) & __valid(this->in.enq)) ? x_wire : q[i + 1];
-        if (!__valid(this->in.enq))
+            q[i] = ((i == c-1) & (bypass == 444) & __valid(this->in.enq)) ? x_wire : q[i + 1];
+        if ((bypass != 444) | !__valid(this->in.enq))
             c--;
     }
     __uint(width) out.first() { return q[0]; }
     void in.enq(__uint(width) v) if (!full()) {
         x_wire = v;
-        if (!__valid(this->out.deq)) {
+        if ((bypass != 444) | !__valid(this->out.deq)) {
             q[c] = v;
             c++;
         }
@@ -63,12 +63,12 @@ printf("[%s:%d] CONSTRUCT\n", __FUNCTION__, __LINE__);
     }
 };
 
-template<int depth, class T>
+template<int depth, class T, int bypass = 0>
 __module SCounter : public Fifo<T> {
-  SCounterBase<depth, __bitsize(T)> fifo;
+  SCounterBase<depth, __bitsize(T), bypass> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
 //GENERIC_INT_TEMPLATE_FLAG
-SCounter<10, __uint(999)> bar;
+SCounter<10, __uint(999), 444> bar;

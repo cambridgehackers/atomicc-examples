@@ -29,10 +29,10 @@ MODULE PulseWire {
     METHOD/Action ifc$send__ENA
     METHOD ifc$value Bit(1) = ((0))
 }
-MODULE SCounter(depth=10) {
+MODULE SCounter(depth=10,bypass=444) {
     INTERFACE PipeIn in
     INTERFACE PipeOut out
-    FIELD SCounterBase(depth=10,width=999) fifo
+    FIELD SCounterBase(depth=10,width=999,bypass=444) fifo
     METHOD/Action in$enq__ENA ( Bit(999) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -43,7 +43,7 @@ MODULE SCounter(depth=10) {
         CALL :fifo$out$first{}
     }
 }
-MODULE SCounterBase(depth=10,width=999) {
+MODULE SCounterBase(depth=10,width=999,bypass=444) {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
     FIELD/Count 10  Bit(999) q
@@ -54,8 +54,8 @@ MODULE SCounterBase(depth=10,width=999) {
     }
     METHOD/Action in$enq__ENA ( Bit(999) v ) if ((((c) == (10)) ^ (1))) {
         STORE :x_wire = in$enq$v
-        STORE (((out$deq__ENA) != (0)) ^ 1):q[c] = in$enq$v
-        STORE (((out$deq__ENA) != (0)) ^ 1):c = (c) + (1)
+        STORE ((0) | (((out$deq__ENA) != (0)) ^ (1))):q[c] = in$enq$v
+        STORE ((0) | (((out$deq__ENA) != (0)) ^ (1))):c = (c) + (1)
     }
     METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
         GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < (10)),((__inst$Genvar1) + (1)),FOR$0Body__ENA

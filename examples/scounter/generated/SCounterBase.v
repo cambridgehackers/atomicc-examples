@@ -3,7 +3,8 @@
 `default_nettype none
 module SCounterBase #(
     parameter integer depth = 10,
-    parameter integer width = 999)(
+    parameter integer width = 999,
+    parameter integer bypass = 444)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [width - 1:0]in$enq$v,
