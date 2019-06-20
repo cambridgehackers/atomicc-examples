@@ -2,8 +2,8 @@
 
 `default_nettype none
 module Gear1toNBase #(
-    parameter integer widthIn = 128,
-    parameter integer widthOut = 32)(
+    parameter integer widthIn = 32,
+    parameter integer widthOut = 128)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [widthIn - 1:0]in$enq$v,
@@ -12,38 +12,39 @@ module Gear1toNBase #(
     output wire out$deq__RDY,
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
+    reg [widthOut - 1:0]buffer;
     reg [4 - 1:0]c;
-    reg [widthOut - 1:0]q [1:0];
     genvar __inst$Genvar1;
-    assign in$enq__RDY = c == 0;
-    assign out$deq__RDY = !( c == 0 );
-    assign out$first = q[ 0 ];
-    assign out$first__RDY = !( c == 0 );
+    assign in$enq__RDY = ( !( 0 == ( ( c == 4 ) ^ 1 ) ) );
+    assign out$deq__RDY = ( !( 0 == ( c == 4 ) ) );
+    assign out$first = buffer;
+    assign out$first__RDY = ( !( 0 == ( c == 4 ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        buffer <= 0;
         c <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA & ( c == 0 )) begin // in$enq__ENA
-            q <= in$enq$v;
-            c <= 4;
+        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
+            c <= c + 1;
         end; // End of in$enq__ENA
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
-            c <= c + ( -1 );
+        if (( out$deq__ENA & out$deq__RDY )) begin // out$deq__ENA
+            c <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = 0; ( __inst$Genvar1 + 1 ) < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = ( 0 ); ( __inst$Genvar1 < 4 ); __inst$Genvar1 = ( __inst$Genvar1 + 1 )) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
-            q[__inst$Genvar1] <= q[__inst$Genvar1 + 1];
-        end; // End of out$deq__ENA
+        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
+            if (( __inst$Genvar1 == c ))
+            __bitsubstrl@{ buffer , ( ( __inst$Genvar1 + 1 ) * widthIn ) - 1 , __inst$Genvar1 * widthIn @} <= in$enq$v;
+        end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
    end // end of generate

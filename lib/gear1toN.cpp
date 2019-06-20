@@ -22,20 +22,20 @@
 
 template<int widthIn, int widthOut>
 __module Gear1toNBase : public Gear<__uint(widthIn), __uint(widthOut)> {
-    __uint(widthOut) q[widthIn/widthOut];
-    //__atomicc_uint(log2(widthIn/widthOut)) c;
-    __uint(widthIn/widthOut) c;
-    bool empty() { return c == 0; };
-    bool full() { return c != 0; };
-    void out.deq() if (!empty()) {
-        for (int i=0; (i + 1)<widthIn/widthOut; i=i+1)
-            q[i] = q[i + 1];
-        c--;
+    __uint(widthOut) buffer;
+    __uint(widthOut/widthIn) c;
+    __shared __uint(widthIn) m;
+    bool readyOut() { return c == widthOut/widthIn ; };
+    void out.deq() if (readyOut()) {
+        c = 0;
     }
-    __uint(widthOut) out.first() if (!empty()) { return q[0]; }
-    void in.enq(__uint(widthIn) v) if (!full()) {
-        q[c] = v;
-        c = widthIn/widthOut;
+    __uint(widthOut) out.first() if (readyOut()) { return buffer; }
+    void in.enq(__uint(widthIn) v) if (!readyOut()) {
+        m = v;
+        for (int i = 0; i < widthOut/widthIn; i = i+1)
+            if (i == c)
+                *__bitsubstrl(buffer, ((i + 1) * widthIn) - 1, (i * widthIn)) = m;
+        c++;
     }
 };
 
@@ -46,4 +46,4 @@ __module Gear1toN : public Gear<In, Out> {
   void out.deq(void) { gear.out.deq(); }
   Out out.first(void) { return __bit_cast<Out>(gear.out.first()); };
 };
-Gear1toN<__uint(128), __uint(32)> bar;
+Gear1toN<__uint(32), __uint(128)> bar;

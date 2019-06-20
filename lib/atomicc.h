@@ -37,6 +37,7 @@
 #define __printf    NOCPipeH *printfp
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
+extern "C" int *__bitsubstrl(int, ...);
 
 #define GENERIC_INT_TEMPLATE_FLAG 999999
 

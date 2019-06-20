@@ -22,19 +22,24 @@
 
 template<int widthIn, int widthOut>
 __module GearNto1Base : public Gear<__uint(widthIn), __uint(widthOut)> {
-    __uint(widthOut) q[widthIn/widthOut];
+    __uint(widthOut) buffer[widthIn/widthOut];
     //__atomicc_uint(log2(widthIn/widthOut)) c;
     __uint(widthIn/widthOut) c;
+    __shared __uint(widthIn) m;
     bool empty() { return c == 0; };
     bool full() { return c != 0; };
     void out.deq() if (!empty()) {
-        for (int i=0; (i + 1)<widthIn/widthOut; i=i+1)
-            q[i] = q[i + 1];
+        for (int i = 0; (i + 1)<widthIn/widthOut; i = i+1)
+            buffer[i] = buffer[i + 1];
         c--;
     }
-    __uint(widthOut) out.first() if (!empty()) { return q[0]; }
+    __uint(widthOut) out.first() if (!empty()) {
+       return buffer[0];
+    }
     void in.enq(__uint(widthIn) v) if (!full()) {
-        q[c] = v;
+        m = v;
+        for (int i = 0; i < widthIn/widthOut; i = i+1)
+            buffer[i] = __bitsubstr(m, ((i + 1) * widthOut) - 1, (i * widthOut));
         c = widthIn/widthOut;
     }
 };
