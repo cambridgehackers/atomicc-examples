@@ -1,0 +1,56 @@
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.1 {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeOut {
+    METHOD/Action deq__ENA
+    METHOD first Bit(128)
+}
+INTERFACE PipeOut.2 {
+    METHOD/Action deq__ENA
+    METHOD first Bit(128)
+}
+EMODULE Gear {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+}
+EMODULE Gear.0 {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
+}
+MODULE MIMO {
+    INTERFACE PipeIn in
+    INTERFACE PipeOut out
+    FIELD MIMOBase(widthIn=32,widthOut=128) gear
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
+        CALL/Action :gear$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :gear$out$deq__ENA{}
+    }
+    METHOD out$first Bit(128) = ((gear$out$first)) {
+        CALL :gear$out$first{}
+    }
+}
+MODULE MIMOBase(widthIn=32,widthOut=128) {
+    INTERFACE PipeIn.1 in
+    INTERFACE PipeOut.2 out
+    FIELD Bit(160) buffer
+    FIELD Bit(160) c
+    FIELD/shared Bit(32) m
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        STORE ((__inst$Genvar1) == (c)):__bitsubstrl{buffer,((__inst$Genvar1) + (32)) - (1),__inst$Genvar1} = m
+    }
+    METHOD/Action in$enq__ENA ( Bit(32) v ) if ((((c) >= (128)) ^ (1))) {
+        STORE :m = in$enq$v
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (160)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        STORE :c = (c) + (32)
+    }
+    METHOD/Action out$deq__ENA if (((c) >= (128))) {
+        STORE :buffer = __bitsubstr{buffer,128,159}
+        STORE :c = (c) - (128)
+    }
+    METHOD out$first Bit(128) = ((buffer)) if (((c) >= (128)))
+}
