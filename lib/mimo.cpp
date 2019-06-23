@@ -23,19 +23,19 @@
 template<int widthIn, int widthOut>
 __module MIMOBase : public Gear<__uint(widthIn), __uint(widthOut)> {
     __uint(widthOut + widthIn) buffer;
-    __uint(widthOut + widthIn) c;
+    __uint(/*clog2*/(widthOut + widthIn)) c;
     __shared __uint(widthIn) m;
     bool readyOut() { return c >= widthOut; };
     void out.deq() if (readyOut()) {
         //shift down buffer by width of output
-        buffer = __bitsubstr(buffer, widthOut, widthOut + widthIn-1);
+        buffer = __bitsubstr(buffer, widthOut + widthIn-1, widthOut);
         c -= widthOut;
     }
     __uint(widthOut) out.first() if (readyOut()) { return buffer; }
     void in.enq(__uint(widthIn) v) if (!readyOut()) {
         m = v;
-        for (int i = 0; i < widthOut + widthIn; i = i+1)
-            if (i == c)    //insert new data at index c
+        for (int i = 0; i < widthOut; i = i+1)
+            if ((widthOut - i) == c)
                 *__bitsubstrl(buffer, i + widthIn - 1, i) = m;
         c += widthIn;
     }

@@ -1,24 +1,10 @@
 STRUCT EchoIndication_data {
     FIELD Bit(32) tag
-    FIELD EchoIndication_union data
-}
-STRUCT EchoIndication_union {
-    FIELD EchoIndication_union::EchoIndication_heard heard
-}
-STRUCT EchoIndication_union::EchoIndication_heard {
-    FIELD Bit(32) meth
-    FIELD Bit(32) v
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
 }
 STRUCT EchoRequest_data {
     FIELD Bit(32) tag
-    FIELD EchoRequest_union data
-}
-STRUCT EchoRequest_union {
-    FIELD EchoRequest_union::EchoRequest_say say
-}
-STRUCT EchoRequest_union::EchoRequest_say {
-    FIELD Bit(32) meth
-    FIELD Bit(32) v
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
 STRUCT NOCData {
     FIELD Bit(128) data
@@ -26,6 +12,20 @@ STRUCT NOCData {
 STRUCT ValueType {
     FIELD Bit(32) a
     FIELD Bit(32) b
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union {
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard {
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union {
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say {
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
 }
 INTERFACE EchoIndication {
     METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )

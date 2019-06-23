@@ -15,10 +15,10 @@ module MIMOBase #(
     reg [160 - 1:0]buffer;
     reg [160 - 1:0]c;
     genvar __inst$Genvar1;
-    assign in$enq__RDY = ( !( 0 == ( ( c >= widthOut ) ^ 1 ) ) );
-    assign out$deq__RDY = ( !( 0 == ( c >= widthOut ) ) );
+    assign in$enq__RDY = !( c >= widthOut );
+    assign out$deq__RDY = c >= widthOut;
     assign out$first = buffer;
-    assign out$first__RDY = ( !( 0 == ( c >= widthOut ) ) );
+    assign out$first__RDY = c >= widthOut;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -26,24 +26,24 @@ module MIMOBase #(
         c <= 0;
       end // nRST
       else begin
-        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
+        if (!( ( c >= widthOut ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
             c <= c + widthIn;
         end; // End of in$enq__ENA
-        if (( out$deq__ENA & out$deq__RDY )) begin // out$deq__ENA
-            buffer <= buffer[ widthOut : 159 ];
+        if (out$deq__ENA & ( c >= widthOut )) begin // out$deq__ENA
+            buffer <= buffer[ 159 : widthOut ];
             c <= c - widthOut;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = ( 0 ); ( __inst$Genvar1 < 160 ); __inst$Genvar1 = ( __inst$Genvar1 + 1 )) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < widthOut; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
-        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
-            if (( __inst$Genvar1 == c ))
+        if (!( ( c >= widthOut ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
+            if (( widthOut - __inst$Genvar1 ) == c)
             __bitsubstrl@{ buffer , ( __inst$Genvar1 + widthIn ) - 1 , __inst$Genvar1 @} <= in$enq$v;
         end; // End of in$enq__ENA
       end

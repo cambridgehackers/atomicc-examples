@@ -15,10 +15,10 @@ module Gear1toNBase #(
     reg [widthOut - 1:0]buffer;
     reg [4 - 1:0]c;
     genvar __inst$Genvar1;
-    assign in$enq__RDY = ( !( 0 == ( ( c == 4 ) ^ 1 ) ) );
-    assign out$deq__RDY = ( !( 0 == ( c == 4 ) ) );
+    assign in$enq__RDY = !( c == 4 );
+    assign out$deq__RDY = c == 4;
     assign out$first = buffer;
-    assign out$first__RDY = ( !( 0 == ( c == 4 ) ) );
+    assign out$first__RDY = c == 4;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -26,23 +26,23 @@ module Gear1toNBase #(
         c <= 0;
       end // nRST
       else begin
-        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
+        if (!( ( c == 4 ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
             c <= c + 1;
         end; // End of in$enq__ENA
-        if (( out$deq__ENA & out$deq__RDY )) begin // out$deq__ENA
+        if (out$deq__ENA & ( c == 4 )) begin // out$deq__ENA
             c <= 0;
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = ( 0 ); ( __inst$Genvar1 < 4 ); __inst$Genvar1 = ( __inst$Genvar1 + 1 )) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
-        if (( in$enq__ENA & in$enq__RDY )) begin // in$enq__ENA
-            if (( __inst$Genvar1 == c ))
+        if (!( ( c == 4 ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
+            if (__inst$Genvar1 == c)
             __bitsubstrl@{ buffer , ( ( __inst$Genvar1 + 1 ) * widthIn ) - 1 , __inst$Genvar1 * widthIn @} <= in$enq$v;
         end; // End of in$enq__ENA
       end

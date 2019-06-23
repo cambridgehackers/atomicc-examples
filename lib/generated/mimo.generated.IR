@@ -41,15 +41,15 @@ MODULE MIMOBase(widthIn=32,widthOut=128) {
     FIELD Bit(160) c
     FIELD/shared Bit(32) m
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE ((__inst$Genvar1) == (c)):__bitsubstrl{buffer,((__inst$Genvar1) + (32)) - (1),__inst$Genvar1} = m
+        STORE (((128) - (__inst$Genvar1)) == (c)):__bitsubstrl{buffer,((__inst$Genvar1) + (32)) - (1),__inst$Genvar1} = m
     }
     METHOD/Action in$enq__ENA ( Bit(32) v ) if ((((c) >= (128)) ^ (1))) {
         STORE :m = in$enq$v
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (160)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (128)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
         STORE :c = (c) + (32)
     }
     METHOD/Action out$deq__ENA if (((c) >= (128))) {
-        STORE :buffer = __bitsubstr{buffer,128,159}
+        STORE :buffer = __bitsubstr{buffer,159,128}
         STORE :c = (c) - (128)
     }
     METHOD out$first Bit(128) = ((buffer)) if (((c) >= (128)))

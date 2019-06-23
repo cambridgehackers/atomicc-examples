@@ -3,7 +3,7 @@
 
 //METASTART; Gear1toNBase
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; ( !( 0 == ( ( c == 4 ) ^ 1 ) ) );
-//METAGUARD; out$deq; ( !( 0 == ( c == 4 ) ) );
-//METAGUARD; out$first; ( !( 0 == ( c == 4 ) ) );
+//METAGUARD; in$enq; !( c == 4 );
+//METAGUARD; out$deq; c == 4;
+//METAGUARD; out$first; c == 4;
 `endif
