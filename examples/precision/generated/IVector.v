@@ -11,7 +11,7 @@ module IVector (input wire CLK, input wire nRST,
     output wire [4 - 1:0]ind$heard$v,
     input wire ind$heard__RDY);
     reg [9 - 1:0]counter;
-    reg [8 - 1:0]fcounter;
+    reg [((14) / (7)) + ((3) * (2)) - 1:0]fcounter;
     reg [9 - 1:0]gcounter;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;

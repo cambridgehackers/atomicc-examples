@@ -50,12 +50,12 @@ MODULE SCounterBase(depth=10,width=999,bypass=444) {
     FIELD Bit(10) c
     FIELD/shared Bit(999) x_wire
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        STORE :q[__inst$Genvar1] = __phi(((((__inst$Genvar1) == ((c) - (1))) & (in$enq__ENA)) != (0)):(x_wire), (((((__inst$Genvar1) == ((c) - (1))) & (in$enq__ENA)) != (0)) ^ 1):(q[(__inst$Genvar1) + (1)]))
+        STORE :q[__inst$Genvar1] = __phi((((((__inst$Genvar1) == ((c) - (1))) & ((444) == (444))) & (in$enq__ENA)) != (0)):(x_wire), ((((((__inst$Genvar1) == ((c) - (1))) & ((444) == (444))) & (in$enq__ENA)) != (0)) ^ 1):(q[(__inst$Genvar1) + (1)]))
     }
     METHOD/Action in$enq__ENA ( Bit(999) v ) if ((((c) == (10)) ^ (1))) {
         STORE :x_wire = in$enq$v
-        STORE ((0) | (((out$deq__ENA) != (0)) ^ (1))):q[c] = in$enq$v
-        STORE ((0) | (((out$deq__ENA) != (0)) ^ (1))):c = (c) + (1)
+        STORE (((444) != (444)) | (((out$deq__ENA) != (0)) ^ (1))):q[c] = in$enq$v
+        STORE (((444) != (444)) | (((out$deq__ENA) != (0)) ^ (1))):c = (c) + (1)
     }
     METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
         GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < (10)),((__inst$Genvar1) + (1)),FOR$0Body__ENA

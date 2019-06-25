@@ -38,7 +38,7 @@ MODULE GearNto1Base(widthIn=128,widthOut=32) {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
     FIELD/Count 4  Bit(32) buffer
-    FIELD Bit(4) c
+    FIELD Bit((128) / (32)) c
     FIELD/shared Bit(128) m
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         STORE :buffer[__inst$Genvar1] = buffer[(__inst$Genvar1) + (1)]
@@ -48,11 +48,11 @@ MODULE GearNto1Base(widthIn=128,widthOut=32) {
     }
     METHOD/Action in$enq__ENA ( Bit(128) v ) if ((((c) != (0)) ^ (1))) {
         STORE :m = in$enq$v
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (4)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
-        STORE :c = 4
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((128) / (32))),((__inst$Genvar1) + (1)),FOR$1Body__ENA
+        STORE :c = (128) / (32)
     }
     METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
-        GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < (4)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < ((128) / (32))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
         STORE :c = (c) + (-1)
     }
     METHOD out$first Bit(32) = ((buffer[0])) if ((((c) == (0)) ^ (1)))

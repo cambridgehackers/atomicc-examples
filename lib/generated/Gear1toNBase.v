@@ -13,7 +13,7 @@ module Gear1toNBase #(
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
     reg [widthOut - 1:0]buffer;
-    reg [4 - 1:0]c;
+    reg [widthOut / widthIn - 1:0]c;
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c == 4 );
     assign out$deq__RDY = c == 4;
@@ -35,7 +35,7 @@ module Gear1toNBase #(
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < ( widthOut / widthIn ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin

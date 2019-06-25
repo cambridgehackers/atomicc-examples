@@ -32,7 +32,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (busy_delay & indication$heard__RDY) begin // RULE$input_rule__ENA
-            busy_delay <= 0;
+            busy_delay <= 0 != 0;
             $display( "input_rule: EchoIndicationInput" );
         end; // End of RULE$input_rule__ENA
         if (!( busy_delay | ( !pipe$enq__ENA ) )) begin // pipe$enq__ENA
@@ -40,7 +40,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
             if (pipe$enq__ENA$v$tag == 1) begin
             meth_delay <= pipe$enq__ENA$v$data$heard$meth;
             v_delay <= pipe$enq__ENA$v$data$heard$v;
-            busy_delay <= 1;
+            busy_delay <= 1 != 0;
             end;
         end; // End of pipe$enq__ENA
       end

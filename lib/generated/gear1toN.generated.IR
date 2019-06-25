@@ -38,14 +38,14 @@ MODULE Gear1toNBase(widthIn=32,widthOut=128) {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
     FIELD Bit(128) buffer
-    FIELD Bit(4) c
+    FIELD Bit((128) / (32)) c
     FIELD/shared Bit(32) m
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         STORE ((__inst$Genvar1) == (c)):__bitsubstrl{buffer,(((__inst$Genvar1) + (1)) * (32)) - (1),(__inst$Genvar1) * (32)} = m
     }
     METHOD/Action in$enq__ENA ( Bit(32) v ) if ((((c) == (4)) ^ (1))) {
         STORE :m = in$enq$v
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (4)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((128) / (32))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
         STORE :c = (c) + (1)
     }
     METHOD/Action out$deq__ENA if (((c) == (4))) {

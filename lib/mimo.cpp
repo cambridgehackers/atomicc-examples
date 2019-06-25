@@ -48,4 +48,5 @@ __module MIMO : public Gear<In, Out> {
   void out.deq(void) { gear.out.deq(); }
   Out out.first(void) { return __bit_cast<Out>(gear.out.first()); };
 };
-MIMO<__uint(32), __uint(128)> bar;
+MIMO<__uint(32), __uint(128//GENERIC_INT_TEMPLATE_FLAG
+)> bar;

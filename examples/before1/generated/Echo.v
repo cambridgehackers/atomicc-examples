@@ -50,26 +50,26 @@ module Echo (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (!( busy_delay | ( !busy ) )) begin // RULE$delay_rule__ENA
-            busy <= 0;
-            busy_delay <= 1;
+            busy <= 0 != 0;
+            busy_delay <= 1 != 0;
             meth_delay <= meth_temp;
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of RULE$delay_rule__ENA
         if (busy_delay & indication$heard__RDY) begin // RULE$respond_rule__ENA
-            busy_delay <= 0;
+            busy_delay <= 0 != 0;
             $display( "respond_rule: Echo" );
         end; // End of RULE$respond_rule__ENA
         if (!( busy | ( !request$say2__ENA ) )) begin // request$say2__ENA
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;
-            busy <= 1;
+            busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say2" , 194 );
         end; // End of request$say2__ENA
         if (!( busy | ( !request$say__ENA ) )) begin // request$say__ENA
             meth_temp <= request$say$meth;
             v_temp <= request$say$v;
-            busy <= 1;
+            busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say" , 188 );
         end; // End of request$say__ENA
         if (swap$x2y__ENA) begin // swap$x2y__ENA

@@ -27,7 +27,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if (!( ( c == depth ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
-            if (out$deq__ENA == 0) begin
+            if (( out$deq__ENA == 0 ) | ( !( bypass == bypass ) )) begin
             q <= in$enq$v;
             c <= c + 1;
             end;
@@ -45,7 +45,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
-            q[__inst$Genvar1] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & in$enq__ENA ) == 0 ) ) ? in$enq$v : q[__inst$Genvar1 + 1];
+            q[__inst$Genvar1] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass == bypass ) & in$enq__ENA ) == 0 ) ) ? in$enq$v : q[__inst$Genvar1 + 1];
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

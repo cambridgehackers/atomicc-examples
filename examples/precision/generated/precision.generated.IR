@@ -74,7 +74,7 @@ MODULE IVector {
     INTERFACE IVectorRequest request
     INTERFACE/Ptr IVectorIndication ind
     FIELD Fifo1 fifo
-    FIELD Bit(8) fcounter
+    FIELD Bit(((14) / (7)) + ((3) * (2))) fcounter
     FIELD Bit(9) counter
     FIELD Bit(9) gcounter
     METHOD/Rule/Action RULE$respond__ENA {

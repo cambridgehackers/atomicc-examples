@@ -13,7 +13,7 @@ module GearNto1Base #(
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
     reg [widthOut - 1:0]buffer [1:0];
-    reg [4 - 1:0]c;
+    reg [widthIn / widthOut - 1:0]c;
     wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;
     assign in$enq__RDY = c == 0;
@@ -29,7 +29,7 @@ module GearNto1Base #(
       end // nRST
       else begin
         if (in$enq__ENA & ( c == 0 )) begin // in$enq__ENA
-            c <= 4;
+            c <= widthIn / widthOut;
         end; // End of in$enq__ENA
         if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
             c <= c + ( -1 );
@@ -37,7 +37,7 @@ module GearNto1Base #(
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = 0; ( __inst$Genvar1 + 1 ) < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = 0; ( __inst$Genvar1 + 1 ) < ( widthIn / widthOut ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -50,7 +50,7 @@ module GearNto1Base #(
     end // always @ (posedge CLK)
    end // end of generate
 
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(__inst$Genvar1 = 0; __inst$Genvar1 < ( widthIn / widthOut ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin

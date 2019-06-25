@@ -37,8 +37,8 @@ MODULE MIMO {
 MODULE MIMOBase(widthIn=32,widthOut=128) {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
-    FIELD Bit(160) buffer
-    FIELD Bit(160) c
+    FIELD Bit((128) + (32)) buffer
+    FIELD Bit((128) + (32)) c
     FIELD/shared Bit(32) m
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         STORE (((128) - (__inst$Genvar1)) == (c)):__bitsubstrl{buffer,((__inst$Genvar1) + (32)) - (1),__inst$Genvar1} = m
@@ -49,7 +49,7 @@ MODULE MIMOBase(widthIn=32,widthOut=128) {
         STORE :c = (c) + (32)
     }
     METHOD/Action out$deq__ENA if (((c) >= (128))) {
-        STORE :buffer = __bitsubstr{buffer,159,128}
+        STORE :buffer = __bitsubstr{buffer,((128) + (32)) - (1),128}
         STORE :c = (c) - (128)
     }
     METHOD out$first Bit(128) = ((buffer)) if (((c) >= (128)))

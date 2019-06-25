@@ -98,27 +98,27 @@ MODULE Echo {
     INTERFACE/Ptr EchoIndication indication
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"delay_rule: Echo\n"}
-        STORE :busy = 0
-        STORE :busy_delay = 1
+        STORE :busy = (0) != (0)
+        STORE :busy_delay = (1) != (0)
         STORE :meth_delay = meth_temp
         STORE :v_delay = v_temp
     }
     METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"respond_rule: Echo\n"}
-        STORE :busy_delay = 0
+        STORE :busy_delay = (0) != (0)
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say2",194}
         STORE :meth_temp = request$say2$meth
         STORE :v_temp = request$say2$v
-        STORE :busy = 1
+        STORE :busy = (1) != (0)
     }
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
         PRINTF :printf{"[%s:%d]Echo\n","request$say",188}
         STORE :meth_temp = request$say$meth
         STORE :v_temp = request$say$v
-        STORE :busy = 1
+        STORE :busy = (1) != (0)
     }
     METHOD/Action swap$x2y__ENA {
         PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",208}
@@ -140,7 +140,7 @@ MODULE EchoIndicationInput {
     FIELD Bit(32) v_delay
     METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
-        STORE :busy_delay = 0
+        STORE :busy_delay = (0) != (0)
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) if (((busy_delay) ^ (1))) {
@@ -149,7 +149,7 @@ MODULE EchoIndicationInput {
         PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq__ENA$v$tag}
         STORE ((pipe$enq__ENA$v$tag) == 1):meth_delay = pipe$enq__ENA$v$data$heard$meth
         STORE ((pipe$enq__ENA$v$tag) == 1):v_delay = pipe$enq__ENA$v$data$heard$v
-        STORE ((pipe$enq__ENA$v$tag) == 1):busy_delay = 1
+        STORE ((pipe$enq__ENA$v$tag) == 1):busy_delay = (1) != (0)
     }
 }
 MODULE EchoIndicationOutput {
@@ -161,13 +161,13 @@ MODULE EchoIndicationOutput {
     FIELD Bit(1) even
     METHOD/Rule/Action RULE$output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
         ALLOCA EchoIndication_data RULE$output_rulee__ENA$agg_2e_tmp
-        STORE :ind_busy = 0
+        STORE :ind_busy = (0) != (0)
         LET EchoIndication_data :RULE$output_rulee__ENA$agg_2e_tmp = ind0
         CALL/Action :pipe$enq__ENA{RULE$output_rulee__ENA$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
         ALLOCA EchoIndication_data RULE$output_ruleo__ENA$agg_2e_tmp
-        STORE :ind_busy = 0
+        STORE :ind_busy = (0) != (0)
         LET EchoIndication_data :RULE$output_ruleo__ENA$agg_2e_tmp = ind1
         CALL/Action :pipe$enq__ENA{RULE$output_ruleo__ENA$agg_2e_tmp}
     }
@@ -179,7 +179,7 @@ MODULE EchoIndicationOutput {
         STORE ((even) ^ 1):ind0$tag = 1
         STORE ((even) ^ 1):ind0$data$heard$meth = indication$heard$meth
         STORE ((even) ^ 1):ind0$data$heard$v = indication$heard$v
-        STORE :ind_busy = 1
+        STORE :ind_busy = (1) != (0)
         STORE :even = (even) ^ (1)
     }
 }
