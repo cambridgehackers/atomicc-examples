@@ -13,7 +13,7 @@ module Gear1toNBase #(
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
     reg [widthOut - 1:0]buffer;
-    reg [widthOut / widthIn - 1:0]c;
+    reg [$clog2( widthOut / widthIn ) - 1:0]c;
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c == 4 );
     assign out$deq__RDY = c == 4;
@@ -43,7 +43,7 @@ module Gear1toNBase #(
       else begin
         if (!( ( c == 4 ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
             if (__inst$Genvar1 == c)
-            __bitsubstrl@{ buffer , ( ( __inst$Genvar1 + 1 ) * widthIn ) - 1 , __inst$Genvar1 * widthIn @} <= in$enq$v;
+            buffer[ ( ( ( __inst$Genvar1 + 1 ) * widthIn ) - 1 ) : ( __inst$Genvar1 * widthIn ) ] <= in$enq$v;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)

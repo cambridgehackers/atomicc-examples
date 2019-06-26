@@ -38,6 +38,7 @@
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 extern "C" int *__bitsubstrl(int, ...);
+extern "C" int __clog2(int);
 
 #define GENERIC_INT_TEMPLATE_FLAG 999999
 

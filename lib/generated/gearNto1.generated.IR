@@ -38,7 +38,7 @@ MODULE GearNto1Base(widthIn=128,widthOut=32) {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
     FIELD/Count 4  Bit(32) buffer
-    FIELD Bit((128) / (32)) c
+    FIELD Bit(__clog2((128) / (32))) c
     FIELD/shared Bit(128) m
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         STORE :buffer[__inst$Genvar1] = buffer[(__inst$Genvar1) + (1)]

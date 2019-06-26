@@ -23,7 +23,7 @@
 template<int widthIn, int widthOut>
 __module Gear1toNBase : public Gear<__uint(widthIn), __uint(widthOut)> {
     __uint(widthOut) buffer;
-    __uint(widthOut/widthIn) c;
+    __uint(__clog2(widthOut/widthIn)) c;
     __shared __uint(widthIn) m;
     bool readyOut() { return c == widthOut/widthIn ; };
     void out.deq() if (readyOut()) {

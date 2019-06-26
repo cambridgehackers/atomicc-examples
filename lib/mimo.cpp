@@ -23,7 +23,7 @@
 template<int widthIn, int widthOut>
 __module MIMOBase : public Gear<__uint(widthIn), __uint(widthOut)> {
     __uint(widthOut + widthIn) buffer;
-    __uint(/*clog2*/(widthOut + widthIn)) c;
+    __uint(__clog2(widthOut + widthIn)) c;
     __shared __uint(widthIn) m;
     bool readyOut() { return c >= widthOut; };
     void out.deq() if (readyOut()) {

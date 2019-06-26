@@ -1,10 +1,10 @@
-`include "scounter.generated.vh"
+`include "sizedFifo.generated.vh"
 
 `default_nettype none
-module SCounterBase #(
-    parameter integer depth = 10,
-    parameter integer width = 999,
-    parameter integer bypass = 444)(
+module SizedFifoBase #(
+    parameter integer depth = 20,
+    parameter integer width = 128,
+    parameter integer bypass = 999)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [width - 1:0]in$enq$v,
@@ -13,7 +13,7 @@ module SCounterBase #(
     output wire out$deq__RDY,
     output wire [width - 1:0]out$first,
     output wire out$first__RDY);
-    reg [depth - 1:0]c;
+    reg [$clog2( depth + 0 ) - 1:0]c;
     reg [width - 1:0]q [depth:0];
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c == depth );
@@ -27,7 +27,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if (!( ( c == depth ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
-            if (( out$deq__ENA == 0 ) | ( !( bypass == bypass ) )) begin
+            if (( bypass == 0 ) | ( out$deq__ENA == 0 )) begin
             q <= in$enq$v;
             c <= c + 1;
             end;
@@ -45,7 +45,7 @@ module SCounterBase #(
       end // nRST
       else begin
         if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
-            q[__inst$Genvar1] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass == bypass ) & in$enq__ENA ) == 0 ) ) ? in$enq$v : q[__inst$Genvar1 + 1];
+            q[__inst$Genvar1] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in$enq__ENA ) == 0 ) ) ? in$enq$v : q[__inst$Genvar1 + 1];
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)

@@ -23,8 +23,7 @@
 template<int widthIn, int widthOut>
 __module GearNto1Base : public Gear<__uint(widthIn), __uint(widthOut)> {
     __uint(widthOut) buffer[widthIn/widthOut];
-    //__atomicc_uint(log2(widthIn/widthOut)) c;
-    __uint(widthIn/widthOut) c;
+    __uint(__clog2(widthIn/widthOut)) c;
     __shared __uint(widthIn) m;
     bool empty() { return c == 0; };
     bool full() { return c != 0; };
