@@ -23,7 +23,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "runtime.h"
 
 #include "lpm.generated.cpp"
 

@@ -25,6 +25,7 @@ MODULE ConfigCounter(count_sz=10) {
     }
     METHOD/Action ifc$maybeDecrement ( Bit(10) v ) Bit(1) = ((ifc$maybeDecrement$retval)) {
         ALLOCA Bit(1) ifc$maybeDecrement$retval
+        STORE ((cnt) >= (ifc$maybeDecr$v)):dec_wire = ifc$maybeDecr$v
         LET Bit(1) ((cnt) >= (ifc$maybeDecr$v)):ifc$maybeDecrement$retval = 1
         LET Bit(1) (((cnt) >= (ifc$maybeDecr$v)) ^ 1):ifc$maybeDecrement$retval = 0
     }

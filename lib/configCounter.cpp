@@ -34,14 +34,14 @@ __module ConfigCounter {
     ConfigCounterIfc<count_sz> ifc;
     __shared __uint(count_sz) inc_wire;
     __shared __uint(count_sz) dec_wire;
-    __uint(count_sz) cnt;
+    __int(count_sz) cnt;
     bool positive_reg;
     void ifc.decrement(__uint(count_sz) v) {
         dec_wire = v;
     }
     __action bool ifc.maybeDecrement(__uint(count_sz) v) {
         if (cnt >= v) {
-            //dec_wire = v;
+            dec_wire = v;
             return true;
         }
         return false;
@@ -56,7 +56,7 @@ __module ConfigCounter {
         return positive_reg;
     }
     __rule react {
-        __uint(count_sz) new_count = (cnt + inc_wire) - dec_wire;
+        __int(count_sz) new_count = (cnt + inc_wire) - dec_wire;
         cnt = new_count;
         positive_reg = (new_count > 0);
     }

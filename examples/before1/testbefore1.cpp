@@ -24,7 +24,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
-#include "runtime.h"
 
 #define request0 request
 #define indication0 indication

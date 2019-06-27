@@ -32,7 +32,7 @@ module ConfigCounter #(
     assign ifc$read = cnt;
     assign ifc$read__RDY = 1;
     // Extra assigments, not to output wires
-    assign dec_wire = ifc$decrement$v;
+    assign dec_wire = ( ifc$decrement__ENA ? ifc$decrement$v : 0 ) | ( ( ifc$maybeDecrement__ENA & ( cnt >= ifc$maybeDecr$v ) ) ? ifc$maybeDecr$v : 0 );
     assign ifc$maybeDecrement$retval = ( cnt >= ifc$maybeDecr$v ) ? 1'd1 : 1'd0;
     assign inc_wire = ifc$increment$v;
 

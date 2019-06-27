@@ -3,6 +3,7 @@
 
 //METASTART; ConfigCounter
 //METAGUARD; RULE$react; 1;
+//METAEXCLUSIVE; ifc$decrement__ENA; ifc$maybeDecrement
 //METAGUARD; ifc$decrement; 1;
 //METAGUARD; ifc$increment; 1;
 //METAGUARD; ifc$maybeDecrement; 1;
