@@ -19,8 +19,6 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeGray$v,
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
-    wire RULE$incdec__ENA;
-    wire RULE$incdec__RDY;
     wire [10 - 1:0]ifc$readBin$temp;
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
@@ -32,8 +30,6 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$incdec__ENA = !( increment__ENA == decrement__ENA );
-    assign RULE$incdec__RDY = !( increment__ENA == decrement__ENA );
     assign ifc$readBin$temp = { ifc$readBin$temp };
 
     always @( posedge CLK) begin
@@ -41,16 +37,16 @@ module GrayCounter #(
         counter <= 0;
       end // nRST
       else begin
-        if (RULE$incdec__ENA & RULE$incdec__RDY) begin // RULE$incdec__ENA
+        if (!( increment__ENA == decrement__ENA )) begin // RULE$incdec__ENA
             counter[ ( width - 9'd1 ) ] <= counter[ ( width - 9'd1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA
-        if (ifc$readBin__ENA & ifc$readBin__RDY) begin // ifc$readBin
+        if (ifc$readBin__ENA) begin // ifc$readBin
             ifc$readBin$temp[ ( width - 1 ) ] <= counter[ ( width - 1 ) ];
         end; // End of ifc$readBin
-        if (ifc$writeBin__ENA & ifc$writeBin__RDY) begin // ifc$writeBin__ENA
+        if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];
         end; // End of ifc$writeBin__ENA
-        if (ifc$writeGray__ENA & ifc$writeGray__RDY) begin // ifc$writeGray__ENA
+        if (ifc$writeGray__ENA) begin // ifc$writeGray__ENA
             counter <= ifc$writeGray$v;
         end; // End of ifc$writeGray__ENA
       end
@@ -62,15 +58,15 @@ module GrayCounter #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (RULE$incdec__ENA & RULE$incdec__RDY) begin // RULE$incdec__ENA
+        if (!( increment__ENA == decrement__ENA )) begin // RULE$incdec__ENA
             RULE$incdec__ENA$parity <= RULE$incdec__ENA$parity ^ counter[ __inst$Genvar1 ];
             if (counter[ __inst$Genvar1 ])
             9'd0 <= __inst$Genvar1 + 1;
         end; // End of RULE$incdec__ENA
-        if (ifc$readBin__ENA & ifc$readBin__RDY) begin // ifc$readBin
+        if (ifc$readBin__ENA) begin // ifc$readBin
             ifc$readBin$temp[ __inst$Genvar1 ] <= ifc$readBin$temp[ ( __inst$Genvar1 + 1 ) ] ^ counter[ __inst$Genvar1 ];
         end; // End of ifc$readBin
-        if (ifc$writeBin__ENA & ifc$writeBin__RDY) begin // ifc$writeBin__ENA
+        if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ __inst$Genvar1 ] <= ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) ] ^ ifc$writeBin$v[ __inst$Genvar1 ];
         end; // End of ifc$writeBin__ENA
       end

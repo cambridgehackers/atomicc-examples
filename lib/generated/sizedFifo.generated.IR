@@ -25,7 +25,7 @@ MODULE SizedFifoBase(depth=20,width=128,bypass=999) {
     }
     METHOD/Action out$deq__ENA if ((((c) == (0)) ^ (1))) {
         GENERATE :__inst$Genvar1,(0),(((__inst$Genvar1) + (1)) < (20)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
-        STORE :c = (c) + (-1)
+        STORE (((999) == (0)) | (((in$enq__ENA) != (0)) ^ (1))):c = (c) + (-1)
     }
     METHOD out$first Bit(128) = ((q[0]))
 }

@@ -33,6 +33,7 @@ module SizedFifoBase #(
             end;
         end; // End of in$enq__ENA
         if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
+            if (( bypass == 0 ) | ( in$enq__ENA == 0 ))
             c <= c + ( -1 );
         end; // End of out$deq__ENA
       end
