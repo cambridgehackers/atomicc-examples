@@ -19,7 +19,7 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeGray$v,
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
-    wire [10 - 1:0]ifc$readBin$temp;
+    wire [(10 * 1) - 1:0]ifc$readBin$temp;
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
     assign ifc$increment__RDY = 1;
@@ -30,11 +30,10 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign ifc$readBin$temp = { ifc$readBin$temp };
+    assign ifc$readBin$temp = counter[ ( width - 1 ) ];
 for(__inst$Genvar1 = width - 2; __inst$Genvar1 >= 0; __inst$Genvar1 = -1) begin
         assign RULE$incdec__ENA$ind = __inst$Genvar1 + 666'd1;
         assign RULE$incdec__ENA$parity = RULE$incdec__ENA$parity ^ counter[ __inst$Genvar1 ];
-        assign ifc$readBin$temp[ __inst$Genvar1 ] = ifc$readBin$temp[ ( __inst$Genvar1 + 1 ) ] ^ counter[ __inst$Genvar1 ];
     end;
 
     always @( posedge CLK) begin
@@ -43,7 +42,7 @@ for(__inst$Genvar1 = width - 2; __inst$Genvar1 >= 0; __inst$Genvar1 = -1) begin
       end // nRST
       else begin
         if (!( increment__ENA == decrement__ENA )) begin // RULE$incdec__ENA
-            counter[ ( width - 9'd1 ) ] <= counter[ ( width - 9'd1 ) ] ^ 1;
+            counter[ ( ( counter[ width - 1 ] == decrement__ENA ) ? 0 : ( width - 9'd1 ) ) ] <= counter[ ( ( counter[ width - 1 ] == decrement__ENA ) ? 0 : ( width - 9'd1 ) ) ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];
@@ -60,6 +59,9 @@ for(__inst$Genvar1 = width - 2; __inst$Genvar1 >= 0; __inst$Genvar1 = -1) begin
       if (!nRST) begin
       end // nRST
       else begin
+        if (ifc$readBin__ENA) begin // ifc$readBin
+            ifc$readBin$temp[__inst$Genvar1] <= ifc$readBin$temp[__inst$Genvar1 + 1] ^ counter[ __inst$Genvar1 ];
+        end; // End of ifc$readBin
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ __inst$Genvar1 ] <= ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) ] ^ ifc$writeBin$v[ __inst$Genvar1 ];
         end; // End of ifc$writeBin__ENA

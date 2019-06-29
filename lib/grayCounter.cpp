@@ -47,11 +47,11 @@ __module GrayCounter {
     }
 
     __uint(width) ifc.readBin() {
-        __uint(width) temp;
-        *__bitsubstrl(temp, width - 1) = __bitsubstr(counter, width - 1);
+        __uint(1) temp[width];
+        temp[width - 1] = __bitsubstr(counter, width - 1);
         for(int i = width - 2; i >= 0; i--)
-            *__bitsubstrl(temp, i) = __bitsubstr(temp, i + 1) ^  __bitsubstr(counter, i);
-        return temp;
+            temp[i] = temp[i + 1] ^  __bitsubstr(counter, i);
+        return __bit_cast<__uint(width)>(temp);
     }
     void ifc.writeBin(__uint(width) v) {
         *__bitsubstrl(counter, width - 1) = __bitsubstr(v, width - 1);
@@ -67,9 +67,7 @@ __module GrayCounter {
             if (__bitsubstr(counter, i))
                 ind = i + 1;
         }
-        if (parity == __valid(ifc.decrement))
-            ind = 0;
-        *__bitsubstrl(counter, ind) ^= 1;
+        *__bitsubstrl(counter, (parity == __valid(ifc.decrement)) ? 0 : ind) ^= 1;
     }
 };
 
