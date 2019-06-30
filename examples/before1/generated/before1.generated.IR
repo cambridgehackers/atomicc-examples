@@ -201,16 +201,16 @@ MODULE EchoRequestOutput {
         ALLOCA EchoRequest_data request$say2__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say2\n"}
         LET Bit(32) :request$say2__ENA$ind$tag = 2
-        STORE :request$say2__ENA$ind$data$say2$meth = request$say2$meth
-        STORE :request$say2__ENA$ind$data$say2$v = request$say2$v
+        LET Bit(32) :request$say2__ENA$ind$data$say2$meth = request$say2$meth
+        LET Bit(32) :request$say2__ENA$ind$data$say2$v = request$say2$v
         CALL/Action :pipe$enq__ENA{request$say2__ENA$ind}
     }
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data request$say__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
         LET Bit(32) :request$say__ENA$ind$tag = 1
-        STORE :request$say__ENA$ind$data$say$meth = request$say$meth
-        STORE :request$say__ENA$ind$data$say$v = request$say$v
+        LET Bit(32) :request$say__ENA$ind$data$say$meth = request$say$meth
+        LET Bit(32) :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     }
 }

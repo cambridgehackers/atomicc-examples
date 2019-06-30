@@ -2,6 +2,7 @@
 `define __grayCounter_GENERATED__VH__
 
 //METASTART; GrayCounter
+//METABEFORE; RULE$incdec__ENA; :ifc$writeBin__ENA; :ifc$writeGray__ENA
 //METAGUARD; RULE$incdec; !( increment__ENA == decrement__ENA );
 //METAGUARD; ifc$decrement; 1;
 //METAGUARD; ifc$increment; 1;

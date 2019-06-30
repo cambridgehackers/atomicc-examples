@@ -84,8 +84,8 @@ MODULE EchoIndicationOutput {
     METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoIndication_data indication$heard__ENA$ind
         LET Bit(32) :indication$heard__ENA$ind$tag = 1
-        STORE :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
-        STORE :indication$heard__ENA$ind$data$heard$v = indication$heard$v
+        LET Bit(32) :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
+        LET Bit(32) :indication$heard__ENA$ind$data$heard$v = indication$heard$v
         CALL/Action :pipe$enq__ENA{indication$heard__ENA$ind}
     }
 }
@@ -106,8 +106,8 @@ MODULE EchoRequestOutput {
         ALLOCA EchoRequest_data request$say__ENA$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
         LET Bit(32) :request$say__ENA$ind$tag = 1
-        STORE :request$say__ENA$ind$data$say$meth = request$say$meth
-        STORE :request$say__ENA$ind$data$say$v = request$say$v
+        LET Bit(32) :request$say__ENA$ind$data$say$meth = request$say$meth
+        LET Bit(32) :request$say__ENA$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
     }
 }

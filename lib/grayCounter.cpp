@@ -49,25 +49,27 @@ __module GrayCounter {
     __uint(width) ifc.readBin() {
         __uint(1) temp[width];
         temp[width - 1] = __bitsubstr(counter, width - 1);
-        for(int i = width - 2; i >= 0; i--)
+        for(int i = 0; i < width - 1; i++)
             temp[i] = temp[i + 1] ^  __bitsubstr(counter, i);
         return __bit_cast<__uint(width)>(temp);
     }
     void ifc.writeBin(__uint(width) v) {
         *__bitsubstrl(counter, width - 1) = __bitsubstr(v, width - 1);
-        for(int i = width - 2; i >= 0; i--)
+        for(int i = 0; i < width - 1; i++)
             *__bitsubstrl(counter, i) = __bitsubstr(v, i + 1) ^  __bitsubstr(v, i);
     }
 
     __rule incdec if (__valid(ifc.increment) != __valid(ifc.decrement)) {
-        __uint(__clog2(width)) ind = width - 1;
-        __uint(1) parity = __bitsubstr(counter, width - 1);
-        for(int i = width - 2; i >= 0; i--) {
-            parity ^= __bitsubstr(counter, i);
-            if (__bitsubstr(counter, i))
-                ind = i + 1;
+        //__uint(__clog2(width)) ind[width];
+        __uint(16) ind[width];
+        __uint(1) parity[width];
+        parity[width - 1] = __bitsubstr(counter, width - 1);
+        ind[width - 1] = width - 1;
+        for(int i = 0; i < width - 1; i++) {
+            parity[i] = parity[i+1] ^ __bitsubstr(counter, i);
+            ind[i] = __bitsubstr(counter, i) ? (i + 1) : ind[i + 1];
         }
-        *__bitsubstrl(counter, (parity == __valid(ifc.decrement)) ? 0 : ind) ^= 1;
+        *__bitsubstrl(counter, (parity[0] == __valid(ifc.decrement)) ? 0 : ind[0]) ^= 1;
     }
 };
 
