@@ -12,9 +12,9 @@ module IVector (input wire CLK, input wire nRST,
     output wire in$say__RDY);
     reg [32 - 1:0]vsize;
     wire [((32 + 32) + 32) - 1:0]in$enq$v;
-    wire [32 - 1:0]in$enq$v$a [10:0];
-    wire [32 - 1:0]in$enq$v$b [10:0];
-    wire [32 - 1:0]in$enq$v$c [10:0];
+    wire [32 - 1:0]in$enq$v$a [10 - 1:0];
+    wire [32 - 1:0]in$enq$v$b [10 - 1:0];
+    wire [32 - 1:0]in$enq$v$c [10 - 1:0];
     wire out$deq__RDY;
     wire out$first__RDY;
     genvar __inst$Genvar1;

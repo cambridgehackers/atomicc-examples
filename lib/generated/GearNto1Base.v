@@ -12,7 +12,7 @@ module GearNto1Base #(
     output wire out$deq__RDY,
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
-    reg [widthOut - 1:0]buffer [1:0];
+    reg [widthOut - 1:0]buffer [1 - 1:0];
     reg [$clog2( widthIn / widthOut ) - 1:0]c;
     wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;

@@ -19,7 +19,7 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeGray$v,
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
-    wire [(10 * 1) - 1:0]ifc$readBin$temp;
+    wire ifc$readBin$temp [10 - 1:0];
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
     assign ifc$increment__RDY = 1;
