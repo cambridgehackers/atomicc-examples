@@ -32,9 +32,9 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$incdec__ENA$ind = width[ 15 : 0 ] - 16'd1;
-    assign RULE$incdec__ENA$parity = counter[ ( width - 1 ) ];
-    assign ifc$readBin$temp = counter[ ( width - 1 ) ];
+    assign RULE$incdec__ENA$ind[width - 1] = width[ 15 : 0 ] - 16'd1;
+    assign RULE$incdec__ENA$parity[width - 1] = counter[ ( width - 1 ) ];
+    assign ifc$readBin$temp[width - 1] = counter[ ( width - 1 ) ];
 for(__inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = 1) begin
         assign RULE$incdec__ENA$ind[__inst$Genvar1] = counter[ __inst$Genvar1 ] ? ( __inst$Genvar1 + 16'd1 ) : RULE$incdec__ENA$ind[__inst$Genvar1 + 1];
         assign RULE$incdec__ENA$parity[__inst$Genvar1] = RULE$incdec__ENA$parity[__inst$Genvar1 + 1] ^ counter[ __inst$Genvar1 ];

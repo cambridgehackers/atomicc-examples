@@ -28,7 +28,7 @@ module SizedFifoBase #(
       else begin
         if (!( ( c == depth ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
             if (( bypass == 0 ) | ( out$deq__ENA == 0 )) begin
-            q <= in$enq$v;
+            q[c] <= in$enq$v;
             c <= c + 1;
             end;
         end; // End of in$enq__ENA
