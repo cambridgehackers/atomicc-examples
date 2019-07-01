@@ -3,7 +3,7 @@
 
 //METASTART; GrayCounter
 //METABEFORE; RULE$incdec__ENA; :ifc$writeBin__ENA; :ifc$writeGray__ENA
-//METAGUARD; RULE$incdec; !( increment__ENA == decrement__ENA );
+//METAGUARD; RULE$incdec; !( ifc$increment__ENA == ifc$decrement__ENA );
 //METAGUARD; ifc$decrement; 1;
 //METAGUARD; ifc$increment; 1;
 //METABEFORE; ifc$readBin; :RULE$incdec__ENA; :ifc$writeBin__ENA; :ifc$writeGray__ENA

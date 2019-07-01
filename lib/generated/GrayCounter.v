@@ -46,8 +46,8 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = 1) begi
         counter <= 0;
       end // nRST
       else begin
-        if (!( increment__ENA == decrement__ENA )) begin // RULE$incdec__ENA
-            counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] <= counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] ^ 1;
+        if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
+            counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == ifc$decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] <= counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == ifc$decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];

@@ -20,13 +20,13 @@ MODULE GrayCounter(width=10) {
     METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeBin$v ) {
         STORE :__bitsubstr{counter,__inst$Genvar1} = (__bitsubstr{ifc$writeBin$v,(__inst$Genvar1) + (1)}) ^ (__bitsubstr{ifc$writeBin$v,__inst$Genvar1})
     }
-    METHOD/Rule/Action RULE$incdec__ENA if (((increment__ENA) != (decrement__ENA))) {
+    METHOD/Rule/Action RULE$incdec__ENA if (((ifc$increment__ENA) != (ifc$decrement__ENA))) {
         ALLOCA ARRAY_10_Bit(16) RULE$incdec__ENA$ind
         ALLOCA ARRAY_10_Bit(1) RULE$incdec__ENA$parity
         LET Bit(1) :RULE$incdec__ENA$parity[(10) - (1)] = __bitsubstr{counter,(10) - (1)}
         LET Bit(16) :RULE$incdec__ENA$ind[(10) - (1)] = (10) - (1)
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) - (1))),(1),FOR$0Body__ENA
-        STORE :__bitsubstr{counter,__phi(((RULE$incdec__ENA$parity[0]) == (decrement__ENA)):(0), (((RULE$incdec__ENA$parity[0]) == (decrement__ENA)) ^ 1):(RULE$incdec__ENA$ind[0]))} = (__bitsubstr{counter,__phi(((RULE$incdec__ENA$parity[0]) == (decrement__ENA)):(0), (((RULE$incdec__ENA$parity[0]) == (decrement__ENA)) ^ 1):(RULE$incdec__ENA$ind[0]))}) ^ (1)
+        STORE :__bitsubstr{counter,__phi(((RULE$incdec__ENA$parity[0]) == (ifc$decrement__ENA)):(0), (((RULE$incdec__ENA$parity[0]) == (ifc$decrement__ENA)) ^ 1):(RULE$incdec__ENA$ind[0]))} = (__bitsubstr{counter,__phi(((RULE$incdec__ENA$parity[0]) == (ifc$decrement__ENA)):(0), (((RULE$incdec__ENA$parity[0]) == (ifc$decrement__ENA)) ^ 1):(RULE$incdec__ENA$ind[0]))}) ^ (1)
     }
     METHOD/Action ifc$decrement__ENA
     METHOD/Action ifc$increment__ENA
