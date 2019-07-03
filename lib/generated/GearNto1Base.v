@@ -48,7 +48,7 @@ module GearNto1Base #(
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
-   end // end of generate
+   end // end of forloop
 
     for(__inst$Genvar1 = 0; __inst$Genvar1 < ( widthIn / widthOut ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
@@ -61,7 +61,7 @@ module GearNto1Base #(
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
-   end // end of generate
+   end // end of forloop
 endmodule 
 
 `default_nettype wire    // set back to default value

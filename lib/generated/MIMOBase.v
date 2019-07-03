@@ -48,7 +48,7 @@ module MIMOBase #(
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
-   end // end of generate
+   end // end of forloop
 endmodule 
 
 `default_nettype wire    // set back to default value

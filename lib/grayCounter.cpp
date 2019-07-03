@@ -47,29 +47,31 @@ __module GrayCounter {
     }
 
     __uint(width) ifc.readBin() {
-        __uint(1) temp[width];
-        temp[width - 1] = __bitsubstr(counter, width - 1);
-        for(int i = 0; i < width - 1; i += 1)
-            temp[i] = temp[i + 1] ^  __bitsubstr(counter, i);
-        return __bit_cast<__uint(width)>(temp);
+        __uint(width) temp;
+        for(int i = 0; i < width; i += 1)
+            *__bitsubstrl(temp, i) = __reduce("^", __bitsubstr(counter, width - 1, i));
+        return temp;
     }
     void ifc.writeBin(__uint(width) v) {
         *__bitsubstrl(counter, width - 1) = __bitsubstr(v, width - 1);
         for(int i = 0; i < width - 1; i += 1)
-            *__bitsubstrl(counter, i) = __bitsubstr(v, i + 1) ^  __bitsubstr(v, i);
+            *__bitsubstrl(counter, i) = __reduce("^", __bitsubstr(v, i + 1, i));
     }
 
     __rule incdec if (__valid(ifc.increment) != __valid(ifc.decrement)) {
-        //__uint(__clog2(width)) ind[width];
-        __uint(16) ind[width];
-        __uint(1) parity[width];
-        parity[width - 1] = __bitsubstr(counter, width - 1);
-        ind[width - 1] = width - 1;
-        for(int i = 0; i < width - 1; i += 1) {
-            parity[i] = parity[i+1] ^ __bitsubstr(counter, i);
-            ind[i] = __bitsubstr(counter, i) ? (i + 1) : ind[i + 1];
+        __uint(1) useLsb = __reduce("^", counter) == __valid(ifc.decrement);
+        if (useLsb)
+            *__bitsubstrl(counter, 0) ^= 1;
+        else {
+            if (__bitsubstr(counter, 0))
+                *__bitsubstrl(counter, 0 + 1) ^= 1;
+            if (!__reduce("|", __bitsubstr(counter, width - 1 - 1, 0)))
+                *__bitsubstrl(counter, width - 1) ^= 1;
         }
-        *__bitsubstrl(counter, (parity[0] == __valid(ifc.decrement)) ? 0 : ind[0]) ^= 1;
+        for(int i = 1; i < width - 2; i += 1)
+            if (!useLsb && __bitsubstr(counter, i)
+               && !__reduce("|", __bitsubstr(counter, i - 1, 0)))
+                    *__bitsubstrl(counter, i + 1) ^= 1;
     }
 };
 

@@ -50,7 +50,7 @@ module SizedFifoBase #(
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
-   end // end of generate
+   end // end of forloop
 endmodule 
 
 `default_nettype wire    // set back to default value

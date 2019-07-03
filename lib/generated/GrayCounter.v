@@ -19,9 +19,8 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeGray$v,
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
-    wire [16 - 1:0]RULE$incdec__ENA$ind [10 - 1:0];
-    wire RULE$incdec__ENA$parity [10 - 1:0];
-    wire ifc$readBin$temp [10 - 1:0];
+    wire RULE$incdec__ENA$useLsb;
+    wire [10 - 1:0]ifc$readBin$temp;
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
     assign ifc$increment__RDY = 1;
@@ -32,13 +31,9 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$incdec__ENA$ind[width - 1] = width[ 15 : 0 ] - 16'd1;
-    assign RULE$incdec__ENA$parity[width - 1] = counter[ ( width - 1 ) ];
-    assign ifc$readBin$temp[width - 1] = counter[ ( width - 1 ) ];
-for(__inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign RULE$incdec__ENA$ind[__inst$Genvar1] = counter[ __inst$Genvar1 ] ? ( __inst$Genvar1 + 16'd1 ) : RULE$incdec__ENA$ind[__inst$Genvar1 + 1];
-        assign RULE$incdec__ENA$parity[__inst$Genvar1] = RULE$incdec__ENA$parity[__inst$Genvar1 + 1] ^ counter[ __inst$Genvar1 ];
-        assign ifc$readBin$temp[__inst$Genvar1] = ifc$readBin$temp[__inst$Genvar1 + 1] ^ counter[ __inst$Genvar1 ];
+    assign RULE$incdec__ENA$useLsb = ( ^counter ) == ifc$decrement__ENA;
+for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+        assign ifc$readBin$temp[ __inst$Genvar1 ] = ^counter[ ( width - 1 ) : __inst$Genvar1 ];
     end;
 
     always @( posedge CLK) begin
@@ -47,7 +42,12 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = __inst$
       end // nRST
       else begin
         if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
-            counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == ifc$decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] <= counter[ ( ( RULE$incdec__ENA$parity[ 0 ] == ifc$decrement__ENA ) ? 0 : RULE$incdec__ENA$ind[0] ) ] ^ 1;
+            if (!( RULE$incdec__ENA$useLsb == 0 ))
+            counter[ 0 ] <= counter[ 0 ] ^ 1;
+            if (counter[ 0 ] & ( RULE$incdec__ENA$useLsb == 0 ))
+            counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
+            if (( ( |counter[ ( ( width - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec__ENA$useLsb == 0 ))
+            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];
@@ -65,11 +65,25 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = __inst$
       end // nRST
       else begin
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
-            counter[ __inst$Genvar1 ] <= ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) ] ^ ifc$writeBin$v[ __inst$Genvar1 ];
+            counter[ __inst$Genvar1 ] <= ^ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
         end; // End of ifc$writeBin__ENA
       end
     end // always @ (posedge CLK)
-   end // end of generate
+   end // end of forloop
+
+    for(__inst$Genvar1 = 1; __inst$Genvar1 < ( width - 2 ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
+            if (( ( |counter[ ( __inst$Genvar1 - 1 ) : 0 ] ) == 0 ) & counter[ __inst$Genvar1 ] & ( RULE$incdec__ENA$useLsb == 0 ))
+            counter[ ( __inst$Genvar1 + 1 ) ] <= counter[ ( __inst$Genvar1 + 1 ) ] ^ 1;
+        end; // End of RULE$incdec__ENA
+      end
+    end // always @ (posedge CLK)
+   end // end of forloop
 endmodule 
 
 `default_nettype wire    // set back to default value
