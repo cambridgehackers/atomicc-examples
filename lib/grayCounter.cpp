@@ -19,16 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-
-template <int width>
-__interface GrayCounterIfc {
-    void increment();
-    void decrement();
-    __uint(width) readGray();
-    void writeGray(__uint(width) v);
-    __uint(width) readBin();
-    void writeBin(__uint(width) v);
-};
+#include "grayCounter.h"
 
 template <int width>
 __module GrayCounter {

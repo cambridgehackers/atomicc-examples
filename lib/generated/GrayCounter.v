@@ -42,12 +42,12 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
-            if (!( RULE$incdec__ENA$useLsb == 0 ))
-            counter[ 0 ] <= counter[ 0 ] ^ 1;
             if (counter[ 0 ] & ( RULE$incdec__ENA$useLsb == 0 ))
             counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
             if (( ( |counter[ ( ( width - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec__ENA$useLsb == 0 ))
             counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
+            if (!( RULE$incdec__ENA$useLsb == 0 ))
+            counter[ 0 ] <= counter[ 0 ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];

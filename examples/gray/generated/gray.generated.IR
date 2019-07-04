@@ -1,0 +1,42 @@
+STRUCT NOCData {
+    FIELD Bit(128) data
+}
+INTERFACE GrayCounterIfc(width=4) {
+    METHOD/Action decrement__ENA
+    METHOD/Action increment__ENA
+    METHOD readBin Bit(4)
+    METHOD readGray Bit(4)
+    METHOD/Action writeBin__ENA ( Bit(4) v )
+    METHOD/Action writeGray__ENA ( Bit(4) v )
+}
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( NOCData v )
+}
+INTERFACE PipeInB {
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
+}
+INTERFACE PipeInH {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE ReturnInd(width=4) {
+    METHOD/Action value__ENA ( Bit(4) v )
+}
+EMODULE GrayCounter(width=4) {
+    INTERFACE GrayCounterIfc(width=4) ifc
+}
+EMODULE UserTop {
+    INTERFACE PipeInB write
+    INTERFACE/Ptr PipeInB read
+}
+EMODULE l_top {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeInH indication
+}
+MODULE Test {
+    SOFTWARE indication
+    SOFTWARE request
+    INTERFACECONNECT/Forward request counter$ifc GrayCounterIfc(width=4)
+    FIELD GrayCounter(width=4) counter
+    INTERFACE/Ptr ReturnInd(width=4) indication
+    INTERFACE GrayCounterIfc(width=4) request
+}
