@@ -16,8 +16,8 @@
 //METASTART; l_top
 //METAEXTERNAL; indication; PipeInH;
 //METAINTERNAL; DUT__Echo; Echo;
-//METAINTERNAL; M2P__indication; EchoIndication___M2P;
-//METAINTERNAL; P2M__request; EchoRequest___P2M;
+//METAINTERNAL; M2P__indication; ___M2PEchoIndication;
+//METAINTERNAL; P2M__request; ___P2MEchoRequest;
 //METACONNECT; DUT__Echo$indication$heard2__ENA; M2P__indication$method$heard2__ENA
 //METACONNECT; DUT__Echo$indication$heard2__RDY; M2P__indication$method$heard2__RDY
 //METACONNECT; DUT__Echo$indication$heard3__ENA; M2P__indication$method$heard3__ENA
@@ -34,7 +34,7 @@
 //METACONNECT; DUT__Echo$request$setLeds__RDY; P2M__request$method$setLeds__RDY
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
-//METASTART; EchoIndication___M2P
+//METASTART; ___M2PEchoIndication
 //METAEXTERNAL; pipe; PipeInH;
 //METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard2__ENA; method$heard3__ENA; method$heard__ENA
@@ -44,7 +44,7 @@
 //METAGUARD; method$heard3; pipe$enq__RDY;
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; method$heard; pipe$enq__RDY;
-//METASTART; EchoRequest___P2M
+//METASTART; ___P2MEchoRequest
 //METAEXTERNAL; method; EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd0:method$say2__ENA;pipe$enq$v[ 31 : 16 ] == 16'd1:method$say__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:method$setLeds__ENA;
 //METAGUARD; pipe$enq; method$say2__RDY & method$say__RDY & method$setLeds__RDY;
