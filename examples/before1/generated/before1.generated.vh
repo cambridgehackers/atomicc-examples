@@ -61,7 +61,7 @@
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
 //METAEXTERNAL; request; EchoRequest;
-//METAINVOKE; pipe$enq__ENA; pipe$enq__ENA$v$tag == 2:request$say2__ENA;pipe$enq__ENA$v$tag == 1:request$say__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:request$say2__ENA;pipe$enq$v$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
 //METASTART; EchoRequestOutput
 //METAEXTERNAL; pipe; PipeIn;

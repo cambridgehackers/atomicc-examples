@@ -13,9 +13,9 @@ MODULE AdapterFromBus {
     FIELD Bit(1) waitForEnq
     FIELD Bit(128) buffer
     METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
-        ALLOCA NOCData RULE$pushValue__ENA$agg_2e_tmp
-        LET Bit(128) :RULE$pushValue__ENA$agg_2e_tmp = buffer
-        CALL/Action :out$enq__ENA{RULE$pushValue__ENA$agg_2e_tmp,0}
+        ALLOCA NOCData RULE$pushValue$agg_2e_tmp
+        LET Bit(128) :RULE$pushValue$agg_2e_tmp = buffer
+        CALL/Action :out$enq__ENA{RULE$pushValue$agg_2e_tmp,0}
         STORE :waitForEnq = (0) != (0)
     }
     METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {

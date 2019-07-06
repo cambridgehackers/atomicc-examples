@@ -13,4 +13,5 @@ cd ../printf ;make
 cd ../clock ;make
 cd ../ft600 ;make
 cd ../riscv ;make
+cd ../gray ;make
 cd ../../lib; make

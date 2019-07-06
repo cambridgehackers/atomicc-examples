@@ -39,13 +39,13 @@ MODULE UserTop {
     INTERFACE PipeInH indication
     FIELD l_top ctop
     METHOD/Action indication$enq__ENA ( NOCData v , Bit(16) length ) {
-        ALLOCA Bit(16) indication$enq__ENA$len
-        ALLOCA Bit(16) indication$enq__ENA$port
-        ALLOCA Bit(128) indication$enq__ENA$vint
-        LET Bit(128) :indication$enq__ENA$vint = indication$enq$v
-        LET Bit(16) :indication$enq__ENA$len = (__bitsubstr{indication$enq__ENA$vint,15,0}) - (1)
-        LET Bit(16) :indication$enq__ENA$port = 5
-        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq__ENA$len}
+        ALLOCA Bit(16) indication$enq$len
+        ALLOCA Bit(16) indication$enq$port
+        ALLOCA Bit(128) indication$enq$vint
+        LET Bit(128) :indication$enq$vint = indication$enq$v
+        LET Bit(16) :indication$enq$len = (__bitsubstr{indication$enq$vint,15,0}) - (1)
+        LET Bit(16) :indication$enq$port = 5
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq$len}
         CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq$length}
     }
     METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {

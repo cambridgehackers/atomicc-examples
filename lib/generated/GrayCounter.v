@@ -19,7 +19,7 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeGray$v,
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
-    wire RULE$incdec__ENA$useLsb;
+    wire RULE$incdec$useLsb;
     wire [10 - 1:0]ifc$readBin$temp;
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
@@ -31,7 +31,7 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$incdec__ENA$useLsb = ( ^counter ) == ifc$decrement__ENA;
+    assign RULE$incdec$useLsb = ( ^counter ) == ifc$decrement__ENA;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign ifc$readBin$temp[ __inst$Genvar1 ] = ^counter[ ( width - 1 ) : __inst$Genvar1 ];
     end;
@@ -42,11 +42,11 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
-            if (counter[ 0 ] & ( RULE$incdec__ENA$useLsb == 0 ))
+            if (counter[ 0 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
-            if (( ( |counter[ ( ( width - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec__ENA$useLsb == 0 ))
+            if (( ( |counter[ ( ( width - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
             counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
-            if (!( RULE$incdec__ENA$useLsb == 0 ))
+            if (!( RULE$incdec$useLsb == 0 ))
             counter[ 0 ] <= counter[ 0 ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
@@ -78,7 +78,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
-            if (( ( |counter[ ( __inst$Genvar1 - 1 ) : 0 ] ) == 0 ) & counter[ __inst$Genvar1 ] & ( RULE$incdec__ENA$useLsb == 0 ))
+            if (( ( |counter[ ( __inst$Genvar1 - 1 ) : 0 ] ) == 0 ) & counter[ __inst$Genvar1 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( __inst$Genvar1 + 1 ) ] <= counter[ ( __inst$Genvar1 + 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA
       end

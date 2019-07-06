@@ -73,41 +73,37 @@ MODULE EchoIndicationInput {
     INTERFACE PipeIn.0 pipe
     INTERFACE/Ptr EchoIndication indication
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) {
-        ALLOCA EchoIndication_data pipe$enq__ENA$v
-        LET EchoIndication_data :pipe$enq__ENA$v = pipe$enq$v
-        CALL/Action ((pipe$enq__ENA$v$tag) == 1):indication$heard__ENA{pipe$enq__ENA$v$data$heard$meth,pipe$enq__ENA$v$data$heard$v}
+        CALL/Action ((pipe$enq$v$tag) == 1):indication$heard__ENA{pipe$enq$v$data$heard$meth,pipe$enq$v$data$heard$v}
     }
 }
 MODULE EchoIndicationOutput {
     INTERFACE EchoIndication indication
     INTERFACE/Ptr PipeIn.0 pipe
     METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoIndication_data indication$heard__ENA$ind
-        LET Bit(32) :indication$heard__ENA$ind$tag = 1
-        LET Bit(32) :indication$heard__ENA$ind$data$heard$meth = indication$heard$meth
-        LET Bit(32) :indication$heard__ENA$ind$data$heard$v = indication$heard$v
-        CALL/Action :pipe$enq__ENA{indication$heard__ENA$ind}
+        ALLOCA EchoIndication_data indication$heard$ind
+        LET Bit(32) :indication$heard$ind$tag = 1
+        LET Bit(32) :indication$heard$ind$data$heard$meth = indication$heard$meth
+        LET Bit(32) :indication$heard$ind$data$heard$v = indication$heard$v
+        CALL/Action :pipe$enq__ENA{indication$heard$ind}
     }
 }
 MODULE EchoRequestInput {
     INTERFACE PipeIn pipe
     INTERFACE/Ptr EchoRequest request
     METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
-        ALLOCA EchoRequest_data pipe$enq__ENA$v
-        LET EchoRequest_data :pipe$enq__ENA$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
-        CALL/Action ((pipe$enq__ENA$v$tag) == 1):request$say__ENA{pipe$enq__ENA$v$data$say$meth,pipe$enq__ENA$v$data$say$v}
+        CALL/Action ((pipe$enq$v$tag) == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
     }
 }
 MODULE EchoRequestOutput {
     INTERFACE EchoRequest request
     INTERFACE/Ptr PipeIn pipe
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoRequest_data request$say__ENA$ind
+        ALLOCA EchoRequest_data request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET Bit(32) :request$say__ENA$ind$tag = 1
-        LET Bit(32) :request$say__ENA$ind$data$say$meth = request$say$meth
-        LET Bit(32) :request$say__ENA$ind$data$say$v = request$say$v
-        CALL/Action :pipe$enq__ENA{request$say__ENA$ind}
+        LET Bit(32) :request$say$ind$tag = 1
+        LET Bit(32) :request$say$ind$data$say$meth = request$say$meth
+        LET Bit(32) :request$say$ind$data$say$v = request$say$v
+        CALL/Action :pipe$enq__ENA{request$say$ind}
     }
 }

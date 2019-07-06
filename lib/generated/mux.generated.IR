@@ -98,11 +98,11 @@ MODULE MuxPipe {
     FIELD Fifo1 forwardFifo
     FIELD Fifo1.9 forwardFifol
     METHOD/Rule/Action RULE$fifoRule__ENA {
-        ALLOCA NOCData RULE$fifoRule__ENA$agg_2e_tmp
+        ALLOCA NOCData RULE$fifoRule$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET NOCData :RULE$fifoRule__ENA$agg_2e_tmp = forwardFifo$out$first
+        LET NOCData :RULE$fifoRule$agg_2e_tmp = forwardFifo$out$first
         CALL :forwardFifol$out$first{}
-        CALL/Action :out$enq__ENA{RULE$fifoRule__ENA$agg_2e_tmp,forwardFifol$out$first}
+        CALL/Action :out$enq__ENA{RULE$fifoRule$agg_2e_tmp,forwardFifol$out$first}
         CALL/Action :forwardFifo$out$deq__ENA{}
         CALL/Action :forwardFifol$out$deq__ENA{}
     }

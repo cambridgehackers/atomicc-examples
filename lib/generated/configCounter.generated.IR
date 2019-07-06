@@ -12,10 +12,10 @@ MODULE ConfigCounter(count_sz=10) {
     FIELD Bit(10) cnt
     FIELD Bit(1) positive_reg
     METHOD/Rule/Action RULE$react__ENA {
-        ALLOCA Bit(10) RULE$react__ENA$new_count
-        LET Bit(10) :RULE$react__ENA$new_count = ((cnt) + (inc_wire)) - (dec_wire)
-        STORE :cnt = RULE$react__ENA$new_count
-        STORE :positive_reg = (RULE$react__ENA$new_count) > (0)
+        ALLOCA Bit(10) RULE$react$new_count
+        LET Bit(10) :RULE$react$new_count = ((cnt) + (inc_wire)) - (dec_wire)
+        STORE :cnt = RULE$react$new_count
+        STORE :positive_reg = (RULE$react$new_count) > (0)
     }
     METHOD/Action ifc$decrement__ENA ( Bit(10) v ) {
         STORE :dec_wire = ifc$decrement$v

@@ -19,6 +19,7 @@
 //METASTART; l_top
 //METAEXTERNAL; indication; PipeInH;
 //METAINTERNAL; DUT__Test; Test;
+//METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
 //METAINTERNAL; M2P__indication; ___M2PReturnInd(width=4);
 //METACONNECT; DUT__Test$request$decrement__ENA; P2M__request$method$decrement__ENA
 //METACONNECT; DUT__Test$request$decrement__RDY; P2M__request$method$decrement__RDY
@@ -46,5 +47,5 @@
 //METAEXTERNAL; method; ___P2MGrayCounterIfc$method;
 //METAEXTERNAL; returnInd; ___P2MGrayCounterIfc$returnInd;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd0:method$decrement__ENA;pipe$enq$v[ 31 : 16 ] == 16'd1:method$increment__ENA;pipe$enq$v[ 31 : 16 ] == width:method$writeBin__ENA;pipe$enq$v[ 31 : 16 ] == 16'd5:method$writeGray__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:returnInd$enq__ENA;pipe$enq$v[ 31 : 16 ] == 16'd3:returnInd$enq__ENA;
-//METAGUARD; pipe$enq; 1;
+//METAGUARD; pipe$enq; method$decrement__RDY & method$increment__RDY & returnInd$enq__RDY & method$writeBin__RDY & method$writeGray__RDY;
 `endif

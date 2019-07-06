@@ -24,15 +24,15 @@ module ___P2MGrayCounterIfc #(
     output wire returnInd$enq__ENA,
     output wire [128 - 1:0]returnInd$enq$v,
     input wire returnInd$enq__RDY);
-    assign method$decrement__ENA = pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == 16'd0 );
-    assign method$increment__ENA = pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == 16'd1 );
+    assign method$decrement__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd0 );
+    assign method$increment__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd1 );
     assign method$writeBin$v = pipe$enq$v[(32 + 4) -1 :32];
-    assign method$writeBin__ENA = pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == width );
+    assign method$writeBin__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == width );
     assign method$writeGray$v = pipe$enq$v[(32 + 4) -1 :32];
-    assign method$writeGray__ENA = pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == 16'd5 );
-    assign pipe$enq__RDY = 1;
-    assign returnInd$enq$v = ( ( pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) ) ? method$readBin : 4'd0 ) | ( ( pipe$enq__ENA & ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) ) ? method$readGray : 4'd0 );
-    assign returnInd$enq__ENA = pipe$enq__ENA & ( ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) | ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) );
+    assign method$writeGray__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd5 );
+    assign pipe$enq__RDY = method$decrement__RDY & method$increment__RDY & returnInd$enq__RDY & method$writeBin__RDY & method$writeGray__RDY;
+    assign returnInd$enq$v = ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) ) ? method$readBin : 128'd0 ) | ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) ) ? method$readGray : 128'd0 );
+    assign returnInd$enq__ENA = pipe$enq__ENA & pipe$enq__RDY & ( ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) | ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) );
 endmodule 
 
 `default_nettype wire    // set back to default value

@@ -78,16 +78,16 @@ MODULE IVector {
     FIELD Bit(9) counter
     FIELD Bit(9) gcounter
     METHOD/Rule/Action RULE$respond__ENA {
-        ALLOCA ValueType RULE$respond__ENA$temp
+        ALLOCA ValueType RULE$respond$temp
         CALL :fifo$out$first{}
-        LET ValueType :RULE$respond__ENA$temp = fifo$out$first
+        LET ValueType :RULE$respond$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{RULE$respond__ENA$temp$a,RULE$respond__ENA$temp$b}
+        CALL/Action :ind$heard__ENA{RULE$respond$temp$a,RULE$respond$temp$b}
     }
     METHOD/Action request$say__ENA ( Bit(6) meth , Bit(4) v ) if ((1)) {
-        ALLOCA ValueType request$say__ENA$temp
-        LET Bit(6) :request$say__ENA$temp$a = request$say$meth
-        LET Bit(4) :request$say__ENA$temp$b = request$say$v
-        CALL/Action :fifo$in$enq__ENA{request$say__ENA$temp}
+        ALLOCA ValueType request$say$temp
+        LET Bit(6) :request$say$temp$a = request$say$meth
+        LET Bit(4) :request$say$temp$b = request$say$v
+        CALL/Action :fifo$in$enq__ENA{request$say$temp}
     }
 }

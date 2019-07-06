@@ -96,15 +96,15 @@ MODULE IVector {
     FIELD FifoPong fifo
     INTERFACE/Ptr IndIF ind
     METHOD/Rule/Action RULE$respond__ENA {
-        ALLOCA ValuePair RULE$respond__ENA$agg_2e_tmp
+        ALLOCA ValuePair RULE$respond$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
-        LET ValuePair :RULE$respond__ENA$agg_2e_tmp = fifo$out$first
-        CALL/Action :ind$heard__ENA{RULE$respond__ENA$agg_2e_tmp}
+        LET ValuePair :RULE$respond$agg_2e_tmp = fifo$out$first
+        CALL/Action :ind$heard__ENA{RULE$respond$agg_2e_tmp}
     }
     METHOD/Action request$say__ENA ( ValuePair v ) {
-        ALLOCA ValuePair request$say__ENA$agg_2e_tmp
-        LET ValuePair :request$say__ENA$agg_2e_tmp = request$say$v
-        CALL/Action :fifo$in$enq__ENA{request$say__ENA$agg_2e_tmp}
+        ALLOCA ValuePair request$say$agg_2e_tmp
+        LET ValuePair :request$say$agg_2e_tmp = request$say$v
+        CALL/Action :fifo$in$enq__ENA{request$say$agg_2e_tmp}
     }
 }

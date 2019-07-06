@@ -14,6 +14,7 @@ module UserTop (input wire CLK, input wire nRST,
     wire [128 - 1:0]ctop$indication$enq$v;
     wire ctop$indication$enq__ENA;
     wire ctop$request$enq__RDY;
+    wire [16 - 1:0]indication$enq$len;
     wire [128 - 1:0]indication$enq$v;
     wire radapter_0$in$enq__RDY;
     wire [16 - 1:0]wadapter_0$out$enq$length;
@@ -46,13 +47,15 @@ module UserTop (input wire CLK, input wire nRST,
         .indication$enq$length(ctop$indication$enq$length),
         .indication$enq__RDY(radapter_0$in$enq__RDY));
     assign indication$enq$v = ctop$indication$enq$v;
+    // Extra assigments, not to output wires
+    assign indication$enq$len = indication$enq$v[ 15 : 0 ] - 16'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
       end // nRST
       else begin
         if (ctop$indication$enq__ENA & radapter_0$in$enq__RDY) begin // indication$enq__ENA
-            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , indication$enq$v[ 15 : 0 ] - 16'd1 );
+            $display( "indConnect.enq v %llx len %lx" , ctop$indication$enq$v , indication$enq$len );
         end; // End of indication$enq__ENA
         if (wadapter_0$out$enq__ENA & ctop$request$enq__RDY) begin // wad$enq__ENA
             $display( "reqConnect.enq v %llx length %lx" , wadapter_0$out$enq$v , wadapter_0$out$enq$length );

@@ -1,7 +1,7 @@
 `include "rulec.generated.vh"
 
 `default_nettype none
-module EchoIndication___M2P (input wire CLK, input wire nRST,
+module ___M2PEchoIndication (input wire CLK, input wire nRST,
     input wire method$heard2__ENA,
     input wire [16 - 1:0]method$heard2$a,
     input wire [16 - 1:0]method$heard2$b,

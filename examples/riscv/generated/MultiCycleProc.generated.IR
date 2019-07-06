@@ -1,0 +1,89 @@
+STRUCT ExecResult {
+    FIELD Bit(32) nextPC
+    FIELD Bit(32) addr
+    FIELD Bit(32) data
+}
+INTERFACE DMem {
+    METHOD/Action request__ENA ( Bit(32) write_en , Bit(32) addr , Bit(32) data )
+    METHOD response Bit(32)
+}
+INTERFACE Decoder {
+    METHOD getAddr ( Bit(32) inst ) Bit(32)
+    METHOD getArithOp ( Bit(32) inst ) Bit(32)
+    METHOD getDst ( Bit(32) inst ) Bit(32)
+    METHOD getOp ( Bit(32) inst ) Bit(32)
+    METHOD getSrc1 ( Bit(32) inst ) Bit(32)
+    METHOD getSrc2 ( Bit(32) inst ) Bit(32)
+}
+INTERFACE Executer {
+    METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult
+}
+INTERFACE IMem {
+    METHOD read ( Bit(32) pc ) Bit(32)
+}
+INTERFACE RegFile {
+    METHOD read ( Bit(32) regnum ) Bit(32)
+    METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
+}
+MODULE MultiCycleProc {
+    INTERFACE/Ptr Decoder dec
+    INTERFACE/Ptr Executer exec
+    INTERFACE/Ptr RegFile rf
+    INTERFACE/Ptr IMem pgm
+    INTERFACE/Ptr DMem dmem
+    FIELD Bit(32) pc
+    FIELD Bit(32) d2e_valid
+    FIELD Bit(32) d2e_op
+    FIELD Bit(32) d2e_arithOp
+    FIELD Bit(32) d2e_src1
+    FIELD Bit(32) d2e_src2
+    FIELD Bit(32) d2e_dst
+    FIELD Bit(32) d2e_addr
+    FIELD Bit(32) e2w_valid
+    FIELD Bit(32) e2w_dst
+    FIELD Bit(32) e2w_val
+    FIELD Bit(32) e2w_addr
+    FIELD Bit(32) e2w_nextPC
+    METHOD/Rule/Action RULE$decode__ENA if (((d2e_valid) == (0))) {
+        ALLOCA Bit(32) RULE$decode$inst
+        CALL :pgm$read{pc}
+        LET Bit(32) :RULE$decode$inst = pgm$read
+        CALL :dec$getOp{RULE$decode$inst}
+        STORE :d2e_op = dec$getOp
+        CALL :dec$getArithOp{RULE$decode$inst}
+        STORE :d2e_arithOp = dec$getArithOp
+        CALL :dec$getSrc1{RULE$decode$inst}
+        STORE :d2e_src1 = dec$getSrc1
+        CALL :dec$getSrc2{RULE$decode$inst}
+        STORE :d2e_src2 = dec$getSrc2
+        CALL :dec$getDst{RULE$decode$inst}
+        STORE :d2e_dst = dec$getDst
+        CALL :dec$getAddr{RULE$decode$inst}
+        STORE :d2e_addr = dec$getAddr
+        STORE :d2e_valid = 1
+    }
+    METHOD/Rule/Action RULE$execArith__ENA if ((((d2e_valid) == (1)) && ((e2w_valid) == (0)))) {
+        ALLOCA ExecResult RULE$execArith$val
+        ALLOCA Bit(32) RULE$execArith$val1
+        ALLOCA Bit(32) RULE$execArith$val2
+        STORE :d2e_valid = 0
+        STORE :e2w_dst = d2e_dst
+        CALL :rf$read{d2e_src1}
+        LET Bit(32) :RULE$execArith$val1 = rf$read
+        CALL :rf$read{d2e_src2}
+        LET Bit(32) :RULE$execArith$val2 = rf$read
+        CALL :exec$basicExec{d2e_op,RULE$execArith$val1,RULE$execArith$val2}
+        LET ExecResult :RULE$execArith$val = exec$basicExec
+        STORE :e2w_val = RULE$execArith$val$data
+        STORE :e2w_nextPC = RULE$execArith$val$nextPC
+        STORE :e2w_addr = RULE$execArith$val$addr
+        STORE :e2w_valid = 1
+    }
+    METHOD/Rule/Action RULE$writeBack__ENA if (((e2w_valid) == (1))) {
+        ALLOCA Bit(32) RULE$writeBack$wbval
+        LET Bit(32) :RULE$writeBack$wbval = e2w_val
+        CALL/Action :rf$write__ENA{e2w_dst,RULE$writeBack$wbval}
+        STORE :e2w_valid = 0
+        STORE :pc = e2w_nextPC
+    }
+}

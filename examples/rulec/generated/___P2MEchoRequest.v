@@ -1,7 +1,7 @@
-`include "printf.generated.vh"
+`include "rulec.generated.vh"
 
 `default_nettype none
-module EchoRequest___P2M (input wire CLK, input wire nRST,
+module ___P2MEchoRequest (input wire CLK, input wire nRST,
     output wire method$say2__ENA,
     output wire [16 - 1:0]method$say2$a,
     output wire [16 - 1:0]method$say2$b,
