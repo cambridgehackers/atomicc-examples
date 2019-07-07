@@ -2,7 +2,6 @@
 `define __gray_GENERATED__VH__
 
 //METASTART; Test
-//METAEXTERNAL; indication; ReturnInd(width=4);
 //METAINTERNAL; counter; GrayCounter(width=4);
 //METACONNECT; request$decrement__ENA; counter$ifc$decrement__ENA
 //METACONNECT; request$decrement__RDY; counter$ifc$decrement__RDY
@@ -20,7 +19,6 @@
 //METAEXTERNAL; indication; PipeInH;
 //METAINTERNAL; DUT__Test; Test;
 //METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
-//METAINTERNAL; M2P__indication; ___M2PReturnInd(width=4);
 //METACONNECT; DUT__Test$request$decrement__ENA; P2M__request$method$decrement__ENA
 //METACONNECT; DUT__Test$request$decrement__RDY; P2M__request$method$decrement__RDY
 //METACONNECT; DUT__Test$request$increment__ENA; P2M__request$method$increment__ENA
@@ -35,14 +33,8 @@
 //METACONNECT; DUT__Test$request$writeGray__RDY; P2M__request$method$writeGray__RDY
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
-//METACONNECT; DUT__Test$indication$value__ENA; M2P__indication$method$value__ENA
-//METACONNECT; DUT__Test$indication$value__RDY; M2P__indication$method$value__RDY
-//METACONNECT; indication$enq__ENA; M2P__indication$pipe$enq__ENA
-//METACONNECT; indication$enq__RDY; M2P__indication$pipe$enq__RDY
-//METASTART; ___M2PReturnInd
-//METAEXTERNAL; pipe; ___M2PReturnInd$pipe;
-//METAINVOKE; method$value__ENA; :pipe$enq__ENA;
-//METAGUARD; method$value; pipe$enq__RDY;
+//METACONNECT; indication$enq__ENA; P2M__request$returnInd$enq__ENA
+//METACONNECT; indication$enq__RDY; P2M__request$returnInd$enq__RDY
 //METASTART; ___P2MGrayCounterIfc
 //METAEXTERNAL; method; ___P2MGrayCounterIfc$method;
 //METAEXTERNAL; returnInd; ___P2MGrayCounterIfc$returnInd;

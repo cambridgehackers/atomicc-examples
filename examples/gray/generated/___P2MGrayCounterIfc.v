@@ -23,6 +23,7 @@ module ___P2MGrayCounterIfc #(
     output wire pipe$enq__RDY,
     output wire returnInd$enq__ENA,
     output wire [128 - 1:0]returnInd$enq$v,
+    output wire [16 - 1:0]returnInd$enq$length,
     input wire returnInd$enq__RDY);
     assign method$decrement__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd0 );
     assign method$increment__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd1 );
@@ -31,7 +32,8 @@ module ___P2MGrayCounterIfc #(
     assign method$writeGray$v = pipe$enq$v[(32 + 4) -1 :32];
     assign method$writeGray__ENA = pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd5 );
     assign pipe$enq__RDY = method$decrement__RDY & method$increment__RDY & returnInd$enq__RDY & method$writeBin__RDY & method$writeGray__RDY;
-    assign returnInd$enq$v = ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) ) ? method$readBin : 128'd0 ) | ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) ) ? method$readGray : 128'd0 );
+    assign returnInd$enq$length = ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) ) ? 16'd1 : 16'd0 ) | ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) ) ? 16'd1 : 16'd0 );
+    assign returnInd$enq$v = ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) ) ? ( { method$readBin, 16'd4, 16'd2, 16'd5} ) : 128'd0 ) | ( ( pipe$enq__ENA & pipe$enq__RDY & ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) ) ? ( { method$readGray, 16'd4, 16'd3, 16'd5} ) : 128'd0 );
     assign returnInd$enq__ENA = pipe$enq__ENA & pipe$enq__RDY & ( ( pipe$enq$v[ 31 : 16 ] == 16'd2 ) | ( pipe$enq$v[ 31 : 16 ] == 16'd3 ) );
 endmodule 
 

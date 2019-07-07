@@ -21,38 +21,75 @@
 #include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
+#include <semaphore.h>
+uint64_t waitReturn(int method, int size);
 #include "GrayCounterIfc_IC_width_ND_4_JC_.h"
-#include "ReturnInd_IC_width_ND_4_JC_.h"
 void atomiccPrintfInit(const char *filename);
 
-static GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = 0;
-
-class ReturnInd : public ReturnInd_IC_width_ND_4_JC_Wrapper
+static sem_t *waitSemaphore;
+static void memdump(unsigned char *p, int len, const char *title)
 {
-public:
-    void value ( const uint8_t v ) {
-printf("[%s:%d]RETURNNNN %d\n", __FUNCTION__, __LINE__, v);
+int i;
+
+    i = 0;
+    while (len > 0) {
+        if (!(i & 0xf)) {
+            if (i > 0)
+                fprintf(stderr, "\n");
+            fprintf(stderr, "%s: ",title);
+        }
+        fprintf(stderr, "%02x ", *p++);
+        i++;
+        len--;
     }
-    ReturnInd(unsigned int id, PortalTransportFunctions *item, void *param) :
-         ReturnInd_IC_width_ND_4_JC_Wrapper(id, item, param) {}
-};
+    fprintf(stderr, "\n");
+}
+
+static uint64_t waitResult;
+static int waitMethod, waitSize;
+int EchoIndication_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd)
+{
+    volatile unsigned int* temp_working_addr = &p->map_base[1];
+    uint16_t *datap = (uint16_t *)temp_working_addr;
+    printf("[%s:%d] p %p channel %d/%d mess %d: ", __FUNCTION__, __LINE__, p, channel, waitMethod, messageFd);
+    //memdump((unsigned char *)temp_working_addr, 32, "DATA");
+    printf("waitSize %d act %d\n", waitSize, *datap++);
+    waitResult = *datap;
+    sem_post(waitSemaphore);
+    return 0;
+}
+uint64_t waitReturn(int method, int size)
+{
+    waitMethod = method;
+    waitSize = size;
+    sem_wait(waitSemaphore);
+    return waitResult;
+}
 
 int main(int argc, const char **argv)
 {
     //atomiccPrintfInit("generated/rulec.generated.printf");
+    if ((waitSemaphore = sem_open("/semaphore", O_CREAT, 0644, 0)) == SEM_FAILED) {
+        perror("sem_open failed");
+        exit(-1);
+    }
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
         &transportSocketInit,
         NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
-    ReturnInd returnInd(IfcNames_ReturnInd_IC_width_ND_4_JC_H2S, &transportMux, &param);
-    request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
+    GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
+    request->pint.handler = EchoIndication_handleMessage;
     request->writeGray(4);
     request->writeBin(3);
-    request->increment();
     request->decrement();
-    request->readGray();
-    request->readBin();
+    for (int i = 0; i < 18; i++) {
+        request->increment();
+        int ret = request->readGray();
+printf("[%s:%d]readGray %d\n", __FUNCTION__, __LINE__, ret);
+        ret = request->readBin();
+printf("[%s:%d]readBin %d\n", __FUNCTION__, __LINE__, ret);
+    }
 sleep(2);
     return 0;
 }

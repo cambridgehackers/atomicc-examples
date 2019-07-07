@@ -12,11 +12,11 @@ public:
         Portal(id, DEFAULT_TILE, bufsize, NULL, NULL, transport, param, this, poller), cb(cbarg) {};
     GrayCounterIfc_IC_width_ND_4_JC_Proxy(int id, PortalPoller *poller) :
         Portal(id, DEFAULT_TILE, GrayCounterIfc_IC_width_ND_4_JC__reqinfo, NULL, NULL, NULL, NULL, this, poller), cb(&GrayCounterIfc_IC_width_ND_4_JC_ProxyReq) {};
-    int decrement (  ) { return cb->decrement (&pint); };
-    int increment (  ) { return cb->increment (&pint); };
-    int readBin (  ) { return cb->readBin (&pint); };
-    int readGray (  ) { return cb->readGray (&pint); };
-    int writeBin ( const uint8_t v ) { return cb->writeBin (&pint, v); };
-    int writeGray ( const uint8_t v ) { return cb->writeGray (&pint, v); };
+    void decrement (  ) { cb->decrement (&pint); };
+    void increment (  ) { cb->increment (&pint); };
+    uint8_t readBin (  ) { cb->readBin (&pint); return waitReturn(2, 4); };
+    uint8_t readGray (  ) { cb->readGray (&pint); return waitReturn(3, 4); };
+    void writeBin ( const uint8_t v ) { cb->writeBin (&pint, v); };
+    void writeGray ( const uint8_t v ) { cb->writeGray (&pint, v); };
 };
 #endif // _GRAYCOUNTERIFC_IC_WIDTH_ND_4_JC__H_

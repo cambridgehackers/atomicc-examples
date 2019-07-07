@@ -22,14 +22,8 @@
 #include "grayCounter.h"
 #include "userTop.h"
 
-template <int width>
-__interface ReturnInd {
-    void value(__uint(width) v);
-};
-
 __module Test {
     GrayCounter<4> counter;
-    __software ReturnInd<4> *indication;
     __software GrayCounterIfc<4>  request = counter.ifc;
 };
 

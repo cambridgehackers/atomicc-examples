@@ -18,9 +18,6 @@ INTERFACE PipeInB {
 INTERFACE PipeInH {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
-INTERFACE ReturnInd(width=4) {
-    METHOD/Action value__ENA ( Bit(4) v )
-}
 EMODULE GrayCounter(width=4) {
     INTERFACE GrayCounterIfc(width=4) ifc
 }
@@ -33,10 +30,8 @@ EMODULE l_top {
     INTERFACE/Ptr PipeInH indication
 }
 MODULE Test {
-    SOFTWARE indication
     SOFTWARE request
     INTERFACECONNECT/Forward request counter$ifc GrayCounterIfc(width=4)
     FIELD GrayCounter(width=4) counter
-    INTERFACE/Ptr ReturnInd(width=4) indication
     INTERFACE GrayCounterIfc(width=4) request
 }

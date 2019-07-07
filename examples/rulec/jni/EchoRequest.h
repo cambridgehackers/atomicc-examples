@@ -12,8 +12,8 @@ public:
         Portal(id, DEFAULT_TILE, bufsize, NULL, NULL, transport, param, this, poller), cb(cbarg) {};
     EchoRequestProxy(int id, PortalPoller *poller) :
         Portal(id, DEFAULT_TILE, EchoRequest_reqinfo, NULL, NULL, NULL, NULL, this, poller), cb(&EchoRequestProxyReq) {};
-    int say ( const uint32_t v ) { return cb->say (&pint, v); };
-    int say2 ( const uint16_t a, const uint16_t b ) { return cb->say2 (&pint, a, b); };
-    int setLeds ( const uint8_t v ) { return cb->setLeds (&pint, v); };
+    void say ( const uint32_t v ) { cb->say (&pint, v); };
+    void say2 ( const uint16_t a, const uint16_t b ) { cb->say2 (&pint, a, b); };
+    void setLeds ( const uint8_t v ) { cb->setLeds (&pint, v); };
 };
 #endif // _ECHOREQUEST_H_

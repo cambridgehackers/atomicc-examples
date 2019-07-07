@@ -2,9 +2,6 @@
 
 `default_nettype none
 module Test (input wire CLK, input wire nRST,
-    output wire indication$value__ENA,
-    output wire [4 - 1:0]indication$value$v,
-    input wire indication$value__RDY,
     input wire request$decrement__ENA,
     output wire request$decrement__RDY,
     input wire request$increment__ENA,
@@ -34,8 +31,6 @@ module Test (input wire CLK, input wire nRST,
         .ifc$writeGray__ENA(request$writeGray__ENA),
         .ifc$writeGray$v(request$writeGray$v),
         .ifc$writeGray__RDY(request$writeGray__RDY));
-    assign indication$value$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$value__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 endmodule 
 
 `default_nettype wire    // set back to default value

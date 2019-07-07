@@ -7,7 +7,7 @@
         },
         { "dtype": "TypeDef",
             "tdtype": {
-                "elements": [ [ "IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H", "5" ], [ "IfcNames_ReturnInd_IC_width_ND_4_JC_H2S", "6" ] ],
+                "elements": [ [ "IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H", "5" ] ],
                 "name": "IfcNames",
                 "type": "Enum"
             },
@@ -21,20 +21,15 @@
                 { "dname": "increment", "dparams": [
                     ] },
                 { "dname": "readBin", "dparams": [
-                    ] },
+                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
                 { "dname": "readGray", "dparams": [
-                    ] },
+                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
                 { "dname": "writeBin", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
                     ] },
                 { "dname": "writeGray", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
                     ] }
-            ], "direction": "0", "cname": "GrayCounterIfc_IC_width_ND_4_JC_" },
-        { "cdecls": [
-                { "dname": "value", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
-                    ] }
-            ], "direction": "1", "cname": "ReturnInd_IC_width_ND_4_JC_" }
+            ], "direction": "0", "cname": "GrayCounterIfc_IC_width_ND_4_JC_" }
     ]
 }

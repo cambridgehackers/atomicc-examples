@@ -27,13 +27,18 @@ __module GrayCounter {
     __uint(width) counter;
     __shared __uint(width) m;
 
-    void ifc.increment() { }
-    void ifc.decrement() { }
+    void ifc.increment() {
+printf("[%s] counter %x\n", __FUNCTION__, counter);
+ }
+    void ifc.decrement() {
+printf("[%s] counter %x\n", __FUNCTION__, counter);
+ }
 
     __uint(width) ifc.readGray() {
         return counter;
     }
     void ifc.writeGray(__uint(width) v) {
+printf("[%s] v %x\n", __FUNCTION__, v);
         counter = v;
     }
 
@@ -47,9 +52,11 @@ __module GrayCounter {
         *__bitsubstrl(counter, width - 1) = __bitsubstr(v, width - 1);
         for(int i = 0; i < width - 1; i += 1)
             *__bitsubstrl(counter, i) = __reduce("^", __bitsubstr(v, i + 1, i));
+printf("[%s] v %x\n", __FUNCTION__, v);
     }
 
     __rule incdec if (__valid(ifc.increment) != __valid(ifc.decrement)) {
+printf("[%s] counter %x\n", __FUNCTION__, counter);
         __uint(1) useLsb = __reduce("^", counter) == __valid(ifc.decrement);
         if (useLsb)
             *__bitsubstrl(counter, 0) ^= 1;
