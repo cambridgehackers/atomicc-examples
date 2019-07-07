@@ -27,9 +27,9 @@ module l_top (input wire CLK, input wire nRST,
     wire [4 - 1:0]P2M__request$method$writeGray$v;
     wire P2M__request$method$writeGray__ENA;
     Test DUT__Test (.CLK(CLK), .nRST(nRST),
-        .indication$value__ENA(DUT__Test$indication$value__ENA),
-        .indication$value$v(DUT__Test$indication$value$v),
-        .indication$value__RDY(M2P__indication$method$value__RDY),
+        .indication$value__ENA(),
+        .indication$value$v(),
+        .indication$value__RDY(0),
         .request$decrement__ENA(P2M__request$method$decrement__ENA),
         .request$decrement__RDY(DUT__Test$request$decrement__RDY),
         .request$increment__ENA(P2M__request$method$increment__ENA),
@@ -62,9 +62,12 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY),
-        .returnInd$enq__ENA(),
-        .returnInd$enq$v(),
-        .returnInd$enq__RDY(0));
+        .returnInd$enq__ENA(DUT__Test$indication$value__ENA),
+        .returnInd$enq$v(DUT__Test$indication$value$v),
+        .returnInd$enq__RDY(M2P__indication$method$value__RDY));
+        //.returnInd$enq__ENA(),
+        //.returnInd$enq$v(),
+        //.returnInd$enq__RDY(0));
     ___M2PReturnInd#(4) M2P__indication (.CLK(CLK), .nRST(nRST),
         .method$value__ENA(DUT__Test$indication$value__ENA),
         .method$value$v(DUT__Test$indication$value$v),
