@@ -27,34 +27,16 @@ uint64_t waitReturn(int method, int size);
 void atomiccPrintfInit(const char *filename);
 
 static sem_t *waitSemaphore;
-static void memdump(unsigned char *p, int len, const char *title)
-{
-int i;
-
-    i = 0;
-    while (len > 0) {
-        if (!(i & 0xf)) {
-            if (i > 0)
-                fprintf(stderr, "\n");
-            fprintf(stderr, "%s: ",title);
-        }
-        fprintf(stderr, "%02x ", *p++);
-        i++;
-        len--;
-    }
-    fprintf(stderr, "\n");
-}
-
 static uint64_t waitResult;
 static int waitMethod, waitSize;
 int EchoIndication_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd)
 {
     volatile unsigned int* temp_working_addr = &p->map_base[1];
     uint16_t *datap = (uint16_t *)temp_working_addr;
-    printf("[%s:%d] p %p channel %d/%d mess %d: ", __FUNCTION__, __LINE__, p, channel, waitMethod, messageFd);
-    //memdump((unsigned char *)temp_working_addr, 32, "DATA");
-    printf("waitSize %d act %d\n", waitSize, *datap++);
-    waitResult = *datap;
+    int messageSize = *datap++;
+    if (channel != waitMethod || waitSize != messageSize)
+         printf("[%s:%d] p %p channel %d/%d messFd %d waitSize %d messageSize %d ", __FUNCTION__, __LINE__, p, channel, waitMethod, messageFd, waitSize, messageSize);
+    memcpy((void *)&waitResult, (void *)datap, sizeof(waitResult));
     sem_post(waitSemaphore);
     return 0;
 }
