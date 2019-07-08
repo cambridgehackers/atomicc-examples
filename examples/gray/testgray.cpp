@@ -22,46 +22,19 @@
 #include <stdio.h>
 #include "sock_utils.h"
 #include <semaphore.h>
-uint64_t waitReturn(int method, int size);
 #include "GrayCounterIfc_IC_width_ND_4_JC_.h"
 void atomiccPrintfInit(const char *filename);
-
-static sem_t *waitSemaphore;
-static uint64_t waitResult;
-static int waitMethod, waitSize;
-int EchoIndication_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd)
-{
-    volatile unsigned int* temp_working_addr = &p->map_base[1];
-    uint16_t *datap = (uint16_t *)temp_working_addr;
-    int messageSize = *datap++;
-    if (channel != waitMethod || waitSize != messageSize)
-         printf("[%s:%d] p %p channel %d/%d messFd %d waitSize %d messageSize %d ", __FUNCTION__, __LINE__, p, channel, waitMethod, messageFd, waitSize, messageSize);
-    memcpy((void *)&waitResult, (void *)datap, sizeof(waitResult));
-    sem_post(waitSemaphore);
-    return 0;
-}
-uint64_t waitReturn(int method, int size)
-{
-    waitMethod = method;
-    waitSize = size;
-    sem_wait(waitSemaphore);
-    return waitResult;
-}
 
 int main(int argc, const char **argv)
 {
     //atomiccPrintfInit("generated/rulec.generated.printf");
-    if ((waitSemaphore = sem_open("/semaphore", O_CREAT, 0644, 0)) == SEM_FAILED) {
-        perror("sem_open failed");
-        exit(-1);
-    }
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
         &transportSocketInit,
         NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
-    GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
-    request->pint.handler = EchoIndication_handleMessage;
+    GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(
+        IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
     request->writeGray(4);
     request->writeBin(3);
     request->decrement();
