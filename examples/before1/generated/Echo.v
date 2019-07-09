@@ -28,14 +28,19 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_temp;
     reg [32 - 1:0]x;
     reg [32 - 1:0]y;
+    wire RULE$delay_rule__RDY;
+    wire RULE$respond_rule__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = busy_delay;
+    assign indication$heard__ENA = RULE$respond_rule__RDY;
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
+    // Extra assigments, not to output wires
+    assign RULE$delay_rule__RDY = !( busy_delay | ( !busy ) );
+    assign RULE$respond_rule__RDY = busy_delay & indication$heard__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -49,24 +54,24 @@ module Echo (input wire CLK, input wire nRST,
         y <= 0;
       end // nRST
       else begin
-        if (!( busy_delay | ( !busy ) )) begin // RULE$delay_rule__ENA
+        if (RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
             busy <= 0 != 0;
             busy_delay <= 1 != 0;
             meth_delay <= meth_temp;
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of RULE$delay_rule__ENA
-        if (busy_delay & indication$heard__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0 != 0;
             $display( "respond_rule: Echo" );
         end; // End of RULE$respond_rule__ENA
-        if (!( busy | ( !request$say2__ENA ) )) begin // request$say2__ENA
+        if (request$say2__ENA & request$say2__RDY) begin // request$say2__ENA
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;
             busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say2" , 194 );
         end; // End of request$say2__ENA
-        if (!( busy | ( !request$say__ENA ) )) begin // request$say__ENA
+        if (request$say__ENA & request$say__RDY) begin // request$say__ENA
             meth_temp <= request$say$meth;
             v_temp <= request$say$v;
             busy <= 1 != 0;

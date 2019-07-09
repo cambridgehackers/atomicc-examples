@@ -8,6 +8,7 @@ module Echo (input wire CLK, input wire nRST,
     output wire ind$heard__ENA,
     output wire [32 - 1:0]ind$heard$v,
     input wire ind$heard__RDY);
+    wire RULE$respond_rule__RDY;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire fifo$out$first__RDY;
@@ -15,12 +16,14 @@ module Echo (input wire CLK, input wire nRST,
         .in$enq__ENA(sout$say__ENA),
         .in$enq$v(sout$say$v),
         .in$enq__RDY(fifo$in$enq__RDY),
-        .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),
+        .out$deq__ENA(RULE$respond_rule__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(ind$heard$v),
         .out$first__RDY(fifo$out$first__RDY));
-    assign ind$heard__ENA = fifo$out$deq__RDY & fifo$out$first__RDY;
+    assign ind$heard__ENA = RULE$respond_rule__RDY;
     assign sout$say__RDY = fifo$in$enq__RDY;
+    // Extra assigments, not to output wires
+    assign RULE$respond_rule__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value

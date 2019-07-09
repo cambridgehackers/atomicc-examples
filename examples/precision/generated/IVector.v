@@ -14,6 +14,7 @@ module IVector (input wire CLK, input wire nRST,
     reg [((14) / (7)) + ((3) * (2)) - 1:0]fcounter;
     reg [9 - 1:0]gcounter;
     wire [(6 + 4) - 1:0]RULE$respond$temp;
+    wire RULE$respond__RDY;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [10 - 1:0]fifo$out$first;
@@ -23,16 +24,17 @@ module IVector (input wire CLK, input wire nRST,
         .in$enq__ENA(request$say__ENA),
         .in$enq$v({ request$say$v , request$say$meth }),
         .in$enq__RDY(fifo$in$enq__RDY),
-        .out$deq__ENA(fifo$out$first__RDY & ind$heard__RDY),
+        .out$deq__ENA(RULE$respond__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
     assign ind$heard$meth = fifo$out$first[ 6 - 1 : 0 ];
     assign ind$heard$v = fifo$out$first[ 4 - 1 + 6 : 6 ];
-    assign ind$heard__ENA = fifo$out$first__RDY & fifo$out$deq__RDY;
+    assign ind$heard__ENA = RULE$respond__RDY;
     assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
     assign RULE$respond$temp = { fifo$out$first[ 4 - 1 + 6 : 6 ] , fifo$out$first[ 6 - 1 : 0 ] };
+    assign RULE$respond__RDY = fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
     assign request$say$temp = { request$say$v , request$say$meth };
 
     always @( posedge CLK) begin

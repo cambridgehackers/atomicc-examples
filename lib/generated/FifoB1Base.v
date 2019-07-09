@@ -29,7 +29,7 @@ module FifoB1Base #(
             if (out$deq__ENA == 0)
             full <= 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA & ( full | in$enq__ENA )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             full <= 0;
         end; // End of out$deq__ENA
       end

@@ -26,13 +26,13 @@ module SizedFifoBase #(
         c <= 0;
       end // nRST
       else begin
-        if (!( ( c == depth ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             if (( bypass == 0 ) | ( out$deq__ENA == 0 )) begin
             q[c] <= in$enq$v;
             c <= c + 1;
             end;
         end; // End of in$enq__ENA
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             if (( bypass == 0 ) | ( in$enq__ENA == 0 ))
             c <= c + ( -1 );
         end; // End of out$deq__ENA
@@ -45,7 +45,7 @@ module SizedFifoBase #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             q[__inst$Genvar1] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in$enq__ENA ) == 0 ) ) ? in$enq$v : q[__inst$Genvar1 + 1];
         end; // End of out$deq__ENA
       end

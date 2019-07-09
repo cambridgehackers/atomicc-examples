@@ -14,6 +14,7 @@ module Connect (input wire CLK, input wire nRST,
     output wire [32 - 1:0]indication$heard$meth,
     output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY);
+    wire RULE$swap_rule__RDY;
     wire lEII_test$pipe$enq__RDY;
     wire lEIO$indication$heard__RDY;
     wire [(32 + (32 + 32)) - 1:0]lEIO$pipe$enq$v;
@@ -66,9 +67,9 @@ module Connect (input wire CLK, input wire nRST,
         .request$say$meth(lERI$request$say$meth),
         .request$say$v(lERI$request$say$v),
         .request$say__RDY(lEcho$request$say__RDY),
-        .swap$x2y__ENA(lEcho$swap$y2x__RDY),
+        .swap$x2y__ENA(RULE$swap_rule__RDY),
         .swap$x2y__RDY(lEcho$swap$x2y__RDY),
-        .swap$y2x__ENA(lEcho$swap$x2y__RDY),
+        .swap$y2x__ENA(RULE$swap_rule__RDY),
         .swap$y2x__RDY(lEcho$swap$y2x__RDY),
         .swap$y2xnull__ENA(1),
         .swap$y2xnull__RDY(lEcho$swap$y2xnull__RDY),
@@ -98,6 +99,8 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard__RDY(indication$heard__RDY));
     assign request$say2__RDY = lERO_test$request$say2__RDY;
     assign request$say__RDY = lERO_test$request$say__RDY;
+    // Extra assigments, not to output wires
+    assign RULE$swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -106,7 +109,7 @@ module Connect (input wire CLK, input wire nRST,
         if (lEcho$swap$y2xnull__RDY) begin // RULE$swap2_rule__ENA
             $display( "swap2_rule:Connect" );
         end; // End of RULE$swap2_rule__ENA
-        if (lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY) begin // RULE$swap_rule__ENA
+        if (RULE$swap_rule__RDY) begin // RULE$swap_rule__ENA
             $display( "swap_rule:Connect" );
         end; // End of RULE$swap_rule__ENA
       end

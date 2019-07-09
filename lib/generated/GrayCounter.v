@@ -23,6 +23,7 @@ module GrayCounter #(
     output wire ifc$writeGray__RDY);
     reg [width - 1:0]counter;
     wire RULE$incdec$useLsb;
+    wire RULE$incdec__RDY;
     wire [10 - 1:0]ifc$readBin$temp;
     wire trace$flag__RDY;
     genvar __inst$Genvar1;
@@ -41,6 +42,7 @@ module GrayCounter #(
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
     assign RULE$incdec$useLsb = ( ^counter ) == ifc$decrement__ENA;
+    assign RULE$incdec__RDY = !( ifc$increment__ENA == ifc$decrement__ENA );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign ifc$readBin$temp[ __inst$Genvar1 ] = ^counter[ ( width - 1 ) : __inst$Genvar1 ];
     end;
@@ -50,7 +52,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
         counter <= 0;
       end // nRST
       else begin
-        if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
+        if (RULE$incdec__RDY) begin // RULE$incdec__ENA
             $display( "[%s] counter %x" , "RULE$incdec" , counter );
             if (!( RULE$incdec$useLsb == 0 ))
             counter[ 0 ] <= counter[ 0 ] ^ 1;
@@ -95,7 +97,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( ifc$increment__ENA == ifc$decrement__ENA )) begin // RULE$incdec__ENA
+        if (RULE$incdec__RDY) begin // RULE$incdec__ENA
             if (( ( |counter[ ( __inst$Genvar1 - 1 ) : 0 ] ) == 0 ) & counter[ __inst$Genvar1 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( __inst$Genvar1 + 1 ) ] <= counter[ ( __inst$Genvar1 + 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA

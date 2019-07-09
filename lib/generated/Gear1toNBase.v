@@ -26,10 +26,10 @@ module Gear1toNBase #(
         c <= 0;
       end // nRST
       else begin
-        if (!( ( c == 4 ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             c <= c + 1;
         end; // End of in$enq__ENA
-        if (out$deq__ENA & ( c == 4 )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             c <= 0;
         end; // End of out$deq__ENA
       end
@@ -41,7 +41,7 @@ module Gear1toNBase #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( ( c == 4 ) | ( !in$enq__ENA ) )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             if (__inst$Genvar1 == c)
             buffer[ ( ( ( __inst$Genvar1 + 1 ) * widthIn ) - 1 ) : ( __inst$Genvar1 * widthIn ) ] <= in$enq$v;
         end; // End of in$enq__ENA

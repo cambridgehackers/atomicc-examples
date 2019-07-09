@@ -28,10 +28,10 @@ module GearNto1Base #(
         c <= 0;
       end // nRST
       else begin
-        if (in$enq__ENA & ( c == 0 )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             c <= widthIn / widthOut;
         end; // End of in$enq__ENA
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             c <= c + ( -1 );
         end; // End of out$deq__ENA
       end
@@ -43,7 +43,7 @@ module GearNto1Base #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( ( c == 0 ) | ( !out$deq__ENA ) )) begin // out$deq__ENA
+        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
             buffer[__inst$Genvar1] <= buffer[__inst$Genvar1 + 1];
         end; // End of out$deq__ENA
       end
@@ -56,7 +56,7 @@ module GearNto1Base #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (in$enq__ENA & ( c == 0 )) begin // in$enq__ENA
+        if (in$enq__ENA & in$enq__RDY) begin // in$enq__ENA
             buffer[__inst$Genvar1] <= m[ ( ( ( __inst$Genvar1 + 1 ) * widthOut ) - 1 ) : ( __inst$Genvar1 * widthOut ) ];
         end; // End of in$enq__ENA
       end
