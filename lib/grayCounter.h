@@ -28,7 +28,6 @@ __interface GrayCounterIfc {
     void writeGray(__uint(width) v);
     __uint(width) readBin();
     void writeBin(__uint(width) v);
-    void flag(int v);
 };
 
 template <int width>

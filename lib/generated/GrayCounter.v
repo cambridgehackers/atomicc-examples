@@ -6,9 +6,6 @@ module GrayCounter #(
     input wire CLK, input wire nRST,
     input wire ifc$decrement__ENA,
     output wire ifc$decrement__RDY,
-    input wire ifc$flag__ENA,
-    input wire [32 - 1:0]ifc$flag$v,
-    output wire ifc$flag__RDY,
     input wire ifc$increment__ENA,
     output wire ifc$increment__RDY,
     output wire [width - 1:0]ifc$readBin,
@@ -25,14 +22,8 @@ module GrayCounter #(
     wire RULE$incdec$useLsb;
     wire RULE$incdec__RDY;
     wire [10 - 1:0]ifc$readBin$temp;
-    wire trace$flag__RDY;
     genvar __inst$Genvar1;
-    VsimTrace trace (.CLK(CLK), .nRST(nRST),
-        .flag__ENA(ifc$flag__ENA),
-        .flag$v(ifc$flag$v),
-        .flag__RDY(trace$flag__RDY));
     assign ifc$decrement__RDY = 1;
-    assign ifc$flag__RDY = trace$flag__RDY;
     assign ifc$increment__RDY = 1;
     assign ifc$readBin = ifc$readBin$temp;
     assign ifc$readBin__RDY = 1;
@@ -53,10 +44,10 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (RULE$incdec__RDY) begin // RULE$incdec__ENA
-            if (( ( |counter[ ( ( ( width - 1 ) - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
-            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
             if (!( RULE$incdec$useLsb == 0 ))
             counter[ 0 ] <= counter[ 0 ] ^ 1;
+            if (( ( |counter[ ( ( ( width - 1 ) - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
+            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
             if (counter[ 0 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA

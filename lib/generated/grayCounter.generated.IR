@@ -1,20 +1,12 @@
 INTERFACE GrayCounterIfc(width=10) {
     METHOD/Action decrement__ENA
-    METHOD/Action flag__ENA ( Bit(32) v )
     METHOD/Action increment__ENA
     METHOD readBin Bit(10)
     METHOD readGray Bit(10)
     METHOD/Action writeBin__ENA ( Bit(10) v )
     METHOD/Action writeGray__ENA ( Bit(10) v )
 }
-INTERFACE TraceIfc {
-    METHOD/Action flag__ENA ( Bit(32) v )
-}
-EMODULE VsimTrace {
-    INTERFACE TraceIfc _
-}
 MODULE GrayCounter(width=10) {
-    FIELD VsimTrace trace
     INTERFACE GrayCounterIfc(width=10) ifc
     FIELD Bit(10) counter
     FIELD/shared Bit(10) m
@@ -36,9 +28,6 @@ MODULE GrayCounter(width=10) {
         GENERATE ((((((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))) | (((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1))))) | ((RULE$incdec$useLsb) != (0))):__inst$Genvar1,(1),((__inst$Genvar1) < ((10) - (2))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
     }
     METHOD/Action ifc$decrement__ENA
-    METHOD/Action ifc$flag__ENA ( Bit(32) v ) {
-        CALL/Action :trace$flag__ENA{ifc$flag$v}
-    }
     METHOD/Action ifc$increment__ENA
     METHOD ifc$readBin Bit(10) = ((ifc$readBin$temp)) {
         ALLOCA Bit(10) ifc$readBin$temp

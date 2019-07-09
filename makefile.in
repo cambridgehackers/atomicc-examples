@@ -58,3 +58,9 @@ zybo:
 clean:
 	rm -rf verilator zybo SWSOCK*
 
+trace:
+	make
+	make clean
+	VERILATOR_TRACE=--trace make verilator
+	rm -f dump.vcd
+	DUMP_VCD=dump.vcd make run

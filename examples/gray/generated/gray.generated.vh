@@ -5,8 +5,6 @@
 //METAINTERNAL; counter; GrayCounter(width=4);
 //METACONNECT; request$decrement__ENA; counter$ifc$decrement__ENA
 //METACONNECT; request$decrement__RDY; counter$ifc$decrement__RDY
-//METACONNECT; request$flag__ENA; counter$ifc$flag__ENA
-//METACONNECT; request$flag__RDY; counter$ifc$flag__RDY
 //METACONNECT; request$increment__ENA; counter$ifc$increment__ENA
 //METACONNECT; request$increment__RDY; counter$ifc$increment__RDY
 //METACONNECT; request$readBin; counter$ifc$readBin
@@ -23,8 +21,6 @@
 //METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
 //METACONNECT; DUT__Test$request$decrement__ENA; P2M__request$method$decrement__ENA
 //METACONNECT; DUT__Test$request$decrement__RDY; P2M__request$method$decrement__RDY
-//METACONNECT; DUT__Test$request$flag__ENA; P2M__request$method$flag__ENA
-//METACONNECT; DUT__Test$request$flag__RDY; P2M__request$method$flag__RDY
 //METACONNECT; DUT__Test$request$increment__ENA; P2M__request$method$increment__ENA
 //METACONNECT; DUT__Test$request$increment__RDY; P2M__request$method$increment__RDY
 //METACONNECT; DUT__Test$request$readBin; P2M__request$method$readBin
@@ -42,6 +38,6 @@
 //METASTART; ___P2MGrayCounterIfc
 //METAEXTERNAL; method; ___P2MGrayCounterIfc$method;
 //METAEXTERNAL; returnInd; ___P2MGrayCounterIfc$returnInd;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd0:method$decrement__ENA;pipe$enq$v[ 31 : 16 ] == 16'd1:method$flag__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:method$increment__ENA;pipe$enq$v[ 31 : 16 ] == 16'd5:method$writeBin__ENA;pipe$enq$v[ 31 : 16 ] == 16'd6:method$writeGray__ENA;pipe$enq$v[ 31 : 16 ] == 16'd3:returnInd$enq__ENA;pipe$enq$v[ 31 : 16 ] == width:returnInd$enq__ENA;
-//METAGUARD; pipe$enq; method$decrement__RDY & method$flag__RDY & method$increment__RDY & returnInd$enq__RDY & method$writeBin__RDY & method$writeGray__RDY;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd0:method$decrement__ENA;pipe$enq$v[ 31 : 16 ] == 16'd1:method$increment__ENA;pipe$enq$v[ 31 : 16 ] == width:method$writeBin__ENA;pipe$enq$v[ 31 : 16 ] == 16'd5:method$writeGray__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:returnInd$enq__ENA;pipe$enq$v[ 31 : 16 ] == 16'd3:returnInd$enq__ENA;
+//METAGUARD; pipe$enq; method$decrement__RDY & method$increment__RDY & returnInd$enq__RDY & method$writeBin__RDY & method$writeGray__RDY;
 `endif

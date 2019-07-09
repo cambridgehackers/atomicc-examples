@@ -10,7 +10,6 @@ module l_top (input wire CLK, input wire nRST,
     output wire [16 - 1:0]indication$enq$length,
     input wire indication$enq__RDY);
     wire DUT__Test$request$decrement__RDY;
-    wire DUT__Test$request$flag__RDY;
     wire DUT__Test$request$increment__RDY;
     wire [4 - 1:0]DUT__Test$request$readBin;
     wire DUT__Test$request$readBin__RDY;
@@ -19,8 +18,6 @@ module l_top (input wire CLK, input wire nRST,
     wire DUT__Test$request$writeBin__RDY;
     wire DUT__Test$request$writeGray__RDY;
     wire P2M__request$method$decrement__ENA;
-    wire [32 - 1:0]P2M__request$method$flag$v;
-    wire P2M__request$method$flag__ENA;
     wire P2M__request$method$increment__ENA;
     wire [4 - 1:0]P2M__request$method$writeBin$v;
     wire P2M__request$method$writeBin__ENA;
@@ -29,9 +26,6 @@ module l_top (input wire CLK, input wire nRST,
     Test DUT__Test (.CLK(CLK), .nRST(nRST),
         .request$decrement__ENA(P2M__request$method$decrement__ENA),
         .request$decrement__RDY(DUT__Test$request$decrement__RDY),
-        .request$flag__ENA(P2M__request$method$flag__ENA),
-        .request$flag$v(P2M__request$method$flag$v),
-        .request$flag__RDY(DUT__Test$request$flag__RDY),
         .request$increment__ENA(P2M__request$method$increment__ENA),
         .request$increment__RDY(DUT__Test$request$increment__RDY),
         .request$readBin(DUT__Test$request$readBin),
@@ -47,9 +41,6 @@ module l_top (input wire CLK, input wire nRST,
     ___P2MGrayCounterIfc#(4) P2M__request (.CLK(CLK), .nRST(nRST),
         .method$decrement__ENA(P2M__request$method$decrement__ENA),
         .method$decrement__RDY(DUT__Test$request$decrement__RDY),
-        .method$flag__ENA(P2M__request$method$flag__ENA),
-        .method$flag$v(P2M__request$method$flag$v),
-        .method$flag__RDY(DUT__Test$request$flag__RDY),
         .method$increment__ENA(P2M__request$method$increment__ENA),
         .method$increment__RDY(DUT__Test$request$increment__RDY),
         .method$readBin(DUT__Test$request$readBin),
