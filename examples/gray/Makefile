@@ -12,6 +12,7 @@ all:
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/gray.ll gray.cpp
 
 trace:
+	make
 	make clean
 	VERILATOR_TRACE=--trace make verilator
 	rm -f dump.vcd

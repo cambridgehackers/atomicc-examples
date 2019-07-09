@@ -37,18 +37,17 @@ int main(int argc, const char **argv)
     GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(
         IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
     request->flag(1); // start
-    request->writeGray(0xc);
-    request->writeBin(0xf);
-    request->decrement();
+    request->writeGray(0);
+    //request->writeBin(0xf);
+    //request->decrement();
     for (int i = 0; i < 18; i++) {
-#if 0
         request->increment();
+        //request->decrement();
         int ret = request->readGray();
-printf("[%s:%d]readGray %d\n", __FUNCTION__, __LINE__, ret);
-        ret = request->readBin();
-printf("[%s:%d]readBin %d\n", __FUNCTION__, __LINE__, ret);
-#endif
-        request->writeGray(i);
+printf("[%s:%d]readGray %x\n", __FUNCTION__, __LINE__, ret);
+        //ret = request->readBin();
+//printf("[%s:%d]readBin %d\n", __FUNCTION__, __LINE__, ret);
+        //request->writeGray(i);
     }
     request->flag(0); // stop
     request->flag(2); // finish

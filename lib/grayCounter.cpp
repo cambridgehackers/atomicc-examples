@@ -36,12 +36,8 @@ __module GrayCounter {
     __uint(width) counter;
     __shared __uint(width) m;
 
-    void ifc.increment() {
-printf("[%s] counter %x\n", __FUNCTION__, counter);
- }
-    void ifc.decrement() {
-printf("[%s] counter %x\n", __FUNCTION__, counter);
- }
+    void ifc.increment() { }
+    void ifc.decrement() { }
 
     __uint(width) ifc.readGray() {
         return counter;
@@ -50,7 +46,6 @@ printf("[%s] counter %x\n", __FUNCTION__, counter);
         trace._.flag(v);
     }
     void ifc.writeGray(__uint(width) v) {
-printf("[%s] v %x\n", __FUNCTION__, v);
         counter = v;
     }
 
@@ -64,18 +59,16 @@ printf("[%s] v %x\n", __FUNCTION__, v);
         *__bitsubstrl(counter, width - 1) = __bitsubstr(v, width - 1);
         for(int i = 0; i < width - 1; i += 1)
             *__bitsubstrl(counter, i) = __reduce("^", __bitsubstr(v, i + 1, i));
-printf("[%s] v %x\n", __FUNCTION__, v);
     }
 
     __rule incdec if (__valid(ifc.increment) != __valid(ifc.decrement)) {
-printf("[%s] counter %x\n", __FUNCTION__, counter);
         __uint(1) useLsb = __reduce("^", counter) == __valid(ifc.decrement);
         if (useLsb)
             *__bitsubstrl(counter, 0) ^= 1;
         else {
             if (__bitsubstr(counter, 0))
                 *__bitsubstrl(counter, 0 + 1) ^= 1;
-            if (!__reduce("|", __bitsubstr(counter, width - 1 - 1, 0)))
+            if (!__reduce("|", __bitsubstr(counter, width - 1 - 1 - 1, 0)))
                 *__bitsubstrl(counter, width - 1) ^= 1;
         }
         for(int i = 1; i < width - 2; i += 1)

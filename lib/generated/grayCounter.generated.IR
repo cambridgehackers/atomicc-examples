@@ -29,22 +29,17 @@ MODULE GrayCounter(width=10) {
     }
     METHOD/Rule/Action RULE$incdec__ENA if (((ifc$increment__ENA) != (ifc$decrement__ENA))) {
         ALLOCA Bit(1) RULE$incdec$useLsb
-        PRINTF :printf{"[%s] counter %x\n","RULE$incdec",counter}
         LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",counter}) == (ifc$decrement__ENA)
         STORE ((RULE$incdec$useLsb) != (0)):__bitsubstr{counter,0} = (__bitsubstr{counter,0}) ^ (1)
         STORE (((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)):__bitsubstr{counter,(0) + (1)} = (__bitsubstr{counter,(0) + (1)}) ^ (1)
-        STORE ((((__reduce{"|",__bitsubstr{counter,((10) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))):__bitsubstr{counter,(10) - (1)} = (__bitsubstr{counter,(10) - (1)}) ^ (1)
-        GENERATE ((((((__reduce{"|",__bitsubstr{counter,((10) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))) | (((__reduce{"|",__bitsubstr{counter,((10) - (1)) - (1),0}}) != (0)) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1))))) | ((RULE$incdec$useLsb) != (0))):__inst$Genvar1,(1),((__inst$Genvar1) < ((10) - (2))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        STORE ((((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))):__bitsubstr{counter,(10) - (1)} = (__bitsubstr{counter,(10) - (1)}) ^ (1)
+        GENERATE ((((((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))) | (((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1))))) | ((RULE$incdec$useLsb) != (0))):__inst$Genvar1,(1),((__inst$Genvar1) < ((10) - (2))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
     }
-    METHOD/Action ifc$decrement__ENA {
-        PRINTF :printf{"[%s] counter %x\n","ifc$decrement",counter}
-    }
+    METHOD/Action ifc$decrement__ENA
     METHOD/Action ifc$flag__ENA ( Bit(32) v ) {
         CALL/Action :trace$flag__ENA{ifc$flag$v}
     }
-    METHOD/Action ifc$increment__ENA {
-        PRINTF :printf{"[%s] counter %x\n","ifc$increment",counter}
-    }
+    METHOD/Action ifc$increment__ENA
     METHOD ifc$readBin Bit(10) = ((ifc$readBin$temp)) {
         ALLOCA Bit(10) ifc$readBin$temp
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
@@ -53,10 +48,8 @@ MODULE GrayCounter(width=10) {
     METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
         STORE :__bitsubstr{counter,(10) - (1)} = __bitsubstr{ifc$writeBin$v,(10) - (1)}
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) - (1))),((__inst$Genvar1) + (1)),FOR$2Body__ENA
-        PRINTF :printf{"[%s] v %x\n","ifc$writeBin",ifc$writeBin$v}
     }
     METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
-        PRINTF :printf{"[%s] v %x\n","ifc$writeGray",ifc$writeGray$v}
         STORE :counter = ifc$writeGray$v
     }
 }

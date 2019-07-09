@@ -53,27 +53,18 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (RULE$incdec__RDY) begin // RULE$incdec__ENA
-            $display( "[%s] counter %x" , "RULE$incdec" , counter );
+            if (( ( |counter[ ( ( ( width - 1 ) - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
+            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
             if (!( RULE$incdec$useLsb == 0 ))
             counter[ 0 ] <= counter[ 0 ] ^ 1;
             if (counter[ 0 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
-            if (( ( |counter[ ( ( width - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
-            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA
-        if (ifc$decrement__ENA) begin // ifc$decrement__ENA
-            $display( "[%s] counter %x" , "ifc$decrement" , counter );
-        end; // End of ifc$decrement__ENA
-        if (ifc$increment__ENA) begin // ifc$increment__ENA
-            $display( "[%s] counter %x" , "ifc$increment" , counter );
-        end; // End of ifc$increment__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];
-            $display( "[%s] v %x" , "ifc$writeBin" , ifc$writeBin$v );
         end; // End of ifc$writeBin__ENA
         if (ifc$writeGray__ENA) begin // ifc$writeGray__ENA
             counter <= ifc$writeGray$v;
-            $display( "[%s] v %x" , "ifc$writeGray" , ifc$writeGray$v );
         end; // End of ifc$writeGray__ENA
       end
     end // always @ (posedge CLK)
