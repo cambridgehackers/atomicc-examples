@@ -3,6 +3,7 @@ STRUCT NOCData {
 }
 INTERFACE GrayCounterIfc(width=4) {
     METHOD/Action decrement__ENA
+    METHOD/Action flag__ENA ( Bit(32) v )
     METHOD/Action increment__ENA
     METHOD readBin Bit(4)
     METHOD readGray Bit(4)

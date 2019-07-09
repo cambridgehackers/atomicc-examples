@@ -18,6 +18,9 @@
         { "cdecls": [
                 { "dname": "decrement", "dparams": [
                     ] },
+                { "dname": "flag", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
                 { "dname": "increment", "dparams": [
                     ] },
                 { "dname": "readBin", "dparams": [

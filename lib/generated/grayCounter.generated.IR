@@ -1,12 +1,20 @@
 INTERFACE GrayCounterIfc(width=10) {
     METHOD/Action decrement__ENA
+    METHOD/Action flag__ENA ( Bit(32) v )
     METHOD/Action increment__ENA
     METHOD readBin Bit(10)
     METHOD readGray Bit(10)
     METHOD/Action writeBin__ENA ( Bit(10) v )
     METHOD/Action writeGray__ENA ( Bit(10) v )
 }
+INTERFACE TraceIfc {
+    METHOD/Action flag__ENA ( Bit(32) v )
+}
+EMODULE VsimTrace {
+    INTERFACE TraceIfc _
+}
 MODULE GrayCounter(width=10) {
+    FIELD VsimTrace trace
     INTERFACE GrayCounterIfc(width=10) ifc
     FIELD Bit(10) counter
     FIELD/shared Bit(10) m
@@ -30,6 +38,9 @@ MODULE GrayCounter(width=10) {
     }
     METHOD/Action ifc$decrement__ENA {
         PRINTF :printf{"[%s] counter %x\n","ifc$decrement",counter}
+    }
+    METHOD/Action ifc$flag__ENA ( Bit(32) v ) {
+        CALL/Action :trace$flag__ENA{ifc$flag$v}
     }
     METHOD/Action ifc$increment__ENA {
         PRINTF :printf{"[%s] counter %x\n","ifc$increment",counter}

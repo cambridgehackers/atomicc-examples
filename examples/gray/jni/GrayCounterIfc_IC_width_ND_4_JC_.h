@@ -14,9 +14,10 @@ public:
     GrayCounterIfc_IC_width_ND_4_JC_Proxy(int id, PortalPoller *poller) :
         Portal(id, DEFAULT_TILE, GrayCounterIfc_IC_width_ND_4_JC__reqinfo, __internalHandleMessage, NULL, NULL, NULL, this, poller), cb(&GrayCounterIfc_IC_width_ND_4_JC_ProxyReq) {__internalInit();};
     void decrement (  ) { cb->decrement (&pint); };
+    void flag ( const uint32_t v ) { cb->flag (&pint, v); };
     void increment (  ) { cb->increment (&pint); };
-    uint8_t readBin (  ) { cb->readBin (&pint); return __internalWaitReturn(2, 4); };
-    uint8_t readGray (  ) { cb->readGray (&pint); return __internalWaitReturn(3, 4); };
+    uint8_t readBin (  ) { cb->readBin (&pint); return __internalWaitReturn(3, 4); };
+    uint8_t readGray (  ) { cb->readGray (&pint); return __internalWaitReturn(4, 4); };
     void writeBin ( const uint8_t v ) { cb->writeBin (&pint, v); };
     void writeGray ( const uint8_t v ) { cb->writeGray (&pint, v); };
 

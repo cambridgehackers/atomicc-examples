@@ -6,6 +6,9 @@ module GrayCounter #(
     input wire CLK, input wire nRST,
     input wire ifc$decrement__ENA,
     output wire ifc$decrement__RDY,
+    input wire ifc$flag__ENA,
+    input wire [32 - 1:0]ifc$flag$v,
+    output wire ifc$flag__RDY,
     input wire ifc$increment__ENA,
     output wire ifc$increment__RDY,
     output wire [width - 1:0]ifc$readBin,
@@ -21,8 +24,14 @@ module GrayCounter #(
     reg [width - 1:0]counter;
     wire RULE$incdec$useLsb;
     wire [10 - 1:0]ifc$readBin$temp;
+    wire trace$flag__RDY;
     genvar __inst$Genvar1;
+    VsimTrace trace (.CLK(CLK), .nRST(nRST),
+        .flag__ENA(ifc$flag__ENA),
+        .flag$v(ifc$flag$v),
+        .flag__RDY(trace$flag__RDY));
     assign ifc$decrement__RDY = 1;
+    assign ifc$flag__RDY = trace$flag__RDY;
     assign ifc$increment__RDY = 1;
     assign ifc$readBin = ifc$readBin$temp;
     assign ifc$readBin__RDY = 1;

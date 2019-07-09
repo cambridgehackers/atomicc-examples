@@ -21,8 +21,17 @@
 #include "atomicc.h"
 #include "grayCounter.h"
 
+__interface TraceIfc {
+    void flag(int v);
+};
+
+__emodule VsimTrace {
+    TraceIfc _;
+};
+
 template <int width>
 __module GrayCounter {
+    VsimTrace trace;
     GrayCounterIfc<width> ifc;
     __uint(width) counter;
     __shared __uint(width) m;
@@ -36,6 +45,9 @@ printf("[%s] counter %x\n", __FUNCTION__, counter);
 
     __uint(width) ifc.readGray() {
         return counter;
+    }
+    void ifc.flag(int v) {
+        trace._.flag(v);
     }
     void ifc.writeGray(__uint(width) v) {
 printf("[%s] v %x\n", __FUNCTION__, v);

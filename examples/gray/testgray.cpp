@@ -21,9 +21,10 @@
 #include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
-#include <semaphore.h>
 #include "GrayCounterIfc_IC_width_ND_4_JC_.h"
 void atomiccPrintfInit(const char *filename);
+
+extern "C" int global_sim_fd;
 
 int main(int argc, const char **argv)
 {
@@ -35,16 +36,21 @@ int main(int argc, const char **argv)
     param.pint = &mcommon->pint;
     GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(
         IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
-    request->writeGray(4);
-    request->writeBin(3);
+    request->flag(1); // start
+    request->writeGray(0xc);
+    request->writeBin(0xf);
     request->decrement();
     for (int i = 0; i < 18; i++) {
+#if 0
         request->increment();
         int ret = request->readGray();
 printf("[%s:%d]readGray %d\n", __FUNCTION__, __LINE__, ret);
         ret = request->readBin();
 printf("[%s:%d]readBin %d\n", __FUNCTION__, __LINE__, ret);
+#endif
+        request->writeGray(i);
     }
-sleep(2);
+    request->flag(0); // stop
+    request->flag(2); // finish
     return 0;
 }
