@@ -1,4 +1,4 @@
-// Copyright (c) 2018 The Connectal Project
+// Copyright (c) 2019 The Connectal Project
 
 // Permission is hereby granted, free of charge, to any person
 // obtaining a copy of this software and associated documentation
@@ -20,6 +20,27 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32)
+     /* array of inputs */
+    (input  input__ENA [funnelWidth-1:0],
+     input  [dataWidth-1:0] input_v [funnelWidth-1:0],
+     output  input__RDY [funnelWidth-1: 0], 
+     /* merged output */
+     output output__ENA [funnelWidth/2 - 1: 0],
+     output [dataWidth-1:0] output_v [funnelWidth/2 - 1: 0],
+     input output__RDY [funnelWidth/2 - 1: 0]);
+
+    genvar j;
+    for (j = 0; j < funnelWidth / 2; j = j+1) begin
+        wire rvalid = input__ENA[j*2+1];
+        wire lvalid = input__ENA[j*2];
+        assign input__RDY[j*2+1] = rvalid && output__RDY[j];
+        assign input__RDY[j*2] = lvalid && !rvalid && output__RDY[j];
+        assign output_v[j] = rvalid ? input_v[j*2+ 1]: input_v[j*2];
+        assign output__ENA[j] = rvalid | lvalid;
+    end
+endmodule
+//////////////////
 module pipeFunnel #(parameter funnelWidth = 8, parameter dataWidth = 32)
      /* array of inputs */
     (input  input__ENA [funnelWidth-1:0],
@@ -33,30 +54,17 @@ module pipeFunnel #(parameter funnelWidth = 8, parameter dataWidth = 32)
     genvar i,j;
     localparam depth = $clog2(funnelWidth) - 1;
     for(i = 0; i <= depth; i = i+1) begin : level
-        for (j = 0; j < funnelWidth / 2 ** (i+1); j = j+1) begin : node
-            wire [dataWidth-1:0] data;
-            wire valid, rvalid, lvalid, ready;
-            if (i==0) begin
-                assign rvalid = (j * 2 + 1 < funnelWidth) ? input__ENA[j*2+1] : 0;
-                assign lvalid = (j * 2 < funnelWidth) ? input__ENA[j*2] : 0;
-                if (j * 2 + 1 < funnelWidth)
-                    assign input__RDY[j*2+1] = rvalid && ready;
-                if (j * 2 < funnelWidth)
-                    assign input__RDY[j*2] = lvalid && !rvalid && ready;
-                assign data = rvalid ?  ((j * 2 + 1 < funnelWidth) ? input_v[j * 2 + 1] : 0)
-                    : ((j * 2 < funnelWidth) ? input_v[j * 2] : 0);
-            end
-            else begin
-                assign rvalid = level[i-1].node[j*2+1].valid;
-                assign lvalid = level[i-1].node[j*2].valid;
-                assign level[i-1].node[j*2+1].ready = rvalid && ready;
-                assign level[i-1].node[j*2].ready = lvalid && !rvalid && ready;
-                assign data = rvalid ? level[i-1].node[j*2+ 1].data : level[i-1].node[j*2].data;
-            end
-            assign valid = rvalid | lvalid;
-        end
+       wire valid [funnelWidth/2**(i+1) - 1: 0];
+       wire [dataWidth-1:0] data [funnelWidth/2**(i+1) - 1: 0];
+       wire ready [funnelWidth/2**(i+1) - 1: 0];
+       if (i == 0)
+       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(
+           input__ENA, input_v, input__RDY, valid, data, ready);
+       else
+       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(
+           level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
     end
-    assign output_v = level[depth].node[0].data;
-    assign output__ENA = level[depth].node[0].valid;
-    assign level[depth].node[0].ready = output__RDY;
+    assign output_v = level[depth].data;
+    assign output__ENA = level[depth].valid;
+    assign level[depth].ready = output__RDY;
 endmodule

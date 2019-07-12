@@ -8,8 +8,8 @@ include ../makefile.in
 
 SOURCES= iobufVec.cpp fifo.cpp mux.cpp adapter.cpp vsimTop.cpp zynqTop.cpp \
     connectNet2.cpp userTop.cpp resetInverter.cpp testTop.cpp clockTop.cpp \
-    gearNto1.cpp gear1toN.cpp mimo.cpp sizedFifo.cpp configCounter.cpp \
-    grayCounter.cpp
+    mimo.cpp sizedFifo.cpp configCounter.cpp \
+    grayCounter.cpp funnel.cpp
 
 CDIRS=$(patsubst %.cpp, %, $(SOURCES))
 
