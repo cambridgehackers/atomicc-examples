@@ -41,7 +41,7 @@ module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32)
     end
 endmodule
 //////////////////
-module pipeFunnel #(parameter funnelWidth = 8, parameter dataWidth = 32)
+module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32)
      /* array of inputs */
     (input  input__ENA [funnelWidth-1:0],
      input  [dataWidth-1:0] input_v [funnelWidth-1:0],
