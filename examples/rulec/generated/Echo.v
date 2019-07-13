@@ -36,13 +36,6 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
-    FunnelBase#(.funnelWidth(4),.dataWidth(32)) funnel (.CLK(CLK), .nRST(nRST),
-        .input$enq__ENA(0),
-        .input$enq$v(0),
-        .input$enq__RDY(),
-        .output$enq__ENA(),
-        .output$enq$v(),
-        .output$enq__RDY(0));
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;

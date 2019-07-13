@@ -3,7 +3,6 @@
 
 //METASTART; Echo
 //METAEXTERNAL; indication; EchoIndication;
-//METAINTERNAL; funnel; FunnelBase(funnelWidth=4,dataWidth=32);
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA; request$say2__ENA; request$say__ENA
 //METAGUARD; RULE$delay_rule; !( busy_delay | ( !busy ) );
 //METAINVOKE; RULE$respond_rule__ENA; !( v_type == 1 ):indication$heard2__ENA;v_type == 1:indication$heard__ENA;
