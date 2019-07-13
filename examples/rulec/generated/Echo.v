@@ -36,9 +36,9 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
-    FunnelBase#(32) funnel (.CLK(CLK), .nRST(nRST),
-        .input$enq__ENA(0),
-        .input$enq$v(0),
+    FunnelBase#(.funnelWidth(5),.dataWidth(32)) funnel (.CLK(CLK), .nRST(nRST),
+        .input$enq__ENA('{default:0}),
+        .input$enq$v('{default:32'd0}),
         .input$enq__RDY(),
         .output$enq__ENA(),
         .output$enq$v(),

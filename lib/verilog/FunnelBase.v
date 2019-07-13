@@ -20,36 +20,38 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32)
+module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) (
      /* array of inputs */
-    (input  input__ENA [funnelWidth-1:0],
-     input  [dataWidth-1:0] input_v [funnelWidth-1:0],
-     output  input__RDY [funnelWidth-1: 0], 
-     /* merged output */
-     output output__ENA [funnelWidth/2 - 1: 0],
-     output [dataWidth-1:0] output_v [funnelWidth/2 - 1: 0],
-     input output__RDY [funnelWidth/2 - 1: 0]);
+    input CLK, input nRST,
+    input  input$enq__ENA [funnelWidth-1:0],
+    input  [dataWidth-1:0] input$enq$v [funnelWidth-1:0],
+    output  input$enq__RDY [funnelWidth-1: 0],
+    /* merged output */
+    output output$enq__ENA [funnelWidth/2 - 1: 0],
+    output [dataWidth-1:0] output$enq$v [funnelWidth/2 - 1: 0],
+    input output$enq__RDY [funnelWidth/2 - 1: 0]);
 
     genvar j;
     for (j = 0; j < funnelWidth / 2; j = j+1) begin
-        wire rvalid = input__ENA[j*2+1];
-        wire lvalid = input__ENA[j*2];
-        assign input__RDY[j*2+1] = rvalid && output__RDY[j];
-        assign input__RDY[j*2] = lvalid && !rvalid && output__RDY[j];
-        assign output_v[j] = rvalid ? input_v[j*2+ 1]: input_v[j*2];
-        assign output__ENA[j] = rvalid | lvalid;
+        wire rvalid = input$enq__ENA[j*2+1];
+        wire lvalid = input$enq__ENA[j*2];
+        assign input$enq__RDY[j*2+1] = rvalid && output$enq__RDY[j];
+        assign input$enq__RDY[j*2] = lvalid && !rvalid && output$enq__RDY[j];
+        assign output$enq$v[j] = rvalid ? input$enq$v[j*2+ 1]: input$enq$v[j*2];
+        assign output$enq__ENA[j] = rvalid | lvalid;
     end
 endmodule
 //////////////////
-module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32)
+module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) (
      /* array of inputs */
-    (input  input__ENA [funnelWidth-1:0],
-     input  [dataWidth-1:0] input_v [funnelWidth-1:0],
-     output  input__RDY [funnelWidth-1: 0], 
-     /* merged output */
-     output output__ENA,
-     output [dataWidth-1:0] output_v,
-     input output__RDY);
+    input CLK, input nRST,
+    input  input$enq__ENA [funnelWidth-1:0],
+    input  [dataWidth-1:0] input$enq$v [funnelWidth-1:0],
+    output  input$enq__RDY [funnelWidth-1: 0],
+    /* merged output */
+    output output$enq__ENA,
+    output [dataWidth-1:0] output$enq$v,
+    input output$enq__RDY);
 
     genvar i,j;
     localparam depth = $clog2(funnelWidth) - 1;
@@ -58,13 +60,13 @@ module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32)
        wire [dataWidth-1:0] data [funnelWidth/2**(i+1) - 1: 0];
        wire ready [funnelWidth/2**(i+1) - 1: 0];
        if (i == 0)
-       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(
-           input__ENA, input_v, input__RDY, valid, data, ready);
+       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
+           input$enq__ENA, input$enq$v, input$enq__RDY, valid, data, ready);
        else
-       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(
+       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
            level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
     end
-    assign output_v = level[depth].data;
-    assign output__ENA = level[depth].valid;
-    assign level[depth].ready = output__RDY;
+    assign output$enq$v = level[depth].data;
+    assign output$enq__ENA = level[depth].valid;
+    assign level[depth].ready[0] = output$enq__RDY;
 endmodule
