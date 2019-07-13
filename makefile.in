@@ -5,7 +5,8 @@ CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
 SIMMAKE=$(TOPDIR)/../atomicc/simulation/Makefile.verilator
 
-export VERILOG_LIB := $(TOPDIR)/lib/generated/
+VERILOG_LIB_GENERATED := $(TOPDIR)/lib/generated
+export VERILOG_LIB := $(VERILOG_LIB_GENERATED) $(VERILOG_LIB_GENERATED)/../verilog
 CLANGBASE = $(TOPDIR)/../llvm/build/bin/
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc
@@ -52,7 +53,7 @@ zybo:
 	PhysAddrWidth=32 \
 	CONNECTAL_BITS_DEPENDENCES=zybo/hw/mkTop.bit \
 	CONNECTAL_EXENAME=android.exe \
-	VERILOG_PATH=verilog:$(VERILOG_LIB) verilog:$(VERILOG_LIB)/../verilog \
+	VERILOG_PATH="$(VERILOG_LIB)" \
 	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
 
 clean:

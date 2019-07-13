@@ -17,7 +17,7 @@ REPORT_NWORST_TIMING_PATHS?=
 include $(TCLDIR)/Makefile.fpgamake.common
 
 ZynqTop_HEADERFILES = 
-ZynqTop_VFILES = $(wildcard ../generated/*.v $(TOPDIR)/lib/generated/*.v)
+ZynqTop_VFILES = $(wildcard ../generated/*.v $(TOPDIR)/lib/generated/*.v $(TOPDIR)/lib/verilog/*.v $(TOPDIR)/lib/verilog/*.sv)
 ZynqTop_VFILES += $(wildcard $(TOPDIR)/lib/*.sv)
 
 ZynqTop_VHDFILES = 
