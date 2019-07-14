@@ -2,12 +2,12 @@ STRUCT NOCData {
     FIELD Bit(128) data
 }
 INTERFACE GrayCounterIfc(width=4) {
-    METHOD/Action decrement__ENA
     METHOD/Action increment__ENA
-    METHOD readBin Bit(4)
+    METHOD/Action decrement__ENA
     METHOD readGray Bit(4)
-    METHOD/Action writeBin__ENA ( Bit(4) v )
     METHOD/Action writeGray__ENA ( Bit(4) v )
+    METHOD readBin Bit(4)
+    METHOD/Action writeBin__ENA ( Bit(4) v )
 }
 INTERFACE PipeIn {
     METHOD/Action enq__ENA ( NOCData v )

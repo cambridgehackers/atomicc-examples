@@ -13,9 +13,9 @@
 //METASTART; IVector
 //METAEXTERNAL; ind; IndIF;
 //METAINTERNAL; fifo; FifoPong;
-//METAINVOKE; RULE$respond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
-//METAGUARD; RULE$respond; fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY;
+//METAINVOKE; RULE$respond__ENA; :fifo$out$deq__ENA;:fifo$out$first;:ind$heard__ENA;
+//METAGUARD; RULE$respond; fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
 //METARULES; RULE$respond
 `endif

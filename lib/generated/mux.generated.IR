@@ -97,6 +97,13 @@ MODULE MuxPipe {
     INTERFACE/Ptr PipeInH out
     FIELD Fifo1 forwardFifo
     FIELD Fifo1.9 forwardFifol
+    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
+        CALL/Action :out$enq__ENA{in$enq$v,in$enq$length}
+    }
+    METHOD/Action forward$enq__ENA ( NOCData v , Bit(16) length ) {
+        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
+        CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
+    }
     METHOD/Rule/Action RULE$fifoRule__ENA {
         ALLOCA NOCData RULE$fifoRule$agg_2e_tmp
         CALL :forwardFifo$out$first{}
@@ -105,12 +112,5 @@ MODULE MuxPipe {
         CALL/Action :out$enq__ENA{RULE$fifoRule$agg_2e_tmp,forwardFifol$out$first}
         CALL/Action :forwardFifo$out$deq__ENA{}
         CALL/Action :forwardFifol$out$deq__ENA{}
-    }
-    METHOD/Action forward$enq__ENA ( NOCData v , Bit(16) length ) {
-        CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
-        CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
-    }
-    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
-        CALL/Action :out$enq__ENA{in$enq$v,in$enq$length}
     }
 }

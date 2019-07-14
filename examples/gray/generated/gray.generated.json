@@ -16,18 +16,18 @@
     ],
     "interfaces": [
         { "cdecls": [
+                { "dname": "increment", "dparams": [
+                    ] },
                 { "dname": "decrement", "dparams": [
                     ] },
-                { "dname": "increment", "dparams": [
+                { "dname": "readGray", "dparams": [
+                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
+                { "dname": "writeGray", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
                     ] },
                 { "dname": "readBin", "dparams": [
                     ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
-                { "dname": "readGray", "dparams": [
-                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
                 { "dname": "writeBin", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
-                    ] },
-                { "dname": "writeGray", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
                     ] }
             ], "direction": "0", "cname": "GrayCounterIfc_IC_width_ND_4_JC_" }

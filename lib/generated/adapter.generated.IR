@@ -12,15 +12,15 @@ MODULE AdapterFromBus {
     INTERFACE/Ptr PipeInH out
     FIELD Bit(1) waitForEnq
     FIELD Bit(128) buffer
+    METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {
+        STORE :buffer = __bitconcat{__bitsubstr{buffer,((128) - (32)) - (1),0},in$enq$v}
+        STORE ((in$enq$length) == (1)):waitForEnq = (1) != (0)
+    }
     METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
         ALLOCA NOCData RULE$pushValue$agg_2e_tmp
         LET Bit(128) :RULE$pushValue$agg_2e_tmp = buffer
         CALL/Action :out$enq__ENA{RULE$pushValue$agg_2e_tmp,0}
         STORE :waitForEnq = (0) != (0)
-    }
-    METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {
-        STORE :buffer = __bitconcat{__bitsubstr{buffer,((128) - (32)) - (1),0},in$enq$v}
-        STORE ((in$enq$length) == (1)):waitForEnq = (1) != (0)
     }
 }
 MODULE AdapterToBus {
@@ -28,13 +28,13 @@ MODULE AdapterToBus {
     INTERFACE/Ptr PipeInB out
     FIELD Bit(16) remain
     FIELD Bit(128) buffer
+    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if (((remain) == (0))) {
+        STORE :buffer = in$enq$v
+        STORE :remain = (in$enq$length) + (1)
+    }
     METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
         CALL/Action :out$enq__ENA{buffer,remain}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)
-    }
-    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if (((remain) == (0))) {
-        STORE :buffer = in$enq$v
-        STORE :remain = (in$enq$length) + (1)
     }
 }

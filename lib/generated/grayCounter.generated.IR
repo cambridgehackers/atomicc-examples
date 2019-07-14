@@ -1,23 +1,31 @@
 INTERFACE GrayCounterIfc(width=10) {
-    METHOD/Action decrement__ENA
     METHOD/Action increment__ENA
-    METHOD readBin Bit(10)
+    METHOD/Action decrement__ENA
     METHOD readGray Bit(10)
-    METHOD/Action writeBin__ENA ( Bit(10) v )
     METHOD/Action writeGray__ENA ( Bit(10) v )
+    METHOD readBin Bit(10)
+    METHOD/Action writeBin__ENA ( Bit(10) v )
 }
 MODULE GrayCounter(width=10) {
     INTERFACE GrayCounterIfc(width=10) ifc
     FIELD Bit(10) counter
     FIELD/shared Bit(10) m
+    METHOD/Action ifc$increment__ENA
+    METHOD/Action ifc$decrement__ENA
+    METHOD ifc$readGray Bit(10) = ((counter))
+    METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
+        STORE :counter = ifc$writeGray$v
+    }
+    METHOD ifc$readBin Bit(10) = ((ifc$readBin$temp)) {
+        ALLOCA Bit(10) ifc$readBin$temp
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
+    }
+    METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
+        STORE :__bitsubstr{counter,(10) - (1)} = __bitsubstr{ifc$writeBin$v,(10) - (1)}
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) - (1))),((__inst$Genvar1) + (1)),FOR$2Body__ENA
+    }
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) RULE$incdec$useLsb ) {
         STORE ((((__reduce{"|",__bitsubstr{counter,(__inst$Genvar1) - (1),0}}) != (0)) ^ 1) & (((__bitsubstr{counter,__inst$Genvar1}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1))):__bitsubstr{counter,(__inst$Genvar1) + (1)} = (__bitsubstr{counter,(__inst$Genvar1) + (1)}) ^ (1)
-    }
-    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readBin$temp ) {
-        LET Bit(32) :__bitsubstr{ifc$readBin$temp,__inst$Genvar1} = __reduce{"^",__bitsubstr{counter,(10) - (1),__inst$Genvar1}}
-    }
-    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeBin$v ) {
-        STORE :__bitsubstr{counter,__inst$Genvar1} = __reduce{"^",__bitsubstr{ifc$writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
     }
     METHOD/Rule/Action RULE$incdec__ENA if (((ifc$increment__ENA) != (ifc$decrement__ENA))) {
         ALLOCA Bit(1) RULE$incdec$useLsb
@@ -27,18 +35,10 @@ MODULE GrayCounter(width=10) {
         STORE ((((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))):__bitsubstr{counter,(10) - (1)} = (__bitsubstr{counter,(10) - (1)}) ^ (1)
         GENERATE ((((((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) ^ 1) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1)))) | (((__reduce{"|",__bitsubstr{counter,(((10) - (1)) - (1)) - (1),0}}) != (0)) & ((((__bitsubstr{counter,0}) != (0)) & (((RULE$incdec$useLsb) != (0)) ^ 1)) | ((((__bitsubstr{counter,0}) != (0)) ^ 1) & (((RULE$incdec$useLsb) != (0)) ^ 1))))) | ((RULE$incdec$useLsb) != (0))):__inst$Genvar1,(1),((__inst$Genvar1) < ((10) - (2))),((__inst$Genvar1) + (1)),FOR$0Body__ENA
     }
-    METHOD/Action ifc$decrement__ENA
-    METHOD/Action ifc$increment__ENA
-    METHOD ifc$readBin Bit(10) = ((ifc$readBin$temp)) {
-        ALLOCA Bit(10) ifc$readBin$temp
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
+    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readBin$temp ) {
+        LET Bit(32) :__bitsubstr{ifc$readBin$temp,__inst$Genvar1} = __reduce{"^",__bitsubstr{counter,(10) - (1),__inst$Genvar1}}
     }
-    METHOD ifc$readGray Bit(10) = ((counter))
-    METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
-        STORE :__bitsubstr{counter,(10) - (1)} = __bitsubstr{ifc$writeBin$v,(10) - (1)}
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) - (1))),((__inst$Genvar1) + (1)),FOR$2Body__ENA
-    }
-    METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
-        STORE :counter = ifc$writeGray$v
+    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeBin$v ) {
+        STORE :__bitsubstr{counter,__inst$Genvar1} = __reduce{"^",__bitsubstr{ifc$writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
     }
 }

@@ -22,6 +22,7 @@
 //METAINTERNAL; fifo7; FifoPong;
 //METAINTERNAL; fifo8; FifoPong;
 //METAINTERNAL; fifo9; FifoPong;
+//METAGUARD; in$say; 1;
 //METAINVOKE; RULE$respond_rule_0__ENA; :fifo[0].out$deq__ENA;:fifo[0].out$first;:out$heard__ENA;
 //METAEXCLUSIVE; RULE$respond_rule_0__ENA; RULE$respond_rule_1__ENA; RULE$respond_rule_2__ENA; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
 //METAGUARD; RULE$respond_rule_0; ( fifo[ 0 ] . out$first__RDY ) & ( fifo[ 0 ] . out$deq__RDY ) & out$heard__RDY;
@@ -51,6 +52,5 @@
 //METAGUARD; RULE$respond_rule_8; ( fifo[ 8 ] . out$first__RDY ) & ( fifo[ 8 ] . out$deq__RDY ) & out$heard__RDY;
 //METAINVOKE; RULE$respond_rule_9__ENA; :fifo[9].out$deq__ENA;:fifo[9].out$first;:out$heard__ENA;
 //METAGUARD; RULE$respond_rule_9; ( fifo[ 9 ] . out$first__RDY ) & ( fifo[ 9 ] . out$deq__RDY ) & out$heard__RDY;
-//METAGUARD; in$say; 1;
 //METARULES; RULE$respond_rule_0; RULE$respond_rule_1; RULE$respond_rule_2; RULE$respond_rule_3; RULE$respond_rule_4; RULE$respond_rule_5; RULE$respond_rule_6; RULE$respond_rule_7; RULE$respond_rule_8; RULE$respond_rule_9
 `endif

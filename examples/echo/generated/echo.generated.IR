@@ -52,13 +52,13 @@ MODULE Echo {
     INTERFACE EchoRequest sout
     INTERFACE/Ptr EchoIndication ind
     FIELD Fifo1 fifo
+    METHOD/Action sout$say__ENA ( Bit(32) v ) {
+        CALL/Action :fifo$in$enq__ENA{sout$say$v}
+    }
     METHOD/Rule/Action RULE$respond_rule__ENA {
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
         CALL/Action :ind$heard__ENA{fifo$out$first}
-    }
-    METHOD/Action sout$say__ENA ( Bit(32) v ) {
-        CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
 }
 MODULE Fifo1 {

@@ -33,8 +33,8 @@ INTERFACE EchoIndication {
     METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE EchoRequest {
-    METHOD/Action say2__ENA ( Bit(32) meth , Bit(32) v )
     METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
+    METHOD/Action say2__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE PipeIn {
     METHOD/Action enq__ENA ( EchoRequest_data v )
@@ -46,9 +46,9 @@ INTERFACE PipeInH {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE Swap {
-    METHOD/Action x2y__ENA
     METHOD/Action y2x__ENA
     METHOD/Action y2xnull__ENA
+    METHOD/Action x2y__ENA
 }
 EMODULE MuxPipe {
     INTERFACE PipeInH in
@@ -68,20 +68,20 @@ MODULE Connect {
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
     INTERFACE/Ptr EchoIndication indication
-    METHOD/Rule/Action RULE$swap2_rule__ENA {
-        PRINTF :printf{"swap2_rule:Connect\n"}
-        CALL/Action :lEcho$swap$y2xnull__ENA{}
+    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
+        CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
+    }
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
+        CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
     }
     METHOD/Rule/Action RULE$swap_rule__ENA {
         PRINTF :printf{"swap_rule:Connect\n"}
         CALL/Action :lEcho$swap$x2y__ENA{}
         CALL/Action :lEcho$swap$y2x__ENA{}
     }
-    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
-        CALL/Action :lERO_test$request$say2__ENA{request$say2$meth,request$say2$v}
-    }
-    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        CALL/Action :lERO_test$request$say__ENA{request$say$meth,request$say$v}
+    METHOD/Rule/Action RULE$swap2_rule__ENA {
+        PRINTF :printf{"swap2_rule:Connect\n"}
+        CALL/Action :lEcho$swap$y2xnull__ENA{}
     }
 }
 MODULE Echo {
@@ -96,6 +96,29 @@ MODULE Echo {
     FIELD Bit(32) x
     FIELD Bit(32) y
     INTERFACE/Ptr EchoIndication indication
+    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
+        PRINTF :printf{"[%s:%d]Echo\n","request$say",188}
+        STORE :meth_temp = request$say$meth
+        STORE :v_temp = request$say$v
+        STORE :busy = (1) != (0)
+    }
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",194}
+        STORE :meth_temp = request$say2$meth
+        STORE :v_temp = request$say2$v
+        STORE :busy = (1) != (0)
+    }
+    METHOD/Action swap$y2x__ENA {
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2x",200}
+        STORE :x = y
+    }
+    METHOD/Action swap$y2xnull__ENA {
+        PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",204}
+    }
+    METHOD/Action swap$x2y__ENA {
+        PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",208}
+        STORE :y = x
+    }
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         PRINTF :printf{"delay_rule: Echo\n"}
         STORE :busy = (0) != (0)
@@ -108,29 +131,6 @@ MODULE Echo {
         STORE :busy_delay = (0) != (0)
         CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
-    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",194}
-        STORE :meth_temp = request$say2$meth
-        STORE :v_temp = request$say2$v
-        STORE :busy = (1) != (0)
-    }
-    METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) if (((busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say",188}
-        STORE :meth_temp = request$say$meth
-        STORE :v_temp = request$say$v
-        STORE :busy = (1) != (0)
-    }
-    METHOD/Action swap$x2y__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$x2y",208}
-        STORE :y = x
-    }
-    METHOD/Action swap$y2x__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$y2x",200}
-        STORE :x = y
-    }
-    METHOD/Action swap$y2xnull__ENA {
-        PRINTF :printf{"[%s:%d]Echo\n","swap$y2xnull",204}
-    }
 }
 MODULE EchoIndicationInput {
     INTERFACE PipeIn.0 pipe
@@ -138,16 +138,16 @@ MODULE EchoIndicationInput {
     FIELD Bit(1) busy_delay
     FIELD Bit(32) meth_delay
     FIELD Bit(32) v_delay
-    METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"input_rule: EchoIndicationInput\n"}
-        STORE :busy_delay = (0) != (0)
-        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
-    }
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) if (((busy_delay) ^ (1))) {
         PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq$v$tag}
         STORE ((pipe$enq$v$tag) == 1):meth_delay = pipe$enq$v$data$heard$meth
         STORE ((pipe$enq$v$tag) == 1):v_delay = pipe$enq$v$data$heard$v
         STORE ((pipe$enq$v$tag) == 1):busy_delay = (1) != (0)
+    }
+    METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
+        PRINTF :printf{"input_rule: EchoIndicationInput\n"}
+        STORE :busy_delay = (0) != (0)
+        CALL/Action :indication$heard__ENA{meth_delay,v_delay}
     }
 }
 MODULE EchoIndicationOutput {
@@ -157,6 +157,17 @@ MODULE EchoIndicationOutput {
     FIELD EchoIndication_data ind1
     FIELD Bit(1) ind_busy
     FIELD Bit(1) even
+    METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) if (((ind_busy) ^ (1))) {
+        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",116,even}
+        STORE (even):ind1$tag = 1
+        STORE (even):ind1$data$heard$meth = indication$heard$meth
+        STORE (even):ind1$data$heard$v = indication$heard$v
+        STORE ((even) ^ 1):ind0$tag = 1
+        STORE ((even) ^ 1):ind0$data$heard$meth = indication$heard$meth
+        STORE ((even) ^ 1):ind0$data$heard$v = indication$heard$v
+        STORE :ind_busy = (1) != (0)
+        STORE :even = (even) ^ (1)
+    }
     METHOD/Rule/Action RULE$output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
         ALLOCA EchoIndication_data RULE$output_rulee$agg_2e_tmp
         STORE :ind_busy = (0) != (0)
@@ -168,17 +179,6 @@ MODULE EchoIndicationOutput {
         STORE :ind_busy = (0) != (0)
         LET EchoIndication_data :RULE$output_ruleo$agg_2e_tmp = ind1
         CALL/Action :pipe$enq__ENA{RULE$output_ruleo$agg_2e_tmp}
-    }
-    METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) if (((ind_busy) ^ (1))) {
-        PRINTF :printf{"[%s:%d]EchoIndicationOutput even %d\n","indication$heard",116,even}
-        STORE (even):ind1$tag = 1
-        STORE (even):ind1$data$heard$meth = indication$heard$meth
-        STORE (even):ind1$data$heard$v = indication$heard$v
-        STORE ((even) ^ 1):ind0$tag = 1
-        STORE ((even) ^ 1):ind0$data$heard$meth = indication$heard$meth
-        STORE ((even) ^ 1):ind0$data$heard$v = indication$heard$v
-        STORE :ind_busy = (1) != (0)
-        STORE :even = (even) ^ (1)
     }
 }
 MODULE EchoRequestInput {
@@ -193,14 +193,6 @@ MODULE EchoRequestInput {
 MODULE EchoRequestOutput {
     INTERFACE EchoRequest request
     INTERFACE/Ptr PipeIn pipe
-    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoRequest_data request$say2$ind
-        PRINTF :printf{"entered EchoRequestOutput::say2\n"}
-        LET Bit(32) :request$say2$ind$tag = 2
-        LET Bit(32) :request$say2$ind$data$say2$meth = request$say2$meth
-        LET Bit(32) :request$say2$ind$data$say2$v = request$say2$v
-        CALL/Action :pipe$enq__ENA{request$say2$ind}
-    }
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
@@ -208,5 +200,13 @@ MODULE EchoRequestOutput {
         LET Bit(32) :request$say$ind$data$say$meth = request$say$meth
         LET Bit(32) :request$say$ind$data$say$v = request$say$v
         CALL/Action :pipe$enq__ENA{request$say$ind}
+    }
+    METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
+        ALLOCA EchoRequest_data request$say2$ind
+        PRINTF :printf{"entered EchoRequestOutput::say2\n"}
+        LET Bit(32) :request$say2$ind$tag = 2
+        LET Bit(32) :request$say2$ind$data$say2$meth = request$say2$meth
+        LET Bit(32) :request$say2$ind$data$say2$v = request$say2$v
+        CALL/Action :pipe$enq__ENA{request$say2$ind}
     }
 }

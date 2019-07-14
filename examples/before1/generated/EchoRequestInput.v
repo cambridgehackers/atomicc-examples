@@ -5,14 +5,14 @@ module EchoRequestInput (input wire CLK, input wire nRST,
     input wire pipe$enq__ENA,
     input wire [(32 + ((32 + 32) + ((32 + 32) + 32))) - 1:0]pipe$enq$v,
     output wire pipe$enq__RDY,
-    output wire request$say2__ENA,
-    output wire [32 - 1:0]request$say2$meth,
-    output wire [32 - 1:0]request$say2$v,
-    input wire request$say2__RDY,
     output wire request$say__ENA,
     output wire [32 - 1:0]request$say$meth,
     output wire [32 - 1:0]request$say$v,
-    input wire request$say__RDY);
+    input wire request$say__RDY,
+    output wire request$say2__ENA,
+    output wire [32 - 1:0]request$say2$meth,
+    output wire [32 - 1:0]request$say2$v,
+    input wire request$say2__RDY);
     assign pipe$enq__RDY = request$say__RDY & request$say2__RDY;
     assign request$say$meth = pipe$enq$v[ ( (31 + 32) ) : 32 ];
     assign request$say$v = pipe$enq$v[ ( (63 + 32) ) : 64 ];

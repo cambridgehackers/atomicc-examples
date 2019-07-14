@@ -8,12 +8,12 @@ INTERFACE DMem {
     METHOD response Bit(32)
 }
 INTERFACE Decoder {
-    METHOD getAddr ( Bit(32) inst ) Bit(32)
-    METHOD getArithOp ( Bit(32) inst ) Bit(32)
-    METHOD getDst ( Bit(32) inst ) Bit(32)
     METHOD getOp ( Bit(32) inst ) Bit(32)
+    METHOD getArithOp ( Bit(32) inst ) Bit(32)
     METHOD getSrc1 ( Bit(32) inst ) Bit(32)
     METHOD getSrc2 ( Bit(32) inst ) Bit(32)
+    METHOD getDst ( Bit(32) inst ) Bit(32)
+    METHOD getAddr ( Bit(32) inst ) Bit(32)
 }
 INTERFACE Executer {
     METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult

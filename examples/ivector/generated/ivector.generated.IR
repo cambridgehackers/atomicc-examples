@@ -97,6 +97,13 @@ MODULE IVector {
     INTERFACE/Ptr IVectorIndication out
     FIELD Bit(32) vsize
     INTERFACE IVectorRequest in
+    METHOD/Action in$say__ENA ( Bit(32) meth , Bit(32) v ) {
+        ALLOCA ValuePair in$say$agg_2e_tmp
+        ALLOCA ValuePair in$say$temp
+        LET Bit(32) :in$say$temp$b = in$say$v
+        LET ValuePair :in$say$agg_2e_tmp = in$say$temp
+        CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say$agg_2e_tmp}
+    }
     METHOD/Rule/Action RULE$respond_rule_0__ENA {
         ALLOCA ValuePair RULE$respond_rule_0$temp
         CALL :fifo[0]$out$first{}
@@ -166,12 +173,5 @@ MODULE IVector {
         LET ValuePair :RULE$respond_rule_9$temp = fifo[9]$out$first
         CALL/Action :fifo[9]$out$deq__ENA{}
         CALL/Action :out$heard__ENA{9,RULE$respond_rule_9$temp$b}
-    }
-    METHOD/Action in$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA ValuePair in$say$agg_2e_tmp
-        ALLOCA ValuePair in$say$temp
-        LET Bit(32) :in$say$temp$b = in$say$v
-        LET ValuePair :in$say$agg_2e_tmp = in$say$temp
-        CALL/Action :fifo[in$say$meth]$in$enq__ENA{in$say$agg_2e_tmp}
     }
 }

@@ -38,6 +38,10 @@ MODULE UserTop {
     INTERFACE PipeInH wad
     INTERFACE PipeInH indication
     FIELD l_top ctop
+    METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {
+        PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
+        CALL/Action :ctop$request$enq__ENA{wad$enq$v}
+    }
     METHOD/Action indication$enq__ENA ( NOCData v , Bit(16) length ) {
         ALLOCA Bit(16) indication$enq$len
         ALLOCA Bit(16) indication$enq$port
@@ -47,9 +51,5 @@ MODULE UserTop {
         LET Bit(16) :indication$enq$port = 5
         PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq$len}
         CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq$length}
-    }
-    METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {
-        PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
-        CALL/Action :ctop$request$enq__ENA{wad$enq$v}
     }
 }

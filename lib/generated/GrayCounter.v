@@ -4,20 +4,20 @@
 module GrayCounter #(
     parameter integer width = 10)(
     input wire CLK, input wire nRST,
-    input wire ifc$decrement__ENA,
-    output wire ifc$decrement__RDY,
     input wire ifc$increment__ENA,
     output wire ifc$increment__RDY,
-    output wire [width - 1:0]ifc$readBin,
-    output wire ifc$readBin__RDY,
+    input wire ifc$decrement__ENA,
+    output wire ifc$decrement__RDY,
     output wire [width - 1:0]ifc$readGray,
     output wire ifc$readGray__RDY,
-    input wire ifc$writeBin__ENA,
-    input wire [width - 1:0]ifc$writeBin$v,
-    output wire ifc$writeBin__RDY,
     input wire ifc$writeGray__ENA,
     input wire [width - 1:0]ifc$writeGray$v,
-    output wire ifc$writeGray__RDY);
+    output wire ifc$writeGray__RDY,
+    output wire [width - 1:0]ifc$readBin,
+    output wire ifc$readBin__RDY,
+    input wire ifc$writeBin__ENA,
+    input wire [width - 1:0]ifc$writeBin$v,
+    output wire ifc$writeBin__RDY);
     reg [width - 1:0]counter;
     wire RULE$incdec$useLsb;
     wire RULE$incdec__RDY;
@@ -44,12 +44,12 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (RULE$incdec__RDY) begin // RULE$incdec__ENA
-            if (( ( |counter[ ( ( ( width - 1 ) - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
-            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
             if (!( RULE$incdec$useLsb == 0 ))
             counter[ 0 ] <= counter[ 0 ] ^ 1;
             if (counter[ 0 ] & ( RULE$incdec$useLsb == 0 ))
             counter[ ( 0 + 1 ) ] <= counter[ ( 0 + 1 ) ] ^ 1;
+            if (( ( |counter[ ( ( ( width - 1 ) - 1 ) - 1 ) : 0 ] ) == 0 ) & ( RULE$incdec$useLsb == 0 ))
+            counter[ ( width - 1 ) ] <= counter[ ( width - 1 ) ] ^ 1;
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
             counter[ ( width - 1 ) ] <= ifc$writeBin$v[ ( width - 1 ) ];

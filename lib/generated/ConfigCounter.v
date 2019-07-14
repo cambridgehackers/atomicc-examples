@@ -7,17 +7,17 @@ module ConfigCounter #(
     input wire ifc$decrement__ENA,
     input wire [count_sz - 1:0]ifc$decrement$v,
     output wire ifc$decrement__RDY,
-    input wire ifc$increment__ENA,
-    input wire [count_sz - 1:0]ifc$increment$v,
-    output wire ifc$increment__RDY,
     output wire ifc$maybeDecrement,
     input wire ifc$maybeDecrement__ENA,
     input wire [count_sz - 1:0]ifc$maybeDecrement$v,
     output wire ifc$maybeDecrement__RDY,
-    output wire ifc$positive,
-    output wire ifc$positive__RDY,
+    input wire ifc$increment__ENA,
+    input wire [count_sz - 1:0]ifc$increment$v,
+    output wire ifc$increment__RDY,
     output wire [count_sz - 1:0]ifc$read,
-    output wire ifc$read__RDY);
+    output wire ifc$read__RDY,
+    output wire ifc$positive,
+    output wire ifc$positive__RDY);
     reg [count_sz - 1:0]cnt;
     reg positive_reg;
     wire [count_sz - 1:0]dec_wire;
@@ -32,7 +32,6 @@ module ConfigCounter #(
     assign ifc$read = cnt;
     assign ifc$read__RDY = 1;
     // Extra assigments, not to output wires
-    wire[count_sz - 1: 0] ifc$maybeDecr$v = 0;
     assign dec_wire = ( ifc$decrement__ENA ? ifc$decrement$v : 0 ) | ( ( ifc$maybeDecrement__ENA & ( cnt >= ifc$maybeDecr$v ) ) ? ifc$maybeDecr$v : 0 );
     assign ifc$maybeDecrement$retval = ( cnt >= ifc$maybeDecr$v ) ? 1'd1 : 1'd0;
     assign inc_wire = ifc$increment$v;
