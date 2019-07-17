@@ -2,6 +2,7 @@
 #ifndef _GRAYCOUNTERIFC_IC_WIDTH_ND_4_JC__H_
 #define _GRAYCOUNTERIFC_IC_WIDTH_ND_4_JC__H_
 #include "portal.h"
+#include <fcntl.h>
 #include <semaphore.h>
 
 class GrayCounterIfc_IC_width_ND_4_JC_Proxy : public Portal {
