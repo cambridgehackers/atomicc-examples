@@ -31,7 +31,11 @@ int main(int argc, const char **argv)
     int ret;
     //atomiccPrintfInit("generated/rulec.generated.printf");
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
+#ifdef SIMULATION
         &transportSocketInit,
+#else
+        &transportPortal,
+#endif
         NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;

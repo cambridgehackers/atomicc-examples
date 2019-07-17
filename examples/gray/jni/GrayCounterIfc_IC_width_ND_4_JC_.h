@@ -26,10 +26,14 @@ private:
         return ((GrayCounterIfc_IC_width_ND_4_JC_Proxy *)p->parent)->__internalResponse(p, channel);
     }
     sem_t *__internalWaitSemaphore;
+    sem_t __internalWaitSemaphoreBody;
     uint64_t __internalWaitResult;
     int __internalWaitMethod, __internalWaitSize;
     void __internalInit() {
         if ((__internalWaitSemaphore = sem_open("/semaphore", O_CREAT, 0644, 0)) == SEM_FAILED) {
+            __internalWaitSemaphore = &__internalWaitSemaphoreBody;
+            if (sem_init(__internalWaitSemaphore, 1, 0) == 0)
+                return;
             perror("sem_open failed");
             exit(-1);
         }
