@@ -64,23 +64,23 @@ module Lpm (input wire CLK, input wire nRST,
         .ifc$resValue(mem$ifc$resValue),
         .ifc$resValue__RDY(mem$ifc$resValue__RDY));
     assign fifo$in$enq$v = ( RULE$recirc__RDY ? { RULE$recirc$agg_2e_tmp$state , fifo$out$first[ 16 - 1 + 4 : 4 ] , fifo$out$first[ 4 - 1 : 0 ] } : 23'd0 ) | ( RULE$enter__RDY ? { 3'd0 , inQ$out$first[ 15 : 0 ] , 4'd0 } : 23'd0 );
-    assign fifo$in$enq__ENA = RULE$recirc__RDY | RULE$enter__RDY;
-    assign fifo$out$deq__ENA = RULE$recirc__RDY | RULE$exitr__RDY;
+    assign fifo$in$enq__ENA = RULE$recirc__RDY || RULE$enter__RDY;
+    assign fifo$out$deq__ENA = RULE$recirc__RDY || RULE$exitr__RDY;
     assign mem$ifc$req$v = ( RULE$recirc__RDY ? ( mem$ifc$resValue + ( ( fifo$out$first[ ( ( 3 - 1 ) + 20 ) : 20 ] == 1 ) ? RULE$recirc$y$IPA[ 15 : 8 ] : RULE$recirc$y$IPA[ 7 : 0 ] ) ) : 32'd0 ) | ( RULE$enter__RDY ? ( 32'd0 + inQ$out$first[ 31 : 16 ] ) : 32'd0 );
-    assign mem$ifc$req__ENA = RULE$recirc__RDY | RULE$enter__RDY;
-    assign mem$ifc$resAccept__ENA = RULE$recirc__RDY | RULE$exitr__RDY;
+    assign mem$ifc$req__ENA = RULE$recirc__RDY || RULE$enter__RDY;
+    assign mem$ifc$resAccept__ENA = RULE$recirc__RDY || RULE$exitr__RDY;
     assign outQ$enq$v = mem$ifc$resValue;
     assign outQ$enq__ENA = RULE$exitr__RDY;
     assign request$enter__RDY = inQ$in$enq__RDY;
     // Extra assigments, not to output wires
     assign RULE$enter$agg_2e_tmp = { 3'd0 , inQ$out$first[ 15 : 0 ] , 4'd0 };
-    assign RULE$enter__RDY = !( RULE$recirc__RDY | ( !( inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY ) ) );
-    assign RULE$exitr__RDY = !( RULE$recirc__RDY | ( !( mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$enq__RDY ) ) | ( !( ( mem$ifc$resValue & 1 ) == 1 ) ) );
+    assign RULE$enter__RDY = !( RULE$recirc__RDY || ( !( inQ$out$first__RDY && inQ$out$deq__RDY && fifo$in$enq__RDY && mem$ifc$req__RDY ) ) );
+    assign RULE$exitr__RDY = !( RULE$recirc__RDY || ( !( mem$ifc$resValue__RDY && fifo$out$first__RDY && mem$ifc$resAccept__RDY && fifo$out$deq__RDY && outQ$enq__RDY ) ) || ( !( ( mem$ifc$resValue & 1 ) == 1 ) ) );
     assign RULE$recirc$agg_2e_tmp = { RULE$recirc$agg_2e_tmp$state , fifo$out$first[ 16 - 1 + 4 : 4 ] , fifo$out$first[ 4 - 1 : 0 ] };
     assign RULE$recirc$agg_2e_tmp$state = fifo$out$first[ 3 - 1 + 20 : 20 ] + 3'd1;
     assign RULE$recirc$y = { fifo$out$first[ 3 - 1 + 20 : 20 ] , fifo$out$first[ 16 - 1 + 4 : 4 ] , fifo$out$first[ 4 - 1 : 0 ] };
     assign RULE$recirc$y$IPA = fifo$out$first[ 16 - 1 + 4 : 4 ];
-    assign RULE$recirc__RDY = !( ( ( mem$ifc$resValue & 1 ) == 1 ) | ( !( mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) );
+    assign RULE$recirc__RDY = !( ( ( mem$ifc$resValue & 1 ) == 1 ) || ( !( mem$ifc$resValue__RDY && fifo$out$first__RDY && mem$ifc$resAccept__RDY && mem$ifc$req__RDY && fifo$out$deq__RDY && fifo$in$enq__RDY ) ) );
 endmodule 
 
 `default_nettype wire    // set back to default value

@@ -100,7 +100,7 @@ module Connect (input wire CLK, input wire nRST,
     assign request$say2__RDY = lERO_test$request$say2__RDY;
     assign request$say__RDY = lERO_test$request$say__RDY;
     // Extra assigments, not to output wires
-    assign RULE$swap_rule__RDY = lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
+    assign RULE$swap_rule__RDY = lEcho$swap$x2y__RDY && lEcho$swap$y2x__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -11,7 +11,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     input wire indication$heard__RDY);
     assign indication$heard$meth = pipe$enq$v[ ( (31 + 32) ) : 32 ];
     assign indication$heard$v = pipe$enq$v[ ( (63 + 32) ) : 64 ];
-    assign indication$heard__ENA = pipe$enq__ENA & ( pipe$enq$v[ ( ( -1 ) + 32 ) : 0 ] == 1 );
+    assign indication$heard__ENA = pipe$enq__ENA && ( pipe$enq$v[ ( ( -1 ) + 32 ) : 0 ] == 1 );
     assign pipe$enq__RDY = indication$heard__RDY;
 endmodule 
 

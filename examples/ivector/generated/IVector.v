@@ -92,28 +92,28 @@ module IVector (input wire CLK, input wire nRST,
     assign in$say__RDY = 1;
     assign out$heard$meth = ( RULE$respond_rule_1__RDY ? 32'd1 : 32'd0 ) | ( RULE$respond_rule_2__RDY ? 32'd2 : 32'd0 ) | ( RULE$respond_rule_3__RDY ? 32'd3 : 32'd0 ) | ( RULE$respond_rule_4__RDY ? 32'd4 : 32'd0 ) | ( RULE$respond_rule_5__RDY ? 32'd5 : 32'd0 ) | ( RULE$respond_rule_6__RDY ? 32'd6 : 32'd0 ) | ( RULE$respond_rule_7__RDY ? 32'd7 : 32'd0 ) | ( RULE$respond_rule_8__RDY ? 32'd8 : 32'd0 ) | ( RULE$respond_rule_9__RDY ? 32'd9 : 32'd0 );
     assign out$heard$v = ( RULE$respond_rule_0__RDY ? fifo[0].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_1__RDY ? fifo[1].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_2__RDY ? fifo[2].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_3__RDY ? fifo[3].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_4__RDY ? fifo[4].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_5__RDY ? fifo[5].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_6__RDY ? fifo[6].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_7__RDY ? fifo[7].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_8__RDY ? fifo[8].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( RULE$respond_rule_9__RDY ? fifo[9].out$first[ 32 - 1 + 32 : 32 ] : 32'd0 );
-    assign out$heard__ENA = RULE$respond_rule_0__RDY | RULE$respond_rule_1__RDY | RULE$respond_rule_2__RDY | RULE$respond_rule_3__RDY | RULE$respond_rule_4__RDY | RULE$respond_rule_5__RDY | RULE$respond_rule_6__RDY | RULE$respond_rule_7__RDY | RULE$respond_rule_8__RDY | RULE$respond_rule_9__RDY;
+    assign out$heard__ENA = RULE$respond_rule_0__RDY || RULE$respond_rule_1__RDY || RULE$respond_rule_2__RDY || RULE$respond_rule_3__RDY || RULE$respond_rule_4__RDY || RULE$respond_rule_5__RDY || RULE$respond_rule_6__RDY || RULE$respond_rule_7__RDY || RULE$respond_rule_8__RDY || RULE$respond_rule_9__RDY;
     // Extra assigments, not to output wires
     assign RULE$respond_rule_0$temp = { fifo[0].out$first[ 32 - 1 + 64 : 64 ] , fifo[0].out$first[ 32 - 1 + 32 : 32 ] , fifo[0].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_0__RDY = ( fifo[ 0 ] . out$first__RDY ) & ( fifo[ 0 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_0__RDY = ( fifo[ 0 ] . out$first__RDY ) && ( fifo[ 0 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_1$temp = { fifo[1].out$first[ 32 - 1 + 64 : 64 ] , fifo[1].out$first[ 32 - 1 + 32 : 32 ] , fifo[1].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_1__RDY = ( fifo[ 1 ] . out$first__RDY ) & ( fifo[ 1 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_1__RDY = ( fifo[ 1 ] . out$first__RDY ) && ( fifo[ 1 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_2$temp = { fifo[2].out$first[ 32 - 1 + 64 : 64 ] , fifo[2].out$first[ 32 - 1 + 32 : 32 ] , fifo[2].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_2__RDY = ( fifo[ 2 ] . out$first__RDY ) & ( fifo[ 2 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_2__RDY = ( fifo[ 2 ] . out$first__RDY ) && ( fifo[ 2 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_3$temp = { fifo[3].out$first[ 32 - 1 + 64 : 64 ] , fifo[3].out$first[ 32 - 1 + 32 : 32 ] , fifo[3].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_3__RDY = ( fifo[ 3 ] . out$first__RDY ) & ( fifo[ 3 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_3__RDY = ( fifo[ 3 ] . out$first__RDY ) && ( fifo[ 3 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_4$temp = { fifo[4].out$first[ 32 - 1 + 64 : 64 ] , fifo[4].out$first[ 32 - 1 + 32 : 32 ] , fifo[4].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_4__RDY = ( fifo[ 4 ] . out$first__RDY ) & ( fifo[ 4 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_4__RDY = ( fifo[ 4 ] . out$first__RDY ) && ( fifo[ 4 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_5$temp = { fifo[5].out$first[ 32 - 1 + 64 : 64 ] , fifo[5].out$first[ 32 - 1 + 32 : 32 ] , fifo[5].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_5__RDY = ( fifo[ 5 ] . out$first__RDY ) & ( fifo[ 5 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_5__RDY = ( fifo[ 5 ] . out$first__RDY ) && ( fifo[ 5 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_6$temp = { fifo[6].out$first[ 32 - 1 + 64 : 64 ] , fifo[6].out$first[ 32 - 1 + 32 : 32 ] , fifo[6].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_6__RDY = ( fifo[ 6 ] . out$first__RDY ) & ( fifo[ 6 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_6__RDY = ( fifo[ 6 ] . out$first__RDY ) && ( fifo[ 6 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_7$temp = { fifo[7].out$first[ 32 - 1 + 64 : 64 ] , fifo[7].out$first[ 32 - 1 + 32 : 32 ] , fifo[7].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_7__RDY = ( fifo[ 7 ] . out$first__RDY ) & ( fifo[ 7 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_7__RDY = ( fifo[ 7 ] . out$first__RDY ) && ( fifo[ 7 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_8$temp = { fifo[8].out$first[ 32 - 1 + 64 : 64 ] , fifo[8].out$first[ 32 - 1 + 32 : 32 ] , fifo[8].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_8__RDY = ( fifo[ 8 ] . out$first__RDY ) & ( fifo[ 8 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_8__RDY = ( fifo[ 8 ] . out$first__RDY ) && ( fifo[ 8 ] . out$deq__RDY ) && out$heard__RDY;
     assign RULE$respond_rule_9$temp = { fifo[9].out$first[ 32 - 1 + 64 : 64 ] , fifo[9].out$first[ 32 - 1 + 32 : 32 ] , fifo[9].out$first[ 32 - 1 : 0 ] };
-    assign RULE$respond_rule_9__RDY = ( fifo[ 9 ] . out$first__RDY ) & ( fifo[ 9 ] . out$deq__RDY ) & out$heard__RDY;
+    assign RULE$respond_rule_9__RDY = ( fifo[ 9 ] . out$first__RDY ) && ( fifo[ 9 ] . out$deq__RDY ) && out$heard__RDY;
     assign fifo[0].out$first$a = fifo[0].out$first[ ( (-1 + 32) ) : 0 ];
     assign fifo[0].out$first$b = fifo[0].out$first[ ( (31 + 32) ) : 32 ];
     assign fifo[0].out$first$c = fifo[0].out$first[ ( (63 + 32) ) : 64 ];
@@ -147,7 +147,7 @@ module IVector (input wire CLK, input wire nRST,
     assign in$say$temp = { in$say$temp$c , in$say$v , in$say$temp$a };
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign fifo[__inst$Genvar1].in$enq$v = { in$say$temp$c , in$say$temp$b , in$say$temp$a };
-        assign fifo[__inst$Genvar1].in$enq__ENA = in$say__ENA & ( __inst$Genvar1 == in$say$meth );
+        assign fifo[__inst$Genvar1].in$enq__ENA = in$say__ENA && ( __inst$Genvar1 == in$say$meth );
     end;
 
     always @( posedge CLK) begin

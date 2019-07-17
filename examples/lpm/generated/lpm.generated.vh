@@ -11,10 +11,10 @@
 //METAGUARD; request$enter; inQ$in$enq__RDY;
 //METAINVOKE; RULE$recirc__ENA; :fifo$in$enq__ENA;:fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$req__ENA;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;
 //METAEXCLUSIVE; RULE$recirc__ENA; RULE$enter__ENA; RULE$exitr__ENA
-//METAGUARD; RULE$recirc; !( ( ( mem$ifc$resValue & 1 ) == 1 ) | ( !( mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & mem$ifc$req__RDY & fifo$out$deq__RDY & fifo$in$enq__RDY ) ) );
+//METAGUARD; RULE$recirc; !( ( ( mem$ifc$resValue & 1 ) == 1 ) || ( !( mem$ifc$resValue__RDY && fifo$out$first__RDY && mem$ifc$resAccept__RDY && mem$ifc$req__RDY && fifo$out$deq__RDY && fifo$in$enq__RDY ) ) );
 //METAINVOKE; RULE$exitr__ENA; :fifo$out$deq__ENA;:fifo$out$first;:mem$ifc$resAccept__ENA;:mem$ifc$resValue;:outQ$enq__ENA;
-//METAGUARD; RULE$exitr; ( ( mem$ifc$resValue & 1 ) == 1 ) & ( RULE$recirc__ENA == 0 ) & mem$ifc$resValue__RDY & fifo$out$first__RDY & mem$ifc$resAccept__RDY & fifo$out$deq__RDY & outQ$enq__RDY;
+//METAGUARD; RULE$exitr; ( ( mem$ifc$resValue & 1 ) == 1 ) && ( RULE$recirc__ENA == 0 ) && mem$ifc$resValue__RDY && fifo$out$first__RDY && mem$ifc$resAccept__RDY && fifo$out$deq__RDY && outQ$enq__RDY;
 //METAINVOKE; RULE$enter__ENA; :fifo$in$enq__ENA;:inQ$out$deq__ENA;:inQ$out$first;:mem$ifc$req__ENA;
-//METAGUARD; RULE$enter; ( RULE$recirc__ENA == 0 ) & inQ$out$first__RDY & inQ$out$deq__RDY & fifo$in$enq__RDY & mem$ifc$req__RDY;
+//METAGUARD; RULE$enter; ( RULE$recirc__ENA == 0 ) && inQ$out$first__RDY && inQ$out$deq__RDY && fifo$in$enq__RDY && mem$ifc$req__RDY;
 //METARULES; RULE$recirc; RULE$exitr; RULE$enter
 `endif

@@ -34,7 +34,7 @@ module IVector (input wire CLK, input wire nRST,
     assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
     assign RULE$respond$temp = { fifo$out$first[ 4 - 1 + 6 : 6 ] , fifo$out$first[ 6 - 1 : 0 ] };
-    assign RULE$respond__RDY = fifo$out$first__RDY & fifo$out$deq__RDY & ind$heard__RDY;
+    assign RULE$respond__RDY = fifo$out$first__RDY && fifo$out$deq__RDY && ind$heard__RDY;
     assign request$say$temp = { request$say$v , request$say$meth };
 
     always @( posedge CLK) begin

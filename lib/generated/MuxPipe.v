@@ -41,15 +41,15 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out$deq__RDY(forwardFifol$out$deq__RDY),
         .out$first(forwardFifol$out$first),
         .out$first__RDY(forwardFifol$out$first__RDY));
-    assign forward$enq__RDY = forwardFifo$in$enq__RDY & forwardFifol$in$enq__RDY;
-    assign forwardFifo$in$enq__ENA = forward$enq__ENA & forward$enq__RDY;
-    assign forwardFifol$in$enq__ENA = forward$enq__ENA & forward$enq__RDY;
-    assign in$enq__RDY = !( forwardFifo$out$first__RDY | ( !out$enq__RDY ) );
-    assign out$enq$length = ( ( in$enq__ENA & in$enq__RDY ) ? in$enq$length : 16'd0 ) | ( RULE$fifoRule__RDY ? forwardFifol$out$first : 16'd0 );
-    assign out$enq$v = ( ( in$enq__ENA & in$enq__RDY ) ? in$enq$v : 128'd0 ) | ( RULE$fifoRule__RDY ? forwardFifo$out$first : 128'd0 );
-    assign out$enq__ENA = ( in$enq__ENA & ( in$enq__RDY | RULE$fifoRule__RDY ) ) | ( ( !in$enq__ENA ) & RULE$fifoRule__RDY );
+    assign forward$enq__RDY = forwardFifo$in$enq__RDY && forwardFifol$in$enq__RDY;
+    assign forwardFifo$in$enq__ENA = forward$enq__ENA && forward$enq__RDY;
+    assign forwardFifol$in$enq__ENA = forward$enq__ENA && forward$enq__RDY;
+    assign in$enq__RDY = !( forwardFifo$out$first__RDY || ( !out$enq__RDY ) );
+    assign out$enq$length = ( ( in$enq__ENA && in$enq__RDY ) ? in$enq$length : 16'd0 ) | ( RULE$fifoRule__RDY ? forwardFifol$out$first : 16'd0 );
+    assign out$enq$v = ( ( in$enq__ENA && in$enq__RDY ) ? in$enq$v : 128'd0 ) | ( RULE$fifoRule__RDY ? forwardFifo$out$first : 128'd0 );
+    assign out$enq__ENA = ( in$enq__ENA && ( in$enq__RDY || RULE$fifoRule__RDY ) ) || ( ( !in$enq__ENA ) && RULE$fifoRule__RDY );
     // Extra assigments, not to output wires
-    assign RULE$fifoRule__RDY = forwardFifo$out$first__RDY & forwardFifol$out$first__RDY & out$enq__RDY & forwardFifo$out$deq__RDY & forwardFifol$out$deq__RDY;
+    assign RULE$fifoRule__RDY = forwardFifo$out$first__RDY && forwardFifol$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY && forwardFifol$out$deq__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value

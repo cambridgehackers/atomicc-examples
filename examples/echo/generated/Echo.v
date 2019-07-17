@@ -23,7 +23,7 @@ module Echo (input wire CLK, input wire nRST,
     assign ind$heard__ENA = RULE$respond_rule__RDY;
     assign sout$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign RULE$respond_rule__RDY = fifo$out$deq__RDY & fifo$out$first__RDY & ind$heard__RDY;
+    assign RULE$respond_rule__RDY = fifo$out$deq__RDY && fifo$out$first__RDY && ind$heard__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value

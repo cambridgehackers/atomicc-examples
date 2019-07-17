@@ -28,11 +28,11 @@ module LpmMemory (input wire CLK, input wire nRST,
         if (RULE$memdelay_rule__RDY) begin // RULE$memdelay_rule__ENA
             delayCount <= delayCount - 1;
         end; // End of RULE$memdelay_rule__ENA
-        if (ifc$req__ENA & ifc$req__RDY) begin // ifc$req__ENA
+        if (ifc$req__ENA && ifc$req__RDY) begin // ifc$req__ENA
             delayCount <= 4;
             saved <= ifc$req$v;
         end; // End of ifc$req__ENA
-        if (ifc$resAccept__ENA & ifc$resAccept__RDY) begin // ifc$resAccept__ENA
+        if (ifc$resAccept__ENA && ifc$resAccept__RDY) begin // ifc$resAccept__ENA
             delayCount <= 0;
         end; // End of ifc$resAccept__ENA
       end

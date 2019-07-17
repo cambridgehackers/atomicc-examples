@@ -21,10 +21,10 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     wire RULE$output_ruleo__RDY;
     assign indication$heard__RDY = !ind_busy;
     assign pipe$enq$v = ( RULE$output_rulee__RDY ? { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag } : 0 ) | ( RULE$output_ruleo__RDY ? { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag } : 0 );
-    assign pipe$enq__ENA = RULE$output_rulee__RDY | RULE$output_ruleo__RDY;
+    assign pipe$enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
-    assign RULE$output_rulee__RDY = ind_busy & even & pipe$enq__RDY;
-    assign RULE$output_ruleo__RDY = !( even | ( !( pipe$enq__RDY & ind_busy ) ) );
+    assign RULE$output_rulee__RDY = ind_busy && even && pipe$enq__RDY;
+    assign RULE$output_ruleo__RDY = !( even || ( !( pipe$enq__RDY && ind_busy ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -44,7 +44,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         if (RULE$output_ruleo__RDY) begin // RULE$output_ruleo__ENA
             ind_busy <= 0 != 0;
         end; // End of RULE$output_ruleo__ENA
-        if (indication$heard__ENA & indication$heard__RDY) begin // indication$heard__ENA
+        if (indication$heard__ENA && indication$heard__RDY) begin // indication$heard__ENA
             ind_busy <= 1 != 0;
             even <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 116 , even );

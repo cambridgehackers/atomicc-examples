@@ -41,25 +41,25 @@ module FifoPong (input wire CLK, input wire nRST,
         .out$deq__RDY(element2$out$deq__RDY),
         .out$first(element2$out$first),
         .out$first__RDY(element2$out$first__RDY));
-    assign element1$in$enq__ENA = !( pong | ( !( in$enq__RDY & in$enq__ENA ) ) );
-    assign element1$out$deq__ENA = !( pong | ( !( out$deq__RDY & out$deq__ENA ) ) );
-    assign element2$in$enq__ENA = in$enq__ENA & in$enq__RDY & pong;
-    assign element2$out$deq__ENA = out$deq__ENA & out$deq__RDY & pong;
-    assign in$enq__RDY = ( element2$in$enq__RDY & ( pong | element1$in$enq__RDY ) ) | ( ( !element2$in$enq__RDY ) & ( !( pong | ( !element1$in$enq__RDY ) ) ) );
-    assign out$deq__RDY = ( element2$out$deq__RDY & ( pong | element1$out$deq__RDY ) ) | ( ( !element2$out$deq__RDY ) & ( !( pong | ( !element1$out$deq__RDY ) ) ) );
+    assign element1$in$enq__ENA = !( pong || ( !( in$enq__RDY && in$enq__ENA ) ) );
+    assign element1$out$deq__ENA = !( pong || ( !( out$deq__RDY && out$deq__ENA ) ) );
+    assign element2$in$enq__ENA = in$enq__ENA && in$enq__RDY && pong;
+    assign element2$out$deq__ENA = out$deq__ENA && out$deq__RDY && pong;
+    assign in$enq__RDY = ( element2$in$enq__RDY && ( pong || element1$in$enq__RDY ) ) || ( ( !element2$in$enq__RDY ) && ( !( pong || ( !element1$in$enq__RDY ) ) ) );
+    assign out$deq__RDY = ( element2$out$deq__RDY && ( pong || element1$out$deq__RDY ) ) || ( ( !element2$out$deq__RDY ) && ( !( pong || ( !element1$out$deq__RDY ) ) ) );
     assign out$first = { out$first$retval$c , out$first$retval$b , out$first$retval$a };
-    assign out$first__RDY = ( element2$out$first__RDY & ( pong | element1$out$first__RDY ) ) | ( ( !element2$out$first__RDY ) & ( !( pong | ( !element1$out$first__RDY ) ) ) );
+    assign out$first__RDY = ( element2$out$first__RDY && ( pong || element1$out$first__RDY ) ) || ( ( !element2$out$first__RDY ) && ( !( pong || ( !element1$out$first__RDY ) ) ) );
     // Extra assigments, not to output wires
-    assign out$first$retval$a = ( ( out$first__RDY & pong ) ? element2$out$first[ 32 - 1 : 0 ] : 32'd0 ) | ( ( !( pong | ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 : 0 ] : 32'd0 );
-    assign out$first$retval$b = ( ( out$first__RDY & pong ) ? element2$out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( ( !( pong | ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 + 32 : 32 ] : 32'd0 );
-    assign out$first$retval$c = ( ( out$first__RDY & pong ) ? element2$out$first[ 32 - 1 + 64 : 64 ] : 32'd0 ) | ( ( !( pong | ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 + 64 : 64 ] : 32'd0 );
+    assign out$first$retval$a = ( ( out$first__RDY && pong ) ? element2$out$first[ 32 - 1 : 0 ] : 32'd0 ) | ( ( !( pong || ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 : 0 ] : 32'd0 );
+    assign out$first$retval$b = ( ( out$first__RDY && pong ) ? element2$out$first[ 32 - 1 + 32 : 32 ] : 32'd0 ) | ( ( !( pong || ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 + 32 : 32 ] : 32'd0 );
+    assign out$first$retval$c = ( ( out$first__RDY && pong ) ? element2$out$first[ 32 - 1 + 64 : 64 ] : 32'd0 ) | ( ( !( pong || ( !out$first__RDY ) ) ) ? element1$out$first[ 32 - 1 + 64 : 64 ] : 32'd0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
         pong <= 0;
       end // nRST
       else begin
-        if (out$deq__ENA & out$deq__RDY) begin // out$deq__ENA
+        if (out$deq__ENA && out$deq__RDY) begin // out$deq__ENA
             pong <= pong ^ 1;
         end; // End of out$deq__ENA
       end

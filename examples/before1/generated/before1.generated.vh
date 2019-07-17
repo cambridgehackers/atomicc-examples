@@ -13,7 +13,7 @@
 //METAINVOKE; request$say2__ENA; :lERO_test$request$say2__ENA;
 //METAGUARD; request$say2; lERO_test$request$say2__RDY;
 //METAINVOKE; RULE$swap_rule__ENA; :lEcho$swap$x2y__ENA;:lEcho$swap$y2x__ENA;
-//METAGUARD; RULE$swap_rule; lEcho$swap$x2y__RDY & lEcho$swap$y2x__RDY;
+//METAGUARD; RULE$swap_rule; lEcho$swap$x2y__RDY && lEcho$swap$y2x__RDY;
 //METAINVOKE; RULE$swap2_rule__ENA; :lEcho$swap$y2xnull__ENA;
 //METAGUARD; RULE$swap2_rule; lEcho$swap$y2xnull__RDY;
 //METARULES; RULE$swap_rule; RULE$swap2_rule
@@ -39,16 +39,16 @@
 //METAGUARD; swap$y2xnull; 1;
 //METAGUARD; swap$x2y; 1;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA
-//METAGUARD; RULE$delay_rule; !( busy_delay | ( !busy ) );
+//METAGUARD; RULE$delay_rule; !( busy_delay || ( !busy ) );
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;
-//METAGUARD; RULE$respond_rule; busy_delay & indication$heard__RDY;
+//METAGUARD; RULE$respond_rule; busy_delay && indication$heard__RDY;
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; EchoIndicationInput
 //METAEXTERNAL; indication; EchoIndication;
 //METAEXCLUSIVE; pipe$enq__ENA; RULE$input_rule__ENA
 //METAGUARD; pipe$enq; !busy_delay;
 //METAINVOKE; RULE$input_rule__ENA; :indication$heard__ENA;
-//METAGUARD; RULE$input_rule; busy_delay & indication$heard__RDY;
+//METAGUARD; RULE$input_rule; busy_delay && indication$heard__RDY;
 //METARULES; RULE$input_rule
 //METASTART; EchoIndicationOutput
 //METAEXTERNAL; pipe; PipeIn.0;
@@ -56,14 +56,14 @@
 //METAGUARD; indication$heard; !ind_busy;
 //METAINVOKE; RULE$output_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULE$output_rulee__ENA; RULE$output_ruleo__ENA
-//METAGUARD; RULE$output_rulee; ind_busy & even & pipe$enq__RDY;
+//METAGUARD; RULE$output_rulee; ind_busy && even && pipe$enq__RDY;
 //METAINVOKE; RULE$output_ruleo__ENA; :pipe$enq__ENA;
-//METAGUARD; RULE$output_ruleo; !( even | ( !( pipe$enq__RDY & ind_busy ) ) );
+//METAGUARD; RULE$output_ruleo; !( even || ( !( pipe$enq__RDY && ind_busy ) ) );
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
 //METAEXTERNAL; request; EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:request$say2__ENA;pipe$enq$v$tag == 1:request$say__ENA;
-//METAGUARD; pipe$enq; request$say__RDY & request$say2__RDY;
+//METAGUARD; pipe$enq; request$say__RDY && request$say2__RDY;
 //METASTART; EchoRequestOutput
 //METAEXTERNAL; pipe; PipeIn;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;

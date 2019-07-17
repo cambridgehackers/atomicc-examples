@@ -689,9 +689,9 @@ module P7Wrap (
     assign MAXIGP0_O$AW__ENA = RULE$gp0aw__RDY;
     assign MAXIGP0_O$W__ENA = RULE$gp0w__RDY;
     // Extra assigments, not to output wires
-    assign RULE$gp0ar__RDY = pps$MAXIGP0ARVALID & MAXIGP0_O$AR__RDY;
-    assign RULE$gp0aw__RDY = pps$MAXIGP0AWVALID & MAXIGP0_O$AW__RDY;
-    assign RULE$gp0w__RDY = pps$MAXIGP0WVALID & MAXIGP0_O$W__RDY;
+    assign RULE$gp0ar__RDY = pps$MAXIGP0ARVALID && MAXIGP0_O$AR__RDY;
+    assign RULE$gp0aw__RDY = pps$MAXIGP0AWVALID && MAXIGP0_O$AW__RDY;
+    assign RULE$gp0w__RDY = pps$MAXIGP0WVALID && MAXIGP0_O$W__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value
