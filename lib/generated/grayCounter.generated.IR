@@ -8,40 +8,58 @@ INTERFACE GrayCounterIfc(width=10) {
 }
 MODULE GrayCounter(width=10) {
     INTERFACE GrayCounterIfc(width=10) ifc
-    FIELD Bit(10) counter
+    FIELD/Count 10  Bit(1) counter
     FIELD/shared Bit(10) m
     METHOD/Action ifc$increment__ENA
     METHOD/Action ifc$decrement__ENA
-    METHOD ifc$readGray Bit(10) = ((counter))
-    METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
-    }
-    METHOD ifc$readBin Bit(10) = ((ifc$readBin$temp)) {
-        ALLOCA Bit(10) ifc$readBin$temp
+    METHOD ifc$readGray Bit(10) = ((ifc$readGray$ctemp)) {
+        ALLOCA Bit(10) ifc$readGray$ctemp
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$2Body__ENA
     }
-    METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
+    METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$3Body__ENA
     }
-    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) RULE$incdec$useLsb ) {
-        STORE ((__inst$Genvar1) == (0)):__bitsubstr{counter,__inst$Genvar1} = (__bitsubstr{counter,__inst$Genvar1}) ^ (RULE$incdec$useLsb)
-        STORE :__bitsubstr{counter,__inst$Genvar1} = (__bitsubstr{counter,__inst$Genvar1}) ^ ((((RULE$incdec$useLsb) != (0)) ^ (1)) & (__bitsubstr{counter,__phi((((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1))):(0), ((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))):((__inst$Genvar1) - (1)))}))
-        STORE :__bitsubstr{counter,__inst$Genvar1} = (__bitsubstr{counter,__inst$Genvar1}) ^ ((((RULE$incdec$useLsb) != (0)) ^ (1)) & (((__reduce{"|",__bitsubstr{counter,__phi((((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))):(0), ((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1)))
-        STORE :__bitsubstr{counter,__inst$Genvar1} = (__bitsubstr{counter,__inst$Genvar1}) ^ (((((RULE$incdec$useLsb) != (0)) ^ (1)) & (__bitsubstr{counter,__phi((((__inst$Genvar1) < (2)) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))):(0), ((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))):((__inst$Genvar1) - (1)))})) & (((__reduce{"|",__bitsubstr{counter,__phi((((__inst$Genvar1) < (2)) & (((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))))):(0), ((((__inst$Genvar1) < (2)) ^ 1) & (((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) < ((10) - (1))) & (((__inst$Genvar1) >= (2)) & ((((((__inst$Genvar1) < (2)) ^ 1) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((__inst$Genvar1) == ((10) - (1))) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))) | ((((__inst$Genvar1) == ((10) - (1))) ^ 1) & ((((((__inst$Genvar1) < (2)) ^ 1) & ((__inst$Genvar1) == (1))) | (((__inst$Genvar1) < (2)) & ((__inst$Genvar1) == (1)))) | (((__inst$Genvar1) == (1)) ^ 1))))))))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1)))
+    METHOD ifc$readBin Bit(10) = ((ifc$readBin$rtemp)) {
+        ALLOCA Bit(10) ifc$readBin$ctemp
+        ALLOCA Bit(10) ifc$readBin$rtemp
+        ALLOCA ARRAY_10_Bit(1) ifc$readBin$temp
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$4Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$5Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$6Body__ENA
+    }
+    METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$7Body__ENA
+    }
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) RULE$incdec$ctemp ) {
+        LET Bit(32) :__bitsubstr{RULE$incdec$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
+    }
+    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) RULE$incdec$useLsb , Bit(666) RULE$incdec$ctemp ) {
+        STORE :counter[__inst$Genvar1] = (counter[__inst$Genvar1]) ^ (__phi(((__inst$Genvar1) == (0)):(RULE$incdec$useLsb), (((((__inst$Genvar1) < (2)) ^ 1) & (((((__inst$Genvar1) < (1)) ^ 1) & (((__inst$Genvar1) == (0)) ^ 1)) | (((__inst$Genvar1) < (1)) & (((__inst$Genvar1) == (0)) ^ 1)))) | (((__inst$Genvar1) < (2)) & (((((__inst$Genvar1) < (1)) ^ 1) & (((__inst$Genvar1) == (0)) ^ 1)) | (((__inst$Genvar1) < (1)) & (((__inst$Genvar1) == (0)) ^ 1))))):(((((RULE$incdec$useLsb) != (0)) ^ (1)) & (((__inst$Genvar1) == ((10) - (1))) | (__bitsubstr{RULE$incdec$ctemp,__phi((((__inst$Genvar1) < (1)) & (((__inst$Genvar1) == (0)) ^ 1)):(0), ((((__inst$Genvar1) < (1)) ^ 1) & (((__inst$Genvar1) == (0)) ^ 1)):((__inst$Genvar1) - (1)))}))) & (((__inst$Genvar1) == (1)) | (((__reduce{"|",__bitsubstr{RULE$incdec$ctemp,__phi((((__inst$Genvar1) < (2)) & (((((__inst$Genvar1) < (1)) ^ 1) & (((__inst$Genvar1) == (0)) ^ 1)) | (((__inst$Genvar1) < (1)) & (((__inst$Genvar1) == (0)) ^ 1)))):(0), ((((__inst$Genvar1) < (2)) ^ 1) & (((((__inst$Genvar1) < (1)) ^ 1) & (((__inst$Genvar1) == (0)) ^ 1)) | (((__inst$Genvar1) < (1)) & (((__inst$Genvar1) == (0)) ^ 1)))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1))))))
     }
     METHOD/Rule/Action RULE$incdec__ENA if (((ifc$increment__ENA) != (ifc$decrement__ENA))) {
+        ALLOCA Bit(10) RULE$incdec$ctemp
         ALLOCA Bit(1) RULE$incdec$useLsb
-        LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",counter}) == (ifc$decrement__ENA)
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",RULE$incdec$ctemp}) == (ifc$decrement__ENA)
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
     }
-    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeGray$v ) {
-        STORE :__bitsubstr{counter,__inst$Genvar1} = __bitsubstr{ifc$writeGray$v,__inst$Genvar1}
+    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readGray$ctemp ) {
+        LET Bit(32) :__bitsubstr{ifc$readGray$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
     }
-    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readBin$temp ) {
-        LET Bit(32) :__bitsubstr{ifc$readBin$temp,__inst$Genvar1} = __reduce{"^",__bitsubstr{counter,(10) - (1),__inst$Genvar1}}
+    METHOD/Action FOR$3Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeGray$v ) {
+        STORE :counter[__inst$Genvar1] = __bitsubstr{ifc$writeGray$v,__inst$Genvar1}
     }
-    METHOD/Action FOR$3Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeBin$v ) {
-        STORE ((__inst$Genvar1) == ((10) - (1))):__bitsubstr{counter,__inst$Genvar1} = __bitsubstr{ifc$writeBin$v,__inst$Genvar1}
-        STORE (((__inst$Genvar1) == ((10) - (1))) ^ 1):__bitsubstr{counter,__inst$Genvar1} = __reduce{"^",__bitsubstr{ifc$writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
+    METHOD/Action FOR$4Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readBin$ctemp ) {
+        LET Bit(32) :__bitsubstr{ifc$readBin$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
+    }
+    METHOD/Action FOR$5Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) ifc$readBin$temp , Bit(666) ifc$readBin$ctemp ) {
+        LET Bit(1) :ifc$readBin$temp[__inst$Genvar1] = __reduce{"^",__bitsubstr{ifc$readBin$ctemp,(10) - (1),__inst$Genvar1}}
+    }
+    METHOD/Action FOR$6Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readBin$rtemp , Bit(1) ifc$readBin$temp ) {
+        LET Bit(32) :__bitsubstr{ifc$readBin$rtemp,__inst$Genvar1} = ifc$readBin$temp[__inst$Genvar1]
+    }
+    METHOD/Action FOR$7Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$writeBin$v ) {
+        STORE ((__inst$Genvar1) == ((10) - (1))):counter[__inst$Genvar1] = __bitsubstr{ifc$writeBin$v,__inst$Genvar1}
+        STORE (((__inst$Genvar1) == ((10) - (1))) ^ 1):counter[__inst$Genvar1] = __reduce{"^",__bitsubstr{ifc$writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
     }
 }
