@@ -1,6 +1,6 @@
 include ../../makefile.in
 
-export PROJECT_CPP = testecho.cpp
+CPPFILES = testecho.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace

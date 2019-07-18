@@ -1,6 +1,6 @@
 include ../../makefile.in
 
-export PROJECT_CPP = testgray.cpp
+CPPFILES = testgray.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace

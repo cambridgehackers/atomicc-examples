@@ -1,4 +1,13 @@
 #
+V?=0
+ifeq ($(V),0)
+Q=@
+VERBOSE_SWITCH=
+else
+Q=
+VERBOSE_SWITCH=--verbose
+endif
+
 export DTOP := $(PWD)   # project directory
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR=$(TOPDIR)/../connectal
@@ -38,14 +47,15 @@ CPPFLAGS += -I/usr/include/x86_64-linux-gnu/
 compile: all
 
 verilator:
-	#PROJECT_CPP=$(PROJECT_CPP) 
-	DTOP=$(DTOP) make -f $(SIMMAKE) verilator
+	BOARD=verilator make gen
+	CPPFILES=$(CPPFILES) DTOP=$(DTOP) make -f $(SIMMAKE) verilator
 
 run:
 	#PROJECT_CPP=$(PROJECT_CPP) 
 	DTOP=$(DTOP) make -f $(SIMMAKE) run
 
 zybo:
+	BOARD=zybo make gen
 	BOARD=zybo \
 	MKTOP=mkZynqTop \
 	OS=android \
@@ -55,6 +65,12 @@ zybo:
 	CONNECTAL_EXENAME=android.exe \
 	VERILOG_PATH="$(VERILOG_LIB)" \
 	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
+
+gen:
+	$(CONNECTALSDIR)/scripts/makefilegen.py -B$(BOARD) --project-dir $(BOARD) \
+	$(foreach f, $(CPPFILES), --source $f) \
+	$(foreach f, $(ALL_CPPFILES2), --source2 $f) \
+	$(VERBOSE_SWITCH)
 
 clean:
 	rm -rf verilator zybo SWSOCK*
