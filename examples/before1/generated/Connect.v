@@ -28,6 +28,10 @@ module Connect (input wire CLK, input wire nRST,
     wire lERI$request$say__ENA;
     wire [(32 + ((32 + 32) + ((32 + 32) + 32))) - 1:0]lERO_test$pipe$enq$v;
     wire lERO_test$pipe$enq__ENA;
+    wire [32 - 1:0]lERO_test$request$say$meth;
+    wire [32 - 1:0]lERO_test$request$say$v;
+    wire [32 - 1:0]lERO_test$request$say2$meth;
+    wire [32 - 1:0]lERO_test$request$say2$v;
     wire lERO_test$request$say2__RDY;
     wire lERO_test$request$say__RDY;
     wire [32 - 1:0]lEcho$indication$heard$meth;
@@ -79,12 +83,12 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard__RDY(lEIO$indication$heard__RDY));
     EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(request$say__ENA),
-        .request$say$meth(request$say$meth),
-        .request$say$v(request$say$v),
+        .request$say$meth(lERO_test$request$say$meth),
+        .request$say$v(lERO_test$request$say$v),
         .request$say__RDY(lERO_test$request$say__RDY),
         .request$say2__ENA(request$say2__ENA),
-        .request$say2$meth(request$say2$meth),
-        .request$say2$v(request$say2$v),
+        .request$say2$meth(lERO_test$request$say2$meth),
+        .request$say2$v(lERO_test$request$say2$v),
         .request$say2__RDY(lERO_test$request$say2__RDY),
         .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
         .pipe$enq$v(lERO_test$pipe$enq$v),
@@ -97,6 +101,10 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard$meth(indication$heard$meth),
         .indication$heard$v(indication$heard$v),
         .indication$heard__RDY(indication$heard__RDY));
+    assign lERO_test$request$say$meth = request$say$meth;
+    assign lERO_test$request$say$v = request$say$v;
+    assign lERO_test$request$say2$meth = request$say2$meth;
+    assign lERO_test$request$say2$v = request$say2$v;
     assign request$say2__RDY = lERO_test$request$say2__RDY;
     assign request$say__RDY = lERO_test$request$say__RDY;
     // Extra assigments, not to output wires

@@ -82,7 +82,7 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     assign rf$write__ENA = RULE$writeBack__RDY;
     // Extra assigments, not to output wires
     assign RULE$decode__RDY = ( d2e_valid == 0 ) && pgm$read__RDY && dec$getOp__RDY && dec$getArithOp__RDY && dec$getSrc1__RDY && dec$getSrc2__RDY && dec$getDst__RDY && dec$getAddr__RDY;
-    assign RULE$execArith$val = { exec$basicExec[ 32 - 1 + 64 : 64 ] , exec$basicExec[ 32 - 1 + 32 : 32 ] , exec$basicExec[ 32 - 1 : 0 ] };
+    assign RULE$execArith$val = { RULE$execArith$val$data , RULE$execArith$val$addr , RULE$execArith$val$nextPC };
     assign RULE$execArith$val$addr = exec$basicExec[ 32 - 1 + 32 : 32 ];
     assign RULE$execArith$val$data = exec$basicExec[ 32 - 1 + 64 : 64 ];
     assign RULE$execArith$val$nextPC = exec$basicExec[ 32 - 1 : 0 ];

@@ -23,7 +23,11 @@ module ZynqTop (
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
     inout wire [54 - 1:0]MIO);
+    wire CLK;
+    wire nRST;
+    wire ps7_fclk_0_c$I;
     wire ps7_fclk_0_c$O;
+    wire ps7_freset_0_r$I;
     wire ps7_freset_0_r$O;
     wire [4 - 1:0]ps7_ps7_foo$FCLKCLK;
     wire [4 - 1:0]ps7_ps7_foo$FCLKRESETN;
@@ -41,6 +45,10 @@ module ZynqTop (
     wire [12 - 1:0]ps7_ps7_foo$MAXIGP0_O$W$id;
     wire ps7_ps7_foo$MAXIGP0_O$W$last;
     wire ps7_ps7_foo$MAXIGP0_O$W__ENA;
+    wire ps7_ps7_foo$intrCLK;
+    wire ps7_ps7_foo$intrinterrupt;
+    wire ps7_ps7_foo$intrnRST;
+    wire test$CLK;
     wire [12 - 1:0]test$MAXIGP0_I$B$id;
     wire [2 - 1:0]test$MAXIGP0_I$B$resp;
     wire test$MAXIGP0_I$B__ENA;
@@ -53,6 +61,7 @@ module ZynqTop (
     wire test$MAXIGP0_O$AW__RDY;
     wire test$MAXIGP0_O$W__RDY;
     wire test$interrupt;
+    wire test$nRST;
     P7Wrap ps7_ps7_foo (
         .MAXIGP0_O$AR__ENA(ps7_ps7_foo$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(ps7_ps7_foo$MAXIGP0_O$AR$addr),
@@ -99,9 +108,9 @@ module ZynqTop (
         .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
         .FIXED_IO_ps_porb(FIXED_IO_ps_porb),
         .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb),
-        .intrinterrupt(test$interrupt),
-        .intrCLK(ps7_fclk_0_c$O),
-        .intrnRST(ps7_freset_0_r$O),
+        .intrinterrupt(ps7_ps7_foo$intrinterrupt),
+        .intrCLK(ps7_ps7_foo$intrCLK),
+        .intrnRST(ps7_ps7_foo$intrnRST),
         .MIO(MIO),
         .FCLKCLK(ps7_ps7_foo$FCLKCLK),
         .FCLKCLKTRIGN(0),
@@ -133,14 +142,24 @@ module ZynqTop (
         .MAXIGP0_I$B$resp(test$MAXIGP0_I$B$resp),
         .MAXIGP0_I$B__RDY(ps7_ps7_foo$MAXIGP0_I$B__RDY),
         .interrupt(test$interrupt),
-        .CLK(ps7_fclk_0_c$O),
-        .nRST(ps7_freset_0_r$O));
+        .CLK(test$CLK),
+        .nRST(test$nRST));
     BUFG ps7_fclk_0_c (
-        .I(ps7_ps7_foo$FCLKCLK[ 0 ]),
+        .I(ps7_fclk_0_c$I),
         .O(ps7_fclk_0_c$O));
     BUFG ps7_freset_0_r (
-        .I(ps7_ps7_foo$FCLKRESETN[ 0 ]),
+        .I(ps7_freset_0_r$I),
         .O(ps7_freset_0_r$O));
+    assign ps7_fclk_0_c$I = ps7_ps7_foo$FCLKCLK[ 0 ];
+    assign ps7_freset_0_r$I = ps7_ps7_foo$FCLKRESETN[ 0 ];
+    assign ps7_ps7_foo$intrCLK = CLK;
+    assign ps7_ps7_foo$intrinterrupt = test$interrupt;
+    assign ps7_ps7_foo$intrnRST = nRST;
+    assign test$CLK = CLK;
+    assign test$nRST = nRST;
+    // Extra assigments, not to output wires
+    assign CLK = ps7_fclk_0_c$O;
+    assign nRST = ps7_freset_0_r$O;
 endmodule 
 
 `default_nettype wire    // set back to default value

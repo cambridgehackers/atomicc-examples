@@ -5,7 +5,7 @@ CONNECTALDIR?=$(DTOP)/../../../connectal
 CONNECTALSDIR?=$(DTOP)/../../connectal
 LOCAL_ARM_MODE := arm
 include $(CONNECTALSDIR)/scripts/Makefile.connectal.application
-LOCAL_SRC_FILES := $(DTOP)/testgray.cpp $(PORTAL_SRC_FILES)
+LOCAL_SRC_FILES := $(DTOP)/testecho.cpp $(PORTAL_SRC_FILES)
 
 LOCAL_PATH :=
 LOCAL_MODULE := android.exe

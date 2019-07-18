@@ -14,28 +14,38 @@ module IVector (input wire CLK, input wire nRST,
     reg [((14) / (7)) + ((3) * (2)) - 1:0]fcounter;
     reg [9 - 1:0]gcounter;
     wire [(6 + 4) - 1:0]RULE$respond$temp;
+    wire [6 - 1:0]RULE$respond$temp$a;
+    wire [4 - 1:0]RULE$respond$temp$b;
     wire RULE$respond__RDY;
+    wire [10 - 1:0]fifo$in$enq$v;
     wire fifo$in$enq__RDY;
     wire fifo$out$deq__RDY;
     wire [10 - 1:0]fifo$out$first;
     wire fifo$out$first__RDY;
     wire [(6 + 4) - 1:0]request$say$temp;
+    wire [6 - 1:0]request$say$temp$a;
+    wire [4 - 1:0]request$say$temp$b;
     Fifo1Base#(10) fifo (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
-        .in$enq$v({ request$say$v , request$say$meth }),
+        .in$enq$v(fifo$in$enq$v),
         .in$enq__RDY(fifo$in$enq__RDY),
         .out$deq__ENA(RULE$respond__RDY),
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    assign ind$heard$meth = fifo$out$first[ 6 - 1 : 0 ];
-    assign ind$heard$v = fifo$out$first[ 4 - 1 + 6 : 6 ];
+    assign fifo$in$enq$v = { request$say$temp$b , request$say$temp$a };
+    assign ind$heard$meth = RULE$respond$temp$a;
+    assign ind$heard$v = RULE$respond$temp$b;
     assign ind$heard__ENA = RULE$respond__RDY;
     assign request$say__RDY = fifo$in$enq__RDY;
     // Extra assigments, not to output wires
-    assign RULE$respond$temp = { fifo$out$first[ 4 - 1 + 6 : 6 ] , fifo$out$first[ 6 - 1 : 0 ] };
+    assign RULE$respond$temp = { RULE$respond$temp$b , RULE$respond$temp$a };
+    assign RULE$respond$temp$a = fifo$out$first[ 6 - 1 : 0 ];
+    assign RULE$respond$temp$b = fifo$out$first[ 4 - 1 + 6 : 6 ];
     assign RULE$respond__RDY = fifo$out$first__RDY && fifo$out$deq__RDY && ind$heard__RDY;
-    assign request$say$temp = { request$say$v , request$say$meth };
+    assign request$say$temp = { request$say$temp$b , request$say$temp$a };
+    assign request$say$temp$a = request$say$meth;
+    assign request$say$temp$b = request$say$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin

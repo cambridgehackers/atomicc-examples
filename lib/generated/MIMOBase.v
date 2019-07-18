@@ -14,11 +14,14 @@ module MIMOBase #(
     output wire out$first__RDY);
     reg [widthOut + widthIn - 1:0]buffer;
     reg [$clog2( widthOut + widthIn ) - 1:0]c;
+    wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c >= widthOut );
     assign out$deq__RDY = c >= widthOut;
     assign out$first = buffer;
     assign out$first__RDY = c >= widthOut;
+    // Extra assigments, not to output wires
+    assign m = in$enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -44,7 +47,7 @@ module MIMOBase #(
       else begin
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
             if (( widthOut - __inst$Genvar1 ) == c)
-            buffer[ ( ( __inst$Genvar1 + widthIn ) - 1 ) : __inst$Genvar1 ] <= in$enq$v;
+            buffer[ ( ( __inst$Genvar1 + widthIn ) - 1 ) : __inst$Genvar1 ] <= m;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
