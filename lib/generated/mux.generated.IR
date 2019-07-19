@@ -104,7 +104,7 @@ MODULE MuxPipe {
         CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
         CALL/Action :forwardFifol$in$enq__ENA{forward$enq$length}
     }
-    METHOD/Rule/Action RULE$fifoRule__ENA {
+    METHOD/Rule/Action RULE$fifoRule__ENA if ((((in$enq__ENA) != (0)) ^ (1))) {
         ALLOCA NOCData RULE$fifoRule$agg_2e_tmp
         CALL :forwardFifo$out$first{}
         LET NOCData :RULE$fifoRule$agg_2e_tmp = forwardFifo$out$first

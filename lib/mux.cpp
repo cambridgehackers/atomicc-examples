@@ -41,7 +41,7 @@ public:
         forwardFifo.in.enq(v);
         forwardFifol.in.enq(length);
     }
-    __rule fifoRule {
+    __rule fifoRule if (!__valid(in.enq)) {
         out->enq(forwardFifo.out.first(), forwardFifol.out.first());
         forwardFifo.out.deq();
         forwardFifol.out.deq();

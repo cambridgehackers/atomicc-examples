@@ -53,7 +53,7 @@ module MuxPipe (input wire CLK, input wire nRST,
     assign out$enq$v = ( ( in$enq__ENA && in$enq__RDY ) ? in$enq$v : 128'd0 ) | ( RULE$fifoRule__RDY ? forwardFifo$out$first : 128'd0 );
     assign out$enq__ENA = ( in$enq__ENA && ( in$enq__RDY || RULE$fifoRule__RDY ) ) || ( ( !in$enq__ENA ) && RULE$fifoRule__RDY );
     // Extra assigments, not to output wires
-    assign RULE$fifoRule__RDY = forwardFifo$out$first__RDY && forwardFifol$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY && forwardFifol$out$deq__RDY;
+    assign RULE$fifoRule__RDY = ( in$enq__ENA == 0 ) && forwardFifo$out$first__RDY && forwardFifol$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY && forwardFifol$out$deq__RDY;
 endmodule 
 
 `default_nettype wire    // set back to default value
