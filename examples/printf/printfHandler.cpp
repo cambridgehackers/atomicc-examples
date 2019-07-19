@@ -116,7 +116,7 @@ printf("[%s:%d] read '%s'\n", __FUNCTION__, __LINE__, buf);
         } while (currentp < bufend && !buf[0]);
         bufp = buf;
         lineNumber++;
-        if (currentp >= bufend)
+        if (!buf[0])
             break;
         if (*bufp++ != '"') {
             printf("[%s:%d] formaterror '%s' current %p end %p\n", __FUNCTION__, __LINE__, buf, currentp, bufend);
