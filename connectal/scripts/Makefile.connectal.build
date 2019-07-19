@@ -45,6 +45,12 @@ BINFILE?=bin/mkTop.xdevcfg.bin.gz
 CONNECTAL_EXENAME?=ubuntu.exe
 EXENAME=$(CONNECTAL_EXENAME)
 
+export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
+export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
+SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, TlpReplay.cpp BsimDma.cpp sock_utils.c portalPrintf.c poller.cpp transportSocket.c transportHardware.c portal.c)
+SIM_CXX_LOCAL = $(SIM_CXX_COMMON) $(DTOP)/../jni/GeneratedCppCallbacks.cpp
+
+
 VIVADO=$(shell which vivado)
 export VIVADODIR=$(shell dirname $(shell dirname $(VIVADO))))
 VIVADOFLAGS= -notrace
@@ -58,6 +64,12 @@ extratarget::
 
 exe: $(EXENAME)
 
+ubuntu.exe: prepare_bin_target
+	@echo "ubuntu.exe"
+	$(Q)cd jni; $(MAKE) --no-print-directory -f Ubuntu.mk ubuntu.exe
+	@cp -v jni/ubuntu.exe bin
+	@echo "ubuntu.exe done"
+
 ifneq ($(CONNECTAL_NOHARDWARE),1)
 BITS_DEPENDENCES ?= $(CONNECTAL_BITS_DEPENDENCES)
 endif #hw/mkTop.bit prepare_bin_target
@@ -66,8 +78,8 @@ bits: $(BITS_DEPENDENCES) prepare_bin_target
 ifneq ($(XILINX),)
 ifeq ($(OS),android)
 	@echo "zipping android"
-	cd $(BOARD); $(CONNECTALDIR)/scripts/reorderbytes.py hw/mkTop.bin bin/mkTop.xdevcfg.bin
-	cd $(BOARD); gzip -f bin/mkTop.xdevcfg.bin
+	$(CONNECTALDIR)/scripts/reorderbytes.py hw/mkTop.bin bin/mkTop.xdevcfg.bin
+	gzip -f bin/mkTop.xdevcfg.bin
 else
 ifneq ($(SIMULATION),)
 	@echo "not zipping xilinx"
@@ -76,23 +88,62 @@ ifneq ($(AWSF1),)
 	@echo "not zipping awsf1"
 else
 	@echo "zipping xilinx"
-	cd $(BOARD); gzip -c hw/mkTop.bin > bin/mkTop.bin.gz
+	gzip -c hw/mkTop.bin > bin/mkTop.bin.gz
 endif # AWSF1
 endif #xsim
 endif #android
 else #!xilinx
 endif #!xilinx
-	$(Q)cd $(BOARD); if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --remove-section fpgadata bin/$(EXENAME); fi
-	$(Q)cd $(BOARD); if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --add-section fpgadata=$(BINFILE) bin/$(EXENAME); fi
-	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route.dcp ]; then cp -f Impl/TopDown/top-post-route.dcp bin; fi
-	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route-timing-summary.rpt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.rpt; fi
-	$(Q)cd $(BOARD); if [ -f Impl/TopDown/top-post-route-timing-summary.txt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.txt; fi
+	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --remove-section fpgadata bin/$(EXENAME); fi
+	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --add-section fpgadata=$(BINFILE) bin/$(EXENAME); fi
+	$(Q)if [ -f Impl/TopDown/top-post-route.dcp ]; then cp -f Impl/TopDown/top-post-route.dcp bin; fi
+	$(Q)if [ -f Impl/TopDown/top-post-route-timing-summary.rpt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.rpt; fi
+	$(Q)if [ -f Impl/TopDown/top-post-route-timing-summary.txt ]; then $(CONNECTALDIR)/scripts/check-timing.py Impl/TopDown/top-post-route-timing-summary.txt; fi
 
 android.exe: prepare_bin_target
-	+cd $(BOARD); DTOP=$(DTOP) ndk-build $(CONNECTAL_NDK_PARAM)
-	@cd $(BOARD); cp -fv libs/armeabi/android.exe bin
-	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
-	$(Q)if [ -f $(BOARD)/bin/mkTop.xdevcfg.bin.gz ]; then cd $(BOARD); $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
+	+ndk-build $(CONNECTAL_NDK_PARAM)
+	$(Q)cp -fv libs/armeabi/android.exe bin
+	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
+	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
+
+android.debug.exe: prepare_bin_target
+	+ndk-build $(CONNECTAL_NDK_PARAM) -B V=1 NDK_DEBUG=1
+	@cp -v libs/armeabi/android.exe bin
+	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
+	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
+    
+android.exe2: prepare_bin_target
+	+ndk-build $(CONNECTAL_NDK_PARAM)
+	@cp -fv libs/armeabi/android.exe2 bin
+
+RUN_SCRIPT?=$(CONNECTAL_RUN_SCRIPT)
+
+run:
+ifeq ($(CONNECTAL_SHARED),1)
+	$(RUN_BSC_LM_LICENSE_FILE) $(GDB) $(RUN_SCRIPT) ./bin/$(EXENAME2) $(RUN_ARGS); retcode=$$?; exit $$retcode
+else
+    ifeq ($(RUNSOURCE2),)
+	$(RUN_BSC_LM_LICENSE_FILE) $(GDB) $(RUN_SCRIPT) ./bin/$(EXENAME) $(RUN_ARGS); retcode=$$?; exit $$retcode
+    else
+	$(RUN_BSC_LM_LICENSE_FILE) $(GDB2) $(RUN_SCRIPT) ./bin/$(EXENAME2)& bsim2pid=$$!; $(RUN_SCRIPT) $(GDB) ./bin/$(EXENAME) $(RUN_ARGS); retcode=$$?; kill $$bsim2pid; exit $$retcode
+    endif
+endif # CONNECTAL_SHARED
+
+
+define SIM_C_RULE
+$1/$(notdir $(basename $3)).o: $3
+	mkdir -p $1
+	$(CC) -c $2 -o $1/$(notdir $(basename $3)).o $3
+endef
+define SIM_CXX_RULE
+$1/$(notdir $(basename $3)).o: $3
+	mkdir -p $1
+	$(CXX) -c $2 -o $1/$(notdir $(basename $3)).o $3
+endef
+
+$(foreach src, $(filter %.c, $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)), $(eval $(call SIM_C_RULE, $(DTOP)/lib, $(SIM_CFLAGS), $(src))))
+$(foreach src, $(filter %.cpp, $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)), $(eval $(call SIM_CXX_RULE, $(DTOP)/lib, $(SIM_CXXFLAGS), $(src))))
+SIM_OBJECTS = $(addprefix $(DTOP)/lib/, $(addsuffix .o, $(basename $(notdir $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)))))
 
 VIVADODIR=$(realpath $(shell dirname $(VIVADO))/..)
 
@@ -107,22 +158,46 @@ VHDL_PRJ_FILE = $(wildcard $(addsuffix /xsim/vhdl.prj, $(XCIDIRS)))
 VLOG_PRJ_BLD  = $(addsuffix .bld, $(VLOG_PRJ_FILE))
 VHDL_PRJ_BLD  = $(addsuffix .bld, $(VHDL_PRJ_FILE))
 
+
+vlsim:  $(DTOP)/obj_dir/vlsim
+
+VERILATOR_ARGS?= -O3 -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(DTOP)/jni -I$(DTOP) -D__ATOMICC__ -O $(PROF_FLAGS)" -LDFLAGS "-O $(PROF_FLAGS)" --profile-cfuncs --output-split 20000
+VERILATOR_ARGS += $(VERILATOR_PROJECT_ARGS)
+ACCSIM=$(ATOMICCDIR)/simulation
+
+$(DTOP)/obj_dir/vlsim.mk: $(DTOP)/bin/libconnectal-sim.so verilog
+	rm -fr $(DTOP)/obj_dir
+	verilator -o vlsim --prefix vlsim $(VERILATOR_ARGS) -cc -exe $(CONNECTALSDIR)/../lib/generated/VsimTop.v -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop $(VERILOG_PATH:%=-y %) -Wno-fatal $(ACCSIM)/cpp/verilatortop.cpp -y $(ACCSIM)/verilog -LDFLAGS -L$(DTOP)/bin
+
+$(DTOP)/obj_dir/vlsim: $(DTOP)/obj_dir/vlsim.mk
+	+$(MAKE) USER_LDLIBS="-lconnectal-sim -lpthread" VM_PARALLEL_BUILDS=1 -C obj_dir -f vlsim.mk
+	cp obj_dir/vlsim bin/vlsim
+
+MODELSIMDIR=$(realpath $(dir $(MODELSIM))/..)
+VSIM_CFLAGS= $(CFLAGS_PROJECT) -Wa,-W -fPIC -m64 -I"$(MODELSIMDIR)/include" -DSYSTEM_VERILOG -DBOARD_vsim -I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__
+VSIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -Wa,-W -fPIC -m64 -I"$(MODELSIMDIR)/include" -DSYSTEM_VERILOG -DBOARD_vsim -I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__
+
+$(foreach src, $(filter %.c, $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)), $(eval $(call SIM_C_RULE, vsim.dir/xsc, $(VSIM_CFLAGS), $(src))))
+$(foreach src, $(filter %.cpp, $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)), $(eval $(call SIM_CXX_RULE, vsim.dir/xsc, $(VSIM_CXXFLAGS), $(src))))
+VSIM_OBJECTS = $(addprefix vsim.dir/xsc/, $(addsuffix .o, $(basename $(notdir $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)))))
+
+VSIM_DEFINES = $(subst -D ,+define+,$(BSVDEFINES))
+VSIM_SV = $(addprefix -sv $(CONNECTALDIR)/verilog/, xsimtop.sv XsimDmaReadWrite.sv XsimLink.sv XsimSink.sv XsimSource.sv)
 SV_SEARCH_PATH = $(addprefix -y , $(VERILOG_PATH))
 SV_SEARCH_PATH += $(addprefix -y , $(addsuffix /submodules, $(VERILOG_PATH)))
 SV_SEARCH_PATH += $(addprefix -y , $(addsuffix /submodules/mentor, $(VERILOG_PATH)))
 
-#verilog: $(VFILE)
-#	@echo "verilog"
+$(DTOP)/bin/libconnectal-sim.so: $(SIM_OBJECTS) prepare_bin_target
+	$(Q)mkdir -p $(DTOP)/bin
+	$(CXX) -O -g -I$(DTOP)/jni -shared -fpic $(SIM_CXXFLAGS) -g -o $(DTOP)/bin/libconnectal-sim.so $(SIM_OBJECTS)
 
 prepare_bin_target:
-	@mkdir -p $(BOARD)/bin $(BOARD)/jni $(BOARD)/hw
-	$(THISDIR)/../../../atomicc/scripts/atomiccConfig.py $(BOARD)
-	cp $(VDIR)/fpgamake.mk $(BOARD)
-	cp $(VDIR)/Android.mk $(BOARD)/jni
-	cp $(VDIR)/Application.mk $(BOARD)/jni
+	@mkdir -p $(BOARD) bin jni hw
+
+verilog:
+# $(VFILE)
+#	@echo "verilog"
 
 $(BOARD)/hw/mkTop.bit: prepare_bin_target  $(BOARD)/fpgamake.mk
 	$(Q)$(MAKE) -C $(BOARD) -f fpgamake.mk
 
-synth.%:$(BOARD)/fpgamake.mk
-	$(MAKE) -C $(BOARD) -f fpgamake.mk Synth/$*/$*-synth.dcp

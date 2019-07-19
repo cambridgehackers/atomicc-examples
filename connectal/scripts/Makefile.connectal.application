@@ -25,6 +25,10 @@ else
 Q=
 endif
 
-PORTAL_INFRA := portal.c transportHardware.c portalPrintf.c poller.cpp transportSocket.c transportPortal.c sock_utils.c
+include $(DTOP)/../jni/Makefile.generated_files
+
+PORTAL_INFRA := portal.c transportHardware.c transportSocket.c transportSerial.c portalJson.c portalPrintf.c poller.cpp sock_utils.c timer.c \
+    transportPortal.c
+
 PORTAL_SRC_FILES := $(addprefix $(CONNECTALDIR)/cpp/, $(PORTAL_INFRA)) \
-      $(wildcard $(DTOP)/jni/*.c) $(wildcard $(DTOP)/jni/*.cpp)
+      $(addprefix $(DTOP)/../jni/,  $(GENERATED_CPP))

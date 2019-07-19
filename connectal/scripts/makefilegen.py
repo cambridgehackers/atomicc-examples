@@ -127,7 +127,7 @@ foreach {pat} {CLK_GATE_hdmi_clock_if CLK_*deleteme_unused_clock* CLK_GATE_*dele
 '''
 
 fpgamakeRuleTemplate='''
-export VERILOG_PATH=verilog %(verilog)s $(BLUESPEC_VERILOG)
+export VERILOG_PATH=verilog %(verilog)s $(ATOMICC_VERILOG)
 MODELSIM_FILES= %(modelsim)s
 FPGAMAKE=$(CONNECTALDIR)/../fpgamake/fpgamake
 fpgamake.mk: $(VFILE) Makefile prepare_bin_target
@@ -158,6 +158,8 @@ RUN_ARGS?=%(run_args)s
 
 export DTOP=%(project_dir)s
 CONNECTALDIR=%(connectaldir)s
+CONNECTALSDIR=%(connectalsdir)s
+ATOMICCDIR=%(atomiccdir)s
 BSVPATH = %(bsvpath)s
 
 BOARD=%(boardname)s
@@ -190,7 +192,7 @@ export DUT_NAME = %(Dut)s
 %(mdefines)s
 %(dump_map)s
 
-include $(CONNECTALDIR)/scripts/Makefile.connectal.build
+include $(CONNECTALSDIR)/scripts/Makefile.connectal.build
 
 %(bitsmake)s
 '''
@@ -204,8 +206,9 @@ androidmk_template='''
 include $(CLEAR_VARS)
 DTOP?=%(project_dir)s
 CONNECTALDIR?=%(connectaldir)s
+CONNECTALSDIR?=%(connectalsdir)s
 LOCAL_ARM_MODE := arm
-include $(CONNECTALDIR)/scripts/Makefile.connectal.application
+include $(CONNECTALSDIR)/scripts/Makefile.connectal.application
 LOCAL_SRC_FILES := %(source)s $(PORTAL_SRC_FILES)
 
 LOCAL_PATH :=
@@ -241,6 +244,7 @@ PIN_BINDING=%(pin_binding)s
 
 linuxmakefile_template='''
 CONNECTALDIR?=%(connectaldir)s
+CONNECTALSDIR?=%(connectalsdir)s
 DTOP?=%(project_dir)s
 
 TOOLCHAIN?=%(toolchain)s
@@ -253,7 +257,7 @@ CFLAGS = $(CFLAGS_COMMON)
 CFLAGS2 = %(cdefines2)s
 
 include $(DTOP)/Makefile.autotop
-include $(CONNECTALDIR)/scripts/Makefile.connectal.application
+include $(CONNECTALSDIR)/scripts/Makefile.connectal.application
 SOURCES = %(source)s $(PORTAL_SRC_FILES)
 SOURCES2 = %(source2)s $(PORTAL_SRC_FILES)
 XSOURCES = $(CONNECTALDIR)/cpp/XsimTop.cpp $(PORTAL_SRC_FILES)
@@ -274,7 +278,9 @@ xsim: $(XSOURCES)
 '''
 
 if __name__=='__main__':
-    connectaldir = os.path.dirname((os.path.normpath(os.path.abspath(sys.argv[0])+'/../')))
+    connectaldir = os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[0])))+'/../../../connectal'
+    connectalsdir = os.path.dirname((os.path.normpath(os.path.abspath(sys.argv[0])+'/../')))
+    atomiccdir = os.path.dirname(os.path.normpath(os.path.abspath(sys.argv[0])))+'/../../../atomicc'
     options = argparser.parse_args()
 
     boardname = options.board.lower()
@@ -321,7 +327,7 @@ if __name__=='__main__':
     if 'rewireclockstring' in option_info and option_info['rewireclockstring'] != '':
         rewireclockstring = option_info['rewireclockstring']
 
-    dutname = 'mk' + option_info['TOP']
+    dutname = option_info['TOP']
     topbsv = connectaldir + '/bsv/' + option_info['TOP'] + '.bsv'
     if not os.path.isfile(topbsv):
         topbsv = project_dir + "/../" + option_info['TOP'] + '.bsv'
@@ -376,6 +382,8 @@ if __name__=='__main__':
     if fpga_vendor:
         options.verilog.append(os.path.join(connectaldir, 'verilog', fpga_vendor))
     options.verilog.append(os.path.join(connectaldir, 'verilog'))
+    options.verilog.append(os.path.join(connectalsdir, '../lib/generated'))
+    options.verilog.append(os.path.join(project_dir, '../generated'))
 
     if noisyFlag:
         pprint.pprint(options.__dict__)
@@ -398,6 +406,7 @@ if __name__=='__main__':
         'source': ' '.join([os.path.abspath(sf) for sf in options.source]) if options.source else '',
         'source2': ' '.join([os.path.abspath(sf) for sf in options.source2]) if options.source2 else '',
         'connectaldir': connectaldir,
+        'connectalsdir': connectalsdir,
         'clibs': ' '.join(['-l%s' % l for l in options.clib]),
         'clibfiles': ' '.join(['%s' % l for l in options.clibfiles]),
         'clibdirs': ' '.join([ '-L%s' % os.path.abspath(l) for l in options.clibdir ]),
@@ -407,11 +416,13 @@ if __name__=='__main__':
         'werr': '-Werror' if not options.nonstrict else '-Wall'
     }
     includelist = ['-I$(DTOP)/jni', '-I$(CONNECTALDIR)', \
+                   '-I$(DTOP)', '-I$(DTOP)/../jni', \
                    '-I$(CONNECTALDIR)/cpp', '-I$(CONNECTALDIR)/lib/cpp', \
                    #'%(sourceincludes)s',
                    '%(cincludes)s']
     substs['toolchain'] = option_info['toolchain'] if 'toolchain' in option_info else ''
     substs['cflags'] = util.escapequotes('%s %s' % ((' '.join(includelist) % substs), ' '.join(options.cflags)))
+    substs['cflags'] += ' -D__ATOMICC__'
     substs['cxxflags'] = util.escapequotes('%s %s' % ((' '.join(includelist) % substs), ' '.join(options.cxxflags)))
     substs['android_build_type'] = 'BUILD_SHARED_LIBRARY' if options.shared else 'BUILD_EXECUTABLE'
     substs['android_local_module'] = 'connectal' if options.shared else 'android.exe'
@@ -440,6 +451,7 @@ if __name__=='__main__':
                  'partname': partname,
                  'boardname': boardname,
                  'connectaldir': connectaldir,
+                 'connectalsdir': connectalsdir,
                  'read_verilog': '\n'.join([tclReadVerilogTemplate
                                             % { 'verilog': os.path.abspath(f),
                                                 'pattern': '/*.*v' if os.path.isdir(f) else ''} for f in options.verilog]),
@@ -515,6 +527,8 @@ if __name__=='__main__':
     if options.protobuf:
         protolist = [os.path.abspath(fn) for fn in options.protobuf]
     make.write(makefileTemplate % {'connectaldir': connectaldir,
+                                   'connectalsdir': connectalsdir,
+                                   'atomiccdir': atomiccdir,
                                    'bsvpath': ':'.join(unique_bsvpaths),
                                    'bsvdefines': util.foldl((lambda e,a: e+' -D '+a), '', bsvdefines),
                                    'boardname': boardname,
@@ -562,7 +576,7 @@ if __name__=='__main__':
 #    configbsv.close()
 #    util.replaceIfChanged(configbsvname, configbsvname + '.new')
 
-    confighname = os.path.join(project_dir, 'jni', 'ConnectalProjectConfig.h')
+    confighname = os.path.join(project_dir, 'ConnectalProjectConfig.h')
     configh = util.createDirAndOpen(confighname + '.new', 'w')
     configh.write('#ifndef _ConnectalProjectConfig_h\n')
     configh.write('#define _ConnectalProjectConfig_h\n')

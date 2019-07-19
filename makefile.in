@@ -12,7 +12,6 @@ export DTOP := $(PWD)   # project directory
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
-SIMMAKE=$(TOPDIR)/../atomicc/simulation/Makefile.verilator
 
 VERILOG_LIB_GENERATED := $(TOPDIR)/lib/generated
 export VERILOG_LIB := $(VERILOG_LIB_GENERATED) $(VERILOG_LIB_GENERATED)/../verilog
@@ -48,29 +47,21 @@ compile: all
 
 verilator:
 	BOARD=verilator make gen
-	CPPFILES=$(CPPFILES) DTOP=$(DTOP) make -f $(SIMMAKE) verilator
+	cd verilator; make
 
 run:
-	#PROJECT_CPP=$(PROJECT_CPP) 
-	DTOP=$(DTOP) make -f $(SIMMAKE) run
+	cd verilator; make run
 
 zybo:
 	BOARD=zybo make gen
-	BOARD=zybo \
-	MKTOP=mkZynqTop \
-	OS=android \
-	XILINX=1 \
-	PhysAddrWidth=32 \
-	CONNECTAL_BITS_DEPENDENCES=zybo/hw/mkTop.bit \
-	CONNECTAL_EXENAME=android.exe \
-	VERILOG_PATH="$(VERILOG_LIB)" \
-	    make -f $(CONNECTALSDIR)/scripts/Makefile.connectal.build
+	cd zybo; make
 
 gen:
 	$(CONNECTALSDIR)/scripts/makefilegen.py -B$(BOARD) --project-dir $(BOARD) \
 	$(foreach f, $(CPPFILES), --source $f) \
 	$(foreach f, $(ALL_CPPFILES2), --source2 $f) \
 	$(VERBOSE_SWITCH)
+	touch $(BOARD)/Makefile.autotop
 
 clean:
 	rm -rf verilator zybo SWSOCK*
