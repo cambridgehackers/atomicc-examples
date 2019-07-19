@@ -66,7 +66,7 @@ int main(int argc, const char **argv)
     long actualFrequency = 0;
     long requestedFrequency = 1e9 / MainClockPeriod;
 
-    atomiccPrintfInit("generated/printf.generated.printf");
+    atomiccPrintfInit("../generated/printf.generated.printf");
 #if 0
     EchoIndication echoIndication(IfcNames_EchoIndicationH2S, NULL, NULL);
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H);

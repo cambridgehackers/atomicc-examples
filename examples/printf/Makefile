@@ -1,7 +1,7 @@
 
 include ../../makefile.in
 
-CPPFILES = testecho.cpp
+CPPFILES = testecho.cpp printfHandler.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -mllvm -dtrace

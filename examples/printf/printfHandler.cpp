@@ -59,6 +59,8 @@ static void atomiccPrintfHandler(struct PortalInternal *p, unsigned int header)
 //memdump((unsigned char *)p->map_base, len * sizeof(p->map_base[0]), "PRINTIND");
     int params[100], *pparam = params, *pdata = (int *)data;
     for (auto item: printfFormat[printfNumber].width) {
+        (void) item;
+        (void) memdump;
         memcpy(pparam, pdata, sizeof(*pparam));
         pparam++;
         pdata++;
