@@ -2,6 +2,7 @@
 include ../../makefile.in
 
 CPPFILES = testecho.cpp printfHandler.cpp
+PRINTF_DATAFILE=generated/printf.generated.printf
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -mllvm -dtrace

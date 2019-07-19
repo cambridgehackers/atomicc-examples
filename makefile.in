@@ -60,6 +60,7 @@ gen:
 	$(CONNECTALSDIR)/scripts/makefilegen.py -B$(BOARD) --project-dir $(BOARD) \
 	$(foreach f, $(CPPFILES), --source $f) \
 	$(foreach f, $(ALL_CPPFILES2), --source2 $f) \
+        $(foreach f, $(PRINTF_DATAFILE), --printfdata $f) \
 	$(VERBOSE_SWITCH)
 	touch $(BOARD)/Makefile.autotop
 

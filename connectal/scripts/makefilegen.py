@@ -96,6 +96,7 @@ argparser.add_argument('--mainclockperiod', help='Clock period of default clock,
 argparser.add_argument('--derivedclockperiod', help='Clock period of derivedClock, in nanoseconds', type=float, default=5.0)
 argparser.add_argument('--pcieclockperiod', help='Clock period of PCIE clock, in nanoseconds', type=int, default=None)
 argparser.add_argument('--run-args', help='Argument to pass via RUN_ARGS when running application', action='append', default=[])
+argparser.add_argument('--printfdata', help='runtime printf datafile', default='')
 
 noisyFlag=False
 
@@ -182,6 +183,7 @@ XSIMFLAGS  = %(xsimflags)s
 TOPBSVFILE = %(topbsvfile)s
 BSVDEFINES = %(bsvdefines)s
 QTUSED = %(qtused)s
+PRINTF_DATAFILE = $(DTOP)/../%(printfDatafile)s
 export BSVDEFINES_LIST = %(bsvdefines_list)s
 export DUT_NAME = %(Dut)s
 %(runsource2)s
@@ -529,6 +531,7 @@ if __name__=='__main__':
     make.write(makefileTemplate % {'connectaldir': connectaldir,
                                    'connectalsdir': connectalsdir,
                                    'atomiccdir': atomiccdir,
+                                   'printfDatafile': options.printfdata,
                                    'bsvpath': ':'.join(unique_bsvpaths),
                                    'bsvdefines': util.foldl((lambda e,a: e+' -D '+a), '', bsvdefines),
                                    'boardname': boardname,

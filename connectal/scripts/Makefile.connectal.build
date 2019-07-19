@@ -25,7 +25,6 @@
 THISDIR := $(abspath $(dir $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR = $(THISDIR)/../../../connectal
 VDIR = $(THISDIR)/../../verilog
-
 V?=0
 ifeq ($(V),0)
   Q=@
@@ -40,15 +39,41 @@ else
 endif
 NDK_OBJCOPY=$(shell $(NDKPATH)ndk-which objcopy)
 
+ifneq ($(XILINX),)
+ifeq ($(OS),android)
 OBJCOPY?=$(NDK_OBJCOPY)
 BINFILE?=bin/mkTop.xdevcfg.bin.gz
-CONNECTAL_EXENAME?=ubuntu.exe
-EXENAME=$(CONNECTAL_EXENAME)
+else #!android
+OBJCOPY?=$(TOOLCHAIN)objcopy
+BINFILE?=bin/mkTop.bin.gz
+endif #!android
+else #!XILINX
+OBJCOPY?= objcopy
+BINFILE?=bin/mkTop.sof.gz
+endif #!XILINX
 
 export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
 export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
 SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, TlpReplay.cpp BsimDma.cpp sock_utils.c portalPrintf.c poller.cpp transportSocket.c transportHardware.c portal.c)
 SIM_CXX_LOCAL = $(SIM_CXX_COMMON) $(DTOP)/../jni/GeneratedCppCallbacks.cpp
+CONNECTAL_EXENAME?=ubuntu.exe
+CONNECTAL_EXENAME2?=ubuntu.exe2
+ifneq ($(CONNECTAL_SHARED),)
+EXENAME=connectal.so
+else
+EXENAME=$(CONNECTAL_EXENAME)
+endif
+EXENAME2=$(CONNECTAL_EXENAME2)
+
+ifeq ($(CONNECTAL_DEBUG),1)
+GDB=gdb
+GDB2=gdb
+else
+GDB= LD_PRELOAD=libSegFault.so SEGFAULT_USE_ALTSTACK=1 SEGFAULT_OUTPUT_NAME=bin/bsimexe-segv-output.txt
+GDB2= LD_PRELOAD=libSegFault.so SEGFAULT_USE_ALTSTACK=1 SEGFAULT_OUTPUT_NAME=bin/bsimexe2-segv-output.txt
+endif
+
+GDB_BSIM= LD_PRELOAD=libSegFault.so SEGFAULT_USE_ALTSTACK=1 SEGFAULT_OUTPUT_NAME=bin/bsim-segv-output.txt
 
 
 VIVADO=$(shell which vivado)
@@ -63,6 +88,8 @@ extratarget::
 # placeholder for variant targets
 
 exe: $(EXENAME)
+	$(Q)if [ -f bin/$(EXENAME) -a -f "$(PRINTF_DATAFILE)" ]; then $(OBJCOPY) --remove-section printfdata bin/$(EXENAME); fi
+	$(Q)if [ -f bin/$(EXENAME) -a -f "$(PRINTF_DATAFILE)" ]; then $(OBJCOPY) --add-section printfdata=$(PRINTF_DATAFILE) bin/$(EXENAME); fi
 
 ubuntu.exe: prepare_bin_target
 	@echo "ubuntu.exe"

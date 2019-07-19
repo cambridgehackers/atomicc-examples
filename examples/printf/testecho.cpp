@@ -98,12 +98,16 @@ int main(int argc, const char **argv)
     int v = 42;
     printf("Saying %d\n", v);
     call_say(v);
+#if 0
     call_say(v*5);
     call_say(v*17);
     call_say(v*93);
+#endif
     call_say2(v, v*3);
+#if 0
     printf("TEST TYPE: SEM\n");
     echoRequestProxy->setLeds(9);
+#endif
 sleep(2);
     return 0;
 }
