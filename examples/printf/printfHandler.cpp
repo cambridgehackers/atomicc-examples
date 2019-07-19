@@ -16,20 +16,21 @@
 */
 #include <stdio.h>
 #include <assert.h>
+#include <ctype.h>
 #include "portal.h"
 #include "readElfSection.h"
 #define MAX_READ_LINE 1024
+#define MAX_WIDTH 10
+#define MAX_FORMAT 1000
 
-#ifndef ANDROID
-#include <string>
-#include <list>
-#include <map>
 typedef struct {
+    int   index;
     char *format;
-    std::list<int> width;
+    int wCount;
+    int width[MAX_WIDTH];
 } PrintfInfo;
-std::map<int, PrintfInfo> printfFormat;
-#endif
+static PrintfInfo printfFormat[MAX_FORMAT];
+static int printfFormatIndex;
 
 static void memdump(unsigned char *p, int len, const char *title)
 {
@@ -49,6 +50,16 @@ int i;
     fprintf(stderr, "\n");
 }
 
+int lookupFormat(int printfNumber)
+{
+    for (int i = 0; i < printfFormatIndex; i++) {
+         if (printfFormat[i].index == printfNumber)
+             return i;
+    }
+printf("[%s:%d] Missing format %d\n", __FUNCTION__, __LINE__, printfNumber);
+    return 0;
+}
+
 static void atomiccPrintfHandler(struct PortalInternal *p, unsigned int header)
 {
     int len = header & 0xffff;
@@ -56,21 +67,14 @@ static void atomiccPrintfHandler(struct PortalInternal *p, unsigned int header)
     p->transport->recv(p, &p->map_base[1], len - 1, &tmpfd);
     unsigned short *data = ((unsigned short *)p->map_base) + 2;
     int printfNumber = *data++;
-    assert(printfNumber >= 0);
+    assert(printfNumber > 0);
     char format[MAX_READ_LINE];
-    sprintf(format, "RUNTIME: %s",
-#ifdef ANDROID
-"ZZZ"
-#else
- printfFormat[printfNumber].format
-#endif
-        );
+    int findex = lookupFormat(printfNumber);
+    sprintf(format, "RUNTIME: %s", printfFormat[findex].format);
     printf("[%s:%d] len %x header %x format %d = '%s'\n", __FUNCTION__, __LINE__, len, header, printfNumber, format);
 memdump((unsigned char *)p->map_base, len * sizeof(p->map_base[0]), "PRINTIND");
-#ifndef ANDROID
     int params[100], *pparam = params, *pdata = (int *)data;
-    for (auto item: printfFormat[printfNumber].width) {
-        (void) item;
+    for (int i = 0; i < printfFormat[findex].wCount; i++) {
         (void) memdump;
         memcpy(pparam, pdata, sizeof(*pparam));
         pparam++;
@@ -78,7 +82,6 @@ memdump((unsigned char *)p->map_base, len * sizeof(p->map_base[0]), "PRINTIND");
     }
     printf(format, params[0], params[1], params[2], params[3],
         params[4], params[5], params[6]);
-#endif
 }
 
 #ifdef ANDROID
@@ -88,18 +91,18 @@ char *getExecutionFilename(char *buf, int buflen);
 void atomiccPrintfInit(const char *filename)
 {
     connectalPrintfHandler = atomiccPrintfHandler;
+    printfFormat[printfFormatIndex++].format = "NONE";
     char buf[MAX_READ_LINE];
     char *bufp;
     uint8_t *currentp, *bufend;
     int lineNumber = 0;
-    int printfNumber = 1;
     unsigned long buflen = 0;
     char fbuffer[MAX_READ_LINE];
     char *fname = getExecutionFilename(fbuffer, sizeof(fbuffer)-1);
 printf("[%s:%d] %s fn %s\n", __FUNCTION__, __LINE__, filename, fname);
     if (readElfSection(fname, "printfdata", &currentp, &buflen)) {
-        printf("atomiccPrintfInit: unable to open '%s'\n", fname);
-        exit(-1);
+        printf("atomiccPrintfInit: unable to find printdata in '%s'\n", fname);
+        return;
     }
     bufend = currentp + buflen;
     while (1) {
@@ -129,22 +132,22 @@ printf("[%s:%d] read '%s'\n", __FUNCTION__, __LINE__, buf);
             exit(-1);
         }
         *bufp++ = 0;
-#ifndef ANDROID
-        char *format = &buf[1];
-        printfFormat[printfNumber] = PrintfInfo{strdup(format)};
+        printfFormat[printfFormatIndex].index = printfFormatIndex; // starts at 1;
+        printfFormat[printfFormatIndex].format = strdup(&buf[1]);
+        printfFormat[printfFormatIndex].wCount = 0;
         while (*bufp) {
             while (*bufp == ' ')
                 bufp++;
-            if (isdigit(*bufp))
-                printfFormat[printfNumber].width.push_back(atoi(bufp));
+            if (isdigit(*bufp)) {
+                printfFormat[printfFormatIndex].width[printfFormat[printfFormatIndex].wCount++] = atoi(bufp);
+            }
             while(isdigit(*bufp))
                 bufp++;
         }
-        printf("[%s:%d] format %d = '%s'", __FUNCTION__, __LINE__, printfNumber, printfFormat[printfNumber].format);
-        for (auto item: printfFormat[printfNumber].width)
-             printf(" width=%d", item);
-#endif
+        printf("[%s:%d] format %d = '%s'", __FUNCTION__, __LINE__, printfFormatIndex, printfFormat[printfFormatIndex].format);
+        for (int i = 0; i < printfFormat[printfFormatIndex].wCount; i++)
+             printf(" width=%d", printfFormat[printfFormatIndex].width[i]);
         printf("\n");
-        printfNumber++;
+        printfFormatIndex++;
     }
 }

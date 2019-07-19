@@ -39,6 +39,10 @@ else
 endif
 NDK_OBJCOPY=$(shell $(NDKPATH)ndk-which objcopy)
 
+NOS := $(shell uname)
+ifeq ($(NOS), Darwin)
+OBJCOPY=true
+else # Darwin
 ifneq ($(XILINX),)
 ifeq ($(OS),android)
 OBJCOPY?=$(NDK_OBJCOPY)
@@ -51,6 +55,7 @@ else #!XILINX
 OBJCOPY?= objcopy
 BINFILE?=bin/mkTop.sof.gz
 endif #!XILINX
+endif #!Darwin
 
 export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
 export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
@@ -219,7 +224,7 @@ $(DTOP)/bin/libconnectal-sim.so: $(SIM_OBJECTS) prepare_bin_target
 	$(CXX) -O -g -I$(DTOP)/jni -shared -fpic $(SIM_CXXFLAGS) -g -o $(DTOP)/bin/libconnectal-sim.so $(SIM_OBJECTS)
 
 prepare_bin_target:
-	@mkdir -p $(BOARD) bin jni hw
+	$(Q)mkdir -p $(BOARD) bin jni hw
 
 verilog:
 # $(VFILE)
