@@ -20,24 +20,28 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include <atomicc.h>
-#if 0
+#include "funnel.h"
 template<int funnelWidth, int dataWidth>
 __module FunnelHalfBase {
+public:
     PipeIn<__uint(dataWidth)> input[funnelWidth];
     PipeIn<__uint(dataWidth)> *output[funnelWidth/2];
 
-    for (int j = 0; j < funnelWidth / 2; j = j+1) begin
-        void input[j * 2 + 1].enq(__uint(dataWidth) v) {
-            output[j].enq(v);
-        }
-        void input[j * 2].enq(__uint(dataWidth) v) if (!__valid(input[j * 2 + 1].enq)) {
-            output[j].enq(v);
-        }
-    end;
+    for (int j = 0; j < funnelWidth / 2; j = j+1) {
+        void input.enq[j * 2 + 1](__uint(dataWidth) v) {
+            //output->enq[j](v);
+        };
+#if 0
+        void input.enq[j * 2](__uint(dataWidth) v) if (!__valid(input[j * 2 + 1].enq)) {
+            output->enq[j](v);
+        };
+#endif
+    };
 };
 
-static FunnelHalfBase<GENERIC_INT_TEMPLATE_FLAG> dummy;
+static FunnelHalfBase<10, 32> dummy;
 
+#if 0
 template<int funnelWidth, int dataWidth>
 __module FunnelBase {
     for (int j = 0; j < __clog2(funnelWidth); j = j+1) begin

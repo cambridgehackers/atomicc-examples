@@ -1,0 +1,11 @@
+INTERFACE PipeIn {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.0 {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+MODULE FunnelHalfBase(funnelWidth=10,dataWidth=32) {
+    INTERFACE/Count 10  PipeIn input
+    INTERFACE/Ptr/Count 5  PipeIn.0 output
+    METHOD/Action input$enq__ENA ( Bit(32) v )
+}
