@@ -26,9 +26,20 @@ __module FunnelHalfBase {
 public:
     PipeIn<__uint(dataWidth)> input[funnelWidth];
     PipeIn<__uint(dataWidth)> *output[funnelWidth/2];
+    int i, k;
+    FunnelHalfBase() {
+#if 0
+        for (int jj = 0; jj < 3; jj = jj+1) {
+            __rule foo {
+                 i = jj + k;
+            }
+        }
+#endif
+    }
 
     for (int j = 0; j < funnelWidth / 2; j = j+1) {
         void input.enq[j * 2 + 1](__uint(dataWidth) v) {
+i = v;
             //output->enq[j](v);
         };
 #if 0
