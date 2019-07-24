@@ -41,7 +41,8 @@ public:
     for (int j = 0; j < funnelWidth / 2; j = j+1) {
         void input.enq[j * 2 + 1](__uint(dataWidth) v) {
 i = v;
-            //(*output)[10].enq(v);
+k = j;
+            (*output)[j].enq(v);
         };
 #if 0
         void input.enq[j * 2](__uint(dataWidth) v) if (!__valid(input[j * 2 + 1].enq)) {

@@ -18,11 +18,6 @@ module FunnelHalfBase #(
         i <= 0;
         k <= 0;
       end // nRST
-      else begin
-        if (input$enq__ENA) begin // input$enq__ENA
-            i <= input$enq$v;
-        end; // End of input$enq__ENA
-      end
     end // always @ (posedge CLK)
 endmodule 
 

@@ -1,13 +1,20 @@
 INTERFACE PipeIn {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn.0 {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 MODULE FunnelHalfBase(funnelWidth=10,dataWidth=32) {
     INTERFACE/Count 10  PipeIn input
     FIELD/Ptr ARRAY_5_Bit(8) output
     FIELD Bit(32) i
     FIELD Bit(32) k
     METHOD/Action input$enq__ENA ( Bit(32) v ) {
-        INSTANTIATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) / (2))),((__inst$Genvar1) + (1)),(((__inst$Genvar1) * (2)) + (1))
-        STORE :i = input$enq$v
+        INSTANTIATE :__inst$Genvar1,(0),((__inst$Genvar1) < ((10) / (2))),((__inst$Genvar1) + (1)),(((__inst$Genvar1) * (2)) + (1)),FOR$__DYNFORBODY__0__ENA
+    }
+    METHOD/Action FOR$__DYNFORBODY__0__ENA ( Bit(32) __inst$Genvar1 , Bit(666) v ) {
+        STORE :i = v
+        STORE :k = __inst$Genvar1
+        CALL/Action :output[__inst$Genvar1]$enq__ENA{v}
     }
 }
