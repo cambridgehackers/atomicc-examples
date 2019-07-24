@@ -25,7 +25,8 @@ template<int funnelWidth, int dataWidth>
 __module FunnelHalfBase {
 public:
     PipeIn<__uint(dataWidth)> input[funnelWidth];
-    PipeIn<__uint(dataWidth)> *output[funnelWidth/2];
+    typedef PipeIn<__uint(dataWidth)> OutFunnel[funnelWidth/2];
+    OutFunnel *output;
     int i, k;
     FunnelHalfBase() {
 #if 0
@@ -40,7 +41,7 @@ public:
     for (int j = 0; j < funnelWidth / 2; j = j+1) {
         void input.enq[j * 2 + 1](__uint(dataWidth) v) {
 i = v;
-            //output->enq[j](v);
+            //(*output)[10].enq(v);
         };
 #if 0
         void input.enq[j * 2](__uint(dataWidth) v) if (!__valid(input[j * 2 + 1].enq)) {
