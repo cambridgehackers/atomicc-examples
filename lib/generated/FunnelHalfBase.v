@@ -7,11 +7,15 @@ module FunnelHalfBase #(
     input wire CLK, input wire nRST,
     input wire input$enq__ENA,
     input wire [dataWidth - 1:0]input$enq$v,
-    output wire input$enq__RDY);
+    output wire input$enq__RDY,
+    output wire output$enq__ENA,
+    output wire [dataWidth - 1:0]output$enq$v,
+    input wire output$enq__RDY);
     reg [dataWidth - 1:0]i;
     reg [dataWidth - 1:0]k;
-    reg [8 - 1:0]output [5 - 1:0];
     assign input$enq__RDY = 1;
+    assign output$enq$v = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign output$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 
     always @( posedge CLK) begin
       if (!nRST) begin
