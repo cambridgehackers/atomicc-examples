@@ -75,6 +75,7 @@ module IVector (input wire CLK, input wire nRST,
     wire [32 - 1:0]in$enq$v$a [10 - 1:0];
     wire [32 - 1:0]in$enq$v$b [10 - 1:0];
     wire [32 - 1:0]in$enq$v$c [10 - 1:0];
+    wire in$enq__RDY;
     wire [((32 + 32) + 32) - 1:0]in$say$temp;
     wire [32 - 1:0]in$say$temp$a;
     wire [32 - 1:0]in$say$temp$b;
@@ -130,7 +131,7 @@ module IVector (input wire CLK, input wire nRST,
     assign fifo[9].in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign fifo[9].out$deq__ENA = RULE$respond_rule_9__RDY;
     assign in$enq$v = { in$enq$v$c , in$enq$v$b , in$enq$v$a };
-    assign in$say__RDY = 1;
+    assign in$say__RDY = fifo[ __inst$Genvar1 ] . in$enq__RDY;
     assign out$heard$meth = ( RULE$respond_rule_1__RDY ? 32'd1 : 32'd0 ) | ( RULE$respond_rule_2__RDY ? 32'd2 : 32'd0 ) | ( RULE$respond_rule_3__RDY ? 32'd3 : 32'd0 ) | ( RULE$respond_rule_4__RDY ? 32'd4 : 32'd0 ) | ( RULE$respond_rule_5__RDY ? 32'd5 : 32'd0 ) | ( RULE$respond_rule_6__RDY ? 32'd6 : 32'd0 ) | ( RULE$respond_rule_7__RDY ? 32'd7 : 32'd0 ) | ( RULE$respond_rule_8__RDY ? 32'd8 : 32'd0 ) | ( RULE$respond_rule_9__RDY ? 32'd9 : 32'd0 );
     assign out$heard$v = ( RULE$respond_rule_0__RDY ? RULE$respond_rule_0$temp$b : 32'd0 ) | ( RULE$respond_rule_1__RDY ? RULE$respond_rule_1$temp$b : 32'd0 ) | ( RULE$respond_rule_2__RDY ? RULE$respond_rule_2$temp$b : 32'd0 ) | ( RULE$respond_rule_3__RDY ? RULE$respond_rule_3$temp$b : 32'd0 ) | ( RULE$respond_rule_4__RDY ? RULE$respond_rule_4$temp$b : 32'd0 ) | ( RULE$respond_rule_5__RDY ? RULE$respond_rule_5$temp$b : 32'd0 ) | ( RULE$respond_rule_6__RDY ? RULE$respond_rule_6$temp$b : 32'd0 ) | ( RULE$respond_rule_7__RDY ? RULE$respond_rule_7$temp$b : 32'd0 ) | ( RULE$respond_rule_8__RDY ? RULE$respond_rule_8$temp$b : 32'd0 ) | ( RULE$respond_rule_9__RDY ? RULE$respond_rule_9$temp$b : 32'd0 );
     assign out$heard__ENA = RULE$respond_rule_0__RDY || RULE$respond_rule_1__RDY || RULE$respond_rule_2__RDY || RULE$respond_rule_3__RDY || RULE$respond_rule_4__RDY || RULE$respond_rule_5__RDY || RULE$respond_rule_6__RDY || RULE$respond_rule_7__RDY || RULE$respond_rule_8__RDY || RULE$respond_rule_9__RDY;
@@ -219,7 +220,7 @@ module IVector (input wire CLK, input wire nRST,
     assign in$say$temp$b = in$say$v;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign fifo[__inst$Genvar1].in$enq$v = { in$say$temp$c , in$say$temp$b , in$say$temp$a };
-        assign fifo[__inst$Genvar1].in$enq__ENA = in$say__ENA && ( __inst$Genvar1 == in$say$meth );
+        assign fifo[__inst$Genvar1].in$enq__ENA = in$say__ENA && in$say__RDY && ( __inst$Genvar1 == in$say$meth );
     end;
 
     always @( posedge CLK) begin

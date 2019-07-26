@@ -27,28 +27,11 @@ public:
     PipeIn<__uint(dataWidth)> input[funnelWidth];
     typedef PipeIn<__uint(dataWidth)> OutFunnel[funnelWidth/2];
     OutFunnel *output;
-    int i, k;
-    FunnelHalfBase() {
-#if 0
-        for (int jj = 0; jj < 3; jj = jj+1) {
-            __rule foo {
-                 i = jj + k;
-            }
-        }
-#endif
-    }
 
-    for (int j = 0; j < funnelWidth / 2; j = j+1) {
-        void input.enq[j * 2 + 1](__uint(dataWidth) v) {
-i = v;
-k = j;
-            (*output)[j].enq(v);
+    for (int j = 0; j < funnelWidth; j = j+1) {
+        void input.enq[j](__uint(dataWidth) v) if ( ((j+1)/2 == j/2) | !__valid(input[j + 1].enq)) {
+            (*output)[j /* / 2 */].enq(v);
         };
-#if 0
-        void input.enq[j * 2](__uint(dataWidth) v) if (!__valid(input[j * 2 + 1].enq)) {
-            output->enq[j](v);
-        };
-#endif
     };
 };
 

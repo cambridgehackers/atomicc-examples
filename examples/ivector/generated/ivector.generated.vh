@@ -22,7 +22,7 @@
 //METAINTERNAL; fifo7; FifoPong;
 //METAINTERNAL; fifo8; FifoPong;
 //METAINTERNAL; fifo9; FifoPong;
-//METAGUARD; in$say; 1;
+//METAGUARD; in$say; fifo[ __inst$Genvar1 ] . in$enq__RDY;
 //METAINVOKE; RULE$respond_rule_0__ENA; :fifo[0].out$deq__ENA;:fifo[0].out$first;:out$heard__ENA;
 //METAEXCLUSIVE; RULE$respond_rule_0__ENA; RULE$respond_rule_1__ENA; RULE$respond_rule_2__ENA; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
 //METAGUARD; RULE$respond_rule_0; ( fifo[ 0 ] . out$first__RDY ) && ( fifo[ 0 ] . out$deq__RDY ) && out$heard__RDY;
