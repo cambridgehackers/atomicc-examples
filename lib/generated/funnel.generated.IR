@@ -11,6 +11,6 @@ MODULE FunnelHalfBase(funnelWidth=10,dataWidth=32) {
         INSTANTIATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),(__inst$Genvar1),FOR$__DYNFORBODY__1__ENA
     }
     METHOD/Action FOR$__DYNFORBODY__1__ENA ( Bit(32) __inst$Genvar1 , Bit(666) input$enq$v ) {
-        CALL/Action :output[__inst$Genvar1]$enq__ENA{input$enq$v}
+        CALL/Action :output[(__inst$Genvar1) / (2)]$enq__ENA{input$enq$v}
     }
 }

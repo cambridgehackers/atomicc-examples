@@ -30,7 +30,7 @@ public:
 
     for (int j = 0; j < funnelWidth; j = j+1) {
         void input.enq[j](__uint(dataWidth) v) if ( ((j+1)/2 == j/2) | !__valid(input[j + 1].enq)) {
-            (*output)[j /* / 2 */].enq(v);
+            (*output)[j / 2].enq(v);
         };
     };
 };
