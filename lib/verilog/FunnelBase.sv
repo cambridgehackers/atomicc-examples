@@ -34,11 +34,10 @@ module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) (
     genvar j;
     for (j = 0; j < funnelWidth / 2; j = j+1) begin
         wire rvalid = input$enq__ENA[j*2+1];
-        wire lvalid = input$enq__ENA[j*2];
-        assign input$enq__RDY[j*2+1] = rvalid && output$enq__RDY[j];
-        assign input$enq__RDY[j*2] = lvalid && !rvalid && output$enq__RDY[j];
+        assign input$enq__RDY[j*2+1] = output$enq__RDY[j];
+        assign input$enq__RDY[j*2] = !rvalid && output$enq__RDY[j];
         assign output$enq$v[j] = rvalid ? input$enq$v[j*2+ 1]: input$enq$v[j*2];
-        assign output$enq__ENA[j] = rvalid | lvalid;
+        assign output$enq__ENA[j] = rvalid | input$enq__ENA[j*2];
     end
 endmodule
 //////////////////
