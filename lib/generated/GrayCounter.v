@@ -40,7 +40,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
         assign RULE$incdec$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
         assign ifc$readBin$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
         assign ifc$readBin$rtemp[ __inst$Genvar1 ] = ifc$readBin$temp[__inst$Genvar1];
-        assign ifc$readBin$temp[__inst$Genvar1] = ^ifc$readBin$ctemp[ ( width - 1 ) : __inst$Genvar1 ];
+        assign ifc$readBin$temp[__inst$Genvar1] = ifc$readBin$ctemp[ ( width - 1 ) : __inst$Genvar1 ];
         assign ifc$readGray$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
     end;
 
@@ -51,13 +51,13 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (RULE$incdec__RDY) begin // RULE$incdec__ENA
-            counter[__inst$Genvar1] <= counter[__inst$Genvar1] ^ ( ( ( __inst$Genvar1 == 0 ) ? RULE$incdec$useLsb : 0 ) | ( ( !( __inst$Genvar1 == 0 ) ) ? ( ( ( RULE$incdec$useLsb != 0 ) ^ 1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( |RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) ) : 0 ] ) != 0 ) ^ 1 ) ) ) : 0 ) );
+            counter[__inst$Genvar1] <= counter[__inst$Genvar1] ^ ( ( ( __inst$Genvar1 == 0 ) ? RULE$incdec$useLsb : 0 ) | ( ( !( __inst$Genvar1 == 0 ) ) ? ( ( ( RULE$incdec$useLsb != 0 ) ^ 1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) ) : 0 ] ) != 0 ) ^ 1 ) ) ) : 0 ) );
         end; // End of RULE$incdec__ENA
         if (ifc$writeBin__ENA) begin // ifc$writeBin__ENA
+            if (!( __inst$Genvar1 == ( width - 1 ) ))
+            counter[__inst$Genvar1] <= ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
             if (__inst$Genvar1 == ( width - 1 ))
             counter[__inst$Genvar1] <= ifc$writeBin$v[ __inst$Genvar1 ];
-            if (!( __inst$Genvar1 == ( width - 1 ) ))
-            counter[__inst$Genvar1] <= ^ifc$writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
         end; // End of ifc$writeBin__ENA
         if (ifc$writeGray__ENA) begin // ifc$writeGray__ENA
             counter[__inst$Genvar1] <= ifc$writeGray$v[ __inst$Genvar1 ];

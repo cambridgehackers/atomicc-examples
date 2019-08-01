@@ -12,10 +12,10 @@ module FunnelHalfBase #(
     output wire [5 * dataWidth - 1:0]output$enq$v,
     input wire output$enq__RDY[5 - 1:0]);
     genvar __inst$Genvar1;
-for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign input$enq__RDY[__inst$Genvar1] = ( ( ( ( __inst$Genvar1 + 1 ) / 2 ) == ( __inst$Genvar1 / 2 ) ) && ( output[ __inst$Genvar1 / 2 ] . enq__RDY ) ) || ( ( !( ( ( __inst$Genvar1 + 1 ) / 2 ) == ( __inst$Genvar1 / 2 ) ) ) && ( output[ __inst$Genvar1 / 2 ] . enq__RDY ) && ( enq__ENA == 0 ) );
-        assign output$enq$v[__inst$Genvar1 / 2] = input$enq$v;
-        assign output$enq__ENA[__inst$Genvar1 / 2] = input$enq__ENA[ __inst$Genvar1 ] && input$enq__RDY[ __inst$Genvar1 ];
+for(__inst$Genvar1 = 0; __inst$Genvar1 < ( funnelWidth / 2 ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
+        assign input$enq__RDY[__inst$Genvar1 * 2] = ( input$enq__ENA[ ( __inst$Genvar1 * 2 ) + 1 ] == 0 ) && output$enq__RDY[ __inst$Genvar1 ];
+        assign output$enq$v[__inst$Genvar1] = ( ( input$enq__ENA[ ( __inst$Genvar1 * 2 ) + 1 ] && input$enq__RDY[ ( __inst$Genvar1 * 2 ) + 1 ] ) ? input$enq$v[ ( ( __inst$Genvar1 * 2 ) + 1 ) ] : 0 ) | ( ( input$enq__ENA[ __inst$Genvar1 * 2 ] && input$enq__RDY[ __inst$Genvar1 * 2 ] ) ? input$enq$v[ ( __inst$Genvar1 * 2 ) ] : 0 );
+        assign output$enq__ENA[__inst$Genvar1] = ( input$enq__ENA[ ( __inst$Genvar1 * 2 ) + 1 ] && ( input$enq__RDY[ ( __inst$Genvar1 * 2 ) + 1 ] || ( input$enq__ENA[ __inst$Genvar1 * 2 ] && input$enq__RDY[ __inst$Genvar1 * 2 ] ) ) ) || ( ( !input$enq__ENA[ ( __inst$Genvar1 * 2 ) + 1 ] ) && input$enq__ENA[ __inst$Genvar1 * 2 ] && input$enq__RDY[ __inst$Genvar1 * 2 ] );
     end;
 endmodule 
 
