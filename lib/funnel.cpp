@@ -24,8 +24,8 @@
 template<int funnelWidth, int dataWidth>
 __module FunnelHalfBase {
 public:
-    PipeIn<__uint(dataWidth)> input[funnelWidth];
-    typedef PipeIn<__uint(dataWidth)> OutFunnel[funnelWidth/2];
+    PipeInBin<dataWidth> input[funnelWidth];
+    typedef PipeInBin<dataWidth> OutFunnel[funnelWidth/2];
     OutFunnel *output;
 
     for (int j = 0; j < funnelWidth / 2; j = j+1) {

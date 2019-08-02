@@ -47,10 +47,17 @@ extern "C" void __finish(void);
 
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
+template<int dataWidth>
+__interface PipeInBin {
+    void enq(__uint(dataWidth) v);
+};
+
 template<class T>
 __interface PipeIn {
     typedef T Data;
     void enq(T v);
+    //PipeInBin<__bitsize(T)> _;
+    //void _.enq(T v) { in.enq(__bit_cast<__uint(__bitsize(T))>(v)); }
 };
 
 template<class T>
