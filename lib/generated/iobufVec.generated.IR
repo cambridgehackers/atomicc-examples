@@ -27,6 +27,6 @@ MODULE IobufVec(iovecWidth=999999) {
         LET Bit(1) :iobufs[__inst$Genvar1]$O = __bitsubstr{O,__inst$Genvar1,1}
     }
     METHOD/Rule/Action RULE$iobufs__ENA {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (999999)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < iovecWidth)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
     }
 }

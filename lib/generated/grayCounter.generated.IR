@@ -14,21 +14,21 @@ MODULE GrayCounter(width=10) {
     METHOD/Action ifc$decrement__ENA
     METHOD ifc$readGray Bit(10) = ((ifc$readGray$ctemp)) {
         ALLOCA Bit(10) ifc$readGray$ctemp
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$2Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$2Body__ENA
     }
     METHOD/Action ifc$writeGray__ENA ( Bit(10) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$3Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$3Body__ENA
     }
     METHOD ifc$readBin Bit(10) = ((ifc$readBin$rtemp)) {
         ALLOCA Bit(10) ifc$readBin$ctemp
         ALLOCA Bit(10) ifc$readBin$rtemp
         ALLOCA ARRAY_10_Bit(1) ifc$readBin$temp
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$4Body__ENA
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$5Body__ENA
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$6Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$4Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$5Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$6Body__ENA
     }
     METHOD/Action ifc$writeBin__ENA ( Bit(10) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$7Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$7Body__ENA
     }
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) RULE$incdec$ctemp ) {
         LET Bit(32) :__bitsubstr{RULE$incdec$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
@@ -39,9 +39,9 @@ MODULE GrayCounter(width=10) {
     METHOD/Rule/Action RULE$incdec__ENA if (((ifc$increment__ENA) != (ifc$decrement__ENA))) {
         ALLOCA Bit(10) RULE$incdec$ctemp
         ALLOCA Bit(1) RULE$incdec$useLsb
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
         LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",RULE$incdec$ctemp}) == (ifc$decrement__ENA)
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1) < (10)),((__inst$Genvar1) + (1)),FOR$1Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$1Body__ENA
     }
     METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(666) ifc$readGray$ctemp ) {
         LET Bit(32) :__bitsubstr{ifc$readGray$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
