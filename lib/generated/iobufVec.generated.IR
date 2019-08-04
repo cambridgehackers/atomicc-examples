@@ -19,7 +19,7 @@ EMODULE IOBUF {
 }
 MODULE IobufVec(iovecWidth=999999) {
     INTERFACE IobufVecPins(iovecWidth=999999) _
-    FIELD/Count 999999  IOBUF iobufs
+    FIELD/Count iovecWidth  IOBUF iobufs
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         LET Bit(1) :iobufs[__inst$Genvar1]$T = T
         LET Bit(1) :iobufs[__inst$Genvar1]$IO = __bitsubstr{IO,__inst$Genvar1,1}

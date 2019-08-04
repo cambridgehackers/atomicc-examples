@@ -8,7 +8,7 @@ INTERFACE GrayCounterIfc(width=10) {
 }
 MODULE GrayCounter(width=10) {
     INTERFACE GrayCounterIfc(width=10) ifc
-    FIELD/Count 10  Bit(1) counter
+    FIELD/Count width  Bit(1) counter
     FIELD/shared Bit(10) m
     METHOD/Action ifc$increment__ENA
     METHOD/Action ifc$decrement__ENA
