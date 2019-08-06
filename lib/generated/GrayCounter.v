@@ -19,12 +19,13 @@ module GrayCounter #(
     input wire [width - 1:0]ifc$writeBin$v,
     output wire ifc$writeBin__RDY);
     reg counter [width - 1:0];
-    wire [10 - 1:0]RULE$incdec$ctemp;
+    wire [width - 1:0]RULE$incdec$ctemp;
+    wire RULE$incdec$useLsb;
     wire RULE$incdec__RDY;
-    wire [10 - 1:0]ifc$readBin$ctemp;
-    wire [10 - 1:0]ifc$readBin$rtemp;
-    wire ifc$readBin$temp [10 - 1:0];
-    wire [10 - 1:0]ifc$readGray$ctemp;
+    wire [width - 1:0]ifc$readBin$ctemp;
+    wire [width - 1:0]ifc$readBin$rtemp;
+    wire ifc$readBin$temp [width - 1:0];
+    wire [width - 1:0]ifc$readGray$ctemp;
     genvar __inst$Genvar1;
     assign ifc$decrement__RDY = 1;
     assign ifc$increment__RDY = 1;
@@ -35,6 +36,7 @@ module GrayCounter #(
     assign ifc$writeBin__RDY = 1;
     assign ifc$writeGray__RDY = 1;
     // Extra assigments, not to output wires
+    assign RULE$incdec$useLsb = RULE$incdec$ctemp == ifc$decrement__ENA;
     assign RULE$incdec__RDY = !( ifc$increment__ENA == ifc$decrement__ENA );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign RULE$incdec$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];

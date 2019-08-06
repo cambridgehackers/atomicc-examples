@@ -38,7 +38,7 @@ module l_top (input wire CLK, input wire nRST,
         .request$writeBin__ENA(P2M__request$method$writeBin__ENA),
         .request$writeBin$v(P2M__request$method$writeBin$v),
         .request$writeBin__RDY(DUT__Test$request$writeBin__RDY));
-    ___P2MGrayCounterIfc#(4) P2M__request (.CLK(CLK), .nRST(nRST),
+    ___P2MGrayCounterIfc_IC_width_ND_4_JC_ P2M__request (.CLK(CLK), .nRST(nRST),
         .method$increment__ENA(P2M__request$method$increment__ENA),
         .method$increment__RDY(DUT__Test$request$increment__RDY),
         .method$decrement__ENA(P2M__request$method$decrement__ENA),

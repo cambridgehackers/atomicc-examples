@@ -16,7 +16,7 @@ module UserTop (input wire CLK, input wire nRST,
     wire [128 - 1:0]ctop$request$enq$v;
     wire ctop$request$enq__RDY;
     wire [16 - 1:0]indication$enq$len;
-    wire [128 - 1:0]indication$enq$v;
+    wire [128 - 1:0]indication$enq$vint;
     wire [16 - 1:0]radapter_0$in$enq$length;
     wire [128 - 1:0]radapter_0$in$enq$v;
     wire radapter_0$in$enq__RDY;
@@ -50,11 +50,11 @@ module UserTop (input wire CLK, input wire nRST,
         .indication$enq$length(ctop$indication$enq$length),
         .indication$enq__RDY(radapter_0$in$enq__RDY));
     assign ctop$request$enq$v = wadapter_0$out$enq$v;
-    assign indication$enq$v = ctop$indication$enq$v;
     assign radapter_0$in$enq$length = ctop$indication$enq$length;
     assign radapter_0$in$enq$v = ctop$indication$enq$v;
     // Extra assigments, not to output wires
-    assign indication$enq$len = indication$enq$v[ 15 : 0 ] - 16'd1;
+    assign indication$enq$len = indication$enq$vint[ 15 : 0 ] - 16'd1;
+    assign indication$enq$vint = ctop$indication$enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin

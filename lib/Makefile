@@ -4,6 +4,7 @@ include ../makefile.in
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -templatetrace
 #CPPFLAGS += -mllvm -rgentrace
+#trace all method bodies being generated
 #CPPFLAGS += -mllvm -mgentrace
 #CPPFLAGS += -mllvm -worktrace
 

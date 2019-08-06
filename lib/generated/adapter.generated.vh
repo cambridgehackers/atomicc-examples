@@ -6,6 +6,7 @@
 //METAEXCLUSIVE; in$enq__ENA; RULE$pushValue__ENA
 //METAGUARD; in$enq; !waitForEnq;
 //METAINVOKE; RULE$pushValue__ENA; :out$enq__ENA;
+//METABEFORE; RULE$pushValue__ENA; :in$enq__ENA
 //METAGUARD; RULE$pushValue; waitForEnq && out$enq__RDY;
 //METARULES; RULE$pushValue
 //METASTART; AdapterToBus

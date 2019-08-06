@@ -56,11 +56,11 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     reg [32 - 1:0]e2w_valid;
     reg [32 - 1:0]pc;
     wire RULE$decode__RDY;
-    wire [((32 + 32) + 32) - 1:0]RULE$execArith$val;
     wire [32 - 1:0]RULE$execArith$val$addr;
     wire [32 - 1:0]RULE$execArith$val$data;
     wire [32 - 1:0]RULE$execArith$val$nextPC;
     wire RULE$execArith__RDY;
+    wire [32 - 1:0]RULE$writeBack$wbval;
     wire RULE$writeBack__RDY;
     assign dec$getAddr$inst = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign dec$getArithOp$inst = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -78,15 +78,15 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     assign pgm$read$pc = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign rf$read$regnum = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign rf$write$regnum = e2w_dst;
-    assign rf$write$regval = e2w_val;
+    assign rf$write$regval = RULE$writeBack$wbval;
     assign rf$write__ENA = RULE$writeBack__RDY;
     // Extra assigments, not to output wires
     assign RULE$decode__RDY = ( d2e_valid == 0 ) && pgm$read__RDY && dec$getOp__RDY && dec$getArithOp__RDY && dec$getSrc1__RDY && dec$getSrc2__RDY && dec$getDst__RDY && dec$getAddr__RDY;
-    assign RULE$execArith$val = { RULE$execArith$val$data , RULE$execArith$val$addr , RULE$execArith$val$nextPC };
     assign RULE$execArith$val$addr = exec$basicExec[ 32 - 1 + 32 : 32 ];
     assign RULE$execArith$val$data = exec$basicExec[ 32 - 1 + 64 : 64 ];
     assign RULE$execArith$val$nextPC = exec$basicExec[ 32 - 1 : 0 ];
     assign RULE$execArith__RDY = ( d2e_valid == 1 ) && ( e2w_valid == 0 ) && rf$read__RDY && exec$basicExec__RDY;
+    assign RULE$writeBack$wbval = e2w_val;
     assign RULE$writeBack__RDY = ( e2w_valid == 1 ) && rf$write__RDY;
 
     always @( posedge CLK) begin

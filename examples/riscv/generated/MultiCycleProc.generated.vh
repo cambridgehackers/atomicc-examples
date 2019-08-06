@@ -14,6 +14,7 @@
 //METAEXCLUSIVE; RULE$execArith__ENA; RULE$writeBack__ENA
 //METAGUARD; RULE$execArith; ( d2e_valid == 1 ) && ( e2w_valid == 0 ) && rf$read__RDY && exec$basicExec__RDY;
 //METAINVOKE; RULE$writeBack__ENA; :rf$write__ENA;
+//METABEFORE; RULE$writeBack__ENA; :RULE$execArith__ENA
 //METAGUARD; RULE$writeBack; ( e2w_valid == 1 ) && rf$write__RDY;
 //METARULES; RULE$decode; RULE$execArith; RULE$writeBack
 `endif

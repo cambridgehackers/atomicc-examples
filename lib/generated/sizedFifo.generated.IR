@@ -19,8 +19,8 @@ MODULE SizedFifoBase(depth=20,width=128,bypass=999) {
         GENERATE :__inst$Genvar1,(0),((((__inst$Genvar1 + 1)) < depth)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
         STORE (((999) == (0)) | (((in$enq__ENA) != (0)) ^ (1))):c = (c) + (-1)
     }
-    METHOD out$first Bit(128) = ((q[0]))
-    METHOD/Action in$enq__ENA ( Bit(128) v ) if ((((c) == (20)) ^ (1))) {
+    METHOD out$first Bit(width) = ((q[0]))
+    METHOD/Action in$enq__ENA ( Bit(width) v ) if ((((c) == (20)) ^ (1))) {
         STORE :x_wire = in$enq$v
         STORE (((999) == (0)) | (((out$deq__ENA) != (0)) ^ (1))):q[c] = in$enq$v
         STORE (((999) == (0)) | (((out$deq__ENA) != (0)) ^ (1))):c = (c) + (1)

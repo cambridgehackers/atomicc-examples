@@ -13,14 +13,12 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     output wire pipe$enq__ENA,
     output wire [(32 + ((32 + 32) + ((32 + 32) + 32))) - 1:0]pipe$enq$v,
     input wire pipe$enq__RDY);
-    wire [(32 + ((32 + 32) + ((32 + 32) + 32))) - 1:0]request$say$ind;
     wire [32 - 1:0]request$say$ind$data$say$meth;
     wire [32 - 1:0]request$say$ind$data$say$v;
     wire [32 - 1:0]request$say$ind$data$say2$meth;
     wire [32 - 1:0]request$say$ind$data$say2$v;
     wire [32 - 1:0]request$say$ind$data$say2$v2;
     wire [32 - 1:0]request$say$ind$tag;
-    wire [(32 + ((32 + 32) + ((32 + 32) + 32))) - 1:0]request$say2$ind;
     wire [32 - 1:0]request$say2$ind$data$say$meth;
     wire [32 - 1:0]request$say2$ind$data$say$v;
     wire [32 - 1:0]request$say2$ind$data$say2$meth;
@@ -32,11 +30,9 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     assign request$say2__RDY = pipe$enq__RDY;
     assign request$say__RDY = pipe$enq__RDY;
     // Extra assigments, not to output wires
-    assign request$say$ind = { request$say$ind$data$say2$v2 , request$say$ind$data$say2$v , request$say$ind$data$say2$meth , request$say$ind$data$say$v , request$say$ind$data$say$meth , request$say$ind$tag };
     assign request$say$ind$data$say$meth = request$say$meth;
     assign request$say$ind$data$say$v = request$say$v;
     assign request$say$ind$tag = 32'd1;
-    assign request$say2$ind = { request$say2$ind$data$say2$v2 , request$say2$ind$data$say2$v , request$say2$ind$data$say2$meth , request$say2$ind$data$say$v , request$say2$ind$data$say$meth , request$say2$ind$tag };
     assign request$say2$ind$data$say2$meth = request$say2$meth;
     assign request$say2$ind$data$say2$v = request$say2$v;
     assign request$say2$ind$tag = 32'd2;

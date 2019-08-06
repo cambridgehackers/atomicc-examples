@@ -12,12 +12,14 @@ module AdapterFromBus (input wire CLK, input wire nRST,
     input wire out$enq__RDY);
     reg [128 - 1:0]buffer;
     reg waitForEnq;
+    wire [128 - 1:0]RULE$pushValue$agg_2e_tmp;
     wire RULE$pushValue__RDY;
     assign in$enq__RDY = !waitForEnq;
     assign out$enq$length = 16'd0;
-    assign out$enq$v = buffer;
+    assign out$enq$v = RULE$pushValue$agg_2e_tmp;
     assign out$enq__ENA = RULE$pushValue__RDY;
     // Extra assigments, not to output wires
+    assign RULE$pushValue$agg_2e_tmp = buffer;
     assign RULE$pushValue__RDY = waitForEnq && out$enq__RDY;
 
     always @( posedge CLK) begin

@@ -1,19 +1,19 @@
 INTERFACE PipeInBin(dataWidth=32) {
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(dataWidth) v )
 }
 MODULE FunnelHalfBase(funnelWidth=10,dataWidth=32) {
     INTERFACE/Count funnelWidth  PipeInBin(dataWidth=32) input
     INTERFACE/Ptr/Count (funnelWidth / 2)  PipeInBin(dataWidth=32) output
-    METHOD/Action input$enq__ENA ( Bit(32) v ) if ((((((input[((__inst$Genvar1 * 2) + 1)]$enq__ENA) != (0)) ^ (1))) != (0))) {
+    METHOD/Action input$enq__ENA ( Bit(dataWidth) v ) if ((((((input[((__inst$Genvar1 * 2) + 1)]$enq__ENA) != (0)) ^ (1))) != (0))) {
         INSTANTIATE :__inst$Genvar1,(0),((__inst$Genvar1 < (funnelWidth / 2))),((__inst$Genvar1 + 1)),(((__inst$Genvar1 * 2) + 1)),FOR$__DYNFORBODY__0__ENA
     }
-    METHOD/Action input$enq__ENA ( Bit(32) v ) if ((((((input[((__inst$Genvar1 * 2) + 1)]$enq__ENA) != (0)) ^ (1))) != (0))) {
+    METHOD/Action input$enq__ENA ( Bit(dataWidth) v ) if ((((((input[((__inst$Genvar1 * 2) + 1)]$enq__ENA) != (0)) ^ (1))) != (0))) {
         INSTANTIATE :__inst$Genvar1,(0),((__inst$Genvar1 < (funnelWidth / 2))),((__inst$Genvar1 + 1)),((__inst$Genvar1 * 2)),FOR$__DYNFORBODY__2__ENA
     }
-    METHOD/Action FOR$__DYNFORBODY__0__ENA ( Bit(32) __inst$Genvar1 , Bit(666) input$enq$v ) {
+    METHOD/Action FOR$__DYNFORBODY__0__ENA ( Bit(32) __inst$Genvar1 , Bit(dataWidth) input$enq$v ) {
         CALL/Action :output[__inst$Genvar1]$enq__ENA{input$enq$v}
     }
-    METHOD/Action FOR$__DYNFORBODY__2__ENA ( Bit(32) __inst$Genvar1 , Bit(666) input$enq$v ) {
+    METHOD/Action FOR$__DYNFORBODY__2__ENA ( Bit(32) __inst$Genvar1 , Bit(dataWidth) input$enq$v ) {
         CALL/Action :output[__inst$Genvar1]$enq__ENA{input$enq$v}
     }
 }
