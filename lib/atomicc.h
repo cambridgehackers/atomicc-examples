@@ -39,7 +39,7 @@
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 extern "C" int *__bitsubstrl(int, ...);
-extern "C" int __clog2(int);
+#define __clog2(A) __builtin_clog2(A)
 extern "C" int __reduce(const char *, ...);
 extern "C" void __finish(void);
 

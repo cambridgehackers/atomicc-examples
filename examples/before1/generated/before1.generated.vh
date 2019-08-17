@@ -17,6 +17,8 @@
 //METAINVOKE; RULE$swap2_rule__ENA; :lEcho$swap$y2xnull__ENA;
 //METAGUARD; RULE$swap2_rule; lEcho$swap$y2xnull__RDY;
 //METARULES; RULE$swap_rule; RULE$swap2_rule
+//METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
+//METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
 //METACONNECT; lERI$request$say2__ENA; lEcho$request$say2__ENA
@@ -27,8 +29,6 @@
 //METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
 //METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
 //METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
-//METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
-//METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
 //METAEXTERNAL; indication; EchoIndication;
 //METAEXCLUSIVE; request$say__ENA; RULE$delay_rule__ENA; request$say2__ENA

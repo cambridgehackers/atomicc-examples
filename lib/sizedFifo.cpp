@@ -24,7 +24,7 @@
 template<int depth, int width, int bypass>
 __module SizedFifoBase : public Fifo<__uint(width)> {
     __uint(width) q[depth];
-    __uint(__clog2(depth + 0)) c;
+    __uint(__clog2(depth + 0)+1) c;
     __shared __uint(width)      x_wire;
     bool empty() { return c == 0; };
     bool full() { return c == depth; };

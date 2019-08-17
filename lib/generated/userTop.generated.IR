@@ -27,10 +27,10 @@ EMODULE l_top {
     INTERFACE/Ptr PipeInH indication
 }
 MODULE UserTop {
-    INTERFACECONNECT ctop$indication indication PipeInH
-    INTERFACECONNECT wadapter_0$out wad PipeInH
     INTERFACECONNECT/Forward write wadapter_0$in PipeInB
     INTERFACECONNECT/Forward read radapter_0$out PipeInB
+    INTERFACECONNECT ctop$indication indication PipeInH
+    INTERFACECONNECT wadapter_0$out wad PipeInH
     FIELD AdapterToBus radapter_0
     FIELD AdapterFromBus wadapter_0
     INTERFACE PipeInB write

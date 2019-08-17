@@ -19,13 +19,15 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
+//#include <tr1/type_traits>
 #include <atomicc.h>
 #include "funnel.h"
 template<int funnelWidth, int dataWidth>
 __module FunnelHalfBase {
 public:
-    PipeInBin<dataWidth> input[funnelWidth];
-    typedef PipeInBin<dataWidth> OutFunnel[funnelWidth/2];
+    typedef PipeInBin<dataWidth> PipeData;
+    PipeData input[funnelWidth];
+    typedef PipeData OutFunnel[funnelWidth/2];
     OutFunnel *output;
 
     for (int j = 0; j < funnelWidth / 2; j = j+1) {
@@ -38,17 +40,24 @@ public:
     };
 };
 
-static FunnelHalfBase<10, 32> dummy;
+static FunnelHalfBase<8, 32> dummy;
 
-#if 0
 template<int funnelWidth, int dataWidth>
 __module FunnelBase {
-    for (int j = 0; j < __clog2(funnelWidth); j = j+1) begin
-        pipeFunnelHalf<funnelWidth / 2 ** j, dataWidth> level;
-        level[j].input = (j == 0) ? input : level[j - 1].output;
-    end;
-    output = level[__clog2(funnelWidth) - 1].output;
+    typedef FunnelHalfBase<funnelWidth, dataWidth> Stack;
+    Stack level[__clog2(funnelWidth)];
+    decltype(level[0].input) input = level[0].input;
+    typename Stack::PipeData *output = level[__clog2(funnelWidth) - 1].output[0];
+    //typename std::tr1::remove_reference<decltype(level[0].output[0])>::type *output = level[__clog2(funnelWidth) - 1].output[0];
+    //decltype((*level[0].output)[0]) *output = level[__clog2(funnelWidth) - 1].output[0];
+    __rule connRule {
+    for (int j = 1; j < __clog2(funnelWidth); j = j+1) {
+        for (int i = 0; i < funnelWidth; i = i + 1) {
+            //level[j].input[i] = level[j - 1].output[i];
+            (*level[j - 1].output)[i] = level[j].input[i];
+        }
+    }
+    }
 };
 
-static FunnelBase<GENERIC_INT_TEMPLATE_FLAG> dummy;
-#endif
+static FunnelBase<8, 32> dummy2;

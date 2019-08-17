@@ -8,6 +8,10 @@
 //METAINTERNAL; lEcho; Echo;
 //METAINTERNAL; lERO_test; EchoRequestOutput;
 //METAINTERNAL; lEII_test; EchoIndicationInput;
+//METACONNECT; request$say__ENA; lERO_test$request$say__ENA
+//METACONNECT; request$say__RDY; lERO_test$request$say__RDY
+//METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
+//METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METACONNECT; lERI$request$say__ENA; lEcho$request$say__ENA
 //METACONNECT; lERI$request$say__RDY; lEcho$request$say__RDY
 //METACONNECT; lEIO$pipe$enq__ENA; lEII_test$pipe$enq__ENA
@@ -16,10 +20,6 @@
 //METACONNECT; lEcho$indication$heard__RDY; lEIO$indication$heard__RDY
 //METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
 //METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
-//METACONNECT; request$say__ENA; lERO_test$request$say__ENA
-//METACONNECT; request$say__RDY; lERO_test$request$say__RDY
-//METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
-//METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
 //METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; request$say__ENA; :indication$heard__ENA;

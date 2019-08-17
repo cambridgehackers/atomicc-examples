@@ -56,11 +56,11 @@ EMODULE MuxPipe {
     INTERFACE/Ptr PipeInH out
 }
 MODULE Connect {
+    INTERFACECONNECT/Forward indication lEII_test$indication EchoIndication
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
     INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.0
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn
-    INTERFACECONNECT/Forward indication lEII_test$indication EchoIndication
     INTERFACE EchoRequest request
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI

@@ -533,10 +533,10 @@ MODULE P7Wrap {
     }
 }
 MODULE ZynqTop {
-    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
-    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I MaxiI
     INTERFACECONNECT/Forward _ ps7_ps7_foo$_ ZynqClock
     INTERFACECONNECT/Forward M ps7_ps7_foo$M Pps7m
+    INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
+    INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I MaxiI
     FIELD P7Wrap ps7_ps7_foo
     FIELD TestTop test
     FIELD BUFG ps7_fclk_0_c
