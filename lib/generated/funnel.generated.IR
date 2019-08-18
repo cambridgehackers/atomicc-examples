@@ -3,7 +3,7 @@ INTERFACE PipeInBin(dataWidth=32) {
 }
 MODULE FunnelBase(funnelWidth=8,dataWidth=32) {
     INTERFACECONNECT/Forward input level[0]$input PipeInBin(dataWidth=32)
-    INTERFACECONNECT/Forward output level[(__builtin_clog2(8) - 1)]$output[0] PipeInBin(dataWidth=32)
+    INTERFACECONNECT/Forward output level[(__builtin_clog2(funnelWidth) - 1)]$output[0] PipeInBin(dataWidth=32)
     FIELD/Count __builtin_clog2(funnelWidth)  FunnelHalfBase(funnelWidth=8,dataWidth=32) level
     INTERFACE/Count 8  PipeInBin(dataWidth=32) input
     INTERFACE/Ptr PipeInBin(dataWidth=32) output
