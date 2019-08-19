@@ -6,10 +6,14 @@
 //METAINTERNAL; level0; FunnelHalfBase(funnelWidth=8,dataWidth=32);
 //METAGUARD; RULE$connRule; 1;
 //METARULES; RULE$connRule
-//METACONNECT; input$enq__ENA; level[ 0 ] level $input$enq__ENA
-//METACONNECT; input$enq__RDY; level[ 0 ] level $input$enq__RDY
-//METACONNECT; output$enq__ENA; level[ __builtin_clog2( funnelWidth ) - 1 ] level $output level [ 0 ]$enq__ENA
-//METACONNECT; output$enq__RDY; level[ __builtin_clog2( funnelWidth ) - 1 ] level $output level [ 0 ]$enq__RDY
+//METACONNECT; level[0].input$enq__ENA; input$enq__ENA
+//METACONNECT; level[0].input$enq__RDY; input$enq__RDY
+//METACONNECT; RULE$connRule$tmp$enq__ENA; level[0].input$enq__ENA
+//METACONNECT; RULE$connRule$tmp$enq__RDY; level[0].input$enq__RDY
+//METACONNECT; output$enq__ENA; level[4 - 1].output[ 0 ]$enq__ENA
+//METACONNECT; output$enq__RDY; level[4 - 1].output[ 0 ]$enq__RDY
+//METACONNECT; level[RULE$connRule$j - 1].output[ __inst$Genvar1 ]$enq__ENA; level[RULE$connRule$j].input[ __inst$Genvar1 ]$enq__ENA
+//METACONNECT; level[RULE$connRule$j - 1].output[ __inst$Genvar1 ]$enq__RDY; level[RULE$connRule$j].input[ __inst$Genvar1 ]$enq__RDY
 //METASTART; FunnelHalfBase
 //METAEXTERNAL; output; FunnelHalfBase$output;
 //METAGUARD; input$enq; ( input$enq__ENA[ ( __inst$Genvar1 * 2 ) + 1 ] == 0 ) && output$enq__RDY[ __inst$Genvar1 ];

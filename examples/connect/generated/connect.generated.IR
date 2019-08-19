@@ -50,10 +50,6 @@ EMODULE MuxPipe {
 MODULE Connect {
     INTERFACECONNECT/Forward request lERO_test$request EchoRequest
     INTERFACECONNECT/Forward indication lEII_test$indication EchoIndication
-    INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.0
-    INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
     FIELD Echo lEcho
@@ -61,6 +57,12 @@ MODULE Connect {
     FIELD EchoIndicationInput lEII_test
     INTERFACE EchoRequest request
     INTERFACE/Ptr EchoIndication indication
+    METHOD/Rule/Action RULE$connectRule__ENA {
+        LET EchoRequest :lERI$request = lEcho$request
+        LET PipeIn.0 :lEIO$pipe = lEII_test$pipe
+        LET EchoIndication :lEcho$indication = lEIO$indication
+        LET PipeIn :lERO_test$pipe = lERI$pipe
+    }
 }
 MODULE Echo {
     INTERFACE EchoRequest request

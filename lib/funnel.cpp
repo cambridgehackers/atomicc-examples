@@ -46,11 +46,14 @@ template<int funnelWidth, int dataWidth>
 __module FunnelBase {
     typedef FunnelHalfBase<funnelWidth, dataWidth> Stack;
     Stack level[__clog2(funnelWidth)];
-    decltype(level[0].input) input = level[0].input;
-    typename Stack::PipeData *output = level[__clog2(funnelWidth) - 1].output[0];
+    //decltype(level[0].input) input;// = level[0].input;
+    typename Stack::PipeData input[funnelWidth];// = level[0].input;
+    typename Stack::PipeData *output;// = level[__clog2(funnelWidth) - 1].output[0];
     //typename std::tr1::remove_reference<decltype(level[0].output[0])>::type *output = level[__clog2(funnelWidth) - 1].output[0];
     //decltype((*level[0].output)[0]) *output = level[__clog2(funnelWidth) - 1].output[0];
     __rule connRule {
+    level[0].input = input;
+    output = level[__clog2(funnelWidth) - 1].output[0];
     for (int j = 1; j < __clog2(funnelWidth); j = j+1) {
         for (int i = 0; i < funnelWidth; i = i + 1) {
             //level[j].input[i] = level[j - 1].output[i];

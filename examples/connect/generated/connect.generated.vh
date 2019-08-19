@@ -8,6 +8,8 @@
 //METAINTERNAL; lEcho; Echo;
 //METAINTERNAL; lERO_test; EchoRequestOutput;
 //METAINTERNAL; lEII_test; EchoIndicationInput;
+//METAGUARD; RULE$connectRule; 1;
+//METARULES; RULE$connectRule
 //METACONNECT; request$say__ENA; lERO_test$request$say__ENA
 //METACONNECT; request$say__RDY; lERO_test$request$say__RDY
 //METACONNECT; indication$heard__ENA; lEII_test$indication$heard__ENA
