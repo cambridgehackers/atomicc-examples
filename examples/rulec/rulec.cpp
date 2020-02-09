@@ -19,6 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
+#include "fifo.h"
 #include "funnel.h"
 #include "userTop.h"
 #define IfcNames_EchoIndicationH2S 5
@@ -39,6 +40,7 @@ __module Echo {
     __software EchoIndication                 *indication;
     //FunnelBase<4, 32> funnel;
     //__printf;
+    //Fifo1<__uint(32)> element2;
     __uint(1) busy, busy_delay;
     __int(32) v_temp, v_delay;
     __int(16) a_temp, b_temp, a_delay, b_delay;
