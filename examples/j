@@ -3,7 +3,7 @@ set -ex
 make
 cd ../echo2 ;make
 cd ../rulec ;make
-cd ../echo ;make
+#cd ../echo ;make
 cd ../before1 ;make
 cd ../ivector ;make
 cd ../lpm ;make

@@ -36,11 +36,10 @@ typedef struct {
 #endif
 
 template<class T>
-__module FifoPong : public Fifo<T> {
+class FifoPong __implements Fifo<T> {
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
-public:
     //PipeIn<T> in;
     //PipeOut<T> out;
     void in.enq(T v) {
@@ -57,33 +56,29 @@ public:
         pong = !pong;
     }
     T out.first(void) { return pong ? element2.out.first() : element1.out.first(); }
-    FifoPong(): Fifo<T>(), pong(false)//, FIFOBASECONSTRUCTOR(FifoPong<T>) 
-{
+    FifoPong(): pong(false) {
         printf("FifoPong: addr %p size 0x%lx\n", this, sizeof(*this));
     };
 };
 
 static FifoPong<UTYPE> bozouseless;
-__interface IndIF {
+class IndIF {
     void heard(UTYPE v);
 };
-__emodule IVectorIndication {
-    IndIF ind;
-    void ind.heard(UTYPE v);
-};
+class IVectorIndication __implements IndIF;
 
-__interface IVectorRequest {
-    void say(UTYPE v) {}
-};
-
-__module IVector {
-    IVectorRequest request;
-    Fifo<UTYPE> *fifo;
+class IVectorRequest {
+    void say(UTYPE v);
     IndIF *ind;
-    void request.say(UTYPE v) {
+};
+
+class IVector __implements IVectorRequest {
+    Fifo<UTYPE> *fifo;
+    void say(UTYPE v) {
         fifo->in.enq(v);
     }
-    IVector(IVectorIndication *ind) : fifo(new FifoPong<UTYPE>()), ind(&ind->ind) {
+    IVector(IndIF *indarg) : fifo(new FifoPong<UTYPE>()) {
+        ind = indarg;
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
         __rule respond { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
@@ -99,7 +94,7 @@ __module IVector {
 ////////////////////////////////////////////////////////////
 
 #if 0
-void IVectorIndication::ind.heard(UTYPE v)
+void IVectorIndication::heard(UTYPE v)
 {
     printf("Heard an ivector: %d %d\n", v
 #ifdef USE_STRUCT
@@ -126,9 +121,9 @@ IVectorTest ivectorTest;
 //int main(int argc, const char *argv[])
 //{
 //    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-//    while (!ivectorTest.ivector->request.say__RDY())
+//    while (!ivectorTest.ivector->say__RDY())
 //        ;
-//    ivectorTest.ivector->request.say(UTYPE{22
+//    ivectorTest.ivector->say(UTYPE{22
 //#ifdef USE_STRUCT
 //, 44
 //#endif

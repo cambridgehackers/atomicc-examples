@@ -1,191 +1,184 @@
-STRUCT AddrCount {
+STRUCT AddrCount  {
     FIELD Bit(6) id
     FIELD Bit(4) count
     FIELD Bit(5) addr
 }
-STRUCT BusData {
+STRUCT BusData  {
     FIELD Bit(32) data
 }
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-STRUCT PortalInfo {
+STRUCT PortalInfo  {
     FIELD Bit(1) last
     FIELD AddrCount ac
 }
-STRUCT ReadResp {
+STRUCT ReadResp  {
     FIELD Bit(6) id
     FIELD Bit(32) data
 }
-INTERFACE MaxiI {
+INTERFACE Fifo  {
+    INTERFACE PipeIn.0 in
+    INTERFACE PipeOut out
+}
+INTERFACE Fifo.1  {
+    INTERFACE PipeIn.2 in
+    INTERFACE PipeOut.3 out
+}
+INTERFACE Fifo.11  {
+    INTERFACE PipeIn.12 in
+    INTERFACE PipeOut.13 out
+}
+INTERFACE Fifo.15  {
+    INTERFACE PipeIn.16 in
+    INTERFACE PipeOut.17 out
+}
+INTERFACE Fifo.18  {
+    INTERFACE PipeIn.19 in
+    INTERFACE PipeOut.20 out
+}
+INTERFACE Fifo.22  {
+    INTERFACE PipeIn.23 in
+    INTERFACE PipeOut.24 out
+}
+INTERFACE Fifo.25  {
+    INTERFACE PipeIn.26 in
+    INTERFACE PipeOut.27 out
+}
+INTERFACE Fifo.29  {
+    INTERFACE PipeIn.30 in
+    INTERFACE PipeOut.31 out
+}
+INTERFACE Fifo.4  {
+    INTERFACE PipeIn.5 in
+    INTERFACE PipeOut.6 out
+}
+INTERFACE Fifo.8  {
+    INTERFACE PipeIn.9 in
+    INTERFACE PipeOut.10 out
+}
+INTERFACE MaxiI  {
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
     METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
 }
-INTERFACE MaxiO {
+INTERFACE MaxiO  {
     METHOD/Action AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
-INTERFACE PipeIn {
+INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCData v )
 }
-INTERFACE PipeIn.0 {
-    METHOD/Action enq__ENA ( AddrCount v )
-}
-INTERFACE PipeIn.12 {
-    METHOD/Action enq__ENA ( ReadResp v )
-}
-INTERFACE PipeIn.15 {
-    METHOD/Action enq__ENA ( Bit(38) v )
-}
-INTERFACE PipeIn.19 {
-    METHOD/Action enq__ENA ( BusData v )
-}
-INTERFACE PipeIn.2 {
+INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(15) v )
 }
-INTERFACE PipeIn.22 {
+INTERFACE PipeIn.12  {
+    METHOD/Action enq__ENA ( Bit(38) v )
+}
+INTERFACE PipeIn.16  {
+    METHOD/Action enq__ENA ( ReadResp v )
+}
+INTERFACE PipeIn.19  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.26 {
+INTERFACE PipeIn.2  {
+    METHOD/Action enq__ENA ( AddrCount v )
+}
+INTERFACE PipeIn.23  {
+    METHOD/Action enq__ENA ( BusData v )
+}
+INTERFACE PipeIn.26  {
     METHOD/Action enq__ENA ( Bit(6) v )
 }
-INTERFACE PipeIn.29 {
+INTERFACE PipeIn.30  {
     METHOD/Action enq__ENA ( Bit(6) v )
 }
-INTERFACE PipeIn.5 {
-    METHOD/Action enq__ENA ( PortalInfo v )
-}
-INTERFACE PipeIn.8 {
+INTERFACE PipeIn.5  {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
-INTERFACE PipeInB {
+INTERFACE PipeIn.9  {
+    METHOD/Action enq__ENA ( PortalInfo v )
+}
+INTERFACE PipeInB  {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
-INTERFACE PipeInH {
+INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
-INTERFACE PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first AddrCount
-}
-INTERFACE PipeOut.13 {
-    METHOD/Action deq__ENA
-    METHOD first ReadResp
-}
-INTERFACE PipeOut.16 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(38)
-}
-INTERFACE PipeOut.20 {
-    METHOD/Action deq__ENA
-    METHOD first BusData
-}
-INTERFACE PipeOut.23 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut.27 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(6)
-}
-INTERFACE PipeOut.3 {
+INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(15)
 }
-INTERFACE PipeOut.30 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(6)
-}
-INTERFACE PipeOut.6 {
+INTERFACE PipeOut.10  {
     METHOD/Action deq__ENA
     METHOD first PortalInfo
 }
-INTERFACE PipeOut.9 {
+INTERFACE PipeOut.13  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(38)
+}
+INTERFACE PipeOut.17  {
+    METHOD/Action deq__ENA
+    METHOD first ReadResp
+}
+INTERFACE PipeOut.20  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.24  {
+    METHOD/Action deq__ENA
+    METHOD first BusData
+}
+INTERFACE PipeOut.27  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(6)
+}
+INTERFACE PipeOut.3  {
+    METHOD/Action deq__ENA
+    METHOD first AddrCount
+}
+INTERFACE PipeOut.31  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(6)
+}
+INTERFACE PipeOut.6  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
-INTERFACE ZynqInterruptT {
+INTERFACE TestTopIfc  {
+    INTERFACE MaxiO MAXIGP0_O
+    INTERFACE/Ptr MaxiI MAXIGP0_I
+}
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB write
+    INTERFACE/Ptr PipeInB read
+}
+INTERFACE ZynqInterruptT  {
     FIELD/output Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
 }
-EMODULE Fifo {
-    INTERFACE PipeIn.0 in
-    INTERFACE PipeOut out
-}
-EMODULE Fifo.1 {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
-}
-EMODULE Fifo.11 {
-    INTERFACE PipeIn.12 in
-    INTERFACE PipeOut.13 out
-}
-EMODULE Fifo.14 {
-    INTERFACE PipeIn.15 in
-    INTERFACE PipeOut.16 out
-}
-EMODULE Fifo.18 {
-    INTERFACE PipeIn.19 in
-    INTERFACE PipeOut.20 out
-}
-EMODULE Fifo.21 {
-    INTERFACE PipeIn.22 in
-    INTERFACE PipeOut.23 out
-}
-EMODULE Fifo.25 {
-    INTERFACE PipeIn.26 in
-    INTERFACE PipeOut.27 out
-}
-EMODULE Fifo.28 {
-    INTERFACE PipeIn.29 in
-    INTERFACE PipeOut.30 out
-}
-EMODULE Fifo.4 {
-    INTERFACE PipeIn.5 in
-    INTERFACE PipeOut.6 out
-}
-EMODULE Fifo.7 {
-    INTERFACE PipeIn.8 in
-    INTERFACE PipeOut.9 out
-}
-EMODULE Fifo1Base(width=15) {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
-}
-EMODULE Fifo1Base(width=16) {
-    INTERFACE PipeIn.8 in
-    INTERFACE PipeOut.9 out
-}
-EMODULE Fifo1Base(width=32) {
-    INTERFACE PipeIn.22 in
-    INTERFACE PipeOut.23 out
-}
-EMODULE Fifo1Base(width=38) {
-    INTERFACE PipeIn.15 in
-    INTERFACE PipeOut.16 out
-}
-EMODULE Fifo1Base(width=6) {
-    INTERFACE PipeIn.29 in
-    INTERFACE PipeOut.30 out
-}
-EMODULE TestTop {
-    INTERFACE ZynqInterruptT _
-    INTERFACE MaxiO MAXIGP0_O
-    INTERFACE/Ptr MaxiI MAXIGP0_I
-}
-EMODULE UserTop {
-    INTERFACE PipeInB write
-    INTERFACE/Ptr PipeInB read
-}
-EMODULE l_top {
+INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeInH indication
 }
-MODULE Fifo1 {
-    INTERFACE PipeIn.0 in
-    INTERFACE PipeOut out
+EMODULE Fifo1Base(width=15) Fifo {
+}
+EMODULE Fifo1Base(width=16) Fifo.4 {
+}
+EMODULE Fifo1Base(width=32) Fifo.18 {
+}
+EMODULE Fifo1Base(width=38) Fifo.11 {
+}
+EMODULE Fifo1Base(width=6) Fifo.25 {
+}
+EMODULE TestTop TestTopIfc {
+}
+EMODULE UserTop UserTopIfc {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE Fifo1 Fifo.1 {
     FIELD Fifo1Base(width=15) fifo
     METHOD/Action in$enq__ENA ( AddrCount v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -199,25 +192,7 @@ MODULE Fifo1 {
         LET Bit(15) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1.10 {
-    INTERFACE PipeIn.5 in
-    INTERFACE PipeOut.6 out
-    FIELD Fifo1Base(width=16) fifo
-    METHOD/Action in$enq__ENA ( PortalInfo v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first PortalInfo = ((out$first$retval)) {
-        ALLOCA PortalInfo out$first$retval
-        CALL :fifo$out$first{}
-        LET Bit(16) :out$first$retval = fifo$out$first
-    }
-}
-MODULE Fifo1.17 {
-    INTERFACE PipeIn.12 in
-    INTERFACE PipeOut.13 out
+MODULE Fifo1.14 Fifo.15 {
     FIELD Fifo1Base(width=38) fifo
     METHOD/Action in$enq__ENA ( ReadResp v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -231,9 +206,7 @@ MODULE Fifo1.17 {
         LET Bit(38) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1.24 {
-    INTERFACE PipeIn.19 in
-    INTERFACE PipeOut.20 out
+MODULE Fifo1.21 Fifo.22 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( BusData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -247,9 +220,7 @@ MODULE Fifo1.24 {
         LET Bit(32) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1.31 {
-    INTERFACE PipeIn.26 in
-    INTERFACE PipeOut.27 out
+MODULE Fifo1.28 Fifo.29 {
     FIELD Fifo1Base(width=6) fifo
     METHOD/Action in$enq__ENA ( Bit(6) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -261,11 +232,22 @@ MODULE Fifo1.31 {
         CALL :fifo$out$first{}
     }
 }
-MODULE TestTop {
+MODULE Fifo1.7 Fifo.8 {
+    FIELD Fifo1Base(width=16) fifo
+    METHOD/Action in$enq__ENA ( PortalInfo v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first PortalInfo = ((out$first$retval)) {
+        ALLOCA PortalInfo out$first$retval
+        CALL :fifo$out$first{}
+        LET Bit(16) :out$first$retval = fifo$out$first
+    }
+}
+MODULE TestTop TestTopIfc {
     INTERFACECONNECT readUser user$read PipeInB
-    INTERFACE ZynqInterruptT _
-    INTERFACE MaxiO MAXIGP0_O
-    INTERFACE/Ptr MaxiI MAXIGP0_I
     FIELD Bit(1) intEnable
     FIELD Bit(1) writeNotFirst
     FIELD Bit(1) writeLast
@@ -281,11 +263,11 @@ MODULE TestTop {
     FIELD Bit(5) writeAddr
     FIELD Fifo1 reqArs
     FIELD Fifo1 reqAws
-    FIELD Fifo1.10 readBeat
-    FIELD Fifo1.10 writeBeat
-    FIELD Fifo1.17 readData
-    FIELD Fifo1.24 writeData
-    FIELD Fifo1.31 writeDone
+    FIELD Fifo1.7 readBeat
+    FIELD Fifo1.7 writeBeat
+    FIELD Fifo1.14 readData
+    FIELD Fifo1.21 writeData
+    FIELD Fifo1.28 writeDone
     FIELD UserTop user
     INTERFACE PipeInB readUser
     FIELD Bit(32) requestValue

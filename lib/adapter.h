@@ -22,14 +22,20 @@
 #ifndef _ADAPTER_H_
 #define _ADAPTER_H_
 template<class T, class BusType>
-__emodule AdapterToBus {
+class AtB {
    PipeInH<T>        in;
    PipeInB<BusType> *out;
 };
 
+template<class T, class BusType>
+class AdapterToBus __implements AtB<T, BusType>;
+
 template<class BusType, class T>
-__emodule AdapterFromBus {
+class AfB {
    PipeInB<BusType>  in;
    PipeInH<T>       *out;
 };
+
+template<class BusType, class T>
+class AdapterFromBus __implements AfB<BusType, T>;
 #endif

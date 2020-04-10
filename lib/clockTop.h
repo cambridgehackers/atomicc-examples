@@ -20,14 +20,12 @@
  */
 #ifndef _CLOCKTOP_H_
 #define _CLOCKTOP_H_
-__interface ClockIfc {
+class ClockIfc {
    __parameter float   CLKIN1_PERIOD;
    __input  __uint(1)  CLK;
    __input  __uint(1)  nRST;
    __output __uint(1)  clockOut;
 };
 
-__emodule ClockTop {
-    ClockIfc _;
-};
+class ClockTop __implements ClockIfc;
 #endif

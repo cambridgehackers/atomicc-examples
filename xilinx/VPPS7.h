@@ -1,4 +1,27 @@
-__interface Pps7ddr {
+// Copyright (c) 2020 The Connectal Project
+
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+// BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+#ifndef _VPPS7_H_
+#define _VPPS7_H_
+class Pps7ddr {
     __inout  __uint(15)       A;
     __input  __uint(4)        ARB;
     __inout  __uint(3)        BA;
@@ -18,7 +41,7 @@ __interface Pps7ddr {
     __inout  __uint(1)        VRP;
     __inout  __uint(1)        WEB;
 };
-__interface Pps7dma {
+class Pps7dma {
     __input  __uint(1)        ACLK;
     __input  __uint(1)        DAREADY;
     __output __uint(2)        DATYPE;
@@ -29,11 +52,11 @@ __interface Pps7dma {
     __input  __uint(1)        DRVALID;
     __output __uint(1)        RSTN;
 };
-__interface Pps7emiocan {
+class Pps7emiocan {
     __input  __uint(1)        PHYRX;
     __output __uint(1)        PHYTX;
 };
-__interface Pps7emioenet {
+class Pps7emioenet {
     __input  __uint(1)        EXTINTIN;
     __input  __uint(1)        GMIICOL;
     __input  __uint(1)        GMIICRS;
@@ -60,12 +83,12 @@ __interface Pps7emioenet {
     __output __uint(1)        SOFRX;
     __output __uint(1)        SOFTX;
 };
-__interface Pps7emiogpio {
+class Pps7emiogpio {
     __input  __uint(64)       I;
     __output __uint(64)       O;
     __output __uint(64)       TN;
 };
-__interface Pps7emioi2c {
+class Pps7emioi2c {
     __input  __uint(1)        SCLI;
     __output __uint(1)        SCLO;
     __output __uint(1)        SCLTN;
@@ -73,14 +96,14 @@ __interface Pps7emioi2c {
     __output __uint(1)        SDAO;
     __output __uint(1)        SDATN;
 };
-__interface Pps7emiopjtag {
+class Pps7emiopjtag {
     __input  __uint(1)        TCK;
     __input  __uint(1)        TDI;
     __output __uint(1)        TDO;
     __output __uint(1)        TDTN;
     __input  __uint(1)        TMS;
 };
-__interface Pps7emiosdio {
+class Pps7emiosdio {
     __output __uint(1)        BUSPOW;
     __output __uint(3)        BUSVOLT;
     __input  __uint(1)        CDN;
@@ -95,7 +118,7 @@ __interface Pps7emiosdio {
     __output __uint(1)        LED;
     __input  __uint(1)        WP;
 };
-__interface Pps7emiospi {
+class Pps7emiospi {
     __input  __uint(1)        MI;
     __output __uint(1)        MO;
     __output __uint(1)        MOTN;
@@ -109,19 +132,19 @@ __interface Pps7emiospi {
     __output __uint(3)        SSON;
     __output __uint(1)        STN;
 };
-__interface Pps7emiosramint {
+class Pps7emiosramint {
     __input  __uint(1)        IN;
 };
-__interface Pps7emiotrace {
+class Pps7emiotrace {
     __input  __uint(1)        CLK;
     __output __uint(1)        CTL;
     __output __uint(32)       DATA;
 };
-__interface Pps7emiottc {
+class Pps7emiottc {
     __input  __uint(3)        CLKI;
     __output __uint(3)        WAVEO;
 };
-__interface Pps7emiouart {
+class Pps7emiouart {
     __input  __uint(1)        CTSN;
     __input  __uint(1)        DCDN;
     __input  __uint(1)        DSRN;
@@ -131,36 +154,36 @@ __interface Pps7emiouart {
     __input  __uint(1)        RX;
     __output __uint(1)        TX;
 };
-__interface Pps7emiousb {
+class Pps7emiousb {
     __output __uint(2)        PORTINDCTL;
     __input  __uint(1)        VBUSPWRFAULT;
     __output __uint(1)        VBUSPWRSELECT;
 };
-__interface Pps7emiowdt {
+class Pps7emiowdt {
     __input  __uint(1)        CLKI;
     __output __uint(1)        RSTO;
 };
-__interface Pps7event {
+class Pps7event {
     __input  __uint(1)        EVENTI;
     __output __uint(1)        EVENTO;
     __output __uint(2)        STANDBYWFE;
     __output __uint(2)        STANDBYWFI;
 };
-__interface Pps7fclk {
+class Pps7fclk {
     __output __uint(4)        CLK;
     __input  __uint(4)        CLKTRIGN;
     __output __uint(4)        RESETN;
 };
-__interface Pps7fpgaid {
+class Pps7fpgaid {
     __input  __uint(1)        LEN;
 };
-__interface Pps7ftmd {
+class Pps7ftmd {
     __input  __uint(4)        TRACEINATID;
     __input  __uint(1)        TRACEINCLOCK;
     __input  __uint(32)       TRACEINDATA;
     __input  __uint(1)        TRACEINVALID;
 };
-__interface Pps7ftmt {
+class Pps7ftmt {
     __input  __uint(32)       F2PDEBUG;
     __input  __uint(4)        F2PTRIG;
     __output __uint(4)        F2PTRIGACK;
@@ -168,14 +191,14 @@ __interface Pps7ftmt {
     __output __uint(4)        P2FTRIG;
     __input  __uint(4)        P2FTRIGACK;
 };
-__interface Pps7irq {
+class Pps7irq {
     __input  __uint(20)       F2P;
     __output __uint(29)       P2F;
 };
-__interface Pps7m {
+class Pps7m {
     __inout  __uint(54)       IO;
 };
-__interface Pps7maxigp {
+class Pps7maxigp {
     __input  __uint(1)        ACLK;
     __output __uint(32)       ARADDR;
     __output __uint(2)        ARBURST;
@@ -217,12 +240,12 @@ __interface Pps7maxigp {
     __output __uint(4)        WSTRB;
     __output __uint(1)        WVALID;
 };
-__interface Pps7ps {
+class Pps7ps {
     __inout  __uint(1)        CLK;
     __inout  __uint(1)        PORB;
     __inout  __uint(1)        SRSTB;
 };
-__interface Pps7saxiacp {
+class Pps7saxiacp {
     __input  __uint(1)        ACLK;
     __input  __uint(32)       ARADDR;
     __input  __uint(2)        ARBURST;
@@ -266,7 +289,7 @@ __interface Pps7saxiacp {
     __input  __uint(8)        WSTRB;
     __input  __uint(1)        WVALID;
 };
-__interface Pps7saxigp {
+class Pps7saxigp {
     __input  __uint(1)        ACLK;
     __input  __uint(32)       ARADDR;
     __input  __uint(2)        ARBURST;
@@ -308,7 +331,7 @@ __interface Pps7saxigp {
     __input  __uint(4)        WSTRB;
     __input  __uint(1)        WVALID;
 };
-__interface Pps7saxihp {
+class Pps7saxihp {
     __input  __uint(1)        ACLK;
     __input  __uint(32)       ARADDR;
     __input  __uint(2)        ARBURST;
@@ -356,7 +379,7 @@ __interface Pps7saxihp {
     __input  __uint(8)        WSTRB;
     __input  __uint(1)        WVALID;
 };
-__interface Pps7PS7 {
+class Pps7PS7 {
     Pps7ddr          DDR;
     Pps7dma          DMA0;
     Pps7dma          DMA1;
@@ -401,6 +424,5 @@ __interface Pps7PS7 {
     Pps7saxihp       SAXIHP2;
     Pps7saxihp       SAXIHP3;
 };
-__emodule PS7 {
-    Pps7PS7 _;
-};
+class PS7 __implements Pps7PS7;
+#endif

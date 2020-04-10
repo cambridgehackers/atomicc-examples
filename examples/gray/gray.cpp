@@ -22,9 +22,13 @@
 #include "grayCounter.h"
 #include "userTop.h"
 
-__module Test {
+class TestIfc {
+    __software GrayCounterIfc<4>  request;
+};
+
+class Test __implements TestIfc {
     GrayCounter<4> counter;
-    __software GrayCounterIfc<4>  request = counter.ifc;
+    __connect request = counter;
 };
 
 Test dummy;

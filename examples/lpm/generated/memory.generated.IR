@@ -1,30 +1,27 @@
-INTERFACE LpmMem {
+INTERFACE LpmMem  {
     METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
 }
-INTERFACE TickIfc {
+INTERFACE TickIfc  {
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
 }
-EMODULE BufTicket {
-    INTERFACE TickIfc tickIfc
+EMODULE BufTicket TickIfc {
 }
-EMODULE LpmMemory {
-    INTERFACE LpmMem ifc
+EMODULE LpmMemory LpmMem {
 }
-MODULE LpmMemory {
-    INTERFACE LpmMem ifc
+MODULE LpmMemory LpmMem {
     FIELD Bit(32) delayCount
     FIELD Bit(32) saved
-    METHOD/Action ifc$req__ENA ( Bit(32) v ) if (((delayCount) == (0))) {
+    METHOD/Action req__ENA ( Bit(32) v ) if (((delayCount) == (0))) {
         STORE :delayCount = 4
-        STORE :saved = ifc$req$v
+        STORE :saved = req$v
     }
-    METHOD/Action ifc$resAccept__ENA if (((delayCount) == (1))) {
+    METHOD/Action resAccept__ENA if (((delayCount) == (1))) {
         STORE :delayCount = 0
     }
-    METHOD ifc$resValue Bit(32) = ((saved)) if (((delayCount) == (1)))
+    METHOD resValue Bit(32) = ((saved)) if (((delayCount) == (1)))
     METHOD/Rule/Action RULE$memdelay_rule__ENA if (((delayCount) > (1))) {
         STORE :delayCount = (delayCount) - (1)
     }

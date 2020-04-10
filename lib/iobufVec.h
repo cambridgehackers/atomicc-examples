@@ -20,7 +20,7 @@
  */
 //#define iovecWidth 2//16
 template <int iovecWidth>
-__interface IobufVecPins {
+class IobufVecPins {
     __inout  __uint(iovecWidth) IO;
     __input  __uint(iovecWidth)  I;
     __output __uint(iovecWidth)  O;
@@ -28,6 +28,4 @@ __interface IobufVecPins {
 };
 
 template <int iovecWidth>
-__emodule IobufVec {
-    IobufVecPins<iovecWidth> _;
-};
+class IobufVec __implements IobufVecPins<iovecWidth>;

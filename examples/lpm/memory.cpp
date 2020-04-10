@@ -21,16 +21,13 @@
  */
 #include "lpmdef.h"
 
-__module LpmMemory {
-    LpmMem ifc;
+class LpmMemory __implements LpmMem {
     int delayCount;
     IPA saved;
-    void ifc.req(IPA v) if (delayCount == 0) { delayCount = 4; saved = v; }
-    void ifc.resAccept(void) if (delayCount == 1) { delayCount = 0;}
-    IPA ifc.resValue(void) if (delayCount == 1) { return saved; }
-    LpmMemory() {
-        __rule memdelay_rule if (delayCount > 1) { delayCount = delayCount - 1; };
-    }
+    void req(IPA v) if (delayCount == 0) { delayCount = 4; saved = v; }
+    void resAccept(void) if (delayCount == 1) { delayCount = 0;}
+    IPA resValue(void) if (delayCount == 1) { return saved; }
+    __rule memdelay_rule if (delayCount > 1) { delayCount = delayCount - 1; };
 };
 
 LpmMemory test;

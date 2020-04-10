@@ -32,23 +32,23 @@ typedef struct {
     myint4 b;
 } ValueType;
 
-__interface IVectorIndication {
+class IVectorIndication {
     void heard(myint6 meth, myint4 v);
 };
-__emodule IVectorInd {
-    IVectorIndication ind;
-    void ind.heard(myint6 meth, myint4 v);
-};
+class IVectorInd __implements IVectorIndication;
 
-__interface IVectorRequest {
+class IVectorRequest {
     void say(myint6 meth, myint4 v);
 };
 
 ValueType grumpy;
 
-__module IVector {
+class IVectorIFC {
     IVectorRequest request;
     IVectorIndication *ind;
+};
+
+class IVector __implements IVectorIFC {
     Fifo1<ValueType> fifo;
     myint23          fcounter;
     static int       intcWidth;
@@ -61,9 +61,8 @@ __module IVector {
         temp.b = v;
         fifo.in.enq(temp);
     }
-    IVector(IVectorInd *aind) : ind(&aind->ind)
-//, counter(lrint(log(4))), gcounter(14) //grumpy.a.size + grumpy.b.size)
-    {
+    IVector(IVectorInd *aind) {
+        ind = aind;
         __rule respond {
             ValueType temp = fifo.out.first();
             fifo.out.deq();
@@ -79,11 +78,11 @@ int IVector::intcWidth = 3;
 // Test Bench
 ////////////////////////////////////////////////////////////
 
-void IVectorInd::ind.heard(myint6 meth, myint4 v)
-{
-    //printf("Heard an ivector: %d %d\n", meth, v);
-    printf("Heard an ivector: %d %d\n", 0, 0);
-}
+//void IVectorInd::ind.heard(myint6 meth, myint4 v)
+//{
+    ////printf("Heard an ivector: %d %d\n", meth, v);
+    //printf("Heard an ivector: %d %d\n", 0, 0);
+//}
 
 class IVectorTest {
 public:

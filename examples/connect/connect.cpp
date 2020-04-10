@@ -58,18 +58,21 @@ typedef struct {
 } EchoIndication_data;
 
 // Interface classes
-__interface EchoRequest {
+class EchoRequest {
     void say(int meth, int v);
 };
 
-__interface EchoIndication {
+class EchoIndication {
     void heard(int meth, int v);
 };
 
 typedef PipeIn<EchoRequest_data> EchoRequestPipe;
-__module EchoRequestOutput { // method -> pipe
+class EROIfc {
     EchoRequest request;
     EchoRequestPipe *pipe;
+};
+
+class EchoRequestOutput __implements EROIfc { // method -> pipe
     void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
@@ -80,9 +83,12 @@ __module EchoRequestOutput { // method -> pipe
     }
 };
 
-__module EchoRequestInput { // pipe -> method
+class ERIIfc {
     EchoRequestPipe pipe;
     EchoRequest *request;
+};
+
+class EchoRequestInput __implements ERIIfc { // pipe -> method
     void pipe.enq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq\n");
         switch (v.tag) {
@@ -94,9 +100,12 @@ __module EchoRequestInput { // pipe -> method
 };
 
 typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
-__module EchoIndicationOutput { // method -> pipe
+class EIOIfc {
     EchoIndication indication;
     EchoIndicationPipe *pipe;
+};
+
+class EchoIndicationOutput __implements EIOIfc { // method -> pipe
     void indication.heard(int meth, int v) {
         EchoIndication_data ind;
         ind.tag = EchoIndication_tag_heard;
@@ -106,9 +115,12 @@ __module EchoIndicationOutput { // method -> pipe
     }
 };
 
-__module EchoIndicationInput { // pipe -> method
+class EIIIfc {
     EchoIndicationPipe pipe;
     EchoIndication *indication;
+};
+
+class EchoIndicationInput __implements EIIIfc { // pipe -> method
     void pipe.enq(EchoIndication_data v) {
         switch (v.tag) {
         case EchoIndication_tag_heard:
@@ -118,15 +130,23 @@ __module EchoIndicationInput { // pipe -> method
     }
 };
 
-__module Echo {
+class EchoIfc {
     EchoRequest request;
     EchoIndication *indication;
+};
+
+class Echo __implements EchoIfc {
     void request.say(int meth, int v) {
         indication->heard(meth, v);
     }
 };
 
-__module Connect {
+class ConnectIfc {
+    EchoRequest request;
+    EchoIndication *indication;
+};
+
+class Connect __implements ConnectIfc {
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
@@ -143,8 +163,8 @@ __module Connect {
         lEcho.indication = &lEIO.indication;
         lERO_test.pipe = &lERI.pipe;
     }
-    EchoRequest request = lERO_test.request; // user request
-    EchoIndication *indication = lEII_test.indication; // user indication
+    __connect request = lERO_test.request; // user request
+    __connect *indication = lEII_test.indication; // user indication
 };
 
 Connect connectTest;

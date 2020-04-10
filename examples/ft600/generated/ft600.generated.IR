@@ -1,4 +1,4 @@
-INTERFACE Ft600 {
+INTERFACE Ft600  {
     FIELD/input Bit(1) usb_clk
     FIELD/input Bit(1) usb_rxf
     FIELD/input Bit(1) usb_txe
@@ -7,17 +7,15 @@ INTERFACE Ft600 {
     FIELD/output Bit(1) usb_oe_n
     FIELD/inout Bit(16) usb_ad
 }
-INTERFACE IobufVecPins(iovecWidth=16) {
+INTERFACE IobufVecPins(iovecWidth=16)  {
     FIELD/inout Bit(16) IO
     FIELD/input Bit(16) I
     FIELD/output Bit(16) O
     FIELD/input Bit(1) T
 }
-EMODULE IobufVec(iovecWidth=16) {
-    INTERFACE IobufVecPins(iovecWidth=16) _
+EMODULE IobufVec(iovecWidth=16) IobufVecPins(iovecWidth=16) {
 }
-MODULE ModFt600 {
-    INTERFACE Ft600 _
+MODULE ModFt600 Ft600 {
     FIELD Bit(1) usb_fifo_empty
     FIELD Bit(2) usb_rxf_delay
     FIELD Bit(1) usb_txe_delay

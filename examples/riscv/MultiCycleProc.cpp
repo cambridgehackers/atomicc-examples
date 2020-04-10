@@ -20,21 +20,21 @@
  */
 #include "atomicc.h"
 
-__interface RegFile {
+class RegFile {
   int read(int regnum);
   void write(int regnum, int regval);
 };
 
-__interface IMem {
+class IMem {
   int read(int pc);
 };
 
-__interface DMem {
+class DMem {
   void request(int write_en, int addr, int data);
   int response();
 };
 
-__interface Decoder {
+class Decoder {
   int getOp(int inst);
   int getArithOp(int inst);
   int getSrc1(int inst);
@@ -49,17 +49,19 @@ struct ExecResult {
   int data;
 };
 
-__interface Executer {
+class Executer {
   ExecResult basicExec(int op, int src1, int src2);
 };
 
-__module MultiCycleProc {
+class MultiCycleProcIfc {
   Decoder *dec;
   Executer *exec;
   RegFile *rf;
   IMem *pgm;
   DMem *dmem;
+};
 
+class MultiCycleProc __implements MultiCycleProcIfc {
   int pc;
   // registers passing info from decode stage to exec stage
   int d2e_valid;
@@ -76,8 +78,12 @@ __module MultiCycleProc {
   int e2w_addr;
   int e2w_nextPC;
 
-  MultiCycleProc(Decoder *dec, Executer *exec, RegFile *rf, IMem *pgm, DMem *dmem)
-    : dec(dec), exec(exec), rf(rf), pgm(pgm), dmem(dmem) {
+  MultiCycleProc(Decoder *adec, Executer *aexec, RegFile *arf, IMem *apgm, DMem *admem) {
+    dec = adec;
+    exec = aexec;
+    rf = arf;
+    pgm = apgm;
+    dmem = admem;
     pc = 0;
     d2e_valid = 0;
     e2w_valid = 0;

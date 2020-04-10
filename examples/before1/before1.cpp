@@ -57,18 +57,21 @@ typedef struct {
 } EchoIndication_data;
 
 // Interface classes
-__interface EchoRequest {
+class EchoRequest {
     void say(int meth, int v);
     void say2(int meth, int v);
 };
 
-__interface EchoIndication {
+class EchoIndication {
     void heard(int meth, int v);
 };
 
-typedef PipeIn<EchoRequest_data> EchoRequestPipe;
-__module EchoRequestOutput { // method -> pipe
+class EROIfc {
     EchoRequest request;
+};
+
+typedef PipeIn<EchoRequest_data> EchoRequestPipe;
+class EchoRequestOutput __implements EROIfc { // method -> pipe
     EchoRequestPipe *pipe;
     void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
@@ -88,8 +91,11 @@ __module EchoRequestOutput { // method -> pipe
     }
 };
 
-__module EchoRequestInput { // pipe -> method
+class ERIIfc {
     EchoRequestPipe pipe;
+};
+
+class EchoRequestInput __implements ERIIfc { // pipe -> method
     EchoRequest *request;
     void pipe.enq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
@@ -104,9 +110,12 @@ __module EchoRequestInput { // pipe -> method
     }
 };
 
-typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
-__module EchoIndicationOutput { // method -> pipe
+class EIOIfc {
     EchoIndication indication;
+};
+
+typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
+class EchoIndicationOutput __implements EIOIfc { // method -> pipe
     EchoIndicationPipe *pipe;
     EchoIndication_data ind0;
     EchoIndication_data ind1;
@@ -141,8 +150,11 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
     }
 };
 
-__module EchoIndicationInput { // pipe -> method
+class EIIIfc {
     EchoIndicationPipe pipe;
+};
+
+class EchoIndicationInput __implements EIIIfc { // pipe -> method
     EchoIndication *indication;
     bool busy_delay;
     int meth_delay;
@@ -166,15 +178,18 @@ printf("input_rule: EchoIndicationInput\n");
     }
 };
 
-__interface Swap {
+class Swap {
     void y2x(void);
     void y2xnull(void);
     void x2y(void);
 };
 
-__module Echo {
+class EchoIfc {
     EchoRequest request;
     Swap        swap;
+};
+
+class Echo __implements EchoIfc {
     bool busy;
     int meth_temp;
     int v_temp;
@@ -225,18 +240,17 @@ printf("respond_rule: Echo\n");
     }
 };
 
-__module Connect {
-    EchoRequest request;
+class Connect __implements EchoRequest {
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;
 
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
-    void request.say(int meth, int v) {
+    void say(int meth, int v) {
         lERO_test.request.say(meth, v);
     }
-    void request.say2(int meth, int v) {
+    void say2(int meth, int v) {
         lERO_test.request.say2(meth, v);
     }
     //void heard(int meth, int v) {

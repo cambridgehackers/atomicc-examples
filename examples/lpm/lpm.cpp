@@ -39,30 +39,29 @@ int lpm(IPA ipa)
 }
 */
 
-__interface LpmRequest {
+class LpmRequest {
     void       enter(IPA x);
 };
 
-__module Lpm {
-    LpmRequest          request;
+class Lpm __implements LpmRequest {
     BufTicket    compBuf;
     Fifo1<IPA>   inQ;
     FifoB1<ProcessData>   fifo;
     PipeIn<IPA> *outQ;
     LpmMemory           mem;
     Lpm() {
-        __rule recirc if (!p(mem.ifc.resValue())) {
-            auto x = mem.ifc.resValue();
+        __rule recirc if (!p(mem.resValue())) {
+            auto x = mem.resValue();
             auto y = fifo.out.first();
-            mem.ifc.resAccept();
-	    mem.ifc.req(compute_addr(x, y.state, y.IPA));
+            mem.resAccept();
+	    mem.req(compute_addr(x, y.state, y.IPA));
 	    fifo.out.deq();
 	    fifo.in.enq(ProcessData{y.ticket, y.IPA, y.state + 1});
         };
-        __rule exitr if (p(mem.ifc.resValue()) & !__valid(RULE$recirc)) {
-            auto x = mem.ifc.resValue();
+        __rule exitr if (p(mem.resValue()) & !__valid(RULE$recirc)) {
+            auto x = mem.resValue();
             auto y = fifo.out.first();
-            mem.ifc.resAccept();
+            mem.resAccept();
 	    fifo.out.deq();
 	    outQ->enq(f1(x,y));
         };
@@ -72,10 +71,10 @@ __module Lpm {
             //compBuf.tickIfc.allocateTicket();
             inQ.out.deq();
 	    fifo.in.enq(ProcessData{ticket, static_cast<__uint(16)>(__bitsubstr(x, 15, 0)), 0});
-	    mem.ifc.req(addr(x));
+	    mem.req(addr(x));
         };
     };
-    void request.enter(IPA x) {
+    void enter(IPA x) {
 	inQ.in.enq(x);
     }
 };

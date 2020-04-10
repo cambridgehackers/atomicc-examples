@@ -26,7 +26,7 @@
  * Standard fifo: enq() and deq() are exclusive
  */
 template<int width>
-__module Fifo1Base : public Fifo<__uint(width)> {
+class Fifo1Base __implements Fifo<__uint(width)> {
   __uint(width) element;
   bool full;
   void in.enq(const __uint(width) v) if (notFull()) {
@@ -46,7 +46,7 @@ static Fifo1Base<GENERIC_INT_TEMPLATE_FLAG> dummy;
  * Bypass/pipeline fifo: enq() and deq() are allowed on same cycle
  */
 template<int width>
-__module FifoB1Base : public Fifo<__uint(width)> {
+class FifoB1Base __implements Fifo<__uint(width)> {
   __uint(width) element;
   bool full;
   __shared __uint(width) enq_v;

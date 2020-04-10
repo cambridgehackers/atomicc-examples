@@ -24,7 +24,7 @@
 
 #define IfcNames_EchoIndicationH2S 5
 
-__module UserTop {
+class UserTop __implements UserTopIfc {
     AdapterToBus<NOCData, BusType> radapter_0;
     AdapterFromBus<BusType, NOCData> wadapter_0;
     PipeInB<BusType> write = wadapter_0.in;

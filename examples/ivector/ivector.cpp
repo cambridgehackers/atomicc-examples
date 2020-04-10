@@ -32,7 +32,7 @@ typedef struct {
 //#define UTYPE int
 
 template<class T>
-__module FifoPong : public Fifo<T> {
+class FifoPong __implements Fifo<T> {
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
@@ -56,23 +56,23 @@ __module FifoPong : public Fifo<T> {
 };
 
 static FifoPong<UTYPE> bozouseless;
-__interface IVectorIndication {
+class IVectorIndication {
     void heard(int meth, int v);
 };
-__emodule IVectorInd{
-    IVectorIndication ind;
-    void ind.heard(int meth, int v) {}
-};
+class IVectorInd __implements IVectorIndication;
 
-__interface IVectorRequest {
+class IVectorRequest {
     void say(int meth, int v);
 };
 
-__module IVector {
-    Fifo<UTYPE> *fifo;
-    IVectorIndication *out;
-    int vsize;
+class IVectorIFC {
     IVectorRequest in;
+    IVectorIndication *out;
+};
+
+class IVector __implements IVectorIFC {
+    Fifo<UTYPE> *fifo;
+    int vsize;
     void in.say(int meth, int v) {
         UTYPE temp;
         temp.b = v;
@@ -127,7 +127,8 @@ __module IVector {
          tfifo->in.enq(temp);
 #endif
     }
-    IVector(IVectorInd *aind, int size) : out(&aind->ind), vsize(size) {
+    IVector(IVectorInd *aind, int size) : vsize(size) {
+        out = aind;
         //for (int i = 0; i < vsize; i++)
             //fifo[i] = new FifoPong<UTYPE>();
         fifo = (Fifo<ValuePair> *)new FifoPong<UTYPE>[vsize];

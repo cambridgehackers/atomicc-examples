@@ -1,4 +1,27 @@
-__interface Mmcme2MMCME2_ADV {
+// Copyright (c) 2020 The Connectal Project
+
+// Permission is hereby granted, free of charge, to any person
+// obtaining a copy of this software and associated documentation
+// files (the "Software"), to deal in the Software without
+// restriction, including without limitation the rights to use, copy,
+// modify, merge, publish, distribute, sublicense, and/or sell copies
+// of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be
+// included in all copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+// EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+// NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+// BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+// ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+// CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+#ifndef _VMMCME2_ADV_H_
+#define _VMMCME2_ADV_H_
+class Mmcme2MMCME2_ADV {
     __parameter const char *     BANDWIDTH;
     __input  __uint(1)        CLKFBIN;
     __output __uint(1)        CLKFBOUT;
@@ -81,6 +104,5 @@ __interface Mmcme2MMCME2_ADV {
     __parameter int              SS_MOD_PERIOD;
     __parameter const char *     STARTUP_WAIT;
 };
-__emodule MMCME2_ADV {
-    Mmcme2MMCME2_ADV _;
-};
+class MMCME2_ADV __implements Mmcme2MMCME2_ADV;
+#endif

@@ -43,10 +43,7 @@ typedef struct {
   BusType    data;
 } BusData;
 
-__module TestTop {
-    ZynqInterruptT     _;
-    MaxiO             MAXIGP0_O;
-    MaxiI            *MAXIGP0_I;
+class TestTop __implements TestTopIfc {
     __uint(1) intEnable, writeNotFirst, writeLast;
     __uint(1) readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;

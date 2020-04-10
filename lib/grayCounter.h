@@ -21,7 +21,7 @@
 #include "atomicc.h"
 
 template <int width>
-__interface GrayCounterIfc {
+class GrayCounterIfc {
     void increment();
     void decrement();
     __uint(width) readGray();
@@ -31,6 +31,4 @@ __interface GrayCounterIfc {
 };
 
 template <int width>
-__emodule GrayCounter {
-    GrayCounterIfc<width> ifc;
-};
+class GrayCounter __implements GrayCounterIfc<width>;

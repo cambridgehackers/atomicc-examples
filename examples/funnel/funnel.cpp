@@ -22,7 +22,7 @@
 #include "grayCounter.h"
 #include "userTop.h"
 
-__module Test {
+class Test {
     GrayCounter<4> counter;
     __software GrayCounterIfc<4>  request = counter.ifc;
 };

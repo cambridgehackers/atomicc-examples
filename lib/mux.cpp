@@ -27,11 +27,8 @@ typedef struct {
     NOCData data;
     __uint(16) length;
 } FifoItem;
-__module MuxPipe {
-public:
-    NOCPipeH           in;
-    NOCPipeH      forward;
-    NOCPipeH         *out;
+
+class MuxPipe __implements MuxPipeIfc {
     Fifo1<NOCData>   forwardFifo;
     Fifo1<__uint(16)>   forwardFifol;
     void in.enq(NOCData v, __uint(16) length) if (!__ready(forwardFifo.out.first)) {

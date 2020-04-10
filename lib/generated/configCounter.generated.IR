@@ -1,12 +1,11 @@
-INTERFACE ConfigCounterIfc(count_sz=10) {
+INTERFACE ConfigCounterIfc(count_sz=10)  {
     METHOD/Action decrement__ENA ( Bit(count_sz) v )
     METHOD/Action maybeDecrement ( Bit(10) v ) Bit(1)
     METHOD/Action increment__ENA ( Bit(count_sz) v )
     METHOD read Bit(count_sz)
     METHOD positive Bit(1)
 }
-MODULE ConfigCounter(count_sz=10) {
-    INTERFACE ConfigCounterIfc(count_sz=10) ifc
+MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {
     FIELD/shared Bit(10) inc_wire
     FIELD/shared Bit(10) dec_wire
     FIELD Bit(10) cnt

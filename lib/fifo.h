@@ -23,10 +23,10 @@
 #define _FIFO_H_
 #include "atomicc.h"
 template<int width>
-__emodule Fifo1Base : public Fifo<__uint(width)> { };
+class Fifo1Base __implements Fifo<__uint(width)>;
 
 template<class T>
-__module Fifo1 : public Fifo<T> {
+class Fifo1 __implements Fifo<T> {
   Fifo1Base<__bitsize(T)> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
@@ -34,10 +34,10 @@ __module Fifo1 : public Fifo<T> {
 };
 
 template<int width>
-__emodule FifoB1Base : public Fifo<__uint(width)> { };
+class FifoB1Base __implements Fifo<__uint(width)>;
 
 template<class T>
-__module FifoB1 : public Fifo<T> {
+class FifoB1 __implements Fifo<T> {
   FifoB1Base<__bitsize(T)> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
@@ -45,10 +45,10 @@ __module FifoB1 : public Fifo<T> {
 };
 
 template<int depth, int width, int bypass = 0>
-__emodule SizedFifoBase : public Fifo<__uint(width)> { };
+class SizedFifoBase __implements Fifo<__uint(width)>;
 
 template<int depth, class T, int bypass = 0>
-__module SizedFifo : public Fifo<T> {
+class SizedFifo __implements Fifo<T> {
   SizedFifoBase<depth, __bitsize(T), bypass> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }

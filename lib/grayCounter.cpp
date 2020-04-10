@@ -22,26 +22,25 @@
 #include "grayCounter.h"
 
 template <int width>
-__module GrayCounter {
-    GrayCounterIfc<width> ifc;
+class GrayCounter __implements GrayCounterIfc<width> {
     __uint(1) counter[width];
     __shared __uint(width) m;
 
-    void ifc.increment() { }
-    void ifc.decrement() { }
+    void increment() { }
+    void decrement() { }
 
-    __uint(width) ifc.readGray() {
+    __uint(width) readGray() {
         __uint(width) ctemp;
         for(int i = 0; i < width; i += 1)
             *__bitsubstrl(ctemp, i) = counter[i];
         return ctemp;
     }
-    void ifc.writeGray(__uint(width) v) {
+    void writeGray(__uint(width) v) {
         for(int i = 0; i < width; i += 1)
             counter[i] = __bitsubstr(v, i);
     }
 
-    __uint(width) ifc.readBin() {
+    __uint(width) readBin() {
         __uint(1) temp[width];
         __uint(width) ctemp;
         for(int i = 0; i < width; i += 1)
@@ -53,7 +52,7 @@ __module GrayCounter {
             *__bitsubstrl(rtemp, i) = temp[i];
         return rtemp;
     }
-    void ifc.writeBin(__uint(width) v) {
+    void writeBin(__uint(width) v) {
         for(int i = 0; i < width; i += 1)
             if (i == width - 1)
                 counter[i] = __bitsubstr(v, i);
@@ -61,11 +60,11 @@ __module GrayCounter {
                 counter[i] = __reduce("^", __bitsubstr(v, i + 1, i));
     }
 
-    __rule incdec if (__valid(ifc.increment) != __valid(ifc.decrement)) {
+    __rule incdec if (__valid(increment) != __valid(decrement)) {
         __uint(width) ctemp;
         for(int i = 0; i < width; i += 1)
             *__bitsubstrl(ctemp, i) = counter[i];
-        __uint(1) useLsb = __reduce("^", ctemp) == __valid(ifc.decrement);
+        __uint(1) useLsb = __reduce("^", ctemp) == __valid(decrement);
         for(int i = 0; i < width; i += 1) {
             counter[i] ^= (i == 0) ?  useLsb : ((!useLsb)
                & ((i == width - 1) | __bitsubstr(ctemp, i < 1 ? 0:(i - 1)))

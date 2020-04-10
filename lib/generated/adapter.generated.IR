@@ -1,15 +1,21 @@
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-INTERFACE PipeInB {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
-}
-INTERFACE PipeInH {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
-}
-MODULE AdapterFromBus {
+INTERFACE AfB  {
     INTERFACE PipeInB in
     INTERFACE/Ptr PipeInH out
+}
+INTERFACE AtB  {
+    INTERFACE PipeInH in
+    INTERFACE/Ptr PipeInB out
+}
+INTERFACE PipeInB  {
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
+}
+INTERFACE PipeInH  {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+MODULE AdapterFromBus AfB {
     FIELD Bit(1) waitForEnq
     FIELD Bit(128) buffer
     METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {
@@ -23,9 +29,7 @@ MODULE AdapterFromBus {
         STORE :waitForEnq = (0) != (0)
     }
 }
-MODULE AdapterToBus {
-    INTERFACE PipeInH in
-    INTERFACE/Ptr PipeInB out
+MODULE AdapterToBus AtB {
     FIELD Bit(16) remain
     FIELD Bit(128) buffer
     METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if (((remain) == (0))) {

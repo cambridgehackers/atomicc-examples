@@ -21,7 +21,7 @@
 #include "atomicc.h"
 
 template <int count_sz>
-__interface ConfigCounterIfc {
+class ConfigCounterIfc {
     void decrement(__uint(count_sz) v);
     __action bool maybeDecrement(__uint(count_sz) v);
     void increment(__uint(count_sz) v);
@@ -30,8 +30,7 @@ __interface ConfigCounterIfc {
 };
 
 template <int count_sz>
-__module ConfigCounter {
-    ConfigCounterIfc<count_sz> ifc;
+class ConfigCounter __implements ConfigCounterIfc<count_sz> {
     __shared __uint(count_sz) inc_wire;
     __shared __uint(count_sz) dec_wire;
     __int(count_sz) cnt;

@@ -1,43 +1,51 @@
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-INTERFACE EchoIndication {
-    METHOD/Action heard__ENA ( Bit(32) v )
-    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
-    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
-}
-INTERFACE EchoRequest {
-    METHOD/Action say__ENA ( Bit(32) v )
-    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
-    METHOD/Action setLeds__ENA ( Bit(8) v )
-}
-INTERFACE PipeIn {
-    METHOD/Action enq__ENA ( NOCData v )
-}
-INTERFACE PipeInB {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
-}
-INTERFACE PipeInH {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
-}
-EMODULE MuxPipe {
-    INTERFACE PipeInH in
-    INTERFACE PipeInH forward
-    INTERFACE/Ptr PipeInH out
-}
-EMODULE UserTop {
-    INTERFACE PipeInB write
-    INTERFACE/Ptr PipeInB read
-}
-EMODULE l_top {
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeInH indication
-}
-MODULE Echo {
+INTERFACE EchoIfc  {
     SOFTWARE request
     SOFTWARE indication
     INTERFACE EchoRequest request
     INTERFACE/Ptr EchoIndication indication
+}
+INTERFACE EchoIndication  {
+    METHOD/Action heard__ENA ( Bit(32) v )
+    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
+}
+INTERFACE EchoRequest  {
+    METHOD/Action say__ENA ( Bit(32) v )
+    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action setLeds__ENA ( Bit(8) v )
+}
+INTERFACE MuxPipeIfc  {
+    INTERFACE PipeInH in
+    INTERFACE PipeInH forward
+    INTERFACE/Ptr PipeInH out
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCData v )
+}
+INTERFACE PipeInB  {
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
+}
+INTERFACE PipeInH  {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB write
+    INTERFACE/Ptr PipeInB read
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeInH indication
+}
+EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE UserTop UserTopIfc {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE Echo EchoIfc {
     INTERFACE/Ptr PipeInH printfp
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
@@ -50,23 +58,23 @@ MODULE Echo {
     FIELD Bit(32) v_type
     FIELD Bit(32) clockReg
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",46,busy_delay,clockReg}
+        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",49,busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
     METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",52}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",55}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD/Action request$setLeds__ENA ( Bit(8) v ) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",59}
+        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",62}
     }
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",62}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",65}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -74,7 +82,7 @@ MODULE Echo {
         STORE :b_delay = b_temp
     }
     METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",70}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",73}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}

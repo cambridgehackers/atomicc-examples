@@ -21,7 +21,7 @@
 #include "atomicc.h"
 
 template<int widthIn, int widthOut>
-__module MIMOBase : public Gear<__uint(widthIn), __uint(widthOut)> {
+class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)> {
     __uint(widthOut + widthIn) buffer;
     __uint(__clog2(widthOut + widthIn)+1) c;
     __shared __uint(widthIn) m;
@@ -42,7 +42,7 @@ __module MIMOBase : public Gear<__uint(widthIn), __uint(widthOut)> {
 };
 
 template<class In, class Out>
-__module MIMO : public Gear<In, Out> {
+class MIMO __implements Gear<In, Out> {
   MIMOBase<__bitsize(In), __bitsize(Out)> gear;
   void in.enq(const In v) { gear.in.enq(__bit_cast<__uint(__bitsize(In))>(v)); };
   void out.deq(void) { gear.out.deq(); }

@@ -22,7 +22,10 @@
 #include <atomicc.h>
 
 template<int funnelWidth, int dataWidth>
-__emodule FunnelBase {
+class FunnelBaseIfc {
     PipeIn<__uint(dataWidth)> input[funnelWidth];
     PipeIn<__uint(dataWidth)> *output;
 };
+
+template<int funnelWidth, int dataWidth>
+class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;

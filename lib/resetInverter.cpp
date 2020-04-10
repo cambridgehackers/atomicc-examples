@@ -21,9 +21,8 @@
 #include "atomicc.h"
 #include "resetInverter.h"
 
-__module ResetInverter {
-    MResetInverterResetInverter _;
+class ResetInverter __implements MResetInverterResetInverter {
     __rule init {
-        _.RESET_OUT = !_.RESET_IN;
+        RESET_OUT = !RESET_IN;
     }
 };

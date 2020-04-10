@@ -24,8 +24,7 @@
 #include "resetInverter.h"
 #include "clockTop.h"
 
-__module ClockTop {
-    ClockIfc _;
+class ClockTop __implements ClockIfc {
     MMCME2_ADV#(BANDWIDTH = "OPTIMIZED",
         CLKFBOUT_USE_FINE_PS = "FALSE", CLKOUT0_USE_FINE_PS = "FALSE",
         CLKOUT1_USE_FINE_PS = "FALSE", CLKOUT2_USE_FINE_PS = "FALSE",
@@ -47,23 +46,23 @@ __module ClockTop {
     BUFG clkbuf;
     BUFG clkbuf0;
     __rule init {
-        ps7_clockGen_pll._.CLKIN2 = 0;
-        ps7_clockGen_pll._.CLKINSEL = 1;
-        ps7_clockGen_pll._.DADDR = 0;
-        ps7_clockGen_pll._.DCLK = 0;
-        ps7_clockGen_pll._.DEN = 0;
-        ps7_clockGen_pll._.DI = 0;
-        ps7_clockGen_pll._.DWE = 0;
-        ps7_clockGen_pll._.PSCLK = 0;
-        ps7_clockGen_pll._.PSEN = 0;
-        ps7_clockGen_pll._.PSINCDEC = 0;
-        ps7_clockGen_pll._.PWRDWN = 0;
-        clkbuf._.I = ps7_clockGen_pll._.CLKFBOUT;
-        _.clockOut = clkbuf0._.O;
-        ps7_clockGen_pll._.CLKFBIN = clkbuf._.O;
-        rinverter._.RESET_IN = _.nRST;
-        ps7_clockGen_pll._.RST = rinverter._.RESET_OUT;
-        clkbuf0._.I = ps7_clockGen_pll._.CLKOUT0;
-        ps7_clockGen_pll._.CLKIN1 = _.CLK;
+        ps7_clockGen_pll.CLKIN2 = 0;
+        ps7_clockGen_pll.CLKINSEL = 1;
+        ps7_clockGen_pll.DADDR = 0;
+        ps7_clockGen_pll.DCLK = 0;
+        ps7_clockGen_pll.DEN = 0;
+        ps7_clockGen_pll.DI = 0;
+        ps7_clockGen_pll.DWE = 0;
+        ps7_clockGen_pll.PSCLK = 0;
+        ps7_clockGen_pll.PSEN = 0;
+        ps7_clockGen_pll.PSINCDEC = 0;
+        ps7_clockGen_pll.PWRDWN = 0;
+        clkbuf.I = ps7_clockGen_pll.CLKFBOUT;
+        clockOut = clkbuf0.O;
+        ps7_clockGen_pll.CLKFBIN = clkbuf.O;
+        rinverter.RESET_IN = nRST;
+        ps7_clockGen_pll.RST = rinverter.RESET_OUT;
+        clkbuf0.I = ps7_clockGen_pll.CLKOUT0;
+        ps7_clockGen_pll.CLKIN1 = CLK;
     };
 };

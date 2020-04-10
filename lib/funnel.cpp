@@ -23,13 +23,15 @@
 #include <atomicc.h>
 #include "funnel.h"
 template<int funnelWidth, int dataWidth>
-__module FunnelHalfBase {
-public:
+class FunnelHalfBaseIfc {
     typedef PipeInBin<dataWidth> PipeData;
     PipeData input[funnelWidth];
     typedef PipeData OutFunnel[funnelWidth/2];
     OutFunnel *output;
+};
 
+template<int funnelWidth, int dataWidth>
+class FunnelHalfBase __implements FunnelHalfBaseIfc<funnelWidth, dataWidth> {
     for (int j = 0; j < funnelWidth / 2; j = j+1) {
         void input.enq[j * 2 + 1](__uint(dataWidth) v) {
             (*output)[j].enq(v);
@@ -43,12 +45,12 @@ public:
 static FunnelHalfBase<8, 32> dummy;
 
 template<int funnelWidth, int dataWidth>
-__module FunnelBase {
+class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth> {
     typedef FunnelHalfBase<funnelWidth, dataWidth> Stack;
     Stack level[__clog2(funnelWidth)];
     //decltype(level[0].input) input;// = level[0].input;
-    typename Stack::PipeData input[funnelWidth];// = level[0].input;
-    typename Stack::PipeData *output;// = level[__clog2(funnelWidth) - 1].output[0];
+    //typename Stack::PipeData input[funnelWidth];// = level[0].input;
+    //typename Stack::PipeData *output;// = level[__clog2(funnelWidth) - 1].output[0];
     //typename std::tr1::remove_reference<decltype(level[0].output[0])>::type *output = level[__clog2(funnelWidth) - 1].output[0];
     //decltype((*level[0].output)[0]) *output = level[__clog2(funnelWidth) - 1].output[0];
     __rule connRule {

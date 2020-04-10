@@ -23,7 +23,7 @@
 
 #define MAX_COUNT 2
 template<class T>
-__module Fifo2 : public Fifo<T> {
+class Fifo2 __implements Fifo<T> {
     T *element;
     int rindex;
     int windex;

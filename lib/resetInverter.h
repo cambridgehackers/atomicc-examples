@@ -21,7 +21,5 @@
 #ifndef _RESETINVERTER_H_
 #define _RESETINVERTER_H_
 #include "VResetInverter.h"
-__emodule ResetInverter {
-    MResetInverterResetInverter _;
-};
+class ResetInverter __implements MResetInverterResetInverter;
 #endif

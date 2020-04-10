@@ -21,10 +21,11 @@
 // SOFTWARE.
 #ifndef _MUX_H_
 #define _MUX_H_
-__emodule MuxPipe {
+class MuxPipeIfc {
     NOCPipeH           in;
     NOCPipeH      forward;
     NOCPipeH         *out;
 };
+class MuxPipe __implements MuxPipeIfc;
 static MuxPipe dummyMux;
 #endif // _MUX_H_

@@ -2,7 +2,7 @@
 `define __lpm_GENERATED__VH__
 
 //METASTART; Lpm
-//METAEXTERNAL; outQ; PipeIn;
+//METAEXTERNAL; outQ; PipeIn.1;
 //METAINTERNAL; compBuf; BufTicket;
 //METAINTERNAL; inQ; Fifo1Base(width=32);
 //METAINTERNAL; fifo; FifoB1Base(width=23);

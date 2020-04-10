@@ -1,43 +1,45 @@
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-INTERFACE PipeIn {
+INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCData v )
 }
-INTERFACE PipeInB {
+INTERFACE PipeInB  {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
 }
-INTERFACE PipeInH {
+INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
-INTERFACE VBeat(width=32) {
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB write
+    INTERFACE/Ptr PipeInB read
+}
+INTERFACE VBeat(width=32)  {
     METHOD/Action beat__ENA ( Bit(32) v , Bit(1) last )
 }
-INTERFACE VsimInterface {
+INTERFACE VBeatP(width=32)  {
+}
+INTERFACE VsimInterface  {
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) CLK_derivedClock
     FIELD/input Bit(1) nRST_derivedReset
     FIELD/input Bit(1) CLK_sys_clk
 }
-EMODULE UserTop {
-    INTERFACE PipeInB write
-    INTERFACE/Ptr PipeInB read
-}
-EMODULE VsimReceive(width=32) {
-    INTERFACE/Ptr VBeat(width=32) _
-}
-EMODULE VsimSend(width=32) {
-    INTERFACE VBeat(width=32) _
-}
-EMODULE l_top {
+INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeInH indication
 }
-MODULE VsimTop {
+EMODULE UserTop UserTopIfc {
+}
+EMODULE VsimReceive(width=32) VBeatP(width=32) {
+}
+EMODULE VsimSend(width=32) VBeat(width=32) {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE VsimTop VsimInterface {
     INTERFACECONNECT readUser user$read PipeInB
-    INTERFACECONNECT sink_0$_ writeUser VBeat(width=32)
-    INTERFACE VsimInterface _
     INTERFACE PipeInB readUser
     FIELD UserTop user
     INTERFACE VBeat(width=32) writeUser

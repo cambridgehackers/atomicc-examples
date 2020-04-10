@@ -22,7 +22,7 @@
 #include "fifo.h"
 
 template<int depth, int width, int bypass>
-__module SizedFifoBase : public Fifo<__uint(width)> {
+class SizedFifoBase __implements Fifo<__uint(width)> {
     __uint(width) q[depth];
     __uint(__clog2(depth + 0)+1) c;
     __shared __uint(width)      x_wire;

@@ -28,9 +28,6 @@
 #include <string>
 #include <stddef.h> // offsetof
 
-#define __interface class __attribute__(( atomicc_interface ))
-#define __module class __attribute__(( atomicc_module ))
-#define __emodule class __attribute__(( atomicc_emodule ))
 #define __software __attribute__(( atomicc_software ))
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
@@ -48,12 +45,12 @@ extern "C" void __finish(void);
 extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
 
 template<int dataWidth>
-__interface PipeInBin {
+class PipeInBin {
     void enq(__uint(dataWidth) v);
 };
 
 template<class T>
-__interface PipeIn {
+class PipeIn {
     typedef T Data;
     void enq(T v);
     //PipeInBin<__bitsize(T)> _;
@@ -61,7 +58,7 @@ __interface PipeIn {
 };
 
 template<class T>
-__interface PipeOut {
+class PipeOut {
     typedef T Data;
     void deq(void);
     T first(void);
@@ -69,24 +66,24 @@ __interface PipeOut {
 
 typedef __int(16) LenType;
 template<class T>
-__interface PipeInH {
+class PipeInH {
     typedef T Data;
     void enq(T v, LenType length);
 };
 template<class T>
-__interface PipeInB {
+class PipeInB {
     typedef T Data;
     void enq(T v, LenType length); // last item in packet has (length == 1)
 };
 
 template<class T>
-__emodule Fifo {
+class Fifo {
     PipeIn<T> in;
     PipeOut<T> out;
 };
 
 template<class In, class Out>
-__emodule Gear {
+class Gear {
     PipeIn<In> in;
     PipeOut<Out> out;
 };
@@ -99,7 +96,7 @@ typedef PipeIn<NOCData>                   NOCPipe;
 typedef PipeInH<NOCData>                  NOCPipeH;
 typedef __uint(32)                        BusType;
 #if 0
-template<class T> __emodule M2P { // method -> pipe
+template<class T> class M2P __implements T { // method -> pipe
 public:
     typedef __serialize(T) Data;
     typedef NOCPipeH   Pipe;
@@ -109,7 +106,7 @@ public:
     Pipe                   unused;
 };
 
-template<class T> __emodule P2M { // pipe -> method
+template<class T> class P2M __implements NOCPipe { // pipe -> method
 public:
     typedef __serialize(T) Data;
     typedef NOCPipe   Pipe;

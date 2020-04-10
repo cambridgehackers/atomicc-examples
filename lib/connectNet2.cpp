@@ -21,10 +21,9 @@
 #include "atomicc.h"
 #include "connectNet2.h"
 
-__module CONNECTNET2 {
-    CNCONNECTNET2 _;
+class CONNECTNET2 __implements CNCONNECTNET2 {
     __rule assign {
-        _.OUT1 = _.IN1;
-        _.OUT2 = _.IN2;
+        OUT1 = IN1;
+        OUT2 = IN2;
     }
 };

@@ -1,13 +1,13 @@
-STRUCT ExecResult {
+STRUCT ExecResult  {
     FIELD Bit(32) nextPC
     FIELD Bit(32) addr
     FIELD Bit(32) data
 }
-INTERFACE DMem {
+INTERFACE DMem  {
     METHOD/Action request__ENA ( Bit(32) write_en , Bit(32) addr , Bit(32) data )
     METHOD response Bit(32)
 }
-INTERFACE Decoder {
+INTERFACE Decoder  {
     METHOD getOp ( Bit(32) inst ) Bit(32)
     METHOD getArithOp ( Bit(32) inst ) Bit(32)
     METHOD getSrc1 ( Bit(32) inst ) Bit(32)
@@ -15,22 +15,24 @@ INTERFACE Decoder {
     METHOD getDst ( Bit(32) inst ) Bit(32)
     METHOD getAddr ( Bit(32) inst ) Bit(32)
 }
-INTERFACE Executer {
+INTERFACE Executer  {
     METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult
 }
-INTERFACE IMem {
+INTERFACE IMem  {
     METHOD read ( Bit(32) pc ) Bit(32)
 }
-INTERFACE RegFile {
-    METHOD read ( Bit(32) regnum ) Bit(32)
-    METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
-}
-MODULE MultiCycleProc {
+INTERFACE MultiCycleProcIfc  {
     INTERFACE/Ptr Decoder dec
     INTERFACE/Ptr Executer exec
     INTERFACE/Ptr RegFile rf
     INTERFACE/Ptr IMem pgm
     INTERFACE/Ptr DMem dmem
+}
+INTERFACE RegFile  {
+    METHOD read ( Bit(32) regnum ) Bit(32)
+    METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
+}
+MODULE MultiCycleProc MultiCycleProcIfc {
     FIELD Bit(32) pc
     FIELD Bit(32) d2e_valid
     FIELD Bit(32) d2e_op

@@ -1,28 +1,26 @@
-INTERFACE PipeIn {
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn.1 {
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first Bit(128)
-}
-INTERFACE PipeOut.2 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(128)
-}
-EMODULE Gear {
+INTERFACE Gear  {
     INTERFACE PipeIn in
     INTERFACE PipeOut out
 }
-EMODULE Gear.0 {
+INTERFACE Gear.0  {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
 }
-MODULE MIMO {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut out
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(128)
+}
+INTERFACE PipeOut.2  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(128)
+}
+MODULE MIMO Gear {
     FIELD MIMOBase(widthIn=32,widthOut=128) gear
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :gear$in$enq__ENA{in$enq$v}
@@ -34,9 +32,7 @@ MODULE MIMO {
         CALL :gear$out$first{}
     }
 }
-MODULE MIMOBase(widthIn=32,widthOut=128) {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+MODULE MIMOBase(widthIn=32,widthOut=128) Gear.0 {
     FIELD Bit((128 + 32)) buffer
     FIELD Bit((__builtin_clog2((128 + 32)) + 1)) c
     FIELD/shared Bit(32) m

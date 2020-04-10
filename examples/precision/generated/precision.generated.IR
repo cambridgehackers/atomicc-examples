@@ -1,62 +1,60 @@
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-STRUCT ValueType {
+STRUCT ValueType  {
     FIELD Bit(6) a
     FIELD Bit(4) b
 }
-STRUCT IVectorTest {
+STRUCT IVectorTest  {
     FIELD IVector ivector
 }
-INTERFACE IVectorIndication {
-    METHOD/Action heard__ENA ( Bit(6) meth , Bit(4) v )
-}
-INTERFACE IVectorRequest {
-    METHOD/Action say__ENA ( Bit(6) meth , Bit(4) v )
-}
-INTERFACE PipeIn {
-    METHOD/Action enq__ENA ( ValueType v )
-}
-INTERFACE PipeIn.1 {
-    METHOD/Action enq__ENA ( Bit(10) v )
-}
-INTERFACE PipeInH {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
-}
-INTERFACE PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first ValueType
-}
-INTERFACE PipeOut.2 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(10)
-}
-EMODULE Fifo {
+INTERFACE Fifo  {
     INTERFACE PipeIn in
     INTERFACE PipeOut out
 }
-EMODULE Fifo.0 {
+INTERFACE Fifo.0  {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
 }
-EMODULE Fifo1Base(width=10) {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+INTERFACE IVectorIFC  {
+    INTERFACE IVectorRequest request
+    FIELD/Ptr IVectorInd ind
 }
-EMODULE IVectorInd {
-    INTERFACE IVectorIndication ind
-    METHOD/Action ind$heard__ENA ( Bit(6) meth , Bit(4) v ) {
-        PRINTF :printf{"Heard an ivector: %d %d\n",0,0}
-    }
+INTERFACE IVectorIndication  {
+    METHOD/Action heard__ENA ( Bit(6) meth , Bit(4) v )
 }
-EMODULE MuxPipe {
+INTERFACE IVectorRequest  {
+    METHOD/Action say__ENA ( Bit(6) meth , Bit(4) v )
+}
+INTERFACE MuxPipeIfc  {
     INTERFACE PipeInH in
     INTERFACE PipeInH forward
     INTERFACE/Ptr PipeInH out
 }
-MODULE Fifo1 {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut out
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( Bit(10) v )
+}
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( ValueType v )
+}
+INTERFACE PipeInH  {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(10)
+}
+INTERFACE PipeOut.2  {
+    METHOD/Action deq__ENA
+    METHOD first ValueType
+}
+EMODULE Fifo1Base(width=10) Fifo {
+}
+EMODULE IVectorInd IVectorIndication {
+}
+EMODULE MuxPipe MuxPipeIfc {
+}
+MODULE Fifo1 Fifo.0 {
     FIELD Fifo1Base(width=10) fifo
     METHOD/Action in$enq__ENA ( ValueType v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -70,9 +68,7 @@ MODULE Fifo1 {
         LET Bit(10) :out$first$retval = fifo$out$first
     }
 }
-MODULE IVector {
-    INTERFACE IVectorRequest request
-    INTERFACE/Ptr IVectorIndication ind
+MODULE IVector IVectorIFC {
     FIELD Fifo1 fifo
     FIELD Bit(((14U / 7) + (3 * 2))) fcounter
     FIELD Bit(9) counter

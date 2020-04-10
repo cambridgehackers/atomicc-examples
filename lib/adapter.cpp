@@ -23,9 +23,7 @@
 #include "adapter.h"
 
 template<class T, class BusType>
-__module AdapterToBus {
-   PipeInH<T>        in;
-   PipeInB<BusType> *out;
+class AdapterToBus __implements AtB<T, BusType> {
    //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    __int(16)        remain;
    __uint(__bitsize(T)) buffer;
@@ -38,7 +36,7 @@ __module AdapterToBus {
    AdapterToBus() {
       __rule copyRule if (remain != 0) {
          //printf("TTTTTT copyRule: buffer %x remain %x\n", buffer, remain);
-         out->enq(buffer, remain);
+         this->out->enq(buffer, remain);
          remain--;
          buffer >>= __bitsize(BusType);
       }
@@ -46,9 +44,7 @@ __module AdapterToBus {
 };
 
 template<class BusType, class T>
-__module AdapterFromBus {
-   PipeInB<BusType>  in;
-   PipeInH<T>       *out;
+class AdapterFromBus __implements AfB<BusType, T> {
    //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
    bool             waitForEnq;
    __uint(__bitsize(T)) buffer;
@@ -62,7 +58,7 @@ __module AdapterFromBus {
    AdapterFromBus() {
       __rule pushValue if (waitForEnq) {
           //printf("FFFFFFFF pushValue: buffer %x\n", buffer);
-          out->enq(__bit_cast<T>(buffer), 0);
+          this->out->enq(__bit_cast<T>(buffer), 0);
           waitForEnq = 0;
       }
    }

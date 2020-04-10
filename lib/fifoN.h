@@ -27,7 +27,7 @@
 #include <fifo.h>
 
 template<class T>
-class FifoN : public Fifo<T> {
+class FifoN __implements Fifo<T> {
   unsigned nelem;
   T *elements;
   unsigned readIndex;

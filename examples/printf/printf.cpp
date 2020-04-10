@@ -22,20 +22,23 @@
 #include "userTop.h"
 #include "mux.h"
 
-__interface EchoRequest {
+class EchoRequest {
     void say(__int(32) v);
     void say2(__int(16) a, __int(16) b);
     void setLeds(__int(8) v);
 };
-__interface EchoIndication {
+class EchoIndication {
     void heard(__int(32) v);
     void heard2(__int(16) a, __int(16) b);
     void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
-__module Echo {
+class EchoIfc {
     __software EchoRequest                     request;
     __software EchoIndication                 *indication;
+};
+
+class Echo __implements EchoIfc {
     __printf;
     __uint(1) busy, busy_delay;
     __int(32) v_temp, v_delay;

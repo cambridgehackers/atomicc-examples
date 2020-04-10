@@ -1,60 +1,61 @@
-STRUCT NOCData {
+STRUCT NOCData  {
     FIELD Bit(128) data
 }
-STRUCT ValuePair {
+STRUCT ValuePair  {
     FIELD Bit(32) a
     FIELD Bit(32) b
     FIELD/Count 20  Bit(32) c
 }
-STRUCT IVectorTest {
+STRUCT IVectorTest  {
     FIELD IVector ivector
 }
-INTERFACE IVectorRequest {
-    METHOD/Action say__ENA ( ValuePair v )
-}
-INTERFACE IndIF {
-    METHOD/Action heard__ENA ( ValuePair v )
-}
-INTERFACE PipeIn {
-    METHOD/Action enq__ENA ( ValuePair v )
-}
-INTERFACE PipeIn.1 {
-    METHOD/Action enq__ENA ( Bit(704) v )
-}
-INTERFACE PipeInH {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
-}
-INTERFACE PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first ValuePair
-}
-INTERFACE PipeOut.2 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(704)
-}
-EMODULE Fifo {
+INTERFACE Fifo  {
     INTERFACE PipeIn in
     INTERFACE PipeOut out
 }
-EMODULE Fifo.0 {
+INTERFACE Fifo.0  {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
 }
-EMODULE Fifo1Base(width=704) {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+INTERFACE IVectorIFC  {
+    INTERFACE IVectorRequest request
+    FIELD/Ptr IVectorIndication ind
 }
-EMODULE IVectorIndication {
-    INTERFACE IndIF ind
+INTERFACE IVectorRequest  {
+    METHOD/Action say__ENA ( ValuePair v )
 }
-EMODULE MuxPipe {
+INTERFACE IndIF  {
+    METHOD/Action heard__ENA ( ValuePair v )
+}
+INTERFACE MuxPipeIfc  {
     INTERFACE PipeInH in
     INTERFACE PipeInH forward
     INTERFACE/Ptr PipeInH out
 }
-MODULE Fifo1 {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut out
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( ValuePair v )
+}
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( Bit(704) v )
+}
+INTERFACE PipeInH  {
+    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first ValuePair
+}
+INTERFACE PipeOut.2  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(704)
+}
+EMODULE Fifo1Base(width=704) Fifo.0 {
+}
+EMODULE IVectorIndication IndIF {
+}
+EMODULE MuxPipe MuxPipeIfc {
+}
+MODULE Fifo1 Fifo {
     FIELD Fifo1Base(width=704) fifo
     METHOD/Action in$enq__ENA ( ValuePair v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -68,9 +69,7 @@ MODULE Fifo1 {
         LET Bit(704) :out$first$retval = fifo$out$first
     }
 }
-MODULE FifoPong {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut out
+MODULE FifoPong Fifo {
     FIELD Fifo1 element1
     FIELD Fifo1 element2
     FIELD Bit(1) pong
@@ -91,10 +90,8 @@ MODULE FifoPong {
         LET ValuePair ((pong) ^ 1):out$first$retval = element1$out$first
     }
 }
-MODULE IVector {
-    INTERFACE IVectorRequest request
+MODULE IVector IVectorIFC {
     FIELD FifoPong fifo
-    INTERFACE/Ptr IndIF ind
     METHOD/Action request$say__ENA ( ValuePair v ) {
         ALLOCA ValuePair request$say$agg_2e_tmp
         LET ValuePair :request$say$agg_2e_tmp = request$say$v

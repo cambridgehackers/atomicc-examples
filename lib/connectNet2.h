@@ -20,7 +20,7 @@
  */
 #ifndef _CONNECTNET2_H_
 #define _CONNECTNET2_H_
-__interface CNCONNECTNET2 {
+class CNCONNECTNET2 {
     __input  __int(1)         IN1;
     __input  __int(1)         IN2;
     __output __int(1)         OUT1;

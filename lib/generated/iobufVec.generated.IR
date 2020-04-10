@@ -1,10 +1,10 @@
-INTERFACE IobufVecPins(iovecWidth=999999) {
+INTERFACE IobufVecPins(iovecWidth=999999)  {
     FIELD/inout Bit(999999) IO
     FIELD/input Bit(999999) I
     FIELD/output Bit(999999) O
     FIELD/input Bit(1) T
 }
-INTERFACE MIOBUF {
+INTERFACE MIOBUF  {
     FIELD/parameter Bit(32) DRIVE
     FIELD/input Bit(1) I
     FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
@@ -14,11 +14,11 @@ INTERFACE MIOBUF {
     FIELD/Ptr/parameter Bit(8) SLEW
     FIELD/input Bit(1) T
 }
-EMODULE IOBUF {
-    INTERFACE MIOBUF _
+INTERFACE MIOBUF.base  {
 }
-MODULE IobufVec(iovecWidth=999999) {
-    INTERFACE IobufVecPins(iovecWidth=999999) _
+EMODULE IOBUF MIOBUF.base {
+}
+MODULE IobufVec(iovecWidth=999999) IobufVecPins(iovecWidth=999999) {
     FIELD/Count iovecWidth  IOBUF iobufs
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         LET Bit(1) :iobufs[__inst$Genvar1]$T = T

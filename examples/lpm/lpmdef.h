@@ -34,21 +34,17 @@ typedef struct {
 #define compute_addr(P, S, IPA) ((P) + ((S) == 1 ? __bitsubstr(IPA, 15, 8) : __bitsubstr(IPA, 7, 0)))
 #define p(X) ((X & 1) == 1)
 
-__interface TickIfc {
+class TickIfc {
     __uint(4) getTicket(void);
     void allocateTicket(void);
 };
 
-__emodule BufTicket {
-    TickIfc tickIfc;
-};
+class BufTicket __implements TickIfc;
 
-__interface LpmMem {
+class LpmMem {
     void req(IPA v);
     void resAccept(void);
     IPA resValue(void);
 };
 
-__emodule LpmMemory {
-    LpmMem ifc;
-};
+class LpmMemory __implements LpmMem;

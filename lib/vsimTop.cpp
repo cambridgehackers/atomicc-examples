@@ -25,21 +25,22 @@
 
 // Modules from SystemVerilog runtime
 template<int width>
-__interface VBeat {
+class VBeat {
     void beat(int v, bool last);
 };
 
 template<int width>
-__emodule VsimReceive {
+class VBeatP {
     VBeat<width> *_;
 };
+
 template<int width>
-__emodule VsimSend {
-    VBeat<width> _;
-};
+class VsimReceive __implements VBeatP<width>;
+template<int width>
+class VsimSend __implements VBeat<width>;
 
 // Top of verilator simulation
-__interface VsimInterface {
+class VsimInterface {
    __input  __uint(1)  CLK;
    __input  __uint(1)  nRST;
    __input  __uint(1)  CLK_derivedClock;
@@ -47,8 +48,7 @@ __interface VsimInterface {
    __input  __uint(1)  CLK_sys_clk;
 };
 
-__module VsimTop {
-    VsimInterface              _;
+class VsimTop __implements VsimInterface {
     PipeInB<BusType>           readUser;
     UserTop                    user;
     VBeat<MAX_BUS_WIDTH>       writeUser;
@@ -58,7 +58,7 @@ __module VsimTop {
     __connect sink_0._ = writeUser;
 
     void readUser.enq(BusType v, LenType length) {
-        source_0._.beat(v, length == 1);
+        source_0.beat(v, length == 1);
     }
     void writeUser.beat(int v, bool last) {
         user.write.enq(v, last ? 1 : 2);

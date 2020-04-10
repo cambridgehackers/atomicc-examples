@@ -21,7 +21,7 @@
 #include "atomicc.h"
 #include "iobufVec.h"
 
-__interface Ft600 {
+class Ft600 {
   __input __int(1) usb_clk;
   __input __int(1) usb_rxf;
   __input __int(1) usb_txe;
@@ -31,21 +31,20 @@ __interface Ft600 {
   __inout __int(16) usb_ad;
 };
 
-__module ModFt600 {
-    Ft600 _;
+class ModFt600 __implements Ft600 {
     __int(1) usb_fifo_empty;
     __int(2) usb_rxf_delay;
     __int(1) usb_txe_delay;
     IobufVec<16> iov;
 
     __rule handshake {
-        _.usb_rd_n = (usb_rxf_delay != 0);
-        _.usb_oe_n = (usb_rxf_delay & 1);
-        _.usb_wr_n = usb_txe_delay | usb_fifo_empty | ~(usb_rxf_delay & 1);
+        usb_rd_n = (usb_rxf_delay != 0);
+        usb_oe_n = (usb_rxf_delay & 1);
+        usb_wr_n = usb_txe_delay | usb_fifo_empty | ~(usb_rxf_delay & 1);
         usb_fifo_empty = 0;
-        usb_rxf_delay = (usb_rxf_delay << 1) | _.usb_rxf;
-        usb_txe_delay = _.usb_txe;
-        _.usb_ad = iov._.IO;
-        iov._.T = _.usb_oe_n;
+        usb_rxf_delay = (usb_rxf_delay << 1) | usb_rxf;
+        usb_txe_delay = usb_txe;
+        usb_ad = iov.IO;
+        iov.T = usb_oe_n;
     }
 };

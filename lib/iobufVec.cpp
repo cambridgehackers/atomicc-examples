@@ -23,15 +23,14 @@
 #include "VIOBUF.h"
 
 template<int iovecWidth>
-__module IobufVec {
-    IobufVecPins<iovecWidth> _;
+class IobufVec __implements IobufVecPins<iovecWidth> {
     IOBUF iobufs[iovecWidth];
     __rule iobufs {
         for (int i = 0; i < iovecWidth; i = i + 1) {
-            iobufs[i]._.T = _.T;
-            iobufs[i]._.IO = __bitsubstr(_.IO, i, 1);
-            iobufs[i]._.I = __bitsubstr(_.I, i, 1);
-            iobufs[i]._.O = __bitsubstr(_.O, i, 1);
+            iobufs[i].T = this->T;
+            iobufs[i].IO = __bitsubstr(this->IO, i, 1);
+            iobufs[i].I = __bitsubstr(this->I, i, 1);
+            iobufs[i].O = __bitsubstr(this->O, i, 1);
         }
     }
 };

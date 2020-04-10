@@ -22,20 +22,20 @@
 #include "fifo.h"
 #include "mux.h"
 
-__interface EchoRequest {
+class EchoRequest {
   void say(const int v);
 };
 
-__interface EchoIndication {
+class EchoIndication {
   void heard(int v);
 };
 
-__emodule EchoInd {
+class EchoInd {
   EchoIndication hout;
   //void hout.heard(int v);
 };
 
-__module Echo {
+class Echo {
   EchoRequest sout;
   EchoIndication *ind;
   Fifo<int> *fifo;

@@ -20,13 +20,15 @@
  */
 #ifndef __USER_TOP_H__
 #define __USER_TOP_H__
-__emodule l_top {
+class l_topIfc {
     PipeIn<NOCData> request;
     PipeInH<NOCData> *indication;
 };
+class l_top __implements l_topIfc;
 
-__emodule UserTop {
+class UserTopIfc {
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
 };
+class UserTop __implements UserTopIfc;
 #endif // __USER_TOP_H__

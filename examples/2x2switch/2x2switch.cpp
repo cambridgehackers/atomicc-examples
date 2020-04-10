@@ -21,7 +21,7 @@
 #include "atomicc.h"
 #include "iobufVec.h"
 
-__interface Ft600 {
+class Ft600 {
   __input __int(1) usb_clk;
   __input __int(1) usb_rxf;
   __input __int(1) usb_txe;
@@ -31,7 +31,7 @@ __interface Ft600 {
   __inout __int(16) usb_ad;
 };
 
-__module ModFt600 {
+class ModFt600 {
     Ft600 _;
     __int(1) usb_fifo_empty;
     __int(2) usb_rxf_delay;

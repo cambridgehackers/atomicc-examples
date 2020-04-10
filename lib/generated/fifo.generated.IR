@@ -1,28 +1,26 @@
-INTERFACE PipeIn {
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeIn.1 {
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeOut {
-    METHOD/Action deq__ENA
-    METHOD first Bit(999999)
-}
-INTERFACE PipeOut.2 {
-    METHOD/Action deq__ENA
-    METHOD first Bit(999999)
-}
-EMODULE Fifo {
+INTERFACE Fifo  {
     INTERFACE PipeIn in
     INTERFACE PipeOut out
 }
-EMODULE Fifo.0 {
+INTERFACE Fifo.0  {
     INTERFACE PipeIn.1 in
     INTERFACE PipeOut.2 out
 }
-MODULE Fifo1Base(width=999999) {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut out
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( Bit(999999) v )
+}
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( Bit(999999) v )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(999999)
+}
+INTERFACE PipeOut.2  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(999999)
+}
+MODULE Fifo1Base(width=999999) Fifo {
     FIELD Bit(999999) element
     FIELD Bit(1) full
     METHOD/Action in$enq__ENA ( Bit(width) v ) if (((full) ^ (1))) {
@@ -34,9 +32,7 @@ MODULE Fifo1Base(width=999999) {
     }
     METHOD out$first Bit(width) = ((element)) if ((full))
 }
-MODULE FifoB1Base(width=999999) {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+MODULE FifoB1Base(width=999999) Fifo.0 {
     FIELD Bit(999999) element
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v

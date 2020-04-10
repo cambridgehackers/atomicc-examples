@@ -20,26 +20,29 @@
  */
 #ifndef _TESTTOP_H_
 #define _TESTTOP_H_
-__interface ZynqInterruptT {
+class ZynqInterruptT {
     __output __uint(1)  interrupt;
     __input __uint(1)  CLK;
     __input __uint(1)  nRST;
 };
 
-__interface MaxiO {
+class MaxiO {
     void AR(__uint(32) addr, __uint(12) id, __uint(4) len);
     void AW(__uint(32) addr, __uint(12) id, __uint(4) len);
     void W(__uint(32) data, __uint(12) id, __uint(1) last);
 };
 
-__interface MaxiI {
+class MaxiI {
     void R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp);
     void B(__uint(12) id, __uint(2) resp);
 };
 
-__emodule TestTop {
+class TestTopIfc //: public ZynqInterruptT 
+{
     ZynqInterruptT     _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
 };
+
+class TestTop __implements TestTopIfc;
 #endif
