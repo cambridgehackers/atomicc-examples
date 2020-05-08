@@ -10,20 +10,20 @@ MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {
     FIELD/shared Bit(10) dec_wire
     FIELD Bit(10) cnt
     FIELD Bit(1) positive_reg
-    METHOD/Action ifc$decrement__ENA ( Bit(count_sz) v ) {
-        STORE :dec_wire = ifc$decrement$v
+    METHOD/Action decrement__ENA ( Bit(count_sz) v ) {
+        STORE :dec_wire = decrement$v
     }
-    METHOD/Action ifc$maybeDecrement ( Bit(10) v ) Bit(1) = ((ifc$maybeDecrement$retval)) {
-        ALLOCA Bit(1) ifc$maybeDecrement$retval
-        STORE ((cnt) >= (ifc$maybeDecrement$v)):dec_wire = ifc$maybeDecrement$v
-        LET Bit(1) ((cnt) >= (ifc$maybeDecrement$v)):ifc$maybeDecrement$retval = 1
-        LET Bit(1) (((cnt) >= (ifc$maybeDecrement$v)) ^ 1):ifc$maybeDecrement$retval = 0
+    METHOD/Action maybeDecrement ( Bit(10) v ) Bit(1) = ((maybeDecrement$retval)) {
+        ALLOCA Bit(1) maybeDecrement$retval
+        STORE ((cnt) >= (maybeDecrement$v)):dec_wire = maybeDecrement$v
+        LET Bit(1) ((cnt) >= (maybeDecrement$v)):maybeDecrement$retval = 1
+        LET Bit(1) (((cnt) >= (maybeDecrement$v)) ^ 1):maybeDecrement$retval = 0
     }
-    METHOD/Action ifc$increment__ENA ( Bit(count_sz) v ) {
-        STORE :inc_wire = ifc$increment$v
+    METHOD/Action increment__ENA ( Bit(count_sz) v ) {
+        STORE :inc_wire = increment$v
     }
-    METHOD ifc$read Bit(count_sz) = ((cnt))
-    METHOD ifc$positive Bit(1) = ((positive_reg))
+    METHOD read Bit(count_sz) = ((cnt))
+    METHOD positive Bit(1) = ((positive_reg))
     METHOD/Rule/Action RULE$react__ENA {
         ALLOCA Bit(count_sz) RULE$react$new_count
         LET Bit(10) :RULE$react$new_count = ((cnt) + (inc_wire)) - (dec_wire)

@@ -66,13 +66,14 @@ class EchoIndication {
     void heard(int meth, int v);
 };
 
+typedef PipeIn<EchoRequest_data> EchoRequestPipe;
+
 class EROIfc {
     EchoRequest request;
+    EchoRequestPipe *pipe;
 };
 
-typedef PipeIn<EchoRequest_data> EchoRequestPipe;
 class EchoRequestOutput __implements EROIfc { // method -> pipe
-    EchoRequestPipe *pipe;
     void request.say(int meth, int v) {
         printf("entered EchoRequestOutput::say\n");
         EchoRequest_data ind;
@@ -92,11 +93,11 @@ class EchoRequestOutput __implements EROIfc { // method -> pipe
 };
 
 class ERIIfc {
+    EchoRequest *request;
     EchoRequestPipe pipe;
 };
 
 class EchoRequestInput __implements ERIIfc { // pipe -> method
-    EchoRequest *request;
     void pipe.enq(EchoRequest_data v) {
         printf("entered EchoRequestInput::enq tag %d\n", v.tag);
         switch (v.tag) {
@@ -110,13 +111,14 @@ class EchoRequestInput __implements ERIIfc { // pipe -> method
     }
 };
 
+typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
+
 class EIOIfc {
     EchoIndication indication;
+    EchoIndicationPipe *pipe;
 };
 
-typedef PipeIn<EchoIndication_data> EchoIndicationPipe;
 class EchoIndicationOutput __implements EIOIfc { // method -> pipe
-    EchoIndicationPipe *pipe;
     EchoIndication_data ind0;
     EchoIndication_data ind1;
     bool ind_busy;
@@ -152,10 +154,10 @@ printf("[%s:%d]EchoIndicationOutput even %d\n", __FUNCTION__, __LINE__, even);
 
 class EIIIfc {
     EchoIndicationPipe pipe;
+    EchoIndication *indication;
 };
 
 class EchoIndicationInput __implements EIIIfc { // pipe -> method
-    EchoIndication *indication;
     bool busy_delay;
     int meth_delay;
     int v_delay;
@@ -240,6 +242,11 @@ printf("respond_rule: Echo\n");
     }
 };
 
+class ConnectIFC {
+    EchoRequest request;
+    EchoIndication *indication;
+};
+
 class Connect __implements EchoRequest {
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
@@ -247,10 +254,10 @@ class Connect __implements EchoRequest {
 
     EchoRequestOutput lERO_test;
     EchoIndicationInput lEII_test;
-    void say(int meth, int v) {
+    void request.say(int meth, int v) {
         lERO_test.request.say(meth, v);
     }
-    void say2(int meth, int v) {
+    void request.say2(int meth, int v) {
         lERO_test.request.say2(meth, v);
     }
     //void heard(int meth, int v) {
@@ -260,7 +267,7 @@ class Connect __implements EchoRequest {
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    EchoIndication *indication = lEII_test.indication; // user indication
+    //__connect indication = lEII_test.indication; // user indication
 
     Connect() {
         __rule swap_rule {

@@ -35,23 +35,23 @@ class ConfigCounter __implements ConfigCounterIfc<count_sz> {
     __shared __uint(count_sz) dec_wire;
     __int(count_sz) cnt;
     bool positive_reg;
-    void ifc.decrement(__uint(count_sz) v) {
+    void decrement(__uint(count_sz) v) {
         dec_wire = v;
     }
-    __action bool ifc.maybeDecrement(__uint(count_sz) v) {
+    __action bool maybeDecrement(__uint(count_sz) v) {
         if (cnt >= v) {
             dec_wire = v;
             return true;
         }
         return false;
     }
-    void ifc.increment(__uint(count_sz) v) {
+    void increment(__uint(count_sz) v) {
         inc_wire = v;
     }
-    __uint(count_sz) ifc.read(void) {
+    __uint(count_sz) read(void) {
         return cnt;
     }
-    bool ifc.positive(void) {
+    bool positive(void) {
         return positive_reg;
     }
     __rule react {

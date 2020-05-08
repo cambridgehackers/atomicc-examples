@@ -97,6 +97,13 @@ MODULE IVector IVectorIFC {
         LET ValuePair :request$say$agg_2e_tmp = request$say$v
         CALL/Action :fifo$in$enq__ENA{request$say$agg_2e_tmp}
     }
+    METHOD/Rule/Action RULE$TemplateRULE$respond0__ENA {
+        ALLOCA ValuePair RULE$TemplateRULE$respond0$agg_2e_tmp
+        CALL/Action :fifo$out$deq__ENA{}
+        CALL :fifo$out$first{}
+        LET ValuePair :RULE$TemplateRULE$respond0$agg_2e_tmp = fifo$out$first
+        CALL/Action :ind$heard__ENA{RULE$TemplateRULE$respond0$agg_2e_tmp}
+    }
     METHOD/Rule/Action RULE$respond__ENA {
         ALLOCA ValuePair RULE$respond$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}

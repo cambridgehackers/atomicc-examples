@@ -14,9 +14,7 @@ INTERFACE MIOBUF  {
     FIELD/Ptr/parameter Bit(8) SLEW
     FIELD/input Bit(1) T
 }
-INTERFACE MIOBUF.base  {
-}
-EMODULE IOBUF MIOBUF.base {
+EMODULE IOBUF MIOBUF {
 }
 MODULE IobufVec(iovecWidth=999999) IobufVecPins(iovecWidth=999999) {
     FIELD/Count iovecWidth  IOBUF iobufs

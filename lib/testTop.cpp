@@ -69,7 +69,6 @@ class TestTop __implements TestTopIfc {
     void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
         writeData.in.enq(BusData{data});
     }
-    PipeInB<BusType> readUser;
     BusType requestValue;
     LenType requestLength;
     __uint(1) writeReady;

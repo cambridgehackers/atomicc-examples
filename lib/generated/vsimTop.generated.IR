@@ -11,6 +11,8 @@ INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE UserTopIfc  {
+    INTERFACE PipeInH wad
+    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }
@@ -18,6 +20,7 @@ INTERFACE VBeat(width=32)  {
     METHOD/Action beat__ENA ( Bit(32) v , Bit(1) last )
 }
 INTERFACE VBeatP(width=32)  {
+    INTERFACE/Ptr VBeat(width=32) _
 }
 INTERFACE VsimInterface  {
     FIELD/input Bit(1) CLK
@@ -39,12 +42,13 @@ EMODULE VsimSend(width=32) VBeat(width=32) {
 EMODULE l_top l_topIfc {
 }
 MODULE VsimTop VsimInterface {
+    INTERFACECONNECT writeUser sink_0$_ VBeat(width=32)
     INTERFACECONNECT readUser user$read PipeInB
-    INTERFACE PipeInB readUser
     FIELD UserTop user
-    INTERFACE VBeat(width=32) writeUser
     FIELD VsimReceive(width=32) sink_0
     FIELD VsimSend(width=32) source_0
+    INTERFACE VBeat(width=32) writeUser
+    INTERFACE PipeInB readUser
     METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(16) length ) {
         CALL/Action :source_0$beat__ENA{readUser$enq$v,(readUser$enq$length) == (1)}
     }

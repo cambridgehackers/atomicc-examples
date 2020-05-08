@@ -69,12 +69,16 @@ class IVectorIndication __implements IndIF;
 
 class IVectorRequest {
     void say(UTYPE v);
+};
+
+class IVectorIFC {
+    IVectorRequest request;
     IndIF *ind;
 };
 
-class IVector __implements IVectorRequest {
+class IVector __implements IVectorIFC {
     Fifo<UTYPE> *fifo;
-    void say(UTYPE v) {
+    void request.say(UTYPE v) {
         fifo->in.enq(v);
     }
     IVector(IndIF *indarg) : fifo(new FifoPong<UTYPE>()) {

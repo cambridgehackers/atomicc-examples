@@ -49,13 +49,11 @@ class VsimInterface {
 };
 
 class VsimTop __implements VsimInterface {
-    PipeInB<BusType>           readUser;
     UserTop                    user;
-    VBeat<MAX_BUS_WIDTH>       writeUser;
     VsimReceive<MAX_BUS_WIDTH> sink_0;
     VsimSend<MAX_BUS_WIDTH>    source_0;
-    __connect readUser = user.read;
-    __connect sink_0._ = writeUser;
+    __implements VBeat<MAX_BUS_WIDTH> writeUser = sink_0._;
+    __implements PipeInB<BusType>     readUser = user.read;
 
     void readUser.enq(BusType v, LenType length) {
         source_0.beat(v, length == 1);

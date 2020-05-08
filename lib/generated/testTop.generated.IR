@@ -146,10 +146,14 @@ INTERFACE PipeOut.6  {
     METHOD first Bit(16)
 }
 INTERFACE TestTopIfc  {
+    INTERFACE ZynqInterruptT _
     INTERFACE MaxiO MAXIGP0_O
     INTERFACE/Ptr MaxiI MAXIGP0_I
+    INTERFACE PipeInB readUser
 }
 INTERFACE UserTopIfc  {
+    INTERFACE PipeInH wad
+    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }
@@ -269,7 +273,6 @@ MODULE TestTop TestTopIfc {
     FIELD Fifo1.21 writeData
     FIELD Fifo1.28 writeDone
     FIELD UserTop user
-    INTERFACE PipeInB readUser
     FIELD Bit(32) requestValue
     FIELD Bit(16) requestLength
     FIELD Bit(1) writeReady

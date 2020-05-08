@@ -27,6 +27,8 @@ class l_topIfc {
 class l_top __implements l_topIfc;
 
 class UserTopIfc {
+    PipeInH<NOCData> wad;
+    PipeInH<NOCData> indication;
     PipeInB<BusType> write;
     PipeInB<BusType> *read;
 };
