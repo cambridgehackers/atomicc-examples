@@ -19,8 +19,6 @@ INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInH wad
-    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }
@@ -39,11 +37,13 @@ EMODULE l_top l_topIfc {
 MODULE UserTop UserTopIfc {
     INTERFACECONNECT write wadapter_0$in PipeInB
     INTERFACECONNECT read radapter_0$out PipeInB
-    INTERFACECONNECT indication ctop$indication PipeInH
     INTERFACECONNECT wad wadapter_0$out PipeInH
+    INTERFACECONNECT indication ctop$indication PipeInH
     FIELD AdapterToBus radapter_0
     FIELD AdapterFromBus wadapter_0
     FIELD l_top ctop
+    INTERFACE PipeInH wad
+    INTERFACE PipeInH indication
     METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
         CALL/Action :ctop$request$enq__ENA{wad$enq$v}

@@ -32,8 +32,6 @@ INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInH wad
-    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }

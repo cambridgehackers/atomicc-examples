@@ -23,8 +23,6 @@ INTERFACE TestIfc  {
     INTERFACE GrayCounterIfc(width=4) request
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInH wad
-    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }

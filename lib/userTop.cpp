@@ -29,6 +29,9 @@ class UserTop __implements UserTopIfc {
     AdapterFromBus<BusType, NOCData> wadapter_0;
     __connect write = wadapter_0.in;
     __connect read = radapter_0.out;
+    l_top       ctop;
+    __implements PipeInH<NOCData> wad = wadapter_0.out;
+    __implements PipeInH<NOCData> indication = ctop.indication;
 
     void wad.enq(NOCData v, __int(16) length) {
 printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
@@ -42,8 +45,4 @@ printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(
         radapter_0.in.enq(//__bit_cast<NOCData>(__bitconcat(__bitsubstr(vint, __bitsize(v) - 1, 16), port)), len);
 v, length);
     }
-
-    l_top       ctop;
-    __connect indication = ctop.indication;
-    __connect wad = wadapter_0.out;
 };

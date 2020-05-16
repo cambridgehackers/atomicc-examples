@@ -39,15 +39,15 @@ int lpm(IPA ipa)
 }
 */
 
-class LpmRequest {
+class LpmIfc {
     void       enter(IPA x);
+    PipeIn<IPA> *outQ;
 };
 
-class Lpm __implements LpmRequest {
+class Lpm __implements LpmIfc {
     BufTicket    compBuf;
     Fifo1<IPA>   inQ;
     FifoB1<ProcessData>   fifo;
-    PipeIn<IPA> *outQ;
     LpmMemory           mem;
     Lpm() {
         __rule recirc if (!p(mem.resValue())) {

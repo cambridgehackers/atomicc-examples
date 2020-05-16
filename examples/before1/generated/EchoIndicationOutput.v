@@ -63,7 +63,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         if (indication$heard__ENA && indication$heard__RDY) begin // indication$heard__ENA
             ind_busy <= 1 != 0;
             even <= even ^ 1;
-            $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 116 , even );
+            $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 127 , even );
             if (even) begin
             ind1$tag <= 1;
             ind1$data$heard$meth <= indication$heard$meth;

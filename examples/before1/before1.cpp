@@ -93,8 +93,8 @@ class EchoRequestOutput __implements EROIfc { // method -> pipe
 };
 
 class ERIIfc {
-    EchoRequest *request;
     EchoRequestPipe pipe;
+    EchoRequest *request;
 };
 
 class EchoRequestInput __implements ERIIfc { // pipe -> method
@@ -189,6 +189,7 @@ class Swap {
 class EchoIfc {
     EchoRequest request;
     Swap        swap;
+    EchoIndication *indication;
 };
 
 class Echo __implements EchoIfc {
@@ -200,7 +201,6 @@ class Echo __implements EchoIfc {
     int v_delay;
     int x;
     int y;
-    EchoIndication *indication;
     void request.say(int meth, int v) if(!busy) {
 printf("[%s:%d]Echo\n", __FUNCTION__, __LINE__);
         meth_temp = meth;
@@ -247,7 +247,7 @@ class ConnectIFC {
     EchoIndication *indication;
 };
 
-class Connect __implements EchoRequest {
+class Connect __implements ConnectIFC {
     EchoIndicationOutput lEIO;
     EchoRequestInput lERI;
     Echo lEcho;

@@ -69,24 +69,24 @@ module Echo (input wire CLK, input wire nRST,
             meth_temp <= request$say2$meth;
             v_temp <= request$say2$v;
             busy <= 1 != 0;
-            $display( "[%s:%d]Echo" , "request$say2" , 194 );
+            $display( "[%s:%d]Echo" , "request$say2" , 211 );
         end; // End of request$say2__ENA
         if (request$say__ENA && request$say__RDY) begin // request$say__ENA
             meth_temp <= request$say$meth;
             v_temp <= request$say$v;
             busy <= 1 != 0;
-            $display( "[%s:%d]Echo" , "request$say" , 188 );
+            $display( "[%s:%d]Echo" , "request$say" , 205 );
         end; // End of request$say__ENA
         if (swap$x2y__ENA) begin // swap$x2y__ENA
             y <= x;
-            $display( "[%s:%d]Echo" , "swap$x2y" , 208 );
+            $display( "[%s:%d]Echo" , "swap$x2y" , 225 );
         end; // End of swap$x2y__ENA
         if (swap$y2x__ENA) begin // swap$y2x__ENA
             x <= y;
-            $display( "[%s:%d]Echo" , "swap$y2x" , 200 );
+            $display( "[%s:%d]Echo" , "swap$y2x" , 217 );
         end; // End of swap$y2x__ENA
         if (swap$y2xnull__ENA) begin // swap$y2xnull__ENA
-            $display( "[%s:%d]Echo" , "swap$y2xnull" , 204 );
+            $display( "[%s:%d]Echo" , "swap$y2xnull" , 221 );
         end; // End of swap$y2xnull__ENA
       end
     end // always @ (posedge CLK)

@@ -22,13 +22,14 @@ INTERFACE Fifo.6  {
     INTERFACE PipeIn.7 in
     INTERFACE PipeOut.8 out
 }
+INTERFACE LpmIfc  {
+    INTERFACE/Ptr PipeIn.1 outQ
+    METHOD/Action enter__ENA ( Bit(32) x )
+}
 INTERFACE LpmMem  {
     METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
-}
-INTERFACE LpmRequest  {
-    METHOD/Action enter__ENA ( Bit(32) x )
 }
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeInH in
@@ -106,55 +107,13 @@ MODULE FifoB1 Fifo.6 {
         LET Bit(23) :out$first$retval = fifo$out$first
     }
 }
-MODULE Lpm LpmRequest {
+MODULE Lpm LpmIfc {
     FIELD BufTicket compBuf
     FIELD Fifo1 inQ
     FIELD FifoB1 fifo
-    INTERFACE/Ptr PipeIn.1 outQ
     FIELD LpmMemory mem
     METHOD/Action enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{enter$x}
-    }
-    METHOD/Rule/Action RULE$TemplateRULE$recirc0__ENA if (((((mem$resValue) & (1)) == (1)) ^ (1))) {
-        ALLOCA ProcessData RULE$TemplateRULE$recirc0$agg_2e_tmp
-        ALLOCA Bit(32) RULE$TemplateRULE$recirc0$x
-        ALLOCA ProcessData RULE$TemplateRULE$recirc0$y
-        CALL :mem$resValue{}
-        LET Bit(32) :RULE$TemplateRULE$recirc0$x = mem$resValue
-        CALL :fifo$out$first{}
-        LET ProcessData :RULE$TemplateRULE$recirc0$y = fifo$out$first
-        CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :mem$req__ENA{(RULE$TemplateRULE$recirc0$x) + (__phi(((RULE$TemplateRULE$recirc0$y$state) == (1)):(__bitsubstr{RULE$TemplateRULE$recirc0$y$IPA,15,8}), (((RULE$TemplateRULE$recirc0$y$state) == (1)) ^ 1):(__bitsubstr{RULE$TemplateRULE$recirc0$y$IPA,7,0})))}
-        CALL/Action :fifo$out$deq__ENA{}
-        LET Bit(4) :RULE$TemplateRULE$recirc0$agg_2e_tmp$ticket = RULE$TemplateRULE$recirc0$y$ticket
-        LET Bit(16) :RULE$TemplateRULE$recirc0$agg_2e_tmp$IPA = RULE$TemplateRULE$recirc0$y$IPA
-        LET Bit(3) :RULE$TemplateRULE$recirc0$agg_2e_tmp$state = (RULE$TemplateRULE$recirc0$y$state) + (1)
-        CALL/Action :fifo$in$enq__ENA{RULE$TemplateRULE$recirc0$agg_2e_tmp}
-    }
-    METHOD/Rule/Action RULE$TemplateRULE$exitr1__ENA if (((((mem$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
-        ALLOCA Bit(32) RULE$TemplateRULE$exitr1$x
-        ALLOCA ProcessData RULE$TemplateRULE$exitr1$y
-        CALL :mem$resValue{}
-        LET Bit(32) :RULE$TemplateRULE$exitr1$x = mem$resValue
-        CALL :fifo$out$first{}
-        LET ProcessData :RULE$TemplateRULE$exitr1$y = fifo$out$first
-        CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :outQ$enq__ENA{RULE$TemplateRULE$exitr1$x}
-    }
-    METHOD/Rule/Action RULE$TemplateRULE$enter2__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
-        ALLOCA ProcessData RULE$TemplateRULE$enter2$agg_2e_tmp
-        ALLOCA Bit(4) RULE$TemplateRULE$enter2$ticket
-        ALLOCA Bit(32) RULE$TemplateRULE$enter2$x
-        CALL :inQ$out$first{}
-        LET Bit(32) :RULE$TemplateRULE$enter2$x = inQ$out$first
-        LET Bit(4) :RULE$TemplateRULE$enter2$ticket = 0
-        CALL/Action :inQ$out$deq__ENA{}
-        LET Bit(4) :RULE$TemplateRULE$enter2$agg_2e_tmp$ticket = RULE$TemplateRULE$enter2$ticket
-        LET Bit(16) :RULE$TemplateRULE$enter2$agg_2e_tmp$IPA = __bitsubstr{RULE$TemplateRULE$enter2$x,15,0}
-        LET Bit(3) :RULE$TemplateRULE$enter2$agg_2e_tmp$state = 0
-        CALL/Action :fifo$in$enq__ENA{RULE$TemplateRULE$enter2$agg_2e_tmp}
-        CALL/Action :mem$req__ENA{(0) + (__bitsubstr{RULE$TemplateRULE$enter2$x,31,16})}
     }
     METHOD/Rule/Action RULE$recirc__ENA if (((((mem$resValue) & (1)) == (1)) ^ (1))) {
         ALLOCA ProcessData RULE$recirc$agg_2e_tmp

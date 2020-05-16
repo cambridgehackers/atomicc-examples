@@ -152,8 +152,6 @@ INTERFACE TestTopIfc  {
     INTERFACE PipeInB readUser
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInH wad
-    INTERFACE PipeInH indication
     INTERFACE PipeInB write
     INTERFACE/Ptr PipeInB read
 }
