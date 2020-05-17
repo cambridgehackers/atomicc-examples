@@ -267,7 +267,7 @@ class Connect __implements ConnectIFC {
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    //__connect indication = lEII_test.indication; // user indication
+    __connect indication = lEII_test.indication; // user indication
 
     Connect() {
         __rule swap_rule {

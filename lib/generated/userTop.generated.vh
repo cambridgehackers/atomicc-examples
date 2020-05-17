@@ -2,7 +2,6 @@
 `define __userTop_GENERATED__VH__
 
 //METASTART; UserTop
-//METAEXTERNAL; read; PipeInB;
 //METAINTERNAL; radapter_0; AdapterToBus;
 //METAINTERNAL; wadapter_0; AdapterFromBus;
 //METAINTERNAL; ctop; l_top;
@@ -14,8 +13,8 @@
 //METACONNECT; write$enq__RDY; wadapter_0$in$enq__RDY
 //METACONNECT; read$enq__ENA; radapter_0$out$enq__ENA
 //METACONNECT; read$enq__RDY; radapter_0$out$enq__RDY
-//METACONNECT; ctop$indication$enq__ENA; indication$enq__ENA
-//METACONNECT; ctop$indication$enq__RDY; indication$enq__RDY
-//METACONNECT; wadapter_0$out$enq__ENA; wad$enq__ENA
-//METACONNECT; wadapter_0$out$enq__RDY; wad$enq__RDY
+//METACONNECT; wad$enq__ENA; wadapter_0$out$enq__ENA
+//METACONNECT; wad$enq__RDY; wadapter_0$out$enq__RDY
+//METACONNECT; indication$enq__ENA; ctop$indication$enq__ENA
+//METACONNECT; indication$enq__RDY; ctop$indication$enq__RDY
 `endif

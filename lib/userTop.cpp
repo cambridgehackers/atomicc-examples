@@ -30,8 +30,8 @@ class UserTop __implements UserTopIfc {
     __connect write = wadapter_0.in;
     __connect read = radapter_0.out;
     l_top       ctop;
-    __implements PipeInH<NOCData> wad = wadapter_0.out;
-    __implements PipeInH<NOCData> indication = ctop.indication;
+    PipeInH<NOCData> wad __implements wadapter_0.out;
+    PipeInH<NOCData> indication __implements ctop.indication;
 
     void wad.enq(NOCData v, __int(16) length) {
 printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);

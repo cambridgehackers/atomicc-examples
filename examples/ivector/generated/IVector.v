@@ -2,14 +2,14 @@
 
 `default_nettype none
 module IVector (input wire CLK, input wire nRST,
-    output wire out$heard__ENA,
-    output wire [32 - 1:0]out$heard$meth,
-    output wire [32 - 1:0]out$heard$v,
-    input wire out$heard__RDY,
     input wire in$say__ENA,
     input wire [32 - 1:0]in$say$meth,
     input wire [32 - 1:0]in$say$v,
-    output wire in$say__RDY);
+    output wire in$say__RDY,
+    output wire out$heard__ENA,
+    output wire [32 - 1:0]out$heard$meth,
+    output wire [32 - 1:0]out$heard$v,
+    input wire out$heard__RDY);
     reg [32 - 1:0]vsize;
     wire [32 - 1:0]RULE$respond_rule_0$temp$b;
     wire RULE$respond_rule_0__RDY;

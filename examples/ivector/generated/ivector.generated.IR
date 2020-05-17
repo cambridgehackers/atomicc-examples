@@ -19,7 +19,7 @@ INTERFACE Fifo.0  {
 }
 INTERFACE IVectorIFC  {
     INTERFACE IVectorRequest in
-    FIELD/Ptr IVectorInd out
+    INTERFACE/Ptr IVectorIndication out
 }
 INTERFACE IVectorIndication  {
     METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )

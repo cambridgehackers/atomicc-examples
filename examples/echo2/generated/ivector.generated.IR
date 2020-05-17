@@ -19,7 +19,7 @@ INTERFACE Fifo.0  {
 }
 INTERFACE IVectorIFC  {
     INTERFACE IVectorRequest request
-    FIELD/Ptr IVectorIndication ind
+    INTERFACE/Ptr IndIF ind
 }
 INTERFACE IVectorRequest  {
     METHOD/Action say__ENA ( ValuePair v )

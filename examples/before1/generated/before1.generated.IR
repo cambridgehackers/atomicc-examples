@@ -87,6 +87,7 @@ MODULE Connect ConnectIFC {
     INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.0
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
     INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn
+    INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
     FIELD Echo lEcho

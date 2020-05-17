@@ -25,9 +25,6 @@ INTERFACE P7WrapIfc  {
     INTERFACE Pps7m M
     INTERFACE Pps7fclk FCLK
 }
-INTERFACE PipeInB  {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
-}
 INTERFACE Pps7PS7  {
     INTERFACE Pps7ddr DDR
     INTERFACE Pps7dma DMA0
@@ -435,7 +432,6 @@ INTERFACE TestTopIfc  {
     INTERFACE ZynqInterruptT _
     INTERFACE MaxiO MAXIGP0_O
     INTERFACE/Ptr MaxiI MAXIGP0_I
-    INTERFACE PipeInB readUser
 }
 INTERFACE ZynqClock  {
     FIELD/inout Bit(15) DDR_Addr

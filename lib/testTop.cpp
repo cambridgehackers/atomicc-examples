@@ -55,6 +55,7 @@ class TestTop __implements TestTopIfc {
     Fifo1<BusData>    writeData;
     Fifo1<AXIId>      writeDone;
     UserTop user;
+    PipeInB<BusType> readUser __implements user.read;
 
     void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
         reqArs.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
@@ -76,7 +77,6 @@ class TestTop __implements TestTopIfc {
         requestValue = v;
         requestLength = length;
     }
-    __connect readUser = user.read;
 
         __rule init {
            _.interrupt = (requestLength != 0) && intEnable;

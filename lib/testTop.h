@@ -42,7 +42,6 @@ class TestTopIfc //: public ZynqInterruptT
     ZynqInterruptT     _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
-    PipeInB<BusType> readUser;
 };
 
 class TestTop __implements TestTopIfc;
