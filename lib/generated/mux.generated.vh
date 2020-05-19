@@ -2,7 +2,6 @@
 `define __mux_GENERATED__VH__
 
 //METASTART; MuxPipe
-//METAEXTERNAL; out; PipeInH;
 //METAINTERNAL; forwardFifo; Fifo1Base(width=128);
 //METAINTERNAL; forwardFifol; Fifo1Base(width=16);
 //METAINVOKE; in$enq__ENA; :out$enq__ENA;

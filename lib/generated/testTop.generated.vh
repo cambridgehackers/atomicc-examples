@@ -2,7 +2,6 @@
 `define __testTop_GENERATED__VH__
 
 //METASTART; TestTop
-//METAEXTERNAL; MAXIGP0_I; MaxiI;
 //METAINTERNAL; reqArs; Fifo1Base(width=15);
 //METAINTERNAL; reqAws; Fifo1Base(width=15);
 //METAINTERNAL; readBeat; Fifo1Base(width=16);

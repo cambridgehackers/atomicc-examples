@@ -45,9 +45,9 @@ module ZynqTop (
     wire [12 - 1:0]ps7_ps7_foo$MAXIGP0_O$W$id;
     wire ps7_ps7_foo$MAXIGP0_O$W$last;
     wire ps7_ps7_foo$MAXIGP0_O$W__ENA;
-    wire ps7_ps7_foo$intrCLK;
-    wire ps7_ps7_foo$intrinterrupt;
-    wire ps7_ps7_foo$intrnRST;
+    wire ps7_ps7_foo$intr$CLK;
+    wire ps7_ps7_foo$intr$interrupt;
+    wire ps7_ps7_foo$intr$nRST;
     wire test$CLK;
     wire [12 - 1:0]test$MAXIGP0_I$B$id;
     wire [2 - 1:0]test$MAXIGP0_I$B$resp;
@@ -108,9 +108,9 @@ module ZynqTop (
         .FIXED_IO_ps_clk(FIXED_IO_ps_clk),
         .FIXED_IO_ps_porb(FIXED_IO_ps_porb),
         .FIXED_IO_ps_srstb(FIXED_IO_ps_srstb),
-        .intrinterrupt(ps7_ps7_foo$intrinterrupt),
-        .intrCLK(ps7_ps7_foo$intrCLK),
-        .intrnRST(ps7_ps7_foo$intrnRST),
+        .intr$interrupt(ps7_ps7_foo$intr$interrupt),
+        .intr$CLK(ps7_ps7_foo$intr$CLK),
+        .intr$nRST(ps7_ps7_foo$intr$nRST),
         .MIO(MIO),
         .FCLKCLK(ps7_ps7_foo$FCLKCLK),
         .FCLKCLKTRIGN(0),
@@ -152,9 +152,9 @@ module ZynqTop (
         .O(ps7_freset_0_r$O));
     assign ps7_fclk_0_c$I = ps7_ps7_foo$FCLKCLK[ 0 ];
     assign ps7_freset_0_r$I = ps7_ps7_foo$FCLKRESETN[ 0 ];
-    assign ps7_ps7_foo$intrCLK = CLK;
-    assign ps7_ps7_foo$intrinterrupt = test$interrupt;
-    assign ps7_ps7_foo$intrnRST = nRST;
+    assign ps7_ps7_foo$intr$CLK = CLK;
+    assign ps7_ps7_foo$intr$interrupt = test$interrupt;
+    assign ps7_ps7_foo$intr$nRST = nRST;
     assign test$CLK = CLK;
     assign test$nRST = nRST;
     // Extra assigments, not to output wires

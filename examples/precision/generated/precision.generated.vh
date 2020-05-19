@@ -2,7 +2,6 @@
 `define __precision_GENERATED__VH__
 
 //METASTART; IVector
-//METAEXTERNAL; ind; IVectorIndication;
 //METAINTERNAL; fifo; Fifo1Base(width=10);
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY;

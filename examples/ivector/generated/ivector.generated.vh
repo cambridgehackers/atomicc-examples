@@ -11,7 +11,6 @@
 //METAINVOKE; out$first; !pong:element1$out$first;pong:element2$out$first;
 //METAGUARD; out$first; ( element2$out$first__RDY && ( pong || element1$out$first__RDY ) ) || ( ( !element2$out$first__RDY ) && ( !( pong || ( !element1$out$first__RDY ) ) ) );
 //METASTART; IVector
-//METAEXTERNAL; out; IVectorIndication;
 //METAINTERNAL; fifo0; FifoPong;
 //METAINTERNAL; fifo1; FifoPong;
 //METAINTERNAL; fifo2; FifoPong;

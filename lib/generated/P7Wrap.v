@@ -47,9 +47,9 @@ module P7Wrap (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb,
-    input wire intrinterrupt,
-    input wire intrCLK,
-    input wire intrnRST,
+    input wire intr$interrupt,
+    input wire intr$CLK,
+    input wire intr$nRST,
     inout wire [54 - 1:0]MIO,
     output wire [4 - 1:0]FCLKCLK,
     input wire [4 - 1:0]FCLKCLKTRIGN,
@@ -711,7 +711,7 @@ module P7Wrap (
     assign pclockTop$nRST = nRST;
     assign pps$DDRARB = 4'd0;
     assign pps$FPGAIDLEN = 1;
-    assign pps$IRQF2P = intrinterrupt;
+    assign pps$IRQF2P = intr$interrupt;
     assign pps$MAXIGP0ACLK = CLK;
     assign pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY;
     assign pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY;
@@ -725,11 +725,11 @@ module P7Wrap (
     assign pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA;
     assign pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY;
     // Extra assigments, not to output wires
-    assign CLK = intrCLK;
+    assign CLK = intr$CLK;
     assign RULE$gp0ar__RDY = pps$MAXIGP0ARVALID && MAXIGP0_O$AR__RDY;
     assign RULE$gp0aw__RDY = pps$MAXIGP0AWVALID && MAXIGP0_O$AW__RDY;
     assign RULE$gp0w__RDY = pps$MAXIGP0WVALID && MAXIGP0_O$W__RDY;
-    assign nRST = intrnRST;
+    assign nRST = intr$nRST;
 endmodule 
 
 `default_nettype wire    // set back to default value

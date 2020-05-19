@@ -19,7 +19,7 @@ INTERFACE MbufgBUFG  {
 }
 INTERFACE P7WrapIfc  {
     INTERFACE ZynqClock _
-    INTERFACE ZynqInterrupt intr
+    INTERFACE ZynqInterrupt intr$
     INTERFACE/Ptr MaxiO MAXIGP0_O
     INTERFACE MaxiI MAXIGP0_I
     INTERFACE Pps7m M
@@ -492,6 +492,50 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(12) :pps$MAXIGP0BID = MAXIGP0_I$B$id
         LET Bit(2) :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :pps$FPGAIDLEN = 1
+        LET Bit(1) :pps$MAXIGP0ACLK = __defaultClock
+        LET Bit(1) :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
+        LET Bit(1) :pps$MAXIGP0BVALID = MAXIGP0_I$B__ENA
+        LET Bit(1) :pps$MAXIGP0ARREADY = MAXIGP0_O$AR__RDY
+        LET Bit(1) :pps$MAXIGP0AWREADY = MAXIGP0_O$AW__RDY
+        LET Bit(1) :pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY
+        LET Bit(15) :DDR_Addr = pps$DDRA
+        LET Bit(3) :DDR_BankAddr = pps$DDRBA
+        LET Bit(1) :DDR_CAS_n = pps$DDRCASB
+        LET Bit(1) :DDR_CKE = pps$DDRCKE
+        LET Bit(1) :DDR_Clk_n = pps$DDRCKN
+        LET Bit(1) :DDR_Clk_p = pps$DDRCKP
+        LET Bit(1) :DDR_CS_n = pps$DDRCSB
+        LET Bit(4) :DDR_DM = pps$DDRDM
+        LET Bit(32) :DDR_DQ = pps$DDRDQ
+        LET Bit(4) :DDR_DQS_n = pps$DDRDQSN
+        LET Bit(4) :DDR_DQS_p = pps$DDRDQSP
+        LET Bit(1) :DDR_DRSTB = pps$DDRDRSTB
+        LET Bit(1) :DDR_ODT = pps$DDRODT
+        LET Bit(1) :DDR_RAS_n = pps$DDRRASB
+        LET Bit(1) :FIXED_IO_ddr_vrn = pps$DDRVRN
+        LET Bit(1) :FIXED_IO_ddr_vrp = pps$DDRVRP
+        LET Bit(1) :DDR_WEB = pps$DDRWEB
+        LET Bit(1) :FIXED_IO_ps_clk = pps$PSCLK
+        LET Bit(1) :FIXED_IO_ps_porb = pps$PSPORB
+        LET Bit(1) :FIXED_IO_ps_srstb = pps$PSSRSTB
+        LET Bit(4) :pps$DDRARB = 0
+        LET Bit(20) :pps$IRQF2P = intr$interrupt
+        LET Bit(1) :__defaultClock = intr$CLK
+        LET Bit(1) :__defaultnReset = intr$nRST
+        LET Bit(1) :pclockTop$CLK = __defaultClock
+        LET Bit(1) :pclockTop$nRST = __defaultnReset
+    }
+    METHOD/Rule/Action RULE$gp0ar__ENA if ((pps$MAXIGP0ARVALID)) {
+        CALL/Action :MAXIGP0_O$AR__ENA{pps$MAXIGP0ARADDR,pps$MAXIGP0ARID,pps$MAXIGP0ARLEN}
+    }
+    METHOD/Rule/Action RULE$gp0aw__ENA if ((pps$MAXIGP0AWVALID)) {
+        CALL/Action :MAXIGP0_O$AW__ENA{pps$MAXIGP0AWADDR,pps$MAXIGP0AWID,pps$MAXIGP0AWLEN}
+    }
+    METHOD/Rule/Action RULE$gp0w__ENA if ((pps$MAXIGP0WVALID)) {
+        CALL/Action :MAXIGP0_O$W__ENA{pps$MAXIGP0WDATA,pps$MAXIGP0WID,pps$MAXIGP0WLAST}
+    }
 }
 MODULE ZynqTop ZynqTopIFC {
     INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
@@ -507,10 +551,10 @@ MODULE ZynqTop ZynqTopIFC {
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
         LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLKRESETN
         LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
-        LET Bit(1) :ps7_ps7_foo$intrinterrupt = testinterrupt
-        LET Bit(1) :ps7_ps7_foo$intrCLK = __defaultClock
-        LET Bit(1) :ps7_ps7_foo$intrnRST = __defaultnReset
-        LET Bit(1) :testCLK = __defaultClock
-        LET Bit(1) :testnRST = __defaultnReset
+        LET Bit(1) :ps7_ps7_foo$intr$interrupt = test$interrupt
+        LET Bit(1) :ps7_ps7_foo$intr$CLK = __defaultClock
+        LET Bit(1) :ps7_ps7_foo$intr$nRST = __defaultnReset
+        LET Bit(1) :test$CLK = __defaultClock
+        LET Bit(1) :test$nRST = __defaultnReset
     }
 }
