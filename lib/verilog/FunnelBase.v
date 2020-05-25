@@ -39,7 +39,7 @@ module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) ( i
         assign output$enq__ENA[j] = rvalid | input$enq__ENA[j*2];
     end
 endmodule
-//////////////////
+
 module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
     input input$enq__ENA[funnelWidth-1:0], /* array of inputs */
     input [funnelWidth * dataWidth-1:0] input$enq$v,
@@ -65,6 +65,3 @@ module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input
     assign output$enq__ENA = level[depth].valid[0];
     assign level[depth].ready[0] = output$enq__RDY;
 endmodule
-
-
-
