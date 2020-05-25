@@ -11,7 +11,7 @@ include ../makefile.in
 SOURCES= iobufVec.cpp fifo.cpp mux.cpp adapter.cpp vsimTop.cpp zynqTop.cpp \
     connectNet2.cpp userTop.cpp resetInverter.cpp testTop.cpp clockTop.cpp \
     mimo.cpp sizedFifo.cpp configCounter.cpp \
-    grayCounter.cpp funnel.cpp
+    grayCounter.cpp
 
 CDIRS=$(patsubst %.cpp, %, $(SOURCES))
 
