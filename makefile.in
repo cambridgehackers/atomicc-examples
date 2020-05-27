@@ -8,7 +8,10 @@ Q=
 VERBOSE_SWITCH=--verbose
 endif
 
+allarchlist = ac701 zedboard zc702 zc706 kc705 vc707 zynq100 v2000t bluesim miniitx100 de5 htg4 vsim parallella xsim zybo kc705g2 vc707g2
+
 export DTOP := $(PWD)   # project directory
+export BOARD := $(BOARD)
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
@@ -42,7 +45,7 @@ CPPFLAGS += -I/usr/include/x86_64-linux-gnu/
 #     make clean    (this cleans out the objects/etc that were created by 'make verilator')
 #
 
-.PHONY: verilator run zybo clean
+.PHONY: verilator run clean $(allarchlist)
 compile: all
 
 verilator:
@@ -52,9 +55,12 @@ verilator:
 run:
 	cd verilator; make run
 
-zybo:
-	BOARD=zybo make gen
-	cd zybo; make
+$(allarchlist): %:
+ifeq ($(BOARD),)
+	$(eval BOARD := $@)
+endif
+	BOARD=$@ make gen
+	cd $@; make
 
 gen:
 	$(CONNECTALSDIR)/scripts/makefilegen.py -B$(BOARD) --project-dir $(BOARD) \
