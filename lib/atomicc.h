@@ -21,6 +21,13 @@
 // SOFTWARE.
 #ifndef _ATOMICC_H_
 #define _ATOMICC_H_
+#if 1
+// With: Ubuntu 18.04.4 LTS
+// In /usr/include/x86_64-linux-gnu/bits/libio.h:284:15: error: field has incomplete type 'void'
+//  _IO_lock_t *_lock;
+#define _IO_lock_t_defined
+typedef int _IO_lock_t;
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
