@@ -8,7 +8,7 @@ Q=
 VERBOSE_SWITCH=--verbose
 endif
 
-allarchlist = ac701 zedboard zc702 zc706 kc705 vc707 zynq100 v2000t bluesim miniitx100 de5 htg4 vsim parallella xsim zybo kc705g2 vc707g2
+allarchlist = ac701 zedboard zc702 zc706 kc705 vc707 zynq100 v2000t miniitx100 de5 htg4 vsim parallella xsim zybo kc705g2 vc707g2
 
 export DTOP := $(PWD)   # project directory
 export BOARD := $(BOARD)
