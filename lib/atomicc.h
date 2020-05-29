@@ -88,6 +88,7 @@ typedef struct {__uint(128) data;} NOCData;
 typedef struct {LenType length; __uint(128) data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
 typedef PipeInH<NOCData>                  NOCPipeH;
+typedef PipeIn<NOCDataH>                  NOCPipeHn;
 typedef __uint(32)                        BusType;
 #if 0
 template<class T> class M2P __implements T { // method -> pipe

@@ -29,19 +29,16 @@ typedef struct {
 } FifoItem;
 
 class MuxPipe __implements MuxPipeIfc {
-    Fifo1<NOCData>   forwardFifo;
+    Fifo1<NOCDataH>   forwardFifo;
     Fifo1<__uint(16)>   forwardFifol;
-    void in.enq(NOCData v, __uint(16) length) if (!__ready(forwardFifo.out.first)) {
-        out->enq(v, length);
+    void in.enq(NOCDataH v) if (!__ready(forwardFifo.out.first)) {
+        out->enq(v);
     }
-    void forward.enq(NOCData v, __uint(16) length) {
+    void forward.enq(NOCDataH v) {
         forwardFifo.in.enq(v);
-        forwardFifol.in.enq(length);
     }
     __rule fifoRule if (!__valid(in.enq)) {
-        out->enq(forwardFifo.out.first(), forwardFifol.out.first());
+        out->enq(forwardFifo.out.first());
         forwardFifo.out.deq();
-        forwardFifol.out.deq();
     }
 };
-//static MuxPipe unusedMuxPipe;
