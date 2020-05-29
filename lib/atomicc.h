@@ -49,24 +49,13 @@ extern "C" void __finish(void);
 
 #define GENERIC_INT_TEMPLATE_FLAG 999999
 
-extern "C" void atomiccSchedulePriority(const char *arule, const char *priority, unsigned long classPtr);
-
-template<int dataWidth>
-class PipeInBin {
-    void enq(__uint(dataWidth) v);
-};
-
 template<class T>
 class PipeIn {
-    typedef T Data;
     void enq(T v);
-    //PipeInBin<__bitsize(T)> _;
-    //void _.enq(T v) { in.enq(__bit_cast<__uint(__bitsize(T))>(v)); }
 };
 
 template<class T>
 class PipeOut {
-    typedef T Data;
     void deq(void);
     T first(void);
 };
@@ -74,12 +63,10 @@ class PipeOut {
 typedef __int(16) LenType;
 template<class T>
 class PipeInH {
-    typedef T Data;
     void enq(T v, LenType length);
 };
 template<class T>
 class PipeInB {
-    typedef T Data;
     void enq(T v, LenType length); // last item in packet has (length == 1)
 };
 
@@ -95,10 +82,10 @@ class Gear {
     PipeOut<Out> out;
 };
 
-#define MAX_NOC_WIDTH                  4//100
 #define PRINTF_PORT    (uint16_t) 0x7fff
 
 typedef struct {__uint(128) data;} NOCData;
+typedef struct {LenType length; __uint(128) data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
 typedef PipeInH<NOCData>                  NOCPipeH;
 typedef __uint(32)                        BusType;
@@ -122,7 +109,6 @@ public:
     T                     *method;
 };
 #endif
-static NOCPipe unusedNOCPipe;
 
 static inline std::string utostr(uint64_t X) {
   char Buffer[21], *BufPtr = Buffer+21;
