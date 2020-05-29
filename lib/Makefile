@@ -1,6 +1,9 @@
 
 include ../makefile.in
 #CPPFLAGS += -emit-llvm
+# trace interface declaration forcing
+#CPPFLAGS += -mllvm -itrace
+# trace end of record decl semantics
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -templatetrace
 #CPPFLAGS += -mllvm -rgentrace
