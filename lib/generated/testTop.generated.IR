@@ -6,7 +6,8 @@ STRUCT AddrCount  {
 STRUCT BusData  {
     FIELD Bit(32) data
 }
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT PortalInfo  {
@@ -67,7 +68,7 @@ INTERFACE MaxiO  {
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( NOCData v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(15) v )
@@ -101,9 +102,6 @@ INTERFACE PipeIn.9  {
 }
 INTERFACE PipeInB  {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
-}
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
@@ -161,7 +159,7 @@ INTERFACE ZynqInterruptT  {
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
-    INTERFACE/Ptr PipeInH indication
+    INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=15) Fifo {
 }

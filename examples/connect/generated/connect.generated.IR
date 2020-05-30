@@ -6,7 +6,8 @@ STRUCT EchoRequest_data  {
     FIELD Bit(32) tag
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT ValueType  {
@@ -32,20 +33,20 @@ INTERFACE ConnectIfc  {
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIIIfc  {
-    INTERFACE PipeIn.0 pipe
+    INTERFACE PipeIn.1 pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn.0 pipe
+    INTERFACE/Ptr PipeIn.1 pipe
 }
 INTERFACE ERIIfc  {
-    INTERFACE PipeIn pipe
+    INTERFACE PipeIn.0 pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn pipe
+    INTERFACE/Ptr PipeIn.0 pipe
 }
 INTERFACE EchoIfc  {
     INTERFACE EchoRequest request
@@ -58,18 +59,18 @@ INTERFACE EchoRequest  {
     METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE MuxPipeIfc  {
-    INTERFACE PipeInH in
-    INTERFACE PipeInH forward
-    INTERFACE/Ptr PipeInH out
+    INTERFACE PipeIn in
+    INTERFACE PipeIn forward
+    INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( EchoRequest_data v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn.0  {
-    METHOD/Action enq__ENA ( EchoIndication_data v )
+    METHOD/Action enq__ENA ( EchoRequest_data v )
 }
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( EchoIndication_data v )
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
@@ -83,9 +84,9 @@ MODULE Connect ConnectIfc {
     FIELD EchoIndicationInput lEII_test
     METHOD/Rule/Action RULE$connectRule__ENA {
         LET EchoRequest :lERI$request = lEcho$request
-        LET PipeIn.0 :lEIO$pipe = lEII_test$pipe
+        LET PipeIn.1 :lEIO$pipe = lEII_test$pipe
         LET EchoIndication :lEcho$indication = lEIO$indication
-        LET PipeIn :lERO_test$pipe = lERI$pipe
+        LET PipeIn.0 :lERO_test$pipe = lERI$pipe
     }
 }
 MODULE Echo EchoIfc {

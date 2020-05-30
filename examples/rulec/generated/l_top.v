@@ -3,11 +3,10 @@
 `default_nettype none
 module l_top (input wire CLK, input wire nRST,
     output wire indication$enq__ENA,
-    output wire [128 - 1:0]indication$enq$v,
-    output wire [16 - 1:0]indication$enq$length,
+    output wire [(16 + 128) - 1:0]indication$enq$v,
     input wire indication$enq__RDY,
     input wire request$enq__ENA,
-    input wire [128 - 1:0]request$enq$v,
+    input wire [(16 + 128) - 1:0]request$enq$v,
     output wire request$enq__RDY);
     wire [32 - 1:0]DUT__Echo$indication$heard$v;
     wire [16 - 1:0]DUT__Echo$indication$heard2$a;
@@ -72,7 +71,6 @@ module l_top (input wire CLK, input wire nRST,
         .method$heard3__RDY(M2P__indication$method$heard3__RDY),
         .pipe$enq__ENA(indication$enq__ENA),
         .pipe$enq$v(indication$enq$v),
-        .pipe$enq$length(indication$enq$length),
         .pipe$enq__RDY(indication$enq__RDY));
     ___P2MEchoRequest P2M__request (.CLK(CLK), .nRST(nRST),
         .method$say__ENA(P2M__request$method$say__ENA),

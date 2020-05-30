@@ -1,4 +1,5 @@
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE EchoIfc  {
@@ -18,13 +19,10 @@ INTERFACE EchoRequest  {
     METHOD/Action setLeds__ENA ( Bit(8) v )
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( NOCData v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInB  {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
-}
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE UserTopIfc  {
     INTERFACE PipeInB write
@@ -32,7 +30,7 @@ INTERFACE UserTopIfc  {
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
-    INTERFACE/Ptr PipeInH indication
+    INTERFACE/Ptr PipeIn indication
 }
 EMODULE UserTop UserTopIfc {
 }

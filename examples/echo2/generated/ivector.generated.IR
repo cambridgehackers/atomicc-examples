@@ -1,4 +1,5 @@
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT ValuePair  {
@@ -10,12 +11,12 @@ STRUCT IVectorTest  {
     FIELD IVector ivector
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn in
+    INTERFACE PipeIn.0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.0  {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+INTERFACE Fifo.1  {
+    INTERFACE PipeIn.2 in
+    INTERFACE PipeOut.3 out
 }
 INTERFACE IVectorIFC  {
     INTERFACE IVectorRequest request
@@ -28,28 +29,28 @@ INTERFACE IndIF  {
     METHOD/Action heard__ENA ( ValuePair v )
 }
 INTERFACE MuxPipeIfc  {
-    INTERFACE PipeInH in
-    INTERFACE PipeInH forward
-    INTERFACE/Ptr PipeInH out
+    INTERFACE PipeIn in
+    INTERFACE PipeIn forward
+    INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( ValuePair v )
 }
-INTERFACE PipeIn.1  {
+INTERFACE PipeIn.2  {
     METHOD/Action enq__ENA ( Bit(704) v )
-}
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first ValuePair
 }
-INTERFACE PipeOut.2  {
+INTERFACE PipeOut.3  {
     METHOD/Action deq__ENA
     METHOD first Bit(704)
 }
-EMODULE Fifo1Base(width=704) Fifo.0 {
+EMODULE Fifo1Base(width=704) Fifo.1 {
 }
 EMODULE IVectorIndication IndIF {
 }

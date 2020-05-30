@@ -28,7 +28,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     wire [(32 + (32 + 32)) - 1:0]ind0;
     wire [(32 + (32 + 32)) - 1:0]ind1;
     assign indication$heard__RDY = !ind_busy;
-    assign pipe$enq$v = ( RULE$output_rulee__RDY ? { RULE$output_rulee$agg_2e_tmp$data$heard$v , RULE$output_rulee$agg_2e_tmp$data$heard$meth , RULE$output_rulee$agg_2e_tmp$tag } : 0 ) | ( RULE$output_ruleo__RDY ? { RULE$output_ruleo$agg_2e_tmp$data$heard$v , RULE$output_ruleo$agg_2e_tmp$data$heard$meth , RULE$output_ruleo$agg_2e_tmp$tag } : 0 );
+    assign pipe$enq$v = ( RULE$output_rulee__RDY ? { RULE$output_rulee$agg_2e_tmp$data$heard$v , RULE$output_rulee$agg_2e_tmp$data$heard$meth , RULE$output_rulee$agg_2e_tmp$tag } : 96'd0 ) | ( RULE$output_ruleo__RDY ? { RULE$output_ruleo$agg_2e_tmp$data$heard$v , RULE$output_ruleo$agg_2e_tmp$data$heard$meth , RULE$output_ruleo$agg_2e_tmp$tag } : 96'd0 );
     assign pipe$enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
     assign RULE$output_rulee$agg_2e_tmp$data$heard$meth = ind0[ 32 - 1 + 32 : 32 ];

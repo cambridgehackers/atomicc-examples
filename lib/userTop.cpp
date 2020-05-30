@@ -35,14 +35,18 @@ class UserTop __implements UserTopIfc {
 
     void wad.enq(NOCData v, __int(16) length) {
 printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
-        ctop.request.enq(v);
+        ctop.request.enq(__bit_cast<NOCDataH>(__bitconcat(__bit_cast<__int(__bitsize(v))>(v), length)));
     }
-    void indication.enq(NOCData v, __int(16) length) {
-        __int(__bitsize(v)) vint = __bit_cast<__int(__bitsize(v))>(v);
+    void indication.enq(NOCDataH v) {
+        __int(16) newlen = __bitsubstr(__bit_cast<__int(__bitsize(v))>(v), __bitsize(v.length) - 1, 0);
+        __int(__bitsize(v.data)) vint = 
+__bitsubstr(__bit_cast<__int(__bitsize(v))>(v), __bitsize(v) - __bitsize(v.length) - 1, __bitsize(v.length));
+//__bit_cast<__int(__bitsize(v.data))>(v.data);
         __int(16) len = __bitsubstr(vint, 15, 0) - 1;
         __int(16) port = IfcNames_EchoIndicationH2S;
-printf("indConnect.enq v %llx len %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)len);
-        radapter_0.in.enq(//__bit_cast<NOCData>(__bitconcat(__bitsubstr(vint, __bitsize(v) - 1, 16), port)), len);
-v, length);
+printf("indConnect.enq v %llx len %lx\n", (long long)vint, (long)len);
+        radapter_0.in.enq(//__bit_cast<NOCData>(__bitconcat(__bitsubstr(vint, __bitsize(v.data) - 1, 16), port)), len);
+__bit_cast<NOCData>(
+__bitsubstr(__bit_cast<__int(__bitsize(v))>(v), __bitsize(v) - __bitsize(v.length) - 1, __bitsize(v.length))), newlen);
     }
 };

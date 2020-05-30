@@ -21,8 +21,8 @@
 #ifndef __USER_TOP_H__
 #define __USER_TOP_H__
 class l_topIfc {
-    PipeIn<NOCData> request;
-    PipeInH<NOCData> *indication;
+    PipeIn<NOCDataH> request;
+    PipeIn<NOCDataH> *indication;
 };
 class l_top __implements l_topIfc;
 

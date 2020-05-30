@@ -1,4 +1,5 @@
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT ProcessData  {
@@ -7,23 +8,23 @@ STRUCT ProcessData  {
     FIELD Bit(3) state
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn in
+    INTERFACE PipeIn.0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.0  {
-    INTERFACE PipeIn.1 in
-    INTERFACE PipeOut.2 out
+INTERFACE Fifo.1  {
+    INTERFACE PipeIn.2 in
+    INTERFACE PipeOut.3 out
 }
-INTERFACE Fifo.3  {
-    INTERFACE PipeIn.4 in
-    INTERFACE PipeOut.5 out
+INTERFACE Fifo.4  {
+    INTERFACE PipeIn.5 in
+    INTERFACE PipeOut.6 out
 }
-INTERFACE Fifo.6  {
-    INTERFACE PipeIn.7 in
-    INTERFACE PipeOut.8 out
+INTERFACE Fifo.7  {
+    INTERFACE PipeIn.8 in
+    INTERFACE PipeOut.9 out
 }
 INTERFACE LpmIfc  {
-    INTERFACE/Ptr PipeIn.1 outQ
+    INTERFACE/Ptr PipeIn.2 outQ
     METHOD/Action enter__ENA ( Bit(32) x )
 }
 INTERFACE LpmMem  {
@@ -32,38 +33,38 @@ INTERFACE LpmMem  {
     METHOD resValue Bit(32)
 }
 INTERFACE MuxPipeIfc  {
-    INTERFACE PipeInH in
-    INTERFACE PipeInH forward
-    INTERFACE/Ptr PipeInH out
+    INTERFACE PipeIn in
+    INTERFACE PipeIn forward
+    INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.1  {
+INTERFACE PipeIn.2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.4  {
+INTERFACE PipeIn.5  {
     METHOD/Action enq__ENA ( Bit(23) v )
 }
-INTERFACE PipeIn.7  {
+INTERFACE PipeIn.8  {
     METHOD/Action enq__ENA ( ProcessData v )
-}
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut.2  {
+INTERFACE PipeOut.3  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut.5  {
+INTERFACE PipeOut.6  {
     METHOD/Action deq__ENA
     METHOD first Bit(23)
 }
-INTERFACE PipeOut.8  {
+INTERFACE PipeOut.9  {
     METHOD/Action deq__ENA
     METHOD first ProcessData
 }
@@ -75,13 +76,13 @@ EMODULE BufTicket TickIfc {
 }
 EMODULE Fifo1Base(width=32) Fifo {
 }
-EMODULE FifoB1Base(width=23) Fifo.3 {
+EMODULE FifoB1Base(width=23) Fifo.4 {
 }
 EMODULE LpmMemory LpmMem {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
-MODULE Fifo1 Fifo.0 {
+MODULE Fifo1 Fifo.1 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -93,7 +94,7 @@ MODULE Fifo1 Fifo.0 {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoB1 Fifo.6 {
+MODULE FifoB1 Fifo.7 {
     FIELD FifoB1Base(width=23) fifo
     METHOD/Action in$enq__ENA ( ProcessData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}

@@ -6,7 +6,8 @@ STRUCT EchoRequest_data  {
     FIELD Bit(32) tag
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union  {
@@ -34,20 +35,20 @@ INTERFACE ConnectIFC  {
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIIIfc  {
-    INTERFACE PipeIn.0 pipe
+    INTERFACE PipeIn.1 pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn.0 pipe
+    INTERFACE/Ptr PipeIn.1 pipe
 }
 INTERFACE ERIIfc  {
-    INTERFACE PipeIn pipe
+    INTERFACE PipeIn.0 pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn pipe
+    INTERFACE/Ptr PipeIn.0 pipe
 }
 INTERFACE EchoIfc  {
     INTERFACE EchoRequest request
@@ -62,18 +63,18 @@ INTERFACE EchoRequest  {
     METHOD/Action say2__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE MuxPipeIfc  {
-    INTERFACE PipeInH in
-    INTERFACE PipeInH forward
-    INTERFACE/Ptr PipeInH out
+    INTERFACE PipeIn in
+    INTERFACE PipeIn forward
+    INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( EchoRequest_data v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn.0  {
-    METHOD/Action enq__ENA ( EchoIndication_data v )
+    METHOD/Action enq__ENA ( EchoRequest_data v )
 }
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( EchoIndication_data v )
 }
 INTERFACE Swap  {
     METHOD/Action y2x__ENA
@@ -84,9 +85,9 @@ EMODULE MuxPipe MuxPipeIfc {
 }
 MODULE Connect ConnectIFC {
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.0
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn.1
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn.0
     INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI

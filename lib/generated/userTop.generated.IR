@@ -1,6 +1,10 @@
 STRUCT NOCData  {
     FIELD Bit(128) data
 }
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE AfB  {
     INTERFACE PipeInB in
     INTERFACE/Ptr PipeInH out
@@ -10,7 +14,7 @@ INTERFACE AtB  {
     INTERFACE/Ptr PipeInB out
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( NOCData v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInB  {
     METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
@@ -24,7 +28,7 @@ INTERFACE UserTopIfc  {
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
-    INTERFACE/Ptr PipeInH indication
+    INTERFACE/Ptr PipeIn indication
 }
 EMODULE AdapterFromBus AfB {
 }
@@ -45,17 +49,23 @@ MODULE UserTop UserTopIfc {
     INTERFACE PipeInH wad
     INTERFACE PipeInH indication
     METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {
+        ALLOCA NOCDataH wad$enq$agg_2e_tmp
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
-        CALL/Action :ctop$request$enq__ENA{wad$enq$v}
+        LET Bit(32) :wad$enq$agg_2e_tmp = __bitconcat{wad$enq$v,wad$enq$length}
+        CALL/Action :ctop$request$enq__ENA{wad$enq$agg_2e_tmp}
     }
-    METHOD/Action indication$enq__ENA ( NOCData v , Bit(16) length ) {
+    METHOD/Action indication$enq__ENA ( NOCDataH v ) {
+        ALLOCA NOCData indication$enq$agg_2e_tmp
         ALLOCA Bit(16) indication$enq$len
+        ALLOCA Bit(16) indication$enq$newlen
         ALLOCA Bit(16) indication$enq$port
         ALLOCA Bit(128) indication$enq$vint
-        LET Bit(128) :indication$enq$vint = indication$enq$v
+        LET Bit(16) :indication$enq$newlen = __bitsubstr{indication$enq$v,(16) - (1),0}
+        LET Bit(128) :indication$enq$vint = __bitsubstr{indication$enq$v,((144) - (16)) - (1),16}
         LET Bit(16) :indication$enq$len = (__bitsubstr{indication$enq$vint,15,0}) - (1)
         LET Bit(16) :indication$enq$port = 5
-        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$v,indication$enq$len}
-        CALL/Action :radapter_0$in$enq__ENA{indication$enq$v,indication$enq$length}
+        PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$vint,indication$enq$len}
+        LET Bit(32) :indication$enq$agg_2e_tmp = __bitsubstr{indication$enq$v,((144) - (16)) - (1),16}
+        CALL/Action :radapter_0$in$enq__ENA{indication$enq$agg_2e_tmp,indication$enq$newlen}
     }
 }
