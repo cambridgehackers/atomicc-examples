@@ -30,19 +30,22 @@ class EchoIndication {
   void heard(int v);
 };
 
-class EchoInd {
-  EchoIndication hout;
-  //void hout.heard(int v);
+class EchoInd __implements EchoIndication {
+  //void heard(int v);
 };
 
-class Echo {
+class EchoIfc {
   EchoRequest sout;
   EchoIndication *ind;
+};
+
+class Echo __implements EchoIfc {
   Fifo<int> *fifo;
   void sout.say(const int v) {
       fifo->in.enq(v);
   }
-  Echo(EchoInd *aind) : fifo(new Fifo1<int>()), ind(&aind->hout) {
+  Echo(EchoIndication *aind) : fifo(new Fifo1<int>()) {
+    ind = aind;
     printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
     __rule respond_rule {
         fifo->out.deq();
