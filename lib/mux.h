@@ -22,9 +22,9 @@
 #ifndef _MUX_H_
 #define _MUX_H_
 class MuxPipeIfc {
-    NOCPipeHn           in;
-    NOCPipeHn      forward;
-    NOCPipeHn         *out;
+    PipeIn<NOCDataH>           in;
+    PipeIn<NOCDataH>      forward;
+    PipeIn<NOCDataH>         *out;
 };
 class MuxPipe __implements MuxPipeIfc;
 static MuxPipe dummyMux;

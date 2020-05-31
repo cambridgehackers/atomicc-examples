@@ -21,6 +21,12 @@
 // SOFTWARE.
 #ifndef _ADAPTER_H_
 #define _ADAPTER_H_
+
+template<class T>
+class PipeInH {
+    void enq(T v, LenType length);
+};
+
 template<class T, class BusType>
 class AtB {
    PipeInH<T>        in;

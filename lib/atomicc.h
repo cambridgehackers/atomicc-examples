@@ -39,7 +39,7 @@ typedef int _IO_lock_t;
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
-#define __printf    NOCPipeH *printfp
+#define __printf    PipeIn<NOCDataH> *printfp
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 extern "C" int *__bitsubstrl(int, ...);
@@ -62,10 +62,6 @@ class PipeOut {
 
 typedef __int(16) LenType;
 template<class T>
-class PipeInH {
-    void enq(T v, LenType length);
-};
-template<class T>
 class PipeInB {
     void enq(T v, LenType length); // last item in packet has (length == 1)
 };
@@ -87,24 +83,19 @@ class Gear {
 typedef struct {__uint(128) data;} NOCData;
 typedef struct {LenType length; __uint(128) data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
-typedef PipeInH<NOCData>                  NOCPipeH;
-typedef PipeIn<NOCDataH>                  NOCPipeHn;
 typedef __uint(32)                        BusType;
 #if 0
 template<class T> class M2P __implements T { // method -> pipe
 public:
     typedef __serialize(T) Data;
-    typedef NOCPipeH   Pipe;
     //typedef PipeIn<Data>   Pipe;
     T                      method;
     Pipe                  *pipe;
-    Pipe                   unused;
 };
 
 template<class T> class P2M __implements NOCPipe { // pipe -> method
 public:
     typedef __serialize(T) Data;
-    typedef NOCPipe   Pipe;
     //typedef PipeIn<Data>   Pipe;
     Pipe                   pipe;
     T                     *method;
