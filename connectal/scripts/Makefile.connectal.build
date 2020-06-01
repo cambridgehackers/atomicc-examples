@@ -40,9 +40,6 @@ endif
 NDK_OBJCOPY=$(shell $(NDKPATH)ndk-which objcopy)
 
 NOS := $(shell uname)
-ifeq ($(NOS), Darwin)
-OBJCOPY=true
-else # Darwin
 ifneq ($(XILINX),)
 ifeq ($(OS),android)
 OBJCOPY?=$(NDK_OBJCOPY)
@@ -55,7 +52,7 @@ else #!XILINX
 OBJCOPY?= objcopy
 BINFILE?=bin/mkTop.sof.gz
 endif #!XILINX
-endif #!Darwin
+OBJCOPY?=true
 
 export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
 export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
@@ -99,7 +96,7 @@ exe: $(EXENAME)
 ubuntu.exe: prepare_bin_target
 	@echo "ubuntu.exe"
 	$(Q)cd jni; $(MAKE) --no-print-directory -f Ubuntu.mk ubuntu.exe
-	@cp -v jni/ubuntu.exe bin
+	$(Q)cp -v jni/ubuntu.exe bin
 	@echo "ubuntu.exe done"
 
 ifneq ($(CONNECTAL_NOHARDWARE),1)
@@ -140,13 +137,13 @@ android.exe: prepare_bin_target
 
 android.debug.exe: prepare_bin_target
 	+ndk-build $(CONNECTAL_NDK_PARAM) -B V=1 NDK_DEBUG=1
-	@cp -v libs/armeabi/android.exe bin
+	$(Q)cp -v libs/armeabi/android.exe bin
 	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --remove-section fpgadata bin/android.exe; fi
 	$(Q)if [ -f bin/mkTop.xdevcfg.bin.gz ]; then $(NDK_OBJCOPY) --add-section fpgadata=bin/mkTop.xdevcfg.bin.gz bin/android.exe; fi
     
 android.exe2: prepare_bin_target
 	+ndk-build $(CONNECTAL_NDK_PARAM)
-	@cp -fv libs/armeabi/android.exe2 bin
+	$(Q)cp -fv libs/armeabi/android.exe2 bin
 
 RUN_SCRIPT?=$(CONNECTAL_RUN_SCRIPT)
 

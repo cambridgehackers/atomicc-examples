@@ -57,15 +57,17 @@ MODULE UserTop UserTopIfc {
     METHOD/Action indication$enq__ENA ( NOCDataH v ) {
         ALLOCA NOCData indication$enq$agg_2e_tmp
         ALLOCA Bit(16) indication$enq$len
-        ALLOCA Bit(16) indication$enq$newlen
         ALLOCA Bit(16) indication$enq$port
+        ALLOCA Bit(16) indication$enq$total_len
         ALLOCA Bit(128) indication$enq$vint
-        LET Bit(16) :indication$enq$newlen = __bitsubstr{indication$enq$v,(16) - (1),0}
-        LET Bit(128) :indication$enq$vint = __bitsubstr{indication$enq$v,((144) - (16)) - (1),16}
+        ALLOCA Bit(144) indication$enq$vtemp
+        LET Bit(144) :indication$enq$vtemp = indication$enq$v
+        LET Bit(16) :indication$enq$total_len = __bitsubstr{indication$enq$vtemp,(16) - (1),0}
+        LET Bit(128) :indication$enq$vint = __bitsubstr{indication$enq$vtemp,((144) - (16)) - (1),16}
         LET Bit(16) :indication$enq$len = (__bitsubstr{indication$enq$vint,15,0}) - (1)
         LET Bit(16) :indication$enq$port = 5
         PRINTF :printf{"indConnect.enq v %llx len %lx\n",indication$enq$vint,indication$enq$len}
-        LET Bit(32) :indication$enq$agg_2e_tmp = __bitsubstr{indication$enq$v,((144) - (16)) - (1),16}
-        CALL/Action :radapter_0$in$enq__ENA{indication$enq$agg_2e_tmp,indication$enq$newlen}
+        LET Bit(128) :indication$enq$agg_2e_tmp = indication$enq$vint
+        CALL/Action :radapter_0$in$enq__ENA{indication$enq$agg_2e_tmp,indication$enq$total_len}
     }
 }

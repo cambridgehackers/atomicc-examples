@@ -16,9 +16,9 @@ module UserTop (input wire CLK, input wire nRST,
     wire ctop$request$enq__RDY;
     wire [128 - 1:0]indication$enq$agg_2e_tmp;
     wire [16 - 1:0]indication$enq$len;
-    wire [16 - 1:0]indication$enq$newlen;
-    wire [(16 + 128) - 1:0]indication$enq$v;
+    wire [16 - 1:0]indication$enq$total_len;
     wire [128 - 1:0]indication$enq$vint;
+    wire [144 - 1:0]indication$enq$vtemp;
     wire [16 - 1:0]radapter_0$in$enq$length;
     wire [128 - 1:0]radapter_0$in$enq$v;
     wire radapter_0$in$enq__RDY;
@@ -52,14 +52,14 @@ module UserTop (input wire CLK, input wire nRST,
         .indication$enq$v(ctop$indication$enq$v),
         .indication$enq__RDY(radapter_0$in$enq__RDY));
     assign ctop$request$enq$v = wad$enq$agg_2e_tmp;
-    assign indication$enq$v = ctop$indication$enq$v;
-    assign radapter_0$in$enq$length = indication$enq$newlen;
+    assign radapter_0$in$enq$length = indication$enq$total_len;
     assign radapter_0$in$enq$v = indication$enq$agg_2e_tmp;
     // Extra assigments, not to output wires
-    assign indication$enq$agg_2e_tmp = indication$enq$v[ ( ( 144 - 16 ) - 1 ) : 16 ];
+    assign indication$enq$agg_2e_tmp = indication$enq$vint;
     assign indication$enq$len = indication$enq$vint[ 15 : 0 ] - 16'd1;
-    assign indication$enq$newlen = indication$enq$v[ ( 16 - 1 ) : 0 ];
-    assign indication$enq$vint = indication$enq$v[ ( ( 144 - 16 ) - 1 ) : 16 ];
+    assign indication$enq$total_len = indication$enq$vtemp[ ( 16 - 1 ) : 0 ];
+    assign indication$enq$vint = indication$enq$vtemp[ ( ( 144 - 16 ) - 1 ) : 16 ];
+    assign indication$enq$vtemp = ctop$indication$enq$v;
     assign wad$enq$agg_2e_tmp = { wadapter_0$out$enq$v , wadapter_0$out$enq$length };
 
     always @( posedge CLK) begin
