@@ -16,8 +16,8 @@ INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
 }
 MODULE AdapterFromBus AfB {
-    FIELD Bit(1) waitForEnq
     FIELD Bit(128) buffer
+    FIELD Bit(1) waitForEnq
     METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {
         STORE :buffer = __bitconcat{__bitsubstr{buffer,((128) - (32)) - (1),0},in$enq$v}
         STORE ((in$enq$length) == (1)):waitForEnq = (1) != (0)
@@ -30,8 +30,8 @@ MODULE AdapterFromBus AfB {
     }
 }
 MODULE AdapterToBus AtB {
-    FIELD Bit(16) remain
     FIELD Bit(128) buffer
+    FIELD Bit(16) remain
     METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if (((remain) == (0))) {
         STORE :buffer = in$enq$v
         STORE :remain = (in$enq$length) + (1)

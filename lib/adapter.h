@@ -21,27 +21,28 @@
 // SOFTWARE.
 #ifndef _ADAPTER_H_
 #define _ADAPTER_H_
+#include "atomicc.h"
 
 template<class T>
 class PipeInH {
     void enq(T v, LenType length);
 };
 
-template<class T, class BusType>
+template<class T, class Tbus>
 class AtB {
    PipeInH<T>        in;
-   PipeInB<BusType> *out;
+   PipeInB<Tbus> *out;
 };
 
-template<class T, class BusType>
-class AdapterToBus __implements AtB<T, BusType>;
+template<class T, class Tbus>
+class AdapterToBus __implements AtB<T, Tbus>;
 
-template<class BusType, class T>
+template<class Tbus, class T>
 class AfB {
-   PipeInB<BusType>  in;
+   PipeInB<Tbus>  in;
    PipeInH<T>       *out;
 };
 
-template<class BusType, class T>
-class AdapterFromBus __implements AfB<BusType, T>;
+template<class Tbus, class T>
+class AdapterFromBus __implements AfB<Tbus, T>;
 #endif

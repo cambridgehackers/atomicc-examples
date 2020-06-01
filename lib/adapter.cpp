@@ -19,48 +19,37 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#include "atomicc.h"
 #include "adapter.h"
 
-template<class T, class BusType>
-class AdapterToBus __implements AtB<T, BusType> {
-   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   __int(16)        remain;
+template<class T, class Tbus>
+class AdapterToBus __implements AtB<T, Tbus> {
    __uint(__bitsize(T)) buffer;
+   __int(16)            remain;
 
    void in.enq(T v, LenType length) if (remain == 0) {
-      //printf("TTTTTT in.enq: v %x length %x\n", v, length);
       buffer = __bit_cast<decltype(buffer)>(v);
       remain = length + 1;
    }
-   AdapterToBus() {
-      __rule copyRule if (remain != 0) {
-         //printf("TTTTTT copyRule: buffer %x remain %x\n", buffer, remain);
-         this->out->enq(buffer, remain);
-         remain--;
-         buffer >>= __bitsize(BusType);
-      }
+   __rule copyRule if (remain != 0) {
+      this->out->enq(buffer, remain);
+      remain--;
+      buffer >>= __bitsize(Tbus);
    }
 };
 
-template<class BusType, class T>
-class AdapterFromBus __implements AfB<BusType, T> {
-   //const int        maxBeats = (sizeof(T) + sizeof(BusType) - 1)/sizeof(BusType);
-   bool             waitForEnq;
+template<class Tbus, class T>
+class AdapterFromBus __implements AfB<Tbus, T> {
    __uint(__bitsize(T)) buffer;
+   bool                 waitForEnq;
 
-   void in.enq(BusType v, LenType length) if (!waitForEnq) {
-      //printf("FFFFFFFF in.enq: v %d last %d buffer %x\n", v, last, buffer);
-      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(BusType) - 1, 0), v);
+   void in.enq(Tbus v, LenType length) if (!waitForEnq) {
+      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(Tbus) - 1, 0), v);
       if (length == 1)  // this is the last beat
           waitForEnq = 1;
    }
-   AdapterFromBus() {
-      __rule pushValue if (waitForEnq) {
-          //printf("FFFFFFFF pushValue: buffer %x\n", buffer);
-          this->out->enq(__bit_cast<T>(buffer), 0);
-          waitForEnq = 0;
-      }
+   __rule pushValue if (waitForEnq) {
+       this->out->enq(__bit_cast<T>(buffer), 0);
+       waitForEnq = 0;
    }
 };
 
