@@ -52,8 +52,8 @@ class VsimTop __implements VsimInterface {
     UserTop                    user;
     VsimReceive<MAX_BUS_WIDTH> sink_0;
     VsimSend<MAX_BUS_WIDTH>    source_0;
-    VBeat<MAX_BUS_WIDTH> writeUser __implements sink_0._;
-    PipeInB<BusType>     readUser __implements user.read;
+    __implements sink_0._ writeUser;
+    __implements user.read readUser;
 
     void readUser.enq(BusType v, LenType length) {
         source_0.beat(v, length == 1);

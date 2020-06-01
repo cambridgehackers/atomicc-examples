@@ -17,7 +17,7 @@ module UserTop (input wire CLK, input wire nRST,
     wire [128 - 1:0]indication$enq$agg_2e_tmp;
     wire [16 - 1:0]indication$enq$len;
     wire [16 - 1:0]indication$enq$newlen;
-    wire [128 - 1:0]indication$enq$v;
+    wire [(16 + 128) - 1:0]indication$enq$v;
     wire [128 - 1:0]indication$enq$vint;
     wire [16 - 1:0]radapter_0$in$enq$length;
     wire [128 - 1:0]radapter_0$in$enq$v;

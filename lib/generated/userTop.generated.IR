@@ -42,12 +42,12 @@ MODULE UserTop UserTopIfc {
     INTERFACECONNECT write wadapter_0$in PipeInB
     INTERFACECONNECT read radapter_0$out PipeInB
     INTERFACECONNECT wad wadapter_0$out PipeInH
-    INTERFACECONNECT indication ctop$indication PipeInH
+    INTERFACECONNECT indication ctop$indication PipeIn
     FIELD AdapterToBus radapter_0
     FIELD AdapterFromBus wadapter_0
     FIELD l_top ctop
     INTERFACE PipeInH wad
-    INTERFACE PipeInH indication
+    INTERFACE PipeIn indication
     METHOD/Action wad$enq__ENA ( NOCData v , Bit(16) length ) {
         ALLOCA NOCDataH wad$enq$agg_2e_tmp
         PRINTF :printf{"reqConnect.enq v %llx length %lx\n",wad$enq$v,wad$enq$length}
