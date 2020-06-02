@@ -21,14 +21,14 @@
                 { "dname": "decrement", "dparams": [
                     ] },
                 { "dname": "readGray", "dparams": [
-                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
+                    ], "rtype": { "name": "Bit", "params": [ { "name": "width" } ] } },
                 { "dname": "writeGray", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "width" } ] } }
                     ] },
                 { "dname": "readBin", "dparams": [
-                    ], "rtype": { "name": "Bit", "params": [ { "name": "4" } ] } },
+                    ], "rtype": { "name": "Bit", "params": [ { "name": "width" } ] } },
                 { "dname": "writeBin", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "4" } ] } }
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "width" } ] } }
                     ] }
             ], "direction": "0", "cname": "GrayCounterIfc_IC_width_ND_4_JC_" }
     ]

@@ -9,27 +9,36 @@ const char * EchoIndication_methodSignatures()
 int EchoIndication_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd)
 {
     static int runaway = 0;
+    int   tmp __attribute__ ((unused));
     int tmpfd __attribute__ ((unused));
     EchoIndicationData tempdata __attribute__ ((unused));
     memset(&tempdata, 0, sizeof(tempdata));
-    volatile unsigned int* temp_working_addr = &p->map_base[1];
+    volatile unsigned int* temp_working_addr = p->transport->mapchannelInd(p, channel);
     switch (channel) {
     case CHAN_NUM_EchoIndication_heard: {
-        tempdata.heard.v = (uint32_t)(((temp_working_addr[0])&0xfffffffful));
+        p->transport->recv(p, temp_working_addr, 1, &tmpfd);
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard.v = (uint32_t)(((tmp)&0xfffffffful));
         ((EchoIndicationCb *)p->cb)->heard(p, tempdata.heard.v);
       } break;
     case CHAN_NUM_EchoIndication_heard2: {
-        tempdata.heard2.b = (uint16_t)(((temp_working_addr[0])&0xfffful));
-        tempdata.heard2.a = (uint16_t)(((temp_working_addr[0]>>16)&0xfffful));
+        p->transport->recv(p, temp_working_addr, 1, &tmpfd);
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard2.b = (uint16_t)(((tmp)&0xfffful));
+        tempdata.heard2.a = (uint16_t)(((tmp>>16)&0xfffful));
         ((EchoIndicationCb *)p->cb)->heard2(p, tempdata.heard2.a, tempdata.heard2.b);
       } break;
     case CHAN_NUM_EchoIndication_heard3: {
-        tempdata.heard3.b = (uint32_t)(((uint32_t)(((temp_working_addr[0])&0xfffful))<<16));
-        tempdata.heard3.a = (uint16_t)(((temp_working_addr[0]>>16)&0xfffful));
-        tempdata.heard3.c = (uint32_t)(((uint32_t)(((temp_working_addr[1])&0xfffful))<<16));
-        tempdata.heard3.b |= (uint32_t)(((temp_working_addr[1]>>16)&0xfffful));
-        tempdata.heard3.d = (uint16_t)(((temp_working_addr[2])&0xfffful));
-        tempdata.heard3.c |= (uint32_t)(((temp_working_addr[2]>>16)&0xfffful));
+        p->transport->recv(p, temp_working_addr, 3, &tmpfd);
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard3.b = (uint32_t)(((uint32_t)(((tmp)&0xfffful))<<16));
+        tempdata.heard3.a = (uint16_t)(((tmp>>16)&0xfffful));
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard3.c = (uint32_t)(((uint32_t)(((tmp)&0xfffful))<<16));
+        tempdata.heard3.b |= (uint32_t)(((tmp>>16)&0xfffful));
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard3.d = (uint16_t)(((tmp)&0xfffful));
+        tempdata.heard3.c |= (uint32_t)(((tmp>>16)&0xfffful));
         ((EchoIndicationCb *)p->cb)->heard3(p, tempdata.heard3.a, tempdata.heard3.b, tempdata.heard3.c, tempdata.heard3.d);
       } break;
     default:

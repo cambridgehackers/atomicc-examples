@@ -16,10 +16,10 @@ public:
         Portal(id, DEFAULT_TILE, GrayCounterIfc_IC_width_ND_4_JC__reqinfo, __internalHandleMessage, NULL, NULL, NULL, this, poller), cb(&GrayCounterIfc_IC_width_ND_4_JC_ProxyReq) {__internalInit();};
     void increment (  ) { cb->increment (&pint); };
     void decrement (  ) { cb->decrement (&pint); };
-    uint8_t readGray (  ) { cb->readGray (&pint); return __internalWaitReturn(2, 4); };
-    void writeGray ( const uint8_t v ) { cb->writeGray (&pint, v); };
-    uint8_t readBin (  ) { cb->readBin (&pint); return __internalWaitReturn(4, 4); };
-    void writeBin ( const uint8_t v ) { cb->writeBin (&pint, v); };
+    uint16_t readGray (  ) { cb->readGray (&pint); return __internalWaitReturn(2, 10); };
+    void writeGray ( const uint16_t v ) { cb->writeGray (&pint, v); };
+    uint16_t readBin (  ) { cb->readBin (&pint); return __internalWaitReturn(4, 10); };
+    void writeBin ( const uint16_t v ) { cb->writeBin (&pint, v); };
 
 private:
     static int __internalHandleMessage(struct PortalInternal *p, unsigned int channel, int messageFd) {
