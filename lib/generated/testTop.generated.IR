@@ -297,7 +297,7 @@ MODULE TestTop TestTopIfc {
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(16) length ) if (((requestLength) == (0))) {
         STORE :requestValue = readUser$enq$v
-        STORE :requestLength = readUser$enq$length
+        STORE :requestLength = (readUser$enq$length) != (0)
     }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :interrupt = ((requestLength) != (0)) && ((intEnable) != (0))

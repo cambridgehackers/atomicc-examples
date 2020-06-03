@@ -325,7 +325,7 @@ module TestTop (
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA && readUser$enq__RDY) begin // readUser$enq__ENA
             requestValue <= user$read$enq$v;
-            requestLength <= user$read$enq$length;
+            requestLength <= user$read$enq$length != 0;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

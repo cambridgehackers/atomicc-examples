@@ -75,7 +75,7 @@ class TestTop __implements TestTopIfc {
     __uint(1) writeReady;
     void readUser.enq(BusType v, LenType length) if (requestLength == 0) {
         requestValue = v;
-        requestLength = length;
+        requestLength = (length != 0);
     }
 
     __rule init {
