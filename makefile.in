@@ -27,6 +27,7 @@ CPPFLAGS += -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exception
 CPPFLAGS += -fblocks -fno-diagnostics-color
 CPPFLAGS += -Xclang -disable-lifetime-markers
 CPPFLAGS += -I/usr/include/c++/4.2.1 -I/usr/include/c++/5
+CPPFLAGS += -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7
 CPPFLAGS += -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5
 CPPFLAGS += -I/usr/include/x86_64-linux-gnu/
 #   catch signal SIGSEGV
@@ -72,7 +73,7 @@ gen:
 	touch $(BOARD)/Makefile.autotop
 
 clean:
-	rm -rf verilator zybo SWSOCK*
+	rm -rf SWSOCK* verilator $(allarchlist)
 
 trace:
 	make

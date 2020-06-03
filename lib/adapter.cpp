@@ -28,7 +28,7 @@ class AdapterToBus __implements AtB<T, Tbus> {
 
    void in.enq(T v, LenType length) if (remain == 0) {
       buffer = __bit_cast<decltype(buffer)>(v);
-      remain = length + 1;
+      remain = length;
    }
    __rule copyRule if (remain != 0) {
       this->out->enq(buffer, remain);

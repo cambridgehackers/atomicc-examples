@@ -32,7 +32,7 @@ module AdapterToBus (input wire CLK, input wire nRST,
         end; // End of RULE$copyRule__ENA
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
             buffer <= in$enq$v;
-            remain <= in$enq$length + 1;
+            remain <= in$enq$length;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)
