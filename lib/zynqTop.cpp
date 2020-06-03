@@ -66,7 +66,7 @@ class P7Wrap __implements P7WrapIfc {
     __connect M = pps.M;
     __connect FCLK = pps.FCLK;
 
-    void MAXIGP0_I.R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp) if (pps.MAXIGP0.RREADY) {
+    void MAXIGP0_I.R(__uint(32) data, __uint(12) id, bool last, __uint(2) resp) if (pps.MAXIGP0.RREADY) {
         pps.MAXIGP0.RDATA = data;
         pps.MAXIGP0.RID = id;
         pps.MAXIGP0.RLAST = last;
