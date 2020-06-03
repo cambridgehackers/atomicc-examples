@@ -16,7 +16,7 @@
 //METARULES; RULE$init; RULE$gp0ar; RULE$gp0aw; RULE$gp0w
 //METASTART; ZynqTop
 //METAINTERNAL; ps7_ps7_foo; P7Wrap;
-//METAINTERNAL; test; TestTop;
+//METAINTERNAL; test; AxiTop;
 //METAINTERNAL; ps7_fclk_0_c; BUFG;
 //METAINTERNAL; ps7_freset_0_r; BUFG;
 //METAGUARD; RULE$init; 1;

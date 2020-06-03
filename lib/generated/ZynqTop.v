@@ -115,7 +115,7 @@ module ZynqTop (
         .FCLKCLK(ps7_ps7_foo$FCLKCLK),
         .FCLKCLKTRIGN(0),
         .FCLKRESETN(ps7_ps7_foo$FCLKRESETN));
-    TestTop test (
+    AxiTop test (
         .MAXIGP0_O$AR__ENA(ps7_ps7_foo$MAXIGP0_O$AR__ENA),
         .MAXIGP0_O$AR$addr(ps7_ps7_foo$MAXIGP0_O$AR$addr),
         .MAXIGP0_O$AR$id(ps7_ps7_foo$MAXIGP0_O$AR$id),

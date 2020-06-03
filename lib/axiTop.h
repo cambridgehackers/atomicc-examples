@@ -18,8 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef _TESTTOP_H_
-#define _TESTTOP_H_
+#ifndef _AXITOP_H_
+#define _AXITOP_H_
 class ZynqInterruptT {
     __output __uint(1)  interrupt;
     __input __uint(1)  CLK;
@@ -37,12 +37,12 @@ class MaxiI {
     void B(__uint(12) id, __uint(2) resp);
 };
 
-class TestTopIfc //: public ZynqInterruptT 
+class AxiTopIfc //: public ZynqInterruptT 
 {
     ZynqInterruptT     _;
     MaxiO             MAXIGP0_O;
     MaxiI            *MAXIGP0_I;
 };
 
-class TestTop __implements TestTopIfc;
+class AxiTop __implements AxiTopIfc;
 #endif

@@ -1,7 +1,7 @@
-`include "testTop.generated.vh"
+`include "axiTop.generated.vh"
 
 `default_nettype none
-module TestTop (
+module AxiTop (
     input wire MAXIGP0_O$AR__ENA,
     input wire [32 - 1:0]MAXIGP0_O$AR$addr,
     input wire [12 - 1:0]MAXIGP0_O$AR$id,
@@ -30,6 +30,7 @@ module TestTop (
     output wire interrupt,
     input wire CLK,
     input wire nRST);
+    reg hasIndication;
     reg intEnable;
     reg portalRControl;
     reg portalWControl;
@@ -37,7 +38,6 @@ module TestTop (
     reg [4 - 1:0]readCount;
     reg readLast;
     reg readNotFirst;
-    reg [16 - 1:0]requestLength;
     reg [32 - 1:0]requestValue;
     reg selectRIndReq;
     reg selectWIndReq;
@@ -62,7 +62,7 @@ module TestTop (
     wire [32 - 1:0]RULE$lread$res;
     wire [5 - 1:0]RULE$lread$temp$ac$addr;
     wire [6 - 1:0]RULE$lread$temp$ac$id;
-    wire [16 - 1:0]RULE$lread$zzIntrChannel;
+    wire RULE$lread$zzIntrChannel;
     wire [5 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$addr;
     wire [4 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$count;
     wire [6 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$id;
@@ -115,7 +115,6 @@ module TestTop (
     wire reqAws$out$deq__RDY;
     wire [15 - 1:0]reqAws$out$first;
     wire reqAws$out$first__RDY;
-    wire user$read$enq$last;
     wire [32 - 1:0]user$read$enq$v;
     wire user$read$enq__ENA;
     wire user$write$enq$last;
@@ -200,7 +199,7 @@ module TestTop (
         .write$enq__RDY(user$write$enq__RDY),
         .read$enq__ENA(user$read$enq__ENA),
         .read$enq$v(user$read$enq$v),
-        .read$enq$last(user$read$enq$last),
+        .read$enq$last(),
         .read$enq__RDY(readUser$enq__RDY));
     assign MAXIGP0_I$B$resp = 2'd0;
     assign MAXIGP0_I$B__ENA = RULE$writeResponse__RDY;
@@ -212,7 +211,7 @@ module TestTop (
     assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
     assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
     assign MAXIGP0_O$W__RDY = writeData$in$enq__RDY;
-    assign interrupt = !( ( requestLength == 0 ) || ( !intEnable ) );
+    assign interrupt = hasIndication && intEnable;
     assign readBeat$in$enq$v = { RULE$lreadNext$agg_2e_tmp$ac$addr , RULE$lreadNext$agg_2e_tmp$ac$count , RULE$lreadNext$agg_2e_tmp$ac$id , RULE$lreadNext$agg_2e_tmp$last };
     assign readData$in$enq$v = { RULE$lread$agg_2e_tmp$data , RULE$lread$agg_2e_tmp$id };
     assign reqArs$in$enq$v = { MAXIGP0_O$AR$agg_2e_tmp$addr , MAXIGP0_O$AR$agg_2e_tmp$count , MAXIGP0_O$AR$agg_2e_tmp$id };
@@ -239,11 +238,11 @@ module TestTop (
     assign RULE$lR__RDY = readData$out$first__RDY && readData$out$deq__RDY && MAXIGP0_I$R__RDY;
     assign RULE$lread$agg_2e_tmp$data = ( portalRControl ? RULE$lread$portalCtrlInfo : 32'd0 ) | ( ( !portalRControl ) ? RULE$lread$res : 32'd0 );
     assign RULE$lread$agg_2e_tmp$id = RULE$lread$temp$ac$id;
-    assign RULE$lread$portalCtrlInfo = ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 0 ) ) ? RULE$lread$zzIntrChannel : 16'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 8 ) ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 12 ) ) ? RULE$lread$zzIntrChannel : 16'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 16 ) ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 20 ) ) ? 32'd2 : 32'd0 );
+    assign RULE$lread$portalCtrlInfo = ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 0 ) ) ? RULE$lread$zzIntrChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 8 ) ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 12 ) ) ? RULE$lread$zzIntrChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 16 ) ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 20 ) ) ? 32'd2 : 32'd0 );
     assign RULE$lread$res = ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 0 ) ) ? requestValue : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 4 ) ) ? user$write$enq__RDY : 1'd0 );
     assign RULE$lread$temp$ac$addr = readBeat$out$first[ 5 - 1 + 11 : 11 ];
     assign RULE$lread$temp$ac$id = readBeat$out$first[ 6 - 1 + 1 : 1 ];
-    assign RULE$lread$zzIntrChannel = ( ( !selectRIndReq ) ? requestLength : 16'd0 );
+    assign RULE$lread$zzIntrChannel = ( !selectRIndReq ) ? hasIndication : 1'd0;
     assign RULE$lreadNext$agg_2e_tmp$ac$addr = RULE$lreadNext$readAddrupdate;
     assign RULE$lreadNext$agg_2e_tmp$ac$count = RULE$lreadNext$readburstCount;
     assign RULE$lreadNext$agg_2e_tmp$ac$id = RULE$lreadNext$temp$id;
@@ -273,10 +272,11 @@ module TestTop (
     assign RULE$lwriteNext__RDY = reqAws$out$first__RDY && writeBeat$in$enq__RDY && ( reqAws$out$deq__RDY || ( !RULE$lwriteNext$writeLastNext ) );
     assign RULE$lwrite__RDY = writeBeat$out$first__RDY && writeBeat$out$deq__RDY && writeData$out$first__RDY && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( portalWControl || user$write$enq__RDY ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( ( portalWControl && RULE$lwrite$wb$last ) || ( ( !portalWControl ) && ( RULE$lwrite$wb$last || ( !user$write$enq__RDY ) ) ) ) ) ) );
     assign RULE$writeResponse__RDY = writeDone$out$first__RDY && MAXIGP0_I$B__RDY && writeDone$out$deq__RDY;
-    assign readUser$enq__RDY = requestLength == 0;
+    assign readUser$enq__RDY = !hasIndication;
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        hasIndication <= 0;
         intEnable <= 0;
         portalRControl <= 0;
         portalWControl <= 0;
@@ -284,7 +284,6 @@ module TestTop (
         readCount <= 0;
         readLast <= 0;
         readNotFirst <= 0;
-        requestLength <= 0;
         requestValue <= 0;
         selectRIndReq <= 0;
         selectWIndReq <= 0;
@@ -311,7 +310,7 @@ module TestTop (
         end; // End of RULE$lreadNext__ENA
         if (RULE$lread__RDY) begin // RULE$lread__ENA
             if (( RULE$lread$temp$ac$addr == 0 ) && ( portalRControl == 0 ))
-            requestLength <= 0;
+            hasIndication <= 0;
         end; // End of RULE$lread__ENA
         if (RULE$lwriteNext__RDY) begin // RULE$lwriteNext__ENA
             writeAddr <= RULE$lwriteNext$writeAddrupdate + 4;
@@ -325,7 +324,7 @@ module TestTop (
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA && readUser$enq__RDY) begin // readUser$enq__ENA
             requestValue <= user$read$enq$v;
-            requestLength <= user$read$enq$last ^ 1;
+            hasIndication <= 1;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

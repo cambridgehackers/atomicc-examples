@@ -21,7 +21,7 @@
 #include "atomicc.h"
 #include "VPPS7.h"
 #include "VBUFG.h"
-#include "testTop.h"
+#include "axiTop.h"
 #include "clockTop.h"
 
 class ZynqClock {
@@ -130,7 +130,7 @@ class ZynqTopIFC {
 
 class ZynqTop __implements ZynqTopIFC {
     P7Wrap           ps7_ps7_foo;
-    TestTop          test;
+    AxiTop          test;
     BUFG ps7_fclk_0_c;
     BUFG ps7_freset_0_r;
     __connect test.MAXIGP0_O = ps7_ps7_foo.MAXIGP0_O;

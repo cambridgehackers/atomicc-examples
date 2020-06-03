@@ -19,7 +19,7 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "fifo.h"
-#include "testTop.h"
+#include "axiTop.h"
 #include "userTop.h"
 
 typedef __uint(5) AXIAddr;
@@ -42,7 +42,7 @@ typedef struct {
   __uint(BusTypeWidth)    data;
 } BusData;
 
-class TestTop __implements TestTopIfc {
+class AxiTop __implements AxiTopIfc {
     __uint(1) intEnable, writeNotFirst, writeLast;
     __uint(1) readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;
@@ -70,23 +70,23 @@ class TestTop __implements TestTopIfc {
         writeData.in.enq(BusData{data});
     }
     __uint(BusTypeWidth) requestValue;
-    LenType requestLength;
+    __uint(1) hasIndication;
     __uint(1) writeReady;
-    void readUser.enq(__uint(BusTypeWidth) v, bool last) if (requestLength == 0) {
+    void readUser.enq(__uint(BusTypeWidth) v, bool last) if (!hasIndication) {
         requestValue = v;
-        requestLength = !last;
+        hasIndication = 1;//!last;
     }
 
     __rule init {
-       _.interrupt = (requestLength != 0) && intEnable;
+       _.interrupt = (hasIndication != 0) && intEnable;
     }
     __rule lread {
         auto temp = readBeat.out.first();
         readBeat.out.deq();
         __uint(BusTypeWidth) res, portalCtrlInfo;
-        LenType zzIntrChannel = !selectRIndReq ? requestLength : 0;
+        __uint(1) zzIntrChannel = !selectRIndReq ? hasIndication : 0;
         if (!portalRControl && temp.ac.addr == 0)
-            requestLength = 0;
+            hasIndication = 0;
         switch (temp.ac.addr) {
           case 0: portalCtrlInfo = zzIntrChannel; break;
           case 8: portalCtrlInfo = 1; break;

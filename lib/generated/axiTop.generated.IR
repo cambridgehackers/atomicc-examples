@@ -18,6 +18,11 @@ STRUCT ReadResp  {
     FIELD Bit(6) id
     FIELD Bit(32) data
 }
+INTERFACE AxiTopIfc  {
+    INTERFACE ZynqInterruptT _
+    INTERFACE MaxiO MAXIGP0_O
+    INTERFACE/Ptr MaxiI MAXIGP0_I
+}
 INTERFACE Fifo  {
     INTERFACE PipeIn.0 in
     INTERFACE PipeOut out
@@ -143,11 +148,6 @@ INTERFACE PipeOut.6  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
-INTERFACE TestTopIfc  {
-    INTERFACE ZynqInterruptT _
-    INTERFACE MaxiO MAXIGP0_O
-    INTERFACE/Ptr MaxiI MAXIGP0_I
-}
 INTERFACE UserTopIfc  {
     INTERFACE PipeInB(width=32) write
     INTERFACE/Ptr PipeInB(width=32) read
@@ -161,6 +161,8 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
+EMODULE AxiTop AxiTopIfc {
+}
 EMODULE Fifo1Base(width=15) Fifo {
 }
 EMODULE Fifo1Base(width=16) Fifo.4 {
@@ -171,81 +173,11 @@ EMODULE Fifo1Base(width=38) Fifo.11 {
 }
 EMODULE Fifo1Base(width=6) Fifo.25 {
 }
-EMODULE TestTop TestTopIfc {
-}
 EMODULE UserTop UserTopIfc {
 }
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo.1 {
-    FIELD Fifo1Base(width=15) fifo
-    METHOD/Action in$enq__ENA ( AddrCount v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first AddrCount = ((out$first$retval)) {
-        ALLOCA AddrCount out$first$retval
-        CALL :fifo$out$first{}
-        LET Bit(15) :out$first$retval = fifo$out$first
-    }
-}
-MODULE Fifo1.14 Fifo.15 {
-    FIELD Fifo1Base(width=38) fifo
-    METHOD/Action in$enq__ENA ( ReadResp v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first ReadResp = ((out$first$retval)) {
-        ALLOCA ReadResp out$first$retval
-        CALL :fifo$out$first{}
-        LET Bit(38) :out$first$retval = fifo$out$first
-    }
-}
-MODULE Fifo1.21 Fifo.22 {
-    FIELD Fifo1Base(width=32) fifo
-    METHOD/Action in$enq__ENA ( BusData v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first BusData = ((out$first$retval)) {
-        ALLOCA BusData out$first$retval
-        CALL :fifo$out$first{}
-        LET Bit(32) :out$first$retval = fifo$out$first
-    }
-}
-MODULE Fifo1.28 Fifo.29 {
-    FIELD Fifo1Base(width=6) fifo
-    METHOD/Action in$enq__ENA ( Bit(6) v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first Bit(6) = ((fifo$out$first)) {
-        CALL :fifo$out$first{}
-    }
-}
-MODULE Fifo1.7 Fifo.8 {
-    FIELD Fifo1Base(width=16) fifo
-    METHOD/Action in$enq__ENA ( PortalInfo v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first PortalInfo = ((out$first$retval)) {
-        ALLOCA PortalInfo out$first$retval
-        CALL :fifo$out$first{}
-        LET Bit(16) :out$first$retval = fifo$out$first
-    }
-}
-MODULE TestTop TestTopIfc {
+MODULE AxiTop AxiTopIfc {
     INTERFACECONNECT readUser user$read PipeInB(width=32)
     FIELD Bit(1) intEnable
     FIELD Bit(1) writeNotFirst
@@ -270,7 +202,7 @@ MODULE TestTop TestTopIfc {
     FIELD UserTop user
     INTERFACE PipeInB(width=32) readUser
     FIELD Bit(32) requestValue
-    FIELD Bit(16) requestLength
+    FIELD Bit(1) hasIndication
     FIELD Bit(1) writeReady
     METHOD/Action MAXIGP0_O$AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len ) {
         ALLOCA AddrCount MAXIGP0_O$AR$agg_2e_tmp
@@ -295,24 +227,24 @@ MODULE TestTop TestTopIfc {
         LET Bit(32) :MAXIGP0_O$W$agg_2e_tmp$data = MAXIGP0_O$W$data
         CALL/Action :writeData$in$enq__ENA{MAXIGP0_O$W$agg_2e_tmp}
     }
-    METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(1) last ) if (((requestLength) == (0))) {
+    METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(1) last ) if ((((hasIndication) != (0)) ^ (1))) {
         STORE :requestValue = readUser$enq$v
-        STORE :requestLength = (readUser$enq$last) ^ (1)
+        STORE :hasIndication = 1
     }
     METHOD/Rule/Action RULE$init__ENA {
-        LET Bit(1) :interrupt = ((requestLength) != (0)) && ((intEnable) != (0))
+        LET Bit(1) :interrupt = ((hasIndication) != (0)) && ((intEnable) != (0))
     }
     METHOD/Rule/Action RULE$lread__ENA {
         ALLOCA ReadResp RULE$lread$agg_2e_tmp
         ALLOCA Bit(32) RULE$lread$portalCtrlInfo
         ALLOCA Bit(32) RULE$lread$res
         ALLOCA PortalInfo RULE$lread$temp
-        ALLOCA Bit(16) RULE$lread$zzIntrChannel
+        ALLOCA Bit(1) RULE$lread$zzIntrChannel
         CALL :readBeat$out$first{}
         LET PortalInfo :RULE$lread$temp = readBeat$out$first
         CALL/Action :readBeat$out$deq__ENA{}
-        LET Bit(16) :RULE$lread$zzIntrChannel = __phi((((selectRIndReq) != (0)) ^ 1):(requestLength), ((selectRIndReq) != (0)):(0))
-        STORE (((RULE$lread$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)):requestLength = 0
+        LET Bit(1) :RULE$lread$zzIntrChannel = __phi((((selectRIndReq) != (0)) ^ 1):(hasIndication), ((selectRIndReq) != (0)):(0))
+        STORE (((RULE$lread$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)):hasIndication = 0
         LET Bit(32) (((RULE$lread$temp$ac$addr) == 0) & ((((RULE$lread$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread$portalCtrlInfo = RULE$lread$zzIntrChannel
         LET Bit(32) (((RULE$lread$temp$ac$addr) == 8) & ((((RULE$lread$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread$portalCtrlInfo = 1
         LET Bit(32) (((RULE$lread$temp$ac$addr) == 12) & ((((RULE$lread$temp$ac$addr) == (0)) & (((portalRControl) != (0)) ^ 1)) | (((((RULE$lread$temp$ac$addr) == (0)) ^ 1) & (((portalRControl) != (0)) ^ 1)) | ((portalRControl) != (0))))):RULE$lread$portalCtrlInfo = RULE$lread$zzIntrChannel
@@ -394,5 +326,73 @@ MODULE TestTop TestTopIfc {
         CALL :writeDone$out$first{}
         CALL/Action :MAXIGP0_I$B__ENA{writeDone$out$first,0}
         CALL/Action :writeDone$out$deq__ENA{}
+    }
+}
+MODULE Fifo1 Fifo.1 {
+    FIELD Fifo1Base(width=15) fifo
+    METHOD/Action in$enq__ENA ( AddrCount v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first AddrCount = ((out$first$retval)) {
+        ALLOCA AddrCount out$first$retval
+        CALL :fifo$out$first{}
+        LET Bit(15) :out$first$retval = fifo$out$first
+    }
+}
+MODULE Fifo1.14 Fifo.15 {
+    FIELD Fifo1Base(width=38) fifo
+    METHOD/Action in$enq__ENA ( ReadResp v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first ReadResp = ((out$first$retval)) {
+        ALLOCA ReadResp out$first$retval
+        CALL :fifo$out$first{}
+        LET Bit(38) :out$first$retval = fifo$out$first
+    }
+}
+MODULE Fifo1.21 Fifo.22 {
+    FIELD Fifo1Base(width=32) fifo
+    METHOD/Action in$enq__ENA ( BusData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first BusData = ((out$first$retval)) {
+        ALLOCA BusData out$first$retval
+        CALL :fifo$out$first{}
+        LET Bit(32) :out$first$retval = fifo$out$first
+    }
+}
+MODULE Fifo1.28 Fifo.29 {
+    FIELD Fifo1Base(width=6) fifo
+    METHOD/Action in$enq__ENA ( Bit(6) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(6) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE Fifo1.7 Fifo.8 {
+    FIELD Fifo1Base(width=16) fifo
+    METHOD/Action in$enq__ENA ( PortalInfo v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first PortalInfo = ((out$first$retval)) {
+        ALLOCA PortalInfo out$first$retval
+        CALL :fifo$out$first{}
+        LET Bit(16) :out$first$retval = fifo$out$first
     }
 }

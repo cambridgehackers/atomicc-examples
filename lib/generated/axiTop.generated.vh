@@ -1,7 +1,7 @@
-`ifndef __testTop_GENERATED__VH__
-`define __testTop_GENERATED__VH__
+`ifndef __axiTop_GENERATED__VH__
+`define __axiTop_GENERATED__VH__
 
-//METASTART; TestTop
+//METASTART; AxiTop
 //METAINTERNAL; reqArs; Fifo1Base(width=15);
 //METAINTERNAL; reqAws; Fifo1Base(width=15);
 //METAINTERNAL; readBeat; Fifo1Base(width=16);
@@ -17,7 +17,7 @@
 //METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
 //METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
 //METAEXCLUSIVE; readUser$enq__ENA; RULE$lread__ENA
-//METAGUARD; readUser$enq; requestLength == 0;
+//METAGUARD; readUser$enq; !hasIndication;
 //METABEFORE; RULE$init__ENA; :RULE$lread__ENA; :RULE$lwrite__ENA; :readUser$enq__ENA
 //METAGUARD; RULE$init; 1;
 //METAINVOKE; RULE$lread__ENA; :readBeat$out$deq__ENA;:readBeat$out$first;1:readData$in$enq__ENA;

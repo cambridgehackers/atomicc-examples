@@ -1,3 +1,8 @@
+INTERFACE AxiTopIfc  {
+    INTERFACE ZynqInterruptT _
+    INTERFACE MaxiO MAXIGP0_O
+    INTERFACE/Ptr MaxiI MAXIGP0_I
+}
 INTERFACE ClockIfc  {
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
@@ -428,11 +433,6 @@ INTERFACE Pps7saxihp  {
     FIELD/input Bit(8) WSTRB
     FIELD/input Bit(1) WVALID
 }
-INTERFACE TestTopIfc  {
-    INTERFACE ZynqInterruptT _
-    INTERFACE MaxiO MAXIGP0_O
-    INTERFACE/Ptr MaxiI MAXIGP0_I
-}
 INTERFACE ZynqClock  {
     FIELD/inout Bit(15) DDR_Addr
     FIELD/inout Bit(3) DDR_BankAddr
@@ -469,13 +469,13 @@ INTERFACE ZynqTopIFC  {
     INTERFACE ZynqClock _
     INTERFACE Pps7m M
 }
+EMODULE AxiTop AxiTopIfc {
+}
 EMODULE BUFG MbufgBUFG {
 }
 EMODULE ClockTop ClockIfc {
 }
 EMODULE PS7 Pps7PS7 {
-}
-EMODULE TestTop TestTopIfc {
 }
 MODULE P7Wrap P7WrapIfc {
     INTERFACECONNECT M pps$M Pps7m
@@ -543,7 +543,7 @@ MODULE ZynqTop ZynqTopIFC {
     INTERFACECONNECT _ ps7_ps7_foo$_ ZynqClock
     INTERFACECONNECT M ps7_ps7_foo$M Pps7m
     FIELD P7Wrap ps7_ps7_foo
-    FIELD TestTop test
+    FIELD AxiTop test
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
     METHOD/Rule/Action RULE$init__ENA {
