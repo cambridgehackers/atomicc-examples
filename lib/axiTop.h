@@ -29,11 +29,11 @@ class ZynqInterruptT {
 class MaxiO {
     void AR(__uint(32) addr, __uint(12) id, __uint(4) len);
     void AW(__uint(32) addr, __uint(12) id, __uint(4) len);
-    void W(__uint(32) data, __uint(12) id, __uint(1) last);
+    void W(__uint(32) data, __uint(12) id, bool last);
 };
 
 class MaxiI {
-    void R(__uint(32) data, __uint(12) id, __uint(1) last, __uint(2) resp);
+    void R(__uint(32) data, __uint(12) id, bool last, __uint(2) resp);
     void B(__uint(12) id, __uint(2) resp);
 };
 

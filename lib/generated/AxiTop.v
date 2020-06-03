@@ -296,35 +296,35 @@ module AxiTop (
       else begin
         if (MAXIGP0_O$AR__ENA && reqArs$in$enq__RDY) begin // MAXIGP0_O$AR__ENA
             portalRControl <= MAXIGP0_O$AR$addr[ 11 : 5 ] == 0;
-            selectRIndReq <= MAXIGP0_O$AR$addr[ 12 ];
+            selectRIndReq <= MAXIGP0_O$AR$addr[ 12 ] != 0;
         end; // End of MAXIGP0_O$AR__ENA
         if (MAXIGP0_O$AW__ENA && reqAws$in$enq__RDY) begin // MAXIGP0_O$AW__ENA
             portalWControl <= MAXIGP0_O$AW$addr[ 11 : 5 ] == 0;
-            selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ];
+            selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ] != 0;
         end; // End of MAXIGP0_O$AW__ENA
         if (RULE$lreadNext__RDY) begin // RULE$lreadNext__ENA
             readAddr <= RULE$lreadNext$readAddrupdate + 4;
             readCount <= RULE$lreadNext$readburstCount - 1;
-            readNotFirst <= ( RULE$lreadNext$readLastNext != 0 ) ^ 1;
+            readNotFirst <= RULE$lreadNext$readLastNext ^ 1;
             readLast <= RULE$lreadNext$readburstCount == 2;
         end; // End of RULE$lreadNext__ENA
         if (RULE$lread__RDY) begin // RULE$lread__ENA
-            if (( RULE$lread$temp$ac$addr == 0 ) && ( portalRControl == 0 ))
-            hasIndication <= 0;
+            if (!( portalRControl || ( !( RULE$lread$temp$ac$addr == 0 ) ) ))
+            hasIndication <= 0 != 0;
         end; // End of RULE$lread__ENA
         if (RULE$lwriteNext__RDY) begin // RULE$lwriteNext__ENA
             writeAddr <= RULE$lwriteNext$writeAddrupdate + 4;
             writeCount <= RULE$lwriteNext$writeburstCount - 1;
-            writeNotFirst <= ( RULE$lwriteNext$writeLastNext != 0 ) ^ 1;
+            writeNotFirst <= RULE$lwriteNext$writeLastNext ^ 1;
             writeLast <= RULE$lwriteNext$writeburstCount == 2;
         end; // End of RULE$lwriteNext__ENA
         if (RULE$lwrite__RDY) begin // RULE$lwrite__ENA
-            if (!( ( portalWControl == 0 ) || ( !( RULE$lwrite$wb$ac$addr == 4 ) ) ))
-            intEnable <= RULE$lwrite$temp$data[ 0 : 0 ];
+            if (( RULE$lwrite$wb$ac$addr == 4 ) && portalWControl)
+            intEnable <= RULE$lwrite$temp$data[ 0 : 0 ] != 0;
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA && readUser$enq__RDY) begin // readUser$enq__ENA
             requestValue <= user$read$enq$v;
-            hasIndication <= 1;
+            hasIndication <= 1 != 0;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

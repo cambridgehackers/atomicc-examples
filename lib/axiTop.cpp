@@ -31,7 +31,7 @@ typedef struct {
     AXIAddr    addr;
 } AddrCount;
 typedef struct {
-  __uint(1) last;
+  bool last;
   AddrCount ac;
 } PortalInfo;
 typedef struct {
@@ -43,8 +43,8 @@ typedef struct {
 } BusData;
 
 class AxiTop __implements AxiTopIfc {
-    __uint(1) intEnable, writeNotFirst, writeLast;
-    __uint(1) readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    bool intEnable, writeNotFirst, writeLast;
+    bool readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
 
@@ -66,12 +66,12 @@ class AxiTop __implements AxiTopIfc {
         portalWControl = __bitsubstr(addr, 11, 5) == 0;
         selectWIndReq = __bitsubstr(addr, 12);
     }
-    void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
+    void MAXIGP0_O.W(__uint(32) data, __uint(12) id, bool last) {
         writeData.in.enq(BusData{data});
     }
     __uint(BusTypeWidth) requestValue;
-    __uint(1) hasIndication;
-    __uint(1) writeReady;
+    bool hasIndication;
+    bool writeReady;
     void readUser.enq(__uint(BusTypeWidth) v, bool last) if (!hasIndication) {
         requestValue = v;
         hasIndication = 1;//!last;
@@ -84,7 +84,7 @@ class AxiTop __implements AxiTopIfc {
         auto temp = readBeat.out.first();
         readBeat.out.deq();
         __uint(BusTypeWidth) res, portalCtrlInfo;
-        __uint(1) zzIntrChannel = !selectRIndReq ? hasIndication : 0;
+        bool zzIntrChannel = !selectRIndReq ? hasIndication : false;
         if (!portalRControl && temp.ac.addr == 0)
             hasIndication = 0;
         switch (temp.ac.addr) {
@@ -106,7 +106,7 @@ class AxiTop __implements AxiTopIfc {
         auto temp = reqArs.out.first();
         auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
         AXICount readburstCount = readNotFirst ? readCount : temp.count;
-        __uint(1) readLastNext = readNotFirst ? readLast : temp.count == 1;
+        bool readLastNext = readNotFirst ? readLast : temp.count == 1;
         readBeat.in.enq(PortalInfo{readLastNext, temp.id, readburstCount, readAddrupdate});
         readAddr = readAddrupdate + 4 ;
         readCount = readburstCount - 1 ;
@@ -136,7 +136,7 @@ class AxiTop __implements AxiTopIfc {
         auto temp = reqAws.out.first();
         auto writeAddrupdate = writeNotFirst ? writeAddr : temp.addr;
         AXICount writeburstCount = writeNotFirst ? writeCount : temp.count;
-        __uint(1) writeLastNext = writeNotFirst ? writeLast : temp.count == 1;
+        bool writeLastNext = writeNotFirst ? writeLast : temp.count == 1;
         writeBeat.in.enq(PortalInfo{writeLastNext, temp.id, writeburstCount, writeAddrupdate});
         writeAddr = writeAddrupdate + 4 ;
         writeCount = writeburstCount - 1 ;
