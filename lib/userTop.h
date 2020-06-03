@@ -20,6 +20,7 @@
  */
 #ifndef __USER_TOP_H__
 #define __USER_TOP_H__
+#include "atomicc.h"
 class l_topIfc {
     PipeIn<NOCDataH> request;
     PipeIn<NOCDataH> *indication;
@@ -27,8 +28,8 @@ class l_topIfc {
 class l_top __implements l_topIfc;
 
 class UserTopIfc {
-    PipeInB<BusType> write;
-    PipeInB<BusType> *read;
+    PipeInB<BusTypeWidth> write;
+    PipeInB<BusTypeWidth> *read;
 };
 class UserTop __implements UserTopIfc;
 #endif // __USER_TOP_H__

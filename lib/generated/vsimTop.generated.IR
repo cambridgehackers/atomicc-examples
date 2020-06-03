@@ -5,18 +5,15 @@ STRUCT NOCDataH  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeInB  {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(1) last )
+INTERFACE PipeInB(width=32)  {
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeInBP(width=32)  {
+    INTERFACE/Ptr PipeInB(width=32) _
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInB write
-    INTERFACE/Ptr PipeInB read
-}
-INTERFACE VBeat(width=32)  {
-    METHOD/Action beat__ENA ( Bit(32) v , Bit(1) last )
-}
-INTERFACE VBeatP(width=32)  {
-    INTERFACE/Ptr VBeat(width=32) _
+    INTERFACE PipeInB(width=32) write
+    INTERFACE/Ptr PipeInB(width=32) read
 }
 INTERFACE VsimInterface  {
     FIELD/input Bit(1) CLK
@@ -31,24 +28,16 @@ INTERFACE l_topIfc  {
 }
 EMODULE UserTop UserTopIfc {
 }
-EMODULE VsimReceive(width=32) VBeatP(width=32) {
+EMODULE VsimReceive(width=32) PipeInBP(width=32) {
 }
-EMODULE VsimSend(width=32) VBeat(width=32) {
+EMODULE VsimSend(width=32) PipeInB(width=32) {
 }
 EMODULE l_top l_topIfc {
 }
 MODULE VsimTop VsimInterface {
-    INTERFACECONNECT writeUser sink_0$_ VBeat(width=32)
-    INTERFACECONNECT readUser user$read PipeInB
+    INTERFACECONNECT sink_0$_ user$write PipeInB(width=32)
+    INTERFACECONNECT user$read source_0 PipeInB(width=32)
     FIELD UserTop user
     FIELD VsimReceive(width=32) sink_0
     FIELD VsimSend(width=32) source_0
-    INTERFACE VBeat(width=32) writeUser
-    INTERFACE PipeInB readUser
-    METHOD/Action readUser$enq__ENA ( Bit(32) v , Bit(1) last ) {
-        CALL/Action :source_0$beat__ENA{readUser$enq$v,readUser$enq$last}
-    }
-    METHOD/Action writeUser$beat__ENA ( Bit(32) v , Bit(1) last ) {
-        CALL/Action :user$write$enq__ENA{writeUser$beat$v,writeUser$beat$last}
-    }
 }

@@ -21,8 +21,8 @@
 // SOFTWARE.
 #include "adapter.h"
 
-template<class T, class Tbus>
-class AdapterToBus __implements AtB<T, Tbus> {
+template<class T, int width>
+class AdapterToBus __implements AtB<T, width> {
    __uint(__bitsize(T)) buffer;
    __int(16)            remain;
 
@@ -33,17 +33,17 @@ class AdapterToBus __implements AtB<T, Tbus> {
    __rule copyRule if (remain != 0) {
       this->out->enq(buffer, remain == 1);
       remain--;
-      buffer >>= __bitsize(Tbus);
+      buffer >>= width;
    }
 };
 
-template<class Tbus, class T>
-class AdapterFromBus __implements AfB<Tbus, T> {
+template<int width, class T>
+class AdapterFromBus __implements AfB<width, T> {
    __uint(__bitsize(T)) buffer;
    bool                 waitForEnq;
 
-   void in.enq(Tbus v, bool last) if (!waitForEnq) {
-      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(Tbus) - 1, 0), v);
+   void in.enq(__uint(width) v, bool last) if (!waitForEnq) {
+      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - width - 1, 0), v);
       if (last)  // this is the last beat
           waitForEnq = 1;
    }
@@ -53,5 +53,5 @@ class AdapterFromBus __implements AfB<Tbus, T> {
    }
 };
 
-static AdapterToBus<NOCData, BusType> radapter_0;
-static AdapterFromBus<BusType, NOCData> wadapter_0;
+static AdapterToBus<NOCData, BusTypeWidth> radapter_0;
+static AdapterFromBus<BusTypeWidth, NOCData> wadapter_0;

@@ -18,15 +18,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "adapter.h"
 #include "userTop.h"
 
 #define IfcNames_EchoIndicationH2S 5
 
 class UserTop __implements UserTopIfc {
-    AdapterToBus<NOCData, BusType> radapter_0;
-    AdapterFromBus<BusType, NOCData> wadapter_0;
+    AdapterToBus<NOCData, BusTypeWidth> radapter_0;
+    AdapterFromBus<BusTypeWidth, NOCData> wadapter_0;
     l_top       ctop;
     __connect write = wadapter_0.in;
     __connect read = radapter_0.out;

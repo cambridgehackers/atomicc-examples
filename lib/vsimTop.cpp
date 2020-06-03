@@ -18,26 +18,18 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "userTop.h"
-
-#define MAX_BUS_WIDTH 32
 
 // Modules from SystemVerilog runtime
 template<int width>
-class VBeat {
-    void beat(int v, bool last);
+class PipeInBP {
+    PipeInB<width> *_;
 };
 
 template<int width>
-class VBeatP {
-    VBeat<width> *_;
-};
-
+class VsimReceive __implements PipeInBP<width>;
 template<int width>
-class VsimReceive __implements VBeatP<width>;
-template<int width>
-class VsimSend __implements VBeat<width>;
+class VsimSend __implements PipeInB<width>;
 
 // Top of verilator simulation
 class VsimInterface {
@@ -50,15 +42,8 @@ class VsimInterface {
 
 class VsimTop __implements VsimInterface {
     UserTop                    user;
-    VsimReceive<MAX_BUS_WIDTH> sink_0;
-    VsimSend<MAX_BUS_WIDTH>    source_0;
-    __implements sink_0._ writeUser;
-    __implements user.read readUser;
-
-    void readUser.enq(BusType v, bool last) {
-        source_0.beat(v, last);
-    }
-    void writeUser.beat(int v, bool last) {
-        user.write.enq(v, last);
-    }
+    VsimReceive<BusTypeWidth> sink_0;
+    VsimSend<BusTypeWidth>    source_0;
+    __connect sink_0._ = user.write;
+    __connect user.read = source_0;
 };

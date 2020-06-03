@@ -28,21 +28,21 @@ class PipeInH {
     void enq(T v, LenType length);
 };
 
-template<class T, class Tbus>
+template<class T, int width>
 class AtB {
    PipeInH<T>        in;
-   PipeInB<Tbus> *out;
+   PipeInB<width> *out;
 };
 
-template<class T, class Tbus>
-class AdapterToBus __implements AtB<T, Tbus>;
+template<class T, int width>
+class AdapterToBus __implements AtB<T, width>;
 
-template<class Tbus, class T>
+template<int width, class T>
 class AfB {
-   PipeInB<Tbus>  in;
+   PipeInB<width>  in;
    PipeInH<T>       *out;
 };
 
-template<class Tbus, class T>
-class AdapterFromBus __implements AfB<Tbus, T>;
+template<int width, class T>
+class AdapterFromBus __implements AfB<width, T>;
 #endif

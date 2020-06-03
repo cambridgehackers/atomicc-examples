@@ -61,9 +61,9 @@ class PipeOut {
 };
 
 typedef __int(16) LenType;
-template<class T>
+template<int width>
 class PipeInB {
-    void enq(T v, bool last);
+    void enq(__uint(width) v, bool last);
 };
 
 template<class T>
@@ -83,7 +83,7 @@ class Gear {
 typedef struct {__uint(128) data;} NOCData;
 typedef struct {LenType length; __uint(128) data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
-typedef __uint(32)                        BusType;
+#define BusTypeWidth               32
 #if 0
 template<class T> class M2P __implements T { // method -> pipe
 public:

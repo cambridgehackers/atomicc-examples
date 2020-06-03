@@ -100,8 +100,8 @@ INTERFACE PipeIn.5  {
 INTERFACE PipeIn.9  {
     METHOD/Action enq__ENA ( PortalInfo v )
 }
-INTERFACE PipeInB  {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(1) last )
+INTERFACE PipeInB(width=32)  {
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
@@ -149,8 +149,8 @@ INTERFACE TestTopIfc  {
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
 INTERFACE UserTopIfc  {
-    INTERFACE PipeInB write
-    INTERFACE/Ptr PipeInB read
+    INTERFACE PipeInB(width=32) write
+    INTERFACE/Ptr PipeInB(width=32) read
 }
 INTERFACE ZynqInterruptT  {
     FIELD/output Bit(1) interrupt
@@ -246,7 +246,7 @@ MODULE Fifo1.7 Fifo.8 {
     }
 }
 MODULE TestTop TestTopIfc {
-    INTERFACECONNECT readUser user$read PipeInB
+    INTERFACECONNECT readUser user$read PipeInB(width=32)
     FIELD Bit(1) intEnable
     FIELD Bit(1) writeNotFirst
     FIELD Bit(1) writeLast
@@ -268,7 +268,7 @@ MODULE TestTop TestTopIfc {
     FIELD Fifo1.21 writeData
     FIELD Fifo1.28 writeDone
     FIELD UserTop user
-    INTERFACE PipeInB readUser
+    INTERFACE PipeInB(width=32) readUser
     FIELD Bit(32) requestValue
     FIELD Bit(16) requestLength
     FIELD Bit(1) writeReady

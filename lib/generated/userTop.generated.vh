@@ -2,8 +2,8 @@
 `define __userTop_GENERATED__VH__
 
 //METASTART; UserTop
-//METAINTERNAL; radapter_0; AdapterToBus;
-//METAINTERNAL; wadapter_0; AdapterFromBus;
+//METAINTERNAL; radapter_0; AdapterToBus(width=32);
+//METAINTERNAL; wadapter_0; AdapterFromBus(width=32);
 //METAINTERNAL; ctop; l_top;
 //METAINVOKE; wad$enq__ENA; :ctop$request$enq__ENA;
 //METAGUARD; wad$enq; ctop$request$enq__RDY;

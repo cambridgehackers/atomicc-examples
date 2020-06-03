@@ -18,7 +18,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "fifo.h"
 #include "testTop.h"
 #include "userTop.h"
@@ -37,10 +36,10 @@ typedef struct {
 } PortalInfo;
 typedef struct {
   AXIId      id;
-  BusType    data;
+  __uint(BusTypeWidth)    data;
 } ReadResp;
 typedef struct {
-  BusType    data;
+  __uint(BusTypeWidth)    data;
 } BusData;
 
 class TestTop __implements TestTopIfc {
@@ -70,10 +69,10 @@ class TestTop __implements TestTopIfc {
     void MAXIGP0_O.W(__uint(32) data, __uint(12) id, __uint(1) last) {
         writeData.in.enq(BusData{data});
     }
-    BusType requestValue;
+    __uint(BusTypeWidth) requestValue;
     LenType requestLength;
     __uint(1) writeReady;
-    void readUser.enq(BusType v, bool last) if (requestLength == 0) {
+    void readUser.enq(__uint(BusTypeWidth) v, bool last) if (requestLength == 0) {
         requestValue = v;
         requestLength = !last;
     }
@@ -84,7 +83,7 @@ class TestTop __implements TestTopIfc {
     __rule lread {
         auto temp = readBeat.out.first();
         readBeat.out.deq();
-        BusType res, portalCtrlInfo;
+        __uint(BusTypeWidth) res, portalCtrlInfo;
         LenType zzIntrChannel = !selectRIndReq ? requestLength : 0;
         if (!portalRControl && temp.ac.addr == 0)
             requestLength = 0;

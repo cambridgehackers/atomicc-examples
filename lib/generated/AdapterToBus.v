@@ -1,13 +1,15 @@
 `include "adapter.generated.vh"
 
 `default_nettype none
-module AdapterToBus (input wire CLK, input wire nRST,
+module AdapterToBus #(
+    parameter integer width = 32)(
+    input wire CLK, input wire nRST,
     input wire in$enq__ENA,
     input wire [128 - 1:0]in$enq$v,
     input wire [16 - 1:0]in$enq$length,
     output wire in$enq__RDY,
     output wire out$enq__ENA,
-    output wire [32 - 1:0]out$enq$v,
+    output wire [width - 1:0]out$enq$v,
     output wire out$enq$last,
     input wire out$enq__RDY);
     reg [128 - 1:0]buffer;
@@ -15,7 +17,7 @@ module AdapterToBus (input wire CLK, input wire nRST,
     wire RULE$copyRule__RDY;
     assign in$enq__RDY = remain == 0;
     assign out$enq$last = remain == 1;
-    assign out$enq$v = buffer[ 31 : 0 ];
+    assign out$enq$v = buffer;
     assign out$enq__ENA = RULE$copyRule__RDY;
     // Extra assigments, not to output wires
     assign RULE$copyRule__RDY = !( ( remain == 0 ) || ( !out$enq__RDY ) );
@@ -28,7 +30,7 @@ module AdapterToBus (input wire CLK, input wire nRST,
       else begin
         if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
-            buffer <= buffer >> 32;
+            buffer <= buffer >> width;
         end; // End of RULE$copyRule__ENA
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
             buffer <= in$enq$v;
