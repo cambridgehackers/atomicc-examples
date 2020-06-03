@@ -31,7 +31,7 @@ class AdapterToBus __implements AtB<T, Tbus> {
       remain = length;
    }
    __rule copyRule if (remain != 0) {
-      this->out->enq(buffer, remain);
+      this->out->enq(buffer, remain == 1);
       remain--;
       buffer >>= __bitsize(Tbus);
    }
@@ -42,9 +42,9 @@ class AdapterFromBus __implements AfB<Tbus, T> {
    __uint(__bitsize(T)) buffer;
    bool                 waitForEnq;
 
-   void in.enq(Tbus v, LenType length) if (!waitForEnq) {
+   void in.enq(Tbus v, bool last) if (!waitForEnq) {
       buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - __bitsize(Tbus) - 1, 0), v);
-      if (length == 1)  // this is the last beat
+      if (last)  // this is the last beat
           waitForEnq = 1;
    }
    __rule pushValue if (waitForEnq) {

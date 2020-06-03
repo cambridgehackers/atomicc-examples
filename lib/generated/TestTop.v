@@ -115,10 +115,10 @@ module TestTop (
     wire reqAws$out$deq__RDY;
     wire [15 - 1:0]reqAws$out$first;
     wire reqAws$out$first__RDY;
-    wire [16 - 1:0]user$read$enq$length;
+    wire user$read$enq$last;
     wire [32 - 1:0]user$read$enq$v;
     wire user$read$enq__ENA;
-    wire [16 - 1:0]user$write$enq$length;
+    wire user$write$enq$last;
     wire [32 - 1:0]user$write$enq$v;
     wire user$write$enq__ENA;
     wire user$write$enq__RDY;
@@ -196,11 +196,11 @@ module TestTop (
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write$enq__ENA(user$write$enq__ENA),
         .write$enq$v(user$write$enq$v),
-        .write$enq$length(user$write$enq$length),
+        .write$enq$last(user$write$enq$last),
         .write$enq__RDY(user$write$enq__RDY),
         .read$enq__ENA(user$read$enq__ENA),
         .read$enq$v(user$read$enq$v),
-        .read$enq$length(user$read$enq$length),
+        .read$enq$last(user$read$enq$last),
         .read$enq__RDY(readUser$enq__RDY));
     assign MAXIGP0_I$B$resp = 2'd0;
     assign MAXIGP0_I$B__ENA = RULE$writeResponse__RDY;
@@ -219,7 +219,7 @@ module TestTop (
     assign reqArs$out$deq__ENA = RULE$lreadNext__RDY && RULE$lreadNext$readLastNext;
     assign reqAws$in$enq$v = { MAXIGP0_O$AW$agg_2e_tmp$addr , MAXIGP0_O$AW$agg_2e_tmp$count , MAXIGP0_O$AW$agg_2e_tmp$id };
     assign reqAws$out$deq__ENA = RULE$lwriteNext__RDY && RULE$lwriteNext$writeLastNext;
-    assign user$write$enq$length = RULE$lwrite$wb$ac$addr != 0;
+    assign user$write$enq$last = !( RULE$lwrite$wb$ac$addr == 0 );
     assign user$write$enq$v = RULE$lwrite$temp$data;
     assign user$write$enq__ENA = !( portalWControl || ( !RULE$lwrite__RDY ) );
     assign writeBeat$in$enq$v = { RULE$lwriteNext$agg_2e_tmp$ac$addr , RULE$lwriteNext$agg_2e_tmp$ac$count , RULE$lwriteNext$agg_2e_tmp$ac$id , RULE$lwriteNext$agg_2e_tmp$last };
@@ -325,7 +325,7 @@ module TestTop (
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA && readUser$enq__RDY) begin // readUser$enq__ENA
             requestValue <= user$read$enq$v;
-            requestLength <= user$read$enq$length != 0;
+            requestLength <= user$read$enq$last ^ 1;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

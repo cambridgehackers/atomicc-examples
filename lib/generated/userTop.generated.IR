@@ -17,7 +17,7 @@ INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInB  {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(1) last )
 }
 INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )

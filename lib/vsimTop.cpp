@@ -55,10 +55,10 @@ class VsimTop __implements VsimInterface {
     __implements sink_0._ writeUser;
     __implements user.read readUser;
 
-    void readUser.enq(BusType v, LenType length) {
-        source_0.beat(v, length == 1);
+    void readUser.enq(BusType v, bool last) {
+        source_0.beat(v, last);
     }
     void writeUser.beat(int v, bool last) {
-        user.write.enq(v, last ? 1 : 2);
+        user.write.enq(v, last);
     }
 };

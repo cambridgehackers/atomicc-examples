@@ -63,7 +63,7 @@ class PipeOut {
 typedef __int(16) LenType;
 template<class T>
 class PipeInB {
-    void enq(T v, LenType length); // last item in packet has (length == 1)
+    void enq(T v, bool last);
 };
 
 template<class T>

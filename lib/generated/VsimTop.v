@@ -13,20 +13,20 @@ module VsimTop (
     wire source_0$beat$last;
     wire [32 - 1:0]source_0$beat$v;
     wire source_0$beat__RDY;
-    wire [16 - 1:0]user$read$enq$length;
+    wire user$read$enq$last;
     wire [32 - 1:0]user$read$enq$v;
     wire user$read$enq__ENA;
-    wire [16 - 1:0]user$write$enq$length;
+    wire user$write$enq$last;
     wire [32 - 1:0]user$write$enq$v;
     wire user$write$enq__RDY;
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write$enq__ENA(sink_0$beat__ENA),
         .write$enq$v(user$write$enq$v),
-        .write$enq$length(user$write$enq$length),
+        .write$enq$last(user$write$enq$last),
         .write$enq__RDY(user$write$enq__RDY),
         .read$enq__ENA(user$read$enq__ENA),
         .read$enq$v(user$read$enq$v),
-        .read$enq$length(user$read$enq$length),
+        .read$enq$last(user$read$enq$last),
         .read$enq__RDY(source_0$beat__RDY));
     VsimReceive#(32) sink_0 (.CLK(CLK), .nRST(nRST),
         .beat__ENA(sink_0$beat__ENA),
@@ -38,9 +38,9 @@ module VsimTop (
         .beat$v(source_0$beat$v),
         .beat$last(source_0$beat$last),
         .beat__RDY(source_0$beat__RDY));
-    assign source_0$beat$last = user$read$enq$length == 1;
+    assign source_0$beat$last = user$read$enq$last;
     assign source_0$beat$v = user$read$enq$v;
-    assign user$write$enq$length = sink_0$beat$last ? 16'd1 : 16'd2;
+    assign user$write$enq$last = sink_0$beat$last;
     assign user$write$enq$v = sink_0$beat$v;
 endmodule 
 

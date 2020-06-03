@@ -8,13 +8,13 @@ module AdapterToBus (input wire CLK, input wire nRST,
     output wire in$enq__RDY,
     output wire out$enq__ENA,
     output wire [32 - 1:0]out$enq$v,
-    output wire [16 - 1:0]out$enq$length,
+    output wire out$enq$last,
     input wire out$enq__RDY);
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]remain;
     wire RULE$copyRule__RDY;
     assign in$enq__RDY = remain == 0;
-    assign out$enq$length = remain;
+    assign out$enq$last = remain == 1;
     assign out$enq$v = buffer[ 31 : 0 ];
     assign out$enq__ENA = RULE$copyRule__RDY;
     // Extra assigments, not to output wires

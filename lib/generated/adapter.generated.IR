@@ -10,7 +10,7 @@ INTERFACE AtB  {
     INTERFACE/Ptr PipeInB out
 }
 INTERFACE PipeInB  {
-    METHOD/Action enq__ENA ( Bit(32) v , Bit(16) length )
+    METHOD/Action enq__ENA ( Bit(32) v , Bit(1) last )
 }
 INTERFACE PipeInH  {
     METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
@@ -18,9 +18,9 @@ INTERFACE PipeInH  {
 MODULE AdapterFromBus AfB {
     FIELD Bit(128) buffer
     FIELD Bit(1) waitForEnq
-    METHOD/Action in$enq__ENA ( Bit(32) v , Bit(16) length ) if (((waitForEnq) ^ (1))) {
+    METHOD/Action in$enq__ENA ( Bit(32) v , Bit(1) last ) if (((waitForEnq) ^ (1))) {
         STORE :buffer = __bitconcat{__bitsubstr{buffer,((128) - (32)) - (1),0},in$enq$v}
-        STORE ((in$enq$length) == (1)):waitForEnq = (1) != (0)
+        STORE (in$enq$last):waitForEnq = (1) != (0)
     }
     METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
         ALLOCA NOCData RULE$pushValue$agg_2e_tmp
@@ -37,7 +37,7 @@ MODULE AdapterToBus AtB {
         STORE :remain = in$enq$length
     }
     METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
-        CALL/Action :out$enq__ENA{buffer,remain}
+        CALL/Action :out$enq__ENA{buffer,(remain) == (1)}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)
     }
