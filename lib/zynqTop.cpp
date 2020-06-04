@@ -53,7 +53,7 @@ class ZynqInterrupt {
 };
 class P7WrapIfc {
     ZynqClock        _;
-    ZynqInterrupt    intr$;
+    ZynqInterrupt    intr;
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
     Pps7m            M;
@@ -106,9 +106,9 @@ class P7Wrap __implements P7WrapIfc {
         _.FIXED_IO_ps_porb = pps.PS.PORB;
         _.FIXED_IO_ps_srstb = pps.PS.SRSTB;
         pps.DDR.ARB = 0;
-        pps.IRQ.F2P = intr$.interrupt;
-        __defaultClock = intr$.CLK;
-        __defaultnReset = intr$.nRST;
+        pps.IRQ.F2P = intr.interrupt;
+        __defaultClock = intr.CLK;
+        __defaultnReset = intr.nRST;
         pclockTop.CLK = __defaultClock;
         pclockTop.nRST = __defaultnReset;
         //pclockTop.clockOut;
@@ -142,9 +142,9 @@ class ZynqTop __implements ZynqTopIFC {
         __defaultClock = ps7_fclk_0_c.O;
         ps7_freset_0_r.I = ps7_ps7_foo.FCLK.RESETN; // [0]
         __defaultnReset = ps7_freset_0_r.O;
-        ps7_ps7_foo.intr$.interrupt = test._.interrupt;
-        ps7_ps7_foo.intr$.CLK = __defaultClock;
-        ps7_ps7_foo.intr$.nRST = __defaultnReset;
+        ps7_ps7_foo.intr.interrupt = test._.interrupt;
+        ps7_ps7_foo.intr.CLK = __defaultClock;
+        ps7_ps7_foo.intr.nRST = __defaultnReset;
         test._.CLK = __defaultClock;
         test._.nRST = __defaultnReset;
     }

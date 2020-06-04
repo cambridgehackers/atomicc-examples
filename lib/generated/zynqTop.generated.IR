@@ -24,7 +24,7 @@ INTERFACE MbufgBUFG  {
 }
 INTERFACE P7WrapIfc  {
     INTERFACE ZynqClock _
-    INTERFACE ZynqInterrupt intr$
+    INTERFACE ZynqInterrupt intr
     INTERFACE/Ptr MaxiO MAXIGP0_O
     INTERFACE MaxiI MAXIGP0_I
     INTERFACE Pps7m M
@@ -521,9 +521,9 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(1) :FIXED_IO_ps_porb = pps$PSPORB
         LET Bit(1) :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET Bit(4) :pps$DDRARB = 0
-        LET Bit(20) :pps$IRQF2P = intr$interrupt
-        LET Bit(1) :__defaultClock = intr$CLK
-        LET Bit(1) :__defaultnReset = intr$nRST
+        LET Bit(20) :pps$IRQF2P = intrinterrupt
+        LET Bit(1) :__defaultClock = intrCLK
+        LET Bit(1) :__defaultnReset = intrnRST
         LET Bit(1) :pclockTop$CLK = __defaultClock
         LET Bit(1) :pclockTop$nRST = __defaultnReset
     }
@@ -551,9 +551,9 @@ MODULE ZynqTop ZynqTopIFC {
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
         LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLKRESETN
         LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
-        LET Bit(1) :ps7_ps7_foo$intr$interrupt = test$interrupt
-        LET Bit(1) :ps7_ps7_foo$intr$CLK = __defaultClock
-        LET Bit(1) :ps7_ps7_foo$intr$nRST = __defaultnReset
+        LET Bit(1) :ps7_ps7_foo$intrinterrupt = test$interrupt
+        LET Bit(1) :ps7_ps7_foo$intrCLK = __defaultClock
+        LET Bit(1) :ps7_ps7_foo$intrnRST = __defaultnReset
         LET Bit(1) :test$CLK = __defaultClock
         LET Bit(1) :test$nRST = __defaultnReset
     }
