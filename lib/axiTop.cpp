@@ -32,7 +32,10 @@ typedef struct {
     AXIAddr    addr;
 } AddrCount;
 typedef struct {
-    bool       last;
+    AXICount   count;
+    AXIAddr    addr;
+} BeatInfo;
+typedef struct {
     AddrCount  ac;
 } PortalInfo;
 typedef struct {
@@ -41,30 +44,33 @@ typedef struct {
 } ReadResp;
 
 class AxiTop __implements AxiTopIfc {
-    bool intEnable, writeNotFirst, writeLast, readNotFirst, readLast;
+    bool intEnable, hasIndication, writeReady;
     bool selectRIndReq, portalRControl, selectWIndReq, portalWControl;
-    bool hasIndication, writeReady;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
     BusData requestValue;
 
-    Fifo1<AddrCount>  reqArs, reqAws;
-    Fifo1<PortalInfo> readBeat,writeBeat;
-    Fifo1<ReadResp>   readData;
-    Fifo1<BusData>    writeData;
-    Fifo1<AXIId>      writeDone;
+    Fifo1<AXIId>    reqArs, reqAws;
+    Fifo1<BeatInfo> readBeat,writeBeat;
+    Fifo1<ReadResp> readData;
+    Fifo1<BusData>  writeData;
+    Fifo1<AXIId>    writeDone;
     UserTop user;
     __implements user.read readUser;
 
     void MAXIGP0_O.AR(BusData addr, __uint(12) id, __uint(4) len) {
-        reqArs.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
+        reqArs.in.enq(id);
         portalRControl = __bitsubstr(addr, 11, __bitsize(AXIAddr)) == 0;
         selectRIndReq = __bitsubstr(addr, 12);
+        readCount = len + 1;
+        readAddr = addr;
     }
     void MAXIGP0_O.AW(BusData addr, __uint(12) id, __uint(4) len) {
-        reqAws.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
+        reqAws.in.enq(id);
         portalWControl = __bitsubstr(addr, 11, __bitsize(AXIAddr)) == 0;
         selectWIndReq = __bitsubstr(addr, 12);
+        writeCount = len + 1;
+        writeAddr = addr;
     }
     void MAXIGP0_O.W(BusData data, __uint(12) id, bool last) {
         writeData.in.enq(data);
@@ -78,12 +84,13 @@ class AxiTop __implements AxiTopIfc {
        _.interrupt = hasIndication && intEnable;
     }
     __rule lread {
+        auto currentRead = reqArs.out.first();
         auto currentRBeat = readBeat.out.first();
         bool currentChannel = selectRIndReq ? false : hasIndication;
         BusData res, portalCtrlInfo;
-        if (!portalRControl && currentRBeat.ac.addr == 0)
+        if (!portalRControl && currentRBeat.addr == 0)
             hasIndication = false;
-        switch (currentRBeat.ac.addr) {
+        switch (currentRBeat.addr) {
         case 0:    portalCtrlInfo = currentChannel; break;
         case 8:    portalCtrlInfo = 1; break;
         case 0xc:  portalCtrlInfo = currentChannel; break;
@@ -91,56 +98,47 @@ class AxiTop __implements AxiTopIfc {
         case 0x14: portalCtrlInfo = 2; break;
         default:   portalCtrlInfo = 0; break;
         }
-        switch (currentRBeat.ac.addr) {
+        switch (currentRBeat.addr) {
         case 0:   res = requestValue; break;
         case 4:   res = __ready(user.write.enq); break;
         default:  res = 0; break;
         }
-        readData.in.enq(ReadResp{currentRBeat.ac.id, portalRControl ? portalCtrlInfo : res});
+        readData.in.enq(ReadResp{currentRead, portalRControl ? portalCtrlInfo : res});
         readBeat.out.deq();
+        if (currentRBeat.count == 1)
+            reqArs.out.deq();
     }
     __rule lreadNext {
         auto currentRead = reqArs.out.first();
-        bool readLastNext = readNotFirst ? readLast : currentRead.count == 1;
-        auto readburstCount = readNotFirst ? readCount : currentRead.count;
-        auto readAddrUpdate = readNotFirst ? readAddr : currentRead.addr;
-        readBeat.in.enq(PortalInfo{readLastNext, currentRead.id, readburstCount, readAddrUpdate});
-        readNotFirst = !readLastNext;
-        readCount = readburstCount - 1 ;
-        readLast = readburstCount == 2 ;
-        readAddr = readAddrUpdate + 4 ;
-        if (readLastNext)
-            reqArs.out.deq();
+        readBeat.in.enq(BeatInfo{readCount, readAddr});
+        readCount -= 1 ;
+        readAddr += 4 ;
     }
     __rule lR {
-        auto currentReadData = readData.out.first();
+        auto currentRData = readData.out.first();
         readData.out.deq();
-        MAXIGP0_I->R(currentReadData.data, currentReadData.id, 1, 0);
+        MAXIGP0_I->R(currentRData.data, currentRData.id, 1, 0);
     }
     __rule lwrite {
+        auto currentWrite = reqAws.out.first();
         auto currentWBeat = writeBeat.out.first();
         auto currentWData = writeData.out.first();
-        if (currentWBeat.last)
-            writeDone.in.enq(currentWBeat.ac.id);
+        if (currentWBeat.count == 1)
+            writeDone.in.enq(currentWrite);
         if (!portalWControl)
-            user.write.enq(currentWData, currentWBeat.ac.addr != 0);
-        else if (currentWBeat.ac.addr == 4)
+            user.write.enq(currentWData, currentWBeat.addr != 0);
+        else if (currentWBeat.addr == 4)
             intEnable = __bitsubstr(currentWData, 0, 0);
         writeBeat.out.deq();
         writeData.out.deq();
+        if (currentWBeat.count == 1)
+            reqAws.out.deq();
     }
     __rule lwriteNext {
         auto currentWrite = reqAws.out.first();
-        bool writeLastNext = writeNotFirst ? writeLast : currentWrite.count == 1;
-        auto writeBurstCount = writeNotFirst ? writeCount : currentWrite.count;
-        auto writeAddrUpdate = writeNotFirst ? writeAddr : currentWrite.addr;
-        writeBeat.in.enq(PortalInfo{writeLastNext, currentWrite.id, writeBurstCount, writeAddrUpdate});
-        writeNotFirst = !writeLastNext ;
-        writeCount = writeBurstCount - 1 ;
-        writeLast = writeBurstCount == 2 ;
-        writeAddr = writeAddrUpdate + 4 ;
-        if (writeLastNext)
-            reqAws.out.deq();
+        writeBeat.in.enq(BeatInfo{writeCount, writeAddr});
+        writeCount -= 1 ;
+        writeAddr += 4 ;
     }
     __rule writeResponse {
         MAXIGP0_I->B(writeDone.out.first(), 0);
