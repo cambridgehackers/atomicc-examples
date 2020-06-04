@@ -22,6 +22,7 @@
 #include "axiTop.h"
 #include "userTop.h"
 
+// Datatypes for holding request info during processing
 typedef __uint(5) AXIAddr;
 typedef __uint(6) AXIId;
 typedef __uint(4) AXICount;
@@ -31,22 +32,21 @@ typedef struct {
     AXIAddr    addr;
 } AddrCount;
 typedef struct {
-  bool last;
-  AddrCount ac;
+    bool       last;
+    AddrCount  ac;
 } PortalInfo;
 typedef struct {
-  AXIId      id;
-  __uint(BusTypeWidth)    data;
+    AXIId      id;
+    BusData    data;
 } ReadResp;
-typedef struct {
-  __uint(BusTypeWidth)    data;
-} BusData;
 
 class AxiTop __implements AxiTopIfc {
-    bool intEnable, writeNotFirst, writeLast;
-    bool readNotFirst, readLast, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    bool intEnable, writeNotFirst, writeLast, readNotFirst, readLast;
+    bool selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    bool hasIndication, writeReady;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
+    BusData requestValue;
 
     Fifo1<AddrCount>  reqArs, reqAws;
     Fifo1<PortalInfo> readBeat,writeBeat;
@@ -56,92 +56,89 @@ class AxiTop __implements AxiTopIfc {
     UserTop user;
     __implements user.read readUser;
 
-    void MAXIGP0_O.AR(__uint(32) addr, __uint(12) id, __uint(4) len) {
+    void MAXIGP0_O.AR(BusData addr, __uint(12) id, __uint(4) len) {
         reqArs.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
-        portalRControl = __bitsubstr(addr, 11, 5) == 0;
+        portalRControl = __bitsubstr(addr, 11, __bitsize(AXIAddr)) == 0;
         selectRIndReq = __bitsubstr(addr, 12);
     }
-    void MAXIGP0_O.AW(__uint(32) addr, __uint(12) id, __uint(4) len) {
+    void MAXIGP0_O.AW(BusData addr, __uint(12) id, __uint(4) len) {
         reqAws.in.enq(AddrCount{static_cast<AXIId>(id), len + 1, static_cast<AXIAddr>(addr)});
-        portalWControl = __bitsubstr(addr, 11, 5) == 0;
+        portalWControl = __bitsubstr(addr, 11, __bitsize(AXIAddr)) == 0;
         selectWIndReq = __bitsubstr(addr, 12);
     }
-    void MAXIGP0_O.W(__uint(32) data, __uint(12) id, bool last) {
-        writeData.in.enq(BusData{data});
+    void MAXIGP0_O.W(BusData data, __uint(12) id, bool last) {
+        writeData.in.enq(data);
     }
-    __uint(BusTypeWidth) requestValue;
-    bool hasIndication;
-    bool writeReady;
-    void readUser.enq(__uint(BusTypeWidth) v, bool last) if (!hasIndication) {
+    void readUser.enq(BusData v, bool last) if (!hasIndication) {
         requestValue = v;
-        hasIndication = 1;//!last;
+        hasIndication = true;//!last;
     }
 
     __rule init {
-       _.interrupt = (hasIndication != 0) && intEnable;
+       _.interrupt = hasIndication && intEnable;
     }
     __rule lread {
-        auto temp = readBeat.out.first();
+        auto currentRBeat = readBeat.out.first();
+        bool currentChannel = selectRIndReq ? false : hasIndication;
+        BusData res, portalCtrlInfo;
+        if (!portalRControl && currentRBeat.ac.addr == 0)
+            hasIndication = false;
+        switch (currentRBeat.ac.addr) {
+        case 0:    portalCtrlInfo = currentChannel; break;
+        case 8:    portalCtrlInfo = 1; break;
+        case 0xc:  portalCtrlInfo = currentChannel; break;
+        case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
+        case 0x14: portalCtrlInfo = 2; break;
+        default:   portalCtrlInfo = 0; break;
+        }
+        switch (currentRBeat.ac.addr) {
+        case 0:   res = requestValue; break;
+        case 4:   res = __ready(user.write.enq); break;
+        default:  res = 0; break;
+        }
+        readData.in.enq(ReadResp{currentRBeat.ac.id, portalRControl ? portalCtrlInfo : res});
         readBeat.out.deq();
-        __uint(BusTypeWidth) res, portalCtrlInfo;
-        bool zzIntrChannel = !selectRIndReq ? hasIndication : false;
-        if (!portalRControl && temp.ac.addr == 0)
-            hasIndication = 0;
-        switch (temp.ac.addr) {
-          case 0: portalCtrlInfo = zzIntrChannel; break;
-          case 8: portalCtrlInfo = 1; break;
-          case 0xc: portalCtrlInfo = zzIntrChannel; break;
-          case 0x10: portalCtrlInfo = selectRIndReq ? 6 : 5; break;
-          case 0x14: portalCtrlInfo = 2; break;
-          default: portalCtrlInfo = 0; break;
-        }
-        switch (temp.ac.addr) {
-          case 0: res = requestValue; break;
-          case 4: res = __ready(user.write.enq); break;
-          default: res = 0; break;
-        }
-        readData.in.enq(ReadResp{temp.ac.id, portalRControl ? portalCtrlInfo : res});
     }
     __rule lreadNext {
-        auto temp = reqArs.out.first();
-        auto readAddrupdate = readNotFirst ? readAddr : temp.addr;
-        AXICount readburstCount = readNotFirst ? readCount : temp.count;
-        bool readLastNext = readNotFirst ? readLast : temp.count == 1;
-        readBeat.in.enq(PortalInfo{readLastNext, temp.id, readburstCount, readAddrupdate});
-        readAddr = readAddrupdate + 4 ;
-        readCount = readburstCount - 1 ;
+        auto currentRead = reqArs.out.first();
+        bool readLastNext = readNotFirst ? readLast : currentRead.count == 1;
+        auto readburstCount = readNotFirst ? readCount : currentRead.count;
+        auto readAddrUpdate = readNotFirst ? readAddr : currentRead.addr;
+        readBeat.in.enq(PortalInfo{readLastNext, currentRead.id, readburstCount, readAddrUpdate});
         readNotFirst = !readLastNext;
+        readCount = readburstCount - 1 ;
         readLast = readburstCount == 2 ;
+        readAddr = readAddrUpdate + 4 ;
         if (readLastNext)
             reqArs.out.deq();
     }
     __rule lR {
-        auto temp = readData.out.first();
+        auto currentReadData = readData.out.first();
         readData.out.deq();
-        MAXIGP0_I->R(temp.data, temp.id, 1, 0);
+        MAXIGP0_I->R(currentReadData.data, currentReadData.id, 1, 0);
     }
     __rule lwrite {
-        auto wb = writeBeat.out.first();
-        writeBeat.out.deq();
-        auto temp = writeData.out.first();
-        writeData.out.deq();
-        if (wb.last)
-            writeDone.in.enq(wb.ac.id);
+        auto currentWBeat = writeBeat.out.first();
+        auto currentWData = writeData.out.first();
+        if (currentWBeat.last)
+            writeDone.in.enq(currentWBeat.ac.id);
         if (!portalWControl)
-            user.write.enq(temp.data, wb.ac.addr != 0);
-        else if (wb.ac.addr == 4)
-            intEnable = __bitsubstr(temp.data, 0, 0);
+            user.write.enq(currentWData, currentWBeat.ac.addr != 0);
+        else if (currentWBeat.ac.addr == 4)
+            intEnable = __bitsubstr(currentWData, 0, 0);
+        writeBeat.out.deq();
+        writeData.out.deq();
     }
     __rule lwriteNext {
-        auto temp = reqAws.out.first();
-        auto writeAddrupdate = writeNotFirst ? writeAddr : temp.addr;
-        AXICount writeburstCount = writeNotFirst ? writeCount : temp.count;
-        bool writeLastNext = writeNotFirst ? writeLast : temp.count == 1;
-        writeBeat.in.enq(PortalInfo{writeLastNext, temp.id, writeburstCount, writeAddrupdate});
-        writeAddr = writeAddrupdate + 4 ;
-        writeCount = writeburstCount - 1 ;
+        auto currentWrite = reqAws.out.first();
+        bool writeLastNext = writeNotFirst ? writeLast : currentWrite.count == 1;
+        auto writeBurstCount = writeNotFirst ? writeCount : currentWrite.count;
+        auto writeAddrUpdate = writeNotFirst ? writeAddr : currentWrite.addr;
+        writeBeat.in.enq(PortalInfo{writeLastNext, currentWrite.id, writeBurstCount, writeAddrUpdate});
         writeNotFirst = !writeLastNext ;
-        writeLast = writeburstCount == 2 ;
+        writeCount = writeBurstCount - 1 ;
+        writeLast = writeBurstCount == 2 ;
+        writeAddr = writeAddrUpdate + 4 ;
         if (writeLastNext)
             reqAws.out.deq();
     }

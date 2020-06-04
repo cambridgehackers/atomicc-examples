@@ -52,43 +52,42 @@ module AxiTop (
     wire [5 - 1:0]MAXIGP0_O$AW$agg_2e_tmp$addr;
     wire [4 - 1:0]MAXIGP0_O$AW$agg_2e_tmp$count;
     wire [6 - 1:0]MAXIGP0_O$AW$agg_2e_tmp$id;
-    wire [32 - 1:0]MAXIGP0_O$W$agg_2e_tmp$data;
-    wire [32 - 1:0]RULE$lR$temp$data;
-    wire [6 - 1:0]RULE$lR$temp$id;
+    wire [32 - 1:0]RULE$lR$currentReadData$data;
+    wire [6 - 1:0]RULE$lR$currentReadData$id;
     wire RULE$lR__RDY;
     wire [32 - 1:0]RULE$lread$agg_2e_tmp$data;
     wire [6 - 1:0]RULE$lread$agg_2e_tmp$id;
+    wire RULE$lread$currentChannel;
+    wire [5 - 1:0]RULE$lread$currentRBeat$ac$addr;
+    wire [6 - 1:0]RULE$lread$currentRBeat$ac$id;
     wire [32 - 1:0]RULE$lread$portalCtrlInfo;
     wire [32 - 1:0]RULE$lread$res;
-    wire [5 - 1:0]RULE$lread$temp$ac$addr;
-    wire [6 - 1:0]RULE$lread$temp$ac$id;
-    wire RULE$lread$zzIntrChannel;
     wire [5 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$addr;
     wire [4 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$count;
     wire [6 - 1:0]RULE$lreadNext$agg_2e_tmp$ac$id;
     wire RULE$lreadNext$agg_2e_tmp$last;
-    wire [5 - 1:0]RULE$lreadNext$readAddrupdate;
+    wire [5 - 1:0]RULE$lreadNext$currentRead$addr;
+    wire [4 - 1:0]RULE$lreadNext$currentRead$count;
+    wire [6 - 1:0]RULE$lreadNext$currentRead$id;
+    wire [5 - 1:0]RULE$lreadNext$readAddrUpdate;
     wire RULE$lreadNext$readLastNext;
     wire [4 - 1:0]RULE$lreadNext$readburstCount;
-    wire [5 - 1:0]RULE$lreadNext$temp$addr;
-    wire [4 - 1:0]RULE$lreadNext$temp$count;
-    wire [6 - 1:0]RULE$lreadNext$temp$id;
     wire RULE$lreadNext__RDY;
     wire RULE$lread__RDY;
-    wire [32 - 1:0]RULE$lwrite$temp$data;
-    wire [5 - 1:0]RULE$lwrite$wb$ac$addr;
-    wire [6 - 1:0]RULE$lwrite$wb$ac$id;
-    wire RULE$lwrite$wb$last;
+    wire [5 - 1:0]RULE$lwrite$currentWBeat$ac$addr;
+    wire [6 - 1:0]RULE$lwrite$currentWBeat$ac$id;
+    wire RULE$lwrite$currentWBeat$last;
+    wire [32 - 1:0]RULE$lwrite$currentWData;
     wire [5 - 1:0]RULE$lwriteNext$agg_2e_tmp$ac$addr;
     wire [4 - 1:0]RULE$lwriteNext$agg_2e_tmp$ac$count;
     wire [6 - 1:0]RULE$lwriteNext$agg_2e_tmp$ac$id;
     wire RULE$lwriteNext$agg_2e_tmp$last;
-    wire [5 - 1:0]RULE$lwriteNext$temp$addr;
-    wire [4 - 1:0]RULE$lwriteNext$temp$count;
-    wire [6 - 1:0]RULE$lwriteNext$temp$id;
-    wire [5 - 1:0]RULE$lwriteNext$writeAddrupdate;
+    wire [5 - 1:0]RULE$lwriteNext$currentWrite$addr;
+    wire [4 - 1:0]RULE$lwriteNext$currentWrite$count;
+    wire [6 - 1:0]RULE$lwriteNext$currentWrite$id;
+    wire [5 - 1:0]RULE$lwriteNext$writeAddrUpdate;
+    wire [4 - 1:0]RULE$lwriteNext$writeBurstCount;
     wire RULE$lwriteNext$writeLastNext;
-    wire [4 - 1:0]RULE$lwriteNext$writeburstCount;
     wire RULE$lwriteNext__RDY;
     wire RULE$lwrite__RDY;
     wire RULE$writeResponse__RDY;
@@ -203,8 +202,8 @@ module AxiTop (
         .read$enq__RDY(readUser$enq__RDY));
     assign MAXIGP0_I$B$resp = 2'd0;
     assign MAXIGP0_I$B__ENA = RULE$writeResponse__RDY;
-    assign MAXIGP0_I$R$data = RULE$lR$temp$data;
-    assign MAXIGP0_I$R$id = RULE$lR$temp$id;
+    assign MAXIGP0_I$R$data = RULE$lR$currentReadData$data;
+    assign MAXIGP0_I$R$id = RULE$lR$currentReadData$id;
     assign MAXIGP0_I$R$last = 1;
     assign MAXIGP0_I$R$resp = 2'd0;
     assign MAXIGP0_I$R__ENA = RULE$lR__RDY;
@@ -218,13 +217,13 @@ module AxiTop (
     assign reqArs$out$deq__ENA = RULE$lreadNext__RDY && RULE$lreadNext$readLastNext;
     assign reqAws$in$enq$v = { MAXIGP0_O$AW$agg_2e_tmp$addr , MAXIGP0_O$AW$agg_2e_tmp$count , MAXIGP0_O$AW$agg_2e_tmp$id };
     assign reqAws$out$deq__ENA = RULE$lwriteNext__RDY && RULE$lwriteNext$writeLastNext;
-    assign user$write$enq$last = !( RULE$lwrite$wb$ac$addr == 0 );
-    assign user$write$enq$v = RULE$lwrite$temp$data;
+    assign user$write$enq$last = !( RULE$lwrite$currentWBeat$ac$addr == 0 );
+    assign user$write$enq$v = RULE$lwrite$currentWData;
     assign user$write$enq__ENA = !( portalWControl || ( !RULE$lwrite__RDY ) );
     assign writeBeat$in$enq$v = { RULE$lwriteNext$agg_2e_tmp$ac$addr , RULE$lwriteNext$agg_2e_tmp$ac$count , RULE$lwriteNext$agg_2e_tmp$ac$id , RULE$lwriteNext$agg_2e_tmp$last };
-    assign writeData$in$enq$v = { MAXIGP0_O$W$agg_2e_tmp$data };
-    assign writeDone$in$enq$v = RULE$lwrite$wb$ac$id;
-    assign writeDone$in$enq__ENA = RULE$lwrite__RDY && RULE$lwrite$wb$last;
+    assign writeData$in$enq$v = MAXIGP0_O$W$data;
+    assign writeDone$in$enq$v = RULE$lwrite$currentWBeat$ac$id;
+    assign writeDone$in$enq__ENA = RULE$lwrite__RDY && RULE$lwrite$currentWBeat$last;
     // Extra assigments, not to output wires
     assign MAXIGP0_O$AR$agg_2e_tmp$addr = MAXIGP0_O$AR$addr[ 4 : 0 ];
     assign MAXIGP0_O$AR$agg_2e_tmp$count = MAXIGP0_O$AR$len + 4'd1;
@@ -232,45 +231,44 @@ module AxiTop (
     assign MAXIGP0_O$AW$agg_2e_tmp$addr = MAXIGP0_O$AW$addr[ 4 : 0 ];
     assign MAXIGP0_O$AW$agg_2e_tmp$count = MAXIGP0_O$AW$len + 4'd1;
     assign MAXIGP0_O$AW$agg_2e_tmp$id = MAXIGP0_O$AW$id[ 5 : 0 ];
-    assign MAXIGP0_O$W$agg_2e_tmp$data = MAXIGP0_O$W$data;
-    assign RULE$lR$temp$data = readData$out$first[ 32 - 1 + 6 : 6 ];
-    assign RULE$lR$temp$id = readData$out$first[ 6 - 1 : 0 ];
+    assign RULE$lR$currentReadData$data = readData$out$first[ 32 - 1 + 6 : 6 ];
+    assign RULE$lR$currentReadData$id = readData$out$first[ 6 - 1 : 0 ];
     assign RULE$lR__RDY = readData$out$first__RDY && readData$out$deq__RDY && MAXIGP0_I$R__RDY;
     assign RULE$lread$agg_2e_tmp$data = ( portalRControl ? RULE$lread$portalCtrlInfo : 32'd0 ) | ( ( !portalRControl ) ? RULE$lread$res : 32'd0 );
-    assign RULE$lread$agg_2e_tmp$id = RULE$lread$temp$ac$id;
-    assign RULE$lread$portalCtrlInfo = ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 0 ) ) ? RULE$lread$zzIntrChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 8 ) ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 12 ) ) ? RULE$lread$zzIntrChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 16 ) ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 20 ) ) ? 32'd2 : 32'd0 );
-    assign RULE$lread$res = ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 0 ) ) ? requestValue : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$temp$ac$addr == 4 ) ) ? user$write$enq__RDY : 1'd0 );
-    assign RULE$lread$temp$ac$addr = readBeat$out$first[ 5 - 1 + 11 : 11 ];
-    assign RULE$lread$temp$ac$id = readBeat$out$first[ 6 - 1 + 1 : 1 ];
-    assign RULE$lread$zzIntrChannel = ( !selectRIndReq ) ? hasIndication : 1'd0;
-    assign RULE$lreadNext$agg_2e_tmp$ac$addr = RULE$lreadNext$readAddrupdate;
+    assign RULE$lread$agg_2e_tmp$id = RULE$lread$currentRBeat$ac$id;
+    assign RULE$lread$currentChannel = selectRIndReq ? 1'd0 : hasIndication;
+    assign RULE$lread$currentRBeat$ac$addr = readBeat$out$first[ 5 - 1 + 11 : 11 ];
+    assign RULE$lread$currentRBeat$ac$id = readBeat$out$first[ 6 - 1 + 1 : 1 ];
+    assign RULE$lread$portalCtrlInfo = ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 0 ) ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 8 ) ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 12 ) ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 16 ) ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 20 ) ) ? 32'd2 : 32'd0 );
+    assign RULE$lread$res = ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 0 ) ) ? requestValue : 32'd0 ) | ( ( RULE$lread__RDY && ( RULE$lread$currentRBeat$ac$addr == 4 ) ) ? user$write$enq__RDY : 1'd0 );
+    assign RULE$lreadNext$agg_2e_tmp$ac$addr = RULE$lreadNext$readAddrUpdate;
     assign RULE$lreadNext$agg_2e_tmp$ac$count = RULE$lreadNext$readburstCount;
-    assign RULE$lreadNext$agg_2e_tmp$ac$id = RULE$lreadNext$temp$id;
+    assign RULE$lreadNext$agg_2e_tmp$ac$id = RULE$lreadNext$currentRead$id;
     assign RULE$lreadNext$agg_2e_tmp$last = RULE$lreadNext$readLastNext;
-    assign RULE$lreadNext$readAddrupdate = readNotFirst ? readAddr : RULE$lreadNext$temp$addr;
-    assign RULE$lreadNext$readLastNext = readNotFirst ? readLast : ( RULE$lreadNext$temp$count == 1 );
-    assign RULE$lreadNext$readburstCount = readNotFirst ? readCount : RULE$lreadNext$temp$count;
-    assign RULE$lreadNext$temp$addr = reqArs$out$first[ 5 - 1 + 10 : 10 ];
-    assign RULE$lreadNext$temp$count = reqArs$out$first[ 4 - 1 + 6 : 6 ];
-    assign RULE$lreadNext$temp$id = reqArs$out$first[ 6 - 1 : 0 ];
+    assign RULE$lreadNext$currentRead$addr = reqArs$out$first[ 5 - 1 + 10 : 10 ];
+    assign RULE$lreadNext$currentRead$count = reqArs$out$first[ 4 - 1 + 6 : 6 ];
+    assign RULE$lreadNext$currentRead$id = reqArs$out$first[ 6 - 1 : 0 ];
+    assign RULE$lreadNext$readAddrUpdate = readNotFirst ? readAddr : RULE$lreadNext$currentRead$addr;
+    assign RULE$lreadNext$readLastNext = readNotFirst ? readLast : ( RULE$lreadNext$currentRead$count == 1 );
+    assign RULE$lreadNext$readburstCount = readNotFirst ? readCount : RULE$lreadNext$currentRead$count;
     assign RULE$lreadNext__RDY = reqArs$out$first__RDY && readBeat$in$enq__RDY && ( reqArs$out$deq__RDY || ( !RULE$lreadNext$readLastNext ) );
-    assign RULE$lread__RDY = readBeat$out$first__RDY && readBeat$out$deq__RDY && readData$in$enq__RDY;
-    assign RULE$lwrite$temp$data = writeData$out$first;
-    assign RULE$lwrite$wb$ac$addr = writeBeat$out$first[ 5 - 1 + 11 : 11 ];
-    assign RULE$lwrite$wb$ac$id = writeBeat$out$first[ 6 - 1 + 1 : 1 ];
-    assign RULE$lwrite$wb$last = writeBeat$out$first[ ( 1 - 1 ) : 0 ];
-    assign RULE$lwriteNext$agg_2e_tmp$ac$addr = RULE$lwriteNext$writeAddrupdate;
-    assign RULE$lwriteNext$agg_2e_tmp$ac$count = RULE$lwriteNext$writeburstCount;
-    assign RULE$lwriteNext$agg_2e_tmp$ac$id = RULE$lwriteNext$temp$id;
+    assign RULE$lread__RDY = readBeat$out$first__RDY && readData$in$enq__RDY && readBeat$out$deq__RDY;
+    assign RULE$lwrite$currentWBeat$ac$addr = writeBeat$out$first[ 5 - 1 + 11 : 11 ];
+    assign RULE$lwrite$currentWBeat$ac$id = writeBeat$out$first[ 6 - 1 + 1 : 1 ];
+    assign RULE$lwrite$currentWBeat$last = writeBeat$out$first[ ( 1 - 1 ) : 0 ];
+    assign RULE$lwrite$currentWData = writeData$out$first;
+    assign RULE$lwriteNext$agg_2e_tmp$ac$addr = RULE$lwriteNext$writeAddrUpdate;
+    assign RULE$lwriteNext$agg_2e_tmp$ac$count = RULE$lwriteNext$writeBurstCount;
+    assign RULE$lwriteNext$agg_2e_tmp$ac$id = RULE$lwriteNext$currentWrite$id;
     assign RULE$lwriteNext$agg_2e_tmp$last = RULE$lwriteNext$writeLastNext;
-    assign RULE$lwriteNext$temp$addr = reqAws$out$first[ 5 - 1 + 10 : 10 ];
-    assign RULE$lwriteNext$temp$count = reqAws$out$first[ 4 - 1 + 6 : 6 ];
-    assign RULE$lwriteNext$temp$id = reqAws$out$first[ 6 - 1 : 0 ];
-    assign RULE$lwriteNext$writeAddrupdate = writeNotFirst ? writeAddr : RULE$lwriteNext$temp$addr;
-    assign RULE$lwriteNext$writeLastNext = writeNotFirst ? writeLast : ( RULE$lwriteNext$temp$count == 1 );
-    assign RULE$lwriteNext$writeburstCount = writeNotFirst ? writeCount : RULE$lwriteNext$temp$count;
+    assign RULE$lwriteNext$currentWrite$addr = reqAws$out$first[ 5 - 1 + 10 : 10 ];
+    assign RULE$lwriteNext$currentWrite$count = reqAws$out$first[ 4 - 1 + 6 : 6 ];
+    assign RULE$lwriteNext$currentWrite$id = reqAws$out$first[ 6 - 1 : 0 ];
+    assign RULE$lwriteNext$writeAddrUpdate = writeNotFirst ? writeAddr : RULE$lwriteNext$currentWrite$addr;
+    assign RULE$lwriteNext$writeBurstCount = writeNotFirst ? writeCount : RULE$lwriteNext$currentWrite$count;
+    assign RULE$lwriteNext$writeLastNext = writeNotFirst ? writeLast : ( RULE$lwriteNext$currentWrite$count == 1 );
     assign RULE$lwriteNext__RDY = reqAws$out$first__RDY && writeBeat$in$enq__RDY && ( reqAws$out$deq__RDY || ( !RULE$lwriteNext$writeLastNext ) );
-    assign RULE$lwrite__RDY = writeBeat$out$first__RDY && writeBeat$out$deq__RDY && writeData$out$first__RDY && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( portalWControl || user$write$enq__RDY ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( ( portalWControl && RULE$lwrite$wb$last ) || ( ( !portalWControl ) && ( RULE$lwrite$wb$last || ( !user$write$enq__RDY ) ) ) ) ) ) );
+    assign RULE$lwrite__RDY = writeBeat$out$first__RDY && writeData$out$first__RDY && ( ( writeDone$in$enq__RDY && ( ( portalWControl && writeBeat$out$deq__RDY && writeData$out$deq__RDY ) || ( ( !portalWControl ) && writeBeat$out$deq__RDY && writeData$out$deq__RDY && user$write$enq__RDY ) ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( ( portalWControl && ( RULE$lwrite$currentWBeat$last || ( !writeData$out$deq__RDY ) || ( !writeBeat$out$deq__RDY ) ) ) || ( ( !portalWControl ) && ( RULE$lwrite$currentWBeat$last || ( !user$write$enq__RDY ) || ( !writeData$out$deq__RDY ) || ( !writeBeat$out$deq__RDY ) ) ) ) ) ) );
     assign RULE$writeResponse__RDY = writeDone$out$first__RDY && MAXIGP0_I$B__RDY && writeDone$out$deq__RDY;
     assign readUser$enq__RDY = !hasIndication;
 
@@ -303,28 +301,28 @@ module AxiTop (
             selectWIndReq <= MAXIGP0_O$AW$addr[ 12 ] != 0;
         end; // End of MAXIGP0_O$AW__ENA
         if (RULE$lreadNext__RDY) begin // RULE$lreadNext__ENA
-            readAddr <= RULE$lreadNext$readAddrupdate + 4;
-            readCount <= RULE$lreadNext$readburstCount - 1;
             readNotFirst <= RULE$lreadNext$readLastNext ^ 1;
+            readCount <= RULE$lreadNext$readburstCount - 1;
             readLast <= RULE$lreadNext$readburstCount == 2;
+            readAddr <= RULE$lreadNext$readAddrUpdate + 4;
         end; // End of RULE$lreadNext__ENA
         if (RULE$lread__RDY) begin // RULE$lread__ENA
-            if (!( portalRControl || ( !( RULE$lread$temp$ac$addr == 0 ) ) ))
-            hasIndication <= 0 != 0;
+            if (!( portalRControl || ( !( RULE$lread$currentRBeat$ac$addr == 0 ) ) ))
+            hasIndication <= 0;
         end; // End of RULE$lread__ENA
         if (RULE$lwriteNext__RDY) begin // RULE$lwriteNext__ENA
-            writeAddr <= RULE$lwriteNext$writeAddrupdate + 4;
-            writeCount <= RULE$lwriteNext$writeburstCount - 1;
             writeNotFirst <= RULE$lwriteNext$writeLastNext ^ 1;
-            writeLast <= RULE$lwriteNext$writeburstCount == 2;
+            writeCount <= RULE$lwriteNext$writeBurstCount - 1;
+            writeLast <= RULE$lwriteNext$writeBurstCount == 2;
+            writeAddr <= RULE$lwriteNext$writeAddrUpdate + 4;
         end; // End of RULE$lwriteNext__ENA
         if (RULE$lwrite__RDY) begin // RULE$lwrite__ENA
-            if (( RULE$lwrite$wb$ac$addr == 4 ) && portalWControl)
-            intEnable <= RULE$lwrite$temp$data[ 0 : 0 ] != 0;
+            if (( RULE$lwrite$currentWBeat$ac$addr == 4 ) && portalWControl)
+            intEnable <= RULE$lwrite$currentWData[ 0 : 0 ] != 0;
         end; // End of RULE$lwrite__ENA
         if (user$read$enq__ENA && readUser$enq__RDY) begin // readUser$enq__ENA
             requestValue <= user$read$enq$v;
-            hasIndication <= 1 != 0;
+            hasIndication <= 1;
         end; // End of readUser$enq__ENA
       end
     end // always @ (posedge CLK)

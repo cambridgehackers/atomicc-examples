@@ -20,20 +20,22 @@
  */
 #ifndef _AXITOP_H_
 #define _AXITOP_H_
+#include "atomicc.h"
 class ZynqInterruptT {
     __output __uint(1)  interrupt;
     __input __uint(1)  CLK;
     __input __uint(1)  nRST;
 };
 
+typedef __uint(BusTypeWidth) BusData;
 class MaxiO {
-    void AR(__uint(32) addr, __uint(12) id, __uint(4) len);
-    void AW(__uint(32) addr, __uint(12) id, __uint(4) len);
-    void W(__uint(32) data, __uint(12) id, bool last);
+    void AR(BusData addr, __uint(12) id, __uint(4) len);
+    void AW(BusData addr, __uint(12) id, __uint(4) len);
+    void W(BusData data, __uint(12) id, bool last);
 };
 
 class MaxiI {
-    void R(__uint(32) data, __uint(12) id, bool last, __uint(2) resp);
+    void R(BusData data, __uint(12) id, bool last, __uint(2) resp);
     void B(__uint(12) id, __uint(2) resp);
 };
 
