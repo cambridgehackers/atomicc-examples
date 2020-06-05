@@ -28,24 +28,11 @@ typedef __uint(6) AXIId;
 typedef __uint(4) AXICount;
 typedef struct {
     AXIId      id;
-    AXICount   count;
-    AXIAddr    addr;
-} AddrCount;
-typedef struct {
-    bool       last;
-    AXIAddr    addr;
-} BeatInfo;
-typedef struct {
-    AddrCount  ac;
-} PortalInfo;
-typedef struct {
-    AXIId      id;
     BusData    data;
 } ReadResp;
 
 class AxiTop __implements AxiTopIfc {
-    bool intEnable, writeReady;
-    bool selectRIndReq, portalRControl, selectWIndReq, portalWControl;
+    bool intEnable, writeReady, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;
 
@@ -102,10 +89,10 @@ class AxiTop __implements AxiTopIfc {
             default:   res = 0; break;
             }
         readData.in.enq(ReadResp{currentRead, res});
-        if (readCount == 0)
-            reqArs.out.deq();
         readCount -= 1;
         readAddr += 4;
+        if (readCount == 0)
+            reqArs.out.deq();
     }
     __rule lreadData {
         auto currentRData = readData.out.first();
@@ -119,13 +106,13 @@ class AxiTop __implements AxiTopIfc {
             user.write.enq(currentWData, writeAddr != 0);
         else if (writeAddr == 4)
             intEnable = __bitsubstr(currentWData, 0, 0);
+        writeCount -= 1;
+        writeAddr += 4;
         writeData.out.deq();
         if (writeCount == 0) {
             writeDone.in.enq(currentWrite);
             reqAws.out.deq();
         }
-        writeCount -= 1;
-        writeAddr += 4;
     }
     __rule writeResponse {
         MAXIGP0_I->B(writeDone.out.first(), 0);
