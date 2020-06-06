@@ -24,26 +24,24 @@
 #define IfcNames_EchoIndicationH2S 5
 
 class UserTop __implements UserTopIfc {
-    AdapterToBus<NOCData, BusTypeWidth> radapter_0;
-    AdapterFromBus<BusTypeWidth, NOCData> wadapter_0;
+    AdapterToBus<NOCDataH, BusTypeWidth> radapter_0;
+    AdapterFromBus<BusTypeWidth, NOCDataH> wadapter_0;
     l_top       ctop;
     __connect write = wadapter_0.in;
     __connect read = radapter_0.out;
+#if 1
+    __connect ctop.request = wadapter_0.out;
+    __connect ctop.indication = radapter_0.in;
+#else
     __implements wadapter_0.out wad;
     __implements ctop.indication indication;
-
-    void wad.enq(NOCData v, __int(16) length) {
-printf("reqConnect.enq v %llx length %lx\n", (long long)__bit_cast<__int(__bitsize(v))>(v), (long)length);
-        ctop.request.enq(__bit_cast<NOCDataH>(__bitconcat(__bit_cast<__int(__bitsize(v))>(v), length)));
+    void wad.enq(NOCDataH v) {
+        printf("reqConnect.enq v %x length %x\n", v.data, v.length);
+        ctop.request.enq(v);
     }
     void indication.enq(NOCDataH v) {
-        __int(__bitsize(v)) vtemp = __bit_cast<__int(__bitsize(v))>(v);
-        __int(16) total_len = __bitsubstr(vtemp, __bitsize(v.length) - 1, 0);
-        __int(__bitsize(v.data)) vint = __bitsubstr(vtemp,
-            __bitsize(v) - __bitsize(v.length) - 1, __bitsize(v.length));
-        __int(16) len = __bitsubstr(vint, 15, 0) - 1;
-        __int(16) port = IfcNames_EchoIndicationH2S;
-printf("indConnect.enq v %llx len %lx\n", (long long)vint, (long)len);
-        radapter_0.in.enq(__bit_cast<NOCData>(vint), total_len);
+        printf("indConnect.enq v %x length %x\n", v.data, v.length);
+        radapter_0.in.enq(v);
     }
+#endif
 };

@@ -23,14 +23,9 @@
 #define _ADAPTER_H_
 #include "atomicc.h"
 
-template<class T>
-class PipeInH {
-    void enq(T v, LenType length);
-};
-
 template<class T, int width>
 class AtB {
-   PipeInH<T>        in;
+   PipeIn<T>        in;
    PipeInB<width> *out;
 };
 
@@ -40,7 +35,7 @@ class AdapterToBus __implements AtB<T, width>;
 template<int width, class T>
 class AfB {
    PipeInB<width>  in;
-   PipeInH<T>       *out;
+   PipeIn<T>       *out;
 };
 
 template<int width, class T>

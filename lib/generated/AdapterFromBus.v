@@ -9,34 +9,40 @@ module AdapterFromBus #(
     input wire in$enq$last,
     output wire in$enq__RDY,
     output wire out$enq__ENA,
-    output wire [128 - 1:0]out$enq$v,
-    output wire [16 - 1:0]out$enq$length,
+    output wire [(16 + 128) - 1:0]out$enq$v,
     input wire out$enq__RDY);
-    reg [128 - 1:0]buffer;
+    reg [144 - 1:0]buffer;
+    reg [16 - 1:0]length;
     reg waitForEnq;
-    wire [128 - 1:0]RULE$pushValue$agg_2e_tmp;
+    wire [(16 + 128) - 1:0]RULE$pushValue$agg_2e_tmp;
     wire RULE$pushValue__RDY;
+    wire [16 - 1:0]in$enq$newLength;
     assign in$enq__RDY = !waitForEnq;
-    assign out$enq$length = 16'd0;
     assign out$enq$v = RULE$pushValue$agg_2e_tmp;
     assign out$enq__ENA = RULE$pushValue__RDY;
     // Extra assigments, not to output wires
     assign RULE$pushValue$agg_2e_tmp = buffer;
     assign RULE$pushValue__RDY = waitForEnq && out$enq__RDY;
+    assign in$enq$newLength = length + 16'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         buffer <= 0;
+        length <= 0;
         waitForEnq <= 0;
       end // nRST
       else begin
         if (RULE$pushValue__RDY) begin // RULE$pushValue__ENA
-            waitForEnq <= 0 != 0;
+            length <= 0;
+            waitForEnq <= 0;
+            $display( "adapterFROMout %x" , buffer );
         end; // End of RULE$pushValue__ENA
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
-            buffer <= { buffer[ ( ( 128 - width ) - 1 ) : 0 ] , in$enq$v };
+            buffer <= { buffer[ ( ( 144 - width ) - 1 ) : 16 ] , in$enq$v , in$enq$newLength };
+            length <= in$enq$newLength;
+            $display( "adapterFROMin %x last %x buffer %x" , in$enq$v , in$enq$last , buffer );
             if (in$enq$last)
-            waitForEnq <= 1 != 0;
+            waitForEnq <= 1;
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)

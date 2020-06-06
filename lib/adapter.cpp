@@ -24,14 +24,17 @@
 template<class T, int width>
 class AdapterToBus __implements AtB<T, width> {
    __uint(__bitsize(T)) buffer;
-   __int(16)            remain;
+   LenType                   remain;
 
-   void in.enq(T v, LenType length) if (remain == 0) {
-      buffer = __bit_cast<decltype(buffer)>(v);
-      remain = length;
+   void in.enq(T v) if (remain == 0) {
+      buffer = __bit_cast<decltype(buffer)>(v.data);
+      remain = v.length;
+      printf ("adapterTOin %x length %x\n", v.data, v.length);
    }
    __rule copyRule if (remain != 0) {
-      this->out->enq(buffer, remain == 1);
+      __uint(width) outVal = __bitsubstr(buffer, width - 1, 0);
+      printf ("adapterTOout %x remain %x\n", outVal, remain);
+      this->out->enq(outVal, remain == 1);
       remain--;
       buffer >>= width;
    }
@@ -41,17 +44,23 @@ template<int width, class T>
 class AdapterFromBus __implements AfB<width, T> {
    __uint(__bitsize(T)) buffer;
    bool                 waitForEnq;
+   LenType              length;
 
    void in.enq(__uint(width) v, bool last) if (!waitForEnq) {
-      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - width - 1, 0), v);
+      printf("adapterFROMin %x last %x buffer %x\n", v, last, buffer);
+      LenType newLength = length + 1;
+      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - width - 1, __bitsize(LenType)), v, __bit_cast<__uint(__bitsize(LenType))>(newLength));
+      length = newLength;
       if (last)  // this is the last beat
-          waitForEnq = 1;
+          waitForEnq = true;
    }
    __rule pushValue if (waitForEnq) {
-       this->out->enq(__bit_cast<T>(buffer), 0);
-       waitForEnq = 0;
+       length = 0;
+       printf("adapterFROMout %x\n", buffer);
+       this->out->enq(__bit_cast<T>(buffer));
+       waitForEnq = false;
    }
 };
 
-static AdapterToBus<NOCData, BusTypeWidth> radapter_0;
-static AdapterFromBus<BusTypeWidth, NOCData> wadapter_0;
+static AdapterToBus<NOCDataH, BusTypeWidth> radapter_0;
+static AdapterFromBus<BusTypeWidth, NOCDataH> wadapter_0;

@@ -1,43 +1,55 @@
-STRUCT NOCData  {
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE AfB(width=32)  {
     INTERFACE PipeInB(width=32) in
-    INTERFACE/Ptr PipeInH out
+    INTERFACE/Ptr PipeIn out
 }
 INTERFACE AtB(width=32)  {
-    INTERFACE PipeInH in
+    INTERFACE PipeIn in
     INTERFACE/Ptr PipeInB(width=32) out
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
-INTERFACE PipeInH  {
-    METHOD/Action enq__ENA ( NOCData v , Bit(16) length )
-}
 MODULE AdapterFromBus(width=32) AfB(width=32) {
-    FIELD Bit(128) buffer
+    FIELD Bit(144) buffer
     FIELD Bit(1) waitForEnq
+    FIELD Bit(16) length
     METHOD/Action in$enq__ENA ( Bit(width) v , Bit(1) last ) if (((waitForEnq) ^ (1))) {
-        STORE :buffer = __bitconcat{__bitsubstr{buffer,((128) - (32)) - (1),0},in$enq$v}
-        STORE (in$enq$last):waitForEnq = (1) != (0)
+        ALLOCA Bit(16) in$enq$newLength
+        PRINTF :printf{"adapterFROMin %x last %x buffer %x\n",in$enq$v,in$enq$last,buffer}
+        LET Bit(16) :in$enq$newLength = (length) + (1)
+        STORE :buffer = __bitconcat{__bitsubstr{buffer,((144) - (32)) - (1),16},in$enq$v,in$enq$newLength}
+        STORE :length = in$enq$newLength
+        STORE (in$enq$last):waitForEnq = 1
     }
     METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
-        ALLOCA NOCData RULE$pushValue$agg_2e_tmp
-        LET Bit(128) :RULE$pushValue$agg_2e_tmp = buffer
-        CALL/Action :out$enq__ENA{RULE$pushValue$agg_2e_tmp,0}
-        STORE :waitForEnq = (0) != (0)
+        ALLOCA NOCDataH RULE$pushValue$agg_2e_tmp
+        STORE :length = 0
+        PRINTF :printf{"adapterFROMout %x\n",buffer}
+        LET Bit(144) :RULE$pushValue$agg_2e_tmp = buffer
+        CALL/Action :out$enq__ENA{RULE$pushValue$agg_2e_tmp}
+        STORE :waitForEnq = 0
     }
 }
 MODULE AdapterToBus(width=32) AtB(width=32) {
-    FIELD Bit(128) buffer
+    FIELD Bit(144) buffer
     FIELD Bit(16) remain
-    METHOD/Action in$enq__ENA ( NOCData v , Bit(16) length ) if (((remain) == (0))) {
-        STORE :buffer = in$enq$v
-        STORE :remain = in$enq$length
+    METHOD/Action in$enq__ENA ( NOCDataH v ) if (((remain) == (0))) {
+        STORE :buffer = in$enq$v$data
+        STORE :remain = in$enq$v$length
+        PRINTF :printf{"adapterTOin %x length %x\n",in$enq$v$data,in$enq$v$length}
     }
     METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
-        CALL/Action :out$enq__ENA{buffer,(remain) == (1)}
+        ALLOCA Bit(width) RULE$copyRule$outVal
+        LET Bit(32) :RULE$copyRule$outVal = __bitsubstr{buffer,(32) - (1),0}
+        PRINTF :printf{"adapterTOout %x remain %x\n",RULE$copyRule$outVal,remain}
+        CALL/Action :out$enq__ENA{RULE$copyRule$outVal,(remain) == (1)}
         STORE :remain = (remain) + (-1)
         STORE :buffer = (buffer) >> (32)
     }
