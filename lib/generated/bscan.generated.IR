@@ -1,0 +1,85 @@
+INTERFACE BscanIfc(width=64)  {
+    INTERFACE PipeInSync toBscan
+    INTERFACE/Ptr PipeInSync.0 fromBscan
+}
+INTERFACE BscanLocalIfc(width=64)  {
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) capture
+    FIELD/input Bit(1) shift
+    FIELD/input Bit(1) update
+    FIELD/output Bit(1) TDO
+    FIELD/input Bit(1) TDI
+    INTERFACE BscanIfc(width=64) _
+}
+INTERFACE MBSCANE2IFC  {
+    FIELD/output Bit(1) CAPTURE
+    FIELD/Ptr/parameter Bit(8) DISABLE_JTAG
+    FIELD/output Bit(1) DRCK
+    FIELD/parameter Bit(32) JTAG_CHAIN
+    FIELD/output Bit(1) RESET
+    FIELD/output Bit(1) RUNTEST
+    FIELD/output Bit(1) SEL
+    FIELD/output Bit(1) SHIFT
+    FIELD/output Bit(1) TCK
+    FIELD/output Bit(1) TDI
+    FIELD/input Bit(1) TDO
+    FIELD/output Bit(1) TMS
+    FIELD/output Bit(1) UPDATE
+}
+INTERFACE MbufgBUFG  {
+    FIELD/input Bit(1) I
+    FIELD/output Bit(1) O
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( Bit(64) v )
+}
+INTERFACE PipeIn.1  {
+    METHOD/Action enq__ENA ( Bit(64) v )
+}
+INTERFACE PipeInSync  {
+    INTERFACE PipeIn _
+}
+INTERFACE PipeInSync.0  {
+    INTERFACE PipeIn.1 _
+}
+EMODULE BSCANE2 MBSCANE2IFC {
+}
+EMODULE BUFG MbufgBUFG {
+}
+MODULE Bscan(id=3,width=64) BscanIfc(width=64) {
+    INTERFACECONNECT toBscan localBscan$toBscan PipeInSync
+    INTERFACECONNECT fromBscan localBscan$fromBscan PipeInSync.0
+    FIELD BSCANE2 bscan
+    PARAMS bscan <JTAG_CHAIN:3>
+    FIELD BUFG tckbuf
+    FIELD BscanLocal(width=64) localBscan
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :tckbuf$I = bscan$TCK
+        LET Bit(1) :localBscan$CLK = tckbuf$O
+        LET Bit(1) :localBscan$nRST = __defaultnReset
+        LET Bit(1) :localBscan$TDI = bscan$TDI
+        LET Bit(1) :localBscan$TDO = bscan$TDO
+        LET Bit(1) :localBscan$capture = ((bscan$SEL) & (bscan$CAPTURE)) != (0)
+        LET Bit(1) :localBscan$shift = ((bscan$SEL) & (bscan$SHIFT)) != (0)
+        LET Bit(1) :localBscan$update = ((bscan$SEL) & (bscan$UPDATE)) != (0)
+    }
+}
+MODULE BscanLocal(width=64) BscanLocalIfc(width=64) {
+    FIELD Bit(64) shiftReg
+    FIELD Bit(1) notReady
+    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((capture) & ((notReady) ^ (1)))) {
+        STORE :shiftReg = toBscan$enq$v
+        STORE :notReady = 1
+    }
+    METHOD/Rule/Action RULE$shiftRule__ENA if ((shift)) {
+        STORE :shiftReg = __bitconcat{TDI,__bitsubstr{shiftReg,(64) - (1),1}}
+    }
+    METHOD/Rule/Action RULE$updateRule__ENA if ((update)) {
+        CALL/Action :fromBscan$enq__ENA{shiftReg}
+        STORE :notReady = 0
+    }
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :TDO = __bitsubstr{shiftReg,0,0}
+    }
+}

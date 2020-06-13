@@ -53,6 +53,10 @@ template<class T>
 class PipeIn {
     void enq(T v);
 };
+template<class T>
+class PipeInSync {
+    PipeIn<T> _;
+};
 
 template<class T>
 class PipeOut {

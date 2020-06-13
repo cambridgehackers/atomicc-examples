@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 The Connectal Project
+/* Copyright (c) 2020 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -18,14 +18,12 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#ifndef _CLOCKTOP_H_
-#define _CLOCKTOP_H_
-class ClockIfc {
-    __parameter float   CLKIN1_PERIOD;
-    __input  __uint(1)  CLK;
-    __input  __uint(1)  nRST;
-    __output __uint(1)  clockOut;
+
+template <int width>
+class BscanIfc {
+    PipeInSync<__uint(width)> toBscan;
+    PipeInSync<__uint(width)> *fromBscan;
 };
 
-class ClockTop __implements ClockIfc;
-#endif
+template <int id, int width>
+class Bscan __implements BscanIfc<width>;
