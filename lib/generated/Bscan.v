@@ -42,11 +42,15 @@ module Bscan #(
     BUFG tckbuf (
         .I(tckbuf$I),
         .O(tckbuf$O));
+    wire toBscan$enqS__RDY;
+    wire fromBscan$enqS__ENA;
+    SyncFF toS(.CLK(CLK), .nRST(nRST), .out(toBscan$enq__RDY), .in(toBscan$enqS__RDY));
+    SyncFF fromS(.CLK(CLK), .nRST(nRST), .out(fromBscan$enq__ENA), .in(fromBscan$enqS__ENA));
     BscanLocal#(64) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
         .toBscan$enq$v(toBscan$enq$v),
-        .toBscan$enq__RDY(toBscan$enq__RDY),
-        .fromBscan$enq__ENA(fromBscan$enq__ENA),
+        .toBscan$enq__RDY(toBscan$enqS__RDY),
+        .fromBscan$enq__ENA(fromBscan$enqS__ENA),
         .fromBscan$enq$v(fromBscan$enq$v),
         .fromBscan$enq__RDY(fromBscan$enq__RDY),
         .CLK(localBscan$CLK),
