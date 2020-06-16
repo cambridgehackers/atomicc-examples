@@ -1,2 +1,2 @@
 
-GENERATED_CPP=GeneratedCppCallbacks.cpp BscanTIndication.c BscanTRequest.c
+GENERATED_CPP=GeneratedCppCallbacks.cpp BtestIndication.c BtestRequest.c

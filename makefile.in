@@ -69,6 +69,7 @@ gen:
 	$(foreach f, $(ALL_CPPFILES2), --source2 $f) \
         $(foreach f, $(PRINTF_DATAFILE), --printfdata $f) \
 	--nonstrict \
+	$(FILEGENFLAGS) \
 	$(VERBOSE_SWITCH)
 	touch $(BOARD)/Makefile.autotop
 

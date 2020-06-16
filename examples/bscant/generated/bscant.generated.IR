@@ -2,18 +2,22 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE BscanTIfc  {
+INTERFACE BscanIfc(width=32)  {
+    INTERFACE PipeInSync toBscan
+    INTERFACE/Ptr PipeInSync.1 fromBscan
+}
+INTERFACE BtestIfc  {
     SOFTWARE request
     SOFTWARE indication
-    INTERFACE BscanTRequest request
-    INTERFACE/Ptr BscanTIndication indication
+    INTERFACE BtestRequest request
+    INTERFACE/Ptr BtestIndication indication
 }
-INTERFACE BscanTIndication  {
+INTERFACE BtestIndication  {
     METHOD/Action heard__ENA ( Bit(32) v )
     METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
 }
-INTERFACE BscanTRequest  {
+INTERFACE BtestRequest  {
     METHOD/Action say__ENA ( Bit(32) v )
     METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action setLeds__ENA ( Bit(8) v )
@@ -21,8 +25,20 @@ INTERFACE BscanTRequest  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn.0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.2  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeInSync  {
+    INTERFACE PipeIn.0 _
+}
+INTERFACE PipeInSync.1  {
+    INTERFACE PipeIn.2 _
 }
 INTERFACE UserTopIfc  {
     INTERFACE PipeInB(width=32) write
@@ -32,11 +48,14 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
+EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
+}
 EMODULE UserTop UserTopIfc {
 }
 EMODULE l_top l_topIfc {
 }
-MODULE BscanT BscanTIfc {
+MODULE Btest BtestIfc {
+    INTERFACECONNECT readUser bscan$fromBscan PipeInSync.1
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
     FIELD Bit(32) v_temp
@@ -46,28 +65,28 @@ MODULE BscanT BscanTIfc {
     FIELD Bit(16) a_delay
     FIELD Bit(16) b_delay
     FIELD Bit(32) v_type
+    FIELD Bscan(id=3,width=32) bscan
+    INTERFACE PipeInSync.1 readUser
+    FIELD Bit(32) fromB
+    FIELD Bit(32) toB
+    FIELD Bit(1) fromReady
+    FIELD Bit(1) toReady
+    METHOD/Action readUser$enq__ENA ( Bit(64) v ) {
+        STORE :fromB = readUser$enq$v
+        STORE :fromReady = 1
+    }
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
-        STORE :v_temp = request$say$v
-        STORE :busy = 1
-        STORE :v_type = 1
+        STORE :toB = request$say$v
+        STORE :toReady = 1
     }
-    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
-        STORE :a_temp = request$say2$a
-        STORE :b_temp = request$say2$b
-        STORE :busy = 1
-        STORE :v_type = 2
-    }
+    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1)))
     METHOD/Action request$setLeds__ENA ( Bit(8) v )
-    METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        STORE :busy = 0
-        STORE :busy_delay = 1
-        STORE :v_delay = v_temp
-        STORE :a_delay = a_temp
-        STORE :b_delay = b_temp
+    METHOD/Rule/Action RULE$requestRule__ENA if ((toReady)) {
+        CALL/Action :bscan$toBscan$enq__ENA{toB}
+        STORE :toReady = 0
     }
-    METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
-        STORE :busy_delay = 0
-        CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
-        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
+    METHOD/Rule/Action RULE$respond_rule__ENA if ((fromReady)) {
+        CALL/Action :indication$heard__ENA{fromB}
+        STORE :fromReady = 0
     }
 }

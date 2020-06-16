@@ -1,7 +1,7 @@
 `include "bscant.generated.vh"
 
 `default_nettype none
-module ___M2PBscanTIndication (input wire CLK, input wire nRST,
+module ___M2PBtestIndication (input wire CLK, input wire nRST,
     input wire method$heard__ENA,
     input wire [32 - 1:0]method$heard$v,
     output wire method$heard__RDY,

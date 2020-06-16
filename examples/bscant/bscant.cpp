@@ -23,54 +23,57 @@
 #include "funnel.h"
 #include "userTop.h"
 #include "bscan.h"
-#define IfcNames_BscanTIndicationH2S 5
+#define IfcNames_BtestIndicationH2S 5
 
-class BscanTRequest {
+class BtestRequest {
     void say(__int(32) v);
     void say2(__int(16) a, __int(16) b);
     void setLeds(__int(8) v);
 };
-class BscanTIndication {
+class BtestIndication {
     void heard(__int(32) v);
     void heard2(__int(16) a, __int(16) b);
     void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
-class BscanTIfc {
-    __software BscanTRequest                     request;
-    __software BscanTIndication                 *indication;
+class BtestIfc {
+    __software BtestRequest                     request;
+    __software BtestIndication                 *indication;
 };
 
-class BscanT __implements BscanTIfc {
+class Btest __implements BtestIfc {
     __uint(1) busy, busy_delay;
     __int(32) v_temp, v_delay;
     __int(16) a_temp, b_temp, a_delay, b_delay;
     int v_type;
+    Bscan<3,32> bscan;
+    __implements bscan.fromBscan readUser;
+    __int(32) fromB;
+    __int(32) toB;
+    bool fromReady;
+    bool toReady;
+
+    void readUser._.enq(__int(64) v) {
+        fromB = v;
+        fromReady = true;
+    }
+
     void request.say(__int(32) v) if(!busy) {
-        v_temp = v;
-        busy = 1;
-        v_type = 1;
+        toB = v;
+        toReady = true;
     }
     void request.say2(__int(16) a, __int(16) b) if(!busy) {
-        a_temp = a;
-        b_temp = b;
-        busy = 1;
-        v_type = 2;
     }
     void request.setLeds(__int(8) v) {
     }
-    __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
-        busy = 0;
-        busy_delay = 1;
-        v_delay = v_temp;
-        a_delay = a_temp;
-        b_delay = b_temp;
-    };
-    __rule respond_rule if(busy_delay != 0) {
-        busy_delay = 0;
-        if (v_type == 1)
-            indication->heard(v_delay);
-        else
-            indication->heard2(a_delay, b_delay);
+
+    __rule requestRule if (toReady) {
+        bscan.toBscan._.enq(toB);
+        toReady = false;
+    }
+
+    __rule respond_rule if(fromReady) {
+        indication->heard(fromB);
+        fromReady = false;
    };
 };

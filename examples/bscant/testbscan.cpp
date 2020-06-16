@@ -21,16 +21,16 @@
 #include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
-#include "BscanTIndication.h"
-#include "BscanTRequest.h"
+#include "BtestIndication.h"
+#include "BtestRequest.h"
 #include "GeneratedTypes.h"
 void atomiccPrintfInit(const char *filename);
 
-static BscanTRequestProxy *echoRequestProxy = 0;
+static BtestRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
 static int limitSay2 = 5;
 
-class BscanTIndication : public BscanTIndicationWrapper
+class BtestIndication : public BtestIndicationWrapper
 {
 public:
     virtual void heard(uint32_t v) {
@@ -45,7 +45,7 @@ public:
     virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
         printf("heard an echo3: %d %d\n", a, b);
     }
-    BscanTIndication(unsigned int id, PortalTransportFunctions *item, void *param) : BscanTIndicationWrapper(id, item, param) {}
+    BtestIndication(unsigned int id, PortalTransportFunctions *item, void *param) : BtestIndicationWrapper(id, item, param) {}
 };
 
 static void call_say(int v)
@@ -69,8 +69,8 @@ int main(int argc, const char **argv)
 
     //atomiccPrintfInit("generated/rulec.generated.printf");
 #if 0
-    BscanTIndication echoIndication(IfcNames_BscanTIndicationH2S, NULL, NULL);
-    echoRequestProxy = new BscanTRequestProxy(IfcNames_BscanTRequestS2H);
+    BtestIndication echoIndication(IfcNames_BtestIndicationH2S, NULL, NULL);
+    echoRequestProxy = new BtestRequestProxy(IfcNames_BtestRequestS2H);
 #elif 1
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
 #ifdef SIMULATION
@@ -81,12 +81,12 @@ int main(int argc, const char **argv)
         NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
-    BscanTIndication echoIndication(IfcNames_BscanTIndicationH2S, &transportMux, &param);
-    echoRequestProxy = new BscanTRequestProxy(IfcNames_BscanTRequestS2H, &transportMux, &param);
+    BtestIndication echoIndication(IfcNames_BtestIndicationH2S, &transportMux, &param);
+    echoRequestProxy = new BtestRequestProxy(IfcNames_BtestRequestS2H, &transportMux, &param);
 #else
     PortalSocketParam paramSocket = {};
-    BscanTIndication echoIndication(IfcNames_BscanTIndicationH2S, &transportSocketInit, &paramSocket);
-    echoRequestProxy = new BscanTRequestProxy(IfcNames_BscanTRequestS2H, &transportReuse, &echoIndication.pint);
+    BtestIndication echoIndication(IfcNames_BtestIndicationH2S, &transportSocketInit, &paramSocket);
+    echoRequestProxy = new BtestRequestProxy(IfcNames_BtestRequestS2H, &transportReuse, &echoIndication.pint);
 #endif
 
     int status = setClockFrequency(0, requestedFrequency, &actualFrequency);
@@ -95,7 +95,7 @@ int main(int argc, const char **argv)
 	    (double)actualFrequency * 1.0e-6,
 	    status, (status != 0) ? errno : 0);
 
-    int v = 42;
+    int v = 0xbeefaa55; //42;
     printf("Saying %d\n", v);
     call_say(v);
     call_say(v*5);
