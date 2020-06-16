@@ -1,0 +1,73 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE BscanTIfc  {
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE BscanTRequest request
+    INTERFACE/Ptr BscanTIndication indication
+}
+INTERFACE BscanTIndication  {
+    METHOD/Action heard__ENA ( Bit(32) v )
+    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
+}
+INTERFACE BscanTRequest  {
+    METHOD/Action say__ENA ( Bit(32) v )
+    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action setLeds__ENA ( Bit(8) v )
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeInB(width=32)  {
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB(width=32) write
+    INTERFACE/Ptr PipeInB(width=32) read
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE UserTop UserTopIfc {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE BscanT BscanTIfc {
+    FIELD Bit(1) busy
+    FIELD Bit(1) busy_delay
+    FIELD Bit(32) v_temp
+    FIELD Bit(32) v_delay
+    FIELD Bit(16) a_temp
+    FIELD Bit(16) b_temp
+    FIELD Bit(16) a_delay
+    FIELD Bit(16) b_delay
+    FIELD Bit(32) v_type
+    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
+        STORE :v_temp = request$say$v
+        STORE :busy = 1
+        STORE :v_type = 1
+    }
+    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
+        STORE :a_temp = request$say2$a
+        STORE :b_temp = request$say2$b
+        STORE :busy = 1
+        STORE :v_type = 2
+    }
+    METHOD/Action request$setLeds__ENA ( Bit(8) v )
+    METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+        STORE :busy = 0
+        STORE :busy_delay = 1
+        STORE :v_delay = v_temp
+        STORE :a_delay = a_temp
+        STORE :b_delay = b_temp
+    }
+    METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
+        STORE :busy_delay = 0
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
+        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
+    }
+}
