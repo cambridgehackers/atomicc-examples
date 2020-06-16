@@ -1,0 +1,15 @@
+INTERFACE SyncFFIfc  {
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) out
+    FIELD/input Bit(1) in
+}
+MODULE SyncFF SyncFFIfc {
+    FIELD Bit(1) one
+    FIELD Bit(1) two
+    METHOD/Rule/Action RULE$init__ENA {
+        STORE :one = in
+        STORE :two = one
+        LET Bit(1) :out = two
+    }
+}
