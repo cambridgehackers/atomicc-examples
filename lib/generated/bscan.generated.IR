@@ -1,6 +1,6 @@
 INTERFACE BscanIfc(width=64)  {
-    INTERFACE PipeInSync toBscan
-    INTERFACE/Ptr PipeInSync.0 fromBscan
+    INTERFACE PipeIn toBscan
+    INTERFACE/Ptr PipeIn.0 fromBscan
 }
 INTERFACE BscanLocalIfc(width=64)  {
     FIELD/input Bit(1) CLK
@@ -10,7 +10,8 @@ INTERFACE BscanLocalIfc(width=64)  {
     FIELD/input Bit(1) update
     FIELD/output Bit(1) TDO
     FIELD/input Bit(1) TDI
-    INTERFACE BscanIfc(width=64) _
+    INTERFACE PipeInSync toBscan
+    INTERFACE/Ptr PipeInSync.2 fromBscan
 }
 INTERFACE MBSCANE2IFC  {
     FIELD/output Bit(1) CAPTURE
@@ -34,26 +35,44 @@ INTERFACE MbufgBUFG  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( Bit(64) v )
 }
+INTERFACE PipeIn.0  {
+    METHOD/Action enq__ENA ( Bit(64) v )
+}
 INTERFACE PipeIn.1  {
     METHOD/Action enq__ENA ( Bit(64) v )
 }
-INTERFACE PipeInSync  {
-    INTERFACE PipeIn _
+INTERFACE PipeIn.3  {
+    METHOD/Action enq__ENA ( Bit(64) v )
 }
-INTERFACE PipeInSync.0  {
+INTERFACE PipeIn.5  {
+    METHOD/Action enq__ENA ( Bit(3) v )
+}
+INTERFACE PipeInSync  {
     INTERFACE PipeIn.1 _
+}
+INTERFACE PipeInSync.2  {
+    INTERFACE PipeIn.3 _
+}
+INTERFACE PipeInSync.4  {
+    INTERFACE PipeIn.5 _
 }
 EMODULE BSCANE2 MBSCANE2IFC {
 }
 EMODULE BUFG MbufgBUFG {
 }
 MODULE Bscan(id=3,width=64) BscanIfc(width=64) {
-    INTERFACECONNECT toBscan localBscan$toBscan PipeInSync
-    INTERFACECONNECT fromBscan localBscan$fromBscan PipeInSync.0
+    INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync.4
     FIELD BSCANE2 bscan
     PARAMS bscan <JTAG_CHAIN:3>
     FIELD BUFG tckbuf
     FIELD BscanLocal(width=64) localBscan
+    INTERFACE PipeInSync.4 readBscan
+    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
+        CALL/Action :localBscan$toBscan$enq__ENA{toBscan$enq$v}
+    }
+    METHOD/Action readBscan$enq__ENA ( Bit(width) v ) {
+        CALL/Action :fromBscan$enq__ENA{readBscan$enq$v}
+    }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :tckbuf$I = bscan$TCK
         LET Bit(1) :localBscan$CLK = tckbuf$O

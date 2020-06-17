@@ -21,8 +21,8 @@
 
 template <int width>
 class BscanIfc {
-    PipeInSync<__uint(width)> toBscan;
-    PipeInSync<__uint(width)> *fromBscan;
+    PipeIn<__uint(width)> toBscan;
+    PipeIn<__uint(width)> *fromBscan;
 };
 
 template <int id, int width>

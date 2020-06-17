@@ -5,6 +5,10 @@
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; tckbuf; BUFG;
 //METAINTERNAL; localBscan; BscanLocal(width=64);
+//METAINVOKE; toBscan$enq__ENA; :localBscan$toBscan$enq__ENA;
+//METAGUARD; toBscan$enq; localBscan$toBscan$enq__RDY;
+//METAINVOKE; readBscan$enq__ENA; :fromBscan$enq__ENA;
+//METAGUARD; readBscan$enq; fromBscan$enq__RDY;
 //METAGUARD; RULE$init; 1;
 //METARULES; RULE$init
 //METASTART; BscanLocal

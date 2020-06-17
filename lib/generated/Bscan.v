@@ -24,6 +24,8 @@ module Bscan #(
     wire localBscan$capture;
     wire localBscan$nRST;
     wire localBscan$shift;
+    wire [64 - 1:0]localBscan$toBscan$enq$v;
+    wire localBscan$toBscan$enq__RDY;
     wire localBscan$update;
     wire tckbuf$I;
     wire tckbuf$O;
@@ -48,8 +50,8 @@ module Bscan #(
     SyncFF fromS(.CLK(CLK), .nRST(nRST), .out(fromBscan$enq__ENA), .in(fromBscan$enqS__ENA));
     BscanLocal#(64) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
-        .toBscan$enq$v(toBscan$enq$v),
-        .toBscan$enq__RDY(toBscan$enqS__RDY),
+        .toBscan$enq$v(localBscan$toBscan$enq$v),
+        .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),
         .fromBscan$enq__ENA(fromBscan$enqS__ENA),
         .fromBscan$enq$v(fromBscan$enq$v),
         .fromBscan$enq__RDY(fromBscan$enq__RDY),
@@ -65,8 +67,10 @@ module Bscan #(
     assign localBscan$capture = bscan$SEL && bscan$CAPTURE;
     assign localBscan$nRST = nRST;
     assign localBscan$shift = bscan$SEL && bscan$SHIFT;
+    assign localBscan$toBscan$enq$v = toBscan$enq$v;
     assign localBscan$update = bscan$SEL && bscan$UPDATE;
     assign tckbuf$I = bscan$TCK;
+    assign toBscan$enqS__RDY = localBscan$toBscan$enq__RDY;
     // Extra assigments, not to output wires
     assign localBscan$TDO = bscan$TDO;
 endmodule 

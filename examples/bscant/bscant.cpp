@@ -19,21 +19,14 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "fifo.h"
-#include "funnel.h"
-#include "userTop.h"
+#include "userTop.h" // to get PipeIn<NOCDataH>
 #include "bscan.h"
-#define IfcNames_BtestIndicationH2S 5
 
 class BtestRequest {
     void say(__int(32) v);
-    void say2(__int(16) a, __int(16) b);
-    void setLeds(__int(8) v);
 };
 class BtestIndication {
     void heard(__int(32) v);
-    void heard2(__int(16) a, __int(16) b);
-    void heard3(__int(16) a, __int(32) b, __int(32) c, __int(16) d);
 };
 
 class BtestIfc {
@@ -42,38 +35,16 @@ class BtestIfc {
 };
 
 class Btest __implements BtestIfc {
-    __uint(1) busy, busy_delay;
-    __int(32) v_temp, v_delay;
-    __int(16) a_temp, b_temp, a_delay, b_delay;
-    int v_type;
     Bscan<3,32> bscan;
     __implements bscan.fromBscan readUser;
-    __int(32) fromB;
-    __int(32) toB;
-    bool fromReady;
-    bool toReady;
+    __int(8) readCount, writeCount;
 
-    void readUser._.enq(__int(64) v) {
-        fromB = v;
-        fromReady = true;
+    void readUser.enq(__int(64) v) {
+        indication->heard(__bitconcat(writeCount, readCount, __bitsubstr(v, 15, 0)));
+        readCount++;
     }
-
-    void request.say(__int(32) v) if(!busy) {
-        toB = v;
-        toReady = true;
+    void request.say(__int(32) v) {
+        bscan.toBscan.enq(v);
+        writeCount++;
     }
-    void request.say2(__int(16) a, __int(16) b) if(!busy) {
-    }
-    void request.setLeds(__int(8) v) {
-    }
-
-    __rule requestRule if (toReady) {
-        bscan.toBscan._.enq(toB);
-        toReady = false;
-    }
-
-    __rule respond_rule if(fromReady) {
-        indication->heard(fromB);
-        fromReady = false;
-   };
 };

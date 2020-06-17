@@ -28,22 +28,16 @@ void atomiccPrintfInit(const char *filename);
 
 static BtestRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
-static int limitSay2 = 5;
 
+int sequence;
 class BtestIndication : public BtestIndicationWrapper
 {
 public:
     virtual void heard(uint32_t v) {
-        printf("heard an echo: %d\n", v);
-        if (limitSay2-- > 0)
-	echoRequestProxy->say2(v, 2*v);
-    }
-    virtual void heard2(uint16_t a, uint16_t b) {
-        sem_post(&sem_heard2);
-        printf("heard an echo2: %d %d\n", a, b);
-    }
-    virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
-        printf("heard an echo3: %d %d\n", a, b);
+        printf("heard an echo: %x\n", v);
+	echoRequestProxy->say(v << 16 | (sequence & 0xffff));
+        sequence += 0x1001;
+        //sem_post(&sem_heard2);
     }
     BtestIndication(unsigned int id, PortalTransportFunctions *item, void *param) : BtestIndicationWrapper(id, item, param) {}
 };
@@ -52,13 +46,6 @@ static void call_say(int v)
 {
     printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
     echoRequestProxy->say(v);
-    sem_wait(&sem_heard2);
-}
-
-static void call_say2(int v, int v2)
-{
-    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
-    echoRequestProxy->say2(v, v2);
     sem_wait(&sem_heard2);
 }
 
@@ -101,9 +88,6 @@ int main(int argc, const char **argv)
     call_say(v*5);
     call_say(v*17);
     call_say(v*93);
-    call_say2(v, v*3);
-    printf("TEST TYPE: SEM\n");
-    echoRequestProxy->setLeds(9);
 sleep(2);
     return 0;
 }

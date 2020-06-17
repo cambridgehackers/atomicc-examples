@@ -38,7 +38,8 @@ class BscanLocalIfc {
     __input  bool       update;
     __output __uint(1)  TDO;
     __input  __uint(1)  TDI;
-    BscanIfc<width> _;
+    PipeInSync<__uint(width)> toBscan;
+    PipeInSync<__uint(width)> *fromBscan;
 };
 
 template <int width>
@@ -46,7 +47,7 @@ class BscanLocal __implements BscanLocalIfc<width> {
     __uint(width) shiftReg;
     bool notReady;
 
-    void _.toBscan._.enq(__uint(width) v) if (this->capture & !notReady) {
+    void toBscan._.enq(__uint(width) v) if (this->capture & !notReady) {
         shiftReg = v;
         notReady = true;
     };
@@ -54,7 +55,7 @@ class BscanLocal __implements BscanLocalIfc<width> {
         shiftReg = __bitconcat(this->TDI, __bitsubstr(shiftReg, width - 1, 1));
     };
     __rule updateRule  if (this->update) {
-        this->_.fromBscan->_.enq(shiftReg);
+        this->fromBscan->_.enq(shiftReg);
         notReady = false;
     };
     __rule init {
@@ -67,8 +68,14 @@ class Bscan __implements BscanIfc<width> {
     BSCANE2#(JTAG_CHAIN = 3/*id*/) bscan;
     BUFG tckbuf;
     BscanLocal<width> localBscan;
-    __connect this->toBscan = localBscan._.toBscan;
-    __connect this->fromBscan = localBscan._.fromBscan;
+    __implements localBscan.fromBscan readBscan;
+
+    void toBscan.enq(__uint(width) v) {
+        localBscan.toBscan._.enq(v);
+    }
+    void readBscan._.enq(__uint(width) v) {
+        this->fromBscan->enq(v);
+    }
 
     __rule init {
         tckbuf.I = bscan.TCK;

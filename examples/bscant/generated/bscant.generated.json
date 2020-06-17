@@ -18,28 +18,11 @@
         { "cdecls": [
                 { "dname": "heard", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
-                    ] },
-                { "dname": "heard2", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
-                    ] },
-                { "dname": "heard3", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "c", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "d", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
                     ] }
             ], "direction": "1", "cname": "BtestIndication" },
         { "cdecls": [
                 { "dname": "say", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
-                    ] },
-                { "dname": "say2", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
-                    ] },
-                { "dname": "setLeds", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
                     ] }
             ], "direction": "0", "cname": "BtestRequest" }
     ]

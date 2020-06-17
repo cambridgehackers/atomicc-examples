@@ -3,8 +3,8 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE BscanIfc(width=32)  {
-    INTERFACE PipeInSync toBscan
-    INTERFACE/Ptr PipeInSync.1 fromBscan
+    INTERFACE PipeIn.0 toBscan
+    INTERFACE/Ptr PipeIn.1 fromBscan
 }
 INTERFACE BtestIfc  {
     SOFTWARE request
@@ -14,13 +14,9 @@ INTERFACE BtestIfc  {
 }
 INTERFACE BtestIndication  {
     METHOD/Action heard__ENA ( Bit(32) v )
-    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
-    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
 }
 INTERFACE BtestRequest  {
     METHOD/Action say__ENA ( Bit(32) v )
-    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
-    METHOD/Action setLeds__ENA ( Bit(8) v )
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
@@ -28,17 +24,11 @@ INTERFACE PipeIn  {
 INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn.1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
-INTERFACE PipeInSync  {
-    INTERFACE PipeIn.0 _
-}
-INTERFACE PipeInSync.1  {
-    INTERFACE PipeIn.2 _
 }
 INTERFACE UserTopIfc  {
     INTERFACE PipeInB(width=32) write
@@ -55,38 +45,17 @@ EMODULE UserTop UserTopIfc {
 EMODULE l_top l_topIfc {
 }
 MODULE Btest BtestIfc {
-    INTERFACECONNECT readUser bscan$fromBscan PipeInSync.1
-    FIELD Bit(1) busy
-    FIELD Bit(1) busy_delay
-    FIELD Bit(32) v_temp
-    FIELD Bit(32) v_delay
-    FIELD Bit(16) a_temp
-    FIELD Bit(16) b_temp
-    FIELD Bit(16) a_delay
-    FIELD Bit(16) b_delay
-    FIELD Bit(32) v_type
+    INTERFACECONNECT readUser bscan$fromBscan PipeIn.1
     FIELD Bscan(id=3,width=32) bscan
-    INTERFACE PipeInSync.1 readUser
-    FIELD Bit(32) fromB
-    FIELD Bit(32) toB
-    FIELD Bit(1) fromReady
-    FIELD Bit(1) toReady
+    INTERFACE PipeIn.1 readUser
+    FIELD Bit(8) readCount
+    FIELD Bit(8) writeCount
     METHOD/Action readUser$enq__ENA ( Bit(64) v ) {
-        STORE :fromB = readUser$enq$v
-        STORE :fromReady = 1
+        CALL/Action :indication$heard__ENA{__bitconcat{writeCount,readCount,__bitsubstr{readUser$enq$v,15,0}}}
+        STORE :readCount = (readCount) + (1)
     }
-    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
-        STORE :toB = request$say$v
-        STORE :toReady = 1
-    }
-    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1)))
-    METHOD/Action request$setLeds__ENA ( Bit(8) v )
-    METHOD/Rule/Action RULE$requestRule__ENA if ((toReady)) {
-        CALL/Action :bscan$toBscan$enq__ENA{toB}
-        STORE :toReady = 0
-    }
-    METHOD/Rule/Action RULE$respond_rule__ENA if ((fromReady)) {
-        CALL/Action :indication$heard__ENA{fromB}
-        STORE :fromReady = 0
+    METHOD/Action request$say__ENA ( Bit(32) v ) {
+        CALL/Action :bscan$toBscan$enq__ENA{request$say$v}
+        STORE :writeCount = (writeCount) + (1)
     }
 }
