@@ -13,10 +13,10 @@ INTERFACE BtestIfc  {
     INTERFACE/Ptr BtestIndication indication
 }
 INTERFACE BtestIndication  {
-    METHOD/Action heard__ENA ( Bit(32) v )
+    METHOD/Action heard__ENA ( Bit(32) v , Bit(8) writeCount , Bit(8) readCount , Bit(8) seqno )
 }
 INTERFACE BtestRequest  {
-    METHOD/Action say__ENA ( Bit(32) v )
+    METHOD/Action say__ENA ( Bit(32) v , Bit(8) seqno )
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
@@ -50,12 +50,17 @@ MODULE Btest BtestIfc {
     INTERFACE PipeIn.1 readUser
     FIELD Bit(8) readCount
     FIELD Bit(8) writeCount
+    FIELD Bit(8) seqval
+    FIELD Bit(32) counter
     METHOD/Action readUser$enq__ENA ( Bit(64) v ) {
-        CALL/Action :indication$heard__ENA{__bitconcat{writeCount,readCount,__bitsubstr{readUser$enq$v,15,0}}}
+        CALL/Action :indication$heard__ENA{readUser$enq$v,writeCount,readCount,seqval}
         STORE :readCount = (readCount) + (1)
     }
-    METHOD/Action request$say__ENA ( Bit(32) v ) {
+    METHOD/Action request$say__ENA ( Bit(32) v , Bit(8) seqno ) {
         CALL/Action :bscan$toBscan$enq__ENA{request$say$v}
+        STORE :seqval = request$say$seqno
+        PRINTF :printf{"REQUESTSAY v %x seqno %x\n",request$say$v,request$say$seqno}
         STORE :writeCount = (writeCount) + (1)
+        STORE :counter = (counter) + (-1)
     }
 }

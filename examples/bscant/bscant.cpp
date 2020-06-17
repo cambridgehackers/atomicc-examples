@@ -23,10 +23,10 @@
 #include "bscan.h"
 
 class BtestRequest {
-    void say(__int(32) v);
+    void say(__uint(32) v, __uint(8) seqno);
 };
 class BtestIndication {
-    void heard(__int(32) v);
+    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(8) seqno);
 };
 
 class BtestIfc {
@@ -37,14 +37,18 @@ class BtestIfc {
 class Btest __implements BtestIfc {
     Bscan<3,32> bscan;
     __implements bscan.fromBscan readUser;
-    __int(8) readCount, writeCount;
+    __uint(8) readCount, writeCount, seqval;
+    __int(32) counter;
 
     void readUser.enq(__int(64) v) {
-        indication->heard(__bitconcat(writeCount, readCount, __bitsubstr(v, 15, 0)));
+        indication->heard(v, writeCount, readCount, seqval);
         readCount++;
     }
-    void request.say(__int(32) v) {
+    void request.say(__uint(32) v, __uint(8) seqno) {
         bscan.toBscan.enq(v);
+        seqval = seqno;
+        printf("REQUESTSAY v %x seqno %x\n", v, seqno);
         writeCount++;
+        counter--;
     }
 };

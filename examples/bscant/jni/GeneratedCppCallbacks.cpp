@@ -10,8 +10,8 @@ int BtestIndicationdisconnect_cb (struct PortalInternal *p) {
     (static_cast<BtestIndicationWrapper *>(p->parent))->disconnect();
     return 0;
 };
-int BtestIndicationheard_cb (  struct PortalInternal *p, const uint32_t v ) {
-    (static_cast<BtestIndicationWrapper *>(p->parent))->heard ( v);
+int BtestIndicationheard_cb (  struct PortalInternal *p, const uint32_t v, const uint8_t writeCount, const uint8_t readCount, const uint8_t seqno ) {
+    (static_cast<BtestIndicationWrapper *>(p->parent))->heard ( v, writeCount, readCount, seqno);
     return 0;
 };
 BtestIndicationCb BtestIndication_cbTable = {
