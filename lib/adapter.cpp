@@ -27,16 +27,16 @@ class AdapterToBus __implements AtB<T, width> {
    LenType                   remain;
 
    void in.enq(T v) if (remain == 0) {
-      buffer = __bit_cast<decltype(buffer)>(v.data);
+      buffer = __bit_cast<decltype(buffer)>(v);
       remain = v.length;
-      printf ("adapterTOin %x length %x\n", v.data, v.length);
+      //printf ("adapterTOin %x length %x\n", v.data, v.length);
    }
    __rule copyRule if (remain != 0) {
-      __uint(width) outVal = __bitsubstr(buffer, width - 1, 0);
-      printf ("adapterTOout %x remain %x\n", outVal, remain);
+      __uint(width) outVal = __bitsubstr(buffer, __bitsize(T) - 1, __bitsize(T) - width);
+      //printf ("adapterTOout %x remain %x\n", outVal, remain);
       this->out->enq(outVal, remain == 1);
       remain--;
-      buffer >>= width;
+      buffer <<= width;
    }
 };
 
@@ -49,7 +49,7 @@ class AdapterFromBus __implements AfB<width, T> {
    void in.enq(__uint(width) v, bool last) if (!waitForEnq) {
       printf("adapterFROMin %x last %x buffer %x\n", v, last, buffer);
       LenType newLength = length + 1;
-      buffer = __bitconcat(__bitsubstr(buffer, __bitsize(buffer) - width - 1, __bitsize(LenType)), v, __bit_cast<__uint(__bitsize(LenType))>(newLength));
+      buffer = __bitconcat(v, __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(LenType) + width), __bit_cast<__uint(__bitsize(LenType))>(newLength));
       length = newLength;
       if (last)  // this is the last beat
           waitForEnq = true;

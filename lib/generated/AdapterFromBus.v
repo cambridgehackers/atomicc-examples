@@ -38,7 +38,7 @@ module AdapterFromBus #(
             $display( "adapterFROMout %x" , buffer );
         end; // End of RULE$pushValue__ENA
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
-            buffer <= { buffer[ ( ( 144 - width ) - 1 ) : 16 ] , in$enq$v , in$enq$newLength };
+            buffer <= { in$enq$v , buffer[ ( 144 - 1 ) : ( 16 + width ) ] , in$enq$newLength };
             length <= in$enq$newLength;
             $display( "adapterFROMin %x last %x buffer %x" , in$enq$v , in$enq$last , buffer );
             if (in$enq$last)

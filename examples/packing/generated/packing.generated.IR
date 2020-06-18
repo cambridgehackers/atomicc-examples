@@ -1,0 +1,48 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE PackIfc  {
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE PackRequest request
+    INTERFACE/Ptr PackIndication indication
+}
+INTERFACE PackIndication  {
+    METHOD/Action heard__ENA ( Bit(32) v , Bit(8) writeCount , Bit(8) readCount , Bit(8) seqno )
+}
+INTERFACE PackRequest  {
+    METHOD/Action say__ENA ( Bit(32) v , Bit(8) seqno )
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeInB(width=32)  {
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB(width=32) write
+    INTERFACE/Ptr PipeInB(width=32) read
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE UserTop UserTopIfc {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE Pack PackIfc {
+    FIELD Bit(8) readCount
+    FIELD Bit(8) writeCount
+    FIELD Bit(8) seqval
+    FIELD Bit(32) counter
+    METHOD/Action request$say__ENA ( Bit(32) v , Bit(8) seqno ) {
+        STORE :seqval = request$say$seqno
+        PRINTF :printf{"REQUESTSAY v %x write %x read %x seqno %x\n",request$say$v,(writeCount) + (32),(readCount) + (64),request$say$seqno}
+        CALL/Action :indication$heard__ENA{request$say$v,(writeCount) + (32),(readCount) + (64),seqval}
+        STORE :writeCount = (writeCount) + (1)
+        STORE :counter = (counter) + (-1)
+        STORE :readCount = (readCount) + (16)
+    }
+}
