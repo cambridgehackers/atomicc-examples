@@ -25,6 +25,6 @@
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; method$heard; pipe$enq__RDY;
 //METASTART; ___P2MBtestRequest
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( 31 + 16 ) : ( 16 + 16 ) ] == 16'd0:method$say__ENA;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method$say__ENA;
 //METAGUARD; pipe$enq; method$say__RDY;
 `endif
