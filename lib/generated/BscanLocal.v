@@ -20,10 +20,14 @@ module BscanLocal #(
     reg [width - 1:0]shiftReg;
     wire RULE$shiftRule__RDY;
     wire RULE$updateRule__RDY;
-    wire toBscan$enqS__ENA;
     wire fromBscan$enqS__RDY;
-    SyncFF toS(.CLK(CLK), .nRST(nRST), .out(toBscan$enqS__ENA), .in(toBscan$enq__ENA));
-    SyncFF fromS(.CLK(CLK), .nRST(nRST), .out(fromBscan$enqS__RDY), .in(fromBscan$enq__RDY));
+    wire toBscan$enqS__ENA;
+    SyncFF fromBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
+        .out(fromBscan$enqS__RDY),
+        .in(fromBscan$enq__RDY));
+    SyncFF toBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
+        .out(toBscan$enqS__ENA),
+        .in(toBscan$enq__ENA));
     assign TDO = shiftReg[ 0 : 0 ];
     assign fromBscan$enq$v = shiftReg;
     assign fromBscan$enq__ENA = RULE$updateRule__RDY;
@@ -44,10 +48,10 @@ module BscanLocal #(
         if (RULE$updateRule__RDY) begin // RULE$updateRule__ENA
             notReady <= 0;
         end; // End of RULE$updateRule__ENA
-        if (toBscan$enqS__ENA && toBscan$enq__RDY) begin // toBscan$enqS__ENA
+        if (toBscan$enqS__ENA && toBscan$enq__RDY) begin // toBscan$enq__ENA
             shiftReg <= toBscan$enq$v;
             notReady <= 1;
-        end; // End of toBscan$enqS__ENA
+        end; // End of toBscan$enq__ENA
       end
     end // always @ (posedge CLK)
 endmodule 

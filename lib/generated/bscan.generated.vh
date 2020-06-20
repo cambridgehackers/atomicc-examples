@@ -4,7 +4,7 @@
 //METASTART; Bscan
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; tckbuf; BUFG;
-//METAINTERNAL; localBscan; BscanLocal(width=64);
+//METAINTERNAL; localBscan; BscanLocal(width=32);
 //METAINVOKE; toBscan$enq__ENA; :localBscan$toBscan$enq__ENA;
 //METAGUARD; toBscan$enq; localBscan$toBscan$enq__RDY;
 //METAINVOKE; readBscan$enq__ENA; :fromBscan$enq__ENA;

@@ -1,8 +1,8 @@
-INTERFACE BscanIfc(width=64)  {
+INTERFACE BscanIfc(width=32)  {
     INTERFACE PipeIn toBscan
     INTERFACE/Ptr PipeIn.0 fromBscan
 }
-INTERFACE BscanLocalIfc(width=64)  {
+INTERFACE BscanLocalIfc(width=32)  {
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) capture
@@ -33,16 +33,16 @@ INTERFACE MbufgBUFG  {
     FIELD/output Bit(1) O
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( Bit(64) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn.0  {
-    METHOD/Action enq__ENA ( Bit(64) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn.1  {
-    METHOD/Action enq__ENA ( Bit(64) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn.3  {
-    METHOD/Action enq__ENA ( Bit(64) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn.5  {
     METHOD/Action enq__ENA ( Bit(3) v )
@@ -60,12 +60,12 @@ EMODULE BSCANE2 MBSCANE2IFC {
 }
 EMODULE BUFG MbufgBUFG {
 }
-MODULE Bscan(id=3,width=64) BscanIfc(width=64) {
+MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync.4
     FIELD BSCANE2 bscan
     PARAMS bscan <JTAG_CHAIN:3>
     FIELD BUFG tckbuf
-    FIELD BscanLocal(width=64) localBscan
+    FIELD BscanLocal(width=32) localBscan
     INTERFACE PipeInSync.4 readBscan
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
         CALL/Action :localBscan$toBscan$enq__ENA{toBscan$enq$v}
@@ -84,15 +84,15 @@ MODULE Bscan(id=3,width=64) BscanIfc(width=64) {
         LET Bit(1) :localBscan$update = ((bscan$SEL) & (bscan$UPDATE)) != (0)
     }
 }
-MODULE BscanLocal(width=64) BscanLocalIfc(width=64) {
-    FIELD Bit(64) shiftReg
+MODULE BscanLocal(width=32) BscanLocalIfc(width=32) {
+    FIELD Bit(32) shiftReg
     FIELD Bit(1) notReady
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((capture) & ((notReady) ^ (1)))) {
         STORE :shiftReg = toBscan$enq$v
         STORE :notReady = 1
     }
     METHOD/Rule/Action RULE$shiftRule__ENA if ((shift)) {
-        STORE :shiftReg = __bitconcat{TDI,__bitsubstr{shiftReg,(64) - (1),1}}
+        STORE :shiftReg = __bitconcat{TDI,__bitsubstr{shiftReg,(32) - (1),1}}
     }
     METHOD/Rule/Action RULE$updateRule__ENA if ((update)) {
         CALL/Action :fromBscan$enq__ENA{shiftReg}

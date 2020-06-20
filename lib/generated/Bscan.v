@@ -18,6 +18,7 @@ module Bscan #(
     wire bscan$TDI;
     wire bscan$TDO;
     wire bscan$UPDATE;
+    wire fromBscan$enqS__ENA;
     wire localBscan$CLK;
     wire localBscan$TDI;
     wire localBscan$TDO;
@@ -29,6 +30,7 @@ module Bscan #(
     wire localBscan$update;
     wire tckbuf$I;
     wire tckbuf$O;
+    wire toBscan$enqS__RDY;
     BSCANE2#(.JTAG_CHAIN(3)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),
@@ -44,10 +46,6 @@ module Bscan #(
     BUFG tckbuf (
         .I(tckbuf$I),
         .O(tckbuf$O));
-    wire toBscan$enqS__RDY;
-    wire fromBscan$enqS__ENA;
-    SyncFF toS(.CLK(CLK), .nRST(nRST), .out(toBscan$enq__RDY), .in(toBscan$enqS__RDY));
-    SyncFF fromS(.CLK(CLK), .nRST(nRST), .out(fromBscan$enq__ENA), .in(fromBscan$enqS__ENA));
     BscanLocal#(32) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
         .toBscan$enq$v(localBscan$toBscan$enq$v),
@@ -62,6 +60,12 @@ module Bscan #(
         .update(localBscan$update),
         .TDO(localBscan$TDO),
         .TDI(localBscan$TDI));
+    SyncFF fromBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
+        .out(fromBscan$enq__ENA),
+        .in(fromBscan$enqS__ENA));
+    SyncFF toBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
+        .out(toBscan$enq__RDY),
+        .in(toBscan$enqS__RDY));
     assign localBscan$CLK = tckbuf$O;
     assign localBscan$TDI = bscan$TDI;
     assign localBscan$capture = bscan$SEL && bscan$CAPTURE;
