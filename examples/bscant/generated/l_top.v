@@ -8,12 +8,16 @@ module l_top (input wire CLK, input wire nRST,
     input wire request$enq__ENA,
     input wire [(16 + 128) - 1:0]request$enq$v,
     output wire request$enq__RDY);
+    wire [8 - 1:0]DUT__Btest$indication$ack$seqno;
+    wire [32 - 1:0]DUT__Btest$indication$ack$v;
+    wire DUT__Btest$indication$ack__ENA;
+    wire [32 - 1:0]DUT__Btest$indication$heard$next;
     wire [8 - 1:0]DUT__Btest$indication$heard$readCount;
-    wire [8 - 1:0]DUT__Btest$indication$heard$seqno;
     wire [32 - 1:0]DUT__Btest$indication$heard$v;
     wire [8 - 1:0]DUT__Btest$indication$heard$writeCount;
     wire DUT__Btest$indication$heard__ENA;
     wire DUT__Btest$request$say__RDY;
+    wire M2P__indication$method$ack__RDY;
     wire M2P__indication$method$heard__RDY;
     wire [8 - 1:0]P2M__request$method$say$seqno;
     wire [32 - 1:0]P2M__request$method$say$v;
@@ -23,18 +27,26 @@ module l_top (input wire CLK, input wire nRST,
         .request$say$v(P2M__request$method$say$v),
         .request$say$seqno(P2M__request$method$say$seqno),
         .request$say__RDY(DUT__Btest$request$say__RDY),
+        .indication$ack__ENA(DUT__Btest$indication$ack__ENA),
+        .indication$ack$v(DUT__Btest$indication$ack$v),
+        .indication$ack$seqno(DUT__Btest$indication$ack$seqno),
+        .indication$ack__RDY(M2P__indication$method$ack__RDY),
         .indication$heard__ENA(DUT__Btest$indication$heard__ENA),
         .indication$heard$v(DUT__Btest$indication$heard$v),
         .indication$heard$writeCount(DUT__Btest$indication$heard$writeCount),
         .indication$heard$readCount(DUT__Btest$indication$heard$readCount),
-        .indication$heard$seqno(DUT__Btest$indication$heard$seqno),
+        .indication$heard$next(DUT__Btest$indication$heard$next),
         .indication$heard__RDY(M2P__indication$method$heard__RDY));
     ___M2PBtestIndication M2P__indication (.CLK(CLK), .nRST(nRST),
+        .method$ack__ENA(DUT__Btest$indication$ack__ENA),
+        .method$ack$v(DUT__Btest$indication$ack$v),
+        .method$ack$seqno(DUT__Btest$indication$ack$seqno),
+        .method$ack__RDY(M2P__indication$method$ack__RDY),
         .method$heard__ENA(DUT__Btest$indication$heard__ENA),
         .method$heard$v(DUT__Btest$indication$heard$v),
         .method$heard$writeCount(DUT__Btest$indication$heard$writeCount),
         .method$heard$readCount(DUT__Btest$indication$heard$readCount),
-        .method$heard$seqno(DUT__Btest$indication$heard$seqno),
+        .method$heard$next(DUT__Btest$indication$heard$next),
         .method$heard__RDY(M2P__indication$method$heard__RDY),
         .pipe$enq__ENA(indication$enq__ENA),
         .pipe$enq$v(indication$enq$v),

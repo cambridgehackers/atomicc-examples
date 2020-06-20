@@ -89,4 +89,4 @@ class Bscan __implements BscanIfc<width> {
     };
 };
 
-Bscan<3, 64> dummyBscan;
+Bscan<3, 32> dummyBscan;

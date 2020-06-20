@@ -1,9 +1,9 @@
 #include "GeneratedTypes.h"
 
-const uint32_t BtestIndication_reqinfo = 0x1000c;
+const uint32_t BtestIndication_reqinfo = 0x20010;
 const char * BtestIndication_methodSignatures()
 {
-    return "{\"heard\": [\"long\", \"long\", \"long\", \"long\"]}";
+    return "{\"ack\": [\"long\", \"long\"], \"heard\": [\"long\", \"long\", \"long\", \"long\"]}";
 }
 
 int BtestIndication_handleMessage(struct PortalInternal *p, unsigned int channel, int messageFd)
@@ -15,16 +15,26 @@ int BtestIndication_handleMessage(struct PortalInternal *p, unsigned int channel
     memset(&tempdata, 0, sizeof(tempdata));
     volatile unsigned int* temp_working_addr = p->transport->mapchannelInd(p, channel);
     switch (channel) {
-    case CHAN_NUM_BtestIndication_heard: {
+    case CHAN_NUM_BtestIndication_ack: {
         p->transport->recv(p, temp_working_addr, 2, &tmpfd);
         tmp = p->transport->read(p, &temp_working_addr);
-        tempdata.heard.v = (uint32_t)(((uint32_t)(((tmp)&0xfffffful))<<8));
+        tempdata.ack.v = (uint32_t)(((uint32_t)(((tmp)&0xfful))<<24));
         tmp = p->transport->read(p, &temp_working_addr);
-        tempdata.heard.seqno = (uint8_t)(((tmp)&0xfful));
-        tempdata.heard.readCount = (uint8_t)(((tmp>>8)&0xfful));
-        tempdata.heard.writeCount = (uint8_t)(((tmp>>16)&0xfful));
-        tempdata.heard.v |= (uint32_t)(((tmp>>24)&0xfful));
-        ((BtestIndicationCb *)p->cb)->heard(p, tempdata.heard.v, tempdata.heard.writeCount, tempdata.heard.readCount, tempdata.heard.seqno);
+        tempdata.ack.seqno = (uint8_t)(((tmp)&0xfful));
+        tempdata.ack.v |= (uint32_t)(((tmp>>8)&0xfffffful));
+        ((BtestIndicationCb *)p->cb)->ack(p, tempdata.ack.v, tempdata.ack.seqno);
+      } break;
+    case CHAN_NUM_BtestIndication_heard: {
+        p->transport->recv(p, temp_working_addr, 3, &tmpfd);
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard.v = (uint32_t)(((uint32_t)(((tmp)&0xfffful))<<16));
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard.readCount = (uint8_t)(((tmp)&0xfful));
+        tempdata.heard.writeCount = (uint8_t)(((tmp>>8)&0xfful));
+        tempdata.heard.v |= (uint32_t)(((tmp>>16)&0xfffful));
+        tmp = p->transport->read(p, &temp_working_addr);
+        tempdata.heard.next = (uint32_t)(((tmp)&0xfffffffful));
+        ((BtestIndicationCb *)p->cb)->heard(p, tempdata.heard.v, tempdata.heard.writeCount, tempdata.heard.readCount, tempdata.heard.next);
       } break;
     default:
         PORTAL_PRINTF("BtestIndication_handleMessage: unknown channel 0x%x\n", channel);

@@ -2,7 +2,7 @@
 
 `default_nettype none
 module BscanLocal #(
-    parameter integer width = 64)(
+    parameter integer width = 32)(
     input wire toBscan$enq__ENA,
     input wire [width - 1:0]toBscan$enq$v,
     output wire toBscan$enq__RDY,

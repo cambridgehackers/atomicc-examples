@@ -3,7 +3,7 @@
 `default_nettype none
 module Bscan #(
     parameter integer id = 3,
-    parameter integer width = 64)(
+    parameter integer width = 32)(
     input wire CLK, input wire nRST,
     input wire toBscan$enq__ENA,
     input wire [width - 1:0]toBscan$enq$v,
@@ -24,7 +24,7 @@ module Bscan #(
     wire localBscan$capture;
     wire localBscan$nRST;
     wire localBscan$shift;
-    wire [64 - 1:0]localBscan$toBscan$enq$v;
+    wire [32 - 1:0]localBscan$toBscan$enq$v;
     wire localBscan$toBscan$enq__RDY;
     wire localBscan$update;
     wire tckbuf$I;
@@ -48,7 +48,7 @@ module Bscan #(
     wire fromBscan$enqS__ENA;
     SyncFF toS(.CLK(CLK), .nRST(nRST), .out(toBscan$enq__RDY), .in(toBscan$enqS__RDY));
     SyncFF fromS(.CLK(CLK), .nRST(nRST), .out(fromBscan$enq__ENA), .in(fromBscan$enqS__ENA));
-    BscanLocal#(64) localBscan (
+    BscanLocal#(32) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
         .toBscan$enq$v(localBscan$toBscan$enq$v),
         .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),

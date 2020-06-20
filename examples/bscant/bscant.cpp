@@ -26,7 +26,8 @@ class BtestRequest {
     void say(__uint(32) v, __uint(8) seqno);
 };
 class BtestIndication {
-    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(8) seqno);
+    void ack(__uint(32) v, __uint(8) seqno);
+    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(32) next);
 };
 
 class BtestIfc {
@@ -37,18 +38,24 @@ class BtestIfc {
 class Btest __implements BtestIfc {
     Bscan<3,32> bscan;
     __implements bscan.fromBscan readUser;
-    __uint(8) readCount, writeCount, seqval;
-    __int(32) counter;
+    __uint(8) readCount, writeCount;
+    __uint(32) nextV;
+    bool ready;
 
-    void readUser.enq(__int(64) v) {
-        indication->heard(v, writeCount, readCount, seqval);
+    void readUser.enq(__uint(64) v) {
+        indication->heard(v, writeCount, readCount, nextV);
+        nextV += 0x1010101;
         readCount++;
     }
     void request.say(__uint(32) v, __uint(8) seqno) {
-        bscan.toBscan.enq(v);
-        seqval = seqno;
+        nextV = v;
+        ready = true;
+        indication->ack(v, seqno + 1);
         printf("REQUESTSAY v %x seqno %x\n", v, seqno);
+    }
+    __rule copyRule {
+        bscan.toBscan.enq(nextV);
+        ready = false;
         writeCount++;
-        counter--;
     }
 };

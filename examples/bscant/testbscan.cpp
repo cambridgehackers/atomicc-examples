@@ -34,24 +34,23 @@ static sem_t sem_heard2;
 int sequence;
 int count;
 
-static void call_say(int v)
+static void call_say(int v, int seqno)
 {
     printf("[%s:%d] %x\n", __FUNCTION__, __LINE__, v);
-    echoRequestProxy->say(v, 0x66);
+    echoRequestProxy->say(v, seqno);
     sem_wait(&sem_heard2);
 }
 
 class BtestIndication : public BtestIndicationWrapper
 {
 public:
-    virtual void heard(uint32_t v, uint8_t writeCount, uint8_t readCount, uint8_t seqno) {
-printf("[%s:%d] v %lx\n", __FUNCTION__, __LINE__, (long)v);
+    virtual void heard(uint32_t v, uint8_t writeCount, uint8_t readCount, uint32_t next) {
         QUIET_FILTER
-	uint32_t next = v << 16 | (sequence & 0xffff);
-        printf("heard an echo: %x W %2x R %2x in %8x send %8x seq %x\n", seqno, writeCount, readCount, v, next, sequence & 0xff);
-        sequence += 0x12;
-        //sem_post(&sem_heard2);
-printf("[%s:%d] after v %lx\n", __FUNCTION__, __LINE__, (long)v);
+        printf("heard an echo: W %2x R %2x in %8x send %8x\n", writeCount, readCount, v, next);
+    }
+    virtual void ack(uint32_t v, uint8_t seqno) {
+        printf("ack: v %x seqno %x\n", v, seqno);
+        sem_post(&sem_heard2);
     }
     BtestIndication(unsigned int id, PortalTransportFunctions *item, void *param) : BtestIndicationWrapper(id, item, param) {}
 };
@@ -91,14 +90,18 @@ int main(int argc, const char **argv)
 
     int v = 0xbeefaa55; //42;
     printf("Saying %d\n", v);
-    call_say(v);
+    call_say(v, 0x67);
     printf("Saying %d\n", v);
-    call_say(v*5);
+    call_say(v*5, 0x23);
     printf("Saying %d\n", v);
-    call_say(v*17);
+    call_say(v*17, 0x45);
     printf("Saying %d\n", v);
-    call_say(v*93);
-    printf("Saying %d\n", v);
+    call_say(v*93, 0x89);
+    printf("Now, wait\n");
+    sem_wait(&sem_heard2);
+    sem_wait(&sem_heard2);
+    sem_wait(&sem_heard2);
+    sem_wait(&sem_heard2);
 sleep(2);
     return 0;
 }
