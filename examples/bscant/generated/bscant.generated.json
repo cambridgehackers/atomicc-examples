@@ -16,21 +16,13 @@
     ],
     "interfaces": [
         { "cdecls": [
-                { "dname": "ack", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "seqno", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
-                    ] },
                 { "dname": "heard", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "writeCount", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
-                        { "pname": "readCount", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
-                        { "pname": "next", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
                     ] }
             ], "direction": "1", "cname": "BtestIndication" },
         { "cdecls": [
                 { "dname": "say", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "seqno", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
                     ] }
             ], "direction": "0", "cname": "BtestRequest" }
     ]

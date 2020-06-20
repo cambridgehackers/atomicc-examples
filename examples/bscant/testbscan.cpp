@@ -1,4 +1,4 @@
-/* Copyright (c) 2014 Quanta Research Cambridge, Inc
+/* Copyright (c) 2020 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -26,7 +26,7 @@
 #include "GeneratedTypes.h"
 void atomiccPrintfInit(const char *filename);
 
-#define QUIET_FILTER // if (count++ % 0x20 == 0)
+#define QUIET_FILTER //if (count % 1000 == 0)
 
 static BtestRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
@@ -34,23 +34,22 @@ static sem_t sem_heard2;
 int sequence;
 int count;
 
-static void call_say(int v, int seqno)
+uint32_t nextData;
+
+static void sendNext(void)
 {
-    printf("[%s:%d] %x\n", __FUNCTION__, __LINE__, v);
-    echoRequestProxy->say(v, seqno);
-    sem_wait(&sem_heard2);
+    nextData += 0x01010201;
+    echoRequestProxy->say(nextData);
 }
 
 class BtestIndication : public BtestIndicationWrapper
 {
 public:
-    virtual void heard(uint32_t v, uint8_t writeCount, uint8_t readCount, uint32_t next) {
+    virtual void heard(uint32_t v) {
+        count++;
         QUIET_FILTER
-        printf("heard an echo: W %2x R %2x in %8x send %8x\n", writeCount, readCount, v, next);
-    }
-    virtual void ack(uint32_t v, uint8_t seqno) {
-        printf("ack: v %x seqno %x\n", v, seqno);
-        sem_post(&sem_heard2);
+        printf("heard an echo: %8d in %8x send %8x\n", count, v, nextData);
+        sendNext();
     }
     BtestIndication(unsigned int id, PortalTransportFunctions *item, void *param) : BtestIndicationWrapper(id, item, param) {}
 };
@@ -87,21 +86,9 @@ int main(int argc, const char **argv)
 	    (double)requestedFrequency * 1.0e-6,
 	    (double)actualFrequency * 1.0e-6,
 	    status, (status != 0) ? errno : 0);
-
-    int v = 0xbeefaa55; //42;
-    printf("Saying %d\n", v);
-    call_say(v, 0x67);
-    printf("Saying %d\n", v);
-    call_say(v*5, 0x23);
-    printf("Saying %d\n", v);
-    call_say(v*17, 0x45);
-    printf("Saying %d\n", v);
-    call_say(v*93, 0x89);
+    sendNext();
     printf("Now, wait\n");
     sem_wait(&sem_heard2);
     sem_wait(&sem_heard2);
-    sem_wait(&sem_heard2);
-    sem_wait(&sem_heard2);
-sleep(2);
     return 0;
 }

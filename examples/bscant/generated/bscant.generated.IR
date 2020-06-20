@@ -13,11 +13,10 @@ INTERFACE BtestIfc  {
     INTERFACE/Ptr BtestIndication indication
 }
 INTERFACE BtestIndication  {
-    METHOD/Action ack__ENA ( Bit(32) v , Bit(8) seqno )
-    METHOD/Action heard__ENA ( Bit(32) v , Bit(8) writeCount , Bit(8) readCount , Bit(32) next )
+    METHOD/Action heard__ENA ( Bit(32) v )
 }
 INTERFACE BtestRequest  {
-    METHOD/Action say__ENA ( Bit(32) v , Bit(8) seqno )
+    METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
@@ -54,15 +53,12 @@ MODULE Btest BtestIfc {
     FIELD Bit(32) nextV
     FIELD Bit(1) ready
     METHOD/Action readUser$enq__ENA ( Bit(64) v ) {
-        CALL/Action :indication$heard__ENA{readUser$enq$v,writeCount,readCount,nextV}
-        STORE :nextV = (nextV) + (16843009)
+        CALL/Action :indication$heard__ENA{readUser$enq$v}
         STORE :readCount = (readCount) + (1)
     }
-    METHOD/Action request$say__ENA ( Bit(32) v , Bit(8) seqno ) {
+    METHOD/Action request$say__ENA ( Bit(32) v ) {
         STORE :nextV = request$say$v
         STORE :ready = 1
-        CALL/Action :indication$ack__ENA{request$say$v,(request$say$seqno) + (1)}
-        PRINTF :printf{"REQUESTSAY v %x seqno %x\n",request$say$v,request$say$seqno}
     }
     METHOD/Rule/Action RULE$copyRule__ENA {
         CALL/Action :bscan$toBscan$enq__ENA{nextV}

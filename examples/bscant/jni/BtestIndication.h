@@ -21,7 +21,6 @@ public:
     virtual void disconnect(void) {
         printf("BtestIndicationWrapper.disconnect called %d\n", pint.client_fd_number);
     };
-    virtual void ack ( const uint32_t v, const uint8_t seqno ) = 0;
-    virtual void heard ( const uint32_t v, const uint8_t writeCount, const uint8_t readCount, const uint32_t next ) = 0;
+    virtual void heard ( const uint32_t v ) = 0;
 };
 #endif // _BTESTINDICATION_H_

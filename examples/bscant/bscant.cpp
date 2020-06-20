@@ -23,11 +23,10 @@
 #include "bscan.h"
 
 class BtestRequest {
-    void say(__uint(32) v, __uint(8) seqno);
+    void say(__uint(32) v);
 };
 class BtestIndication {
-    void ack(__uint(32) v, __uint(8) seqno);
-    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(32) next);
+    void heard(__uint(32) v);
 };
 
 class BtestIfc {
@@ -43,15 +42,12 @@ class Btest __implements BtestIfc {
     bool ready;
 
     void readUser.enq(__uint(64) v) {
-        indication->heard(v, writeCount, readCount, nextV);
-        nextV += 0x1010101;
+        indication->heard(v);
         readCount++;
     }
-    void request.say(__uint(32) v, __uint(8) seqno) {
+    void request.say(__uint(32) v) {
         nextV = v;
         ready = true;
-        indication->ack(v, seqno + 1);
-        printf("REQUESTSAY v %x seqno %x\n", v, seqno);
     }
     __rule copyRule {
         bscan.toBscan.enq(nextV);

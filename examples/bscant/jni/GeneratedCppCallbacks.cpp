@@ -10,17 +10,12 @@ int BtestIndicationdisconnect_cb (struct PortalInternal *p) {
     (static_cast<BtestIndicationWrapper *>(p->parent))->disconnect();
     return 0;
 };
-int BtestIndicationack_cb (  struct PortalInternal *p, const uint32_t v, const uint8_t seqno ) {
-    (static_cast<BtestIndicationWrapper *>(p->parent))->ack ( v, seqno);
-    return 0;
-};
-int BtestIndicationheard_cb (  struct PortalInternal *p, const uint32_t v, const uint8_t writeCount, const uint8_t readCount, const uint32_t next ) {
-    (static_cast<BtestIndicationWrapper *>(p->parent))->heard ( v, writeCount, readCount, next);
+int BtestIndicationheard_cb (  struct PortalInternal *p, const uint32_t v ) {
+    (static_cast<BtestIndicationWrapper *>(p->parent))->heard ( v);
     return 0;
 };
 BtestIndicationCb BtestIndication_cbTable = {
     BtestIndicationdisconnect_cb,
-    BtestIndicationack_cb,
     BtestIndicationheard_cb,
 };
 #endif //NO_CPP_PORTAL_CODE
