@@ -1,0 +1,18 @@
+INTERFACE Out2InIfc  {
+    INTERFACE/Ptr PipeOut in
+    INTERFACE/Ptr PipeIn out
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+MODULE Out2In Out2InIfc {
+    METHOD/Rule/Action RULE$copyRule__ENA {
+        CALL :in$first{}
+        CALL/Action :out$enq__ENA{in$first}
+        CALL/Action :in$deq__ENA{}
+    }
+}

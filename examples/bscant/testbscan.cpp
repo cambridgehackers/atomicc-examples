@@ -26,7 +26,7 @@
 #include "GeneratedTypes.h"
 void atomiccPrintfInit(const char *filename);
 
-#define QUIET_FILTER //if (count % 1000 == 0)
+#define QUIET_FILTER if (count % 1000 == 0)
 
 static BtestRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;

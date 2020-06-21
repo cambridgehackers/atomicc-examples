@@ -19,30 +19,11 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "userTop.h" // to get PipeIn<NOCDataH>
-
-class PackRequest {
-    void say(__uint(32) v, __uint(8) seqno);
-};
-class PackIndication {
-    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(8) seqno);
+template <class T>
+class Out2InIfc {
+    PipeOut<T> *in;
+    PipeIn<T> *out;
 };
 
-class PackIfc {
-    __software PackRequest                     request;
-    __software PackIndication                 *indication;
-};
-
-class Pack __implements PackIfc {
-    __uint(8) readCount, writeCount, seqval;
-    __int(32) counter;
-
-    void request.say(__uint(32) v, __uint(8) seqno) {
-        seqval = seqno;
-        printf("REQUESTSAY v %x write %x read %x seqno %x\n", v, writeCount + 0x20, readCount + 0x40, seqno);
-        indication->heard(v, writeCount + 0x20, readCount + 0x40, seqval);
-        writeCount++;
-        counter--;
-        readCount += 0x10;
-    }
-};
+template <class T>
+class Out2In __implements Out2InIfc<T>;

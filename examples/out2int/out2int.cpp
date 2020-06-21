@@ -1,4 +1,4 @@
-/* Copyright (c) 2020 The Connectal Project
+/* Copyright (c) 2016 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,29 +20,35 @@
  */
 #include "atomicc.h"
 #include "userTop.h" // to get PipeIn<NOCDataH>
+#include "fifo.h"
+#include "out2in.h"
 
-class PackRequest {
-    void say(__uint(32) v, __uint(8) seqno);
+class OinRequest {
+    void say(__uint(32) v);
 };
-class PackIndication {
-    void heard(__uint(32) v, __uint(8) writeCount, __uint(8) readCount, __uint(8) seqno);
-};
-
-class PackIfc {
-    __software PackRequest                     request;
-    __software PackIndication                 *indication;
+class OinIndication {
+    void heard(__uint(32) v);
 };
 
-class Pack __implements PackIfc {
-    __uint(8) readCount, writeCount, seqval;
-    __int(32) counter;
+class OinIfc {
+    __software OinRequest                     request;
+    __software OinIndication                 *indication;
+};
 
-    void request.say(__uint(32) v, __uint(8) seqno) {
-        seqval = seqno;
-        printf("REQUESTSAY v %x write %x read %x seqno %x\n", v, writeCount + 0x20, readCount + 0x40, seqno);
-        indication->heard(v, writeCount + 0x20, readCount + 0x40, seqval);
-        writeCount++;
-        counter--;
-        readCount += 0x10;
+class Oin __implements OinIfc {
+    Fifo1<__uint(32)> first, second;
+    Out2In<__uint(32)> pipe;
+    __connect pipe.in = first.out;
+    __connect pipe.out = second.in;
+
+    void request.say(__uint(32) v) {
+        first.in.enq(v);
+        printf("REQUESTSAY v %x\n", v);
     }
+
+    __rule copyRule {
+        indication->heard(second.out.first());
+        second.out.deq();
+    }
+
 };

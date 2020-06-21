@@ -1,0 +1,99 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE Fifo  {
+    INTERFACE PipeIn.0 in
+    INTERFACE PipeOut out
+}
+INTERFACE Fifo.1  {
+    INTERFACE PipeIn.2 in
+    INTERFACE PipeOut.3 out
+}
+INTERFACE OinIfc  {
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE OinRequest request
+    INTERFACE/Ptr OinIndication indication
+}
+INTERFACE OinIndication  {
+    METHOD/Action heard__ENA ( Bit(32) v )
+}
+INTERFACE OinRequest  {
+    METHOD/Action say__ENA ( Bit(32) v )
+}
+INTERFACE Out2InIfc  {
+    INTERFACE/Ptr PipeOut.4 in
+    INTERFACE/Ptr PipeIn.5 out
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.2  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.5  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeInB(width=32)  {
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.3  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.4  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE UserTopIfc  {
+    INTERFACE PipeInB(width=32) write
+    INTERFACE/Ptr PipeInB(width=32) read
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE Fifo1Base(width=32) Fifo {
+}
+EMODULE Out2In Out2InIfc {
+}
+EMODULE UserTop UserTopIfc {
+}
+EMODULE l_top l_topIfc {
+}
+MODULE Fifo1 Fifo.1 {
+    FIELD Fifo1Base(width=32) fifo
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(32) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE Oin OinIfc {
+    INTERFACECONNECT pipe$in first$out PipeOut.4
+    INTERFACECONNECT pipe$out second$in PipeIn.5
+    FIELD Fifo1 first
+    FIELD Fifo1 second
+    FIELD Out2In pipe
+    METHOD/Action request$say__ENA ( Bit(32) v ) {
+        CALL/Action :first$in$enq__ENA{request$say$v}
+        PRINTF :printf{"REQUESTSAY v %x\n",request$say$v}
+    }
+    METHOD/Rule/Action RULE$copyRule__ENA {
+        CALL :second$out$first{}
+        CALL/Action :indication$heard__ENA{second$out$first}
+        CALL/Action :second$out$deq__ENA{}
+    }
+}
