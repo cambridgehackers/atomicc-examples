@@ -21,12 +21,6 @@
 #ifndef __USER_TOP_H__
 #define __USER_TOP_H__
 #include "atomicc.h"
-class l_topIfc {
-    PipeIn<NOCDataH> request;
-    PipeIn<NOCDataH> *indication;
-};
-class l_top __implements l_topIfc;
-
 class UserTopIfc {
     PipeInB<BusTypeWidth> write;
     PipeInB<BusTypeWidth> *read;

@@ -28,12 +28,17 @@
 #define _IO_lock_t_defined
 typedef int _IO_lock_t;
 #endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <string.h>
 #include <string>
 #include <stddef.h> // offsetof
+
+#define BusTypeWidth               32
+#define GENERIC_INT_TEMPLATE_FLAG 999999
+#define PRINTF_PORT    (uint16_t) 0x7fff
 
 #define __software __attribute__(( atomicc_software ))
 #define __shared __attribute__(( atomicc_shared ))
@@ -46,8 +51,6 @@ extern "C" int *__bitsubstrl(int, ...);
 #define __clog2(A) __builtin_clog2(A)
 extern "C" int __reduce(const char *, ...);
 extern "C" void __finish(void);
-
-#define GENERIC_INT_TEMPLATE_FLAG 999999
 
 template<class T>
 class PipeIn {
@@ -82,12 +85,16 @@ class Gear {
     PipeOut<Out> out;
 };
 
-#define PRINTF_PORT    (uint16_t) 0x7fff
-
 typedef struct {__uint(128) data;} NOCData;
 typedef struct {LenType length; __uint(128) data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
-#define BusTypeWidth               32
+
+class l_topIfc {
+    PipeIn<NOCDataH> request;
+    PipeIn<NOCDataH> *indication;
+};
+class l_top __implements l_topIfc; // force PipeIn<NOCDataH> to appear in IR
+
 #if 0
 template<class T> class M2P __implements T { // method -> pipe
 public:
@@ -119,4 +126,5 @@ static inline std::string utostr(uint64_t X) {
 #define container_of(ptr, type, member) ({			\
 	const typeof( ((type *)0)->member ) *__mptr = (ptr);	\
 	(type *)( (char *)__mptr - offsetof(type,member) );})
+
 #endif // _ATOMICC_H_

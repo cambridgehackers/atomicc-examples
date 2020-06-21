@@ -20,11 +20,10 @@
  */
 #include "atomicc.h"
 #include "grayCounter.h"
-#include "userTop.h"
 
 class Test {
     GrayCounter<4> counter;
-    __software GrayCounterIfc<4>  request = counter.ifc;
+    __software GrayCounterIfc<4>  request = counter;
 };
 
 Test dummy;

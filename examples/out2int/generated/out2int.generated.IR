@@ -38,9 +38,6 @@ INTERFACE PipeIn.2  {
 INTERFACE PipeIn.5  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeInB(width=32)  {
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
@@ -53,10 +50,6 @@ INTERFACE PipeOut.4  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE UserTopIfc  {
-    INTERFACE PipeInB(width=32) write
-    INTERFACE/Ptr PipeInB(width=32) read
-}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
@@ -64,8 +57,6 @@ INTERFACE l_topIfc  {
 EMODULE Fifo1Base(width=32) Fifo {
 }
 EMODULE Out2In Out2InIfc {
-}
-EMODULE UserTop UserTopIfc {
 }
 EMODULE l_top l_topIfc {
 }

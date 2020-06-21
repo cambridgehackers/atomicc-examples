@@ -18,8 +18,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
-#include "userTop.h" // to get PipeIn<NOCDataH>
 #include "fifo.h"
 #include "out2in.h"
 

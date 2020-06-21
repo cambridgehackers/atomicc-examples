@@ -18,9 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "grayCounter.h"
-#include "userTop.h"
 
 class TestIfc {
     __software GrayCounterIfc<4>  request;

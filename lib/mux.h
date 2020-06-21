@@ -21,6 +21,7 @@
 // SOFTWARE.
 #ifndef _MUX_H_
 #define _MUX_H_
+#include "atomicc.h"
 class MuxPipeIfc {
     PipeIn<NOCDataH>           in;
     PipeIn<NOCDataH>      forward;

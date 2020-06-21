@@ -19,7 +19,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "userTop.h" // to get PipeIn<NOCDataH>
 
 class PackRequest {
     void say(__uint(32) v, __uint(8) seqno);

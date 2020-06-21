@@ -27,20 +27,11 @@ INTERFACE PipeIn.0  {
 INTERFACE PipeIn.1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeInB(width=32)  {
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
-INTERFACE UserTopIfc  {
-    INTERFACE PipeInB(width=32) write
-    INTERFACE/Ptr PipeInB(width=32) read
-}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
-}
-EMODULE UserTop UserTopIfc {
 }
 EMODULE l_top l_topIfc {
 }

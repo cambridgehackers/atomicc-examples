@@ -18,10 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "fifo.h"
 #include "funnel.h"
-#include "userTop.h"
 #define IfcNames_EchoIndicationH2S 5
 
 class EchoRequest {
