@@ -1,13 +1,26 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE Out2InIfc  {
     INTERFACE/Ptr PipeOut in
-    INTERFACE/Ptr PipeIn out
+    INTERFACE/Ptr PipeIn.0 out
 }
 INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Out2In Out2InIfc {
     METHOD/Rule/Action RULE$copyRule__ENA {

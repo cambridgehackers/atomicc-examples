@@ -1,8 +1,21 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE CNCONNECTNET2  {
     FIELD/input Bit(1) IN1
     FIELD/input Bit(1) IN2
     FIELD/output Bit(1) OUT1
     FIELD/output Bit(1) OUT2
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
 }
 MODULE CONNECTNET2 CNCONNECTNET2 {
     METHOD/Rule/Action RULE$assign__ENA {

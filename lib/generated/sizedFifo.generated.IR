@@ -1,13 +1,26 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE Fifo  {
-    INTERFACE PipeIn in
+    INTERFACE PipeIn.0 in
     INTERFACE PipeOut out
 }
 INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(128) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
 }
 MODULE SizedFifoBase(depth=20,width=128,bypass=999) Fifo {
     FIELD/Count depth  Bit(128) q

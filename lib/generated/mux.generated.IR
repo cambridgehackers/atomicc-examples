@@ -51,11 +51,17 @@ INTERFACE PipeOut.9  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE Fifo1Base(width=144) Fifo {
 }
 EMODULE Fifo1Base(width=16) Fifo.3 {
 }
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Fifo1 Fifo.1 {
     FIELD Fifo1Base(width=144) fifo

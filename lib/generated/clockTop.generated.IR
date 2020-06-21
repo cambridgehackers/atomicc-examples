@@ -1,3 +1,7 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE ClockIfc  {
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
@@ -95,6 +99,13 @@ INTERFACE Mmcme2MMCME2_ADV  {
     FIELD/parameter Bit(32) SS_MOD_PERIOD
     FIELD/Ptr/parameter Bit(8) STARTUP_WAIT
 }
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE BUFG MbufgBUFG {
 }
 EMODULE ClockTop ClockIfc {
@@ -102,6 +113,8 @@ EMODULE ClockTop ClockIfc {
 EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {
 }
 EMODULE ResetInverter MResetInverterResetInverter {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE ClockTop ClockIfc {
     FIELD MMCME2_ADV ps7_clockGen_pll

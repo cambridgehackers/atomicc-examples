@@ -1,15 +1,28 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE LpmMem  {
     METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
 }
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
 INTERFACE TickIfc  {
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE BufTicket TickIfc {
 }
 EMODULE LpmMemory LpmMem {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE LpmMemory LpmMem {
     FIELD Bit(32) delayCount

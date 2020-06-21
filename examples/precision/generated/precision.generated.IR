@@ -49,11 +49,17 @@ INTERFACE PipeOut.3  {
     METHOD/Action deq__ENA
     METHOD first ValueType
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE Fifo1Base(width=10) Fifo {
 }
 EMODULE IVectorInd IVectorIndication {
 }
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Fifo1 Fifo.1 {
     FIELD Fifo1Base(width=10) fifo

@@ -1,3 +1,7 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE AxiTopIfc  {
     INTERFACE ZynqInterruptT _
     INTERFACE MaxiO MAXIGP0_O
@@ -29,6 +33,9 @@ INTERFACE P7WrapIfc  {
     INTERFACE MaxiI MAXIGP0_I
     INTERFACE Pps7m M
     INTERFACE Pps7fclk FCLK
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE Pps7PS7  {
     INTERFACE Pps7ddr DDR
@@ -469,6 +476,10 @@ INTERFACE ZynqTopIFC  {
     INTERFACE ZynqClock _
     INTERFACE Pps7m M
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE AxiTop AxiTopIfc {
 }
 EMODULE BUFG MbufgBUFG {
@@ -476,6 +487,8 @@ EMODULE BUFG MbufgBUFG {
 EMODULE ClockTop ClockIfc {
 }
 EMODULE PS7 Pps7PS7 {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE P7Wrap P7WrapIfc {
     INTERFACECONNECT M pps$M Pps7m

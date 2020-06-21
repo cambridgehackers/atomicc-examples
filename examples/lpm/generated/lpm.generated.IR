@@ -72,6 +72,10 @@ INTERFACE TickIfc  {
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE BufTicket TickIfc {
 }
 EMODULE Fifo1Base(width=32) Fifo {
@@ -81,6 +85,8 @@ EMODULE FifoB1Base(width=23) Fifo.4 {
 EMODULE LpmMemory LpmMem {
 }
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Fifo1 Fifo.1 {
     FIELD Fifo1Base(width=32) fifo

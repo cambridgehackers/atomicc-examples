@@ -1,3 +1,7 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE Ft600  {
     FIELD/input Bit(1) usb_clk
     FIELD/input Bit(1) usb_rxf
@@ -13,7 +17,16 @@ INTERFACE IobufVecPins(iovecWidth=16)  {
     FIELD/output Bit(16) O
     FIELD/input Bit(1) T
 }
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE IobufVec(iovecWidth=16) IobufVecPins(iovecWidth=16) {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE ModFt600 Ft600 {
     FIELD Bit(1) usb_fifo_empty

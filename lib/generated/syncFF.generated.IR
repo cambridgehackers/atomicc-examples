@@ -1,8 +1,21 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
 INTERFACE SyncFFIfc  {
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) out
     FIELD/input Bit(1) in
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
 }
 MODULE SyncFF SyncFFIfc {
     FIELD Bit(1) one

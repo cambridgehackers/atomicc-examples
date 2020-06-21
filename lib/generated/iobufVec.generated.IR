@@ -1,3 +1,7 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE IobufVecPins(iovecWidth=999999)  {
     FIELD/inout Bit(999999) IO
     FIELD/input Bit(999999) I
@@ -14,7 +18,16 @@ INTERFACE MIOBUF  {
     FIELD/Ptr/parameter Bit(8) SLEW
     FIELD/input Bit(1) T
 }
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE IOBUF MIOBUF {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE IobufVec(iovecWidth=999999) IobufVecPins(iovecWidth=999999) {
     FIELD/Count iovecWidth  IOBUF iobufs

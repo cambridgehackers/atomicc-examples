@@ -81,7 +81,13 @@ INTERFACE Swap  {
     METHOD/Action y2xnull__ENA
     METHOD/Action x2y__ENA
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Connect ConnectIFC {
     INTERFACECONNECT lERI$request lEcho$request EchoRequest

@@ -72,7 +72,13 @@ INTERFACE PipeIn.0  {
 INTERFACE PipeIn.1  {
     METHOD/Action enq__ENA ( EchoIndication_data v )
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Connect ConnectIfc {
     INTERFACECONNECT request lERO_test$request EchoRequest

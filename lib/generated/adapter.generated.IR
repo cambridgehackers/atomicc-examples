@@ -16,6 +16,12 @@ INTERFACE PipeIn  {
 INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
 MODULE AdapterFromBus(width=32) AfB(width=32) {
     FIELD Bit(144) buffer
     FIELD Bit(1) waitForEnq

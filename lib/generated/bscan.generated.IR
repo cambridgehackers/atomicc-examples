@@ -1,6 +1,10 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE BscanIfc(width=32)  {
-    INTERFACE PipeIn toBscan
-    INTERFACE/Ptr PipeIn.0 fromBscan
+    INTERFACE PipeIn.0 toBscan
+    INTERFACE/Ptr PipeIn.1 fromBscan
 }
 INTERFACE BscanLocalIfc(width=32)  {
     FIELD/input Bit(1) CLK
@@ -11,7 +15,7 @@ INTERFACE BscanLocalIfc(width=32)  {
     FIELD/output Bit(1) TDO
     FIELD/input Bit(1) TDI
     INTERFACE PipeInSync toBscan
-    INTERFACE/Ptr PipeInSync.2 fromBscan
+    INTERFACE/Ptr PipeInSync.3 fromBscan
 }
 INTERFACE MBSCANE2IFC  {
     FIELD/output Bit(1) CAPTURE
@@ -33,7 +37,7 @@ INTERFACE MbufgBUFG  {
     FIELD/output Bit(1) O
 }
 INTERFACE PipeIn  {
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn.0  {
     METHOD/Action enq__ENA ( Bit(32) v )
@@ -41,32 +45,41 @@ INTERFACE PipeIn.0  {
 INTERFACE PipeIn.1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.3  {
+INTERFACE PipeIn.2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.5  {
+INTERFACE PipeIn.4  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.6  {
     METHOD/Action enq__ENA ( Bit(3) v )
 }
 INTERFACE PipeInSync  {
-    INTERFACE PipeIn.1 _
+    INTERFACE PipeIn.2 _
 }
-INTERFACE PipeInSync.2  {
-    INTERFACE PipeIn.3 _
+INTERFACE PipeInSync.3  {
+    INTERFACE PipeIn.4 _
 }
-INTERFACE PipeInSync.4  {
-    INTERFACE PipeIn.5 _
+INTERFACE PipeInSync.5  {
+    INTERFACE PipeIn.6 _
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
 }
 EMODULE BSCANE2 MBSCANE2IFC {
 }
 EMODULE BUFG MbufgBUFG {
 }
+EMODULE l_top l_topIfc {
+}
 MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
-    INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync.4
+    INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync.5
     FIELD BSCANE2 bscan
     PARAMS bscan <JTAG_CHAIN:3>
     FIELD BUFG tckbuf
     FIELD BscanLocal(width=32) localBscan
-    INTERFACE PipeInSync.4 readBscan
+    INTERFACE PipeInSync.5 readBscan
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
         CALL/Action :localBscan$toBscan$enq__ENA{toBscan$enq$v}
     }

@@ -1,3 +1,7 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE GrayCounterIfc(width=10)  {
     METHOD/Action increment__ENA
     METHOD/Action decrement__ENA
@@ -5,6 +9,15 @@ INTERFACE GrayCounterIfc(width=10)  {
     METHOD/Action writeGray__ENA ( Bit(width) v )
     METHOD readBin Bit(width)
     METHOD/Action writeBin__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
 }
 MODULE GrayCounter(width=10) GrayCounterIfc(width=10) {
     FIELD/Count width  Bit(1) counter
