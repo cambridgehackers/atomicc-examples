@@ -92,7 +92,7 @@ module AxiTop (
     wire writeDone$in$enq__RDY;
     wire writeDone$out$deq__RDY;
     wire writeDone$out$first__RDY;
-    Fifo1Base#(6) reqArs (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(6)) reqArs (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AR__ENA),
         .in$enq$v(reqArs$in$enq$v),
         .in$enq__RDY(reqArs$in$enq__RDY),
@@ -100,7 +100,7 @@ module AxiTop (
         .out$deq__RDY(reqArs$out$deq__RDY),
         .out$first(reqArs$out$first),
         .out$first__RDY(reqArs$out$first__RDY));
-    Fifo1Base#(6) reqAws (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(6)) reqAws (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$AW__ENA),
         .in$enq$v(reqAws$in$enq$v),
         .in$enq__RDY(reqAws$in$enq__RDY),
@@ -108,7 +108,7 @@ module AxiTop (
         .out$deq__RDY(reqAws$out$deq__RDY),
         .out$first(reqAws$out$first),
         .out$first__RDY(reqAws$out$first__RDY));
-    Fifo1Base#(6) writeDone (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(6)) writeDone (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(writeDone$in$enq__ENA),
         .in$enq$v(writeDone$in$enq$v),
         .in$enq__RDY(writeDone$in$enq__RDY),
@@ -116,7 +116,7 @@ module AxiTop (
         .out$deq__RDY(writeDone$out$deq__RDY),
         .out$first(MAXIGP0_I$B$id),
         .out$first__RDY(writeDone$out$first__RDY));
-    Fifo1Base#(32) requestValue (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(32)) requestValue (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(user$read$enq__ENA),
         .in$enq$v(requestValue$in$enq$v),
         .in$enq__RDY(requestValue$in$enq__RDY),
@@ -124,7 +124,7 @@ module AxiTop (
         .out$deq__RDY(requestValue$out$deq__RDY),
         .out$first(requestValue$out$first),
         .out$first__RDY(requestValue$out$first__RDY));
-    Fifo1Base#(38) readData (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(38)) readData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(RULE$lread__RDY),
         .in$enq$v(readData$in$enq$v),
         .in$enq__RDY(readData$in$enq__RDY),
@@ -132,7 +132,7 @@ module AxiTop (
         .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
-    Fifo1Base#(32) writeData (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(32)) writeData (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(MAXIGP0_O$W__ENA),
         .in$enq$v(writeData$in$enq$v),
         .in$enq__RDY(writeData$in$enq__RDY),

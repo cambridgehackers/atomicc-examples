@@ -20,7 +20,7 @@ module Oin (input wire CLK, input wire nRST,
     wire second$in$enq__RDY;
     wire second$out$deq__RDY;
     wire second$out$first__RDY;
-    Fifo1Base#(32) first (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(32)) first (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(request$say__ENA),
         .in$enq$v(first$in$enq$v),
         .in$enq__RDY(first$in$enq__RDY),
@@ -28,7 +28,7 @@ module Oin (input wire CLK, input wire nRST,
         .out$deq__RDY(first$out$deq__RDY),
         .out$first(first$out$first),
         .out$first__RDY(first$out$first__RDY));
-    Fifo1Base#(32) second (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(32)) second (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(pipe$out$enq__ENA),
         .in$enq$v(pipe$out$enq$v),
         .in$enq__RDY(second$in$enq__RDY),

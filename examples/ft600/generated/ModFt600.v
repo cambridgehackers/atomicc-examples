@@ -15,7 +15,7 @@ module ModFt600 (
     wire CLK;
     wire iov$T;
     wire nRST;
-    IobufVec#(16) iov (
+    IobufVec#(.iovecWidth(16)) iov (
         .IO(usb_ad),
         .I(0),
         .O(),

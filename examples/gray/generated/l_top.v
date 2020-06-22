@@ -3,11 +3,10 @@
 `default_nettype none
 module l_top (input wire CLK, input wire nRST,
     input wire request$enq__ENA,
-    input wire [128 - 1:0]request$enq$v,
+    input wire [(16 + 128) - 1:0]request$enq$v,
     output wire request$enq__RDY,
     output wire indication$enq__ENA,
-    output wire [128 - 1:0]indication$enq$v,
-    output wire [16 - 1:0]indication$enq$length,
+    output wire [(16 + 128) - 1:0]indication$enq$v,
     input wire indication$enq__RDY);
     wire DUT__Test$request$decrement__RDY;
     wire DUT__Test$request$increment__RDY;
@@ -19,9 +18,9 @@ module l_top (input wire CLK, input wire nRST,
     wire DUT__Test$request$writeGray__RDY;
     wire P2M__request$method$decrement__ENA;
     wire P2M__request$method$increment__ENA;
-    wire [4 - 1:0]P2M__request$method$writeBin$v;
+    wire [width - 1:0]P2M__request$method$writeBin$v;
     wire P2M__request$method$writeBin__ENA;
-    wire [4 - 1:0]P2M__request$method$writeGray$v;
+    wire [width - 1:0]P2M__request$method$writeGray$v;
     wire P2M__request$method$writeGray__ENA;
     Test DUT__Test (.CLK(CLK), .nRST(nRST),
         .request$increment__ENA(P2M__request$method$increment__ENA),
@@ -38,7 +37,7 @@ module l_top (input wire CLK, input wire nRST,
         .request$writeBin__ENA(P2M__request$method$writeBin__ENA),
         .request$writeBin$v(P2M__request$method$writeBin$v),
         .request$writeBin__RDY(DUT__Test$request$writeBin__RDY));
-    ___P2MGrayCounterIfc_IC_width_ND_4_JC_ P2M__request (.CLK(CLK), .nRST(nRST),
+    ___P2MGrayCounterIfc#(.width(4)) P2M__request (.CLK(CLK), .nRST(nRST),
         .method$increment__ENA(P2M__request$method$increment__ENA),
         .method$increment__RDY(DUT__Test$request$increment__RDY),
         .method$decrement__ENA(P2M__request$method$decrement__ENA),
@@ -55,11 +54,9 @@ module l_top (input wire CLK, input wire nRST,
         .method$writeBin__RDY(DUT__Test$request$writeBin__RDY),
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
-        .pipe$enq__RDY(request$enq__RDY),
-        .returnInd$enq__ENA(indication$enq__ENA),
-        .returnInd$enq$v(indication$enq$v),
-        .returnInd$enq$length(indication$enq$length),
-        .returnInd$enq__RDY(indication$enq__RDY));
+        .pipe$enq__RDY(request$enq__RDY));
+    assign indication$enq$v = P2M__request$returnInd$enq$v;
+    assign indication$enq__ENA = P2M__request$returnInd$enq__ENA;
 endmodule 
 
 `default_nettype wire    // set back to default value

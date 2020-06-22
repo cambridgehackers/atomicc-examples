@@ -33,7 +33,7 @@ class BtestIfc {
 };
 
 class Btest __implements BtestIfc {
-    Bscan<3,32> bscan;
+    Bscan<4,32> bscan;
     __implements bscan.fromBscan readUser;
     __uint(8) readCount, writeCount;
     __uint(32) nextV;

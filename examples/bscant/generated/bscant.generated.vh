@@ -2,7 +2,7 @@
 `define __bscant_GENERATED__VH__
 
 //METASTART; Btest
-//METAINTERNAL; bscan; Bscan(id=3,width=32);
+//METAINTERNAL; bscan; Bscan(id=4,width=32);
 //METAINVOKE; readUser$enq__ENA; :indication$heard__ENA;
 //METAGUARD; readUser$enq; indication$heard__RDY;
 //METAEXCLUSIVE; request$say__ENA; RULE$copyRule__ENA

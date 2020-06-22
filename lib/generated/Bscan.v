@@ -31,7 +31,7 @@ module Bscan #(
     wire tckbuf$I;
     wire tckbuf$O;
     wire toBscan$enqS__RDY;
-    BSCANE2#(.JTAG_CHAIN(3)) bscan (
+    BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),
         .RESET(),
@@ -46,7 +46,7 @@ module Bscan #(
     BUFG tckbuf (
         .I(tckbuf$I),
         .O(tckbuf$O));
-    BscanLocal#(32) localBscan (
+    BscanLocal#(.width(32)) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
         .toBscan$enq$v(localBscan$toBscan$enq$v),
         .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),

@@ -16,7 +16,7 @@ module UserTop (input wire CLK, input wire nRST,
     wire radapter_0$in$enq__RDY;
     wire [(16 + 128) - 1:0]wadapter_0$out$enq$v;
     wire wadapter_0$out$enq__ENA;
-    AdapterToBus#(32) radapter_0 (.CLK(CLK), .nRST(nRST),
+    AdapterToBus#(.width(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(ctop$indication$enq__ENA),
         .in$enq$v(ctop$indication$enq$v),
         .in$enq__RDY(radapter_0$in$enq__RDY),
@@ -24,7 +24,7 @@ module UserTop (input wire CLK, input wire nRST,
         .out$enq$v(read$enq$v),
         .out$enq$last(read$enq$last),
         .out$enq__RDY(read$enq__RDY));
-    AdapterFromBus#(32) wadapter_0 (.CLK(CLK), .nRST(nRST),
+    AdapterFromBus#(.width(32)) wadapter_0 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(write$enq__ENA),
         .in$enq$v(write$enq$v),
         .in$enq$last(write$enq$last),

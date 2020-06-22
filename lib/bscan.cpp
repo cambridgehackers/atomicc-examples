@@ -65,7 +65,7 @@ class BscanLocal __implements BscanLocalIfc<width> {
 
 template <int id, int width>
 class Bscan __implements BscanIfc<width> {
-    BSCANE2#(JTAG_CHAIN = 3/*id*/) bscan;
+    BSCANE2#(JTAG_CHAIN = id) bscan;
     BUFG tckbuf;
     BscanLocal<width> localBscan;
     __implements localBscan.fromBscan readBscan;

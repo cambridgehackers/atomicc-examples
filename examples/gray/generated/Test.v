@@ -16,7 +16,7 @@ module Test (input wire CLK, input wire nRST,
     input wire request$writeBin__ENA,
     input wire [4 - 1:0]request$writeBin$v,
     output wire request$writeBin__RDY);
-    GrayCounter#(4) counter (.CLK(CLK), .nRST(nRST),
+    GrayCounter#(.width(4)) counter (.CLK(CLK), .nRST(nRST),
         .increment__ENA(request$increment__ENA),
         .increment__RDY(request$increment__RDY),
         .decrement__ENA(request$decrement__ENA),

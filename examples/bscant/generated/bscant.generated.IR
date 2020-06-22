@@ -31,13 +31,13 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
+EMODULE Bscan(id=4,width=32) BscanIfc(width=32) {
 }
 EMODULE l_top l_topIfc {
 }
 MODULE Btest BtestIfc {
     INTERFACECONNECT readUser bscan$fromBscan PipeIn.1
-    FIELD Bscan(id=3,width=32) bscan
+    FIELD Bscan(id=4,width=32) bscan
     INTERFACE PipeIn.1 readUser
     FIELD Bit(8) readCount
     FIELD Bit(8) writeCount

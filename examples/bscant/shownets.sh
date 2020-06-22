@@ -1,7 +1,7 @@
 # source filename
 open_checkpoint zedboard/bin/top-post-route.dcp
 
-set fp [open layoutnets.txt w]
+set fp [open zedboard/layoutnets.txt w]
 set all_nets   [get_nets -hsc "/" -quiet -hierarchical ]
 foreach net $all_nets {
     if {"$net" == "<const0>"} continue
@@ -17,7 +17,7 @@ foreach net $all_nets {
 }
 #foreach net $all_nets { set temp [get_property NAME $net]; puts $fp $temp }
 close $fp
-write_verilog -force layoutnet.v
+write_verilog -force zedboard/layoutnet.v
 
 open_checkpoint zedboard/Synth/ZynqTop/ZynqTop-synth.dcp
-write_verilog -force layoutsynthnet.v
+write_verilog -force zedboard/layoutsynthnet.v

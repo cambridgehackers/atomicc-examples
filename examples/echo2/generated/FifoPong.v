@@ -27,7 +27,7 @@ module FifoPong (input wire CLK, input wire nRST,
     wire [32 - 1:0]out$first$retval$a;
     wire [32 - 1:0]out$first$retval$b;
     wire [32 - 1:0]out$first$retval$c;
-    Fifo1Base#(704) element1 (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(704)) element1 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(element1$in$enq__ENA),
         .in$enq$v(element1$in$enq$v),
         .in$enq__RDY(element1$in$enq__RDY),
@@ -35,7 +35,7 @@ module FifoPong (input wire CLK, input wire nRST,
         .out$deq__RDY(element1$out$deq__RDY),
         .out$first(element1$out$first),
         .out$first__RDY(element1$out$first__RDY));
-    Fifo1Base#(704) element2 (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(704)) element2 (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(element2$in$enq__ENA),
         .in$enq$v(element2$in$enq$v),
         .in$enq__RDY(element2$in$enq__RDY),

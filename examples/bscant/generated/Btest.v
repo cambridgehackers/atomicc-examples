@@ -15,7 +15,7 @@ module Btest (input wire CLK, input wire nRST,
     wire bscan$fromBscan$enq__ENA;
     wire [32 - 1:0]bscan$toBscan$enq$v;
     wire bscan$toBscan$enq__RDY;
-    Bscan#(32) bscan (.CLK(CLK), .nRST(nRST),
+    Bscan#(.id(4),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
         .toBscan$enq__ENA(1),
         .toBscan$enq$v(bscan$toBscan$enq$v),
         .toBscan$enq__RDY(bscan$toBscan$enq__RDY),
