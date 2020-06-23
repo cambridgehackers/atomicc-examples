@@ -38,6 +38,7 @@ MODULE Echo EchoIfc {
     FIELD Bit(16) b_delay
     FIELD Bit(32) v_type
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
+        PRINTF :printf{"request.say %x\n",request$say$v}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1

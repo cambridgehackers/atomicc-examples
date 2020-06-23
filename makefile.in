@@ -7,6 +7,8 @@ else
 Q=
 VERBOSE_SWITCH=--verbose
 endif
+#define the following for modules to be compiled with runtime printf support
+#CPPFLAGS += -DUSE_PRINTF
 
 allarchlist = ac701 zedboard zc702 zc706 kc705 vc707 zynq100 v2000t miniitx100 de5 htg4 vsim parallella xsim zybo kc705g2 vc707g2
 
@@ -15,6 +17,7 @@ export BOARD := $(BOARD)
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
+ATOMICC_RUNTIME=$(TOPDIR)/../atomicc/runtime/cpp
 
 VERILOG_LIB_GENERATED := $(TOPDIR)/lib/generated
 export VERILOG_LIB := $(VERILOG_LIB_GENERATED) $(VERILOG_LIB_GENERATED)/../verilog
@@ -22,7 +25,7 @@ CLANGBASE = $(TOPDIR)/../llvm/build/bin/
 CPP = $(CLANGBASE)clang++ 
 LLC = $(CLANGBASE)llc
 LINK = $(CLANGBASE)llvm-link
-CPPFLAGS = -I$(TOPDIR)/lib/ -I$(TOPDIR)/xilinx -I.
+CPPFLAGS += -I$(TOPDIR)/lib/ -I$(TOPDIR)/xilinx -I.
 CPPFLAGS += -std=c++11 -fno-unwind-tables -fno-use-cxa-atexit -fno-cxx-exceptions
 CPPFLAGS += -fblocks -fno-diagnostics-color
 CPPFLAGS += -Xclang -disable-lifetime-markers

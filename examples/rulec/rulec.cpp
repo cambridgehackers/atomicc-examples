@@ -49,6 +49,7 @@ class Echo __implements EchoIfc {
     __int(16) a_temp, b_temp, a_delay, b_delay;
     int v_type;
     void request.say(__int(32) v) if(!busy) {
+        printf("request.say %x\n", v);
         v_temp = v;
 #if 0
         v_delay = v_temp; /// testing jca

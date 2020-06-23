@@ -1,7 +1,7 @@
 
 include ../../makefile.in
 
-CPPFILES = testecho.cpp printfHandler.cpp
+CPPFILES = testecho.cpp $(ATOMICC_RUNTIME)/printfHandler.cpp
 PRINTF_DATAFILE=generated/printf.generated.printf
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -fdump-record-layouts

@@ -44,7 +44,6 @@ typedef int _IO_lock_t;
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
-#define __printf    PipeIn<NOCDataH> *printfp
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
 extern "C" int *__bitsubstrl(int, ...);
@@ -111,6 +110,10 @@ public:
     Pipe                   pipe;
     T                     *method;
 };
+#endif
+
+#ifdef USE_PRINTF
+class Printf __implements PipeIn<NOCDataH>;
 #endif
 
 static inline std::string utostr(uint64_t X) {

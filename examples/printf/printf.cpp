@@ -37,7 +37,6 @@ class EchoIfc {
 };
 
 class Echo __implements EchoIfc {
-    __printf;
     __uint(1) busy, busy_delay;
     __int(32) v_temp, v_delay;
     __int(16) a_temp, b_temp, a_delay, b_delay;
