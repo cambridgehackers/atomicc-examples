@@ -20,33 +20,33 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
-    input input$enq__ENA [funnelWidth-1:0],        /* array of inputs */
-    input [funnelWidth * dataWidth-1:0] input$enq$v,
-    output  input$enq__RDY [funnelWidth-1: 0],
-    output output$enq__ENA [funnelWidth/2 - 1: 0], /* merged output */
-    output [(funnelWidth /2) * dataWidth-1:0] output$enq$v,
-    input output$enq__RDY [funnelWidth/2 - 1: 0]);
+module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) ( in CLK, in nRST,
+    in in$enq__ENA [funnelWidth-1:0],        /* array of inputs */
+    in [funnelWidth * dataWidth-1:0] in$enq$v,
+    out  in$enq__RDY [funnelWidth-1: 0],
+    out out$enq__ENA [funnelWidth/2 - 1: 0], /* merged output */
+    out [(funnelWidth /2) * dataWidth-1:0] out$enq$v,
+    in out$enq__RDY [funnelWidth/2 - 1: 0]);
 
     genvar j;
     for (j = 0; j < funnelWidth / 2; j = j+1) begin
-        wire rvalid = input$enq__ENA[j*2+1];
-        assign input$enq__RDY[j*2+1] = output$enq__RDY[j];
-        assign input$enq__RDY[j*2] = !rvalid && output$enq__RDY[j];
-        assign output$enq$v[dataWidth * (j + 1) - 1: dataWidth * j] =
-            rvalid ? input$enq$v[dataWidth * (j*2 + 2) - 1: dataWidth * (j*2 + 1)]:
-                     input$enq$v[dataWidth * (j*2 + 1) - 1: dataWidth * j*2];
-        assign output$enq__ENA[j] = rvalid | input$enq__ENA[j*2];
+        wire rvalid = in$enq__ENA[j*2+1];
+        assign in$enq__RDY[j*2+1] = out$enq__RDY[j];
+        assign in$enq__RDY[j*2] = !rvalid && out$enq__RDY[j];
+        assign out$enq$v[dataWidth * (j + 1) - 1: dataWidth * j] =
+            rvalid ? in$enq$v[dataWidth * (j*2 + 2) - 1: dataWidth * (j*2 + 1)]:
+                     in$enq$v[dataWidth * (j*2 + 1) - 1: dataWidth * j*2];
+        assign out$enq__ENA[j] = rvalid | in$enq__ENA[j*2];
     end
 endmodule
 
-module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
-    input input$enq__ENA[funnelWidth-1:0], /* array of inputs */
-    input [funnelWidth * dataWidth-1:0] input$enq$v,
-    output input$enq__RDY[funnelWidth-1: 0],
-    output output$enq__ENA,                /* merged output */
-    output [dataWidth-1:0] output$enq$v,
-    input output$enq__RDY);
+module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( in CLK, in nRST,
+    in in$enq__ENA[funnelWidth-1:0], /* array of inputs */
+    in [funnelWidth * dataWidth-1:0] in$enq$v,
+    out in$enq__RDY[funnelWidth-1: 0],
+    out out$enq__ENA,                /* merged output */
+    out [dataWidth-1:0] out$enq$v,
+    in out$enq__RDY);
 
     genvar i;
     localparam depth = $clog2(funnelWidth) - 1;
@@ -56,12 +56,12 @@ module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input
        wire ready [funnelWidth/2**(i+1) - 1: 0];
        if (i == 0)
        pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
-           input$enq__ENA, input$enq$v, input$enq__RDY, valid, data, ready);
+           in$enq__ENA, in$enq$v, in$enq__RDY, valid, data, ready);
        else
        pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
            level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
     end
-    assign output$enq$v = level[depth].data[dataWidth - 1: 0];
-    assign output$enq__ENA = level[depth].valid[0];
-    assign level[depth].ready[0] = output$enq__RDY;
+    assign out$enq$v = level[depth].data[dataWidth - 1: 0];
+    assign out$enq__ENA = level[depth].valid[0];
+    assign level[depth].ready[0] = out$enq__RDY;
 endmodule

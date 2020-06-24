@@ -3,6 +3,7 @@ include ../../makefile.in
 
 CPPFILES = testecho.cpp $(ATOMICC_RUNTIME)/printfHandler.cpp
 PRINTF_DATAFILE=generated/printf.generated.printf
+CPPFLAGS += -DUSE_PRINTF
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -fdump-record-layouts
 #CPPFLAGS += -mllvm -dtrace
@@ -11,5 +12,6 @@ PRINTF_DATAFILE=generated/printf.generated.printf
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/printf.ll printf.cpp
+	$(ATOMICCDIR)/atomiccLinker generated/linker
 
 #-include $(DTOP)/generated/printf.generated.filelist

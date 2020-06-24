@@ -3,3 +3,7 @@
 "[request$setLeds:59]Echo\n" 
 "[delay_rule:62]Echo\n" 
 "[respond_rule:70]Echo\n" 
+"DISPLAYM2P %x" 0 
+"DISPLAYM2P %x" 0 
+"DISPLAYM2P %x" 0 
+"DISPLAYP2M %x" 0 

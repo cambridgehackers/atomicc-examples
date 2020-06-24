@@ -17,7 +17,8 @@ export BOARD := $(BOARD)
 TOPDIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 CONNECTALDIR=$(TOPDIR)/../connectal
 CONNECTALSDIR=$(TOPDIR)/connectal
-ATOMICC_RUNTIME=$(TOPDIR)/../atomicc/runtime/cpp
+ATOMICCDIR=$(TOPDIR)/../atomicc
+ATOMICC_RUNTIME=$(ATOMICCDIR)/runtime/cpp
 
 VERILOG_LIB_GENERATED := $(TOPDIR)/lib/generated
 export VERILOG_LIB := $(VERILOG_LIB_GENERATED) $(VERILOG_LIB_GENERATED)/../verilog

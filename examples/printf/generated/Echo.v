@@ -24,11 +24,7 @@ module Echo (input wire CLK, input wire nRST,
     output wire [32 - 1:0]indication$heard3$b,
     output wire [32 - 1:0]indication$heard3$c,
     output wire [16 - 1:0]indication$heard3$d,
-    input wire indication$heard3__RDY,
-    output wire printfp$enq__ENA,
-    output wire [128 - 1:0]printfp$enq$v,
-    output wire [16 - 1:0]printfp$enq$length,
-    input wire printfp$enq__RDY);
+    input wire indication$heard3__RDY);
     reg [16 - 1:0]a_delay;
     reg [16 - 1:0]a_temp;
     reg [16 - 1:0]b_delay;
@@ -41,6 +37,13 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
+    wire [(16 + 128) - 1:0]printfp$enq$v;
+    wire printfp$enq__ENA;
+    wire printfp$enq__RDY;
+    Printf printfp (.CLK(CLK), .nRST(nRST),
+        .enq__ENA(printfp$enq__ENA),
+        .enq$v(printfp$enq$v),
+        .enq__RDY(printfp$enq__RDY));
     assign indication$heard$v = v_delay;
     assign indication$heard2$a = a_delay;
     assign indication$heard2$b = b_delay;
@@ -51,8 +54,7 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
-    assign printfp$enq$length = ( ( request$say__ENA && request$say__RDY ) ? 16'd3 : 16'd0 ) | ( ( request$say2__ENA && request$say2__RDY ) ? 16'd2 : 16'd0 ) | ( ( request$setLeds__ENA && printfp$enq__RDY ) ? 16'd2 : 16'd0 ) | ( RULE$delay_rule__RDY ? 16'd2 : 16'd0 ) | ( RULE$respond_rule__RDY ? 16'd2 : 16'd0 );
-    assign printfp$enq$v = ( ( request$say__ENA && request$say__RDY ) ? { 47'd0 , busy_delay , clockReg , 16'd1 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( request$say2__ENA && request$say2__RDY ) ? { 80'd0 , 16'd2 , 16'd32767 , 16'd5 } : 128'd0 ) | ( ( request$setLeds__ENA && printfp$enq__RDY ) ? { 80'd0 , 16'd3 , 16'd32767 , 16'd5 } : 128'd0 ) | ( RULE$delay_rule__RDY ? { 80'd0 , 16'd4 , 16'd32767 , 16'd5 } : 128'd0 ) | ( RULE$respond_rule__RDY ? { 80'd0 , 16'd5 , 16'd32767 , 16'd5 } : 128'd0 );
+    assign printfp$enq$v = ( ( request$say__ENA && request$say__RDY ) ? { 47'd0 , busy_delay , clockReg , 16'd1 , 16'd32767 , 16'd5 } : 144'd0 ) | ( ( request$say2__ENA && request$say2__RDY ) ? { 80'd0 , 16'd2 , 16'd32767 , 16'd5 } : 144'd0 ) | ( ( request$setLeds__ENA && printfp$enq__RDY ) ? { 80'd0 , 16'd3 , 16'd32767 , 16'd5 } : 144'd0 ) | ( RULE$delay_rule__RDY ? { 80'd0 , 16'd4 , 16'd32767 , 16'd5 } : 144'd0 ) | ( RULE$respond_rule__RDY ? { 80'd0 , 16'd5 , 16'd32767 , 16'd5 } : 144'd0 );
     assign printfp$enq__ENA = ( request$say__ENA && ( request$say__RDY || ( request$say2__ENA && ( request$say2__RDY || request$setLeds__ENA || RULE$delay_rule__RDY || RULE$respond_rule__RDY ) ) || ( ( !request$say2__ENA ) && ( request$setLeds__ENA || RULE$delay_rule__RDY || RULE$respond_rule__RDY ) ) ) ) || ( ( !request$say__ENA ) && ( ( request$say2__ENA && ( request$say2__RDY || request$setLeds__ENA || RULE$delay_rule__RDY || RULE$respond_rule__RDY ) ) || ( ( !request$say2__ENA ) && ( request$setLeds__ENA || RULE$delay_rule__RDY || RULE$respond_rule__RDY ) ) ) );
     assign request$say2__RDY = !( busy || ( !printfp$enq__RDY ) );
     assign request$say__RDY = !( busy || ( !printfp$enq__RDY ) );

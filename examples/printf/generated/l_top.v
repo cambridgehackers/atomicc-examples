@@ -3,11 +3,10 @@
 `default_nettype none
 module l_top (input wire CLK, input wire nRST,
     output wire indication$enq__ENA,
-    output wire [128 - 1:0]indication$enq$v,
-    output wire [16 - 1:0]indication$enq$length,
+    output wire [(16 + 128) - 1:0]indication$enq$v,
     input wire indication$enq__RDY,
     input wire request$enq__ENA,
-    input wire [128 - 1:0]request$enq$v,
+    input wire [(16 + 128) - 1:0]request$enq$v,
     output wire request$enq__RDY);
     wire [32 - 1:0]DUT__Echo$indication$heard$v;
     wire [16 - 1:0]DUT__Echo$indication$heard2$a;
@@ -19,18 +18,12 @@ module l_top (input wire CLK, input wire nRST,
     wire [16 - 1:0]DUT__Echo$indication$heard3$d;
     wire DUT__Echo$indication$heard3__ENA;
     wire DUT__Echo$indication$heard__ENA;
-    wire [16 - 1:0]DUT__Echo$printfp$enq$length;
-    wire [128 - 1:0]DUT__Echo$printfp$enq$v;
-    wire DUT__Echo$printfp$enq__ENA;
     wire DUT__Echo$request$say2__RDY;
     wire DUT__Echo$request$say__RDY;
     wire DUT__Echo$request$setLeds__RDY;
     wire M2P__indication$method$heard2__RDY;
     wire M2P__indication$method$heard3__RDY;
     wire M2P__indication$method$heard__RDY;
-    wire [16 - 1:0]M2P__indication$pipe$enq$length;
-    wire [128 - 1:0]M2P__indication$pipe$enq$v;
-    wire M2P__indication$pipe$enq__ENA;
     wire [32 - 1:0]P2M__request$method$say$v;
     wire [16 - 1:0]P2M__request$method$say2$a;
     wire [16 - 1:0]P2M__request$method$say2$b;
@@ -38,8 +31,9 @@ module l_top (input wire CLK, input wire nRST,
     wire P2M__request$method$say__ENA;
     wire [8 - 1:0]P2M__request$method$setLeds$v;
     wire P2M__request$method$setLeds__ENA;
-    wire mux$forward$enq__RDY;
-    wire mux$in$enq__RDY;
+    wire ind$enq__ENA;
+    wire [(16 + 128) - 1:0]ind$enq$v;
+    wire ind$enq__RDY;
     Echo DUT__Echo (.CLK(CLK), .nRST(nRST),
         .request$say__ENA(P2M__request$method$say__ENA),
         .request$say$v(P2M__request$method$say$v),
@@ -63,24 +57,7 @@ module l_top (input wire CLK, input wire nRST,
         .indication$heard3$b(DUT__Echo$indication$heard3$b),
         .indication$heard3$c(DUT__Echo$indication$heard3$c),
         .indication$heard3$d(DUT__Echo$indication$heard3$d),
-        .indication$heard3__RDY(M2P__indication$method$heard3__RDY),
-        .printfp$enq__ENA(DUT__Echo$printfp$enq__ENA),
-        .printfp$enq$v(DUT__Echo$printfp$enq$v),
-        .printfp$enq$length(DUT__Echo$printfp$enq$length),
-        .printfp$enq__RDY(mux$forward$enq__RDY));
-    MuxPipe mux (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(M2P__indication$pipe$enq__ENA),
-        .in$enq$v(M2P__indication$pipe$enq$v),
-        .in$enq$length(M2P__indication$pipe$enq$length),
-        .in$enq__RDY(mux$in$enq__RDY),
-        .forward$enq__ENA(DUT__Echo$printfp$enq__ENA),
-        .forward$enq$v(DUT__Echo$printfp$enq$v),
-        .forward$enq$length(DUT__Echo$printfp$enq$length),
-        .forward$enq__RDY(mux$forward$enq__RDY),
-        .out$enq__ENA(indication$enq__ENA),
-        .out$enq$v(indication$enq$v),
-        .out$enq$length(indication$enq$length),
-        .out$enq__RDY(indication$enq__RDY));
+        .indication$heard3__RDY(M2P__indication$method$heard3__RDY));
     ___M2PEchoIndication M2P__indication (.CLK(CLK), .nRST(nRST),
         .method$heard__ENA(DUT__Echo$indication$heard__ENA),
         .method$heard$v(DUT__Echo$indication$heard$v),
@@ -95,10 +72,9 @@ module l_top (input wire CLK, input wire nRST,
         .method$heard3$c(DUT__Echo$indication$heard3$c),
         .method$heard3$d(DUT__Echo$indication$heard3$d),
         .method$heard3__RDY(M2P__indication$method$heard3__RDY),
-        .pipe$enq__ENA(M2P__indication$pipe$enq__ENA),
-        .pipe$enq$v(M2P__indication$pipe$enq$v),
-        .pipe$enq$length(M2P__indication$pipe$enq$length),
-        .pipe$enq__RDY(mux$in$enq__RDY));
+        .pipe$enq__ENA(ind$enq__ENA),
+        .pipe$enq$v(ind$enq$v),
+        .pipe$enq__RDY(ind$enq__RDY));
     ___P2MEchoRequest P2M__request (.CLK(CLK), .nRST(nRST),
         .method$say__ENA(P2M__request$method$say__ENA),
         .method$say$v(P2M__request$method$say$v),
@@ -113,6 +89,12 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
+`include "Linker.vh"
+endmodule 
+module Printf (input wire CLK, input wire nRST,
+    input wire enq__ENA,
+    input wire [(16 + 128) - 1:0]enq$v,
+    output wire enq__RDY);
 endmodule 
 
 `default_nettype wire    // set back to default value

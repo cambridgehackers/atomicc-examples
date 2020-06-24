@@ -32,10 +32,11 @@ INTERFACE l_topIfc  {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
+EMODULE Printf PipeIn {
+}
 EMODULE l_top l_topIfc {
 }
 MODULE Echo EchoIfc {
-    INTERFACE/Ptr PipeIn printfp
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
     FIELD Bit(32) v_temp
@@ -47,23 +48,23 @@ MODULE Echo EchoIfc {
     FIELD Bit(32) v_type
     FIELD Bit(32) clockReg
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",47,busy_delay,clockReg}
+        PRINTF :printf{"[%s:%d]Echo %x %x\n","request$say",46,busy_delay,clockReg}
         STORE :v_temp = request$say$v
         STORE :busy = 1
         STORE :v_type = 1
     }
     METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$say2",53}
+        PRINTF :printf{"[%s:%d]Echo\n","request$say2",52}
         STORE :a_temp = request$say2$a
         STORE :b_temp = request$say2$b
         STORE :busy = 1
         STORE :v_type = 2
     }
     METHOD/Action request$setLeds__ENA ( Bit(8) v ) {
-        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",60}
+        PRINTF :printf{"[%s:%d]Echo\n","request$setLeds",59}
     }
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
-        PRINTF :printf{"[delay_rule:%d]Echo\n",63}
+        PRINTF :printf{"[delay_rule:%d]Echo\n",62}
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
@@ -71,7 +72,7 @@ MODULE Echo EchoIfc {
         STORE :b_delay = b_temp
     }
     METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
-        PRINTF :printf{"[respond_rule:%d]Echo\n",71}
+        PRINTF :printf{"[respond_rule:%d]Echo\n",70}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
         CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
