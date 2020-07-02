@@ -385,6 +385,7 @@ if __name__=='__main__':
         options.verilog.append(os.path.join(connectaldir, 'verilog', fpga_vendor))
     options.verilog.append(os.path.join(connectaldir, 'verilog'))
     options.verilog.append(os.path.join(connectalsdir, '../lib/generated'))
+    options.verilog.append(os.path.join(connectalsdir, '../lib/verilog'))
     options.verilog.append(os.path.join(project_dir, '../generated'))
 
     if noisyFlag:

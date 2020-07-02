@@ -1,4 +1,4 @@
-/* Copyright (c) 2019 The Connectal Project
+/* Copyright (c) 2014 Quanta Research Cambridge, Inc
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -18,34 +18,35 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include <errno.h>
 #include <stdio.h>
 #include "sock_utils.h"
-#include "GrayCounterIfc_IC_width_ND_4_JC_.h"
+#include "FunnelIndication.h"
+#include "FunnelRequest.h"
+#include "GeneratedTypes.h"
 void atomiccPrintfInit(const char *filename);
 
-extern "C" int global_sim_fd;
-//0   0000
-//1   0001
-//2   0011
-//3   0010
-//4   0110
-//5   0111
-//6   0101
-//7   0100
-//8   1100
-//9   1101
-//10  1111
-//11  1110
-//12  1010
-//13  1011
-//14  1001
-//15  1000
+static FunnelRequestProxy *echoRequestProxy = 0;
+static sem_t sem_heard2;
+
+class FunnelIndication : public FunnelIndicationWrapper
+{
+public:
+    virtual void heard(uint32_t v) {
+        printf("heard an echo: %d\n", v);
+        sem_post(&sem_heard2);
+    }
+    FunnelIndication(unsigned int id, PortalTransportFunctions *item, void *param) : FunnelIndicationWrapper(id, item, param) {}
+};
+
+static void call_say(int v)
+{
+    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
+    echoRequestProxy->say(v);
+    sem_wait(&sem_heard2);
+}
 
 int main(int argc, const char **argv)
 {
-    int ret;
-    //atomiccPrintfInit("generated/rulec.generated.printf");
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
 #ifdef SIMULATION
         &transportSocketInit,
@@ -55,19 +56,24 @@ int main(int argc, const char **argv)
         NULL, 0);
     PortalMuxParam param = {};
     param.pint = &mcommon->pint;
-    GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(
-        IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
-    request->writeGray(0);
-    //request->writeBin(0xf);
-    //request->decrement();
-    for (int i = 0; i < 18; i++) {
-        //request->increment();
-        request->decrement();
-        ret = request->readGray();
-printf("[%s:%d]readGray %x\n", __FUNCTION__, __LINE__, ret);
-        //ret = request->readBin();
-//printf("[%s:%d]readBin %d\n", __FUNCTION__, __LINE__, ret);
-        //request->writeGray(i);
-    }
+    FunnelIndication echoIndication(IfcNames_FunnelIndicationH2S, &transportMux, &param);
+    echoRequestProxy = new FunnelRequestProxy(IfcNames_FunnelRequestS2H, &transportMux, &param);
+
+    int v = 42;
+    printf("Saying %d\n", v);
+    call_say(v);
+    call_say(v*5);
+    call_say(v*17);
+printf("[%s:%d] third\n", __FUNCTION__, __LINE__);
+    call_say(v*93);
+printf("[%s:%d] fourth\n", __FUNCTION__, __LINE__);
+    call_say(v*93);
+    call_say(v*93);
+    call_say(v*93);
+    call_say(v*93);
+    //call_say(v*100);
+    //call_say(v*120);
+printf("[%s:%d]testover, now SLEEEEEEEEEEEEEEEEEEEP\n", __FUNCTION__, __LINE__);
+//sleep(2);
     return 0;
 }

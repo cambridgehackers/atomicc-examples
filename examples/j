@@ -17,4 +17,5 @@ cd ../gray ;make
 cd ../bscant ;make
 cd ../packing ;make
 cd ../out2int ;make
+cd ../funnel ;make
 cd ../../lib; make

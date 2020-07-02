@@ -4,6 +4,7 @@ CPPFILES = testfunnel.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace
+#CPPFLAGS += -mllvm -mgentrace
 
 all:
 	mkdir -p generated

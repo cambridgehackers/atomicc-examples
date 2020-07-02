@@ -2,28 +2,143 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-STRUCT Test  {
-    SOFTWARE request
-    INTERFACECONNECT/Forward request counter GrayCounterIfc(width=4)
-    FIELD GrayCounter(width=4) counter
-    INTERFACE GrayCounterIfc(width=4) request
+INTERFACE Fifo  {
+    INTERFACE PipeIn.0 in
+    INTERFACE PipeOut out
 }
-INTERFACE GrayCounterIfc(width=4)  {
-    METHOD/Action increment__ENA
-    METHOD/Action decrement__ENA
-    METHOD readGray Bit(width)
-    METHOD/Action writeGray__ENA ( Bit(width) v )
-    METHOD readBin Bit(width)
-    METHOD/Action writeBin__ENA ( Bit(width) v )
+INTERFACE Fifo.1  {
+    INTERFACE PipeIn.2 in
+    INTERFACE PipeOut.3 out
+}
+INTERFACE Fifo.13  {
+    INTERFACE PipeIn.14 in
+    INTERFACE PipeOut.15 out
+}
+INTERFACE Fifo.5  {
+    INTERFACE PipeIn.6 in
+    INTERFACE PipeOut.7 out
+}
+INTERFACE Fifo.9  {
+    INTERFACE PipeIn.10 in
+    INTERFACE PipeOut.11 out
+}
+INTERFACE FunnelIfc  {
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE FunnelRequest request
+    INTERFACE/Ptr FunnelIndication indication
+}
+INTERFACE FunnelIndication  {
+    METHOD/Action heard__ENA ( Bit(32) v )
+}
+INTERFACE FunnelRequest  {
+    METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn.0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.10  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.14  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.2  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn.6  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeOut  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.11  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.15  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.3  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE PipeOut.7  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE GrayCounter(width=4) GrayCounterIfc(width=4) {
+EMODULE Fifo1Base(width=32) Fifo {
 }
 EMODULE l_top l_topIfc {
+}
+MODULE Fifo1 Fifo.1 {
+    FIELD Fifo1Base(width=32) fifo
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(32) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE Fifo1.12 Fifo.13 {
+    FIELD Fifo1Base(width=32) fifo
+}
+MODULE Fifo1.4 Fifo.5 {
+    FIELD Fifo1Base(width=32) fifo
+}
+MODULE Fifo1.8 Fifo.9 {
+    FIELD Fifo1Base(width=32) fifo
+}
+MODULE Funnel FunnelIfc {
+    FIELD Bit(1) busy
+    FIELD Bit(1) busy_delay
+    FIELD Fifo1 fifoA
+    FIELD Fifo1.4 fifoB
+    FIELD Fifo1.8 fifoC
+    FIELD Fifo1.12 fifoD
+    FIELD Bit(2) index
+    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
+        PRINTF :printf{"request.say %x index %d\n",request$say$v,index}
+        CALL/Action ((index) == (0)):fifoA$in$enq__ENA{request$say$v}
+        CALL/Action ((index) == (1)):fifoB$in$enq__ENA{request$say$v}
+        CALL/Action ((index) == (2)):fifoC$in$enq__ENA{request$say$v}
+        CALL/Action ((index) == (3)):fifoD$in$enq__ENA{request$say$v}
+        STORE :index = (index) + (1)
+    }
+    METHOD/Rule/Action RULE$respondA_rule__ENA {
+        PRINTF :printf{"[%s:%d] index %d\n","RULE$respondA_rule_block_invoke",57,index}
+        CALL :fifoA$out$first{}
+        CALL/Action :indication$heard__ENA{fifoA$out$first}
+        CALL/Action :fifoA$out$deq__ENA{}
+    }
+    METHOD/Rule/Action RULE$respondB_rule__ENA {
+        PRINTF :printf{"[%s:%d]\n","RULE$respondB_rule_block_invoke",62}
+        CALL :fifoB$out$first{}
+        CALL/Action :indication$heard__ENA{fifoB$out$first}
+        CALL/Action :fifoB$out$deq__ENA{}
+    }
+    METHOD/Rule/Action RULE$respondC_rule__ENA {
+        PRINTF :printf{"[%s:%d]\n","RULE$respondC_rule_block_invoke",67}
+        CALL :fifoC$out$first{}
+        CALL/Action :indication$heard__ENA{fifoC$out$first}
+        CALL/Action :fifoC$out$deq__ENA{}
+    }
+    METHOD/Rule/Action RULE$respondD_rule__ENA {
+        PRINTF :printf{"[%s:%d]\n","RULE$respondD_rule_block_invoke",72}
+        CALL :fifoD$out$first{}
+        CALL/Action :indication$heard__ENA{fifoD$out$first}
+        CALL/Action :fifoD$out$deq__ENA{}
+    }
 }

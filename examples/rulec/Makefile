@@ -8,4 +8,7 @@ CPPFILES = testecho.cpp
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
+	$(ATOMICCDIR)/atomiccLinker generated/linker
 
+dump:
+	vivado -mode batch -source shownets.sh 
