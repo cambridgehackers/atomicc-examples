@@ -49,6 +49,6 @@ MODULE ModFt600 Ft600 {
         STORE :usb_txe_delay = usb_txe
     }
     METHOD/Rule/Action RULE$iobufs__ENA {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 16U)),(1),FOR$0Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 16)),(1),FOR$0Body__ENA
     }
 }
