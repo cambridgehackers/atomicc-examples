@@ -1,9 +1,0 @@
-#
-set -x
-verilator -lint-only -Wno-fatal  -exe  --profile-cfuncs \
-    --output-split 20000 \
-    -y generated -y extra \
-    -y /afs/csail.mit.edu/group/csg/tools/tools_lx86/xilinx2015/vivado2015.2/Vivado/2015.2/data/verilog/src/xeclib/ \
-    -DDerivedClockPeriod=4 -DMainClockPeriod=4  \
-    --top-module ZynqTopNew generated/ZynqTopNew.v
-

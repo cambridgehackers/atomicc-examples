@@ -23,9 +23,18 @@
 
 template<int funnelWidth, int dataWidth>
 class FunnelBaseIfc {
-    PipeIn<__uint(dataWidth)> input[funnelWidth];
-    PipeIn<__uint(dataWidth)> *output;
+    PipeIn<__uint(dataWidth)> in[funnelWidth];
+    PipeIn<__uint(dataWidth)> *out;
 };
 
 template<int funnelWidth, int dataWidth>
 class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
+
+template<int funnelWidth, class T>
+class FunnelIfc {
+    PipeIn<T> in[funnelWidth];
+    PipeIn<T> *out;
+};
+
+template<int funnelWidth, class T>
+class Funnel __implements FunnelIfc<funnelWidth, T>;

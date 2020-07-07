@@ -1,35 +1,62 @@
 `ifndef __funnel_GENERATED__VH__
 `define __funnel_GENERATED__VH__
 
-//METASTART; Funnel
+//METASTART; FunnelTest
 //METAINTERNAL; fifoA; Fifo1Base(width=32);
 //METAINTERNAL; fifoB; Fifo1Base(width=32);
 //METAINTERNAL; fifoC; Fifo1Base(width=32);
 //METAINTERNAL; fifoD; Fifo1Base(width=32);
+//METAINTERNAL; iA; Out2In;
+//METAINTERNAL; iB; Out2In;
+//METAINTERNAL; iC; Out2In;
+//METAINTERNAL; iD; Out2In;
+//METAINTERNAL; funnel; Funnel(funnelWidth=4);
+//METAINTERNAL; result; Fifo1Base(width=32);
 //METAINVOKE; request$say__ENA; index == 0:fifoA$in$enq__ENA;index == 1:fifoB$in$enq__ENA;index == 2:fifoC$in$enq__ENA;index == 3:fifoD$in$enq__ENA;
 //METAGUARD; request$say; !( busy || ( !( ( fifoA$in$enq__RDY && ( ( fifoB$in$enq__RDY && ( ( fifoC$in$enq__RDY && ( fifoD$in$enq__RDY || ( !( index == 3 ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( !( ( fifoD$in$enq__RDY && ( index == 2 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) ) ) ) ) ) ) ) || ( ( !fifoB$in$enq__RDY ) && ( !( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( index == 1 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 1 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 1 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 1 ) ) ) ) ) ) ) ) ) ) || ( ( !fifoA$in$enq__RDY ) && ( !( ( fifoB$in$enq__RDY && ( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( index == 0 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 0 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 0 ) ) ) ) ) ) ) || ( ( !fifoB$in$enq__RDY ) && ( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( ( index == 1 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 1 ) || ( index == 0 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 1 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 1 ) || ( index == 0 ) ) ) ) ) ) ) ) ) ) ) ) );
-//METAINVOKE; RULE$respondA_rule__ENA; :fifoA$out$deq__ENA;:fifoA$out$first;:indication$heard__ENA;
-//METAEXCLUSIVE; RULE$respondA_rule__ENA; RULE$respondB_rule__ENA; RULE$respondC_rule__ENA; RULE$respondD_rule__ENA
-//METAGUARD; RULE$respondA_rule; fifoA$out$first__RDY && indication$heard__RDY && fifoA$out$deq__RDY;
-//METAINVOKE; RULE$respondB_rule__ENA; :fifoB$out$deq__ENA;:fifoB$out$first;:indication$heard__ENA;
-//METAEXCLUSIVE; RULE$respondB_rule__ENA; RULE$respondC_rule__ENA; RULE$respondD_rule__ENA
-//METAGUARD; RULE$respondB_rule; fifoB$out$first__RDY && indication$heard__RDY && fifoB$out$deq__RDY;
-//METAINVOKE; RULE$respondC_rule__ENA; :fifoC$out$deq__ENA;:fifoC$out$first;:indication$heard__ENA;
-//METAEXCLUSIVE; RULE$respondC_rule__ENA; RULE$respondD_rule__ENA
-//METAGUARD; RULE$respondC_rule; fifoC$out$first__RDY && indication$heard__RDY && fifoC$out$deq__RDY;
-//METAINVOKE; RULE$respondD_rule__ENA; :fifoD$out$deq__ENA;:fifoD$out$first;:indication$heard__ENA;
-//METAGUARD; RULE$respondD_rule; fifoD$out$first__RDY && indication$heard__RDY && fifoD$out$deq__RDY;
-//METARULES; RULE$respondA_rule; RULE$respondB_rule; RULE$respondC_rule; RULE$respondD_rule
+//METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;:result$out$deq__ENA;:result$out$first;
+//METAGUARD; RULE$respond_rule; result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY;
+//METARULES; RULE$respond_rule
+//METACONNECT; iA$in$deq__ENA; fifoA$out$deq__ENA
+//METACONNECT; iA$in$deq__RDY; fifoA$out$deq__RDY
+//METACONNECT; iA$in$first; fifoA$out$first
+//METACONNECT; iA$in$first__RDY; fifoA$out$first__RDY
+//METACONNECT; iB$in$deq__ENA; fifoB$out$deq__ENA
+//METACONNECT; iB$in$deq__RDY; fifoB$out$deq__RDY
+//METACONNECT; iB$in$first; fifoB$out$first
+//METACONNECT; iB$in$first__RDY; fifoB$out$first__RDY
+//METACONNECT; iC$in$deq__ENA; fifoC$out$deq__ENA
+//METACONNECT; iC$in$deq__RDY; fifoC$out$deq__RDY
+//METACONNECT; iC$in$first; fifoC$out$first
+//METACONNECT; iC$in$first__RDY; fifoC$out$first__RDY
+//METACONNECT; iD$in$deq__ENA; fifoD$out$deq__ENA
+//METACONNECT; iD$in$deq__RDY; fifoD$out$deq__RDY
+//METACONNECT; iD$in$first; fifoD$out$first
+//METACONNECT; iD$in$first__RDY; fifoD$out$first__RDY
+//METACONNECT; funnel$in[ 0 ]$enq__ENA; iA$out$enq__ENA
+//METACONNECT; funnel$in[ 0 ]$enq__RDY; iA$out$enq__RDY
+//METACONNECT; funnel$in[ 1 ]$enq__ENA; iB$out$enq__ENA
+//METACONNECT; funnel$in[ 1 ]$enq__RDY; iB$out$enq__RDY
+//METACONNECT; funnel$in[ 2 ]$enq__ENA; iC$out$enq__ENA
+//METACONNECT; funnel$in[ 2 ]$enq__RDY; iC$out$enq__RDY
+//METACONNECT; funnel$in[ 3 ]$enq__ENA; iD$out$enq__ENA
+//METACONNECT; funnel$in[ 3 ]$enq__RDY; iD$out$enq__RDY
+//METACONNECT; funnel$out$enq__ENA; result$in$enq__ENA
+//METACONNECT; funnel$out$enq__RDY; result$in$enq__RDY
+//METASTART; Out2In
+//METAINVOKE; RULE$copyRule__ENA; :in$deq__ENA;:in$first;:out$enq__ENA;
+//METAGUARD; RULE$copyRule; in$first__RDY && out$enq__RDY && in$deq__RDY;
+//METARULES; RULE$copyRule
 //METASTART; l_top
-//METAINTERNAL; DUT__Funnel; Funnel;
+//METAINTERNAL; DUT__FunnelTest; FunnelTest;
 //METAINTERNAL; M2P__indication; ___M2PFunnelIndication;
 //METAINTERNAL; P2M__request; ___P2MFunnelRequest;
-//METACONNECT; DUT__Funnel$indication$heard__ENA; M2P__indication$method$heard__ENA
-//METACONNECT; DUT__Funnel$indication$heard__RDY; M2P__indication$method$heard__RDY
+//METACONNECT; DUT__FunnelTest$indication$heard__ENA; M2P__indication$method$heard__ENA
+//METACONNECT; DUT__FunnelTest$indication$heard__RDY; M2P__indication$method$heard__RDY
 //METACONNECT; indication$enq__ENA; M2P__indication$pipe$enq__ENA
 //METACONNECT; indication$enq__RDY; M2P__indication$pipe$enq__RDY
-//METACONNECT; DUT__Funnel$request$say__ENA; P2M__request$method$say__ENA
-//METACONNECT; DUT__Funnel$request$say__RDY; P2M__request$method$say__RDY
+//METACONNECT; DUT__FunnelTest$request$say__ENA; P2M__request$method$say__ENA
+//METACONNECT; DUT__FunnelTest$request$say__RDY; P2M__request$method$say__RDY
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
 //METASTART; ___M2PFunnelIndication

@@ -26,4 +26,9 @@ class Out2InIfc {
 };
 
 template <class T>
-class Out2In __implements Out2InIfc<T>;
+class Out2In __implements Out2InIfc<T> {
+    __rule copyRule {
+        this->out->enq(this->in->first());
+        this->in->deq();
+    }
+};
