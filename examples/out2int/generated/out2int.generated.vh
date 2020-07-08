@@ -16,6 +16,10 @@
 //METACONNECT; pipe$in$first__RDY; first$out$first__RDY
 //METACONNECT; pipe$out$enq__ENA; second$in$enq__ENA
 //METACONNECT; pipe$out$enq__RDY; second$in$enq__RDY
+//METASTART; Out2In
+//METAINVOKE; RULE$copyRule__ENA; :in$deq__ENA;:in$first;:out$enq__ENA;
+//METAGUARD; RULE$copyRule; in$first__RDY && out$enq__RDY && in$deq__RDY;
+//METARULES; RULE$copyRule
 //METASTART; l_top
 //METAINTERNAL; DUT__Oin; Oin;
 //METAINTERNAL; M2P__indication; ___M2POinIndication;

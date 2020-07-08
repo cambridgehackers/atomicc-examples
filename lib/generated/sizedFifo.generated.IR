@@ -3,13 +3,13 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(128) v )
 }
 INTERFACE PipeOut  {

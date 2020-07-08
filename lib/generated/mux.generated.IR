@@ -3,20 +3,20 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.1  {
+INTERFACE Fifo_OC_1  {
     INTERFACE PipeIn in
-    INTERFACE PipeOut.2 out
+    INTERFACE PipeOut_OC_2 out
 }
-INTERFACE Fifo.3  {
-    INTERFACE PipeIn.4 in
-    INTERFACE PipeOut.5 out
+INTERFACE Fifo_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
 }
-INTERFACE Fifo.7  {
-    INTERFACE PipeIn.8 in
-    INTERFACE PipeOut.9 out
+INTERFACE Fifo_OC_7  {
+    INTERFACE PipeIn_OC_8 in
+    INTERFACE PipeOut_OC_9 out
 }
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn in
@@ -26,28 +26,28 @@ INTERFACE MuxPipeIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(144) v )
 }
-INTERFACE PipeIn.4  {
+INTERFACE PipeIn_OC_4  {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
-INTERFACE PipeIn.8  {
+INTERFACE PipeIn_OC_8  {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(144)
 }
-INTERFACE PipeOut.2  {
+INTERFACE PipeOut_OC_2  {
     METHOD/Action deq__ENA
     METHOD first NOCDataH
 }
-INTERFACE PipeOut.5  {
+INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
-INTERFACE PipeOut.9  {
+INTERFACE PipeOut_OC_9  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
@@ -57,13 +57,13 @@ INTERFACE l_topIfc  {
 }
 EMODULE Fifo1Base(width=144) Fifo {
 }
-EMODULE Fifo1Base(width=16) Fifo.3 {
+EMODULE Fifo1Base(width=16) Fifo_OC_3 {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo.1 {
+MODULE Fifo1 Fifo_OC_1 {
     FIELD Fifo1Base(width=144) fifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -77,7 +77,7 @@ MODULE Fifo1 Fifo.1 {
         LET Bit(144) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1.6 Fifo.7 {
+MODULE Fifo1_OC_6 Fifo_OC_7 {
     FIELD Fifo1Base(width=16) fifo
     METHOD/Action in$enq__ENA ( Bit(16) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -91,7 +91,7 @@ MODULE Fifo1.6 Fifo.7 {
 }
 MODULE MuxPipe MuxPipeIfc {
     FIELD Fifo1 forwardFifo
-    FIELD Fifo1.6 forwardFifol
+    FIELD Fifo1_OC_6 forwardFifol
     METHOD/Action in$enq__ENA ( NOCDataH v ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v}
     }

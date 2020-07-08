@@ -11,12 +11,12 @@ STRUCT IVectorTest  {
     FIELD IVector ivector
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.1  {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
+INTERFACE Fifo_OC_1  {
+    INTERFACE PipeIn_OC_2 in
+    INTERFACE PipeOut_OC_3 out
 }
 INTERFACE IVectorIFC  {
     INTERFACE IVectorRequest request
@@ -36,17 +36,17 @@ INTERFACE MuxPipeIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( ValuePair v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(704) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first ValuePair
 }
-INTERFACE PipeOut.3  {
+INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(704)
 }
@@ -54,7 +54,7 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE Fifo1Base(width=704) Fifo.1 {
+EMODULE Fifo1Base(width=704) Fifo_OC_1 {
 }
 EMODULE IVectorIndication IndIF {
 }

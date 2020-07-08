@@ -3,12 +3,12 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.1  {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
+INTERFACE Fifo_OC_1  {
+    INTERFACE PipeIn_OC_2 in
+    INTERFACE PipeOut_OC_3 out
 }
 INTERFACE OinIfc  {
     SOFTWARE request
@@ -23,30 +23,30 @@ INTERFACE OinRequest  {
     METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE Out2InIfc  {
-    INTERFACE/Ptr PipeOut.4 in
-    INTERFACE/Ptr PipeIn.5 out
+    INTERFACE/Ptr PipeOut_OC_4 in
+    INTERFACE/Ptr PipeIn_OC_5 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.5  {
+INTERFACE PipeIn_OC_5  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut.3  {
+INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut.4  {
+INTERFACE PipeOut_OC_4  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
@@ -56,11 +56,9 @@ INTERFACE l_topIfc  {
 }
 EMODULE Fifo1Base(width=32) Fifo {
 }
-EMODULE Out2In Out2InIfc {
-}
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo.1 {
+MODULE Fifo1 Fifo_OC_1 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -73,8 +71,8 @@ MODULE Fifo1 Fifo.1 {
     }
 }
 MODULE Oin OinIfc {
-    INTERFACECONNECT pipe$in first$out PipeOut.4
-    INTERFACECONNECT pipe$out second$in PipeIn.5
+    INTERFACECONNECT pipe$in first$out PipeOut_OC_4
+    INTERFACECONNECT pipe$out second$in PipeIn_OC_5
     FIELD Fifo1 first
     FIELD Fifo1 second
     FIELD Out2In pipe
@@ -86,5 +84,12 @@ MODULE Oin OinIfc {
         CALL :second$out$first{}
         CALL/Action :indication$heard__ENA{second$out$first}
         CALL/Action :second$out$deq__ENA{}
+    }
+}
+MODULE Out2In Out2InIfc {
+    METHOD/Rule/Action RULE$copyRule__ENA {
+        CALL :in$first{}
+        CALL/Action :out$enq__ENA{in$first}
+        CALL/Action :in$deq__ENA{}
     }
 }

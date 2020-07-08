@@ -33,20 +33,20 @@ INTERFACE ConnectIfc  {
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIIIfc  {
-    INTERFACE PipeIn.1 pipe
+    INTERFACE PipeIn_OC_1 pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn.1 pipe
+    INTERFACE/Ptr PipeIn_OC_1 pipe
 }
 INTERFACE ERIIfc  {
-    INTERFACE PipeIn.0 pipe
+    INTERFACE PipeIn_OC_0 pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn.0 pipe
+    INTERFACE/Ptr PipeIn_OC_0 pipe
 }
 INTERFACE EchoIfc  {
     INTERFACE EchoRequest request
@@ -66,10 +66,10 @@ INTERFACE MuxPipeIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( EchoRequest_data v )
 }
-INTERFACE PipeIn.1  {
+INTERFACE PipeIn_OC_1  {
     METHOD/Action enq__ENA ( EchoIndication_data v )
 }
 INTERFACE l_topIfc  {
@@ -90,9 +90,9 @@ MODULE Connect ConnectIfc {
     FIELD EchoIndicationInput lEII_test
     METHOD/Rule/Action RULE$connectRule__ENA {
         LET EchoRequest :lERI$request = lEcho$request
-        LET PipeIn.1 :lEIO$pipe = lEII_test$pipe
+        LET PipeIn_OC_1 :lEIO$pipe = lEII_test$pipe
         LET EchoIndication :lEcho$indication = lEIO$indication
-        LET PipeIn.0 :lERO_test$pipe = lERI$pipe
+        LET PipeIn_OC_0 :lERO_test$pipe = lERI$pipe
     }
 }
 MODULE Echo EchoIfc {

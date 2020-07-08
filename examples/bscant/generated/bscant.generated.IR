@@ -3,8 +3,8 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE BscanIfc(width=32)  {
-    INTERFACE PipeIn.0 toBscan
-    INTERFACE/Ptr PipeIn.1 fromBscan
+    INTERFACE PipeIn_OC_0 toBscan
+    INTERFACE/Ptr PipeIn_OC_1 fromBscan
 }
 INTERFACE BtestIfc  {
     SOFTWARE request
@@ -21,10 +21,10 @@ INTERFACE BtestRequest  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.1  {
+INTERFACE PipeIn_OC_1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
@@ -36,9 +36,9 @@ EMODULE Bscan(id=4,width=32) BscanIfc(width=32) {
 EMODULE l_top l_topIfc {
 }
 MODULE Btest BtestIfc {
-    INTERFACECONNECT readUser bscan$fromBscan PipeIn.1
+    INTERFACECONNECT readUser bscan$fromBscan PipeIn_OC_1
     FIELD Bscan(id=4,width=32) bscan
-    INTERFACE PipeIn.1 readUser
+    INTERFACE PipeIn_OC_1 readUser
     FIELD Bit(8) readCount
     FIELD Bit(8) writeCount
     FIELD Bit(32) nextV

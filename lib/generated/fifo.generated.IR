@@ -3,27 +3,27 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.1  {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
+INTERFACE Fifo_OC_1  {
+    INTERFACE PipeIn_OC_2 in
+    INTERFACE PipeOut_OC_3 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
-INTERFACE PipeOut.3  {
+INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
@@ -45,7 +45,7 @@ MODULE Fifo1Base(width=999999) Fifo {
     }
     METHOD out$first Bit(width) = ((element)) if ((full))
 }
-MODULE FifoB1Base(width=999999) Fifo.1 {
+MODULE FifoB1Base(width=999999) Fifo_OC_1 {
     FIELD Bit(999999) element
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v

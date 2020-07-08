@@ -3,27 +3,27 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Gear  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Gear.1  {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
+INTERFACE Gear_OC_1  {
+    INTERFACE PipeIn_OC_2 in
+    INTERFACE PipeOut_OC_3 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
-INTERFACE PipeOut.3  {
+INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
@@ -45,7 +45,7 @@ MODULE MIMO Gear {
         CALL :gear$out$first{}
     }
 }
-MODULE MIMOBase(widthIn=32,widthOut=128) Gear.1 {
+MODULE MIMOBase(widthIn=32,widthOut=128) Gear_OC_1 {
     FIELD Bit((128 + 32)) buffer
     FIELD Bit((__builtin_clog2((128 + 32)) + 1)) c
     FIELD/shared Bit(32) m
