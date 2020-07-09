@@ -2,7 +2,6 @@
 `define __connect_GENERATED__VH__
 
 //METASTART; Connect
-//METAEXTERNAL; indication; EchoIndication;
 //METAINTERNAL; lEIO; EchoIndicationOutput;
 //METAINTERNAL; lERI; EchoRequestInput;
 //METAINTERNAL; lEcho; Echo;
@@ -23,23 +22,18 @@
 //METACONNECT; lERO_test$pipe$enq__ENA; lERI$pipe$enq__ENA
 //METACONNECT; lERO_test$pipe$enq__RDY; lERI$pipe$enq__RDY
 //METASTART; Echo
-//METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; request$say__ENA; :indication$heard__ENA;
 //METAGUARD; request$say; indication$heard__RDY;
 //METASTART; EchoIndicationInput
-//METAEXTERNAL; indication; EchoIndication;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 1:indication$heard__ENA;
 //METAGUARD; pipe$enq; indication$heard__RDY;
 //METASTART; EchoIndicationOutput
-//METAEXTERNAL; pipe; PipeIn.0;
 //METAINVOKE; indication$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; indication$heard; pipe$enq__RDY;
 //METASTART; EchoRequestInput
-//METAEXTERNAL; request; EchoRequest;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 1:request$say__ENA;
 //METAGUARD; pipe$enq; request$say__RDY;
 //METASTART; EchoRequestOutput
-//METAEXTERNAL; pipe; PipeIn;
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAGUARD; request$say; pipe$enq__RDY;
 `endif

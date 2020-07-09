@@ -11,7 +11,6 @@
 //METAINVOKE; out$first; !pong:element1$out$first;pong:element2$out$first;
 //METAGUARD; out$first; ( element2$out$first__RDY && ( pong || element1$out$first__RDY ) ) || ( ( !element2$out$first__RDY ) && ( !( pong || ( !element1$out$first__RDY ) ) ) );
 //METASTART; IVector
-//METAEXTERNAL; ind; IndIF;
 //METAINTERNAL; fifo; FifoPong;
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY;

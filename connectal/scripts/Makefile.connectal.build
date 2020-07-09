@@ -82,7 +82,7 @@ VIVADO=$(shell which vivado)
 export VIVADODIR=$(shell dirname $(shell dirname $(VIVADO))))
 VIVADOFLAGS= -notrace
 
-#VFILE=verilog/$(MKTOP).v
+#VFILE=verilog/$(MKTOP).sv
 
 all: exe bits extratarget
 
@@ -196,7 +196,7 @@ ACCSIM=$(ATOMICCDIR)/simulation
 
 $(DTOP)/obj_dir/vlsim.mk: $(DTOP)/bin/libconnectal-sim.so verilog
 	rm -fr $(DTOP)/obj_dir
-	verilator -o vlsim --prefix vlsim $(VERILATOR_ARGS) -cc -exe $(CONNECTALSDIR)/../lib/generated/VsimTop.v -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop $(VERILOG_PATH:%=-y %) -Wno-fatal $(ACCSIM)/cpp/verilatortop.cpp -y $(ACCSIM)/verilog -LDFLAGS -L$(DTOP)/bin
+	verilator -o vlsim --prefix vlsim $(VERILATOR_ARGS) -cc -exe $(CONNECTALSDIR)/../lib/generated/VsimTop.sv -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop $(VERILOG_PATH:%=-y %) -Wno-fatal $(ACCSIM)/cpp/verilatortop.cpp -y $(ACCSIM)/verilog -LDFLAGS -L$(DTOP)/bin
 
 $(DTOP)/obj_dir/vlsim: $(DTOP)/obj_dir/vlsim.mk
 	+$(MAKE) USER_LDLIBS="-lconnectal-sim -lpthread" VM_PARALLEL_BUILDS=1 -C obj_dir -f vlsim.mk

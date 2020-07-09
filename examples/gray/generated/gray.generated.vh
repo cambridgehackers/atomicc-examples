@@ -35,7 +35,7 @@
 //METACONNECT; indication$enq__ENA; P2M__request$returnInd$enq__ENA
 //METACONNECT; indication$enq__RDY; P2M__request$returnInd$enq__RDY
 //METASTART; ___P2MGrayCounterIfc
-//METAEXTERNAL; returnInd; ___P2MGrayCounterIfc$returnInd;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ 31 : 16 ] == 16'd1:method$decrement__ENA;pipe$enq$v[ 31 : 16 ] == 16'd0:method$increment__ENA;pipe$enq$v[ 31 : 16 ] == 16'd5:method$writeBin__ENA;pipe$enq$v[ 31 : 16 ] == 16'd3:method$writeGray__ENA;pipe$enq$v[ 31 : 16 ] == 16'd2:returnInd$enq__ENA;pipe$enq$v[ 31 : 16 ] == width:returnInd$enq__ENA;
+//METAEXTERNAL; returnInd; PipeIn;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method$decrement__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method$increment__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd5:method$writeBin__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3:method$writeGray__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:returnInd$enq__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width:returnInd$enq__ENA;
 //METAGUARD; pipe$enq; method$increment__RDY && method$decrement__RDY && returnInd$enq__RDY && method$writeGray__RDY && method$writeBin__RDY;
 `endif
