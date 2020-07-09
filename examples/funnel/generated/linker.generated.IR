@@ -18,10 +18,10 @@ MODULE FunnelTest FunnelTest_interface {
     FIELD Fifo1Base__W20 fifoB
     FIELD Fifo1Base__W20 fifoC
     FIELD Fifo1Base__W20 fifoD
-    FIELD Out2In iA
-    FIELD Out2In iB
-    FIELD Out2In iC
-    FIELD Out2In iD
+    FIELD Out2InBase__W20 iA
+    FIELD Out2InBase__W20 iB
+    FIELD Out2InBase__W20 iC
+    FIELD Out2InBase__W20 iD
     FIELD Funnel funnel
     FIELD Fifo1Base__W20 result
 }
@@ -87,9 +87,24 @@ INTERFACE Fifo1Base__W20_interface {
     FIELD/output Bit(32) out$first
     FIELD/output Bit(1) out$first__RDY
 }
-MODULE Out2In Out2In_interface {
+MODULE Out2InBase Out2InBase_interface {
 }
-INTERFACE Out2In_interface {
+INTERFACE Out2InBase_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(1) in$deq__ENA
+    FIELD/input  Bit(1) in$deq__RDY
+    FIELD/input  Bit(999999) in$first
+    FIELD/input  Bit(1) in$first__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(999999) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE Out2InBase__W20 Out2InBase__W20_interface {
+}
+INTERFACE Out2InBase__W20_interface {
+    FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/output Bit(1) in$deq__ENA
@@ -107,4 +122,5 @@ FILE generated/___M2PFunnelIndication.sv
 FILE generated/___P2MFunnelRequest.sv
 FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//Fifo1Base.sv
 FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//fifo.generated.vh
-FILE generated/Out2In.sv
+FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//Out2InBase.sv
+FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//out2in.generated.vh

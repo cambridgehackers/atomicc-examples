@@ -18,19 +18,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
-template <class T>
-class Out2InIfc {
-    PipeOut<T> *in;
-    PipeIn<T> *out;
-};
+#include "out2in.h"
 
 template <int width>
-class Out2InBase __implements Out2InIfc<__uint(width)>;
-
-template <class T>
-class Out2In __implements Out2InIfc<T> {
-    Out2InBase<__bitsize(T)> base;
-    __connect base.in = this->in;
-    __connect base.out = this->out;
+class Out2InBase __implements Out2InIfc<__uint(width)> {
+    __rule copyRule {
+        this->out->enq(this->in->first());
+        this->in->deq();
+    }
 };
+
+static Out2InBase<GENERIC_INT_TEMPLATE_FLAG> dummy;

@@ -6,10 +6,10 @@
 //METAINTERNAL; fifoB; Fifo1Base(width=32);
 //METAINTERNAL; fifoC; Fifo1Base(width=32);
 //METAINTERNAL; fifoD; Fifo1Base(width=32);
-//METAINTERNAL; iA; Out2In;
-//METAINTERNAL; iB; Out2In;
-//METAINTERNAL; iC; Out2In;
-//METAINTERNAL; iD; Out2In;
+//METAINTERNAL; iA; Out2InBase(width=32);
+//METAINTERNAL; iB; Out2InBase(width=32);
+//METAINTERNAL; iC; Out2InBase(width=32);
+//METAINTERNAL; iD; Out2InBase(width=32);
 //METAINTERNAL; funnel; Funnel(funnelWidth=4);
 //METAINTERNAL; result; Fifo1Base(width=32);
 //METAINVOKE; request$say__ENA; index == 0:fifoA$in$enq__ENA;index == 1:fifoB$in$enq__ENA;index == 2:fifoC$in$enq__ENA;index == 3:fifoD$in$enq__ENA;
@@ -43,10 +43,6 @@
 //METACONNECT; funnel$in[ 3 ]$enq__RDY; iD$out$enq__RDY
 //METACONNECT; funnel$out$enq__ENA; result$in$enq__ENA
 //METACONNECT; funnel$out$enq__RDY; result$in$enq__RDY
-//METASTART; Out2In
-//METAINVOKE; RULE$copyRule__ENA; :in$deq__ENA;:in$first;:out$enq__ENA;
-//METAGUARD; RULE$copyRule; in$first__RDY && out$enq__RDY && in$deq__RDY;
-//METARULES; RULE$copyRule
 //METASTART; l_top
 //METAINTERNAL; DUT__FunnelTest; FunnelTest;
 //METAINTERNAL; M2P__indication; ___M2PFunnelIndication;

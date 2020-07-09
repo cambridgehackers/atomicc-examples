@@ -21,54 +21,52 @@
 // SOFTWARE.
 
 module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
-    input in$enq__ENA [funnelWidth-1:0],        /* array of inputs */
-    input [funnelWidth * dataWidth-1:0] in$enq$v,
-    output  in$enq__RDY [funnelWidth-1: 0],
-    output out$enq__ENA [funnelWidth/2 - 1: 0], /* merged output */
-    output [(funnelWidth /2) * dataWidth-1:0] out$enq$v,
-    input out$enq__RDY [funnelWidth/2 - 1: 0]);
+    input                  zzin$enq__ENA  [funnelWidth - 1:0],        /* array of inputs */
+    input  [dataWidth-1:0] zzin$enq$v     [funnelWidth - 1:0],
+    output                 zzin$enq__RDY  [funnelWidth - 1:0],
+
+    output                 zzout$enq__ENA [(funnelWidth/2) - 1:0], /* merged output */
+    output [dataWidth-1:0] zzout$enq$v    [(funnelWidth/2) - 1:0],
+    input                  zzout$enq__RDY [(funnelWidth/2) - 1:0]);
 
     genvar j;
     for (j = 0; j < funnelWidth / 2; j = j+1) begin
-        wire rvalid = in$enq__ENA[j*2+1];
-        //assign in$enq__RDY[j*2+1] = out$enq__RDY[j];
-        //assign in$enq__RDY[j*2] = !rvalid && out$enq__RDY[j];
-        assign in$enq__RDY[j*2+1:j*2] = '{out$enq__RDY[j], !rvalid && out$enq__RDY[j]};
-        assign out$enq$v[dataWidth * (j + 1) - 1: dataWidth * j] =
-            rvalid ? in$enq$v[dataWidth * (j*2 + 2) - 1: dataWidth * (j*2 + 1)]:
-                     in$enq$v[dataWidth * (j*2 + 1) - 1: dataWidth * j*2];
-        assign out$enq__ENA[j] = rvalid | in$enq__ENA[j*2];
+        wire rvalid = zzin$enq__ENA[j*2+1];
+        assign zzin$enq__RDY[j*2+1] =            zzout$enq__RDY[j];
+        assign zzin$enq__RDY[j*2]   = !rvalid && zzout$enq__RDY[j];
+        assign zzout$enq$v   [j]    = rvalid ? zzin$enq$v[j*2 + 1]: zzin$enq$v[j*2];
+        assign zzout$enq__ENA[j]    = rvalid | zzin$enq__ENA[j*2];
     end
 endmodule
 
 module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
-    input in$enq__ENA[funnelWidth-1:0], /* array of inputs */
-    input [funnelWidth * dataWidth-1:0] in$enq$v,
-    output in$enq__RDY[funnelWidth-1: 0],
-    output out$enq__ENA,                /* merged output */
+    input                  in$enq__ENA[funnelWidth-1:0], /* array of inputs */
+    input  [dataWidth-1:0] in$enq$v   [funnelWidth-1:0],
+    output                 in$enq__RDY[funnelWidth-1:0],
+    output                 out$enq__ENA,                /* merged output */
     output [dataWidth-1:0] out$enq$v,
-    input out$enq__RDY);
+    input                  out$enq__RDY);
 
     if (funnelWidth == 1) begin
-    assign out$enq$v = in$enq$v;
-    assign out$enq__ENA = in$enq__ENA[0];
-    assign in$enq__RDY[0] = out$enq__RDY;
+        assign out$enq$v = in$enq$v[0];
+        assign out$enq__ENA = in$enq__ENA[0];
+        assign in$enq__RDY[0] = out$enq__RDY;
     end
     else begin
     genvar i;
     localparam depth = $clog2(funnelWidth) - 1;
     for(i = 0; i <= depth; i = i+1) begin : level
-       wire valid [funnelWidth/2**(i+1) - 1: 0];
-       wire [funnelWidth/2**(i+1) * dataWidth-1:0] data;
-       wire ready [funnelWidth/2**(i+1) - 1: 0];
+       wire                 valid [(funnelWidth/2**(i+1)) - 1: 0];
+       wire [dataWidth-1:0] data  [(funnelWidth/2**(i+1)) - 1: 0];
+       wire                 ready [(funnelWidth/2**(i+1)) - 1: 0];
        if (i == 0)
-       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
-           in$enq__ENA, in$enq$v, in$enq__RDY, valid, data, ready);
+           pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
+               in$enq__ENA, in$enq$v, in$enq__RDY, valid, data, ready);
        else
-       pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
-           level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
+           pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
+               level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
     end
-    assign out$enq$v = level[depth].data[dataWidth - 1: 0];
+    assign out$enq$v = level[depth].data[0];
     assign out$enq__ENA = level[depth].valid[0];
     assign level[depth].ready[0] = out$enq__RDY;
     end
