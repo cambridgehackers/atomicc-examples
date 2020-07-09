@@ -95,3 +95,10 @@ INTERFACE Printf_interface {
     FIELD/input  Bit(144) enq$v
     FIELD/output Bit(1) enq__RDY
 }
+FILE generated/l_top.sv
+FILE generated/printf.generated.vh
+FILE generated/Echo.sv
+FILE generated/___M2PEchoIndication.sv
+FILE generated/___P2MEchoRequest.sv
+FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//Printf.sv
+FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//printfStub.generated.vh
