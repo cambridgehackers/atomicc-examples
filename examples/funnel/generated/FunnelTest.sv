@@ -1,7 +1,7 @@
 `include "funnel.generated.vh"
 
 `default_nettype none
-module FunnelTest (input wire CLK, input wire nRST,
+module FunnelTest#(funnelWidth=4, dataWidth=32) (input wire CLK, input wire nRST,
     input wire request$say__ENA,
     input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
@@ -36,6 +36,9 @@ module FunnelTest (input wire CLK, input wire nRST,
     wire fifoD$out$deq__RDY;
     wire [32 - 1:0]fifoD$out$first;
     wire fifoD$out$first__RDY;
+    wire [32 - 1:0]funnel$in$enq$v [funnelWidth - 1:0];
+    wire funnel$in$enq__ENA [funnelWidth - 1:0];
+    wire funnel$in$enq__RDY [funnelWidth - 1:0];
     wire [32 - 1:0]funnel$out$enq$v;
     wire funnel$out$enq__ENA;
     wire iA$in$deq__ENA;
@@ -54,10 +57,6 @@ module FunnelTest (input wire CLK, input wire nRST,
     wire result$out$deq__ENA;
     wire result$out$deq__RDY;
     wire result$out$first__RDY;
-    wire funnel$in$enq__ENA[3:0];
-    wire [31:0] funnel$in$enq$v[3:0];
-    wire funnel$in$enq__RDY[3:0];
-    wire funnel$out$enq__RDY;
     Fifo1Base#(.width(32)) fifoA (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(fifoA$in$enq__ENA),
         .in$enq$v(fifoA$in$enq$v),
