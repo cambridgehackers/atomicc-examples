@@ -70,32 +70,9 @@ class FunnelTest __implements FunnelTestIfc {
             fifoD.in.enq(v);
         index++;
     }
-#if 1
     __rule respond_rule {
 printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, index);
         indication->heard(result.out.first());
         result.out.deq();
    };
-#else
-    __rule respondA_rule {
-printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, index);
-        indication->heard(fifoA.out.first());
-        fifoA.out.deq();
-   };
-    __rule respondB_rule {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-        indication->heard(fifoB.out.first());
-        fifoB.out.deq();
-   };
-    __rule respondC_rule {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-        indication->heard(fifoC.out.first());
-        fifoC.out.deq();
-   };
-    __rule respondD_rule {
-printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-        indication->heard(fifoD.out.first());
-        fifoD.out.deq();
-   };
-#endif
 };

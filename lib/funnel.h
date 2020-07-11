@@ -37,4 +37,8 @@ class FunnelIfc {
 };
 
 template<int funnelWidth, class T>
-class Funnel __implements FunnelIfc<funnelWidth, T>;
+class Funnel __implements FunnelIfc<funnelWidth, T> {
+    FunnelBase<funnelWidth, __bitsize(T)> base;
+    __connect base.in = this->in;
+    __connect base.out = this->out;
+};

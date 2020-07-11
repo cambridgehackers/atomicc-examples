@@ -1,7 +1,7 @@
 `include "funnel.generated.vh"
 
 `default_nettype none
-module FunnelTest#(funnelWidth=4, dataWidth=32) (input wire CLK, input wire nRST,
+module FunnelTest (input wire CLK, input wire nRST,
     input wire request$say__ENA,
     input wire [32 - 1:0]request$say$v,
     output wire request$say__RDY,
@@ -36,9 +36,9 @@ module FunnelTest#(funnelWidth=4, dataWidth=32) (input wire CLK, input wire nRST
     wire fifoD$out$deq__RDY;
     wire [32 - 1:0]fifoD$out$first;
     wire fifoD$out$first__RDY;
-    wire [32 - 1:0]funnel$in$enq$v [funnelWidth - 1:0];
-    wire funnel$in$enq__ENA [funnelWidth - 1:0];
-    wire funnel$in$enq__RDY [funnelWidth - 1:0];
+    wire [32 - 1:0]funnel$in$enq$v [4 - 1:0];
+    wire funnel$in$enq__ENA [4 - 1:0];
+    wire funnel$in$enq__RDY [4 - 1:0];
     wire [32 - 1:0]funnel$out$enq$v;
     wire funnel$out$enq__ENA;
     wire iA$in$deq__ENA;
@@ -121,7 +121,7 @@ module FunnelTest#(funnelWidth=4, dataWidth=32) (input wire CLK, input wire nRST
         .out$enq__ENA(iD$out$enq__ENA),
         .out$enq$v(iD$out$enq$v),
         .out$enq__RDY(funnel$in$enq__RDY[ 3 ]));
-    FunnelBase #(.funnelWidth(4), .dataWidth(32)) funnel (.CLK(CLK), .nRST(nRST),
+    FunnelBase#(.funnelWidth(4),.dataWidth(32)) funnel (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(funnel$in$enq__ENA),
         .in$enq$v(funnel$in$enq$v),
         .in$enq__RDY(funnel$in$enq__RDY),
@@ -166,7 +166,7 @@ module FunnelTest#(funnelWidth=4, dataWidth=32) (input wire CLK, input wire nRST
       end // nRST
       else begin
         if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
-            $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 75 , index );
+            $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 74 , index );
         end; // End of RULE$respond_rule__ENA
         if (request$say__ENA && request$say__RDY) begin // request$say__ENA
             index <= index + 1;

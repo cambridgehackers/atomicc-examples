@@ -22,7 +22,7 @@ MODULE FunnelTest FunnelTest_interface {
     FIELD Out2InBase__W20 iB
     FIELD Out2InBase__W20 iC
     FIELD Out2InBase__W20 iD
-    FIELD Funnel funnel
+    FIELD FunnelBase funnel
     FIELD Fifo1Base__W20 result
 }
 INTERFACE FunnelTest_interface {

@@ -10,9 +10,13 @@ INTERFACE Fifo_OC_1  {
     INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut_OC_3 out
 }
-INTERFACE FunnelIfc(funnelWidth=4)  {
+INTERFACE FunnelBaseIfc(funnelWidth=4,dataWidth=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_33 in
-    INTERFACE/Ptr PipeIn_OC_33 out
+    INTERFACE/Ptr PipeIn_OC_34 out
+}
+INTERFACE FunnelIfc(funnelWidth=4)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_35 in
+    INTERFACE/Ptr PipeIn_OC_35 out
 }
 INTERFACE FunnelIndication  {
     METHOD/Action heard__ENA ( Bit(32) v )
@@ -73,6 +77,12 @@ INTERFACE PipeIn_OC_32  {
 INTERFACE PipeIn_OC_33  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn_OC_34  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_35  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
@@ -107,7 +117,7 @@ INTERFACE l_topIfc  {
 }
 EMODULE Fifo1Base(width=32) Fifo {
 }
-EMODULE Funnel(funnelWidth=4) FunnelIfc(funnelWidth=4) {
+EMODULE FunnelBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataWidth=32) {
 }
 EMODULE Out2InBase(width=32) Out2InIfc {
 }
@@ -125,16 +135,21 @@ MODULE Fifo1 Fifo_OC_1 {
         CALL :fifo$out$first{}
     }
 }
+MODULE Funnel(funnelWidth=4) FunnelIfc(funnelWidth=4) {
+    INTERFACECONNECT base$in in PipeIn_OC_33
+    INTERFACECONNECT base$out out PipeIn_OC_34
+    FIELD FunnelBase(funnelWidth=4,dataWidth=32) base
+}
 MODULE FunnelTest FunnelTestIfc {
     INTERFACECONNECT iA$in fifoA$out PipeOut_OC_19
     INTERFACECONNECT iB$in fifoB$out PipeOut_OC_23
     INTERFACECONNECT iC$in fifoC$out PipeOut_OC_27
     INTERFACECONNECT iD$in fifoD$out PipeOut_OC_31
-    INTERFACECONNECT funnel$in[0] iA$out PipeIn_OC_33
-    INTERFACECONNECT funnel$in[1] iB$out PipeIn_OC_33
-    INTERFACECONNECT funnel$in[2] iC$out PipeIn_OC_33
-    INTERFACECONNECT funnel$in[3] iD$out PipeIn_OC_33
-    INTERFACECONNECT funnel$out result$in PipeIn_OC_33
+    INTERFACECONNECT funnel$in[0] iA$out PipeIn_OC_35
+    INTERFACECONNECT funnel$in[1] iB$out PipeIn_OC_35
+    INTERFACECONNECT funnel$in[2] iC$out PipeIn_OC_35
+    INTERFACECONNECT funnel$in[3] iD$out PipeIn_OC_35
+    INTERFACECONNECT funnel$out result$in PipeIn_OC_35
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
     FIELD Fifo1 fifoA
@@ -157,7 +172,7 @@ MODULE FunnelTest FunnelTestIfc {
         STORE :index = (index) + (1)
     }
     METHOD/Rule/Action RULE$respond_rule__ENA {
-        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",75,index}
+        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",74,index}
         CALL :result$out$first{}
         CALL/Action :indication$heard__ENA{result$out$first}
         CALL/Action :result$out$deq__ENA{}
