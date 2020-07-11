@@ -32,7 +32,7 @@ module Echo (input wire CLK, input wire nRST,
     wire RULE$respond_rule__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = RULE$respond_rule__RDY;
+    assign indication$heard__ENA = busy_delay;
     assign request$say2__RDY = !busy;
     assign request$say__RDY = !busy;
     assign swap$x2y__RDY = 1;

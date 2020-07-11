@@ -30,7 +30,7 @@ module BscanLocal #(
         .in(toBscan$enq__ENA));
     assign TDO = shiftReg[ 0 : 0 ];
     assign fromBscan$enq$v = shiftReg;
-    assign fromBscan$enq__ENA = RULE$updateRule__RDY;
+    assign fromBscan$enq__ENA = update;
     assign toBscan$enq__RDY = !( notReady || ( !capture ) );
     // Extra assigments, not to output wires
     assign RULE$shiftRule__RDY = shift;

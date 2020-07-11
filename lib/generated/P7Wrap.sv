@@ -55,9 +55,6 @@ module P7Wrap (
     input wire [4 - 1:0]FCLKCLKTRIGN,
     output wire [4 - 1:0]FCLKRESETN);
     wire CLK;
-    wire RULE$gp0ar__RDY;
-    wire RULE$gp0aw__RDY;
-    wire RULE$gp0w__RDY;
     wire nRST;
     wire pclockTop$CLK;
     wire pclockTop$nRST;
@@ -704,9 +701,9 @@ module P7Wrap (
         .CLK(pclockTop$CLK),
         .nRST(pclockTop$nRST),
         .clockOut());
-    assign MAXIGP0_O$AR__ENA = RULE$gp0ar__RDY;
-    assign MAXIGP0_O$AW__ENA = RULE$gp0aw__RDY;
-    assign MAXIGP0_O$W__ENA = RULE$gp0w__RDY;
+    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
+    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
+    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
     assign pclockTop$CLK = CLK;
     assign pclockTop$nRST = nRST;
     assign pps$DDRARB = 4'd0;
@@ -726,9 +723,6 @@ module P7Wrap (
     assign pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY;
     // Extra assigments, not to output wires
     assign CLK = intrCLK;
-    assign RULE$gp0ar__RDY = pps$MAXIGP0ARVALID && MAXIGP0_O$AR__RDY;
-    assign RULE$gp0aw__RDY = pps$MAXIGP0AWVALID && MAXIGP0_O$AW__RDY;
-    assign RULE$gp0w__RDY = pps$MAXIGP0WVALID && MAXIGP0_O$W__RDY;
     assign nRST = intrnRST;
 endmodule 
 

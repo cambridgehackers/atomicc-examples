@@ -47,14 +47,13 @@ module AxiTop (
     wire [32 - 1:0]RULE$lread$res;
     wire [32 - 1:0]RULE$lreadData$currentRData$data;
     wire [6 - 1:0]RULE$lreadData$currentRData$id;
-    wire RULE$lreadData__RDY;
     wire RULE$lread__RDY;
     wire [32 - 1:0]RULE$lwrite$currentWData;
     wire [6 - 1:0]RULE$lwrite$currentWrite;
     wire RULE$lwrite__RDY;
-    wire RULE$writeResponse__RDY;
     wire [38 - 1:0]readData$in$enq$v;
     wire readData$in$enq__RDY;
+    wire readData$out$deq__ENA;
     wire readData$out$deq__RDY;
     wire [38 - 1:0]readData$out$first;
     wire readData$out$first__RDY;
@@ -90,6 +89,7 @@ module AxiTop (
     wire [6 - 1:0]writeDone$in$enq$v;
     wire writeDone$in$enq__ENA;
     wire writeDone$in$enq__RDY;
+    wire writeDone$out$deq__ENA;
     wire writeDone$out$deq__RDY;
     wire writeDone$out$first__RDY;
     Fifo1Base#(.width(6)) reqArs (.CLK(CLK), .nRST(nRST),
@@ -112,7 +112,7 @@ module AxiTop (
         .in$enq__ENA(writeDone$in$enq__ENA),
         .in$enq$v(writeDone$in$enq$v),
         .in$enq__RDY(writeDone$in$enq__RDY),
-        .out$deq__ENA(RULE$writeResponse__RDY),
+        .out$deq__ENA(writeDone$out$deq__ENA),
         .out$deq__RDY(writeDone$out$deq__RDY),
         .out$first(MAXIGP0_I$B$id),
         .out$first__RDY(writeDone$out$first__RDY));
@@ -128,7 +128,7 @@ module AxiTop (
         .in$enq__ENA(RULE$lread__RDY),
         .in$enq$v(readData$in$enq$v),
         .in$enq__RDY(readData$in$enq__RDY),
-        .out$deq__ENA(RULE$lreadData__RDY),
+        .out$deq__ENA(readData$out$deq__ENA),
         .out$deq__RDY(readData$out$deq__RDY),
         .out$first(readData$out$first),
         .out$first__RDY(readData$out$first__RDY));
@@ -150,17 +150,18 @@ module AxiTop (
         .read$enq$last(),
         .read$enq__RDY(requestValue$in$enq__RDY));
     assign MAXIGP0_I$B$resp = 2'd0;
-    assign MAXIGP0_I$B__ENA = RULE$writeResponse__RDY;
+    assign MAXIGP0_I$B__ENA = writeDone$out$first__RDY && writeDone$out$deq__RDY;
     assign MAXIGP0_I$R$data = RULE$lreadData$currentRData$data;
     assign MAXIGP0_I$R$id = RULE$lreadData$currentRData$id;
     assign MAXIGP0_I$R$last = 1;
     assign MAXIGP0_I$R$resp = 2'd0;
-    assign MAXIGP0_I$R__ENA = RULE$lreadData__RDY;
+    assign MAXIGP0_I$R__ENA = readData$out$first__RDY && readData$out$deq__RDY;
     assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
     assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
     assign MAXIGP0_O$W__RDY = writeData$in$enq__RDY;
     assign interrupt = requestValue$out$deq__RDY && intEnable;
     assign readData$in$enq$v = { RULE$lread$agg_2e_tmp$data , RULE$lread$agg_2e_tmp$id };
+    assign readData$out$deq__ENA = readData$out$first__RDY && MAXIGP0_I$R__RDY;
     assign reqArs$in$enq$v = MAXIGP0_O$AR$id[ 5 : 0 ];
     assign reqArs$out$deq__ENA = RULE$lread__RDY && ( readCount == 0 );
     assign reqAws$in$enq$v = MAXIGP0_O$AW$id[ 5 : 0 ];
@@ -173,6 +174,7 @@ module AxiTop (
     assign writeData$in$enq$v = MAXIGP0_O$W$data;
     assign writeDone$in$enq$v = RULE$lwrite$currentWrite;
     assign writeDone$in$enq__ENA = RULE$lwrite__RDY && ( writeCount == 0 );
+    assign writeDone$out$deq__ENA = writeDone$out$first__RDY && MAXIGP0_I$B__RDY;
     // Extra assigments, not to output wires
     assign RULE$lread$agg_2e_tmp$data = RULE$lread$res;
     assign RULE$lread$agg_2e_tmp$id = RULE$lread$currentRead;
@@ -181,12 +183,10 @@ module AxiTop (
     assign RULE$lread$res = ( ( RULE$lread__RDY && ( readAddr == 0 ) && portalRControl ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 8 ) && portalRControl ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 12 ) && portalRControl ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 16 ) && portalRControl ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 20 ) && portalRControl ) ? 32'd2 : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ) ) ? requestValue$out$first : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ) ) ? user$write$enq__RDY : 1'd0 );
     assign RULE$lreadData$currentRData$data = readData$out$first[ 32 - 1 + 6 : 6 ];
     assign RULE$lreadData$currentRData$id = readData$out$first[ 6 - 1 : 0 ];
-    assign RULE$lreadData__RDY = readData$out$first__RDY && MAXIGP0_I$R__RDY && readData$out$deq__RDY;
     assign RULE$lread__RDY = reqArs$out$first__RDY && ( ( portalRControl && readData$in$enq__RDY && ( reqArs$out$deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData$in$enq__RDY && ( ( reqArs$out$deq__RDY && ( ( requestValue$out$first__RDY && ( requestValue$out$deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out$first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) || ( ( !reqArs$out$deq__RDY ) && ( !( ( readCount == 0 ) || ( !( ( requestValue$out$first__RDY && ( requestValue$out$deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out$first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) ) ) ) ) ) );
     assign RULE$lwrite$currentWData = writeData$out$first;
     assign RULE$lwrite$currentWrite = reqAws$out$first;
     assign RULE$lwrite__RDY = reqAws$out$first__RDY && writeData$out$first__RDY && ( ( portalWControl && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( reqAws$out$deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( ( reqAws$out$deq__RDY && user$write$enq__RDY ) || ( ( !reqAws$out$deq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write$enq__RDY ) ) ) ) ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write$enq__RDY ) ) ) ) ) ) );
-    assign RULE$writeResponse__RDY = writeDone$out$first__RDY && MAXIGP0_I$B__RDY && writeDone$out$deq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin

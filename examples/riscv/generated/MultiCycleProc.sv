@@ -79,7 +79,7 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     assign rf$read$regnum = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign rf$write$regnum = e2w_dst;
     assign rf$write$regval = RULE$writeBack$wbval;
-    assign rf$write__ENA = RULE$writeBack__RDY;
+    assign rf$write__ENA = e2w_valid == 1;
     // Extra assigments, not to output wires
     assign RULE$decode__RDY = ( d2e_valid == 0 ) && pgm$read__RDY && dec$getOp__RDY && dec$getArithOp__RDY && dec$getSrc1__RDY && dec$getSrc2__RDY && dec$getDst__RDY && dec$getAddr__RDY;
     assign RULE$execArith$val$addr = exec$basicExec[ 32 - 1 + 32 : 32 ];

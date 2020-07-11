@@ -11,6 +11,7 @@ module FunnelTest (input wire CLK, input wire nRST,
     reg busy;
     reg busy_delay;
     reg [2 - 1:0]index;
+    wire RULE$respond_rule__RDY;
     wire [32 - 1:0]fifoA$in$enq$v;
     wire fifoA$in$enq__ENA;
     wire fifoA$in$enq__RDY;
@@ -50,9 +51,9 @@ module FunnelTest (input wire CLK, input wire nRST,
     wire [32 - 1:0]iD$out$enq$v;
     wire iD$out$enq__ENA;
     wire result$in$enq__RDY;
+    wire result$out$deq__ENA;
     wire result$out$deq__RDY;
     wire result$out$first__RDY;
-
     wire funnel$in$enq__ENA[3:0];
     wire [31:0] funnel$in$enq$v[3:0];
     wire funnel$in$enq__RDY[3:0];
@@ -132,7 +133,7 @@ module FunnelTest (input wire CLK, input wire nRST,
         .in$enq__ENA(funnel$out$enq__ENA),
         .in$enq$v(funnel$out$enq$v),
         .in$enq__RDY(result$in$enq__RDY),
-        .out$deq__ENA(result$out$first__RDY && indication$heard__RDY),
+        .out$deq__ENA(result$out$deq__ENA),
         .out$deq__RDY(result$out$deq__RDY),
         .out$first(indication$heard$v),
         .out$first__RDY(result$out$first__RDY));
@@ -146,7 +147,9 @@ module FunnelTest (input wire CLK, input wire nRST,
     assign fifoD$in$enq__ENA = request$say__ENA && request$say__RDY && ( index == 3 );
     assign indication$heard__ENA = result$out$first__RDY && result$out$deq__RDY;
     assign request$say__RDY = !( busy || ( !( ( fifoA$in$enq__RDY && ( ( fifoB$in$enq__RDY && ( ( fifoC$in$enq__RDY && ( fifoD$in$enq__RDY || ( !( index == 3 ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( !( ( fifoD$in$enq__RDY && ( index == 2 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) ) ) ) ) ) ) ) || ( ( !fifoB$in$enq__RDY ) && ( !( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( index == 1 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 1 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 1 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 1 ) ) ) ) ) ) ) ) ) ) || ( ( !fifoA$in$enq__RDY ) && ( !( ( fifoB$in$enq__RDY && ( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( index == 0 ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 0 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 0 ) ) ) ) ) ) ) || ( ( !fifoB$in$enq__RDY ) && ( ( fifoC$in$enq__RDY && ( ( fifoD$in$enq__RDY && ( ( index == 1 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 1 ) || ( index == 0 ) ) ) ) ) || ( ( !fifoC$in$enq__RDY ) && ( ( fifoD$in$enq__RDY && ( ( index == 2 ) || ( index == 1 ) || ( index == 0 ) ) ) || ( ( !fifoD$in$enq__RDY ) && ( ( index == 3 ) || ( index == 2 ) || ( index == 1 ) || ( index == 0 ) ) ) ) ) ) ) ) ) ) ) ) );
+    assign result$out$deq__ENA = result$out$first__RDY && indication$heard__RDY;
     // Extra assigments, not to output wires
+    assign RULE$respond_rule__RDY = result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY;
     assign funnel$in$enq$v[ 0 ] = iA$out$enq$v;
     assign funnel$in$enq$v[ 1 ] = iB$out$enq$v;
     assign funnel$in$enq$v[ 2 ] = iC$out$enq$v;
@@ -163,7 +166,7 @@ module FunnelTest (input wire CLK, input wire nRST,
         index <= 0;
       end // nRST
       else begin
-        if (result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 75 , index );
         end; // End of RULE$respond_rule__ENA
         if (request$say__ENA && request$say__RDY) begin // request$say__ENA

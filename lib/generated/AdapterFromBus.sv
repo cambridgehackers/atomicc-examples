@@ -19,7 +19,7 @@ module AdapterFromBus #(
     wire [16 - 1:0]in$enq$newLength;
     assign in$enq__RDY = !waitForEnq;
     assign out$enq$v = RULE$pushValue$agg_2e_tmp;
-    assign out$enq__ENA = RULE$pushValue__RDY;
+    assign out$enq__ENA = waitForEnq;
     // Extra assigments, not to output wires
     assign RULE$pushValue$agg_2e_tmp = buffer;
     assign RULE$pushValue__RDY = waitForEnq && out$enq__RDY;

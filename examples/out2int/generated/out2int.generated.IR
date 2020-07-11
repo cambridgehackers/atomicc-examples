@@ -26,6 +26,10 @@ INTERFACE Out2InIfc  {
     INTERFACE/Ptr PipeOut_OC_4 in
     INTERFACE/Ptr PipeIn_OC_5 out
 }
+INTERFACE Out2InIfc_OC_6  {
+    INTERFACE/Ptr PipeOut_OC_7 in
+    INTERFACE/Ptr PipeIn_OC_8 out
+}
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
@@ -36,6 +40,9 @@ INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_5  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_8  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
@@ -50,11 +57,17 @@ INTERFACE PipeOut_OC_4  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
+INTERFACE PipeOut_OC_7  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=32) Fifo {
+}
+EMODULE Out2InBase(width=32) Out2InIfc {
 }
 EMODULE l_top l_topIfc {
 }
@@ -71,8 +84,8 @@ MODULE Fifo1 Fifo_OC_1 {
     }
 }
 MODULE Oin OinIfc {
-    INTERFACECONNECT pipe$in first$out PipeOut_OC_4
-    INTERFACECONNECT pipe$out second$in PipeIn_OC_5
+    INTERFACECONNECT pipe$in first$out PipeOut_OC_7
+    INTERFACECONNECT pipe$out second$in PipeIn_OC_8
     FIELD Fifo1 first
     FIELD Fifo1 second
     FIELD Out2In pipe
@@ -86,10 +99,8 @@ MODULE Oin OinIfc {
         CALL/Action :second$out$deq__ENA{}
     }
 }
-MODULE Out2In Out2InIfc {
-    METHOD/Rule/Action RULE$copyRule__ENA {
-        CALL :in$first{}
-        CALL/Action :out$enq__ENA{in$first}
-        CALL/Action :in$deq__ENA{}
-    }
+MODULE Out2In Out2InIfc_OC_6 {
+    INTERFACECONNECT base$in in PipeOut_OC_4
+    INTERFACECONNECT base$out out PipeIn_OC_5
+    FIELD Out2InBase(width=32) base
 }

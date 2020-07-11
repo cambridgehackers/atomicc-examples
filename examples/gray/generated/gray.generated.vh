@@ -1,22 +1,8 @@
 `ifndef __gray_GENERATED__VH__
 `define __gray_GENERATED__VH__
 
-//METASTART; Test
-//METAINTERNAL; counter; GrayCounter(width=4);
-//METACONNECT; request$increment__ENA; counter$increment__ENA
-//METACONNECT; request$increment__RDY; counter$increment__RDY
-//METACONNECT; request$decrement__ENA; counter$decrement__ENA
-//METACONNECT; request$decrement__RDY; counter$decrement__RDY
-//METACONNECT; request$readGray; counter$readGray
-//METACONNECT; request$readGray__RDY; counter$readGray__RDY
-//METACONNECT; request$writeGray__ENA; counter$writeGray__ENA
-//METACONNECT; request$writeGray__RDY; counter$writeGray__RDY
-//METACONNECT; request$readBin; counter$readBin
-//METACONNECT; request$readBin__RDY; counter$readBin__RDY
-//METACONNECT; request$writeBin__ENA; counter$writeBin__ENA
-//METACONNECT; request$writeBin__RDY; counter$writeBin__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__Test; Test;
+//METAINTERNAL; DUT__Test; GrayCounter(width=4);
 //METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
 //METACONNECT; DUT__Test$request$increment__ENA; P2M__request$method$increment__ENA
 //METACONNECT; DUT__Test$request$increment__RDY; P2M__request$method$increment__RDY

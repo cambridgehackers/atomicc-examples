@@ -16,7 +16,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     wire [32 - 1:0]pipe$enq$v$tag;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = RULE$input_rule__RDY;
+    assign indication$heard__ENA = busy_delay;
     assign pipe$enq__RDY = !busy_delay;
     // Extra assigments, not to output wires
     assign RULE$input_rule__RDY = busy_delay && indication$heard__RDY;

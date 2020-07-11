@@ -4,7 +4,7 @@
 //METASTART; Oin
 //METAINTERNAL; first; Fifo1Base(width=32);
 //METAINTERNAL; second; Fifo1Base(width=32);
-//METAINTERNAL; pipe; Out2In;
+//METAINTERNAL; pipe; Out2InBase(width=32);
 //METAINVOKE; request$say__ENA; :first$in$enq__ENA;
 //METAGUARD; request$say; first$in$enq__RDY;
 //METAINVOKE; RULE$copyRule__ENA; :indication$heard__ENA;:second$out$deq__ENA;:second$out$first;
@@ -16,10 +16,6 @@
 //METACONNECT; pipe$in$first__RDY; first$out$first__RDY
 //METACONNECT; pipe$out$enq__ENA; second$in$enq__ENA
 //METACONNECT; pipe$out$enq__RDY; second$in$enq__RDY
-//METASTART; Out2In
-//METAINVOKE; RULE$copyRule__ENA; :in$deq__ENA;:in$first;:out$enq__ENA;
-//METAGUARD; RULE$copyRule; in$first__RDY && out$enq__RDY && in$deq__RDY;
-//METARULES; RULE$copyRule
 //METASTART; l_top
 //METAINTERNAL; DUT__Oin; Oin;
 //METAINTERNAL; M2P__indication; ___M2POinIndication;
