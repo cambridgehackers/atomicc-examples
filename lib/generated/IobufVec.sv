@@ -8,19 +8,25 @@ module IobufVec #(
     output wire [iovecWidth - 1:0]O,
     input wire T);
     wire CLK;
+    wire iobufs$I [iovecWidth - 1:0];
+    wire iobufs$IO [iovecWidth - 1:0];
+    wire iobufs$O [iovecWidth - 1:0];
+    wire iobufs$T [iovecWidth - 1:0];
     wire nRST;
     genvar __inst$Genvar1;
     for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
-      wire I;
-      wire IO;
-      wire O;
-      wire T;
+      wire iobufs$I;
+      wire iobufs$IO;
+      wire iobufs$O;
+      wire iobufs$T;
       IOBUF data (
-        .I(I),
-        .IO(IO),
-        .O(O),
-        .T(T));
+        .I(iobufs$I),
+        .IO(iobufs$IO),
+        .O(iobufs$O),
+        .T(iobufs$T));
     end;
+    assign IO = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign O = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
         assign iobufs[__inst$Genvar1].I = I[ __inst$Genvar1 : 1 ];
         assign iobufs[__inst$Genvar1].IO = IO[ __inst$Genvar1 : 1 ];

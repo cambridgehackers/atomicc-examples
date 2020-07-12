@@ -64,3 +64,16 @@ class FifoB1Base __implements Fifo<__uint(width)> {
 };
 
 static FifoB1Base<GENERIC_INT_TEMPLATE_FLAG> dummyb;
+
+/*
+ * FifoP: both in and out interfaces are PipeIn
+ */
+template<int width>
+class FifoPBase __implements FifoPIfc<__uint(width)> {
+  Fifo1Base<width> fifo;
+  Out2InBase<width> base;
+  void in.enq(const __uint(width) v) { fifo.in.enq(v); };
+  __connect fifo.out = this->out;
+};
+
+static FifoPBase<GENERIC_INT_TEMPLATE_FLAG> dummyc;

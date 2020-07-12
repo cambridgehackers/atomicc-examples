@@ -3,20 +3,28 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_6 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo_OC_1  {
+INTERFACE FifoPIfc  {
+    INTERFACE PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_0 out
+}
+INTERFACE FifoPIfc_OC_1  {
     INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+    INTERFACE/Ptr PipeIn_OC_2 out
+}
+INTERFACE Fifo_OC_7  {
+    INTERFACE PipeIn_OC_8 in
+    INTERFACE PipeOut_OC_9 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=4,dataWidth=32)  {
-    INTERFACE/Count funnelWidth  PipeIn_OC_33 in
-    INTERFACE/Ptr PipeIn_OC_34 out
+    INTERFACE/Count funnelWidth  PipeIn_OC_3 in
+    INTERFACE/Ptr PipeIn_OC_4 out
 }
 INTERFACE FunnelIfc(funnelWidth=4)  {
-    INTERFACE/Count funnelWidth  PipeIn_OC_35 in
-    INTERFACE/Ptr PipeIn_OC_35 out
+    INTERFACE/Count funnelWidth  PipeIn_OC_5 in
+    INTERFACE/Ptr PipeIn_OC_5 out
 }
 INTERFACE FunnelIndication  {
     METHOD/Action heard__ENA ( Bit(32) v )
@@ -30,84 +38,35 @@ INTERFACE FunnelTestIfc  {
     INTERFACE FunnelRequest request
     INTERFACE/Ptr FunnelIndication indication
 }
-INTERFACE Out2InIfc  {
-    INTERFACE/Ptr PipeOut_OC_16 in
-    INTERFACE/Ptr PipeIn_OC_17 out
-}
-INTERFACE Out2InIfc_OC_18  {
-    INTERFACE/Ptr PipeOut_OC_19 in
-    INTERFACE/Ptr PipeIn_OC_20 out
-}
-INTERFACE Out2InIfc_OC_22  {
-    INTERFACE/Ptr PipeOut_OC_23 in
-    INTERFACE/Ptr PipeIn_OC_24 out
-}
-INTERFACE Out2InIfc_OC_26  {
-    INTERFACE/Ptr PipeOut_OC_27 in
-    INTERFACE/Ptr PipeIn_OC_28 out
-}
-INTERFACE Out2InIfc_OC_30  {
-    INTERFACE/Ptr PipeOut_OC_31 in
-    INTERFACE/Ptr PipeIn_OC_32 out
-}
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_17  {
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_20  {
+INTERFACE PipeIn_OC_3  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_24  {
+INTERFACE PipeIn_OC_4  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_28  {
+INTERFACE PipeIn_OC_5  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_32  {
+INTERFACE PipeIn_OC_6  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_33  {
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_34  {
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_35  {
+INTERFACE PipeIn_OC_8  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut_OC_16  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_19  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_23  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_27  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_3  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_31  {
+INTERFACE PipeOut_OC_9  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
@@ -115,15 +74,15 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE Fifo1Base(width=32) Fifo {
+EMODULE Fifo1Base(width=32) Fifo_OC_7 {
+}
+EMODULE FifoPBase(width=32) FifoPIfc {
 }
 EMODULE FunnelBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataWidth=32) {
 }
-EMODULE Out2InBase(width=32) Out2InIfc {
-}
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo_OC_1 {
+MODULE Fifo1 Fifo {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -135,66 +94,33 @@ MODULE Fifo1 Fifo_OC_1 {
         CALL :fifo$out$first{}
     }
 }
+MODULE FifoP FifoPIfc_OC_1 {
+    INTERFACECONNECT fifo$in in PipeIn_OC_0
+    INTERFACECONNECT fifo$out out PipeIn_OC_0
+    FIELD FifoPBase(width=32) fifo
+}
 MODULE Funnel(funnelWidth=4) FunnelIfc(funnelWidth=4) {
-    INTERFACECONNECT base$in in PipeIn_OC_33
-    INTERFACECONNECT base$out out PipeIn_OC_34
+    INTERFACECONNECT base$in in PipeIn_OC_3
+    INTERFACECONNECT base$out out PipeIn_OC_4
     FIELD FunnelBase(funnelWidth=4,dataWidth=32) base
 }
 MODULE FunnelTest FunnelTestIfc {
-    INTERFACECONNECT iA$in fifoA$out PipeOut_OC_19
-    INTERFACECONNECT iB$in fifoB$out PipeOut_OC_23
-    INTERFACECONNECT iC$in fifoC$out PipeOut_OC_27
-    INTERFACECONNECT iD$in fifoD$out PipeOut_OC_31
-    INTERFACECONNECT funnel$in[0] iA$out PipeIn_OC_35
-    INTERFACECONNECT funnel$in[1] iB$out PipeIn_OC_35
-    INTERFACECONNECT funnel$in[2] iC$out PipeIn_OC_35
-    INTERFACECONNECT funnel$in[3] iD$out PipeIn_OC_35
-    INTERFACECONNECT funnel$out result$in PipeIn_OC_35
-    FIELD Bit(1) busy
-    FIELD Bit(1) busy_delay
-    FIELD Fifo1 fifoA
-    FIELD Fifo1 fifoB
-    FIELD Fifo1 fifoC
-    FIELD Fifo1 fifoD
-    FIELD Out2In iA
-    FIELD Out2In_OC_21 iB
-    FIELD Out2In_OC_25 iC
-    FIELD Out2In_OC_29 iD
-    FIELD Bit(2) index
+    INTERFACECONNECT funnel$in[i] fifo[i]$out PipeIn_OC_5
+    INTERFACECONNECT funnel$out result$in PipeIn_OC_5
+    FIELD/Count 4  FifoP fifo
     FIELD Funnel(funnelWidth=4) funnel
+    FIELD Bit(2) index
     FIELD Fifo1 result
-    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 )
+    METHOD/Action request$say__ENA ( Bit(32) v ) {
         PRINTF :printf{"request.say %x index %d\n",request$say$v,index}
-        CALL/Action ((index) == (0)):fifoA$in$enq__ENA{request$say$v}
-        CALL/Action ((index) == (1)):fifoB$in$enq__ENA{request$say$v}
-        CALL/Action ((index) == (2)):fifoC$in$enq__ENA{request$say$v}
-        CALL/Action ((index) == (3)):fifoD$in$enq__ENA{request$say$v}
+        CALL/Action :fifo[index]$in$enq__ENA{request$say$v}
         STORE :index = (index) + (1)
     }
     METHOD/Rule/Action RULE$respond_rule__ENA {
-        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",74,index}
+        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",54,index}
         CALL :result$out$first{}
         CALL/Action :indication$heard__ENA{result$out$first}
         CALL/Action :result$out$deq__ENA{}
     }
-}
-MODULE Out2In Out2InIfc_OC_18 {
-    INTERFACECONNECT base$in in PipeOut_OC_16
-    INTERFACECONNECT base$out out PipeIn_OC_17
-    FIELD Out2InBase(width=32) base
-}
-MODULE Out2In_OC_21 Out2InIfc_OC_22 {
-    INTERFACECONNECT base$in in PipeOut_OC_16
-    INTERFACECONNECT base$out out PipeIn_OC_17
-    FIELD Out2InBase(width=32) base
-}
-MODULE Out2In_OC_25 Out2InIfc_OC_26 {
-    INTERFACECONNECT base$in in PipeOut_OC_16
-    INTERFACECONNECT base$out out PipeIn_OC_17
-    FIELD Out2InBase(width=32) base
-}
-MODULE Out2In_OC_29 Out2InIfc_OC_30 {
-    INTERFACECONNECT base$in in PipeOut_OC_16
-    INTERFACECONNECT base$out out PipeIn_OC_17
-    FIELD Out2InBase(width=32) base
 }

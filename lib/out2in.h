@@ -18,6 +18,8 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+#ifndef __OUT2IN_H__
+#define __OUT2IN_H__
 #include "atomicc.h"
 template <class T>
 class Out2InIfc {
@@ -34,3 +36,4 @@ class Out2In __implements Out2InIfc<T> {
     __connect base.in = this->in;
     __connect base.out = this->out;
 };
+#endif  // __OUT2IN_H__

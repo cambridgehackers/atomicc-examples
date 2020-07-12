@@ -36,38 +36,18 @@ class FunnelTestIfc {
 };
 
 class FunnelTest __implements FunnelTestIfc {
-    __uint(1) busy, busy_delay;
-    Fifo1<__int(32)> fifoA;
-    Fifo1<__int(32)> fifoB;
-    Fifo1<__int(32)> fifoC;
-    Fifo1<__int(32)> fifoD;
-    Out2In<__int(32)> iA;
-    Out2In<__int(32)> iB;
-    Out2In<__int(32)> iC;
-    Out2In<__int(32)> iD;
-    __uint(2) index;
-    __connect iA.in = fifoA.out;
-    __connect iB.in = fifoB.out;
-    __connect iC.in = fifoC.out;
-    __connect iD.in = fifoD.out;
+    FifoP<__int(32)>     fifo[4];
     Funnel<4, __int(32)> funnel;
-    __connect funnel.in[0] = iA.out;
-    __connect funnel.in[1] = iB.out;
-    __connect funnel.in[2] = iC.out;
-    __connect funnel.in[3] = iD.out;
+    __uint(2)            index;
+    for (int i = 0; i < 4; i++) {
+        __connect funnel.in[i] = fifo[i].out;
+    }
     Fifo1<__int(32)> result;
     __connect funnel.out = result.in;
     
-    void request.say(__int(32) v) if(!busy) {
+    void request.say(__int(32) v) {
         printf("request.say %x index %d\n", v, index);
-        if (index == 0)
-            fifoA.in.enq(v);
-        if (index == 1)
-            fifoB.in.enq(v);
-        if (index == 2)
-            fifoC.in.enq(v);
-        if (index == 3)
-            fifoD.in.enq(v);
+        fifo[index].in.enq(v);
         index++;
     }
     __rule respond_rule {

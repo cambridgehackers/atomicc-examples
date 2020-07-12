@@ -22,6 +22,8 @@
 #ifndef _FIFO_H_
 #define _FIFO_H_
 #include "atomicc.h"
+#include "out2in.h"
+
 template<int width>
 class Fifo1Base __implements Fifo<__uint(width)>;
 
@@ -53,5 +55,23 @@ class SizedFifo __implements Fifo<T> {
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
+};
+
+// FifoP
+
+template<class T>
+class FifoPIfc {
+    PipeIn<T> in;
+    PipeIn<T> *out;
+};
+
+template<int width>
+class FifoPBase __implements FifoPIfc<__uint(width)>;
+
+template<class T>
+class FifoP __implements FifoPIfc<T> {
+  FifoPBase<__bitsize(T)> fifo;
+  __connect fifo.in = this->in;
+  __connect fifo.out = this->out;
 };
 #endif

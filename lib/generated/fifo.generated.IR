@@ -6,9 +6,17 @@ INTERFACE Fifo  {
     INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
+INTERFACE FifoPIfc  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE/Ptr PipeIn_OC_4 out
+}
 INTERFACE Fifo_OC_1  {
     INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut_OC_3 out
+}
+INTERFACE Out2InIfc  {
+    INTERFACE/Ptr PipeOut_OC_5 in
+    INTERFACE/Ptr PipeIn_OC_6 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
@@ -19,6 +27,12 @@ INTERFACE PipeIn_OC_0  {
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
+INTERFACE PipeIn_OC_4  {
+    METHOD/Action enq__ENA ( Bit(999999) v )
+}
+INTERFACE PipeIn_OC_6  {
+    METHOD/Action enq__ENA ( Bit(999999) v )
+}
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
@@ -27,9 +41,15 @@ INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
+INTERFACE PipeOut_OC_5  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(999999)
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE Out2InBase(width=999999) Out2InIfc {
 }
 EMODULE l_top l_topIfc {
 }
@@ -58,4 +78,12 @@ MODULE FifoB1Base(width=999999) Fifo_OC_1 {
         STORE :full = 0
     }
     METHOD out$first Bit(width) = ((__phi((full):(element), ((full) ^ 1):(enq_v)))) if (((full) | (in$enq__ENA)))
+}
+MODULE FifoPBase(width=999999) FifoPIfc {
+    INTERFACECONNECT fifo$out out PipeOut
+    FIELD Fifo1Base(width=999999) fifo
+    FIELD Out2InBase(width=999999) base
+    METHOD/Action in$enq__ENA ( Bit(width) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
 }

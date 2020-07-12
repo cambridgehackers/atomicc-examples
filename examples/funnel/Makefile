@@ -9,4 +9,4 @@ CPPFILES = testfunnel.cpp
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/funnel.ll funnel.cpp
-	$(ATOMICCDIR)/atomiccLinker generated/linker
+	#$(ATOMICCDIR)/atomiccLinker generated/linker

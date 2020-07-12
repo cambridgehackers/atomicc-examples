@@ -31,31 +31,35 @@ module IVector (input wire CLK, input wire nRST,
     wire RULE$respond_rule_8__RDY;
     wire [32 - 1:0]RULE$respond_rule_9$temp$b;
     wire RULE$respond_rule_9__RDY;
-    wire [((32 + 32) + 32) - 1:0]in$enq$v;
-    wire [32 - 1:0]in$enq$v$a [10 - 1:0];
-    wire [32 - 1:0]in$enq$v$b [10 - 1:0];
-    wire [32 - 1:0]in$enq$v$c [10 - 1:0];
-    wire in$enq__RDY;
-    wire out$deq__RDY;
-    wire out$first__RDY;
+    wire [((32 + 32) + 32) - 1:0]fifo$in$enq$v [10 - 1:0];
+    wire [32 - 1:0]fifo$in$enq$v$a [10 - 1:0];
+    wire [32 - 1:0]fifo$in$enq$v$b [10 - 1:0];
+    wire [32 - 1:0]fifo$in$enq$v$c [10 - 1:0];
+    wire fifo$in$enq__ENA [10 - 1:0];
+    wire fifo$in$enq__RDY [10 - 1:0];
+    wire fifo$out$deq__ENA [10 - 1:0];
+    wire fifo$out$deq__RDY [10 - 1:0];
+    wire [((32 + 32) + 32) - 1:0]fifo$out$first [10 - 1:0];
+    wire fifo$out$first__RDY [10 - 1:0];
     genvar __inst$Genvar1;
     for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin : fifo
-      wire in$enq__ENA;
-      wire [((32 + 32) + 32) - 1:0]in$enq$v;
-      wire in$enq__RDY;
-      wire out$deq__ENA;
-      wire out$deq__RDY;
-      wire [((32 + 32) + 32) - 1:0]out$first;
-      wire out$first__RDY;
+      wire fifo$in$enq__ENA;
+      wire [((32 + 32) + 32) - 1:0]fifo$in$enq$v;
+      wire fifo$in$enq__RDY;
+      wire fifo$out$deq__ENA;
+      wire fifo$out$deq__RDY;
+      wire [((32 + 32) + 32) - 1:0]fifo$out$first;
+      wire fifo$out$first__RDY;
       FifoPong data (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(in$enq__ENA),
-        .in$enq$v(in$enq$v),
-        .in$enq__RDY(in$enq__RDY),
-        .out$deq__ENA(out$deq__ENA),
-        .out$deq__RDY(out$deq__RDY),
-        .out$first(out$first),
-        .out$first__RDY(out$first__RDY));
+        .in$enq__ENA(fifo$in$enq__ENA),
+        .in$enq$v(fifo$in$enq$v),
+        .in$enq__RDY(fifo$in$enq__RDY),
+        .out$deq__ENA(fifo$out$deq__ENA),
+        .out$deq__RDY(fifo$out$deq__RDY),
+        .out$first(fifo$out$first),
+        .out$first__RDY(fifo$out$first__RDY));
     end;
+    assign fifo$in$enq$v = { fifo$in$enq$v$c , fifo$in$enq$v$b , fifo$in$enq$v$a };
     assign fifo[0].in$enq$v = { fifo[0].in$enq$v$c , fifo[0].in$enq$v$b , fifo[0].in$enq$v$a };
     assign fifo[0].in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign fifo[0].out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
@@ -86,7 +90,6 @@ module IVector (input wire CLK, input wire nRST,
     assign fifo[9].in$enq$v = { fifo[9].in$enq$v$c , fifo[9].in$enq$v$b , fifo[9].in$enq$v$a };
     assign fifo[9].in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign fifo[9].out$deq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign in$enq$v = { in$enq$v$c , in$enq$v$b , in$enq$v$a };
     assign in$say__RDY = fifo[ __inst$Genvar1 ] fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo fifo in$enq__RDY;
     assign out$heard$meth = ( RULE$respond_rule_1__RDY ? 32'd1 : 32'd0 ) | ( RULE$respond_rule_2__RDY ? 32'd2 : 32'd0 ) | ( RULE$respond_rule_3__RDY ? 32'd3 : 32'd0 ) | ( RULE$respond_rule_4__RDY ? 32'd4 : 32'd0 ) | ( RULE$respond_rule_5__RDY ? 32'd5 : 32'd0 ) | ( RULE$respond_rule_6__RDY ? 32'd6 : 32'd0 ) | ( RULE$respond_rule_7__RDY ? 32'd7 : 32'd0 ) | ( RULE$respond_rule_8__RDY ? 32'd8 : 32'd0 ) | ( RULE$respond_rule_9__RDY ? 32'd9 : 32'd0 );
     assign out$heard$v = ( RULE$respond_rule_0__RDY ? RULE$respond_rule_0$temp$b : 32'd0 ) | ( RULE$respond_rule_1__RDY ? RULE$respond_rule_1$temp$b : 32'd0 ) | ( RULE$respond_rule_2__RDY ? RULE$respond_rule_2$temp$b : 32'd0 ) | ( RULE$respond_rule_3__RDY ? RULE$respond_rule_3$temp$b : 32'd0 ) | ( RULE$respond_rule_4__RDY ? RULE$respond_rule_4$temp$b : 32'd0 ) | ( RULE$respond_rule_5__RDY ? RULE$respond_rule_5$temp$b : 32'd0 ) | ( RULE$respond_rule_6__RDY ? RULE$respond_rule_6$temp$b : 32'd0 ) | ( RULE$respond_rule_7__RDY ? RULE$respond_rule_7$temp$b : 32'd0 ) | ( RULE$respond_rule_8__RDY ? RULE$respond_rule_8$temp$b : 32'd0 ) | ( RULE$respond_rule_9__RDY ? RULE$respond_rule_9$temp$b : 32'd0 );
