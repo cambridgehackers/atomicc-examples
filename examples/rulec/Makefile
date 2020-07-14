@@ -12,3 +12,5 @@ all:
 
 dump:
 	vivado -mode batch -source shownets.sh 
+	$(ATOMICCDIR)/../verilog-rewrite/verilogRewrite zedboard/layoutnet.v
+
