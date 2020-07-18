@@ -28,10 +28,10 @@ module IobufVec #(
     assign IO = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign O = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign iobufs[__inst$Genvar1].I = I[ __inst$Genvar1 : 1 ];
-        assign iobufs[__inst$Genvar1].IO = IO[ __inst$Genvar1 : 1 ];
-        assign iobufs[__inst$Genvar1].O = O[ __inst$Genvar1 : 1 ];
-        assign iobufs[__inst$Genvar1].T = T;
+        assign iobufs$IO[__inst$Genvar1] = IO[ __inst$Genvar1 : 1 ];
+        assign iobufs$I[__inst$Genvar1] = I[ __inst$Genvar1 : 1 ];
+        assign iobufs$O[__inst$Genvar1] = O[ __inst$Genvar1 : 1 ];
+        assign iobufs$T[__inst$Genvar1] = T;
     end;
 endmodule 
 

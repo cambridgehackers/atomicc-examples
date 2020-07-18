@@ -74,7 +74,7 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE Fifo1Base(width=32) Fifo_OC_7 {
+EMODULE Fifo1Base(width=32) Fifo {
 }
 EMODULE FifoPBase(width=32) FifoPIfc {
 }
@@ -82,7 +82,7 @@ EMODULE FunnelBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataW
 }
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo {
+MODULE Fifo1 Fifo_OC_7 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -105,16 +105,14 @@ MODULE Funnel(funnelWidth=4) FunnelIfc(funnelWidth=4) {
     FIELD FunnelBase(funnelWidth=4,dataWidth=32) base
 }
 MODULE FunnelTest FunnelTestIfc {
-    INTERFACECONNECT funnel$in[i] fifo[i]$out PipeIn_OC_5
     INTERFACECONNECT funnel$out result$in PipeIn_OC_5
     FIELD/Count 4  FifoP fifo
     FIELD Funnel(funnelWidth=4) funnel
     FIELD Bit(2) index
     FIELD Fifo1 result
-    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 )
     METHOD/Action request$say__ENA ( Bit(32) v ) {
         PRINTF :printf{"request.say %x index %d\n",request$say$v,index}
-        CALL/Action :fifo[index]$in$enq__ENA{request$say$v}
+        CALL/Action :fifo[index].in$enq__ENA{request$say$v}
         STORE :index = (index) + (1)
     }
     METHOD/Rule/Action RULE$respond_rule__ENA {
@@ -122,5 +120,11 @@ MODULE FunnelTest FunnelTestIfc {
         CALL :result$out$first{}
         CALL/Action :indication$heard__ENA{result$out$first}
         CALL/Action :result$out$deq__ENA{}
+    }
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo[__inst$Genvar1].out PipeIn_OC_5
+    }
+    METHOD/Rule/Action RULE$init__ENA {
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 4)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
     }
 }

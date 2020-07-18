@@ -46,7 +46,7 @@ module Bscan #(
     BUFG tckbuf (
         .I(tckbuf$I),
         .O(tckbuf$O));
-    BscanLocal#(.width(32)) localBscan (
+    BscanLocal#(.width(width)) localBscan (
         .toBscan$enq__ENA(toBscan$enq__ENA),
         .toBscan$enq$v(localBscan$toBscan$enq$v),
         .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),

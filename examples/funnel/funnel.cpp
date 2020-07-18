@@ -39,9 +39,9 @@ class FunnelTest __implements FunnelTestIfc {
     FifoP<__int(32)>     fifo[4];
     Funnel<4, __int(32)> funnel;
     __uint(2)            index;
-    for (int i = 0; i < 4; i++) {
-        __connect funnel.in[i] = fifo[i].out;
-    }
+    //for (int i = 0; i < 4; i++) {
+        //__connect funnel.in[i] = fifo[i].out;
+    //}
     Fifo1<__int(32)> result;
     __connect funnel.out = result.in;
     
@@ -55,4 +55,9 @@ printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, index);
         indication->heard(result.out.first());
         result.out.deq();
    };
+   __rule init {
+        for (int i = 0; i < 4; i = i + 1) {
+            __connect funnel.in[i] = fifo[i].out;
+        }
+    }
 };

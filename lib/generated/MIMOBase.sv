@@ -12,8 +12,8 @@ module MIMOBase #(
     output wire out$deq__RDY,
     output wire [widthOut - 1:0]out$first,
     output wire out$first__RDY);
-    reg [widthOut + widthIn - 1:0]buffer;
-    reg [$clog2( widthOut + widthIn ) + 1 - 1:0]c;
+    reg [widthOut+widthIn - 1:0]buffer;
+    reg [$clog2( widthOut + widthIn )+1 - 1:0]c;
     wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;
     assign in$enq__RDY = !( c >= widthOut );

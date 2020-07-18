@@ -80,7 +80,8 @@ MODULE FifoB1Base(width=999999) Fifo_OC_1 {
     METHOD out$first Bit(width) = ((__phi((full):(element), ((full) ^ 1):(enq_v)))) if (((full) | (in$enq__ENA)))
 }
 MODULE FifoPBase(width=999999) FifoPIfc {
-    INTERFACECONNECT fifo$out out PipeOut
+    INTERFACECONNECT base$in fifo$out PipeOut_OC_5
+    INTERFACECONNECT base$out out PipeIn_OC_6
     FIELD Fifo1Base(width=999999) fifo
     FIELD Out2InBase(width=999999) base
     METHOD/Action in$enq__ENA ( Bit(width) v ) {

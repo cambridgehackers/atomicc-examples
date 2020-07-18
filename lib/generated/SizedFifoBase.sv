@@ -13,7 +13,7 @@ module SizedFifoBase #(
     output wire out$deq__RDY,
     output wire [width - 1:0]out$first,
     output wire out$first__RDY);
-    reg [$clog2( depth + 0 ) + 1 - 1:0]c;
+    reg [$clog2( depth + 0 )+1 - 1:0]c;
     reg [width - 1:0]q [depth - 1:0];
     wire [width - 1:0]x_wire;
     genvar __inst$Genvar1;

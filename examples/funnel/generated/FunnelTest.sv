@@ -56,17 +56,17 @@ module FunnelTest (input wire CLK, input wire nRST,
         .out$deq__RDY(result$out$deq__RDY),
         .out$first(indication$heard$v),
         .out$first__RDY(result$out$first__RDY));
+    assign fifo$in$enq$v = request$say$v;
+    assign fifo$in$enq__ENA = request$say__ENA;
     assign indication$heard__ENA = result$out$first__RDY && result$out$deq__RDY;
-    assign request$say__RDY = fifo$in$enq__RDY[ __inst$Genvar1 ] || ( !( __inst$Genvar1 == index ) );
+    assign request$say__RDY = fifo$in$enq__RDY;
     assign result$out$deq__ENA = result$out$first__RDY && indication$heard__RDY;
     // Extra assigments, not to output wires
     assign RULE$respond_rule__RDY = result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY;
-    assign funnel$in$enq$v[ i ] = fifo$enq$v[ i ] fifo$enq$v $out;
-    assign funnel$in$enq__ENA[ i ] = fifo$enq__ENA[ i ] fifo$enq__ENA $out;
-    assign funnel$in$enq__RDY[ i ] = fifo$enq__RDY[ i ] fifo$enq__RDY fifo$enq__RDY fifo$enq__RDY fifo$enq__RDY fifo$enq__RDY fifo$enq__RDY fifo$enq__RDY $out;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign fifo[__inst$Genvar1].in$enq$v = request$say$v;
-        assign fifo[__inst$Genvar1].in$enq__ENA = request$say__ENA && request$say__RDY && ( __inst$Genvar1 == index );
+        assign funnel$in$enq$v[ __inst$Genvar1 ] = fifo$out$enq$v[ __inst$Genvar1 ];
+        assign funnel$in$enq__ENA[ __inst$Genvar1 ] = fifo$out$enq__ENA[ __inst$Genvar1 ];
+        assign funnel$in$enq__RDY[ __inst$Genvar1 ] = fifo$out$enq__RDY[ __inst$Genvar1 ];
     end;
 
     always @( posedge CLK) begin
@@ -77,7 +77,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1)
         if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 54 , index );
         end; // End of RULE$respond_rule__ENA
-        if (request$say__ENA && request$say__RDY) begin // request$say__ENA
+        if (request$say__ENA && fifo$in$enq__RDY) begin // request$say__ENA
             index <= index + 1;
             $display( "request.say %x index %d" , request$say$v , index );
         end; // End of request$say__ENA

@@ -16,8 +16,10 @@
 //METAINTERNAL; base; Out2InBase(width=999999);
 //METAINVOKE; in$enq__ENA; :fifo$in$enq__ENA;
 //METAGUARD; in$enq; fifo$in$enq__RDY;
-//METACONNECT; fifo$out$deq__ENA; out$deq__ENA
-//METACONNECT; fifo$out$deq__RDY; out$deq__RDY
-//METACONNECT; fifo$out$first; out$first
-//METACONNECT; fifo$out$first__RDY; out$first__RDY
+//METACONNECT; base$in$deq__ENA; fifo$out$deq__ENA
+//METACONNECT; base$in$deq__RDY; fifo$out$deq__RDY
+//METACONNECT; base$in$first; fifo$out$first
+//METACONNECT; base$in$first__RDY; fifo$out$first__RDY
+//METACONNECT; base$out$enq__ENA; out$enq__ENA
+//METACONNECT; base$out$enq__RDY; out$enq__RDY
 `endif

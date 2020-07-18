@@ -73,7 +73,8 @@ class FifoPBase __implements FifoPIfc<__uint(width)> {
   Fifo1Base<width> fifo;
   Out2InBase<width> base;
   void in.enq(const __uint(width) v) { fifo.in.enq(v); };
-  __connect fifo.out = this->out;
+  __connect base.in = fifo.out;
+  __connect base.out = this->out;
 };
 
 static FifoPBase<GENERIC_INT_TEMPLATE_FLAG> dummyc;

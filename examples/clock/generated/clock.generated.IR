@@ -38,7 +38,7 @@ MODULE ModFt600 Ft600 {
     FIELD Bit(1) usb_txe_delay
     FIELD/Count 16  IOBUF iobufs
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        LET Bit(1) :iobufs[__inst$Genvar1]$IO = (usb_ad)  >>  (__inst$Genvar1)
+        LET Bit(1) :iobufs[__inst$Genvar1].IO = (usb_ad)  >>  (__inst$Genvar1)
     }
     METHOD/Rule/Action RULE$handshake__ENA {
         LET Bit(1) :usb_rd_n = (usb_rxf_delay) != (0)

@@ -8,12 +8,12 @@
 //METAINTERNAL; fifo3; FifoPBase(width=32);
 //METAINTERNAL; funnel; FunnelBase(funnelWidth=4,dataWidth=32);
 //METAINTERNAL; result; Fifo1Base(width=32);
-//METAGUARD; request$say; fifo$in$enq__RDY[ __inst$Genvar1 ] || ( !( __inst$Genvar1 == index ) );
+//METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
+//METAGUARD; request$say; fifo$in$enq__RDY;
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;:result$out$deq__ENA;:result$out$first;
 //METAGUARD; RULE$respond_rule; result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY;
-//METARULES; RULE$respond_rule
-//METACONNECT; funnel$in[ i ]$enq__ENA; fifo[ i ] fifo $out$enq__ENA
-//METACONNECT; funnel$in[ i ]$enq__RDY; fifo[ i ] fifo $out$enq__RDY
+//METAGUARD; RULE$init; 1;
+//METARULES; RULE$respond_rule; RULE$init
 //METACONNECT; funnel$out$enq__ENA; result$in$enq__ENA
 //METACONNECT; funnel$out$enq__RDY; result$in$enq__RDY
 //METASTART; l_top
