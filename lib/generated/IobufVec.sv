@@ -14,17 +14,11 @@ module IobufVec #(
     wire iobufs$T [iovecWidth - 1:0];
     wire nRST;
     genvar __inst$Genvar1;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
-      wire iobufs$I;
-      wire iobufs$IO;
-      wire iobufs$O;
-      wire iobufs$T;
-      IOBUF data (
+    IOBUF iobufs [iovecWidth - 1:0] (
         .I(iobufs$I),
         .IO(iobufs$IO),
         .O(iobufs$O),
         .T(iobufs$T));
-    end;
     assign IO = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign O = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
 for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin

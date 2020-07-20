@@ -78,7 +78,7 @@ gen:
 	touch $(BOARD)/Makefile.autotop
 
 clean:
-	rm -rf SWSOCK* verilator $(allarchlist) yosys
+	rm -rf SWSOCK* verilator $(allarchlist) generated/yosys
 
 trace:
 	make

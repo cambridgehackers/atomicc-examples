@@ -1,0 +1,27 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal AxiTop.sv UserTop.sv Fifo1Base.sv l_top.sv \
+    AdapterFromBus.sv AdapterToBus.sv \
+    ___M2PEchoIndication.sv ___P2MEchoRequest.sv Echo.sv
+prep -top AxiTop
+
+[files]
+../../lib/generated/AxiTop.sv
+../../lib/generated/axiTop.generated.vh
+../../lib/generated/Fifo1Base.sv
+../../lib/generated/fifo.generated.vh
+../../lib/generated/UserTop.sv
+../../lib/generated/userTop.generated.vh
+../../lib/generated/AdapterToBus.sv
+../../lib/generated/adapter.generated.vh
+../../lib/generated/AdapterFromBus.sv
+generated/l_top.sv
+generated/rulec.generated.vh
+generated/Echo.sv
+generated/___M2PEchoIndication.sv
+generated/___P2MEchoRequest.sv
