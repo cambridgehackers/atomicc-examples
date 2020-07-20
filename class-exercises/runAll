@@ -1,0 +1,16 @@
+#
+set -x
+set -y
+cd exercise-01; ../j
+cd ../exercise-02; ../j
+cd ../exercise-03; ../j
+cd ../exercise-04; ../j
+cd ../exercise-05; ../j
+cd ../exercise-06; ../j
+cd ../exercise-07; ../j
+cd ../exercise-08; ../j
+cd ../exercise-09; ../j
+cd ../exercise-10; ../j
+cd ../exercise-11; ../j
+cd ../exercise-12; ../j
+cd ..

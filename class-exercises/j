@@ -1,0 +1,4 @@
+#
+set -x
+set -e
+sby -f *.sby
