@@ -100,5 +100,5 @@ FILE generated/printf.generated.vh
 FILE generated/Echo.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/___P2MEchoRequest.sv
-FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//Printf.sv
-FILE /home/jca/git/atomicc/../atomicc-examples/lib/generated//printfStub.generated.vh
+FILE ../../lib/generated/Printf.sv
+FILE ../../lib/generated/printfStub.generated.vh

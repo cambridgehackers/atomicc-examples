@@ -19,17 +19,11 @@ module ModFt600 (
     wire iobufs$T [16 - 1:0];
     wire nRST;
     genvar __inst$Genvar1;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = __inst$Genvar1 + 1) begin : iobufs
-      wire iobufs$I;
-      wire iobufs$IO;
-      wire iobufs$O;
-      wire iobufs$T;
-      IOBUF data (
+    IOBUF iobufs [16 - 1:0] (
         .I(iobufs$I),
         .IO(iobufs$IO),
         .O(iobufs$O),
         .T(iobufs$T));
-    end;
     assign usb_ad = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = !( usb_rxf_delay == 0 );

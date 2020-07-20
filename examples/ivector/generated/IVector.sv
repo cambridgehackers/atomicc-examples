@@ -42,15 +42,7 @@ module IVector (input wire CLK, input wire nRST,
     wire [((32 + 32) + 32) - 1:0]fifo$out$first [10 - 1:0];
     wire fifo$out$first__RDY [10 - 1:0];
     genvar __inst$Genvar1;
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin : fifo
-      wire fifo$in$enq__ENA;
-      wire [((32 + 32) + 32) - 1:0]fifo$in$enq$v;
-      wire fifo$in$enq__RDY;
-      wire fifo$out$deq__ENA;
-      wire fifo$out$deq__RDY;
-      wire [((32 + 32) + 32) - 1:0]fifo$out$first;
-      wire fifo$out$first__RDY;
-      FifoPong data (.CLK(CLK), .nRST(nRST),
+    FifoPong fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(fifo$in$enq__ENA),
         .in$enq$v(fifo$in$enq$v),
         .in$enq__RDY(fifo$in$enq__RDY),
@@ -58,7 +50,6 @@ module IVector (input wire CLK, input wire nRST,
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    end;
     assign fifo$in$enq$v = { fifo$in$enq$v$c , fifo$in$enq$v$b , fifo$in$enq$v$a };
     assign fifo[0].in$enq$v = { fifo[0].in$enq$v$c , fifo[0].in$enq$v$b , fifo[0].in$enq$v$a };
     assign fifo[0].in$enq__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
