@@ -14,3 +14,6 @@ dump:
 	vivado -mode batch -source shownets.sh 
 	$(ATOMICCDIR)/../verilog-rewrite/verilogRewrite zedboard/layoutnet.v
 
+ytest:
+	sby -f yosys.sby
+

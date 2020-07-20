@@ -1,0 +1,59 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal AxiTop.sv UserTop.sv Fifo1Base.sv l_top.sv \
+    AdapterFromBus.sv AdapterToBus.sv \
+    ___M2PEchoIndication.sv ___P2MEchoRequest.sv Echo.sv
+prep -top AxiTop
+
+[files]
+generated/Echo.sv
+generated/l_top.sv
+generated/___M2PEchoIndication.sv
+generated/___P2MEchoRequest.sv
+generated/rulec.generated.vh
+../../lib/generated/adapter.generated.vh
+../../lib/generated/axiTop.generated.vh
+../../lib/generated/bscan.generated.vh
+../../lib/generated/clockTop.generated.vh
+../../lib/generated/configCounter.generated.vh
+../../lib/generated/connectNet2.generated.vh
+../../lib/generated/fifo.generated.vh
+../../lib/generated/grayCounter.generated.vh
+../../lib/generated/iobufVec.generated.vh
+../../lib/generated/mimo.generated.vh
+../../lib/generated/mux.generated.vh
+../../lib/generated/out2in.generated.vh
+../../lib/generated/printfStub.generated.vh
+../../lib/generated/resetInverter.generated.vh
+../../lib/generated/sizedFifo.generated.vh
+../../lib/generated/syncFF.generated.vh
+../../lib/generated/userTop.generated.vh
+../../lib/generated/vsimTop.generated.vh
+../../lib/generated/zynqTop.generated.vh
+../../lib/generated/AdapterFromBus.sv
+../../lib/generated/AdapterToBus.sv
+../../lib/generated/AxiTop.sv
+../../lib/generated/BscanLocal.sv
+../../lib/generated/Bscan.sv
+../../lib/generated/ClockTop.sv
+../../lib/generated/ConfigCounter.sv
+../../lib/generated/CONNECTNET2.sv
+../../lib/generated/Fifo1Base.sv
+../../lib/generated/FifoB1Base.sv
+../../lib/generated/FifoPBase.sv
+../../lib/generated/GrayCounter.sv
+../../lib/generated/IobufVec.sv
+../../lib/generated/MIMOBase.sv
+../../lib/generated/MuxPipe.sv
+../../lib/generated/Out2InBase.sv
+../../lib/generated/P7Wrap.sv
+../../lib/generated/Printf.sv
+../../lib/generated/ResetInverter.sv
+../../lib/generated/SizedFifoBase.sv
+../../lib/generated/SyncFF.sv
+../../lib/generated/UserTop.sv
