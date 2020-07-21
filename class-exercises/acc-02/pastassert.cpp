@@ -44,13 +44,13 @@ class PastAssert __implements PastAssertIfc<MAX_AMOUNT, F_TESTID> {
         __assert(counter < MAX_AMOUNT);
     }
     __rule verify1a if (F_TESTID == 1) {
-        __assert(!startSignal__ENA);
+        __assert(!__valid(startSignal));
     }
     __rule verify1b if (F_TESTID == 1) {
         __assert($past(counter == 0));
     }
     __rule verify2a if (F_TESTID == 2) {
-        __assert(!startSignal__ENA);
+        __assert(!__valid(startSignal));
     }
     __rule verify2b if (F_TESTID == 2) {
         __assert(counter == 0);
