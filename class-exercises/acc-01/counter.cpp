@@ -18,9 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "fifo.h"
-#include "out2in.h"
-#include "funnel.h"
+#include "atomicc.h"
 
 template <__uint(16) MAX_AMOUNT>
 class CounterIfc {
