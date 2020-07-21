@@ -1,6 +1,6 @@
 include ../../makefile.in
 
-CPPFILES = testfunnel.cpp
+#CPPFILES = testcounter.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace
@@ -8,5 +8,5 @@ CPPFILES = testfunnel.cpp
 
 all:
 	mkdir -p generated
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/funnel.ll funnel.cpp
-	$(ATOMICCDIR)/atomiccLinker l_top generated/linker
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/counter.ll counter.cpp
+	$(ATOMICCDIR)/atomiccLinker Counter generated/linker

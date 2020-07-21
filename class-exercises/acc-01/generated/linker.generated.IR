@@ -1,0 +1,13 @@
+MODULE Counter Counter_interface {
+}
+INTERFACE Counter_interface {
+    FIELD/parameter Bit(32) MAX_AMOUNT
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) startSignal__ENA
+    FIELD/output Bit(1) startSignal__RDY
+    FIELD/output Bit(1) busy
+    FIELD/output Bit(1) busy__RDY
+}
+FILE generated/Counter.sv
+FILE generated/counter.generated.vh

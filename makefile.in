@@ -86,3 +86,10 @@ trace:
 	VERILATOR_TRACE=--trace make verilator
 	rm -f dump.vcd
 	DUMP_VCD=dump.vcd make run
+
+dump:
+	vivado -mode batch -source shownets.sh 
+	$(ATOMICCDIR)/../verilog-rewrite/verilogRewrite zedboard/layoutnet.v
+
+ytest:
+	sby -f generated/yosys.sby

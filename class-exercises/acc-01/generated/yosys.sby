@@ -1,0 +1,15 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal AxiTop.sv UserTop.sv Fifo1Base.sv l_top.sv \
+    AdapterFromBus.sv AdapterToBus.sv \
+    ___M2PEchoIndication.sv ___P2MEchoRequest.sv Echo.sv
+prep -top AxiTop
+
+[files]
+generated/Counter.sv
+generated/counter.generated.vh
