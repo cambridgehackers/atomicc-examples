@@ -31,8 +31,8 @@ module Counter #(
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     always @(*)
-        $assert( counter < MAX_AMOUNT )
+        assert( counter < MAX_AMOUNT );
 `endif
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

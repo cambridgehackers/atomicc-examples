@@ -25,6 +25,6 @@ MODULE Counter(MAX_AMOUNT=22) CounterIfc(MAX_AMOUNT=22) {
         STORE :counter = (counter) + (-1)
     }
     METHOD/Rule/Action RULE$init__ENA {
-        ASSERT :$assert(counter < MAX_AMOUNT )
+        ASSERT :assert(counter < MAX_AMOUNT )
     }
 }
