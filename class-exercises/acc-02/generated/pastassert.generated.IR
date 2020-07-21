@@ -1,0 +1,56 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE PastAssertIfc(MAX_AMOUNT=22,F_TESTID=9999)  {
+    METHOD/Action startSignal__ENA
+    METHOD busy Bit(1)
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE PastAssert(MAX_AMOUNT=22,F_TESTID=9999) PastAssertIfc(MAX_AMOUNT=22,F_TESTID=9999) {
+    FIELD Bit(16) counter
+    FIELD Bit(1) fPastValid
+    METHOD/Action startSignal__ENA if (((counter) == (0))) {
+        STORE :counter = (22) - (1)
+    }
+    METHOD busy Bit(1) = (((counter) != (0)))
+    METHOD/Rule/Action RULE$decRule__ENA if (((counter) != (0))) {
+        STORE :counter = (counter) + (-1)
+    }
+    METHOD/Rule/Action RULE$verify0__ENA {
+        ASSERT :assert(counter < MAX_AMOUNT )
+    }
+    METHOD/Rule/Action RULE$verify1a__ENA if (((9999) == (1))) {
+        ASSERT :assert(! startSignal__ENA )
+    }
+    METHOD/Rule/Action RULE$verify1b__ENA if (((9999) == (1))) {
+        ASSERT :assert($past ( counter == 0 ) )
+    }
+    METHOD/Rule/Action RULE$verify2a__ENA if (((9999) == (2))) {
+        ASSERT :assert(! startSignal__ENA )
+    }
+    METHOD/Rule/Action RULE$verify2b__ENA if (((9999) == (2))) {
+        ASSERT :assert(counter == 0 )
+    }
+    METHOD/Rule/Action RULE$verify3a__ENA if (((9999) == (3))) {
+        CALL :$past{startSignal__ENA}
+        CALL ($past{startSignal__ENA}):$past{counter}
+        ASSERT ((($past{counter}) == (0)) & ($past{startSignal__ENA})):assert(counter == 0xffff )
+    }
+    METHOD/Rule/Action RULE$verify4a__ENA if (((9999) == (4))) {
+        STORE :fPastValid = (1) != (0)
+    }
+    METHOD/Rule/Action RULE$verify4b__ENA if (((9999) == (4))) {
+        CALL (fPastValid):$past{startSignal__ENA}
+        CALL (($past{startSignal__ENA}) & (fPastValid)):$past{counter}
+        ASSERT ((($past{counter}) == (0)) & (($past{startSignal__ENA}) & (fPastValid))):assert(counter == 0xffff )
+    }
+}

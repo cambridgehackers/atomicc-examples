@@ -50,6 +50,7 @@ extern "C" int *__bitsubstrl(int, ...);
 #define __clog2(A) __builtin_clog2(A)
 extern "C" int __reduce(const char *, ...);
 extern "C" void __finish(void);
+extern "C" bool $past(int);
 
 template<class T>
 class PipeIn {

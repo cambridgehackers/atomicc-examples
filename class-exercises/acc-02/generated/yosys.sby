@@ -1,0 +1,14 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal PastAssert.sv 
+
+prep -top PastAssert
+
+[files]
+generated/PastAssert.sv
+generated/pastassert.generated.vh
