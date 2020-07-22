@@ -20,11 +20,10 @@ INTERFACE l_topIfc  {
 EMODULE l_top l_topIfc {
 }
 MODULE ReqArb ReqArbIfc {
-    FIELD Bit(1) aIsTheOwner
-    METHOD/Action a__ENA ( Bit(1) v ) if ((aIsTheOwner)) {
+    METHOD/Action a__ENA ( Bit(1) v ) if ((((b__ENA) != (0)) ^ (1))) {
         CALL/Action :out$a__ENA{a$v}
     }
-    METHOD/Action b__ENA ( Bit(1) v ) if (((aIsTheOwner) ^ (1))) {
+    METHOD/Action b__ENA ( Bit(1) v ) if ((((a__ENA) != (0)) ^ (1))) {
         CALL/Action :out$a__ENA{b$v}
     }
 }

@@ -4,7 +4,7 @@
 //METASTART; ReqArb
 //METAINVOKE; a__ENA; :out$a__ENA;
 //METAEXCLUSIVE; a__ENA; b__ENA
-//METAGUARD; a; aIsTheOwner && out$a__RDY;
+//METAGUARD; a; ( b__ENA == 0 ) && out$a__RDY;
 //METAINVOKE; b__ENA; :out$a__ENA;
-//METAGUARD; b; !( aIsTheOwner || ( !out$a__RDY ) );
+//METAGUARD; b; ( a__ENA == 0 ) && out$a__RDY;
 `endif

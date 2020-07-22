@@ -31,12 +31,10 @@ class ReqArbIfc {
 };
 
 class ReqArb __implements ReqArbIfc {
-    bool aIsTheOwner;
-    // hmmm... in the original, the guards are reactive and set when the user calls....
-    void a(bool v) if (aIsTheOwner) {
+    void a(bool v) if (!__valid(b)) {
         out->a(v);
     }
-    void b(bool v) if (!aIsTheOwner) {
+    void b(bool v) if (!__valid(a)) {
         out->a(v);
     }
 };
