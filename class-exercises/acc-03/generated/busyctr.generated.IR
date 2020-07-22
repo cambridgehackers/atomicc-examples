@@ -1,0 +1,31 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE BusyCtrIfc(MAX_AMOUNT=22)  {
+    METHOD/Action startSignal__ENA
+    METHOD busy Bit(1)
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE BusyCtr(MAX_AMOUNT=22) BusyCtrIfc(MAX_AMOUNT=22) {
+    FIELD Bit(16) counter
+    FIELD Bit(1) fPastValid
+    METHOD/Action startSignal__ENA if (((counter) == (0))) {
+        STORE :counter = (22) - (1)
+    }
+    METHOD busy Bit(1) = (((counter) != (0)))
+    METHOD/Rule/Action RULE$decRule__ENA if (((counter) != (0))) {
+        STORE :counter = (counter) + (-1)
+    }
+    METHOD/Rule/Action RULE$verify0__ENA {
+        ASSERT :assert(counter < MAX_AMOUNT )
+    }
+}
