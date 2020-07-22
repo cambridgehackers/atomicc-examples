@@ -1,0 +1,30 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE ReqArbIfc  {
+    INTERFACE/Ptr ReqCallout out
+    METHOD/Action a__ENA ( Bit(1) v )
+    METHOD/Action b__ENA ( Bit(1) v )
+}
+INTERFACE ReqCallout  {
+    METHOD/Action a__ENA ( Bit(1) v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE ReqArb ReqArbIfc {
+    FIELD Bit(1) aIsTheOwner
+    METHOD/Action a__ENA ( Bit(1) v ) if ((aIsTheOwner)) {
+        CALL/Action :out$a__ENA{a$v}
+    }
+    METHOD/Action b__ENA ( Bit(1) v ) if (((aIsTheOwner) ^ (1))) {
+        CALL/Action :out$a__ENA{b$v}
+    }
+}

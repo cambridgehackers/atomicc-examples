@@ -1,0 +1,17 @@
+MODULE ReqArb ReqArb_interface {
+}
+INTERFACE ReqArb_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) a__ENA
+    FIELD/input  Bit(1) a$v
+    FIELD/output Bit(1) a__RDY
+    FIELD/input  Bit(1) b__ENA
+    FIELD/input  Bit(1) b$v
+    FIELD/output Bit(1) b__RDY
+    FIELD/output Bit(1) out$a__ENA
+    FIELD/output Bit(1) out$a$v
+    FIELD/input  Bit(1) out$a__RDY
+}
+FILE generated/ReqArb.sv
+FILE generated/reqarb.generated.vh
