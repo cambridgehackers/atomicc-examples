@@ -21,7 +21,7 @@ module LfsrFib #(
       end // nRST
       else begin
         if (shiftBit__ENA) begin // shiftBit__ENA
-            sreg <= { sreg[ ( LN - 1 ) : 1 ] , ( sreg[ 0 ] & TAPS ) ^ shiftBit$v };
+            sreg <= { ( sreg[ 0 ] & TAPS ) ^ shiftBit$v , sreg[ ( LN - 1 ) : 1 ] };
         end; // End of shiftBit__ENA
       end
     end // always @ (posedge CLK)

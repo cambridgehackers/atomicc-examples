@@ -37,7 +37,7 @@ MODULE DblPipe DblPipeIfc {
 MODULE LfsrFib(LN=8,TAPS=45) LfsrFibIfc(LN=8,TAPS=45) {
     FIELD Bit(8) sreg
     METHOD/Action shiftBit__ENA ( Bit(1) v ) {
-        STORE :sreg = __bitconcat{__bitsubstr{sreg,(8) - (1),1},((__bitsubstr{sreg,0}) & (45)) ^ (shiftBit$v)}
+        STORE :sreg = __bitconcat{((__bitsubstr{sreg,0}) & (45)) ^ (shiftBit$v),__bitsubstr{sreg,(8) - (1),1}}
     }
     METHOD outBit Bit(1) = (((__bitsubstr{sreg,0}) != (0)))
 }

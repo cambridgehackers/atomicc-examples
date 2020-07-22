@@ -19,26 +19,21 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "lfsrfib.h"
 
-class DblPipeIfc {
+template <int LN, int TAPS>
+class LfsrFibIfc {
     void shiftBit(bool v);
     bool outBit();
 };
 
-class DblPipe __implements DblPipeIfc {
-    LfsrFib<8, 0x2d> one;
-    LfsrFib<8, 0x2d> two;
-    bool o_data;
-
+template <int LN, int TAPS>
+class LfsrFib __implements LfsrFibIfc<LN, TAPS> {
+    __uint(LN) sreg;
+    
     void shiftBit(bool v) {
-        one.shiftBit(v);
-        two.shiftBit(v);
+        sreg = __bitconcat((__bitsubstr(sreg, 0) & TAPS) ^ v, __bitsubstr(sreg, LN-1, 1));
     }
     bool outBit() {
-        return o_data;
-    }
-    __rule updateRule {
-        o_data = one.outBit() ^ two.outBit();
+        return __bitsubstr(sreg, 0);
     }
 };
