@@ -21,6 +21,6 @@ module ___M2POinIndication (input wire CLK, input wire nRST,
         end; // End of method$heard__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

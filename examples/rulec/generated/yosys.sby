@@ -5,9 +5,8 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -formal AxiTop.sv UserTop.sv Fifo1Base.sv l_top.sv \
-    AdapterFromBus.sv AdapterToBus.sv \
-    ___M2PEchoIndication.sv ___P2MEchoRequest.sv Echo.sv
+read_verilog -formal AxiTop.sv Fifo1Base.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv Echo.sv ___M2PEchoIndication.sv ___P2MEchoRequest.sv 
+
 prep -top AxiTop
 
 [files]

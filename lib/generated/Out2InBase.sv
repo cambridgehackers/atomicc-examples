@@ -14,6 +14,6 @@ module Out2InBase #(
     assign in$deq__ENA = in$first__RDY && out$enq__RDY;
     assign out$enq$v = in$first;
     assign out$enq__ENA = in$first__RDY && in$deq__RDY;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

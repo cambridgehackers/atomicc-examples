@@ -19,6 +19,6 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     assign indication$heard$ind$data$heard$meth = indication$heard$meth;
     assign indication$heard$ind$data$heard$v = indication$heard$v;
     assign indication$heard$ind$tag = 32'd1;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -54,6 +54,6 @@ module BscanLocal #(
         end; // End of toBscan$enq__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

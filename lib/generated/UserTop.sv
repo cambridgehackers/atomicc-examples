@@ -39,6 +39,6 @@ module UserTop (input wire CLK, input wire nRST,
         .indication$enq__ENA(ctop$indication$enq__ENA),
         .indication$enq$v(ctop$indication$enq$v),
         .indication$enq__RDY(radapter_0$in$enq__RDY));
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

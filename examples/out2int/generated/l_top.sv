@@ -35,6 +35,6 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

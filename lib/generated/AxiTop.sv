@@ -230,6 +230,6 @@ module AxiTop (
         end; // End of RULE$lwrite__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

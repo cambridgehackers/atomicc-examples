@@ -29,6 +29,6 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

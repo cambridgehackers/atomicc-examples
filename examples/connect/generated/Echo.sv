@@ -14,6 +14,6 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard$v = request$say$v;
     assign indication$heard__ENA = request$say__ENA;
     assign request$say__RDY = indication$heard__RDY;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

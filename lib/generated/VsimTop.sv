@@ -34,6 +34,6 @@ module VsimTop (
         .enq$v(user$read$enq$v),
         .enq$last(user$read$enq$last),
         .enq__RDY(source_0$enq__RDY));
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

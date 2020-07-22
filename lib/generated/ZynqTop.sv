@@ -160,6 +160,6 @@ module ZynqTop (
     // Extra assigments, not to output wires
     assign CLK = ps7_fclk_0_c$O;
     assign nRST = ps7_freset_0_r$O;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -77,6 +77,6 @@ module Bscan #(
     assign toBscan$enqS__RDY = localBscan$toBscan$enq__RDY;
     // Extra assigments, not to output wires
     assign localBscan$TDO = bscan$TDO;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

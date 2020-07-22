@@ -99,6 +99,6 @@ module Lpm (input wire CLK, input wire nRST,
     assign RULE$recirc$y$state = fifo$out$first[ 3 - 1 + 20 : 20 ];
     assign RULE$recirc$y$ticket = fifo$out$first[ 4 - 1 : 0 ];
     assign RULE$recirc__RDY = !( ( ( mem$resValue & 1 ) == 1 ) || ( !( mem$resValue__RDY && fifo$out$first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out$deq__RDY && fifo$in$enq__RDY ) ) );
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -52,6 +52,6 @@ module MIMOBase #(
       end
     end // always @ (posedge CLK)
    end // end of forloop
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

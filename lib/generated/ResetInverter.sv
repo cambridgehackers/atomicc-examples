@@ -7,6 +7,6 @@ module ResetInverter (
     wire CLK;
     wire nRST;
     assign RESET_OUT = !RESET_IN;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

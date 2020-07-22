@@ -13,6 +13,6 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     assign indication$heard$v = pipe$enq$v[ ( (63 + 32) ) : 64 ];
     assign indication$heard__ENA = pipe$enq__ENA && ( pipe$enq$v[ ( ( -1 ) + 32 ) : 0 ] == 1 );
     assign pipe$enq__RDY = indication$heard__RDY;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

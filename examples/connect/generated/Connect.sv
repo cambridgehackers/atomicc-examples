@@ -65,6 +65,6 @@ module Connect (input wire CLK, input wire nRST,
         .indication$heard$meth(indication$heard$meth),
         .indication$heard$v(indication$heard$v),
         .indication$heard__RDY(indication$heard__RDY));
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

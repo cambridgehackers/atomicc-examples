@@ -43,6 +43,6 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__RDY(request$enq__RDY));
     assign indication$enq$v = P2M__request$returnInd$enq$v;
     assign indication$enq__ENA = P2M__request$returnInd$enq__ENA;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

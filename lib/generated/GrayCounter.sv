@@ -67,6 +67,6 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end
     end // always @ (posedge CLK)
    end // end of forloop
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

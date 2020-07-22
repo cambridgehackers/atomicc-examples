@@ -156,6 +156,6 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1
         vsize <= 0;
       end // nRST
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

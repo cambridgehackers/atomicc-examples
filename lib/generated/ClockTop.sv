@@ -87,6 +87,6 @@ module ClockTop #(
     assign ps7_clockGen_pll$PWRDWN = 0;
     assign ps7_clockGen_pll$RST = rinverter$RESET_OUT;
     assign rinverter$RESET_IN = nRST;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -724,6 +724,6 @@ module P7Wrap (
     // Extra assigments, not to output wires
     assign CLK = intrCLK;
     assign nRST = intrnRST;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

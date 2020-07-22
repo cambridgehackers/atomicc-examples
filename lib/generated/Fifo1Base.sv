@@ -33,6 +33,6 @@ module Fifo1Base #(
         end; // End of out$deq__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

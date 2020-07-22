@@ -27,6 +27,6 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < iovecWidth; __inst$Genvar1 = __inst$Gen
         assign iobufs$O[__inst$Genvar1] = O[ __inst$Genvar1 : 1 ];
         assign iobufs$T[__inst$Genvar1] = T;
     end;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -44,6 +44,6 @@ module MuxPipe (input wire CLK, input wire nRST,
     assign RULE$fifoRule$agg_2e_tmp$data = forwardFifo$out$first[ 128 - 1 + 16 : 16 ];
     assign RULE$fifoRule$agg_2e_tmp$length = forwardFifo$out$first[ 16 - 1 : 0 ];
     assign RULE$fifoRule__RDY = ( in$enq__ENA == 0 ) && forwardFifo$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -39,6 +39,6 @@ module ModFt600 (
         // End of RULE$handshake__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

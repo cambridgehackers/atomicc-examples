@@ -50,6 +50,6 @@ module ConfigCounter #(
         // End of RULE$react__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -50,6 +50,6 @@ module IVector (input wire CLK, input wire nRST,
         gcounter <= 0;
       end // nRST
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

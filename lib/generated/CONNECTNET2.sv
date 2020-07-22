@@ -10,6 +10,6 @@ module CONNECTNET2 (
     wire nRST;
     assign OUT1 = IN1;
     assign OUT2 = IN2;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

@@ -46,6 +46,6 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
         // End of RULE$handshake__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

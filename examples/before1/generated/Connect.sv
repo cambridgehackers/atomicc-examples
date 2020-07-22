@@ -122,6 +122,6 @@ module Connect (input wire CLK, input wire nRST,
         end; // End of RULE$swap_rule__ENA
       end
     end // always @ (posedge CLK)
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

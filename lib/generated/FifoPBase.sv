@@ -34,6 +34,6 @@ module FifoPBase #(
         .out$enq__RDY(out$enq__RDY));
     assign fifo$in$enq$v = in$enq$v;
     assign in$enq__RDY = fifo$in$enq__RDY;
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

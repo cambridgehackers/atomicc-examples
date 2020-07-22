@@ -40,6 +40,6 @@ module IVector (input wire CLK, input wire nRST,
     assign request$say$agg_2e_tmp$a = request$say$v[ 32 - 1 : 0 ];
     assign request$say$agg_2e_tmp$b = request$say$v[ 32 - 1 + 32 : 32 ];
     assign request$say$agg_2e_tmp$c = request$say$v[ 32 - 1 + 64 : 64 ];
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value
