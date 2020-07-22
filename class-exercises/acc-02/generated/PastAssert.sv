@@ -39,26 +39,25 @@ module PastAssert #(
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     always @(*)
-        if (RULE$verify0__ENA)
-            assert( counter < MAX_AMOUNT );
+        assert( counter < MAX_AMOUNT );
     always @(*)
-        if (RULE$verify1a__ENA)
+        if (F_TESTID == 1)
             assert( !startSignal__ENA );
     always @(*)
-        if (RULE$verify1b__ENA)
+        if (F_TESTID == 1)
             assert( $past( counter == 0 ) );
     always @(*)
-        if (RULE$verify2a__ENA)
+        if (F_TESTID == 2)
             assert( !startSignal__ENA );
     always @(*)
-        if (RULE$verify2b__ENA)
+        if (F_TESTID == 2)
             assert( counter == 0 );
-    always @(*)
-        if (RULE$verify3a__ENA && ( $past( counter ) == 0 ) && $past( startSignal__ENA ))
-            assert( counter == 0xffff );
-    always @(*)
-        if (RULE$verify4b__ENA && ( $past( counter ) == 0 ) && $past( startSignal__ENA ) && fPastValid)
-            assert( counter == 0xffff );
+    always @( posedge CLK)
+        if (( F_TESTID == 3 ) && ( $past( counter ) == 0 ) && $past( startSignal__ENA ))
+            assert( counter == 16'hffff );
+    always @( posedge CLK)
+        if (( F_TESTID == 4 ) && ( $past( counter ) == 0 ) && $past( startSignal__ENA ) && fPastValid)
+            assert( counter == 16'hffff );
 `endif
 endmodule
 
