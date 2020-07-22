@@ -1,0 +1,53 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE BusType  {
+    METHOD/Action cyc__ENA ( Bit(1) stb , Bit(1) we , Bit(32) adr , Bit(32) dat , Bit((32 / 8)) sel )
+    METHOD ack Bit(1)
+    METHOD stall Bit(1)
+    METHOD err Bit(1)
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1)  {
+    INTERFACE BusType a
+    INTERFACE BusType b
+    INTERFACE/Ptr BusType o
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) {
+    FIELD Bit(1) r_a_owner
+    METHOD/Action a$cyc__ENA ( Bit(1) stb , Bit(1) we , Bit(32) adr , Bit(32) dat , Bit((32 / 8)) sel ) {
+        STORE :r_a_owner = 1
+        CALL/Action :o$cyc__ENA{a$cyc$stb,a$cyc$we,a$cyc$adr,a$cyc$dat,a$cyc$sel}
+    }
+    METHOD a$ack Bit(1) = (((o$ack) & (r_a_owner))) {
+        CALL :o$ack{}
+    }
+    METHOD a$stall Bit(1) = (((o$stall) | ((r_a_owner) ^ (1)))) {
+        CALL :o$stall{}
+    }
+    METHOD a$err Bit(1) = (((o$err) & (r_a_owner))) {
+        CALL :o$err{}
+    }
+    METHOD/Action b$cyc__ENA ( Bit(1) stb , Bit(1) we , Bit(32) adr , Bit(32) dat , Bit((32 / 8)) sel ) if ((((a$cyc__ENA) != (0)) ^ (1))) {
+        STORE :r_a_owner = 0
+        CALL/Action :o$cyc__ENA{b$cyc$stb,b$cyc$we,b$cyc$adr,b$cyc$dat,b$cyc$sel}
+    }
+    METHOD b$ack Bit(1) = (((o$ack) & ((r_a_owner) ^ (1)))) {
+        CALL :o$ack{}
+    }
+    METHOD b$stall Bit(1) = (((o$stall) | (r_a_owner))) {
+        CALL :o$stall{}
+    }
+    METHOD b$err Bit(1) = (((o$err) & ((r_a_owner) ^ (1)))) {
+        CALL :o$err{}
+    }
+}
