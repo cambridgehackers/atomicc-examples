@@ -1,0 +1,22 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal l_top.sv FunnelTest.sv ___M2PFunnelIndication.sv ___P2MFunnelRequest.sv FifoPBase.sv Fifo1Base.sv Out2InBase.sv 
+
+prep -top l_top
+
+[files]
+generated/l_top.sv
+generated/funnel.generated.vh
+generated/FunnelTest.sv
+generated/___M2PFunnelIndication.sv
+generated/___P2MFunnelRequest.sv
+../../lib/generated/FifoPBase.sv
+../../lib/generated/fifo.generated.vh
+../../lib/generated/Fifo1Base.sv
+../../lib/generated/Out2InBase.sv
+../../lib/generated/out2in.generated.vh
