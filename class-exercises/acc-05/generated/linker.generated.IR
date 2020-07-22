@@ -1,0 +1,43 @@
+MODULE LfsrEquiv LfsrEquiv_interface {
+    FIELD LfsrFib fib
+    FIELD LfsrGal gal
+}
+INTERFACE LfsrEquiv_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) shiftBit__ENA
+    FIELD/input  Bit(1) shiftBit$v
+    FIELD/output Bit(1) shiftBit__RDY
+    FIELD/output Bit(1) outBit
+    FIELD/output Bit(1) outBit__RDY
+}
+MODULE LfsrFib LfsrFib_interface {
+}
+INTERFACE LfsrFib_interface {
+    FIELD/parameter Bit(32) LN
+    FIELD/parameter Bit(32) TAPS
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) shiftBit__ENA
+    FIELD/input  Bit(1) shiftBit$v
+    FIELD/output Bit(1) shiftBit__RDY
+    FIELD/output Bit(1) outBit
+    FIELD/output Bit(1) outBit__RDY
+}
+MODULE LfsrGal LfsrGal_interface {
+}
+INTERFACE LfsrGal_interface {
+    FIELD/parameter Bit(32) LN
+    FIELD/parameter Bit(32) TAPS
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) shiftBit__ENA
+    FIELD/input  Bit(1) shiftBit$v
+    FIELD/output Bit(1) shiftBit__RDY
+    FIELD/output Bit(1) outBit
+    FIELD/output Bit(1) outBit__RDY
+}
+FILE generated/LfsrEquiv.sv
+FILE generated/lfsrequiv.generated.vh
+FILE generated/LfsrFib.sv
+FILE generated/LfsrGal.sv

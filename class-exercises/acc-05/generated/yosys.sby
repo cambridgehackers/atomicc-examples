@@ -1,0 +1,16 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal LfsrEquiv.sv LfsrFib.sv LfsrGal.sv 
+
+prep -top LfsrEquiv
+
+[files]
+generated/LfsrEquiv.sv
+generated/lfsrequiv.generated.vh
+generated/LfsrFib.sv
+generated/LfsrGal.sv

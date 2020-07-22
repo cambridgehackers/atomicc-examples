@@ -1,0 +1,55 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE LfsrEquivIfc  {
+    METHOD/Action shiftBit__ENA ( Bit(1) v )
+    METHOD outBit Bit(1)
+}
+INTERFACE LfsrFibIfc(LN=8,TAPS=45)  {
+    METHOD/Action shiftBit__ENA ( Bit(1) v )
+    METHOD outBit Bit(1)
+}
+INTERFACE LfsrGalIfc(LN=8,TAPS=45)  {
+    METHOD/Action shiftBit__ENA ( Bit(1) v )
+    METHOD outBit Bit(1)
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE LfsrEquiv LfsrEquivIfc {
+    FIELD LfsrFib(LN=8,TAPS=45) fib
+    FIELD LfsrGal(LN=8,TAPS=45) gal
+    FIELD Bit(1) o_data
+    METHOD/Action shiftBit__ENA ( Bit(1) v ) {
+        CALL/Action :fib$shiftBit__ENA{shiftBit$v}
+        CALL/Action :gal$shiftBit__ENA{shiftBit$v}
+    }
+    METHOD outBit Bit(1) = ((o_data))
+    METHOD/Rule/Action RULE$updateRule__ENA {
+        CALL :fib$outBit{}
+        CALL :gal$outBit{}
+        STORE :o_data = (fib$outBit) ^ (gal$outBit)
+    }
+}
+MODULE LfsrFib(LN=8,TAPS=45) LfsrFibIfc(LN=8,TAPS=45) {
+    FIELD Bit(8) sreg
+    METHOD/Action shiftBit__ENA ( Bit(1) v ) {
+        STORE :sreg = __bitconcat{((__bitsubstr{sreg,0}) & (45)) ^ (shiftBit$v),__bitsubstr{sreg,(8) - (1),1}}
+    }
+    METHOD outBit Bit(1) = (((__bitsubstr{sreg,0}) != (0)))
+}
+MODULE LfsrGal(LN=8,TAPS=45) LfsrGalIfc(LN=8,TAPS=45) {
+    FIELD Bit(8) sreg
+    METHOD/Action shiftBit__ENA ( Bit(1) v ) {
+        STORE (shiftBit$v):sreg = (__bitconcat{shiftBit$v,__bitsubstr{sreg,(8) - (1),1}}) ^ (45)
+        STORE ((shiftBit$v) ^ 1):sreg = __bitconcat{shiftBit$v,__bitsubstr{sreg,(8) - (1),1}}
+    }
+    METHOD outBit Bit(1) = (((__bitsubstr{sreg,0}) != (0)))
+}
