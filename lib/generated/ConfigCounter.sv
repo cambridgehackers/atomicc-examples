@@ -36,7 +36,7 @@ module ConfigCounter #(
     assign RULE$react$new_count = ( cnt + inc_wire ) - dec_wire;
     assign dec_wire = ( decrement__ENA ? decrement$v : 0 ) | ( ( maybeDecrement__ENA && ( cnt >= maybeDecrement$v ) ) ? maybeDecrement$v : 0 );
     assign inc_wire = increment$v;
-    assign maybeDecrement$retval = ( cnt >= maybeDecrement$v ) ? 1'd1 : 1'd0;
+    assign maybeDecrement$retval = 1 && ( cnt >= maybeDecrement$v );
 
     always @( posedge CLK) begin
       if (!nRST) begin
