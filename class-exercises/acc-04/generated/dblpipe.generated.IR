@@ -1,0 +1,43 @@
+STRUCT NOCDataH  {
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE DblPipeIfc  {
+    METHOD/Action shiftBit__ENA ( Bit(1) v )
+    METHOD outBit Bit(1)
+}
+INTERFACE LfsrFibIfc(LN=8,TAPS=45)  {
+    METHOD/Action shiftBit__ENA ( Bit(1) v )
+    METHOD outBit Bit(1)
+}
+INTERFACE PipeIn  {
+    METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE l_top l_topIfc {
+}
+MODULE DblPipe DblPipeIfc {
+    FIELD LfsrFib(LN=8,TAPS=45) one
+    FIELD LfsrFib(LN=8,TAPS=45) two
+    FIELD Bit(1) o_data
+    METHOD/Action shiftBit__ENA ( Bit(1) v ) {
+        CALL/Action :one$shiftBit__ENA{shiftBit$v}
+        CALL/Action :two$shiftBit__ENA{shiftBit$v}
+    }
+    METHOD outBit Bit(1) = ((o_data))
+    METHOD/Rule/Action RULE$updateRule__ENA {
+        CALL :one$outBit{}
+        CALL :two$outBit{}
+        STORE :o_data = (one$outBit) ^ (two$outBit)
+    }
+}
+MODULE LfsrFib(LN=8,TAPS=45) LfsrFibIfc(LN=8,TAPS=45) {
+    FIELD Bit(8) sreg
+    METHOD/Action shiftBit__ENA ( Bit(1) v ) {
+        STORE :sreg = __bitconcat{__bitsubstr{sreg,(8) - (1),1},((__bitsubstr{sreg,0}) & (45)) ^ (shiftBit$v)}
+    }
+    METHOD outBit Bit(1) = (((__bitsubstr{sreg,0}) != (0)))
+}
