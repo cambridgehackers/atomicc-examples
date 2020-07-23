@@ -12,13 +12,11 @@ module PastAssert #(
     reg [16 - 1:0]counter;
     reg fPastValid;
     wire RULE$decRule__RDY;
-    wire RULE$verify4a__RDY;
     assign busy = !( counter == 0 );
     assign busy__RDY = 1;
     assign startSignal__RDY = counter == 0;
     // Extra assigments, not to output wires
     assign RULE$decRule__RDY = !( counter == 0 );
-    assign RULE$verify4a__RDY = F_TESTID == 4;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -29,9 +27,10 @@ module PastAssert #(
         if (RULE$decRule__RDY) begin // RULE$decRule__ENA
             counter <= counter + ( -1 );
         end; // End of RULE$decRule__ENA
-        if (RULE$verify4a__RDY) begin // RULE$verify4a__ENA
+        // RULE$verifyRule__ENA
+            if (F_TESTID == 4)
             fPastValid <= 1 != 0;
-        end; // End of RULE$verify4a__ENA
+        // End of RULE$verifyRule__ENA
         if (startSignal__ENA && startSignal__RDY) begin // startSignal__ENA
             counter <= MAX_AMOUNT - 1;
         end; // End of startSignal__ENA
@@ -53,10 +52,10 @@ module PastAssert #(
         if (F_TESTID == 2)
             assert( counter == 0 );
     always @( posedge CLK)
-        if (( F_TESTID == 3 ) && ( $past( counter ) == 0 ) && $past( startSignal__ENA ))
+        if (( $past( counter ) == 0 ) && $past( startSignal__ENA ) && ( F_TESTID == 3 ))
             assert( counter == 16'hffff );
     always @( posedge CLK)
-        if (( F_TESTID == 4 ) && ( $past( counter ) == 0 ) && $past( startSignal__ENA ) && fPastValid)
+        if (( $past( counter ) == 0 ) && $past( startSignal__ENA ) && fPastValid && ( F_TESTID == 4 ))
             assert( counter == 16'hffff );
 `endif
 endmodule

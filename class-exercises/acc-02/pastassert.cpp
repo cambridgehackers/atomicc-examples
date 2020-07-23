@@ -1,4 +1,4 @@
-/* Copyright (c) 2016 The Connectal Project
+/* Copyright (c) 2020 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -40,31 +40,24 @@ class PastAssert __implements PastAssertIfc<MAX_AMOUNT, F_TESTID> {
     __rule decRule if (counter != 0) {
         counter--;
     }
-    __rule verify0 {
+    __rule verifyRule {
         __assert(counter < MAX_AMOUNT);
-    }
-    __rule verify1a if (F_TESTID == 1) {
-        __assert(!__valid(startSignal));
-    }
-    __rule verify1b if (F_TESTID == 1) {
-        __assert($past(counter == 0));
-    }
-    __rule verify2a if (F_TESTID == 2) {
-        __assert(!__valid(startSignal));
-    }
-    __rule verify2b if (F_TESTID == 2) {
-        __assert(counter == 0);
-    }
-    __rule verify3a if (F_TESTID == 3) {
-        if ($past(__valid(startSignal)) && $past(counter) == 0)
-            __assert(counter == 0xffff);
-    }
-    __rule verify4a if (F_TESTID == 4) {
-        fPastValid = 1;
-    }
-    __rule verify4b if (F_TESTID == 4) {
-        if (fPastValid && $past(__valid(startSignal)) && $past(counter) == 0)
-            __assert(counter == 0xffff);
+        if (F_TESTID == 1)
+            __assert(!__valid(startSignal));
+        if (F_TESTID == 1)
+            __assert($past(counter == 0));
+        if (F_TESTID == 2)
+            __assert(!__valid(startSignal));
+        if (F_TESTID == 2)
+            __assert(counter == 0);
+        if (F_TESTID == 3)
+            if ($past(__valid(startSignal)) && $past(counter) == 0)
+                __assert(counter == 0xffff);
+        if (F_TESTID == 4)
+            fPastValid = 1;
+        if (F_TESTID == 4)
+            if (fPastValid && $past(__valid(startSignal)) && $past(counter) == 0)
+                __assert(counter == 0xffff);
     }
 };
 

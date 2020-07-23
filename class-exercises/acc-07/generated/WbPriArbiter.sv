@@ -8,8 +8,8 @@ module WbPriArbiter #(
     input wire a$cyc__ENA,
     input wire a$cyc$stb,
     input wire a$cyc$we,
-    input wire [32 - 1:0]a$cyc$adr,
-    input wire [32 - 1:0]a$cyc$dat,
+    input wire [32 - 1:0]a$cyc$addr,
+    input wire [32 - 1:0]a$cyc$data,
     input wire [32/8 - 1:0]a$cyc$sel,
     output wire a$cyc__RDY,
     output wire a$ack,
@@ -21,8 +21,8 @@ module WbPriArbiter #(
     input wire b$cyc__ENA,
     input wire b$cyc$stb,
     input wire b$cyc$we,
-    input wire [32 - 1:0]b$cyc$adr,
-    input wire [32 - 1:0]b$cyc$dat,
+    input wire [32 - 1:0]b$cyc$addr,
+    input wire [32 - 1:0]b$cyc$data,
     input wire [32/8 - 1:0]b$cyc$sel,
     output wire b$cyc__RDY,
     output wire b$ack,
@@ -34,8 +34,8 @@ module WbPriArbiter #(
     output wire o$cyc__ENA,
     output wire o$cyc$stb,
     output wire o$cyc$we,
-    output wire [32 - 1:0]o$cyc$adr,
-    output wire [32 - 1:0]o$cyc$dat,
+    output wire [32 - 1:0]o$cyc$addr,
+    output wire [32 - 1:0]o$cyc$data,
     output wire [32/8 - 1:0]o$cyc$sel,
     input wire o$cyc__RDY,
     input wire o$ack,
@@ -59,8 +59,8 @@ module WbPriArbiter #(
     assign b$err__RDY = o$err__RDY;
     assign b$stall = o$stall || r_a_owner;
     assign b$stall__RDY = o$stall__RDY;
-    assign o$cyc$adr = ( ( a$cyc__ENA && o$cyc__RDY ) ? a$cyc$adr : 32'd0 ) | ( ( b$cyc__ENA && b$cyc__RDY ) ? b$cyc$adr : 32'd0 );
-    assign o$cyc$dat = ( ( a$cyc__ENA && o$cyc__RDY ) ? a$cyc$dat : 32'd0 ) | ( ( b$cyc__ENA && b$cyc__RDY ) ? b$cyc$dat : 32'd0 );
+    assign o$cyc$addr = ( ( a$cyc__ENA && o$cyc__RDY ) ? a$cyc$addr : 32'd0 ) | ( ( b$cyc__ENA && b$cyc__RDY ) ? b$cyc$addr : 32'd0 );
+    assign o$cyc$data = ( ( a$cyc__ENA && o$cyc__RDY ) ? a$cyc$data : 32'd0 ) | ( ( b$cyc__ENA && b$cyc__RDY ) ? b$cyc$data : 32'd0 );
     assign o$cyc$sel = ( ( a$cyc__ENA && o$cyc__RDY ) ? a$cyc$sel : 32 / 8'd0 ) | ( ( b$cyc__ENA && b$cyc__RDY ) ? b$cyc$sel : 32 / 8'd0 );
     assign o$cyc$stb = ( a$cyc__ENA && ( ( o$cyc__RDY && ( a$cyc$stb || ( b$cyc__ENA && b$cyc__RDY && b$cyc$stb ) ) ) || ( ( !o$cyc__RDY ) && b$cyc__ENA && b$cyc__RDY && b$cyc$stb ) ) ) || ( ( !a$cyc__ENA ) && b$cyc__ENA && b$cyc__RDY && b$cyc$stb );
     assign o$cyc$we = ( a$cyc__ENA && ( ( o$cyc__RDY && ( a$cyc$we || ( b$cyc__ENA && b$cyc__RDY && b$cyc$we ) ) ) || ( ( !o$cyc__RDY ) && b$cyc__ENA && b$cyc__RDY && b$cyc$we ) ) ) || ( ( !a$cyc__ENA ) && b$cyc__ENA && b$cyc__RDY && b$cyc$we );

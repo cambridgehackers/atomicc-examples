@@ -19,27 +19,23 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "atomicc.h"
-#include "lfsrfib.h"
-#include "lfsrgal.h"
 
-class LfsrEquivIfc {
-    void shiftBit(bool v);
-    bool outBit();
+#define AW 32
+#define DW 32
+
+class BusRequestType {
+    void cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
 };
 
-class LfsrEquiv __implements LfsrEquivIfc {
-    LfsrFib<8, 0x2d> fib;
-    LfsrGal<8, 0x2d> gal;
-    bool o_data;
+class BusStatusType {
+    bool ack();
+    bool stall();
+    bool err();
+};
 
-    void shiftBit(bool v) {
-        fib.shiftBit(v);
-        gal.shiftBit(v);
-    }
-    bool outBit() {
-        return o_data;
-    }
-    __rule updateRule {
-        o_data = fib.outBit() ^ gal.outBit();
-    }
+class BusType {
+    void cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
+    bool ack();
+    bool stall();
+    bool err();
 };
