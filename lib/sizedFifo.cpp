@@ -30,15 +30,15 @@ class SizedFifoBase __implements Fifo<__uint(width)> {
     bool full() { return c == depth; };
     void out.deq() if (!empty()) {
         for (int i=0; (i + 1)<depth; i=i+1)
-            q[i] = ((i == c-1) & (bypass != 0) & __valid(this->in.enq))
+            q[i] = ((i == c-1) & (bypass != 0) & __valid(in.enq))
                    ? x_wire : q[i + 1];
-        if ((bypass == 0) | !__valid(this->in.enq))
+        if ((bypass == 0) | !__valid(in.enq))
             c--;
     }
     __uint(width) out.first() { return q[0]; }
     void in.enq(__uint(width) v) if (!full()) {
         x_wire = v;
-        if ((bypass == 0) | !__valid(this->out.deq)) {
+        if ((bypass == 0) | !__valid(out.deq)) {
             q[c] = v;
             c++;
         }

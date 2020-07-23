@@ -50,15 +50,15 @@ class FifoB1Base __implements Fifo<__uint(width)> {
   __uint(width) element;
   bool full;
   __shared __uint(width) enq_v;
-  void in.enq(const __uint(width) v) if (notFull() | __valid(this->out.deq)) {
+  void in.enq(const __uint(width) v) if (notFull() | __valid(out.deq)) {
     enq_v = v;
     element = v;
-    if (!__valid(this->out.deq))
+    if (!__valid(out.deq))
         full = true;
   };
   void out.deq(void) if (notEmpty()) { full = false; };
   __uint(width) out.first(void) if (notEmpty()) { return full ? element : enq_v; };
-  bool notEmpty() const { return full | __valid(this->in.enq); };
+  bool notEmpty() const { return full | __valid(in.enq); };
   bool notFull() const { return !full; };
   FifoB1Base(): full(false) { };
 };

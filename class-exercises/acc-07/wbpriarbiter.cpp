@@ -53,7 +53,7 @@ class WbPriArbiter __implements WbPriArbiterIfc<OPT_ZERO_ON_IDLE, F_OPT_CLK2FFLO
     bool a.err() {
         return this->o->err() & r_a_owner;
     }
-    void b.cyc(bool stb, bool we, __uint(AW) adr, __uint(DW) dat, __uint(DW/8) sel) if (!__valid(this->a.cyc)) {
+    void b.cyc(bool stb, bool we, __uint(AW) adr, __uint(DW) dat, __uint(DW/8) sel) if (!__valid(a.cyc)) {
        r_a_owner = false;
        this->o->cyc(stb, we, adr, dat, sel);
     }

@@ -26,6 +26,6 @@ MODULE BusyCtr(MAX_AMOUNT=22) BusyCtrIfc(MAX_AMOUNT=22) {
         STORE :counter = (counter) + (-1)
     }
     METHOD/Rule/Action RULE$verify0__ENA {
-        ASSERT :assert(counter < MAX_AMOUNT )
+        ASSERT :assert(counter < MAX_AMOUNT)
     }
 }

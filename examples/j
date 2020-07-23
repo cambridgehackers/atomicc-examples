@@ -19,3 +19,10 @@ cd ../packing ;make
 cd ../out2int ;make
 cd ../funnel ;make
 cd ../../lib; make
+cd ../class-exercises/acc-01; make
+cd ../acc-02; make
+cd ../acc-03; make
+cd ../acc-04; make
+cd ../acc-05; make
+cd ../acc-06; make
+cd ../acc-07; make
