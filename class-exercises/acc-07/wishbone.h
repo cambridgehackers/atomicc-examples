@@ -23,18 +23,20 @@
 #define AW 32
 #define DW 32
 
-class BusRequestType {
-    void cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
+class WishboneRequestType {
+    __input bool cyc;
+    void stb(bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
 };
 
-class BusStatusType {
+class WishboneStatusType {
     bool ack();
     bool stall();
     bool err();
 };
 
-class BusType {
-    void cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
+class WishboneType {
+    __input bool cyc;
+    void stb(bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel);
     bool ack();
     bool stall();
     bool err();

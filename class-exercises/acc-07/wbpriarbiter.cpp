@@ -22,18 +22,18 @@
 
 template<int OPT_ZERO_ON_IDLE, int F_OPT_CLK2FFLOGIC>
 class WbPriArbiterIfc {
-    BusType a;
-    BusType b;
-    BusType *o;
+    WishboneType a;
+    WishboneType b;
+    WishboneType *o;
 };
 
 template<int OPT_ZERO_ON_IDLE, int F_OPT_CLK2FFLOGIC>
 class WbPriArbiter __implements WbPriArbiterIfc<OPT_ZERO_ON_IDLE, F_OPT_CLK2FFLOGIC> {
     bool r_a_owner;
 
-    void a.cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel) {
+    void a.stb(bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel) if (this->a.cyc) {
        r_a_owner = true;
-       this->o->cyc(stb, we, addr, data, sel);
+       this->o->stb(we, addr, data, sel);
     }
     bool a.ack() {
         return this->o->ack() & r_a_owner;
@@ -44,9 +44,9 @@ class WbPriArbiter __implements WbPriArbiterIfc<OPT_ZERO_ON_IDLE, F_OPT_CLK2FFLO
     bool a.err() {
         return this->o->err() & r_a_owner;
     }
-    void b.cyc(bool stb, bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel) if (!__valid(a.cyc)) {
+    void b.stb(bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel) if (!this->a.cyc) {
        r_a_owner = false;
-       this->o->cyc(stb, we, addr, data, sel);
+       this->o->stb(we, addr, data, sel);
     }
     bool b.ack() {
         return this->o->ack() & !r_a_owner;
