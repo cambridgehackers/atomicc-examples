@@ -67,65 +67,65 @@ module FwbSlave (
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     always @( posedge CLK)
-        if (!( ( status$stall__RDY && f_past_valid ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid ) ) ))
-            assert( !nRST );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && f_past_valid ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && f_past_valid ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && f_past_valid ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || f_past_valid ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( f_past_valid || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( ( nRST != 0 ) ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && $past( ( nRST != 0 ) ^ 1 ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ))
-            assert( !a$cyc );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( acyc ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && $past( ( nRST != 0 ) ^ 1 ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ))
-            assert( !stb__ENA );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( ( a$stb__ENA != 0 ) ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && $past( ( nRST != 0 ) ^ 1 ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ))
-            assert( !status$ack( ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( status$ack ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && $past( ( nRST != 0 ) ^ 1 ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !$past( ( nRST != 0 ) ^ 1 ) ) ) ) ) ) ))
-            assert( !status$err( ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( $past( ( nRST != 0 ) ^ 1 ) == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( status$err ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && $past( acyc ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !$past( acyc ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !$past( acyc ) ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !$past( acyc ) ) ) ) ) ) ))
-            assert( !a$cyc );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( $past( acyc ) == 0 ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( $past( acyc ) == 0 ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( $past( acyc ) == 0 ) ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || ( $past( acyc ) == 0 ) ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( $past( acyc ) == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( acyc ^ 1 );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && ( a$stb__ENA == 0 ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || ( a$stb__ENA == 0 ) ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || ( a$stb__ENA == 0 ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( a$stb__ENA == 0 ) ) ) ) ) ))
-            assert( a$cyc );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( a$stb__ENA == 0 ) ) || ( ( !status$stall__RDY ) && ( ( a$stb__ENA == 0 ) || ( !( ( nreqs - nacks ) || ( !( status$ack || status$err ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( a$stb__ENA == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( acyc );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !acyc ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !acyc ) ) ) ) ) ))
-            assert( stb__ENA );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( !( status$ack || status$err || ( !acyc ) ) ) ) ) ) ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && acyc ) ))
+            assert( a$stb__ENA );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !acyc ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !acyc ) ) ) ) ) ))
-            assert( we_share == $past( we_share ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( !( status$ack || status$err || ( !acyc ) ) ) ) ) ) ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && acyc ) ))
+            assert( we_share == $past{ we_share } );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !acyc ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !acyc ) ) ) ) ) ))
-            assert( addr_share == $past( addr_share ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( !( status$ack || status$err || ( !acyc ) ) ) ) ) ) ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && acyc ) ))
+            assert( addr_share == $past{ addr_share } );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !acyc ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !acyc ) ) ) ) ) ))
-            assert( sel_share == $past( sel_share ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( !( status$ack || status$err || ( !acyc ) ) ) ) ) ) ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && acyc ) ))
+            assert( sel_share == $past{ sel_share } );
     always @( posedge CLK)
-        if (( status$err__RDY && ( ( status$stall__RDY && we_share ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !we_share ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && ( f_past_valid || ( !we_share ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( !we_share ) ) ) ) ) ))
-            assert( data_share == $past( data_share ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( ( status$stall__RDY && we_share ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && we_share ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && we_share ) || ( ( !( nreqs - nacks ) ) && ( !( status$ack || status$err || ( !we_share ) ) ) ) ) ) ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && we_share ) ))
+            assert( data_share == $past{ data_share } );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && ( a$stb__ENA == 0 ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || ( a$stb__ENA == 0 ) ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || ( a$stb__ENA == 0 ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( a$stb__ENA == 0 ) ) ) ) ) ))
-            assert( we_share == $past( we_share ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( a$stb__ENA == 0 ) ) || ( ( !status$stall__RDY ) && ( ( a$stb__ENA == 0 ) || ( !( ( nreqs - nacks ) || ( !( status$ack || status$err ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( a$stb__ENA == 0 ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( we_share == $past{ we_share } );
     always @( posedge CLK)
-        if (status$err__RDY && ( ( status$stall__RDY && f_past_valid && acyc && ( nreqs - nacks ) ) || ( ( !status$stall__RDY ) && ( !( $past{ a$stb__ENA } || ( !( f_past_valid && acyc && ( nreqs - nacks ) ) ) ) ) ) ))
-            assert( we_share == $past( we_share ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( nreqs - nacks ) && acyc && f_past_valid ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY && ( nreqs - nacks ) && acyc && f_past_valid ) ))
+            assert( we_share == $past{ we_share } );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || acyc ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || acyc ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || acyc ) ) ) ) ))
-            assert( !status$ack( ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || acyc ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( acyc || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( status$ack ^ 1 );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || acyc ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || acyc ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || acyc ) ) ) ) ))
-            assert( !status$err( ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && acyc ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && acyc ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && acyc ) || ( ( !( nreqs - nacks ) ) && ( status$ack || status$err || acyc ) ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( acyc || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( status$err ^ 1 );
     always @( posedge CLK)
-        if (( status$err__RDY && ( status$stall__RDY || ( !$past{ a$stb__ENA } ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && f_past_valid ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid ) ) ) ) ))
-            assert( ( !status$ack( ) ) || ( !status$err( ) ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( status$stall__RDY || ( a$stb__ENA == 0 ) || ( nreqs - nacks ) || ( !( status$ack || status$err ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY ) ))
+            assert( status$ack && ( status$err ^ 1 ) );
     always @( posedge CLK)
-        if (( status$err__RDY && ( status$stall__RDY || ( !$past{ a$stb__ENA } ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && f_past_valid ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid ) ) ) ) ))
-            assert( f_outstanding( ) < ( ( 1 << 4 ) - 1 ) );
+        if (status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( status$stall__RDY || ( a$stb__ENA == 0 ) || ( nreqs - nacks ) || ( !( status$ack || status$err ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY ) ))
+            assert( ( ( acyc ? ( nreqs - nacks ) : 0 ) ) < ( ( 1 << 4 ) - 1 ) );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || ( nreqs - nacks ) || ( !acyc ) ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( nreqs - nacks ) || ( !acyc ) ) ) ) ) ))
-            assert( ( !status$ack( ) ) || ( stb__ENA && ( !status$stall( ) ) ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( nreqs - nacks ) || status$ack || status$err || ( !acyc ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( nreqs - nacks ) || ( !acyc ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( ( ( !( ( nreqs - nacks ) || ( !acyc ) ) ) ? 1 : 0 ) | ( ( !( ( nreqs - nacks ) || ( !acyc ) || ( !status$ack ) ) ) ? ( ( a$stb__ENA != 0 ) && ( status$stall ^ 1 ) ) : 0 ) );
     always @( posedge CLK)
-        if (!( ( status$err__RDY && ( ( status$stall__RDY && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || ( nreqs - nacks ) || ( !acyc ) ) ) ) ) || ( ( !status$err__RDY ) && ( ( status$stall__RDY && ( f_past_valid || ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid || ( nreqs - nacks ) || ( !acyc ) ) ) ) ) ))
-            assert( ( !status$err( ) ) || ( stb__ENA && ( !status$stall( ) ) ) );
+        if (!( ( ( $past{ a$stb__ENA } == 0 ) && ( ( status$stall__RDY && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !status$stall__RDY ) && ( ( ( a$stb__ENA == 0 ) && ( ( nreqs - nacks ) || ( !acyc ) ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( ( nreqs - nacks ) || status$ack || status$err || ( !acyc ) ) ) ) ) || ( !status$ack__RDY ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && ( ( nreqs - nacks ) || ( !acyc ) || ( !status$stall__RDY ) || ( !status$ack__RDY ) ) ) || ( !status$err__RDY ) ))
+            assert( ( ( !( ( nreqs - nacks ) || ( !acyc ) ) ) ? 1 : 0 ) | ( ( !( ( nreqs - nacks ) || ( !acyc ) || ( !status$err ) ) ) ? ( ( a$stb__ENA != 0 ) && ( status$stall ^ 1 ) ) : 0 ) );
 `endif
 endmodule
 

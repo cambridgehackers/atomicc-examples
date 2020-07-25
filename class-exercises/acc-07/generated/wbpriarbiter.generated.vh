@@ -16,9 +16,9 @@
 //METAINVOKE; RULE$init4__ENA; !( a$stb__ENA == 0 ):status$stall;
 //METAEXCLUSIVE; RULE$init4__ENA; RULE$verify__ENA
 //METAGUARD; RULE$init4; ( a$stb__ENA == 0 ) || status$stall__RDY;
-//METAINVOKE; RULE$verify__ENA; $past{ a$stb__ENA }:$past;$past{ nRST }:$past;$past{ status$err }:$past;f_past_valid:$past;f_past_valid:status$err;$past{ a$stb__ENA }:status$stall;
-//METABEFORE; RULE$verify__ENA; :a$stb__ENA
-//METAGUARD; RULE$verify; ( status$err__RDY && ( status$stall__RDY || ( !$past{ a$stb__ENA } ) ) ) || ( ( !status$err__RDY ) && ( !( ( status$stall__RDY && f_past_valid ) || ( ( !status$stall__RDY ) && ( $past{ a$stb__ENA } || f_past_valid ) ) ) ) );
+//METAINVOKE; RULE$verify__ENA; !( $past{ ( nRST != 0 ) ^ 1 } == 0 ):status$ack;!( ( nreqs - nacks ) || ( !acyc ) ):status$ack;!acyc:status$ack;1:status$ack;!( $past{ ( nRST != 0 ) ^ 1 } == 0 ):status$err;!( ( nreqs - nacks ) || ( !acyc ) ):status$err;!acyc:status$err;f_past_valid:status$err;status$ack:status$err;!( $past{ a$stb__ENA } == 0 ):status$stall;!( ( a$stb__ENA == 0 ) || ( nreqs - nacks ) || ( !acyc ) || ( !status$ack ) ):status$stall;!( ( a$stb__ENA == 0 ) || ( nreqs - nacks ) || ( !acyc ) || ( !status$err ) ):status$stall;
+//METABEFORE; RULE$verify__ENA; :RULE$init2__ENA; :RULE$init3__ENA; :RULE$init4__ENA; :a$stb__ENA
+//METAGUARD; RULE$verify; status$err__RDY && ( ( ( $past{ a$stb__ENA } == 0 ) && status$ack__RDY && ( status$stall__RDY || ( a$stb__ENA == 0 ) || ( nreqs - nacks ) || ( !( status$ack || status$err ) ) ) ) || ( ( !( $past{ a$stb__ENA } == 0 ) ) && status$ack__RDY && status$stall__RDY ) );
 //METARULES; RULE$init; RULE$init2; RULE$init3; RULE$init4; RULE$verify
 //METASTART; WbPriArbiter
 //METAINVOKE; a$stb__ENA; :o$stb__ENA;

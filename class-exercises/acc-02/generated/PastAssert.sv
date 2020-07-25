@@ -41,22 +41,22 @@ module PastAssert #(
         assert( counter < MAX_AMOUNT );
     always @(*)
         if (F_TESTID == 1)
-            assert( !startSignal__ENA );
+            assert( ( startSignal__ENA != 0 ) ^ 1 );
     always @(*)
         if (F_TESTID == 1)
-            assert( $past( counter == 0 ) );
+            assert( $past{ counter == 0 } );
     always @(*)
         if (F_TESTID == 2)
-            assert( !startSignal__ENA );
+            assert( ( startSignal__ENA != 0 ) ^ 1 );
     always @(*)
         if (F_TESTID == 2)
             assert( counter == 0 );
     always @( posedge CLK)
-        if (( $past( counter ) == 0 ) && $past( startSignal__ENA ) && ( F_TESTID == 3 ))
-            assert( counter == 16'hffff );
+        if (!( ( $past( startSignal__ENA ) == 0 ) || ( !( ( F_TESTID == 3 ) && ( $past( counter ) == 0 ) ) ) ))
+            assert( counter == ( -1 ) );
     always @( posedge CLK)
-        if (( $past( counter ) == 0 ) && $past( startSignal__ENA ) && fPastValid && ( F_TESTID == 4 ))
-            assert( counter == 16'hffff );
+        if (!( ( $past( startSignal__ENA ) == 0 ) || ( !( fPastValid && ( F_TESTID == 4 ) && ( $past( counter ) == 0 ) ) ) ))
+            assert( counter == ( -1 ) );
 `endif
 endmodule
 

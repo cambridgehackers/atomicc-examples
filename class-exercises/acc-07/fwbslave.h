@@ -79,31 +79,31 @@ class FwbSlave __implements FwbSlaveIfc {
     __rule verify {
         if (!f_past_valid)
               __assert(!__defaultnReset);
-        if (f_past_valid && $past(!__defaultnReset)) {
+        if (f_past_valid && __past(!__defaultnReset)) {
               __assume(!a.cyc);
               __assume(!__valid(a.stb));
               __assert(!status->ack());
               __assert(!status->err());
         }
-        if (f_past_valid && $past(status->err()) && $past(a.cyc))
+        if (f_past_valid && __past(status->err()) && __past(a.cyc))
               __assume(!a.cyc);
         if (__valid(a.stb))
               __assume(a.cyc);
-        if (f_past_valid && $past(__defaultnReset) && $past(__valid(a.stb)) && $past(status->stall()) && a.cyc) {
+        if (f_past_valid && __past(__defaultnReset) && __past(__valid(a.stb)) && __past(status->stall()) && a.cyc) {
               __assume(__valid(a.stb));
-              __assume(we_share == $past(we_share));
-              __assume(addr_share == $past(addr_share));
-              __assume(sel_share == $past(sel_share));
+              __assume(we_share == __past(we_share));
+              __assume(addr_share == __past(addr_share));
+              __assume(sel_share == __past(sel_share));
               if (we_share)
-                  __assume(data_share == $past(data_share));
+                  __assume(data_share == __past(data_share));
         }
-        if (f_past_valid && $past(__valid(a.stb)) && __valid(a.stb))
-            __assume(we_share == $past(we_share));
+        if (f_past_valid && __past(__valid(a.stb)) && __valid(a.stb))
+            __assume(we_share == __past(we_share));
         if (f_past_valid && f_outstanding() > 0)
-            __assume(we_share == $past(we_share));
+            __assume(we_share == __past(we_share));
         //if (__valid(a.stb) && we_share)
         //    __assume(__reduce("|", sel_share));
-        if (f_past_valid && !$past(a.cyc) && !a.cyc) {
+        if (f_past_valid && !__past(a.cyc) && !a.cyc) {
             __assert(!status->ack());
             __assert(!status->err());
         }

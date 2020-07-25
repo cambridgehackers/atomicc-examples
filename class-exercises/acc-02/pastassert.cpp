@@ -45,18 +45,18 @@ class PastAssert __implements PastAssertIfc<MAX_AMOUNT, F_TESTID> {
         if (F_TESTID == 1)
             __assert(!__valid(startSignal));
         if (F_TESTID == 1)
-            __assert($past(counter == 0));
+            __assert(__past(counter == 0));
         if (F_TESTID == 2)
             __assert(!__valid(startSignal));
         if (F_TESTID == 2)
             __assert(counter == 0);
         if (F_TESTID == 3)
-            if ($past(__valid(startSignal)) && $past(counter) == 0)
+            if (__past(__valid(startSignal)) && __past(counter) == 0)
                 __assert(counter == 0xffff);
         if (F_TESTID == 4)
             fPastValid = 1;
         if (F_TESTID == 4)
-            if (fPastValid && $past(__valid(startSignal)) && $past(counter) == 0)
+            if (fPastValid && __past(__valid(startSignal)) && __past(counter) == 0)
                 __assert(counter == 0xffff);
     }
 };

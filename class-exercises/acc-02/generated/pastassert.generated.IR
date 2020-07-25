@@ -26,17 +26,13 @@ MODULE PastAssert(MAX_AMOUNT=22,F_TESTID=9999) PastAssertIfc(MAX_AMOUNT=22,F_TES
         STORE :counter = (counter) + (-1)
     }
     METHOD/Rule/Action RULE$verifyRule__ENA {
-        ASSERT :assert(counter < MAX_AMOUNT)
-        ASSERT ((9999) == (1)):assert(! startSignal__ENA)
-        ASSERT ((9999) == (1)):assert($past ( counter == 0 ))
-        ASSERT ((9999) == (2)):assert(! startSignal__ENA)
-        ASSERT ((9999) == (2)):assert(counter == 0)
-        CALL ((9999) == (3)):$past{startSignal__ENA}
-        CALL (($past{startSignal__ENA}) & ((9999) == (3))):$past{counter}
-        ASSERT ((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))):assert(counter == 0xffff)
-        STORE (((9999) == (4)) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))):fPastValid = (1) != (0)
-        CALL ((fPastValid) & (((9999) == (4)) & ((((9999) == (4)) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))) | ((((9999) == (4)) ^ 1) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1)))))):$past{startSignal__ENA}
-        CALL (($past{startSignal__ENA}) & ((fPastValid) & (((9999) == (4)) & ((((9999) == (4)) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))) | ((((9999) == (4)) ^ 1) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))))))):$past{counter}
-        ASSERT ((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((fPastValid) & (((9999) == (4)) & ((((9999) == (4)) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))) | ((((9999) == (4)) ^ 1) & ((((($past{counter}) == (0)) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & (($past{startSignal__ENA}) & ((9999) == (3)))) | ((($past{startSignal__ENA}) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1)))))))):assert(counter == 0xffff)
+        ASSERT :assert((counter) < (22))
+        ASSERT ((9999) == (1)):assert(((startSignal__ENA) != (0)) ^ (1))
+        ASSERT ((9999) == (1)):assert($past{(counter) == (0)})
+        ASSERT ((9999) == (2)):assert(((startSignal__ENA) != (0)) ^ (1))
+        ASSERT ((9999) == (2)):assert((counter) == (0))
+        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))):assert((counter) == (-1))
+        STORE (((9999) == (4)) & ((((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | (((($past{startSignal__ENA}) != (0)) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))):fPastValid = (1) != (0)
+        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((fPastValid) & (((9999) == (4)) & ((((9999) == (4)) & ((((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | (((($past{startSignal__ENA}) != (0)) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1))) | ((((9999) == (4)) ^ 1) & ((((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | ((((($past{counter}) == (0)) ^ 1) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))) | (((($past{startSignal__ENA}) != (0)) ^ 1) & ((9999) == (3))))) | (((9999) == (3)) ^ 1)))))))):assert((counter) == (-1))
     }
 }
