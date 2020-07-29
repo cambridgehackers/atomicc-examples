@@ -30,7 +30,7 @@ MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {
         ALLOCA Bit(1) maybeDecrement$retval
         STORE ((cnt) >= (maybeDecrement$v)):dec_wire = maybeDecrement$v
         LET Bit(1) ((cnt) >= (maybeDecrement$v)):maybeDecrement$retval = 1
-        LET Bit(1) (((cnt) >= (maybeDecrement$v)) ^ 1):maybeDecrement$retval = 0
+        LET Bit(1) !((cnt) >= (maybeDecrement$v)):maybeDecrement$retval = 0
     }
     METHOD/Action increment__ENA ( Bit(count_sz) v ) {
         STORE :inc_wire = increment$v

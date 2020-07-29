@@ -60,6 +60,6 @@ MODULE Echo EchoIfc {
     METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
-        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
+        CALL/Action !((v_type) == (1)):indication$heard2__ENA{a_delay,b_delay}
     }
 }

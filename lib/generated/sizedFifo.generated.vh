@@ -4,8 +4,8 @@
 //METASTART; SizedFifoBase
 //METAEXCLUSIVE; out$deq__ENA; in$enq__ENA
 //METABEFORE; out$deq__ENA; :in$enq__ENA
-//METAGUARD; out$deq; !( c == 0 );
+//METAGUARD; out$deq; 0 != ( ( c == 0 ) ^ 1 );
 //METAGUARD; out$first; 1;
 //METABEFORE; in$enq__ENA; :out$deq__ENA
-//METAGUARD; in$enq; !( c == depth );
+//METAGUARD; in$enq; 0 != ( ( c == depth ) ^ 1 );
 `endif

@@ -17,9 +17,9 @@ module SizedFifoBase #(
     reg [width - 1:0]q [depth - 1:0];
     wire [width - 1:0]x_wire;
     genvar __inst$Genvar1;
-    assign in$enq__RDY = !( c == depth );
-    assign out$deq__RDY = !( c == 0 );
-    assign out$first = q[ 0 ];
+    assign in$enq__RDY = !( 0 == ( ( c == depth ) ^ 1 ) );
+    assign out$deq__RDY = !( 0 == ( ( c == 0 ) ^ 1 ) );
+    assign out$first = q[0];
     assign out$first__RDY = 1;
     // Extra assigments, not to output wires
     assign x_wire = in$enq$v;

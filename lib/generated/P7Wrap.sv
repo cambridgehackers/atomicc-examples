@@ -55,6 +55,9 @@ module P7Wrap (
     input wire [4 - 1:0]FCLKCLKTRIGN,
     output wire [4 - 1:0]FCLKRESETN);
     wire CLK;
+    wire RULE$gp0ar__RDY;
+    wire RULE$gp0aw__RDY;
+    wire RULE$gp0w__RDY;
     wire nRST;
     wire pclockTop$CLK;
     wire pclockTop$nRST;
@@ -67,13 +70,16 @@ module P7Wrap (
     wire pps$MAXIGP0AWREADY;
     wire pps$MAXIGP0AWVALID;
     wire [12 - 1:0]pps$MAXIGP0BID;
+    wire pps$MAXIGP0BREADY;
     wire [2 - 1:0]pps$MAXIGP0BRESP;
     wire pps$MAXIGP0BVALID;
     wire [32 - 1:0]pps$MAXIGP0RDATA;
     wire [12 - 1:0]pps$MAXIGP0RID;
     wire pps$MAXIGP0RLAST;
+    wire pps$MAXIGP0RREADY;
     wire [2 - 1:0]pps$MAXIGP0RRESP;
     wire pps$MAXIGP0RVALID;
+    wire pps$MAXIGP0WLAST;
     wire pps$MAXIGP0WREADY;
     wire pps$MAXIGP0WVALID;
     PS7 pps (
@@ -332,18 +338,18 @@ module P7Wrap (
         .MAXIGP0AWSIZE(),
         .MAXIGP0AWVALID(pps$MAXIGP0AWVALID),
         .MAXIGP0BID(pps$MAXIGP0BID),
-        .MAXIGP0BREADY(MAXIGP0_I$B__RDY),
+        .MAXIGP0BREADY(pps$MAXIGP0BREADY),
         .MAXIGP0BRESP(pps$MAXIGP0BRESP),
         .MAXIGP0BVALID(pps$MAXIGP0BVALID),
         .MAXIGP0RDATA(pps$MAXIGP0RDATA),
         .MAXIGP0RID(pps$MAXIGP0RID),
         .MAXIGP0RLAST(pps$MAXIGP0RLAST),
-        .MAXIGP0RREADY(MAXIGP0_I$R__RDY),
+        .MAXIGP0RREADY(pps$MAXIGP0RREADY),
         .MAXIGP0RRESP(pps$MAXIGP0RRESP),
         .MAXIGP0RVALID(pps$MAXIGP0RVALID),
         .MAXIGP0WDATA(MAXIGP0_O$W$data),
         .MAXIGP0WID(MAXIGP0_O$W$id),
-        .MAXIGP0WLAST(MAXIGP0_O$W$last),
+        .MAXIGP0WLAST(pps$MAXIGP0WLAST),
         .MAXIGP0WREADY(pps$MAXIGP0WREADY),
         .MAXIGP0WSTRB(),
         .MAXIGP0WVALID(pps$MAXIGP0WVALID),
@@ -701,9 +707,12 @@ module P7Wrap (
         .CLK(pclockTop$CLK),
         .nRST(pclockTop$nRST),
         .clockOut());
-    assign MAXIGP0_O$AR__ENA = pps$MAXIGP0ARVALID;
-    assign MAXIGP0_O$AW__ENA = pps$MAXIGP0AWVALID;
-    assign MAXIGP0_O$W__ENA = pps$MAXIGP0WVALID;
+    assign MAXIGP0_I$B__RDY = !( 0 == pps$MAXIGP0BREADY );
+    assign MAXIGP0_I$R__RDY = !( 0 == pps$MAXIGP0RREADY );
+    assign MAXIGP0_O$AR__ENA = RULE$gp0ar__RDY;
+    assign MAXIGP0_O$AW__ENA = RULE$gp0aw__RDY;
+    assign MAXIGP0_O$W$last = !( pps$MAXIGP0WLAST == 0 );
+    assign MAXIGP0_O$W__ENA = RULE$gp0w__RDY;
     assign pclockTop$CLK = CLK;
     assign pclockTop$nRST = nRST;
     assign pps$DDRARB = 4'd0;
@@ -723,6 +732,9 @@ module P7Wrap (
     assign pps$MAXIGP0WREADY = MAXIGP0_O$W__RDY;
     // Extra assigments, not to output wires
     assign CLK = intrCLK;
+    assign RULE$gp0ar__RDY = !( ( 0 == pps$MAXIGP0ARVALID ) || ( !MAXIGP0_O$AR__RDY ) );
+    assign RULE$gp0aw__RDY = !( ( 0 == pps$MAXIGP0AWVALID ) || ( !MAXIGP0_O$AW__RDY ) );
+    assign RULE$gp0w__RDY = !( ( 0 == pps$MAXIGP0WVALID ) || ( !MAXIGP0_O$W__RDY ) );
     assign nRST = intrnRST;
 endmodule
 

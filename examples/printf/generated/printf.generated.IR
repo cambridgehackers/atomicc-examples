@@ -75,7 +75,7 @@ MODULE Echo EchoIfc {
         PRINTF :printf{"[respond_rule:%d]Echo\n",70}
         STORE :busy_delay = 0
         CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
-        CALL/Action (((v_type) == (1)) ^ 1):indication$heard2__ENA{a_delay,b_delay}
+        CALL/Action !((v_type) == (1)):indication$heard2__ENA{a_delay,b_delay}
     }
     METHOD/Rule/Action RULE$clockRule__ENA {
         STORE :clockReg = (clockReg) + (1)

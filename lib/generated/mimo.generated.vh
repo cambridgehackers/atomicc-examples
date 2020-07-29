@@ -3,7 +3,7 @@
 
 //METASTART; MIMOBase
 //METAEXCLUSIVE; out$deq__ENA; in$enq__ENA
-//METAGUARD; out$deq; c >= widthOut;
-//METAGUARD; out$first; c >= widthOut;
-//METAGUARD; in$enq; !( c >= widthOut );
+//METAGUARD; out$deq; 0 != ( c >= widthOut );
+//METAGUARD; out$first; 0 != ( c >= widthOut );
+//METAGUARD; in$enq; 0 != ( ( c >= widthOut ) ^ 1 );
 `endif

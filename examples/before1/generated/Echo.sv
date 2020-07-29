@@ -32,15 +32,15 @@ module Echo (input wire CLK, input wire nRST,
     wire RULE$respond_rule__RDY;
     assign indication$heard$meth = meth_delay;
     assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = busy_delay;
-    assign request$say2__RDY = !busy;
-    assign request$say__RDY = !busy;
+    assign indication$heard__ENA = RULE$respond_rule__RDY;
+    assign request$say2__RDY = !( 0 == ( busy ^ 1 ) );
+    assign request$say__RDY = !( 0 == ( busy ^ 1 ) );
     assign swap$x2y__RDY = 1;
     assign swap$y2x__RDY = 1;
     assign swap$y2xnull__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$delay_rule__RDY = !( busy_delay || ( !busy ) );
-    assign RULE$respond_rule__RDY = busy_delay && indication$heard__RDY;
+    assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
+    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !indication$heard__RDY ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin

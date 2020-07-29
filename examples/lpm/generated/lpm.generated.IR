@@ -131,7 +131,7 @@ MODULE Lpm LpmIfc {
         CALL :fifo$out$first{}
         LET ProcessData :RULE$recirc$y = fifo$out$first
         CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :mem$req__ENA{(RULE$recirc$x) + (__phi(((RULE$recirc$y$state) == (1)):(__bitsubstr{RULE$recirc$y$IPA,15,8}), (((RULE$recirc$y$state) == (1)) ^ 1):(__bitsubstr{RULE$recirc$y$IPA,7,0})))}
+        CALL/Action :mem$req__ENA{(RULE$recirc$x) + (__phi(((RULE$recirc$y$state) == (1)):(__bitsubstr{RULE$recirc$y$IPA,15,8}), !((RULE$recirc$y$state) == (1)):(__bitsubstr{RULE$recirc$y$IPA,7,0})))}
         CALL/Action :fifo$out$deq__ENA{}
         LET Bit(4) :RULE$recirc$agg_2e_tmp$ticket = RULE$recirc$y$ticket
         LET Bit(16) :RULE$recirc$agg_2e_tmp$IPA = RULE$recirc$y$IPA

@@ -153,13 +153,13 @@ module AxiTop (
     assign MAXIGP0_I$B__ENA = writeDone$out$first__RDY && writeDone$out$deq__RDY;
     assign MAXIGP0_I$R$data = RULE$lreadData$currentRData$data;
     assign MAXIGP0_I$R$id = RULE$lreadData$currentRData$id;
-    assign MAXIGP0_I$R$last = 1;
+    assign MAXIGP0_I$R$last = !( 1 == 0 );
     assign MAXIGP0_I$R$resp = 2'd0;
     assign MAXIGP0_I$R__ENA = readData$out$first__RDY && readData$out$deq__RDY;
     assign MAXIGP0_O$AR__RDY = reqArs$in$enq__RDY;
     assign MAXIGP0_O$AW__RDY = reqAws$in$enq__RDY;
     assign MAXIGP0_O$W__RDY = writeData$in$enq__RDY;
-    assign interrupt = requestValue$out$deq__RDY && intEnable;
+    assign interrupt = !( ( requestValue$out$deq__RDY == 0 ) || ( !intEnable ) );
     assign readData$in$enq$v = { RULE$lread$agg_2e_tmp$data , RULE$lread$agg_2e_tmp$id };
     assign readData$out$deq__ENA = readData$out$first__RDY && MAXIGP0_I$R__RDY;
     assign reqArs$in$enq$v = MAXIGP0_O$AR$id[ 5 : 0 ];
@@ -178,7 +178,7 @@ module AxiTop (
     // Extra assigments, not to output wires
     assign RULE$lread$agg_2e_tmp$data = RULE$lread$res;
     assign RULE$lread$agg_2e_tmp$id = RULE$lread$currentRead;
-    assign RULE$lread$currentChannel = selectRIndReq ? 1'd0 : requestValue$out$deq__RDY;
+    assign RULE$lread$currentChannel = !( selectRIndReq || ( !requestValue$out$deq__RDY ) );
     assign RULE$lread$currentRead = reqArs$out$first;
     assign RULE$lread$res = ( ( RULE$lread__RDY && ( readAddr == 0 ) && portalRControl ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 8 ) && portalRControl ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 12 ) && portalRControl ) ? RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 16 ) && portalRControl ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 20 ) && portalRControl ) ? 32'd2 : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ) ) ? requestValue$out$first : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ) ) ? user$write$enq__RDY : 1'd0 );
     assign RULE$lreadData$currentRData$data = readData$out$first[ 32 - 1 + 6 : 6 ];
@@ -215,16 +215,12 @@ module AxiTop (
             writeAddr <= MAXIGP0_O$AW$addr;
         end; // End of MAXIGP0_O$AW__ENA
         if (RULE$lread__RDY) begin // RULE$lread__ENA
-            if (1) begin
             readCount <= readCount - 1;
             readAddr <= readAddr + 4;
-            end;
         end; // End of RULE$lread__ENA
         if (RULE$lwrite__RDY) begin // RULE$lwrite__ENA
-            if (1) begin
             writeCount <= writeCount - 1;
             writeAddr <= writeAddr + 4;
-            end;
             if (( writeAddr == 4 ) && portalWControl)
             intEnable <= RULE$lwrite$currentWData[ 0 : 0 ] != 0;
         end; // End of RULE$lwrite__ENA

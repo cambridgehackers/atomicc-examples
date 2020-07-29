@@ -88,9 +88,9 @@ module Lpm (input wire CLK, input wire nRST,
     assign RULE$enter$agg_2e_tmp$ticket = RULE$enter$ticket;
     assign RULE$enter$ticket = 4'd0;
     assign RULE$enter$x = inQ$out$first;
-    assign RULE$enter__RDY = !( RULE$recirc__RDY || ( !( inQ$out$first__RDY && inQ$out$deq__RDY && fifo$in$enq__RDY && mem$req__RDY ) ) );
+    assign RULE$enter__RDY = !( ( 0 == ( ( RULE$recirc__RDY != 0 ) ^ 1 ) ) || ( !( inQ$out$first__RDY && inQ$out$deq__RDY && fifo$in$enq__RDY && mem$req__RDY ) ) );
     assign RULE$exitr$x = mem$resValue;
-    assign RULE$exitr__RDY = !( RULE$recirc__RDY || ( !( mem$resValue__RDY && fifo$out$first__RDY && mem$resAccept__RDY && fifo$out$deq__RDY && outQ$enq__RDY ) ) || ( !( ( mem$resValue & 1 ) == 1 ) ) );
+    assign RULE$exitr__RDY = ( ( mem$resValue & 1 ) == 1 ) && ( RULE$recirc__RDY == 0 ) && mem$resValue__RDY && fifo$out$first__RDY && mem$resAccept__RDY && fifo$out$deq__RDY && outQ$enq__RDY;
     assign RULE$recirc$agg_2e_tmp$IPA = RULE$recirc$y$IPA;
     assign RULE$recirc$agg_2e_tmp$state = RULE$recirc$y$state + 3'd1;
     assign RULE$recirc$agg_2e_tmp$ticket = RULE$recirc$y$ticket;
@@ -98,7 +98,7 @@ module Lpm (input wire CLK, input wire nRST,
     assign RULE$recirc$y$IPA = fifo$out$first[ 16 - 1 + 4 : 4 ];
     assign RULE$recirc$y$state = fifo$out$first[ 3 - 1 + 20 : 20 ];
     assign RULE$recirc$y$ticket = fifo$out$first[ 4 - 1 : 0 ];
-    assign RULE$recirc__RDY = !( ( ( mem$resValue & 1 ) == 1 ) || ( !( mem$resValue__RDY && fifo$out$first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out$deq__RDY && fifo$in$enq__RDY ) ) );
+    assign RULE$recirc__RDY = !( ( 0 == ( ( ( mem$resValue & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out$first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out$deq__RDY && fifo$in$enq__RDY ) ) );
 endmodule
 
 `default_nettype wire    // set back to default value

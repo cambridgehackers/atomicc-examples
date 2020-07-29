@@ -17,12 +17,12 @@ module AdapterFromBus #(
     wire [(16 + 128) - 1:0]RULE$pushValue$agg_2e_tmp;
     wire RULE$pushValue__RDY;
     wire [16 - 1:0]in$enq$newLength;
-    assign in$enq__RDY = !waitForEnq;
+    assign in$enq__RDY = !( 0 == ( waitForEnq ^ 1 ) );
     assign out$enq$v = RULE$pushValue$agg_2e_tmp;
-    assign out$enq__ENA = waitForEnq;
+    assign out$enq__ENA = RULE$pushValue__RDY;
     // Extra assigments, not to output wires
     assign RULE$pushValue$agg_2e_tmp = buffer;
-    assign RULE$pushValue__RDY = waitForEnq && out$enq__RDY;
+    assign RULE$pushValue__RDY = !( ( 0 == waitForEnq ) || ( !out$enq__RDY ) );
     assign in$enq$newLength = length + 16'd1;
 
     always @( posedge CLK) begin

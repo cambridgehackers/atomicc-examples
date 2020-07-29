@@ -16,10 +16,10 @@ module MIMOBase #(
     reg [$clog2( widthOut + widthIn )+1 - 1:0]c;
     wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;
-    assign in$enq__RDY = !( c >= widthOut );
-    assign out$deq__RDY = c >= widthOut;
+    assign in$enq__RDY = !( 0 == ( ( c >= widthOut ) ^ 1 ) );
+    assign out$deq__RDY = !( 0 == ( c >= widthOut ) );
     assign out$first = buffer;
-    assign out$first__RDY = c >= widthOut;
+    assign out$first__RDY = !( 0 == ( c >= widthOut ) );
     // Extra assigments, not to output wires
     assign m = in$enq$v;
 

@@ -68,11 +68,11 @@ module Bscan #(
         .in(toBscan$enqS__RDY));
     assign localBscan$CLK = tckbuf$O;
     assign localBscan$TDI = bscan$TDI;
-    assign localBscan$capture = bscan$SEL && bscan$CAPTURE;
+    assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
     assign localBscan$nRST = nRST;
-    assign localBscan$shift = bscan$SEL && bscan$SHIFT;
+    assign localBscan$shift = !( ( bscan$SEL & bscan$SHIFT ) == 0 );
     assign localBscan$toBscan$enq$v = toBscan$enq$v;
-    assign localBscan$update = bscan$SEL && bscan$UPDATE;
+    assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     assign tckbuf$I = bscan$TCK;
     assign toBscan$enqS__RDY = localBscan$toBscan$enq__RDY;
     // Extra assigments, not to output wires

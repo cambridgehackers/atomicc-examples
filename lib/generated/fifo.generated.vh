@@ -3,14 +3,14 @@
 
 //METASTART; Fifo1Base
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !full;
-//METAGUARD; out$deq; full;
-//METAGUARD; out$first; full;
+//METAGUARD; in$enq; 0 != ( full ^ 1 );
+//METAGUARD; out$deq; 0 != full;
+//METAGUARD; out$first; 0 != full;
 //METASTART; FifoB1Base
 //METAEXCLUSIVE; in$enq__ENA; out$deq__ENA
-//METAGUARD; in$enq; !( ( ( full ^ 1 ) | out$deq__ENA ) == 0 );
-//METAGUARD; out$deq; full || in$enq__ENA;
-//METAGUARD; out$first; full || in$enq__ENA;
+//METAGUARD; in$enq; ( ( full ^ 1 ) | out$deq__ENA ) != 0;
+//METAGUARD; out$deq; full | in$enq__ENA;
+//METAGUARD; out$first; full | in$enq__ENA;
 //METASTART; FifoPBase
 //METAINTERNAL; fifo; Fifo1Base(width=999999);
 //METAINTERNAL; base; Out2InBase(width=999999);

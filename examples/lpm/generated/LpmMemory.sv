@@ -17,7 +17,7 @@ module LpmMemory (input wire CLK, input wire nRST,
     assign resValue = saved;
     assign resValue__RDY = delayCount == 1;
     // Extra assigments, not to output wires
-    assign RULE$memdelay_rule__RDY = delayCount > 1;
+    assign RULE$memdelay_rule__RDY = !( 0 == ( delayCount > 1 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -8,6 +8,6 @@
 //METAGUARD; writeGray; 1;
 //METAGUARD; readBin; 1;
 //METAGUARD; writeBin; 1;
-//METAGUARD; RULE$incdec; !( increment__ENA == decrement__ENA );
+//METAGUARD; RULE$incdec; increment__ENA != decrement__ENA;
 //METARULES; RULE$incdec
 `endif

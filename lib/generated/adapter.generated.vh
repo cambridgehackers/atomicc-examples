@@ -4,10 +4,10 @@
 //METASTART; AdapterFromBus
 //METAEXCLUSIVE; in$enq__ENA; RULE$pushValue__ENA
 //METABEFORE; in$enq__ENA; :RULE$pushValue__ENA
-//METAGUARD; in$enq; !waitForEnq;
+//METAGUARD; in$enq; 0 != ( waitForEnq ^ 1 );
 //METAINVOKE; RULE$pushValue__ENA; :out$enq__ENA;
 //METABEFORE; RULE$pushValue__ENA; :in$enq__ENA
-//METAGUARD; RULE$pushValue; waitForEnq && out$enq__RDY;
+//METAGUARD; RULE$pushValue; !( ( 0 == waitForEnq ) || ( !out$enq__RDY ) );
 //METARULES; RULE$pushValue
 //METASTART; AdapterToBus
 //METAEXCLUSIVE; in$enq__ENA; RULE$copyRule__ENA

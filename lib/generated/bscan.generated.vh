@@ -13,10 +13,10 @@
 //METARULES; RULE$init
 //METASTART; BscanLocal
 //METAEXCLUSIVE; toBscan$enq__ENA; RULE$shiftRule__ENA; RULE$updateRule__ENA
-//METAGUARD; toBscan$enq; !( notReady || ( !capture ) );
-//METAGUARD; RULE$shiftRule; shift;
+//METAGUARD; toBscan$enq; capture & ( notReady ^ 1 );
+//METAGUARD; RULE$shiftRule; 0 != shift;
 //METAINVOKE; RULE$updateRule__ENA; :fromBscan$enq__ENA;
-//METAGUARD; RULE$updateRule; update && fromBscan$enq__RDY;
+//METAGUARD; RULE$updateRule; !( ( 0 == update ) || ( !fromBscan$enq__RDY ) );
 //METABEFORE; RULE$init__ENA; :RULE$shiftRule__ENA; :toBscan$enq__ENA
 //METAGUARD; RULE$init; 1;
 //METARULES; RULE$shiftRule; RULE$updateRule; RULE$init

@@ -7,6 +7,6 @@
 //METAEXCLUSIVE; resAccept__ENA; RULE$memdelay_rule__ENA
 //METAGUARD; resAccept; delayCount == 1;
 //METAGUARD; resValue; delayCount == 1;
-//METAGUARD; RULE$memdelay_rule; delayCount > 1;
+//METAGUARD; RULE$memdelay_rule; 0 != ( delayCount > 1 );
 //METARULES; RULE$memdelay_rule
 `endif

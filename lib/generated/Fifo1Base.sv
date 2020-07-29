@@ -13,10 +13,10 @@ module Fifo1Base #(
     output wire out$first__RDY);
     reg [width - 1:0]element;
     reg full;
-    assign in$enq__RDY = !full;
-    assign out$deq__RDY = full;
+    assign in$enq__RDY = !( 0 == ( full ^ 1 ) );
+    assign out$deq__RDY = !( 0 == full );
     assign out$first = element;
-    assign out$first__RDY = full;
+    assign out$first__RDY = !( 0 == full );
 
     always @( posedge CLK) begin
       if (!nRST) begin

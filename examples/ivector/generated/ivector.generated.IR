@@ -82,19 +82,19 @@ MODULE FifoPong Fifo {
     FIELD Bit(1) pong
     METHOD/Action in$enq__ENA ( ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
-        CALL/Action ((pong) ^ 1):element1$in$enq__ENA{in$enq$v}
+        CALL/Action !(pong):element1$in$enq__ENA{in$enq$v}
     }
     METHOD/Action out$deq__ENA {
         CALL/Action (pong):element2$out$deq__ENA{}
-        CALL/Action ((pong) ^ 1):element1$out$deq__ENA{}
+        CALL/Action !(pong):element1$out$deq__ENA{}
         STORE :pong = (pong) ^ (1)
     }
     METHOD out$first ValuePair = ((out$first$retval)) {
         ALLOCA ValuePair out$first$retval
         CALL (pong):element2$out$first{}
         LET ValuePair (pong):out$first$retval = element2$out$first
-        CALL ((pong) ^ 1):element1$out$first{}
-        LET ValuePair ((pong) ^ 1):out$first$retval = element1$out$first
+        CALL !(pong):element1$out$first{}
+        LET ValuePair !(pong):out$first$retval = element1$out$first
     }
 }
 MODULE IVector IVectorIFC {

@@ -187,9 +187,9 @@ MODULE EchoIndicationOutput EIOIfc {
         STORE (even):ind1$tag = 1
         STORE (even):ind1$data$heard$meth = indication$heard$meth
         STORE (even):ind1$data$heard$v = indication$heard$v
-        STORE ((even) ^ 1):ind0$tag = 1
-        STORE ((even) ^ 1):ind0$data$heard$meth = indication$heard$meth
-        STORE ((even) ^ 1):ind0$data$heard$v = indication$heard$v
+        STORE !(even):ind0$tag = 1
+        STORE !(even):ind0$data$heard$meth = indication$heard$meth
+        STORE !(even):ind0$data$heard$v = indication$heard$v
         STORE :ind_busy = (1) != (0)
         STORE :even = (even) ^ (1)
     }

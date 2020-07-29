@@ -167,24 +167,24 @@ MODULE AxiTop AxiTopIfc {
         ALLOCA Bit(32) RULE$lread$res
         CALL :reqArs$out$first{}
         LET Bit(6) :RULE$lread$currentRead = reqArs$out$first
-        LET Bit(1) :RULE$lread$currentChannel = __phi((selectRIndReq):(0), ((selectRIndReq) ^ 1):(requestValue$out$deq__RDY))
+        LET Bit(1) :RULE$lread$currentChannel = __phi((selectRIndReq):(0), !(selectRIndReq):(requestValue$out$deq__RDY))
         LET Bit(32) (((readAddr) == 0) & (portalRControl)):RULE$lread$res = RULE$lread$currentChannel
         LET Bit(32) (((readAddr) == 8) & (portalRControl)):RULE$lread$res = 1
         LET Bit(32) (((readAddr) == 12) & (portalRControl)):RULE$lread$res = RULE$lread$currentChannel
         LET Bit(32) (((readAddr) == 16) & (portalRControl)):RULE$lread$res = (selectRIndReq) ? (6) : (5)
         LET Bit(32) (((readAddr) == 20) & (portalRControl)):RULE$lread$res = 2
         LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)):RULE$lread$res = 0
-        CALL (((readAddr) == 0) & ((portalRControl) ^ 1)):requestValue$out$first{}
-        LET Bit(32) (((readAddr) == 0) & ((portalRControl) ^ 1)):RULE$lread$res = requestValue$out$first
-        CALL/Action (((readAddr) == 0) & ((portalRControl) ^ 1)):requestValue$out$deq__ENA{}
-        LET Bit(32) (((readAddr) == 4) & ((portalRControl) ^ 1)):RULE$lread$res = user$write$enq__RDY
-        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)):RULE$lread$res = 0
-        LET Bit(6) (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl)))))))):RULE$lread$agg_2e_tmp$id = RULE$lread$currentRead
-        LET Bit(32) (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl)))))))):RULE$lread$agg_2e_tmp$data = RULE$lread$res
-        CALL/Action (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl)))))))):readData$in$enq__ENA{RULE$lread$agg_2e_tmp}
-        STORE (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl)))))))):readCount = (readCount) - (1)
-        STORE (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl)))))))):readAddr = (readAddr) + (4)
-        CALL/Action (((readCount) == (0)) & (((((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & ((portalRControl) ^ 1)) | ((((readAddr) == 4) & ((portalRControl) ^ 1)) | (((readAddr) == 0) & ((portalRControl) ^ 1)))) | ((((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)) | ((((readAddr) == 20) & (portalRControl)) | ((((readAddr) == 16) & (portalRControl)) | ((((readAddr) == 12) & (portalRControl)) | ((((readAddr) == 8) & (portalRControl)) | (((readAddr) == 0) & (portalRControl))))))))):reqArs$out$deq__ENA{}
+        CALL (((readAddr) == 0) & !(portalRControl)):requestValue$out$first{}
+        LET Bit(32) (((readAddr) == 0) & !(portalRControl)):RULE$lread$res = requestValue$out$first
+        CALL/Action (((readAddr) == 0) & !(portalRControl)):requestValue$out$deq__ENA{}
+        LET Bit(32) (((readAddr) == 4) & !(portalRControl)):RULE$lread$res = user$write$enq__RDY
+        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)):RULE$lread$res = 0
+        LET Bit(6) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):RULE$lread$agg_2e_tmp$id = RULE$lread$currentRead
+        LET Bit(32) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):RULE$lread$agg_2e_tmp$data = RULE$lread$res
+        CALL/Action ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readData$in$enq__ENA{RULE$lread$agg_2e_tmp}
+        STORE ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readCount = (readCount) - (1)
+        STORE ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readAddr = (readAddr) + (4)
+        CALL/Action (((readCount) == (0)) & ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)))):reqArs$out$deq__ENA{}
     }
     METHOD/Rule/Action RULE$lreadData__ENA {
         ALLOCA ReadResp RULE$lreadData$currentRData
@@ -200,13 +200,13 @@ MODULE AxiTop AxiTopIfc {
         LET Bit(6) :RULE$lwrite$currentWrite = reqAws$out$first
         CALL :writeData$out$first{}
         LET Bit(32) :RULE$lwrite$currentWData = writeData$out$first
-        CALL/Action ((portalWControl) ^ 1):user$write$enq__ENA{RULE$lwrite$currentWData,(writeAddr) != (0)}
+        CALL/Action !(portalWControl):user$write$enq__ENA{RULE$lwrite$currentWData,(writeAddr) != (0)}
         STORE (((writeAddr) == (4)) & (portalWControl)):intEnable = (__bitsubstr{RULE$lwrite$currentWData,0,0}) != (0)
-        STORE (((((writeAddr) == (4)) & (portalWControl)) | ((((writeAddr) == (4)) ^ 1) & (portalWControl))) | ((portalWControl) ^ 1)):writeCount = (writeCount) - (1)
-        STORE (((((writeAddr) == (4)) & (portalWControl)) | ((((writeAddr) == (4)) ^ 1) & (portalWControl))) | ((portalWControl) ^ 1)):writeAddr = (writeAddr) + (4)
-        CALL/Action (((((writeAddr) == (4)) & (portalWControl)) | ((((writeAddr) == (4)) ^ 1) & (portalWControl))) | ((portalWControl) ^ 1)):writeData$out$deq__ENA{}
-        CALL/Action (((writeCount) == (0)) & (((((writeAddr) == (4)) & (portalWControl)) | ((((writeAddr) == (4)) ^ 1) & (portalWControl))) | ((portalWControl) ^ 1))):writeDone$in$enq__ENA{RULE$lwrite$currentWrite}
-        CALL/Action (((writeCount) == (0)) & (((((writeAddr) == (4)) & (portalWControl)) | ((((writeAddr) == (4)) ^ 1) & (portalWControl))) | ((portalWControl) ^ 1))):reqAws$out$deq__ENA{}
+        STORE :writeCount = (writeCount) - (1)
+        STORE :writeAddr = (writeAddr) + (4)
+        CALL/Action :writeData$out$deq__ENA{}
+        CALL/Action ((writeCount) == (0)):writeDone$in$enq__ENA{RULE$lwrite$currentWrite}
+        CALL/Action ((writeCount) == (0)):reqAws$out$deq__ENA{}
     }
     METHOD/Rule/Action RULE$writeResponse__ENA {
         CALL :writeDone$out$first{}

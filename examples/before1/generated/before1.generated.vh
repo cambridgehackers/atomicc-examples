@@ -30,31 +30,31 @@
 //METACONNECT; indication$heard__RDY; lEII_test$indication$heard__RDY
 //METASTART; Echo
 //METAEXCLUSIVE; request$say__ENA; RULE$delay_rule__ENA; request$say2__ENA
-//METAGUARD; request$say; !busy;
+//METAGUARD; request$say; 0 != ( busy ^ 1 );
 //METAEXCLUSIVE; request$say2__ENA; RULE$delay_rule__ENA
-//METAGUARD; request$say2; !busy;
+//METAGUARD; request$say2; 0 != ( busy ^ 1 );
 //METAGUARD; swap$y2x; 1;
 //METAGUARD; swap$y2xnull; 1;
 //METAGUARD; swap$x2y; 1;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA
-//METAGUARD; RULE$delay_rule; !( busy_delay || ( !busy ) );
+//METAGUARD; RULE$delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;
-//METAGUARD; RULE$respond_rule; busy_delay && indication$heard__RDY;
+//METAGUARD; RULE$respond_rule; !( ( busy_delay == 0 ) || ( !indication$heard__RDY ) );
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; EchoIndicationInput
 //METAEXCLUSIVE; pipe$enq__ENA; RULE$input_rule__ENA
-//METAGUARD; pipe$enq; !busy_delay;
+//METAGUARD; pipe$enq; 0 != ( busy_delay ^ 1 );
 //METAINVOKE; RULE$input_rule__ENA; :indication$heard__ENA;
-//METAGUARD; RULE$input_rule; busy_delay && indication$heard__RDY;
+//METAGUARD; RULE$input_rule; !( ( busy_delay == 0 ) || ( !indication$heard__RDY ) );
 //METARULES; RULE$input_rule
 //METASTART; EchoIndicationOutput
 //METAEXCLUSIVE; indication$heard__ENA; RULE$output_rulee__ENA; RULE$output_ruleo__ENA
-//METAGUARD; indication$heard; !ind_busy;
+//METAGUARD; indication$heard; 0 != ( ind_busy ^ 1 );
 //METAINVOKE; RULE$output_rulee__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; RULE$output_rulee__ENA; RULE$output_ruleo__ENA
-//METAGUARD; RULE$output_rulee; ind_busy && even && pipe$enq__RDY;
+//METAGUARD; RULE$output_rulee; !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe$enq__RDY ) );
 //METAINVOKE; RULE$output_ruleo__ENA; :pipe$enq__ENA;
-//METAGUARD; RULE$output_ruleo; !( even || ( !( pipe$enq__RDY && ind_busy ) ) );
+//METAGUARD; RULE$output_ruleo; !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe$enq__RDY ) );
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:request$say2__ENA;pipe$enq$v$tag == 1:request$say__ENA;

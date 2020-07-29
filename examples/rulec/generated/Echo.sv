@@ -46,12 +46,12 @@ module Echo (input wire CLK, input wire nRST,
     assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication$heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
-    assign request$say2__RDY = !busy;
-    assign request$say__RDY = !busy;
+    assign request$say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
+    assign request$say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
     assign request$setLeds__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$delay_rule__RDY = !( busy_delay || ( !busy ) );
-    assign RULE$respond_rule__RDY = busy_delay && ( ( indication$heard__RDY && ( ( v_type == 1 ) || indication$heard2__RDY ) ) || ( ( !indication$heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication$heard2__RDY ) ) ) ) );
+    assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
+    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication$heard__RDY && ( ( v_type == 1 ) || indication$heard2__RDY ) ) || ( ( !indication$heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication$heard2__RDY ) ) ) ) ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
