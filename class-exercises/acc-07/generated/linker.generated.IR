@@ -1,0 +1,47 @@
+MODULE WbPriArbiter WbPriArbiter_interface {
+}
+INTERFACE WbPriArbiter_interface {
+    FIELD/parameter Bit(32) OPT_ZERO_ON_IDLE
+    FIELD/parameter Bit(32) F_OPT_CLK2FFLOGIC
+    FIELD/input  Bit(1) a$stb__ENA
+    FIELD/input  Bit(1) a$stb$we
+    FIELD/input  Bit(32) a$stb$addr
+    FIELD/input  Bit(32) a$stb$data
+    FIELD/input  Bit(4) a$stb$sel
+    FIELD/output Bit(1) a$stb__RDY
+    FIELD/output Bit(1) a$ack
+    FIELD/output Bit(1) a$ack__RDY
+    FIELD/output Bit(1) a$stall
+    FIELD/output Bit(1) a$stall__RDY
+    FIELD/output Bit(1) a$err
+    FIELD/output Bit(1) a$err__RDY
+    FIELD/input  Bit(1) b$stb__ENA
+    FIELD/input  Bit(1) b$stb$we
+    FIELD/input  Bit(32) b$stb$addr
+    FIELD/input  Bit(32) b$stb$data
+    FIELD/input  Bit(4) b$stb$sel
+    FIELD/output Bit(1) b$stb__RDY
+    FIELD/output Bit(1) b$ack
+    FIELD/output Bit(1) b$ack__RDY
+    FIELD/output Bit(1) b$stall
+    FIELD/output Bit(1) b$stall__RDY
+    FIELD/output Bit(1) b$err
+    FIELD/output Bit(1) b$err__RDY
+    FIELD/output Bit(1) o$stb__ENA
+    FIELD/output Bit(1) o$stb$we
+    FIELD/output Bit(32) o$stb$addr
+    FIELD/output Bit(32) o$stb$data
+    FIELD/output Bit(4) o$stb$sel
+    FIELD/input  Bit(1) o$stb__RDY
+    FIELD/input  Bit(1) o$ack
+    FIELD/input  Bit(1) o$ack__RDY
+    FIELD/input  Bit(1) o$stall
+    FIELD/input  Bit(1) o$stall__RDY
+    FIELD/input  Bit(1) o$err
+    FIELD/input  Bit(1) o$err__RDY
+    FIELD/input  Bit(1) acyc
+    FIELD/input  Bit(1) bcyc
+    FIELD/input  Bit(1) ocyc
+}
+FILE generated/WbPriArbiter.sv
+FILE generated/wbpriarbiter.generated.vh

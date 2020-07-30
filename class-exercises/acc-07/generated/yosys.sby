@@ -1,0 +1,14 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal WbPriArbiter.sv 
+
+prep -top WbPriArbiter
+
+[files]
+generated/WbPriArbiter.sv
+generated/wbpriarbiter.generated.vh

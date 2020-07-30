@@ -37,13 +37,13 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out$first__RDY());
     assign forward$enq__RDY = forwardFifo$in$enq__RDY;
     assign forwardFifo$in$enq$v = forward$enq$v;
-    assign in$enq__RDY = !( forwardFifo$out$first__RDY || ( !out$enq__RDY ) );
+    assign in$enq__RDY = !( ( 0 == ( ( forwardFifo$out$first__RDY != 0 ) ^ 1 ) ) || ( !out$enq__RDY ) );
     assign out$enq$v = ( ( in$enq__ENA && in$enq__RDY ) ? in$enq$v : 144'd0 ) | ( RULE$fifoRule__RDY ? { RULE$fifoRule$agg_2e_tmp$data , RULE$fifoRule$agg_2e_tmp$length } : 144'd0 );
-    assign out$enq__ENA = ( in$enq__ENA && ( RULE$fifoRule__RDY || ( !forwardFifo$out$first__RDY ) ) ) || ( ( !in$enq__ENA ) && RULE$fifoRule__RDY );
+    assign out$enq__ENA = ( in$enq__ENA && ( in$enq__RDY || RULE$fifoRule__RDY ) ) || ( ( !in$enq__ENA ) && RULE$fifoRule__RDY );
     // Extra assigments, not to output wires
     assign RULE$fifoRule$agg_2e_tmp$data = forwardFifo$out$first[ 128 - 1 + 16 : 16 ];
     assign RULE$fifoRule$agg_2e_tmp$length = forwardFifo$out$first[ 16 - 1 : 0 ];
-    assign RULE$fifoRule__RDY = ( in$enq__ENA == 0 ) && forwardFifo$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY;
+    assign RULE$fifoRule__RDY = !( ( 0 == ( ( in$enq__ENA != 0 ) ^ 1 ) ) || ( !( forwardFifo$out$first__RDY && out$enq__RDY && forwardFifo$out$deq__RDY ) ) );
 endmodule
 
 `default_nettype wire    // set back to default value

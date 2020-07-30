@@ -8,4 +8,4 @@ include ../../makefile.in
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/wbpriarbiter.ll wbpriarbiter.cpp
-	#$(ATOMICCDIR)/atomiccLinker WbPriArbiter generated/linker
+	$(ATOMICCDIR)/atomiccLinker WbPriArbiter generated/linker
