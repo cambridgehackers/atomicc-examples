@@ -9,7 +9,7 @@
 //METAINTERNAL; funnel; FunnelBase(funnelWidth=4,dataWidth=32);
 //METAINTERNAL; result; Fifo1Base(width=32);
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
-//METAGUARD; request$say; fifo$in$enq__RDY;
+//METAGUARD; request$say; fifo$in$enq__RDY_or1;
 //METAINVOKE; RULE$respond_rule__ENA; :indication$heard__ENA;:result$out$deq__ENA;:result$out$first;
 //METAGUARD; RULE$respond_rule; result$out$first__RDY && indication$heard__RDY && result$out$deq__RDY;
 //METAGUARD; RULE$init; 1;

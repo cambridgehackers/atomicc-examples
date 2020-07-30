@@ -39,11 +39,11 @@ module GrayCounter #(
     assign RULE$incdec$useLsb = RULE$incdec$ctemp == decrement__ENA;
     assign RULE$incdec__RDY = !( increment__ENA == decrement__ENA );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign RULE$incdec$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
-        assign readBin$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
-        assign readBin$rtemp[ __inst$Genvar1 ] = readBin$temp[__inst$Genvar1];
-        assign readBin$temp[__inst$Genvar1] = readBin$ctemp[ ( width - 1 ) : __inst$Genvar1 ];
-        assign readGray$ctemp[ __inst$Genvar1 ] = counter[__inst$Genvar1];
+        assign RULE$incdec$ctemp[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
+        assign readBin$ctemp[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
+        assign readBin$rtemp[ __inst$Genvar1 ] = readBin$temp[ __inst$Genvar1 ];
+        assign readBin$temp[ __inst$Genvar1 ] = readBin$ctemp[ ( width - 1 ) : __inst$Genvar1 ];
+        assign readGray$ctemp[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
     end;
 
     for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
@@ -53,16 +53,16 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       end // nRST
       else begin
         if (RULE$incdec__RDY) begin // RULE$incdec__ENA
-            counter[__inst$Genvar1] <= counter[__inst$Genvar1] ^ ( ( __inst$Genvar1 == 0 ) ? RULE$incdec$useLsb : ( ( ( RULE$incdec$useLsb != 0 ) ^ 1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) ) : 0 ] ) != 0 ) ^ 1 ) ) ) );
+            counter[ __inst$Genvar1 ] <= counter[ __inst$Genvar1 ] ^ ( ( __inst$Genvar1 == 0 ) ? RULE$incdec$useLsb : ( ( ( RULE$incdec$useLsb != 0 ) ^ 1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( RULE$incdec$ctemp[ ( ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) ) : 0 ] ) != 0 ) ^ 1 ) ) ) );
         end; // End of RULE$incdec__ENA
         if (writeBin__ENA) begin // writeBin__ENA
             if (__inst$Genvar1 == ( width - 1 ))
-            counter[__inst$Genvar1] <= writeBin$v[ __inst$Genvar1 ];
+            counter[ __inst$Genvar1 ] <= writeBin$v[ __inst$Genvar1 ];
             if (!( __inst$Genvar1 == ( width - 1 ) ))
-            counter[__inst$Genvar1] <= writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
+            counter[ __inst$Genvar1 ] <= writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
         end; // End of writeBin__ENA
         if (writeGray__ENA) begin // writeGray__ENA
-            counter[__inst$Genvar1] <= writeGray$v[ __inst$Genvar1 ];
+            counter[ __inst$Genvar1 ] <= writeGray$v[ __inst$Genvar1 ];
         end; // End of writeGray__ENA
       end
     end // always @ (posedge CLK)
