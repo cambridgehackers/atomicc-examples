@@ -76,56 +76,7 @@ class IVector __implements IVectorIFC {
     void in.say(int meth, int v) {
         UTYPE temp;
         temp.b = v;
-#if 0 // this is what it should expand to
-        if (meth == 0)
-        fifo[0].in.enq(temp);
-        else if (meth == 1)
-        fifo[1].in.enq(temp);
-        else if (meth == 2)
-        fifo[2].in.enq(temp);
-        else if (meth == 3)
-        fifo[3].in.enq(temp);
-        else if (meth == 4)
-        fifo[4].in.enq(temp);
-        else if (meth == 5)
-        fifo[5].in.enq(temp);
-        else if (meth == 6)
-        fifo[6].in.enq(temp);
-        else if (meth == 7)
-        fifo[7].in.enq(temp);
-        else if (meth == 8)
-        fifo[8].in.enq(temp);
-        else if (meth == 9)
-        fifo[9].in.enq(temp);
-#elif 1
         fifo[meth].in.enq(temp);
-#elif 1
-        ((meth == 0) ? fifo[0] :
-         (meth == 1) ? fifo[1] :
-         (meth == 2) ? fifo[2] :
-         (meth == 3) ? fifo[3] :
-         (meth == 4) ? fifo[4] :
-         (meth == 5) ? fifo[5] :
-         (meth == 6) ? fifo[6] :
-         (meth == 7) ? fifo[7] :
-         (meth == 8) ? fifo[8] :
-                       fifo[9] ).in.enq(temp);
-#else
-         Fifo<UTYPE> *tfifo;
-         switch(meth) {
-         case 0: tfifo = &fifo[0]; break;
-         case 1: tfifo = &fifo[1]; break;
-         case 2: tfifo = &fifo[2]; break;
-         case 3: tfifo = &fifo[3]; break;
-         case 4: tfifo = &fifo[4]; break;
-         case 5: tfifo = &fifo[5]; break;
-         case 6: tfifo = &fifo[6]; break;
-         case 7: tfifo = &fifo[7]; break;
-         case 8: tfifo = &fifo[8]; break;
-         default: tfifo = &fifo[9];
-         }
-         tfifo->in.enq(temp);
-#endif
     }
     IVector(IVectorInd *aind, int size) : vsize(size) {
         out = aind;
