@@ -23,16 +23,6 @@ module ___P2MEchoRequest (input wire CLK, input wire nRST,
     assign method$setLeds$v = pipe$enq$v[(16 + 128) - 32-24 -1 :((16 + 128) - 32-24 - 8)];
     assign method$setLeds__ENA = pipe$enq__ENA && method$say__RDY && method$say2__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 );
     assign pipe$enq__RDY = method$say__RDY && method$say2__RDY && method$setLeds__RDY;
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-      end // nRST
-      else begin
-        if (pipe$enq__ENA && pipe$enq__RDY) begin // pipe$enq__ENA
-            $display( "DISPLAYP2M %x" , pipe$enq$v );
-        end; // End of pipe$enq__ENA
-      end
-    end // always @ (posedge CLK)
 endmodule
 
 `default_nettype wire    // set back to default value

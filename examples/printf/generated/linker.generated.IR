@@ -44,7 +44,6 @@ INTERFACE Echo_interface {
     FIELD/input  Bit(1) indication$heard3__RDY
 }
 MODULE ___M2PEchoIndication ___M2PEchoIndication_interface {
-    FIELD Printf printfp
 }
 INTERFACE ___M2PEchoIndication_interface {
     FIELD/input  Bit(1) CLK
@@ -67,7 +66,6 @@ INTERFACE ___M2PEchoIndication_interface {
     FIELD/input  Bit(1) pipe$enq__RDY
 }
 MODULE ___P2MEchoRequest ___P2MEchoRequest_interface {
-    FIELD Printf printfp
 }
 INTERFACE ___P2MEchoRequest_interface {
     FIELD/input  Bit(1) CLK

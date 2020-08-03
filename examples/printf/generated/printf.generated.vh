@@ -41,17 +41,15 @@
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
 //METASTART; ___M2PEchoIndication
-//METAINTERNAL; printfp; Printf;
-//METAINVOKE; method$heard__ENA; :pipe$enq__ENA;:printfp$enq__ENA;
+//METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard__ENA; method$heard2__ENA; method$heard3__ENA
-//METAGUARD; method$heard; pipe$enq__RDY && printfp$enq__RDY;
-//METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;:printfp$enq__ENA;
+//METAGUARD; method$heard; pipe$enq__RDY;
+//METAINVOKE; method$heard2__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; method$heard2__ENA; method$heard3__ENA
-//METAGUARD; method$heard2; pipe$enq__RDY && printfp$enq__RDY;
-//METAINVOKE; method$heard3__ENA; :pipe$enq__ENA;:printfp$enq__ENA;
-//METAGUARD; method$heard3; pipe$enq__RDY && printfp$enq__RDY;
+//METAGUARD; method$heard2; pipe$enq__RDY;
+//METAINVOKE; method$heard3__ENA; :pipe$enq__ENA;
+//METAGUARD; method$heard3; pipe$enq__RDY;
 //METASTART; ___P2MEchoRequest
-//METAINTERNAL; printfp; Printf;
-//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method$say2__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method$say__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method$setLeds__ENA;:printfp$enq__ENA;
-//METAGUARD; pipe$enq; method$say__RDY && method$say2__RDY && method$setLeds__RDY && printfp$enq__RDY;
+//METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method$say2__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method$say__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method$setLeds__ENA;
+//METAGUARD; pipe$enq; method$say__RDY && method$say2__RDY && method$setLeds__RDY;
 `endif
