@@ -22,55 +22,46 @@ EMODULE l_top l_topIfc {
 MODULE GrayCounter(width=10) GrayCounterIfc(width=10) {
     FIELD/Count width  Bit(1) counter
     FIELD/shared Bit(10) m
+    FIELD/shared Bit(10) counterBit
     METHOD/Action increment__ENA
     METHOD/Action decrement__ENA
-    METHOD readGray Bit(width) = ((readGray$ctemp)) {
-        ALLOCA Bit(width) readGray$ctemp
+    METHOD readGray Bit(width) = ((counterBit))
+    METHOD/Action writeGray__ENA ( Bit(width) v ) {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$2Body__ENA
     }
-    METHOD/Action writeGray__ENA ( Bit(width) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$3Body__ENA
-    }
     METHOD readBin Bit(width) = ((readBin$rtemp)) {
-        ALLOCA Bit(width) readBin$ctemp
         ALLOCA Bit(width) readBin$rtemp
         ALLOCA ARRAY_width_Bit(1) readBin$temp
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$3Body__ENA
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$4Body__ENA
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$5Body__ENA
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$6Body__ENA
     }
     METHOD/Action writeBin__ENA ( Bit(width) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$7Body__ENA
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$5Body__ENA
     }
-    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) RULE$incdec$ctemp ) {
-        LET Bit(32) :__bitsubstr{RULE$incdec$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
-    }
-    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) RULE$incdec$useLsb , Bit(width) RULE$incdec$ctemp ) {
-        STORE :counter[__inst$Genvar1] = (counter[__inst$Genvar1]) ^ (__phi(((__inst$Genvar1) == (0)):(RULE$incdec$useLsb), !((__inst$Genvar1) == (0)):(((((RULE$incdec$useLsb) != (0)) ^ (1)) & (((__inst$Genvar1) == ((10) - (1))) | (__bitsubstr{RULE$incdec$ctemp,__phi((((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (1)))}))) & (((__inst$Genvar1) == (1)) | (((__reduce{"|",__bitsubstr{RULE$incdec$ctemp,__phi((((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1))))))
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) RULE$incdec$useLsb ) {
+        STORE :counter[__inst$Genvar1] = (counter[__inst$Genvar1]) ^ (__phi(((__inst$Genvar1) == (0)):(RULE$incdec$useLsb), !((__inst$Genvar1) == (0)):(((((RULE$incdec$useLsb) != (0)) ^ (1)) & (((__inst$Genvar1) == ((10) - (1))) | (__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (1)))}))) & (((__inst$Genvar1) == (1)) | (((__reduce{"|",__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1))))))
     }
     METHOD/Rule/Action RULE$incdec__ENA if (((increment__ENA) != (decrement__ENA))) {
-        ALLOCA Bit(width) RULE$incdec$ctemp
         ALLOCA Bit(1) RULE$incdec$useLsb
+        LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",counterBit}) == (decrement__ENA)
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
-        LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",RULE$incdec$ctemp}) == (decrement__ENA)
+    }
+    METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        LET Bit(32) :__bitsubstr{counterBit,__inst$Genvar1} = counter[__inst$Genvar1]
+    }
+    METHOD/Rule/Action RULE$init__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$1Body__ENA
     }
-    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) readGray$ctemp ) {
-        LET Bit(32) :__bitsubstr{readGray$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
-    }
-    METHOD/Action FOR$3Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) writeGray$v ) {
+    METHOD/Action FOR$2Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) writeGray$v ) {
         STORE :counter[__inst$Genvar1] = __bitsubstr{writeGray$v,__inst$Genvar1}
     }
-    METHOD/Action FOR$4Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) readBin$ctemp ) {
-        LET Bit(32) :__bitsubstr{readBin$ctemp,__inst$Genvar1} = counter[__inst$Genvar1]
+    METHOD/Action FOR$3Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) readBin$temp ) {
+        LET Bit(1) :readBin$temp[__inst$Genvar1] = __reduce{"^",__bitsubstr{counterBit,(10) - (1),__inst$Genvar1}}
     }
-    METHOD/Action FOR$5Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) readBin$temp , Bit(width) readBin$ctemp ) {
-        LET Bit(1) :readBin$temp[__inst$Genvar1] = __reduce{"^",__bitsubstr{readBin$ctemp,(10) - (1),__inst$Genvar1}}
-    }
-    METHOD/Action FOR$6Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) readBin$rtemp , Bit(1) readBin$temp ) {
+    METHOD/Action FOR$4Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) readBin$rtemp , Bit(1) readBin$temp ) {
         LET Bit(32) :__bitsubstr{readBin$rtemp,__inst$Genvar1} = readBin$temp[__inst$Genvar1]
     }
-    METHOD/Action FOR$7Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) writeBin$v ) {
+    METHOD/Action FOR$5Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) writeBin$v ) {
         STORE ((__inst$Genvar1) == ((10) - (1))):counter[__inst$Genvar1] = __bitsubstr{writeBin$v,__inst$Genvar1}
         STORE !((__inst$Genvar1) == ((10) - (1))):counter[__inst$Genvar1] = __reduce{"^",__bitsubstr{writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
     }

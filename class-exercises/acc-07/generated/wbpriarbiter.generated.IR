@@ -48,10 +48,10 @@ MODULE FwbSlave FwbSlaveIfc {
     FIELD/shared Bit(32) data_share
     FIELD/shared Bit((32 / 8)) sel_share
     METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) {
-        STORE :we_share = a$stb$we
-        STORE :addr_share = a$stb$addr
-        STORE :data_share = a$stb$data
-        STORE :sel_share = a$stb$sel
+        LET Bit(1) :we_share = a$stb$we
+        LET Bit(32) :addr_share = a$stb$addr
+        LET Bit(32) :data_share = a$stb$data
+        LET Bit((32 / 8)) :sel_share = a$stb$sel
     }
     METHOD f_nreqs Bit((32 / 8)) = ((nreqs))
     METHOD f_nacks Bit((32 / 8)) = ((nacks))

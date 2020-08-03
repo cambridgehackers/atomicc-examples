@@ -1,8 +1,22 @@
 `ifndef __gray_GENERATED__VH__
 `define __gray_GENERATED__VH__
 
+//METASTART; Test
+//METAINTERNAL; counter; GrayCounter(width=4);
+//METACONNECT; request$increment__ENA; counter$increment__ENA
+//METACONNECT; request$increment__RDY; counter$increment__RDY
+//METACONNECT; request$decrement__ENA; counter$decrement__ENA
+//METACONNECT; request$decrement__RDY; counter$decrement__RDY
+//METACONNECT; request$readGray; counter$readGray
+//METACONNECT; request$readGray__RDY; counter$readGray__RDY
+//METACONNECT; request$writeGray__ENA; counter$writeGray__ENA
+//METACONNECT; request$writeGray__RDY; counter$writeGray__RDY
+//METACONNECT; request$readBin; counter$readBin
+//METACONNECT; request$readBin__RDY; counter$readBin__RDY
+//METACONNECT; request$writeBin__ENA; counter$writeBin__ENA
+//METACONNECT; request$writeBin__RDY; counter$writeBin__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__Test; GrayCounter(width=4);
+//METAINTERNAL; DUT__Test; Test;
 //METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
 //METACONNECT; DUT__Test$request$increment__ENA; P2M__request$method$increment__ENA
 //METACONNECT; DUT__Test$request$increment__RDY; P2M__request$method$increment__RDY
@@ -21,7 +35,6 @@
 //METACONNECT; indication$enq__ENA; P2M__request$returnInd$enq__ENA
 //METACONNECT; indication$enq__RDY; P2M__request$returnInd$enq__RDY
 //METASTART; ___P2MGrayCounterIfc
-//METAEXTERNAL; returnInd; PipeIn;
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method$decrement__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method$increment__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd5:method$writeBin__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3:method$writeGray__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:returnInd$enq__ENA;pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width:returnInd$enq__ENA;
 //METAGUARD; pipe$enq; method$increment__RDY && method$decrement__RDY && returnInd$enq__RDY && method$writeGray__RDY && method$writeBin__RDY;
 `endif

@@ -21,6 +21,7 @@
 // SOFTWARE.
 #include "adapter.h"
 
+#define TRACE_ADAPTER 0
 template<class T, int width>
 class AdapterToBus __implements AtB<T, width> {
    __uint(__bitsize(T)) buffer;
@@ -29,11 +30,13 @@ class AdapterToBus __implements AtB<T, width> {
    void in.enq(T v) if (remain == 0) {
       buffer = __bit_cast<decltype(buffer)>(v);
       remain = v.length;
-      //printf ("adapterTOin %x length %x\n", v.data, v.length);
+      if (TRACE_ADAPTER)
+      printf ("adapterTOin %x length %x\n", v.data, v.length);
    }
    __rule copyRule if (remain != 0) {
       __uint(width) outVal = __bitsubstr(buffer, __bitsize(T) - 1, __bitsize(T) - width);
-      //printf ("adapterTOout %x remain %x\n", outVal, remain);
+      if (TRACE_ADAPTER)
+      printf ("adapterTOout %x remain %x\n", outVal, remain);
       this->out->enq(outVal, remain == 1);
       remain--;
       buffer <<= width;
@@ -47,6 +50,7 @@ class AdapterFromBus __implements AfB<width, T> {
    LenType              length;
 
    void in.enq(__uint(width) v, bool last) if (!waitForEnq) {
+      if (TRACE_ADAPTER)
       printf("adapterFROMin %x last %x buffer %x\n", v, last, buffer);
       LenType newLength = length + 1;
       buffer = __bitconcat(v, __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(LenType) + width), __bit_cast<__uint(__bitsize(LenType))>(newLength));
@@ -56,6 +60,7 @@ class AdapterFromBus __implements AfB<width, T> {
    }
    __rule pushValue if (waitForEnq) {
        length = 0;
+       if (TRACE_ADAPTER)
        printf("adapterFROMout %x\n", buffer);
        this->out->enq(__bit_cast<T>(buffer));
        waitForEnq = false;

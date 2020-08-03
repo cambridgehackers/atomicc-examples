@@ -26,23 +26,13 @@ module ___P2MGrayCounterIfc #(
     input wire returnInd$enq__RDY);
     assign method$decrement__ENA = pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1 );
     assign method$increment__ENA = pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0 );
-    assign method$writeBin$v = pipe$enq$v[(16 + 128) - 32 -1 :((16 + 128) - 32 - width)];
+    assign method$writeBin$v = pipe$enq$v[(16 + 128) - 32-28 -1 :((16 + 128) - 32-28 - 4)];
     assign method$writeBin__ENA = pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd5 );
-    assign method$writeGray$v = pipe$enq$v[(16 + 128) - 32 -1 :((16 + 128) - 32 - width)];
+    assign method$writeGray$v = pipe$enq$v[(16 + 128) - 32-28 -1 :((16 + 128) - 32-28 - 4)];
     assign method$writeGray__ENA = pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3 );
     assign pipe$enq__RDY = method$increment__RDY && method$decrement__RDY && returnInd$enq__RDY && method$writeGray__RDY && method$writeBin__RDY;
-    assign returnInd$enq$v = ( ( pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ? ( { method$readGray, 16'd0, 16'd2, 16'd5, 16'd2/* length */} ) : 144'd0 ) | ( ( pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width ) ) ? ( { method$readBin, 16'd0, 16'd4, 16'd5, 16'd2/* length */} ) : 144'd0 );
+    assign returnInd$enq$v = ( ( pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ? ( { 16'd2, 16'd5, 12'd0, method$readGray, 16'd10, 64'd0, 16'd2} ) : 144'd0 ) | ( ( pipe$enq__ENA && pipe$enq__RDY && ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width ) ) ? ( { 16'd4, 16'd5, 12'd0, method$readBin, 16'd10, 64'd0, 16'd2} ) : 144'd0 );
     assign returnInd$enq__ENA = pipe$enq__ENA && pipe$enq__RDY && ( ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) || ( pipe$enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width ) );
-
-    always @( posedge CLK) begin
-      if (!nRST) begin
-      end // nRST
-      else begin
-        if (pipe$enq__ENA && pipe$enq__RDY) begin // pipe$enq__ENA
-            $display( "DISPLAYP2M %x" , pipe$enq$v );
-        end; // End of pipe$enq__ENA
-      end
-    end // always @ (posedge CLK)
 endmodule
 
 `default_nettype wire    // set back to default value

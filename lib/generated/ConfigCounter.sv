@@ -34,7 +34,7 @@ module ConfigCounter #(
     assign read__RDY = 1;
     // Extra assigments, not to output wires
     assign RULE$react$new_count = ( cnt + inc_wire ) - dec_wire;
-    assign dec_wire = ( decrement__ENA ? decrement$v : 0 ) | ( ( maybeDecrement__ENA && ( cnt >= maybeDecrement$v ) ) ? maybeDecrement$v : 0 );
+    assign dec_wire = decrement$v | ( ( cnt >= maybeDecrement$v ) ? maybeDecrement$v : 0 );
     assign inc_wire = increment$v;
     assign maybeDecrement$retval = cnt >= maybeDecrement$v;
 

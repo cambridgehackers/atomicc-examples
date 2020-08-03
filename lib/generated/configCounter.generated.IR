@@ -24,16 +24,16 @@ MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {
     FIELD Bit(10) cnt
     FIELD Bit(1) positive_reg
     METHOD/Action decrement__ENA ( Bit(count_sz) v ) {
-        STORE :dec_wire = decrement$v
+        LET Bit(10) :dec_wire = decrement$v
     }
     METHOD/Action maybeDecrement ( Bit(10) v ) Bit(1) = ((maybeDecrement$retval)) {
         ALLOCA Bit(1) maybeDecrement$retval
-        STORE ((cnt) >= (maybeDecrement$v)):dec_wire = maybeDecrement$v
+        LET Bit(10) ((cnt) >= (maybeDecrement$v)):dec_wire = maybeDecrement$v
         LET Bit(1) ((cnt) >= (maybeDecrement$v)):maybeDecrement$retval = 1
         LET Bit(1) !((cnt) >= (maybeDecrement$v)):maybeDecrement$retval = 0
     }
     METHOD/Action increment__ENA ( Bit(count_sz) v ) {
-        STORE :inc_wire = increment$v
+        LET Bit(10) :inc_wire = increment$v
     }
     METHOD read Bit(count_sz) = ((cnt))
     METHOD positive Bit(1) = ((positive_reg))

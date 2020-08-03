@@ -70,7 +70,7 @@ MODULE FifoB1Base(width=999999) Fifo_OC_1 {
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v
     METHOD/Action in$enq__ENA ( Bit(width) v ) if (((((full) ^ (1)) | (out$deq__ENA)) != (0))) {
-        STORE :enq_v = in$enq$v
+        LET Bit(999999) :enq_v = in$enq$v
         STORE :element = in$enq$v
         STORE !((out$deq__ENA) != (0)):full = 1
     }

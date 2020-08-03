@@ -31,6 +31,6 @@ module Test (input wire CLK, input wire nRST,
         .writeBin__ENA(request$writeBin__ENA),
         .writeBin$v(request$writeBin$v),
         .writeBin__RDY(request$writeBin__RDY));
-endmodule 
+endmodule
 
 `default_nettype wire    // set back to default value

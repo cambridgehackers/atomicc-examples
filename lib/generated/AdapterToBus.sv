@@ -32,10 +32,14 @@ module AdapterToBus #(
         if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
             buffer <= buffer << width;
+            if (!( 0 == 0 ))
+            $display( "adapterTOout %x remain %x" , RULE$copyRule$outVal , remain );
         end; // End of RULE$copyRule__ENA
         if (in$enq__ENA && in$enq__RDY) begin // in$enq__ENA
             buffer <= in$enq$v;
             remain <= in$enq$v[ ( (-1 + 16) ) : 0 ];
+            if (!( 0 == 0 ))
+            $display( "adapterTOin %x length %x" , in$enq$v[ ( (15 + 128) ) : 16 ] , in$enq$v[ ( (-1 + 16) ) : 0 ] );
         end; // End of in$enq__ENA
       end
     end // always @ (posedge CLK)

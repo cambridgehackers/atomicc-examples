@@ -28,12 +28,10 @@ class GrayCounter __implements GrayCounterIfc<width> {
 
     void increment() { }
     void decrement() { }
+    __shared __uint(width) counterBit;
 
     __uint(width) readGray() {
-        __uint(width) ctemp;
-        for(int i = 0; i < width; i += 1)
-            *__bitsubstrl(ctemp, i) = counter[i];
-        return ctemp;
+        return counterBit;
     }
     void writeGray(__uint(width) v) {
         for(int i = 0; i < width; i += 1)
@@ -42,11 +40,8 @@ class GrayCounter __implements GrayCounterIfc<width> {
 
     __uint(width) readBin() {
         __uint(1) temp[width];
-        __uint(width) ctemp;
         for(int i = 0; i < width; i += 1)
-            *__bitsubstrl(ctemp, i) = counter[i];
-        for(int i = 0; i < width; i += 1)
-            temp[i] = __reduce("^", __bitsubstr(ctemp, width - 1, i));
+            temp[i] = __reduce("^", __bitsubstr(counterBit, width - 1, i));
         __uint(width) rtemp;
         for(int i = 0; i < width; i += 1)
             *__bitsubstrl(rtemp, i) = temp[i];
@@ -61,15 +56,17 @@ class GrayCounter __implements GrayCounterIfc<width> {
     }
 
     __rule incdec if (__valid(increment) != __valid(decrement)) {
-        __uint(width) ctemp;
-        for(int i = 0; i < width; i += 1)
-            *__bitsubstrl(ctemp, i) = counter[i];
-        __uint(1) useLsb = __reduce("^", ctemp) == __valid(decrement);
+        __uint(1) useLsb = __reduce("^", counterBit) == __valid(decrement);
         for(int i = 0; i < width; i += 1) {
             counter[i] ^= (i == 0) ?  useLsb : ((!useLsb)
-               & ((i == width - 1) | __bitsubstr(ctemp, i < 1 ? 0:(i - 1)))
-               & ((i == 1) | !__reduce("|", __bitsubstr(ctemp, i < 2 ? 0:(i - 2), 0))));
+               & ((i == width - 1) | __bitsubstr(counterBit, i < 1 ? 0:(i - 1)))
+               & ((i == 1) | !__reduce("|", __bitsubstr(counterBit, i < 2 ? 0:(i - 2), 0))));
         }
+    }
+
+    __rule init {
+        for(int i = 0; i < width; i += 1)
+            *__bitsubstrl(counterBit, i) = counter[i];
     }
 };
 

@@ -55,7 +55,7 @@ MODULE MIMOBase(widthIn=32,widthOut=128) Gear_OC_1 {
     }
     METHOD out$first Bit(widthOut) = ((buffer)) if (((c) >= (128)))
     METHOD/Action in$enq__ENA ( Bit(widthIn) v ) if ((((c) >= (128)) ^ (1))) {
-        STORE :m = in$enq$v
+        LET Bit(32) :m = in$enq$v
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < widthOut)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
         STORE :c = (c) + (32)
     }
