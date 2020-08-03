@@ -19,35 +19,46 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-
 #include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
+#include "sock_utils.h"
+#include "EchoIndication.h"
+#include "EchoRequest.h"
+#include "GeneratedTypes.h"
 
 unsigned int stop_main_program;
-class l_module_OC_EchoIndication {
+class EchoRequestProxy *echoRequestProxy;
+
+class EchoIndication : public EchoIndicationWrapper {
 public:
-  void heard(unsigned int v) {
+    void heard(unsigned int v) {
         printf((("Heard an echo: %d\n")), v);
         stop_main_program = 1;
-  }
-  bool heard__RDY(void) { return true; }
+    }
+    EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
 };
-#include "fifo.generated.cpp"
-#include "echo.generated.cpp"
-
-
-class l_module_OC_EchoIndication zEchoIndication;
-class l_module_OC_Echo zEcho;
 
 int main(int argc, const char *argv[])
 {
+    Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
+#ifdef SIMULATION
+        &transportSocketInit,
+#else
+        &transportPortal,
+#endif
+        NULL, 0);
+    PortalMuxParam param = {};
+    param.pint = &mcommon->pint;
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S, &transportMux, &param);
+    echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H, &transportMux, &param);
+
   printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-    zEcho.setind(&zEchoIndication);
-    zEcho.say(22);
-    while (!stop_main_program) {
-        zEcho.run();
-    }
+    //echoRequestProxy.setind(&zEchoIndication);
+    echoRequestProxy->say(22);
+    //while (!stop_main_program) {
+        //echoRequestProxy.run();
+    //}
+  printf("[%s:%d] sleep\n", __FUNCTION__, __LINE__);
+  sleep(2);
   printf("[%s:%d] ending\n", __FUNCTION__, __LINE__);
   return 0;
 }

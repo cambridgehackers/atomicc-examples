@@ -1,5 +1,6 @@
-
 include ../../makefile.in
+
+CPPFILES = testecho.cpp
 #CPPFLAGS += -emit-llvm
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace

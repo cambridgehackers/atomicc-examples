@@ -2,11 +2,9 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-STRUCT EchoTest  {
-    FIELD Echo echo
-    FIELD Bit(32) x
-}
 INTERFACE EchoIfc  {
+    SOFTWARE sout
+    SOFTWARE ind
     INTERFACE EchoRequest sout
     INTERFACE/Ptr EchoIndication ind
 }
@@ -17,12 +15,12 @@ INTERFACE EchoRequest  {
     METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn.0 in
+    INTERFACE PipeIn_OC_0 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo.1  {
-    INTERFACE PipeIn.2 in
-    INTERFACE PipeOut.3 out
+INTERFACE Fifo_OC_1  {
+    INTERFACE PipeIn_OC_2 in
+    INTERFACE PipeOut_OC_3 out
 }
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn in
@@ -32,23 +30,29 @@ INTERFACE MuxPipeIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
-INTERFACE PipeIn.0  {
+INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn.2  {
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut.3  {
+INTERFACE PipeOut_OC_3  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-EMODULE Fifo1Base(width=32) Fifo.1 {
+INTERFACE l_topIfc  {
+    INTERFACE PipeIn request
+    INTERFACE/Ptr PipeIn indication
+}
+EMODULE Fifo1Base(width=32) Fifo {
 }
 EMODULE MuxPipe MuxPipeIfc {
+}
+EMODULE l_top l_topIfc {
 }
 MODULE Echo EchoIfc {
     FIELD Fifo1 fifo
@@ -61,9 +65,7 @@ MODULE Echo EchoIfc {
         CALL/Action :ind$heard__ENA{fifo$out$first}
     }
 }
-MODULE EchoInd EchoIndication {
-}
-MODULE Fifo1 Fifo {
+MODULE Fifo1 Fifo_OC_1 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}

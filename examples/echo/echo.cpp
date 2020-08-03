@@ -30,48 +30,20 @@ class EchoIndication {
   void heard(int v);
 };
 
-class EchoInd __implements EchoIndication {
-  //void heard(int v);
-};
-
 class EchoIfc {
-  EchoRequest sout;
-  EchoIndication *ind;
+  __software EchoRequest     sout;
+  __software EchoIndication *ind;
 };
 
 class Echo __implements EchoIfc {
-  Fifo<int> *fifo;
-  void sout.say(const int v) {
-      fifo->in.enq(v);
-  }
-  Echo(EchoIndication *aind) : fifo(new Fifo1<int>()) {
-    ind = aind;
-    printf("Echo: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(Echo));
-    __rule respond_rule {
-        fifo->out.deq();
-	ind->heard(fifo->out.first());
+    Fifo1<int> fifo;
+    void sout.say(const int v) {
+        fifo.in.enq(v);
     }
-  };
-  ~Echo() {}
+    __rule respond_rule {
+        fifo.out.deq();
+	ind->heard(fifo.out.first());
+    }
 };
 
-////////////////////////////////////////////////////////////
-// Test Bench
-////////////////////////////////////////////////////////////
-
-//void EchoInd::hout.heard(int v)
-//{
-    //printf("Heard an echo: %d\n", v);
-//}
-
-class EchoTest {
-  Echo *echo;
-  int x;
-public:
-  EchoTest(): echo(new Echo(new EchoInd())), x(7) {
-      printf("EchoTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(EchoTest));
-  }
-  ~EchoTest() {}
-};
-
-EchoTest echoTest;
+Echo dummy;
