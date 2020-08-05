@@ -109,14 +109,15 @@ MODULE FunnelTest FunnelTestIfc {
     FIELD/Count 4  FifoP fifo
     FIELD FunnelBuffered(funnelWidth=4) funnel
     FIELD Fifo1 result
-    FIELD Bit(2) index
+    FIELD Bit(8) index
     METHOD/Action request$say__ENA ( Bit(32) v ) {
         PRINTF :printf{"request.say %x index %d\n",request$say$v,index}
         CALL/Action :fifo[index].in$enq__ENA{request$say$v}
-        STORE :index = (index) + (1)
+        STORE ((index) >= ((4) - (1))):index = 0
+        STORE !((index) >= ((4) - (1))):index = (index) + (1)
     }
     METHOD/Rule/Action RULE$respond_rule__ENA {
-        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",50,index}
+        PRINTF :printf{"[%s:%d] index %d\n","RULE$respond_rule_block_invoke",55,index}
         CALL :result$out$first{}
         CALL/Action :indication$heard__ENA{result$out$first}
         CALL/Action :result$out$deq__ENA{}

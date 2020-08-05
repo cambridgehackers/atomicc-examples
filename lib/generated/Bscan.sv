@@ -25,7 +25,7 @@ module Bscan #(
     wire localBscan$capture;
     wire localBscan$nRST;
     wire localBscan$shift;
-    wire [32 - 1:0]localBscan$toBscan$enq$v;
+    wire [width - 1:0]localBscan$toBscan$enq$v;
     wire localBscan$toBscan$enq__RDY;
     wire localBscan$update;
     wire tckbuf$I;

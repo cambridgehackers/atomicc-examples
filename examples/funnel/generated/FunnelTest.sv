@@ -8,12 +8,12 @@ module FunnelTest (input wire CLK, input wire nRST,
     output wire indication$heard__ENA,
     output wire [32 - 1:0]indication$heard$v,
     input wire indication$heard__RDY);
-    reg [2 - 1:0]index;
+    reg [8 - 1:0]index;
     wire RULE$respond_rule__RDY;
     wire [32 - 1:0]fifo$in$enq$v [4 - 1:0];
     wire fifo$in$enq__ENA [4 - 1:0];
     wire fifo$in$enq__RDY [4 - 1:0];
-    wire [4 - 1:0]fifo$in$enq__RDY_or;
+    wire [ 4 - 1:0]fifo$in$enq__RDY_or;
     wire fifo$in$enq__RDY_or1;
     wire [32 - 1:0]fifo$out$enq$v [4 - 1:0];
     wire fifo$out$enq__ENA [4 - 1:0];
@@ -71,11 +71,14 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1)
       end // nRST
       else begin
         if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
-            $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 50 , index );
+            $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 55 , index );
         end; // End of RULE$respond_rule__ENA
         if (request$say__ENA && request$say__RDY) begin // request$say__ENA
-            index <= index + 1;
             $display( "request.say %x index %d" , request$say$v , index );
+            if (index >= ( 4 - 1 ))
+            index <= 0;
+            if (!( index >= ( 4 - 1 ) ))
+            index <= index + 1;
         end; // End of request$say__ENA
       end
     end // always @ (posedge CLK)

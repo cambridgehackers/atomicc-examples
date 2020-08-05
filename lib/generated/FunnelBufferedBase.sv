@@ -11,9 +11,9 @@ module FunnelBufferedBase #(
     output wire out$enq__ENA,
     output wire [dataWidth - 1:0]out$enq$v,
     input wire out$enq__RDY);
-    wire [32 - 1:0]base$in$enq$v [4 - 1:0];
-    wire base$in$enq__ENA [4 - 1:0];
-    wire base$in$enq__RDY [4 - 1:0];
+    wire [dataWidth - 1:0]base$in$enq$v [funnelWidth - 1:0];
+    wire base$in$enq__ENA [funnelWidth - 1:0];
+    wire base$in$enq__RDY [funnelWidth - 1:0];
     wire [32 - 1:0]buffer$in$enq$v [funnelWidth - 1:0];
     wire buffer$in$enq__ENA [funnelWidth - 1:0];
     wire buffer$in$enq__RDY [funnelWidth - 1:0];

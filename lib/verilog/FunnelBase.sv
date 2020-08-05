@@ -53,17 +53,34 @@ module FunnelBase #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input
         assign in$enq__RDY[0] = out$enq__RDY;
     end
     else begin
+    // handle non-power-of-2 funnelWidths
+    localparam logWidth = $clog2(funnelWidth);
+    localparam localWidth = 2**logWidth;
+    wire                 localin$enq__ENA[localWidth-1:0];
+    wire [dataWidth-1:0] localin$enq$v   [localWidth-1:0];
+    wire                 localin$enq__RDY[localWidth-1:0];
     genvar i;
-    localparam depth = $clog2(funnelWidth) - 1;
+    for(i = 0; i < localWidth; i = i+1) begin
+        if (i < funnelWidth) begin
+            assign localin$enq__ENA[i] = in$enq__ENA[i];
+            assign localin$enq$v[i] = in$enq$v[i];
+            assign in$enq__RDY[i] = localin$enq__RDY[i];
+        end
+        else begin
+            assign localin$enq__ENA[i] = 0;
+            assign localin$enq$v[i] = 0;
+        end;
+    end;
+    localparam depth = $clog2(localWidth) - 1;
     for(i = 0; i <= depth; i = i+1) begin : level
-       wire                 valid [(funnelWidth/2**(i+1)) - 1: 0];
-       wire [dataWidth-1:0] data  [(funnelWidth/2**(i+1)) - 1: 0];
-       wire                 ready [(funnelWidth/2**(i+1)) - 1: 0];
+       wire                 valid [(localWidth/2**(i+1)) - 1: 0];
+       wire [dataWidth-1:0] data  [(localWidth/2**(i+1)) - 1: 0];
+       wire                 ready [(localWidth/2**(i+1)) - 1: 0];
        if (i == 0)
-           pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
-               in$enq__ENA, in$enq$v, in$enq__RDY, valid, data, ready);
+           pipeFunnelHalf #(localWidth/2**i, dataWidth) funnel(CLK, nRST,
+               localin$enq__ENA, localin$enq$v, localin$enq__RDY, valid, data, ready);
        else
-           pipeFunnelHalf #(funnelWidth/2**i, dataWidth) funnel(CLK, nRST,
+           pipeFunnelHalf #(localWidth/2**i, dataWidth) funnel(CLK, nRST,
                level[i-1].valid, level[i-1].data, level[i-1].ready, valid, data, ready);
     end
     assign out$enq$v = level[depth].data[0];

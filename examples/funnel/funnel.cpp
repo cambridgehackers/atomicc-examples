@@ -22,6 +22,8 @@
 #include "funnel.h"
 #define IfcNames_FunnelIndicationH2S 5
 
+#define SPLIT_WIDTH 4
+
 class FunnelRequest {
     void say(__int(32) v);
 };
@@ -35,16 +37,19 @@ class FunnelTestIfc {
 };
 
 class FunnelTest __implements FunnelTestIfc {
-    FifoP<__int(32)>       fifo[4];
-    FunnelBuffered<4, __int(32)>   funnel;
+    FifoP<__int(32)>       fifo[SPLIT_WIDTH];
+    FunnelBuffered<SPLIT_WIDTH, __int(32)>   funnel;
     Fifo1<__int(32)>       result;
-    __uint(2)              index;
+    __uint(8)              index;
     __connect funnel.out = result.in;
     
     void request.say(__int(32) v) {
         printf("request.say %x index %d\n", v, index);
         fifo[index].in.enq(v);
-        index++;
+        if (index >= SPLIT_WIDTH - 1)
+            index = 0;
+        else
+            index++;
     }
     __rule respond_rule {
 printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, index);
@@ -52,8 +57,7 @@ printf("[%s:%d] index %d\n", __FUNCTION__, __LINE__, index);
         result.out.deq();
    };
    __rule init {
-        for (int i = 0; i < 4; i = i + 1) {
+        for (int i = 0; i < SPLIT_WIDTH; i = i + 1)
             __connect funnel.in[i] = fifo[i].out;
-        }
     }
 };

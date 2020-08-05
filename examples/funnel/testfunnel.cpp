@@ -25,8 +25,10 @@
 #include "GeneratedTypes.h"
 void atomiccPrintfInit(const char *filename);
 
+#define TEST_LENGTH 20
 static FunnelRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
+int counter;
 
 class FunnelIndication : public FunnelIndicationWrapper
 {
@@ -40,7 +42,7 @@ public:
 
 static void call_say(int v)
 {
-    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
+    printf("[%s:%d] %d: %d\n", __FUNCTION__, __LINE__, counter++, v);
     echoRequestProxy->say(v);
     sem_wait(&sem_heard2);
 }
@@ -67,12 +69,8 @@ int main(int argc, const char **argv)
 printf("[%s:%d] third\n", __FUNCTION__, __LINE__);
     call_say(v*93);
 printf("[%s:%d] fourth\n", __FUNCTION__, __LINE__);
-    call_say(v*93);
-    call_say(v*93);
-    call_say(v*93);
-    call_say(v*93);
-    //call_say(v*100);
-    //call_say(v*120);
+    for (int i = 0; i < TEST_LENGTH; i++)
+        call_say(v*93 + i);
 printf("[%s:%d]testover, now SLEEEEEEEEEEEEEEEEEEEP\n", __FUNCTION__, __LINE__);
 //sleep(2);
     return 0;
