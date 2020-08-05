@@ -15,7 +15,7 @@ INTERFACE l_top_interface {
 }
 MODULE FunnelTest FunnelTest_interface {
     FIELD FifoPBase__W20 fifo
-    FIELD FunnelBase funnel
+    FIELD FunnelBufferedBase funnel
     FIELD Fifo1Base__W20 result
 }
 INTERFACE FunnelTest_interface {
@@ -51,6 +51,22 @@ INTERFACE ___P2MFunnelRequest_interface {
     FIELD/input  Bit(1) pipe$enq__ENA
     FIELD/input  Bit(144) pipe$enq$v
     FIELD/output Bit(1) pipe$enq__RDY
+}
+MODULE FunnelBufferedBase FunnelBufferedBase_interface {
+    FIELD FifoPBase__W20 buffer
+    FIELD FunnelBase base
+}
+INTERFACE FunnelBufferedBase_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) dataWidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
 }
 MODULE FifoPBase FifoPBase_interface {
     FIELD Fifo1Base fifo
@@ -145,6 +161,7 @@ FILE generated/___M2PFunnelIndication.sv
 FILE generated/___P2MFunnelRequest.sv
 FILE ../../lib/generated/FifoPBase.sv
 FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/FunnelBufferedBase.sv
 FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/Out2InBase.sv
 FILE ../../lib/generated/out2in.generated.vh

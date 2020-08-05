@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -formal l_top.sv FunnelTest.sv ___M2PFunnelIndication.sv ___P2MFunnelRequest.sv FifoPBase.sv Fifo1Base.sv Out2InBase.sv 
+read_verilog -formal l_top.sv FunnelTest.sv ___M2PFunnelIndication.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv 
 
 prep -top l_top
 
@@ -17,6 +17,7 @@ generated/___M2PFunnelIndication.sv
 generated/___P2MFunnelRequest.sv
 ../../lib/generated/FifoPBase.sv
 ../../lib/generated/fifo.generated.vh
+../../lib/generated/FunnelBufferedBase.sv
 ../../lib/generated/Fifo1Base.sv
 ../../lib/generated/Out2InBase.sv
 ../../lib/generated/out2in.generated.vh

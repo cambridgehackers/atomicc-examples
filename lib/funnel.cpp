@@ -19,40 +19,19 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#ifndef _FUNNEL_H_
-#define _FUNNEL_H_
-#include "fifo.h"
+#include "funnel.h"
 
 template<int funnelWidth, int dataWidth>
-class FunnelBaseIfc {
-    PipeIn<__uint(dataWidth)> in[funnelWidth];
-    PipeIn<__uint(dataWidth)> *out;
+class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, dataWidth> {
+    FifoPBase<dataWidth>  buffer [funnelWidth];
+    FunnelBase<funnelWidth, dataWidth> base;
+    __connect base.out  = this->out;
+    __rule init {
+        for (int i = 0; i < funnelWidth; i = i + 1) {
+            __connect buffer[i].in = this->in[i];
+            __connect base.in[i]   = buffer[i].out;
+        }
+    }
 };
 
-template<int funnelWidth, int dataWidth>
-class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
-
-template<int funnelWidth, class T>
-class FunnelIfc {
-    PipeIn<T> in[funnelWidth];
-    PipeIn<T> *out;
-};
-
-template<int funnelWidth, class T>
-class Funnel __implements FunnelIfc<funnelWidth, T> {
-    FunnelBase<funnelWidth, __bitsize(T)> base;
-    __connect base.in = this->in;
-    __connect base.out = this->out;
-};
-
-template<int funnelWidth, int dataWidth>
-class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
-
-template<int funnelWidth, class T>
-class FunnelBuffered __implements FunnelIfc<funnelWidth, T> {
-    FunnelBufferedBase<funnelWidth, __bitsize(T)> base;
-    __connect base.in = this->in;
-    __connect base.out = this->out;
-};
-#endif // _FUNNEL_H_
-
+FunnelBufferedBase<4, 32> dummy;

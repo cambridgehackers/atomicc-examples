@@ -88,7 +88,7 @@ trace:
 	DUMP_VCD=dump.vcd make run
 
 dump:
-	vivado -mode batch -source shownets.sh 
+	vivado -mode batch -source $(TOPDIR)/shownets.sh 
 	$(ATOMICCDIR)/../verilog-rewrite/verilogRewrite zedboard/layoutnet.v
 
 sby:

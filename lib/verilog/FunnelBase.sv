@@ -21,21 +21,21 @@
 // SOFTWARE.
 
 module pipeFunnelHalf #(parameter funnelWidth = 8, parameter dataWidth = 32) ( input CLK, input nRST,
-    input                  zzin$enq__ENA  [funnelWidth - 1:0],        /* array of inputs */
-    input  [dataWidth-1:0] zzin$enq$v     [funnelWidth - 1:0],
-    output                 zzin$enq__RDY  [funnelWidth - 1:0],
+    input                  in$enq__ENA  [funnelWidth - 1:0],        /* array of inputs */
+    input  [dataWidth-1:0] in$enq$v     [funnelWidth - 1:0],
+    output                 in$enq__RDY  [funnelWidth - 1:0],
 
-    output                 zzout$enq__ENA [(funnelWidth/2) - 1:0], /* merged output */
-    output [dataWidth-1:0] zzout$enq$v    [(funnelWidth/2) - 1:0],
-    input                  zzout$enq__RDY [(funnelWidth/2) - 1:0]);
+    output                 out$enq__ENA [(funnelWidth/2) - 1:0], /* merged output */
+    output [dataWidth-1:0] out$enq$v    [(funnelWidth/2) - 1:0],
+    input                  out$enq__RDY [(funnelWidth/2) - 1:0]);
 
     genvar j;
     for (j = 0; j < funnelWidth / 2; j = j+1) begin
-        wire rvalid = zzin$enq__ENA[j*2+1];
-        assign zzin$enq__RDY[j*2+1] =            zzout$enq__RDY[j];
-        assign zzin$enq__RDY[j*2]   = !rvalid && zzout$enq__RDY[j];
-        assign zzout$enq$v   [j]    = rvalid ? zzin$enq$v[j*2 + 1]: zzin$enq$v[j*2];
-        assign zzout$enq__ENA[j]    = rvalid | zzin$enq__ENA[j*2];
+        wire rvalid = in$enq__ENA[j*2+1];
+        assign in$enq__RDY[j*2+1] =            out$enq__RDY[j];
+        assign in$enq__RDY[j*2]   = !rvalid && out$enq__RDY[j];
+        assign out$enq$v   [j]    = rvalid ? in$enq$v[j*2 + 1]: in$enq$v[j*2];
+        assign out$enq__ENA[j]    = rvalid | in$enq__ENA[j*2];
     end
 endmodule
 

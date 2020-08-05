@@ -6,7 +6,7 @@
 //METAINTERNAL; fifo1; FifoPBase(width=32);
 //METAINTERNAL; fifo2; FifoPBase(width=32);
 //METAINTERNAL; fifo3; FifoPBase(width=32);
-//METAINTERNAL; funnel; FunnelBase(funnelWidth=4,dataWidth=32);
+//METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=4,dataWidth=32);
 //METAINTERNAL; result; Fifo1Base(width=32);
 //METAINVOKE; request$say__ENA; :fifo$in$enq__ENA;
 //METAGUARD; request$say; fifo$in$enq__RDY_or1;

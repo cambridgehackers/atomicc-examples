@@ -19,7 +19,6 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "fifo.h"
-#include "out2in.h"
 #include "funnel.h"
 #define IfcNames_FunnelIndicationH2S 5
 
@@ -31,18 +30,15 @@ class FunnelIndication {
 };
 
 class FunnelTestIfc {
-    __software FunnelRequest                     request;
-    __software FunnelIndication                 *indication;
+    __software FunnelRequest     request;
+    __software FunnelIndication *indication;
 };
 
 class FunnelTest __implements FunnelTestIfc {
-    FifoP<__int(32)>     fifo[4];
-    Funnel<4, __int(32)> funnel;
-    __uint(2)            index;
-    //for (int i = 0; i < 4; i++) {
-        //__connect funnel.in[i] = fifo[i].out;
-    //}
-    Fifo1<__int(32)> result;
+    FifoP<__int(32)>       fifo[4];
+    FunnelBuffered<4, __int(32)>   funnel;
+    Fifo1<__int(32)>       result;
+    __uint(2)              index;
     __connect funnel.out = result.in;
     
     void request.say(__int(32) v) {
