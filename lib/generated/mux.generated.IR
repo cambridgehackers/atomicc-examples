@@ -3,20 +3,24 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo_OC_1  {
-    INTERFACE PipeIn in
-    INTERFACE PipeOut_OC_2 out
-}
 INTERFACE Fifo_OC_3  {
-    INTERFACE PipeIn_OC_4 in
-    INTERFACE PipeOut_OC_5 out
+    INTERFACE PipeIn in
+    INTERFACE PipeOut_OC_4 out
 }
-INTERFACE Fifo_OC_7  {
-    INTERFACE PipeIn_OC_8 in
-    INTERFACE PipeOut_OC_9 out
+INTERFACE Fifo_OC_5  {
+    INTERFACE PipeIn_OC_6 in
+    INTERFACE PipeOut_OC_7 out
+}
+INTERFACE Fifo_OC_9  {
+    INTERFACE PipeIn_OC_10 in
+    INTERFACE PipeOut_OC_11 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn in
@@ -27,27 +31,33 @@ INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
-    METHOD/Action enq__ENA ( Bit(144) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_4  {
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_10  {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
-INTERFACE PipeIn_OC_8  {
+INTERFACE PipeIn_OC_2  {
+    METHOD/Action enq__ENA ( Bit(144) v )
+}
+INTERFACE PipeIn_OC_6  {
     METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(144)
 }
-INTERFACE PipeOut_OC_2  {
-    METHOD/Action deq__ENA
-    METHOD first NOCDataH
-}
-INTERFACE PipeOut_OC_5  {
+INTERFACE PipeOut_OC_11  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
-INTERFACE PipeOut_OC_9  {
+INTERFACE PipeOut_OC_4  {
+    METHOD/Action deq__ENA
+    METHOD first NOCDataH
+}
+INTERFACE PipeOut_OC_7  {
     METHOD/Action deq__ENA
     METHOD first Bit(16)
 }
@@ -57,13 +67,15 @@ INTERFACE l_topIfc  {
 }
 EMODULE Fifo1Base(width=144) Fifo {
 }
-EMODULE Fifo1Base(width=16) Fifo_OC_3 {
+EMODULE Fifo1Base(width=16) Fifo_OC_5 {
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo_OC_1 {
+MODULE Fifo1 Fifo_OC_3 {
     FIELD Fifo1Base(width=144) fifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -77,7 +89,7 @@ MODULE Fifo1 Fifo_OC_1 {
         LET Bit(144) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_6 Fifo_OC_7 {
+MODULE Fifo1_OC_8 Fifo_OC_9 {
     FIELD Fifo1Base(width=16) fifo
     METHOD/Action in$enq__ENA ( Bit(16) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -91,7 +103,7 @@ MODULE Fifo1_OC_6 Fifo_OC_7 {
 }
 MODULE MuxPipe MuxPipeIfc {
     FIELD Fifo1 forwardFifo
-    FIELD Fifo1_OC_6 forwardFifol
+    FIELD Fifo1_OC_8 forwardFifol
     METHOD/Action in$enq__ENA ( NOCDataH v ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v}
     }

@@ -15,12 +15,16 @@ INTERFACE EchoRequest  {
     METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo_OC_1  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+INTERFACE Fifo_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn in
@@ -33,14 +37,20 @@ INTERFACE PipeIn  {
 INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE PipeIn_OC_2  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_4  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut_OC_3  {
+INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
@@ -49,6 +59,8 @@ INTERFACE l_topIfc  {
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=32) Fifo {
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }
@@ -65,7 +77,7 @@ MODULE Echo EchoIfc {
         CALL/Action :ind$heard__ENA{fifo$out$first}
     }
 }
-MODULE Fifo1 Fifo_OC_1 {
+MODULE Fifo1 Fifo_OC_3 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}

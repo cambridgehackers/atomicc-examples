@@ -36,7 +36,7 @@ static void call_say(int v, int seq)
 {
     printf("[%s:%d] v %x, seq %x\n", __FUNCTION__, __LINE__, v, seq);
     echoRequestProxy->say(v, seq);
-    //sem_wait(&sem_heard2);
+    sem_wait(&sem_heard2);
 }
 
 class PackIndication : public PackIndicationWrapper
@@ -47,11 +47,8 @@ printf("[%s:%d] v %lx\n", __FUNCTION__, __LINE__, (long)v);
         QUIET_FILTER
 	uint32_t next = v << 16 | (sequence & 0xffff);
         printf("heard an echo: %x W %2x R %2x in %8x send %8x seq %x\n", seqno, writeCount, readCount, v, next, sequence & 0xff);
-        if (count++ < 1) {
-	call_say(next, sequence);
-        }
         sequence += 0x12;
-        //sem_post(&sem_heard2);
+        sem_post(&sem_heard2);
 printf("[%s:%d] after v %lx\n", __FUNCTION__, __LINE__, (long)v);
     }
     PackIndication(unsigned int id, PortalTransportFunctions *item, void *param) : PackIndicationWrapper(id, item, param) {}
@@ -72,20 +69,15 @@ int main(int argc, const char **argv)
     echoRequestProxy = new PackRequestProxy(IfcNames_PackRequestS2H, &transportMux, &param);
 
     int v = 0xbeefaa55; //42;
-    printf("Saying %d\n", v);
+    printf("Saying %x\n", v);
     call_say(v, 0x67);
-#if 0
-    printf("Saying %d\n", v);
+    printf("Saying %x\n", v);
     call_say(v*5, 0x75);
-    printf("Saying %d\n", v);
+    printf("Saying %x\n", v);
     call_say(v*17, 0x84);
-    printf("Saying %d\n", v);
+    printf("Saying %x\n", v);
     call_say(v*93, 0x93);
-    printf("Saying %d\n", v);
-#endif
-    sem_wait(&sem_heard2);
-    sem_wait(&sem_heard2);
-    sem_wait(&sem_heard2);
+    printf("Saying %x\n", v);
 sleep(2);
     return 0;
 }

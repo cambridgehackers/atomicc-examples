@@ -2,6 +2,10 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE GrayCounterIfc(width=4)  {
     METHOD/Action increment__ENA
     METHOD/Action decrement__ENA
@@ -13,6 +17,12 @@ INTERFACE GrayCounterIfc(width=4)  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE TestIfc  {
     SOFTWARE request
     INTERFACE GrayCounterIfc(width=4) request
@@ -20,6 +30,8 @@ INTERFACE TestIfc  {
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE GrayCounter(width=4) GrayCounterIfc(width=4) {
 }

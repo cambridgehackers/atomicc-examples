@@ -13,6 +13,10 @@ INTERFACE ClockIfc  {
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE MaxiI  {
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
     METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
@@ -36,6 +40,12 @@ INTERFACE P7WrapIfc  {
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
+}
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE Pps7PS7  {
     INTERFACE Pps7ddr DDR
@@ -485,6 +495,8 @@ EMODULE AxiTop AxiTopIfc {
 EMODULE BUFG MbufgBUFG {
 }
 EMODULE ClockTop ClockIfc {
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE PS7 Pps7PS7 {
 }

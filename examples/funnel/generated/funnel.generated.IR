@@ -3,28 +3,32 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_6 in
+    INTERFACE PipeIn_OC_8 in
     INTERFACE PipeOut out
 }
 INTERFACE FifoPIfc  {
-    INTERFACE PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_0 out
-}
-INTERFACE FifoPIfc_OC_1  {
     INTERFACE PipeIn_OC_2 in
     INTERFACE/Ptr PipeIn_OC_2 out
 }
-INTERFACE Fifo_OC_7  {
-    INTERFACE PipeIn_OC_8 in
-    INTERFACE PipeOut_OC_9 out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=4,dataWidth=32)  {
-    INTERFACE/Count funnelWidth  PipeIn_OC_3 in
+INTERFACE FifoPIfc_OC_3  {
+    INTERFACE PipeIn_OC_4 in
     INTERFACE/Ptr PipeIn_OC_4 out
 }
-INTERFACE FunnelIfc(funnelWidth=4)  {
+INTERFACE Fifo_OC_9  {
+    INTERFACE PipeIn_OC_10 in
+    INTERFACE PipeOut_OC_11 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=4,dataWidth=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_5 in
-    INTERFACE/Ptr PipeIn_OC_5 out
+    INTERFACE/Ptr PipeIn_OC_6 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
+INTERFACE FunnelIfc(funnelWidth=4)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_7 in
+    INTERFACE/Ptr PipeIn_OC_7 out
 }
 INTERFACE FunnelIndication  {
     METHOD/Action heard__ENA ( Bit(32) v )
@@ -44,10 +48,13 @@ INTERFACE PipeIn  {
 INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_2  {
+INTERFACE PipeIn_OC_1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_3  {
+INTERFACE PipeIn_OC_10  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_4  {
@@ -59,6 +66,9 @@ INTERFACE PipeIn_OC_5  {
 INTERFACE PipeIn_OC_6  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn_OC_7  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE PipeIn_OC_8  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
@@ -66,7 +76,7 @@ INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut_OC_9  {
+INTERFACE PipeOut_OC_11  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
@@ -80,9 +90,11 @@ EMODULE FifoPBase(width=32) FifoPIfc {
 }
 EMODULE FunnelBufferedBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataWidth=32) {
 }
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
+}
 EMODULE l_top l_topIfc {
 }
-MODULE Fifo1 Fifo_OC_7 {
+MODULE Fifo1 Fifo_OC_9 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -94,18 +106,18 @@ MODULE Fifo1 Fifo_OC_7 {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoP FifoPIfc_OC_1 {
-    INTERFACECONNECT fifo$in in PipeIn_OC_0
-    INTERFACECONNECT fifo$out out PipeIn_OC_0
+MODULE FifoP FifoPIfc_OC_3 {
+    INTERFACECONNECT fifo$in in PipeIn_OC_2
+    INTERFACECONNECT fifo$out out PipeIn_OC_2
     FIELD FifoPBase(width=32) fifo
 }
 MODULE FunnelBuffered(funnelWidth=4) FunnelIfc(funnelWidth=4) {
-    INTERFACECONNECT base$in in PipeIn_OC_3
-    INTERFACECONNECT base$out out PipeIn_OC_4
+    INTERFACECONNECT base$in in PipeIn_OC_5
+    INTERFACECONNECT base$out out PipeIn_OC_6
     FIELD FunnelBufferedBase(funnelWidth=4,dataWidth=32) base
 }
 MODULE FunnelTest FunnelTestIfc {
-    INTERFACECONNECT funnel$out result$in PipeIn_OC_5
+    INTERFACECONNECT funnel$out result$in PipeIn_OC_7
     FIELD/Count 4  FifoP fifo
     FIELD FunnelBuffered(funnelWidth=4) funnel
     FIELD Fifo1 result
@@ -123,7 +135,7 @@ MODULE FunnelTest FunnelTestIfc {
         CALL/Action :result$out$deq__ENA{}
     }
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo[__inst$Genvar1].out PipeIn_OC_5
+        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo[__inst$Genvar1].out PipeIn_OC_7
     }
     METHOD/Rule/Action RULE$init__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 4)),((__inst$Genvar1 + 1)),FOR$0Body__ENA

@@ -2,6 +2,10 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE PackIfc  {
     SOFTWARE request
     SOFTWARE indication
@@ -17,9 +21,17 @@ INTERFACE PackRequest  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE l_top l_topIfc {
 }

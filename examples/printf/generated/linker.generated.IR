@@ -2,16 +2,17 @@ MODULE l_top l_top_interface {
     FIELD Echo DUT__Echo
     FIELD ___M2PEchoIndication M2P__indication
     FIELD ___P2MEchoRequest P2M__request
+    FIELD FunnelBufferedBase funnel
 }
 INTERFACE l_top_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/output Bit(1) indication$enq__ENA
-    FIELD/output Bit(144) indication$enq$v
-    FIELD/input  Bit(1) indication$enq__RDY
     FIELD/input  Bit(1) request$enq__ENA
     FIELD/input  Bit(144) request$enq$v
     FIELD/output Bit(1) request$enq__RDY
+    FIELD/output Bit(1) indication$enq__ENA
+    FIELD/output Bit(144) indication$enq$v
+    FIELD/input  Bit(1) indication$enq__RDY
 }
 MODULE Echo Echo_interface {
     FIELD Printf printfp
@@ -84,19 +85,8 @@ INTERFACE ___P2MEchoRequest_interface {
     FIELD/input  Bit(144) pipe$enq$v
     FIELD/output Bit(1) pipe$enq__RDY
 }
-MODULE Printf Printf_interface {
-}
-INTERFACE Printf_interface {
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) enq__ENA
-    FIELD/input  Bit(144) enq$v
-    FIELD/output Bit(1) enq__RDY
-}
 FILE generated/l_top.sv
 FILE generated/printf.generated.vh
 FILE generated/Echo.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/___P2MEchoRequest.sv
-FILE ../../lib/generated/Printf.sv
-FILE ../../lib/generated/printfStub.generated.vh

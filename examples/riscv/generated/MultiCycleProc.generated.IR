@@ -22,6 +22,10 @@ INTERFACE Decoder  {
 INTERFACE Executer  {
     METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE IMem  {
     METHOD read ( Bit(32) pc ) Bit(32)
 }
@@ -35,6 +39,12 @@ INTERFACE MultiCycleProcIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE RegFile  {
     METHOD read ( Bit(32) regnum ) Bit(32)
     METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
@@ -42,6 +52,8 @@ INTERFACE RegFile  {
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE l_top l_topIfc {
 }

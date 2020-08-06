@@ -18,6 +18,10 @@ INTERFACE EchoRequest  {
     METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action setLeds__ENA ( Bit(8) v )
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn in
     INTERFACE PipeIn forward
@@ -26,9 +30,17 @@ INTERFACE MuxPipeIfc  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE MuxPipe MuxPipeIfc {
 }

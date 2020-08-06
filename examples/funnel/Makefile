@@ -5,6 +5,7 @@ CPPFILES = testfunnel.cpp
 #CPPFLAGS += -mllvm -dtrace
 #CPPFLAGS += -mllvm -rgentrace
 #CPPFLAGS += -mllvm -mgentrace
+#FILEGENFLAGS += -DVERILATOR_PROJECT_ARGS="--trace"
 
 all:
 	mkdir -p generated

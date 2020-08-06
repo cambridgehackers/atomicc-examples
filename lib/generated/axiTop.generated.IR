@@ -12,28 +12,32 @@ INTERFACE AxiTopIfc  {
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo_OC_1  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+INTERFACE Fifo_OC_10  {
+    INTERFACE PipeIn_OC_11 in
+    INTERFACE PipeOut_OC_12 out
 }
-INTERFACE Fifo_OC_11  {
-    INTERFACE PipeIn_OC_12 in
-    INTERFACE PipeOut_OC_13 out
+INTERFACE Fifo_OC_13  {
+    INTERFACE PipeIn_OC_14 in
+    INTERFACE PipeOut_OC_15 out
 }
-INTERFACE Fifo_OC_15  {
-    INTERFACE PipeIn_OC_16 in
-    INTERFACE PipeOut_OC_17 out
+INTERFACE Fifo_OC_17  {
+    INTERFACE PipeIn_OC_18 in
+    INTERFACE PipeOut_OC_19 out
 }
-INTERFACE Fifo_OC_4  {
-    INTERFACE PipeIn_OC_5 in
-    INTERFACE PipeOut_OC_6 out
+INTERFACE Fifo_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
 }
-INTERFACE Fifo_OC_8  {
-    INTERFACE PipeIn_OC_9 in
-    INTERFACE PipeOut_OC_10 out
+INTERFACE Fifo_OC_6  {
+    INTERFACE PipeIn_OC_7 in
+    INTERFACE PipeOut_OC_8 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MaxiI  {
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
@@ -51,44 +55,50 @@ INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
 INTERFACE PipeIn_OC_0  {
-    METHOD/Action enq__ENA ( Bit(6) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_12  {
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_11  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_14  {
     METHOD/Action enq__ENA ( Bit(38) v )
 }
-INTERFACE PipeIn_OC_16  {
+INTERFACE PipeIn_OC_18  {
     METHOD/Action enq__ENA ( ReadResp v )
 }
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(6) v )
 }
-INTERFACE PipeIn_OC_5  {
-    METHOD/Action enq__ENA ( Bit(32) v )
+INTERFACE PipeIn_OC_4  {
+    METHOD/Action enq__ENA ( Bit(6) v )
 }
-INTERFACE PipeIn_OC_9  {
+INTERFACE PipeIn_OC_7  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(6)
 }
-INTERFACE PipeOut_OC_10  {
+INTERFACE PipeOut_OC_12  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
-INTERFACE PipeOut_OC_13  {
+INTERFACE PipeOut_OC_15  {
     METHOD/Action deq__ENA
     METHOD first Bit(38)
 }
-INTERFACE PipeOut_OC_17  {
+INTERFACE PipeOut_OC_19  {
     METHOD/Action deq__ENA
     METHOD first ReadResp
 }
-INTERFACE PipeOut_OC_3  {
+INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(6)
 }
-INTERFACE PipeOut_OC_6  {
+INTERFACE PipeOut_OC_8  {
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
@@ -107,11 +117,13 @@ INTERFACE l_topIfc  {
 }
 EMODULE AxiTop AxiTopIfc {
 }
-EMODULE Fifo1Base(width=32) Fifo_OC_4 {
+EMODULE Fifo1Base(width=32) Fifo_OC_6 {
 }
-EMODULE Fifo1Base(width=38) Fifo_OC_11 {
+EMODULE Fifo1Base(width=38) Fifo_OC_13 {
 }
 EMODULE Fifo1Base(width=6) Fifo {
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE UserTop UserTopIfc {
 }
@@ -132,9 +144,9 @@ MODULE AxiTop AxiTopIfc {
     FIELD Fifo1 reqArs
     FIELD Fifo1 reqAws
     FIELD Fifo1 writeDone
-    FIELD Fifo1_OC_7 requestValue
-    FIELD Fifo1_OC_14 readData
-    FIELD Fifo1_OC_7 writeData
+    FIELD Fifo1_OC_9 requestValue
+    FIELD Fifo1_OC_16 readData
+    FIELD Fifo1_OC_9 writeData
     FIELD UserTop user
     INTERFACE PipeInB(width=32) readUser
     METHOD/Action MAXIGP0_O$AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len ) {
@@ -214,7 +226,7 @@ MODULE AxiTop AxiTopIfc {
         CALL/Action :writeDone$out$deq__ENA{}
     }
 }
-MODULE Fifo1 Fifo_OC_1 {
+MODULE Fifo1 Fifo_OC_3 {
     FIELD Fifo1Base(width=6) fifo
     METHOD/Action in$enq__ENA ( Bit(6) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -226,7 +238,7 @@ MODULE Fifo1 Fifo_OC_1 {
         CALL :fifo$out$first{}
     }
 }
-MODULE Fifo1_OC_14 Fifo_OC_15 {
+MODULE Fifo1_OC_16 Fifo_OC_17 {
     FIELD Fifo1Base(width=38) fifo
     METHOD/Action in$enq__ENA ( ReadResp v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -240,7 +252,7 @@ MODULE Fifo1_OC_14 Fifo_OC_15 {
         LET Bit(38) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_7 Fifo_OC_8 {
+MODULE Fifo1_OC_9 Fifo_OC_10 {
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}

@@ -6,6 +6,10 @@ INTERFACE DblPipeIfc  {
     METHOD/Action shiftBit__ENA ( Bit(1) v )
     METHOD outBit Bit(1)
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE LfsrFibIfc(LN=8,TAPS=45)  {
     METHOD/Action shiftBit__ENA ( Bit(1) v )
     METHOD outBit Bit(1)
@@ -13,9 +17,17 @@ INTERFACE LfsrFibIfc(LN=8,TAPS=45)  {
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeIn_OC_0  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE l_top l_topIfc {
 }

@@ -2,13 +2,17 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
+}
 INTERFACE Gear  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
-INTERFACE Gear_OC_1  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+INTERFACE Gear_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
@@ -16,20 +20,28 @@ INTERFACE PipeIn  {
 INTERFACE PipeIn_OC_0  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE PipeIn_OC_2  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_4  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
-INTERFACE PipeOut_OC_3  {
+INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE l_top l_topIfc {
 }
@@ -45,7 +57,7 @@ MODULE MIMO Gear {
         CALL :gear$out$first{}
     }
 }
-MODULE MIMOBase(widthIn=32,widthOut=128) Gear_OC_1 {
+MODULE MIMOBase(widthIn=32,widthOut=128) Gear_OC_3 {
     FIELD Bit((128 + 32)) buffer
     FIELD Bit((__builtin_clog2((128 + 32)) + 1)) c
     FIELD/shared Bit(32) m

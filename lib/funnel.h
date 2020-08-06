@@ -23,15 +23,6 @@
 #define _FUNNEL_H_
 #include "fifo.h"
 
-template<int funnelWidth, int dataWidth>
-class FunnelBaseIfc {
-    PipeIn<__uint(dataWidth)> in[funnelWidth];
-    PipeIn<__uint(dataWidth)> *out;
-};
-
-template<int funnelWidth, int dataWidth>
-class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
-
 template<int funnelWidth, class T>
 class FunnelIfc {
     PipeIn<T> in[funnelWidth];
@@ -44,9 +35,6 @@ class Funnel __implements FunnelIfc<funnelWidth, T> {
     __connect base.in = this->in;
     __connect base.out = this->out;
 };
-
-template<int funnelWidth, int dataWidth>
-class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
 
 template<int funnelWidth, class T>
 class FunnelBuffered __implements FunnelIfc<funnelWidth, T> {

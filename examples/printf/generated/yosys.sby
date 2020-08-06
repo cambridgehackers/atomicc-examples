@@ -1,0 +1,17 @@
+[options]
+mode bmc
+
+[engines]
+smtbmc
+
+[script]
+read_verilog -formal l_top.sv Echo.sv ___M2PEchoIndication.sv ___P2MEchoRequest.sv 
+
+prep -top l_top
+
+[files]
+generated/l_top.sv
+generated/printf.generated.vh
+generated/Echo.sv
+generated/___M2PEchoIndication.sv
+generated/___P2MEchoRequest.sv

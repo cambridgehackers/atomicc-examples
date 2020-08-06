@@ -37,15 +37,15 @@ module IVector (input wire CLK, input wire nRST,
     wire [32 - 1:0]fifo$in$enq$v$c [10 - 1:0];
     wire fifo$in$enq__ENA [10 - 1:0];
     wire fifo$in$enq__RDY [10 - 1:0];
-    wire [10 - 1:0]fifo$in$enq__RDY_or;
+    wire [ 10 - 1:0]fifo$in$enq__RDY_or;
     wire fifo$in$enq__RDY_or1;
     wire fifo$out$deq__ENA [10 - 1:0];
     wire fifo$out$deq__RDY [10 - 1:0];
-    wire [10 - 1:0]fifo$out$deq__RDY_or;
+    wire [ 10 - 1:0]fifo$out$deq__RDY_or;
     wire fifo$out$deq__RDY_or1;
     wire [((32 + 32) + 32) - 1:0]fifo$out$first [10 - 1:0];
     wire fifo$out$first__RDY [10 - 1:0];
-    wire [10 - 1:0]fifo$out$first__RDY_or;
+    wire [ 10 - 1:0]fifo$out$first__RDY_or;
     wire fifo$out$first__RDY_or1;
     FifoPong fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in$enq__ENA(fifo$in$enq__ENA),

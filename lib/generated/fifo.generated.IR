@@ -3,26 +3,33 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
 INTERFACE FifoPIfc  {
-    INTERFACE PipeIn_OC_4 in
-    INTERFACE/Ptr PipeIn_OC_4 out
+    INTERFACE PipeIn_OC_6 in
+    INTERFACE/Ptr PipeIn_OC_6 out
 }
-INTERFACE Fifo_OC_1  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+INTERFACE Fifo_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE Out2InIfc  {
-    INTERFACE/Ptr PipeOut_OC_5 in
-    INTERFACE/Ptr PipeIn_OC_6 out
+    INTERFACE/Ptr PipeOut_OC_7 in
+    INTERFACE/Ptr PipeIn_OC_8 out
 }
 INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
-    METHOD/Action enq__ENA ( Bit(999999) v )
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(999999) v )
@@ -33,11 +40,10 @@ INTERFACE PipeIn_OC_4  {
 INTERFACE PipeIn_OC_6  {
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
-INTERFACE PipeOut  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(999999)
+INTERFACE PipeIn_OC_8  {
+    METHOD/Action enq__ENA ( Bit(999999) v )
 }
-INTERFACE PipeOut_OC_3  {
+INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
@@ -45,9 +51,15 @@ INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
+INTERFACE PipeOut_OC_7  {
+    METHOD/Action deq__ENA
+    METHOD first Bit(999999)
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE Out2InBase(width=999999) Out2InIfc {
 }
@@ -65,7 +77,7 @@ MODULE Fifo1Base(width=999999) Fifo {
     }
     METHOD out$first Bit(width) = ((element)) if ((full))
 }
-MODULE FifoB1Base(width=999999) Fifo_OC_1 {
+MODULE FifoB1Base(width=999999) Fifo_OC_3 {
     FIELD Bit(999999) element
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v
@@ -80,8 +92,8 @@ MODULE FifoB1Base(width=999999) Fifo_OC_1 {
     METHOD out$first Bit(width) = ((__phi((full):(element), !(full):(enq_v)))) if (((full) | (in$enq__ENA)))
 }
 MODULE FifoPBase(width=999999) FifoPIfc {
-    INTERFACECONNECT base$in fifo$out PipeOut_OC_5
-    INTERFACECONNECT base$out out PipeIn_OC_6
+    INTERFACECONNECT base$in fifo$out PipeOut_OC_7
+    INTERFACECONNECT base$out out PipeIn_OC_8
     FIELD Fifo1Base(width=999999) fifo
     FIELD Out2InBase(width=999999) base
     METHOD/Action in$enq__ENA ( Bit(width) v ) {

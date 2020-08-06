@@ -11,12 +11,16 @@ STRUCT IVectorTest  {
     FIELD IVector ivector
 }
 INTERFACE Fifo  {
-    INTERFACE PipeIn_OC_0 in
+    INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
-INTERFACE Fifo_OC_1  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut_OC_3 out
+INTERFACE Fifo_OC_3  {
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE PipeOut_OC_5 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
+    INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE IVectorIFC  {
     INTERFACE IVectorRequest request
@@ -37,16 +41,22 @@ INTERFACE PipeIn  {
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
-    METHOD/Action enq__ENA ( ValuePair v )
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_1  {
+    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    METHOD/Action enq__ENA ( ValuePair v )
+}
+INTERFACE PipeIn_OC_4  {
     METHOD/Action enq__ENA ( Bit(704) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first ValuePair
 }
-INTERFACE PipeOut_OC_3  {
+INTERFACE PipeOut_OC_5  {
     METHOD/Action deq__ENA
     METHOD first Bit(704)
 }
@@ -54,7 +64,9 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE Fifo1Base(width=704) Fifo_OC_1 {
+EMODULE Fifo1Base(width=704) Fifo_OC_3 {
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
 }
 EMODULE IVectorIndication IndIF {
 }

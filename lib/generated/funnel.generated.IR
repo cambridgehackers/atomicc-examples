@@ -3,10 +3,14 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE FifoPIfc  {
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE/Ptr PipeIn_OC_2 out
+    INTERFACE PipeIn_OC_4 in
+    INTERFACE/Ptr PipeIn_OC_4 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=4,dataWidth=32)  {
+    INTERFACE/Count funnelWidth  PipeIn_OC_2 in
+    INTERFACE/Ptr PipeIn_OC_3 out
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
@@ -22,6 +26,12 @@ INTERFACE PipeIn_OC_1  {
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
+INTERFACE PipeIn_OC_3  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeIn_OC_4  {
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
@@ -30,15 +40,17 @@ EMODULE FifoPBase(width=32) FifoPIfc {
 }
 EMODULE FunnelBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataWidth=32) {
 }
+EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
+}
 EMODULE l_top l_topIfc {
 }
 MODULE FunnelBufferedBase(funnelWidth=4,dataWidth=32) FunnelBaseIfc(funnelWidth=4,dataWidth=32) {
-    INTERFACECONNECT base$out out PipeIn_OC_1
+    INTERFACECONNECT base$out out PipeIn_OC_3
     FIELD/Count funnelWidth  FifoPBase(width=32) buffer
     FIELD FunnelBase(funnelWidth=4,dataWidth=32) base
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        INTERFACECONNECT buffer[__inst$Genvar1].in in[__inst$Genvar1] PipeIn_OC_2
-        INTERFACECONNECT base$in[__inst$Genvar1] buffer[__inst$Genvar1].out PipeIn_OC_0
+        INTERFACECONNECT buffer[__inst$Genvar1].in in[__inst$Genvar1] PipeIn_OC_4
+        INTERFACECONNECT base$in[__inst$Genvar1] buffer[__inst$Genvar1].out PipeIn_OC_2
     }
     METHOD/Rule/Action RULE$init__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < funnelWidth)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
