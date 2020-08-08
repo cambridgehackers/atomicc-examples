@@ -19,6 +19,7 @@ prep -top AxiTop
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/adapter.generated.vh
 ../../lib/generated/AdapterFromBus.sv
+generated/common.vh
 generated/l_top.sv
 generated/rulec.generated.vh
 generated/Echo.sv

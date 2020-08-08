@@ -1,30 +1,11 @@
 `include "rulec.generated.vh"
+`include "common.vh"
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [32 - 1:0]request$say$v,
-    output wire request$say__RDY,
-    input wire request$say2__ENA,
-    input wire [16 - 1:0]request$say2$a,
-    input wire [16 - 1:0]request$say2$b,
-    output wire request$say2__RDY,
-    input wire request$setLeds__ENA,
-    input wire [8 - 1:0]request$setLeds$v,
-    output wire request$setLeds__RDY,
-    output wire indication$heard__ENA,
-    output wire [32 - 1:0]indication$heard$v,
-    input wire indication$heard__RDY,
-    output wire indication$heard2__ENA,
-    output wire [16 - 1:0]indication$heard2$a,
-    output wire [16 - 1:0]indication$heard2$b,
-    input wire indication$heard2__RDY,
-    output wire indication$heard3__ENA,
-    output wire [16 - 1:0]indication$heard3$a,
-    output wire [32 - 1:0]indication$heard3$b,
-    output wire [32 - 1:0]indication$heard3$c,
-    output wire [16 - 1:0]indication$heard3$d,
-    input wire indication$heard3__RDY);
+    EchoRequest.server request,
+    EchoIndication.client indication);
+
     reg [16 - 1:0]a_delay;
     reg [16 - 1:0]a_temp;
     reg [16 - 1:0]b_delay;
@@ -36,22 +17,22 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
-    assign indication$heard$v = v_delay;
-    assign indication$heard2$a = a_delay;
-    assign indication$heard2$b = b_delay;
-    assign indication$heard2__ENA = !( ( v_type == 1 ) || ( !RULE$respond_rule__RDY ) );
-    assign indication$heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication$heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
-    assign request$say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
-    assign request$say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
-    assign request$setLeds__RDY = 1;
+    assign indication.heard$v = v_delay;
+    assign indication.heard2$a = a_delay;
+    assign indication.heard2$b = b_delay;
+    assign indication.heard2__ENA = !( ( v_type == 1 ) || ( !RULE$respond_rule__RDY ) );
+    assign indication.heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication.heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication.heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication.heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication.heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign indication.heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
+    assign request.say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
+    assign request.say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
+    assign request.setLeds__RDY = 1;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
-    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication$heard__RDY && ( ( v_type == 1 ) || indication$heard2__RDY ) ) || ( ( !indication$heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication$heard2__RDY ) ) ) ) ) ) );
+    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -76,18 +57,18 @@ module Echo (input wire CLK, input wire nRST,
         if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
         end; // End of RULE$respond_rule__ENA
-        if (request$say2__ENA && request$say2__RDY) begin // request$say2__ENA
-            a_temp <= request$say2$a;
-            b_temp <= request$say2$b;
+        if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA
+            a_temp <= request.say2$a;
+            b_temp <= request.say2$b;
             busy <= 1;
             v_type <= 2;
-        end; // End of request$say2__ENA
-        if (request$say__ENA && request$say__RDY) begin // request$say__ENA
-            v_temp <= request$say$v;
+        end; // End of request.say2__ENA
+        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+            v_temp <= request.say$v;
             busy <= 1;
             v_type <= 1;
-            $display( "request.say %x" , request$say$v );
-        end; // End of request$say__ENA
+            $display( "request.say %x" , request.say$v );
+        end; // End of request.say__ENA
       end
     end // always @ (posedge CLK)
 endmodule
