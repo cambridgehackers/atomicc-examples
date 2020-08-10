@@ -22,11 +22,6 @@ module l_top (input wire CLK, input wire nRST,
     wire P2M__request$method$writeBin__ENA;
     wire [4 - 1:0]P2M__request$method$writeGray$v;
     wire P2M__request$method$writeGray__ENA;
-    wire [(16 + 128) - 1:0]P2M__request$returnInd$enq$v;
-    wire P2M__request$returnInd$enq__ENA;
-    wire [(16 + 128) - 1:0]funnel$in$enq$v [1 - 1:0];
-    wire funnel$in$enq__ENA [1 - 1:0];
-    wire funnel$in$enq__RDY [1 - 1:0];
     Test DUT__Test (.CLK(CLK), .nRST(nRST),
         .request$increment__ENA(P2M__request$method$increment__ENA),
         .request$increment__RDY(DUT__Test$request$increment__RDY),
@@ -60,19 +55,9 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY),
-        .returnInd$enq__ENA(P2M__request$returnInd$enq__ENA),
-        .returnInd$enq$v(P2M__request$returnInd$enq$v),
-        .returnInd$enq__RDY(funnel$in$enq__RDY[ 0 ]));
-    FunnelBufferedBase#(.funnelWidth(1),.dataWidth((16 + 128))) funnel (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(funnel$in$enq__ENA),
-        .in$enq$v(funnel$in$enq$v),
-        .in$enq__RDY(funnel$in$enq__RDY),
-        .out$enq__ENA(indication$enq__ENA),
-        .out$enq$v(indication$enq$v),
-        .out$enq__RDY(indication$enq__RDY));
-    // Extra assigments, not to output wires
-    assign funnel$in$enq$v[ 0 ] = P2M__request$returnInd$enq$v;
-    assign funnel$in$enq__ENA[ 0 ] = P2M__request$returnInd$enq__ENA;
+        .returnInd$enq__ENA(indication$enq__ENA),
+        .returnInd$enq$v(indication$enq$v),
+        .returnInd$enq__RDY(indication$enq__RDY));
 endmodule
 
 `default_nettype wire    // set back to default value

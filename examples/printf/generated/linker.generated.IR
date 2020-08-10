@@ -2,7 +2,6 @@ MODULE l_top l_top_interface {
     FIELD Echo DUT__Echo
     FIELD ___M2PEchoIndication M2P__indication
     FIELD ___P2MEchoRequest P2M__request
-    FIELD FunnelBufferedBase funnel
 }
 INTERFACE l_top_interface {
     FIELD/input  Bit(1) CLK

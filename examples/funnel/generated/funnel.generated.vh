@@ -20,17 +20,14 @@
 //METAINTERNAL; DUT__FunnelTest; FunnelTest;
 //METAINTERNAL; M2P__indication; ___M2PFunnelIndication;
 //METAINTERNAL; P2M__request; ___P2MFunnelRequest;
-//METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=99,dataWidth=32);
 //METACONNECT; DUT__FunnelTest$indication$heard__ENA; M2P__indication$method$heard__ENA
 //METACONNECT; DUT__FunnelTest$indication$heard__RDY; M2P__indication$method$heard__RDY
 //METACONNECT; DUT__FunnelTest$request$say__ENA; P2M__request$method$say__ENA
 //METACONNECT; DUT__FunnelTest$request$say__RDY; P2M__request$method$say__RDY
 //METACONNECT; request$enq__ENA; P2M__request$pipe$enq__ENA
 //METACONNECT; request$enq__RDY; P2M__request$pipe$enq__RDY
-//METACONNECT; M2P__indication$pipe$enq__ENA; funnel$in[ 0 ]$enq__ENA
-//METACONNECT; M2P__indication$pipe$enq__RDY; funnel$in[ 0 ]$enq__RDY
-//METACONNECT; indication$enq__ENA; funnel$out$enq__ENA
-//METACONNECT; indication$enq__RDY; funnel$out$enq__RDY
+//METACONNECT; indication$enq__ENA; M2P__indication$pipe$enq__ENA
+//METACONNECT; indication$enq__RDY; M2P__indication$pipe$enq__RDY
 //METASTART; ___M2PFunnelIndication
 //METAINVOKE; method$heard__ENA; :pipe$enq__ENA;
 //METAGUARD; method$heard; pipe$enq__RDY;

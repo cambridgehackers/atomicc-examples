@@ -2,7 +2,6 @@ MODULE l_top l_top_interface {
     FIELD FunnelTest DUT__FunnelTest
     FIELD ___M2PFunnelIndication M2P__indication
     FIELD ___P2MFunnelRequest P2M__request
-    FIELD FunnelBufferedBase funnel
 }
 INTERFACE l_top_interface {
     FIELD/input  Bit(1) CLK

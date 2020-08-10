@@ -12,13 +12,8 @@ module l_top (input wire CLK, input wire nRST,
     wire DUT__Echo$ind$heard__ENA;
     wire DUT__Echo$sout$say__RDY;
     wire M2P__ind$method$heard__RDY;
-    wire [(16 + 128) - 1:0]M2P__ind$pipe$enq$v;
-    wire M2P__ind$pipe$enq__ENA;
     wire [32 - 1:0]P2M__sout$method$say$v;
     wire P2M__sout$method$say__ENA;
-    wire [(16 + 128) - 1:0]funnel$in$enq$v [1 - 1:0];
-    wire funnel$in$enq__ENA [1 - 1:0];
-    wire funnel$in$enq__RDY [1 - 1:0];
     Echo DUT__Echo (.CLK(CLK), .nRST(nRST),
         .sout$say__ENA(P2M__sout$method$say__ENA),
         .sout$say$v(P2M__sout$method$say$v),
@@ -30,9 +25,9 @@ module l_top (input wire CLK, input wire nRST,
         .method$heard__ENA(DUT__Echo$ind$heard__ENA),
         .method$heard$v(DUT__Echo$ind$heard$v),
         .method$heard__RDY(M2P__ind$method$heard__RDY),
-        .pipe$enq__ENA(M2P__ind$pipe$enq__ENA),
-        .pipe$enq$v(M2P__ind$pipe$enq$v),
-        .pipe$enq__RDY(funnel$in$enq__RDY[ 0 ]));
+        .pipe$enq__ENA(indication$enq__ENA),
+        .pipe$enq$v(indication$enq$v),
+        .pipe$enq__RDY(indication$enq__RDY));
     ___P2MEchoRequest P2M__sout (.CLK(CLK), .nRST(nRST),
         .method$say__ENA(P2M__sout$method$say__ENA),
         .method$say$v(P2M__sout$method$say$v),
@@ -40,16 +35,6 @@ module l_top (input wire CLK, input wire nRST,
         .pipe$enq__ENA(request$enq__ENA),
         .pipe$enq$v(request$enq$v),
         .pipe$enq__RDY(request$enq__RDY));
-    FunnelBufferedBase#(.funnelWidth(1),.dataWidth((16 + 128))) funnel (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(funnel$in$enq__ENA),
-        .in$enq$v(funnel$in$enq$v),
-        .in$enq__RDY(funnel$in$enq__RDY),
-        .out$enq__ENA(indication$enq__ENA),
-        .out$enq$v(indication$enq$v),
-        .out$enq__RDY(indication$enq__RDY));
-    // Extra assigments, not to output wires
-    assign funnel$in$enq$v[ 0 ] = M2P__ind$pipe$enq$v;
-    assign funnel$in$enq__ENA[ 0 ] = M2P__ind$pipe$enq__ENA;
 endmodule
 
 `default_nettype wire    // set back to default value
