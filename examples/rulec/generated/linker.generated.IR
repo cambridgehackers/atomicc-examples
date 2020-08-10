@@ -37,20 +37,6 @@ INTERFACE AxiTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE Fifo1Base Fifo1Base_interface {
-}
-INTERFACE Fifo1Base_interface {
-    FIELD/parameter Bit(32) width
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(999999) in$enq$v
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/input  Bit(1) out$deq__ENA
-    FIELD/output Bit(1) out$deq__RDY
-    FIELD/output Bit(999999) out$first
-    FIELD/output Bit(1) out$first__RDY
-}
 MODULE Fifo1Base__W26 Fifo1Base__W26_interface {
 }
 INTERFACE Fifo1Base__W26_interface {
@@ -146,12 +132,12 @@ MODULE l_top l_top_interface {
 INTERFACE l_top_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/output Bit(1) indication$enq__ENA
-    FIELD/output Bit(144) indication$enq$v
-    FIELD/input  Bit(1) indication$enq__RDY
     FIELD/input  Bit(1) request$enq__ENA
     FIELD/input  Bit(144) request$enq$v
     FIELD/output Bit(1) request$enq__RDY
+    FIELD/output Bit(1) indication$enq__ENA
+    FIELD/output Bit(144) indication$enq$v
+    FIELD/input  Bit(1) indication$enq__RDY
 }
 MODULE Echo Echo_interface {
 }
@@ -225,12 +211,29 @@ INTERFACE ___P2MEchoRequest_interface {
 }
 FILE ../../lib/generated/AxiTop.sv
 FILE ../../lib/generated/axiTop.generated.vh
-FILE ../../lib/generated/Fifo1Base.sv
-FILE ../../lib/generated/fifo.generated.vh
-FILE ../../lib/generated/UserTop.sv
-FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/AdapterToBus.sv
+FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/bscan.generated.vh
+FILE ../../lib/generated/clockTop.generated.vh
+FILE ../../lib/generated/configCounter.generated.vh
+FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/funnel.generated.vh
+FILE ../../lib/generated/grayCounter.generated.vh
+FILE ../../lib/generated/iobufVec.generated.vh
+FILE ../../lib/generated/mimo.generated.vh
+FILE ../../lib/generated/mux.generated.vh
+FILE ../../lib/generated/out2in.generated.vh
+FILE ../../lib/generated/printfStub.generated.vh
+FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/zynqTop.generated.vh
+FILE ../../lib/generated/Fifo1Base.sv
+FILE ../../lib/generated/UserTop.sv
+FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
 FILE generated/rulec.generated.vh

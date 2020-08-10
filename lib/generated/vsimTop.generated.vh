@@ -1,6 +1,68 @@
 `ifndef __vsimTop_GENERATED__VH__
 `define __vsimTop_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeInB_DEF__
+`define __PipeInB_DEF__
+interface PipeInB#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic  enq$last;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v, enq$last,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v, enq$last,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __VsimInterface_DEF__
+`define __VsimInterface_DEF__
+interface VsimInterface;
+    logic  CLK;
+    logic  nRST;
+    logic  CLK_derivedClock;
+    logic  nRST_derivedReset;
+    logic  CLK_sys_clk;
+    modport server (input  CLK_derivedClock, nRST_derivedReset, CLK_sys_clk);
+    modport client (output CLK_derivedClock, nRST_derivedReset, CLK_sys_clk);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; VsimTop
 //METAINTERNAL; user; UserTop;
 //METAINTERNAL; sink_0; VsimReceive(width=32);

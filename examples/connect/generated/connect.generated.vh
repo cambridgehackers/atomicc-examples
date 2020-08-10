@@ -1,6 +1,140 @@
 `ifndef __connect_GENERATED__VH__
 `define __connect_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __EchoIndication_data_DEF__
+`define __EchoIndication_data_DEF__
+typedef struct packed {
+    logic [32 - 1:0] tag;
+    logic [(32 + 32) - 1:0] data;
+} EchoIndication_data;
+`endif
+`ifndef __EchoRequest_data_DEF__
+`define __EchoRequest_data_DEF__
+typedef struct packed {
+    logic [32 - 1:0] tag;
+    logic [(32 + 32) - 1:0] data;
+} EchoRequest_data;
+`endif
+`ifndef __ValueType_DEF__
+`define __ValueType_DEF__
+typedef struct packed {
+    logic [32 - 1:0] a;
+    logic [32 - 1:0] b;
+} ValueType;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
+typedef struct packed {
+    logic [(32 + 32) - 1:0] heard;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
+typedef struct packed {
+    logic [32 - 1:0] meth;
+    logic [32 - 1:0] v;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
+typedef struct packed {
+    logic [(32 + 32) - 1:0] say;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
+typedef struct packed {
+    logic [32 - 1:0] meth;
+    logic [32 - 1:0] v;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
+`endif
+`ifndef __EchoRequest_DEF__
+`define __EchoRequest_DEF__
+interface EchoRequest;
+    logic say__ENA;
+    logic [32 - 1:0] say$meth;
+    logic [32 - 1:0] say$v;
+    logic say__RDY;
+    modport server (input  say__ENA, say$meth, say$v,
+                    output say__RDY);
+    modport client (output say__ENA, say$meth, say$v,
+                    input  say__RDY);
+endinterface
+`endif
+`ifndef __EchoIndication_DEF__
+`define __EchoIndication_DEF__
+interface EchoIndication;
+    logic heard__ENA;
+    logic [32 - 1:0] heard$meth;
+    logic [32 - 1:0] heard$v;
+    logic heard__RDY;
+    modport server (input  heard__ENA, heard$meth, heard$v,
+                    output heard__RDY);
+    modport client (output heard__ENA, heard$meth, heard$v,
+                    input  heard__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_3_DEF__
+`define __PipeIn_OC_3_DEF__
+interface PipeIn_OC_3;
+    logic enq__ENA;
+    logic [(32 + (32 + 32)) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_2_DEF__
+`define __PipeIn_OC_2_DEF__
+interface PipeIn_OC_2;
+    logic enq__ENA;
+    logic [(32 + (32 + 32)) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; Connect
 //METAINTERNAL; lEIO; EchoIndicationOutput;
 //METAINTERNAL; lERI; EchoRequestInput;

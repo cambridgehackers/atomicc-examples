@@ -2,7 +2,7 @@
 
 `default_nettype none
 module FunnelBufferedBase #(
-    parameter integer funnelWidth = 99,
+    parameter integer funnelWidth = 4,
     parameter integer dataWidth = 32)(
     input wire CLK, input wire nRST,
     input wire in$enq__ENA[funnelWidth - 1:0],

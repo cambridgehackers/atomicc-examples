@@ -1,6 +1,68 @@
 `ifndef __userTop_GENERATED__VH__
 `define __userTop_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __PipeInB_DEF__
+`define __PipeInB_DEF__
+interface PipeInB#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic  enq$last;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v, enq$last,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v, enq$last,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn#(width = 32);
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; UserTop
 //METAINTERNAL; radapter_0; AdapterToBus(width=32);
 //METAINTERNAL; wadapter_0; AdapterFromBus(width=32);

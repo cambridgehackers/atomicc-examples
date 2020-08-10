@@ -1,6 +1,138 @@
 `ifndef __bscan_GENERATED__VH__
 `define __bscan_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __MBSCANE2IFC_DEF__
+`define __MBSCANE2IFC_DEF__
+interface MBSCANE2IFC;
+    logic  CAPTURE;
+    logic  DRCK;
+    logic  RESET;
+    logic  RUNTEST;
+    logic  SEL;
+    logic  SHIFT;
+    logic  TCK;
+    logic  TDI;
+    logic  TDO;
+    logic  TMS;
+    logic  UPDATE;
+    modport server (input  TDO,
+                    output CAPTURE, DRCK, RESET, RUNTEST, SEL, SHIFT, TCK, TDI, TMS, UPDATE);
+    modport client (output TDO,
+                    input  CAPTURE, DRCK, RESET, RUNTEST, SEL, SHIFT, TCK, TDI, TMS, UPDATE);
+endinterface
+`endif
+`ifndef __MbufgBUFG_DEF__
+`define __MbufgBUFG_DEF__
+interface MbufgBUFG;
+    logic  I;
+    logic  O;
+    modport server (input  I,
+                    output O);
+    modport client (output I,
+                    input  O);
+endinterface
+`endif
+`ifndef __PipeIn_OC_2_DEF__
+`define __PipeIn_OC_2_DEF__
+interface PipeIn_OC_2#(id = 3, width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_3_DEF__
+`define __PipeIn_OC_3_DEF__
+interface PipeIn_OC_3#(id = 3, width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_4_DEF__
+`define __PipeIn_OC_4_DEF__
+interface PipeIn_OC_4#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_6_DEF__
+`define __PipeIn_OC_6_DEF__
+interface PipeIn_OC_6#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __BscanLocalIfc_DEF__
+`define __BscanLocalIfc_DEF__
+interface BscanLocalIfc#(width = 32);
+    logic  CLK;
+    logic  nRST;
+    logic  capture;
+    logic  shift;
+    logic  update;
+    logic  TDO;
+    logic  TDI;
+    modport server (input  capture, shift, update, TDI,
+                    output TDO);
+    modport client (output capture, shift, update, TDI,
+                    input  TDO);
+endinterface
+`endif
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; Bscan
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; tckbuf; BUFG;

@@ -5,11 +5,32 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -formal DblPipe.sv LfsrFib.sv 
+read_verilog -sv -formal DblPipe.sv LfsrFib.sv 
 
 prep -top DblPipe
 
 [files]
 generated/DblPipe.sv
 generated/dblpipe.generated.vh
+../../lib/generated/atomicclib.vh
+../../lib/generated/adapter.generated.vh
+../../lib/generated/axiTop.generated.vh
+../../lib/generated/bscan.generated.vh
+../../lib/generated/clockTop.generated.vh
+../../lib/generated/configCounter.generated.vh
+../../lib/generated/connectNet2.generated.vh
+../../lib/generated/fifo.generated.vh
+../../lib/generated/funnel.generated.vh
+../../lib/generated/grayCounter.generated.vh
+../../lib/generated/iobufVec.generated.vh
+../../lib/generated/mimo.generated.vh
+../../lib/generated/mux.generated.vh
+../../lib/generated/out2in.generated.vh
+../../lib/generated/printfStub.generated.vh
+../../lib/generated/resetInverter.generated.vh
+../../lib/generated/sizedFifo.generated.vh
+../../lib/generated/syncFF.generated.vh
+../../lib/generated/userTop.generated.vh
+../../lib/generated/vsimTop.generated.vh
+../../lib/generated/zynqTop.generated.vh
 generated/LfsrFib.sv

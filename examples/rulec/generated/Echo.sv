@@ -1,5 +1,4 @@
 `include "rulec.generated.vh"
-`include "common.vh"
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,

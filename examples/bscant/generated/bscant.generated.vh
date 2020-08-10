@@ -1,6 +1,91 @@
 `ifndef __bscant_GENERATED__VH__
 `define __bscant_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __PipeIn_OC_2_DEF__
+`define __PipeIn_OC_2_DEF__
+interface PipeIn_OC_2#(id = 4, width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_3_DEF__
+`define __PipeIn_OC_3_DEF__
+interface PipeIn_OC_3#(id = 4, width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __BtestRequest_DEF__
+`define __BtestRequest_DEF__
+interface BtestRequest;
+    logic say__ENA;
+    logic [32 - 1:0] say$v;
+    logic say__RDY;
+    modport server (input  say__ENA, say$v,
+                    output say__RDY);
+    modport client (output say__ENA, say$v,
+                    input  say__RDY);
+endinterface
+`endif
+`ifndef __BtestIndication_DEF__
+`define __BtestIndication_DEF__
+interface BtestIndication;
+    logic heard__ENA;
+    logic [32 - 1:0] heard$v;
+    logic heard__RDY;
+    modport server (input  heard__ENA, heard$v,
+                    output heard__RDY);
+    modport client (output heard__ENA, heard$v,
+                    input  heard__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; Btest
 //METAINTERNAL; bscan; Bscan(id=4,width=32);
 //METAINVOKE; readUser$enq__ENA; :indication$heard__ENA;

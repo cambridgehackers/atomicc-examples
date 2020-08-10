@@ -1,6 +1,154 @@
 `ifndef __lpm_GENERATED__VH__
 `define __lpm_GENERATED__VH__
+`include "atomicclib.vh"
 
+`ifndef __ProcessData_DEF__
+`define __ProcessData_DEF__
+typedef struct packed {
+    logic [4 - 1:0] ticket;
+    logic [16 - 1:0] IPA;
+    logic [3 - 1:0] state;
+} ProcessData;
+`endif
+`ifndef __TickIfc_DEF__
+`define __TickIfc_DEF__
+interface TickIfc;
+    logic getTicket;
+    logic getTicket__RDY;
+    logic allocateTicket__ENA;
+    logic allocateTicket__RDY;
+    modport server (input  getTicket, allocateTicket__ENA,
+                    output getTicket__RDY, allocateTicket__RDY);
+    modport client (output getTicket, allocateTicket__ENA,
+                    input  getTicket__RDY, allocateTicket__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_2_DEF__
+`define __PipeIn_OC_2_DEF__
+interface PipeIn_OC_2#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeOut_DEF__
+`define __PipeOut_DEF__
+interface PipeOut#(width = 32);
+    logic deq__ENA;
+    logic deq__RDY;
+    logic first;
+    logic first__RDY;
+    modport server (input  deq__ENA, first,
+                    output deq__RDY, first__RDY);
+    modport client (output deq__ENA, first,
+                    input  deq__RDY, first__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_7_DEF__
+`define __PipeIn_OC_7_DEF__
+interface PipeIn_OC_7#(width = 23);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeOut_OC_8_DEF__
+`define __PipeOut_OC_8_DEF__
+interface PipeOut_OC_8#(width = 23);
+    logic deq__ENA;
+    logic deq__RDY;
+    logic first;
+    logic first__RDY;
+    modport server (input  deq__ENA, first,
+                    output deq__RDY, first__RDY);
+    modport client (output deq__ENA, first,
+                    input  deq__RDY, first__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_0_DEF__
+`define __PipeIn_OC_0_DEF__
+interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_1_DEF__
+`define __PipeIn_OC_1_DEF__
+interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
+    logic enq__ENA;
+    logic [dataWidth - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_4_DEF__
+`define __PipeIn_OC_4_DEF__
+interface PipeIn_OC_4;
+    logic enq__ENA;
+    logic [32 - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __LpmIfc_DEF__
+`define __LpmIfc_DEF__
+interface LpmIfc;
+    logic enter__ENA;
+    logic [32 - 1:0] enter$x;
+    logic enter__RDY;
+    modport server (input  enter__ENA, enter$x,
+                    output enter__RDY);
+    modport client (output enter__ENA, enter$x,
+                    input  enter__RDY);
+endinterface
+`endif
+`ifndef __LpmMem_DEF__
+`define __LpmMem_DEF__
+interface LpmMem;
+    logic req__ENA;
+    logic [32 - 1:0] req$v;
+    logic req__RDY;
+    logic resAccept__ENA;
+    logic resAccept__RDY;
+    logic resValue;
+    logic resValue__RDY;
+    modport server (input  req__ENA, req$v, resAccept__ENA, resValue,
+                    output req__RDY, resAccept__RDY, resValue__RDY);
+    modport client (output req__ENA, req$v, resAccept__ENA, resValue,
+                    input  req__RDY, resAccept__RDY, resValue__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_DEF__
+`define __PipeIn_DEF__
+interface PipeIn;
+    logic enq__ENA;
+    logic [(16 + 128) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
 //METASTART; Lpm
 //METAINTERNAL; compBuf; BufTicket;
 //METAINTERNAL; inQ; Fifo1Base(width=32);

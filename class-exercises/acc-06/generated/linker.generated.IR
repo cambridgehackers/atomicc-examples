@@ -15,3 +15,24 @@ INTERFACE ReqArb_interface {
 }
 FILE generated/ReqArb.sv
 FILE generated/reqarb.generated.vh
+FILE ../../lib/generated/atomicclib.vh
+FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/bscan.generated.vh
+FILE ../../lib/generated/clockTop.generated.vh
+FILE ../../lib/generated/configCounter.generated.vh
+FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/funnel.generated.vh
+FILE ../../lib/generated/grayCounter.generated.vh
+FILE ../../lib/generated/iobufVec.generated.vh
+FILE ../../lib/generated/mimo.generated.vh
+FILE ../../lib/generated/mux.generated.vh
+FILE ../../lib/generated/out2in.generated.vh
+FILE ../../lib/generated/printfStub.generated.vh
+FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/zynqTop.generated.vh

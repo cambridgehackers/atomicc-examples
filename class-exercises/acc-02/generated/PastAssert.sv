@@ -44,7 +44,7 @@ module PastAssert #(
             assert( ( startSignal__ENA != 0 ) ^ 1 );
     always @(*)
         if (F_TESTID == 1)
-            assert( $past{ counter == 0 } );
+            assert( $past( counter == 0 ) );
     always @(*)
         if (F_TESTID == 2)
             assert( ( startSignal__ENA != 0 ) ^ 1 );

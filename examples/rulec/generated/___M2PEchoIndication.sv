@@ -1,5 +1,4 @@
 `include "rulec.generated.vh"
-`include "common.vh"
 
 `default_nettype none
 module ___M2PEchoIndication (input wire CLK, input wire nRST,

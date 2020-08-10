@@ -84,8 +84,39 @@ INTERFACE ___P2MEchoRequest_interface {
     FIELD/input  Bit(144) pipe$enq$v
     FIELD/output Bit(1) pipe$enq__RDY
 }
+MODULE Printf Printf_interface {
+}
+INTERFACE Printf_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) enq__ENA
+    FIELD/input  Bit(144) enq$v
+    FIELD/output Bit(1) enq__RDY
+}
 FILE generated/l_top.sv
 FILE generated/printf.generated.vh
+FILE ../../lib/generated/atomicclib.vh
+FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/bscan.generated.vh
+FILE ../../lib/generated/clockTop.generated.vh
+FILE ../../lib/generated/configCounter.generated.vh
+FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/funnel.generated.vh
+FILE ../../lib/generated/grayCounter.generated.vh
+FILE ../../lib/generated/iobufVec.generated.vh
+FILE ../../lib/generated/mimo.generated.vh
+FILE ../../lib/generated/mux.generated.vh
+FILE ../../lib/generated/out2in.generated.vh
+FILE ../../lib/generated/printfStub.generated.vh
+FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/zynqTop.generated.vh
 FILE generated/Echo.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/___P2MEchoRequest.sv
+FILE ../../lib/generated/Printf.sv

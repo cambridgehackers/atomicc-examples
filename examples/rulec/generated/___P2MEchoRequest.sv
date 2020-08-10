@@ -1,5 +1,4 @@
 `include "rulec.generated.vh"
-`include "common.vh"
 
 `default_nettype none
 module ___P2MEchoRequest (input wire CLK, input wire nRST,
