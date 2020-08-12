@@ -22,9 +22,9 @@
 #define _AXITOP_H_
 #include "atomicc.h"
 class ZynqInterruptT {
-    __output __uint(1)  interrupt;
     __input __uint(1)  CLK;
     __input __uint(1)  nRST;
+    __output __uint(1)  interrupt;
 };
 
 typedef __uint(BusTypeWidth) BusData;

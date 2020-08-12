@@ -2,6 +2,13 @@
 `define __funnel_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
+`endif
 `ifndef __PipeIn_OC_4_DEF__
 `define __PipeIn_OC_4_DEF__
 interface PipeIn_OC_4#(width = 32);
@@ -79,6 +86,6 @@ endinterface
 //METAINTERNAL; base; FunnelBase(funnelWidth=4,dataWidth=32);
 //METAGUARD; RULE$init; 1;
 //METARULES; RULE$init
-//METACONNECT; base$out$enq__ENA; out$enq__ENA
-//METACONNECT; base$out$enq__RDY; out$enq__RDY
+//METACONNECT; base$out.enq__ENA; out.enq__ENA
+//METACONNECT; base$out.enq__RDY; out.enq__RDY
 `endif

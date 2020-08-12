@@ -27,7 +27,7 @@ class UserTop __implements UserTopIfc {
     AdapterToBus<NOCDataH, BusTypeWidth> radapter_0;
     AdapterFromBus<BusTypeWidth, NOCDataH> wadapter_0;
     l_top       ctop;
-    __connect write = wadapter_0.in;
+    __connect wadapter_0.in = write;
     __connect read = radapter_0.out;
 #if 1
     __connect ctop.request = wadapter_0.out;

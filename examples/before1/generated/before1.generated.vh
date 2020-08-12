@@ -5,16 +5,23 @@
 `ifndef __EchoIndication_data_DEF__
 `define __EchoIndication_data_DEF__
 typedef struct packed {
-    logic [32 - 1:0] tag;
     logic [(32 + 32) - 1:0] data;
+    logic [32 - 1:0] tag;
 } EchoIndication_data;
 `endif
 `ifndef __EchoRequest_data_DEF__
 `define __EchoRequest_data_DEF__
 typedef struct packed {
-    logic [32 - 1:0] tag;
     logic [((32 + 32) + ((32 + 32) + 32)) - 1:0] data;
+    logic [32 - 1:0] tag;
 } EchoRequest_data;
+`endif
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
 `endif
 `ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
 `define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
@@ -25,30 +32,30 @@ typedef struct packed {
 `ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
 `define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
 typedef struct packed {
-    logic [32 - 1:0] meth;
     logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
 `endif
 `ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
 `define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
 typedef struct packed {
-    logic [(32 + 32) - 1:0] say;
     logic [((32 + 32) + 32) - 1:0] say2;
+    logic [(32 + 32) - 1:0] say;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
 `endif
 `ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
 `define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
 typedef struct packed {
-    logic [32 - 1:0] meth;
     logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
 `endif
 `ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2_DEF__
 `define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2_DEF__
 typedef struct packed {
-    logic [32 - 1:0] meth;
-    logic [32 - 1:0] v;
     logic [32 - 1:0] v2;
+    logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2;
 `endif
 `ifndef __EchoRequest_DEF__
@@ -213,7 +220,7 @@ endinterface
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
 //METAINVOKE; pipe$enq__ENA; pipe$enq$v$tag == 2:request$say2__ENA;pipe$enq$v$tag == 1:request$say__ENA;
-//METAGUARD; pipe$enq; request$say__RDY && request$say2__RDY;
+//METAGUARD; pipe$enq; ( request$say__RDY && ( request$say2__RDY || ( !( pipe$enq$v$tag == 2 ) ) ) ) || ( ( !request$say__RDY ) && ( !( ( pipe$enq$v$tag == 1 ) || ( !( request$say2__RDY || ( !( pipe$enq$v$tag == 2 ) ) ) ) ) ) );
 //METASTART; EchoRequestOutput
 //METAINVOKE; request$say__ENA; :pipe$enq__ENA;
 //METAEXCLUSIVE; request$say__ENA; request$say2__ENA

@@ -2,6 +2,9 @@
 
 `default_nettype none
 module AxiTop (
+    input wire CLK,
+    input wire nRST,
+    output wire interrupt,
     input wire MAXIGP0_O$AR__ENA,
     input wire [32 - 1:0]MAXIGP0_O$AR$addr,
     input wire [12 - 1:0]MAXIGP0_O$AR$id,
@@ -26,10 +29,7 @@ module AxiTop (
     output wire MAXIGP0_I$B__ENA,
     output wire [12 - 1:0]MAXIGP0_I$B$id,
     output wire [2 - 1:0]MAXIGP0_I$B$resp,
-    input wire MAXIGP0_I$B__RDY,
-    output wire interrupt,
-    input wire CLK,
-    input wire nRST);
+    input wire MAXIGP0_I$B__RDY);
     reg intEnable;
     reg portalRControl;
     reg portalWControl;

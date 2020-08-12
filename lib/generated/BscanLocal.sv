@@ -3,19 +3,19 @@
 `default_nettype none
 module BscanLocal #(
     parameter integer width = 32)(
-    input wire toBscan$enq__ENA,
-    input wire [width - 1:0]toBscan$enq$v,
-    output wire toBscan$enq__RDY,
-    output wire fromBscan$enq__ENA,
-    output wire [width - 1:0]fromBscan$enq$v,
-    input wire fromBscan$enq__RDY,
     input wire CLK,
     input wire nRST,
     input wire capture,
     input wire shift,
     input wire update,
     output wire TDO,
-    input wire TDI);
+    input wire TDI,
+    input wire toBscan$enq__ENA,
+    input wire [width - 1:0]toBscan$enq$v,
+    output wire toBscan$enq__RDY,
+    output wire fromBscan$enq__ENA,
+    output wire [width - 1:0]fromBscan$enq$v,
+    input wire fromBscan$enq__RDY);
     reg notReady;
     reg [width - 1:0]shiftReg;
     wire RULE$shiftRule__RDY;

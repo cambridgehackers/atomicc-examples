@@ -5,10 +5,17 @@
 `ifndef __ExecResult_DEF__
 `define __ExecResult_DEF__
 typedef struct packed {
-    logic [32 - 1:0] nextPC;
-    logic [32 - 1:0] addr;
     logic [32 - 1:0] data;
+    logic [32 - 1:0] addr;
+    logic [32 - 1:0] nextPC;
 } ExecResult;
+`endif
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
 `endif
 `ifndef __PipeIn_OC_0_DEF__
 `define __PipeIn_OC_0_DEF__

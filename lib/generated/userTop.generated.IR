@@ -45,7 +45,7 @@ EMODULE UserTop UserTopIfc {
 EMODULE l_top l_topIfc {
 }
 MODULE UserTop UserTopIfc {
-    INTERFACECONNECT write wadapter_0$in PipeInB(width=32)
+    INTERFACECONNECT wadapter_0$in write PipeInB(width=32)
     INTERFACECONNECT read radapter_0$out PipeInB(width=32)
     INTERFACECONNECT ctop$request wadapter_0$out PipeIn
     INTERFACECONNECT ctop$indication radapter_0$in PipeIn

@@ -2,6 +2,13 @@
 `define __sizedFifo_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
+`endif
 `ifndef __PipeIn_OC_0_DEF__
 `define __PipeIn_OC_0_DEF__
 interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
@@ -64,10 +71,10 @@ interface PipeIn;
 endinterface
 `endif
 //METASTART; SizedFifoBase
-//METAEXCLUSIVE; out$deq__ENA; in$enq__ENA
-//METABEFORE; out$deq__ENA; :in$enq__ENA
-//METAGUARD; out$deq; 0 != ( ( c == 0 ) ^ 1 );
-//METAGUARD; out$first; 1;
-//METABEFORE; in$enq__ENA; :out$deq__ENA
-//METAGUARD; in$enq; 0 != ( ( c == depth ) ^ 1 );
+//METAEXCLUSIVE; out.deq__ENA; in.enq__ENA
+//METABEFORE; out.deq__ENA; :in.enq__ENA
+//METAGUARD; out.deq; 0 != ( ( c == 0 ) ^ 1 );
+//METAGUARD; out.first; 1;
+//METABEFORE; in.enq__ENA; :out.deq__ENA
+//METAGUARD; in.enq; 0 != ( ( c == depth ) ^ 1 );
 `endif

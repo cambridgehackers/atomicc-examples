@@ -22,14 +22,18 @@
 
 // Modules from SystemVerilog runtime
 template<int width>
-class PipeInBP {
-    PipeInB<width> *_;
+class VsimReceiveIfc {
+    PipeInB<width> *port;
 };
+template<int width>
+class VsimReceive __implements VsimReceiveIfc<width>;
 
 template<int width>
-class VsimReceive __implements PipeInBP<width>;
+class VsimSendIfc {
+    PipeInB<width> port;
+};
 template<int width>
-class VsimSend __implements PipeInB<width>;
+class VsimSend __implements VsimSendIfc<width>;
 
 // Top of verilator simulation
 class VsimInterface {
@@ -44,6 +48,6 @@ class VsimTop __implements VsimInterface {
     UserTop                    user;
     VsimReceive<BusTypeWidth> sink_0;
     VsimSend<BusTypeWidth>    source_0;
-    __connect sink_0._ = user.write;
-    __connect user.read = source_0;
+    __connect user.write = sink_0.port;
+    __connect user.read = source_0.port;
 };

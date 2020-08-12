@@ -32,9 +32,6 @@ module IVector (input wire CLK, input wire nRST,
     wire [32 - 1:0]RULE$respond_rule_9$temp$b;
     wire RULE$respond_rule_9__RDY;
     wire [((32 + 32) + 32) - 1:0]fifo$in$enq$v [10 - 1:0];
-    wire [32 - 1:0]fifo$in$enq$v$a [10 - 1:0];
-    wire [32 - 1:0]fifo$in$enq$v$b [10 - 1:0];
-    wire [32 - 1:0]fifo$in$enq$v$c [10 - 1:0];
     wire fifo$in$enq__ENA [10 - 1:0];
     wire fifo$in$enq__RDY [10 - 1:0];
     wire [ 10 - 1:0]fifo$in$enq__RDY_or;
@@ -55,7 +52,6 @@ module IVector (input wire CLK, input wire nRST,
         .out$deq__RDY(fifo$out$deq__RDY),
         .out$first(fifo$out$first),
         .out$first__RDY(fifo$out$first__RDY));
-    assign fifo$in$enq$v = { fifo$in$enq$v$c , fifo$in$enq$v$b , fifo$in$enq$v$a };
     assign in$say__RDY = fifo$in$enq__RDY_or1;
     assign out$heard$meth = ( RULE$respond_rule_1__RDY ? 32'd1 : 32'd0 ) | ( RULE$respond_rule_2__RDY ? 32'd2 : 32'd0 ) | ( RULE$respond_rule_3__RDY ? 32'd3 : 32'd0 ) | ( RULE$respond_rule_4__RDY ? 32'd4 : 32'd0 ) | ( RULE$respond_rule_5__RDY ? 32'd5 : 32'd0 ) | ( RULE$respond_rule_6__RDY ? 32'd6 : 32'd0 ) | ( RULE$respond_rule_7__RDY ? 32'd7 : 32'd0 ) | ( RULE$respond_rule_8__RDY ? 32'd8 : 32'd0 ) | ( RULE$respond_rule_9__RDY ? 32'd9 : 32'd0 );
     assign out$heard$v = ( RULE$respond_rule_0__RDY ? RULE$respond_rule_0$temp$b : 32'd0 ) | ( RULE$respond_rule_1__RDY ? RULE$respond_rule_1$temp$b : 32'd0 ) | ( RULE$respond_rule_2__RDY ? RULE$respond_rule_2$temp$b : 32'd0 ) | ( RULE$respond_rule_3__RDY ? RULE$respond_rule_3$temp$b : 32'd0 ) | ( RULE$respond_rule_4__RDY ? RULE$respond_rule_4$temp$b : 32'd0 ) | ( RULE$respond_rule_5__RDY ? RULE$respond_rule_5$temp$b : 32'd0 ) | ( RULE$respond_rule_6__RDY ? RULE$respond_rule_6$temp$b : 32'd0 ) | ( RULE$respond_rule_7__RDY ? RULE$respond_rule_7$temp$b : 32'd0 ) | ( RULE$respond_rule_8__RDY ? RULE$respond_rule_8$temp$b : 32'd0 ) | ( RULE$respond_rule_9__RDY ? RULE$respond_rule_9$temp$b : 32'd0 );

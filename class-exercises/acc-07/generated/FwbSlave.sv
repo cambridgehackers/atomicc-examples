@@ -14,13 +14,13 @@ module FwbSlave (
     input wire [32 - 1:0]a$stb$data,
     input wire [(32 / 8) - 1:0]a$stb$sel,
     output wire a$stb__RDY,
+    input wire acyc,
     input wire status$ack,
     input wire status$ack__RDY,
     input wire status$stall,
     input wire status$stall__RDY,
     input wire status$err,
-    input wire status$err__RDY,
-    input wire acyc);
+    input wire status$err__RDY);
     reg f_past_valid;
     reg [(32 / 8) - 1:0]nacks;
     reg [(32 / 8) - 1:0]nreqs;

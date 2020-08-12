@@ -107,9 +107,9 @@ INTERFACE UserTopIfc  {
     INTERFACE/Ptr PipeInB(width=32) read
 }
 INTERFACE ZynqInterruptT  {
-    FIELD/output Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) interrupt
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request

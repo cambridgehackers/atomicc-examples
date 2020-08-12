@@ -8,11 +8,18 @@ typedef struct packed {
     logic [((((14 / 7) + (3 * 2)) + 9) + 9) - 1:0] ivector;
 } IVectorTest;
 `endif
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
+`endif
 `ifndef __ValueType_DEF__
 `define __ValueType_DEF__
 typedef struct packed {
-    logic [6 - 1:0] a;
     logic [4 - 1:0] b;
+    logic [6 - 1:0] a;
 } ValueType;
 `endif
 `ifndef __PipeIn_OC_2_DEF__

@@ -2,19 +2,26 @@
 `define __axiTop_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
+`endif
 `ifndef __ReadResp_DEF__
 `define __ReadResp_DEF__
 typedef struct packed {
-    logic [6 - 1:0] id;
     logic [32 - 1:0] data;
+    logic [6 - 1:0] id;
 } ReadResp;
 `endif
 `ifndef __ZynqInterruptT_DEF__
 `define __ZynqInterruptT_DEF__
 interface ZynqInterruptT;
-    logic  interrupt;
     logic  CLK;
     logic  nRST;
+    logic  interrupt;
     modport server (output interrupt);
     modport client (input  interrupt);
 endinterface
@@ -60,6 +67,31 @@ interface MaxiI;
                     output R__RDY, B__RDY);
     modport client (output R__ENA, R$data, R$id, R$last, R$resp, B__ENA, B$id, B$resp,
                     input  R__RDY, B__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_4_DEF__
+`define __PipeIn_OC_4_DEF__
+interface PipeIn_OC_4;
+    logic enq__ENA;
+    logic [6 - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeOut_OC_5_DEF__
+`define __PipeOut_OC_5_DEF__
+interface PipeOut_OC_5;
+    logic deq__ENA;
+    logic deq__RDY;
+    logic first;
+    logic first__RDY;
+    modport server (input  deq__ENA, first,
+                    output deq__RDY, first__RDY);
+    modport client (output deq__ENA, first,
+                    input  deq__RDY, first__RDY);
 endinterface
 `endif
 `ifndef __PipeIn_OC_7_DEF__
@@ -137,6 +169,56 @@ interface PipeOut#(width = 6);
                     input  deq__RDY, first__RDY);
 endinterface
 `endif
+`ifndef __PipeIn_OC_18_DEF__
+`define __PipeIn_OC_18_DEF__
+interface PipeIn_OC_18;
+    logic enq__ENA;
+    logic [(6 + 32) - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeOut_OC_19_DEF__
+`define __PipeOut_OC_19_DEF__
+interface PipeOut_OC_19;
+    logic deq__ENA;
+    logic deq__RDY;
+    logic first;
+    logic first__RDY;
+    modport server (input  deq__ENA, first,
+                    output deq__RDY, first__RDY);
+    modport client (output deq__ENA, first,
+                    input  deq__RDY, first__RDY);
+endinterface
+`endif
+`ifndef __PipeIn_OC_11_DEF__
+`define __PipeIn_OC_11_DEF__
+interface PipeIn_OC_11;
+    logic enq__ENA;
+    logic [32 - 1:0] enq$v;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeOut_OC_12_DEF__
+`define __PipeOut_OC_12_DEF__
+interface PipeOut_OC_12;
+    logic deq__ENA;
+    logic deq__RDY;
+    logic first;
+    logic first__RDY;
+    modport server (input  deq__ENA, first,
+                    output deq__RDY, first__RDY);
+    modport client (output deq__ENA, first,
+                    input  deq__RDY, first__RDY);
+endinterface
+`endif
 `ifndef __PipeIn_OC_0_DEF__
 `define __PipeIn_OC_0_DEF__
 interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
@@ -187,36 +269,60 @@ interface PipeIn;
 endinterface
 `endif
 //METASTART; AxiTop
-//METAINTERNAL; reqArs; Fifo1Base(width=6);
-//METAINTERNAL; reqAws; Fifo1Base(width=6);
-//METAINTERNAL; writeDone; Fifo1Base(width=6);
-//METAINTERNAL; requestValue; Fifo1Base(width=32);
-//METAINTERNAL; readData; Fifo1Base(width=38);
-//METAINTERNAL; writeData; Fifo1Base(width=32);
+//METAINTERNAL; reqArs; Fifo1;
+//METAINTERNAL; reqAws; Fifo1;
+//METAINTERNAL; writeDone; Fifo1;
+//METAINTERNAL; requestValue; Fifo1_OC_9;
+//METAINTERNAL; readData; Fifo1_OC_16;
+//METAINTERNAL; writeData; Fifo1_OC_9;
 //METAINTERNAL; user; UserTop;
-//METAINVOKE; MAXIGP0_O$AR__ENA; :reqArs$in$enq__ENA;
-//METAEXCLUSIVE; MAXIGP0_O$AR__ENA; RULE$lread__ENA
-//METAGUARD; MAXIGP0_O$AR; reqArs$in$enq__RDY;
-//METAINVOKE; MAXIGP0_O$AW__ENA; :reqAws$in$enq__ENA;
-//METAEXCLUSIVE; MAXIGP0_O$AW__ENA; RULE$lwrite__ENA
-//METAGUARD; MAXIGP0_O$AW; reqAws$in$enq__RDY;
-//METAINVOKE; MAXIGP0_O$W__ENA; :writeData$in$enq__ENA;
-//METAGUARD; MAXIGP0_O$W; writeData$in$enq__RDY;
-//METAINVOKE; readUser$enq__ENA; :requestValue$in$enq__ENA;
-//METAGUARD; readUser$enq; requestValue$in$enq__RDY;
+//METAINVOKE; MAXIGP0_O.AR__ENA; :reqArs.in$enq__ENA;
+//METAEXCLUSIVE; MAXIGP0_O.AR__ENA; RULE$lread__ENA
+//METAGUARD; MAXIGP0_O.AR; reqArs.in$enq__RDY;
+//METAINVOKE; MAXIGP0_O.AW__ENA; :reqAws.in$enq__ENA;
+//METAEXCLUSIVE; MAXIGP0_O.AW__ENA; RULE$lwrite__ENA
+//METAGUARD; MAXIGP0_O.AW; reqAws.in$enq__RDY;
+//METAINVOKE; MAXIGP0_O.W__ENA; :writeData.in$enq__ENA;
+//METAGUARD; MAXIGP0_O.W; writeData.in$enq__RDY;
+//METAINVOKE; readUser.enq__ENA; :requestValue.in$enq__ENA;
+//METAGUARD; readUser.enq; requestValue.in$enq__RDY;
 //METABEFORE; RULE$init__ENA; :RULE$lwrite__ENA
 //METAGUARD; RULE$init; 1;
-//METAINVOKE; RULE$lread__ENA; 1:readData$in$enq__ENA;readCount == 0:reqArs$out$deq__ENA;:reqArs$out$first;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue$out$deq__ENA;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue$out$first;
-//METABEFORE; RULE$lread__ENA; :MAXIGP0_O$AR__ENA
-//METAGUARD; RULE$lread; reqArs$out$first__RDY && ( ( portalRControl && readData$in$enq__RDY && ( reqArs$out$deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData$in$enq__RDY && ( ( requestValue$out$first__RDY && ( ( requestValue$out$deq__RDY && ( reqArs$out$deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !requestValue$out$deq__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs$out$deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) || ( ( !requestValue$out$first__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs$out$deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) );
-//METAINVOKE; RULE$lreadData__ENA; :MAXIGP0_I$R__ENA;:readData$out$deq__ENA;:readData$out$first;
-//METAGUARD; RULE$lreadData; readData$out$first__RDY && MAXIGP0_I$R__RDY && readData$out$deq__RDY;
-//METAINVOKE; RULE$lwrite__ENA; writeCount == 0:reqAws$out$deq__ENA;:reqAws$out$first;!portalWControl:user$write$enq__ENA;:writeData$out$deq__ENA;:writeData$out$first;writeCount == 0:writeDone$in$enq__ENA;
-//METABEFORE; RULE$lwrite__ENA; :MAXIGP0_O$AW__ENA
-//METAGUARD; RULE$lwrite; reqAws$out$first__RDY && writeData$out$first__RDY && ( ( portalWControl && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( reqAws$out$deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && writeData$out$deq__RDY && ( ( writeDone$in$enq__RDY && ( ( ( writeCount == 0 ) && user$write$enq__RDY && reqAws$out$deq__RDY ) || ( ( !( writeCount == 0 ) ) && user$write$enq__RDY ) ) ) || ( ( !writeDone$in$enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write$enq__RDY ) ) ) ) ) ) );
-//METAINVOKE; RULE$writeResponse__ENA; :MAXIGP0_I$B__ENA;:writeDone$out$deq__ENA;:writeDone$out$first;
-//METAGUARD; RULE$writeResponse; writeDone$out$first__RDY && MAXIGP0_I$B__RDY && writeDone$out$deq__RDY;
+//METAINVOKE; RULE$lread__ENA; 1:readData.in$enq__ENA;readCount == 0:reqArs.out$deq__ENA;:reqArs.out$first;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue.out$deq__ENA;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue.out$first;
+//METABEFORE; RULE$lread__ENA; :MAXIGP0_O.AR__ENA
+//METAGUARD; RULE$lread; reqArs.out$first__RDY && ( ( portalRControl && readData.in$enq__RDY && ( reqArs.out$deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData.in$enq__RDY && ( ( requestValue.out$first__RDY && ( ( requestValue.out$deq__RDY && ( reqArs.out$deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !requestValue.out$deq__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs.out$deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) || ( ( !requestValue.out$first__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs.out$deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) );
+//METAINVOKE; RULE$lreadData__ENA; :MAXIGP0_I.R__ENA;:readData.out$deq__ENA;:readData.out$first;
+//METAGUARD; RULE$lreadData; readData.out$first__RDY && MAXIGP0_I.R__RDY && readData.out$deq__RDY;
+//METAINVOKE; RULE$lwrite__ENA; writeCount == 0:reqAws.out$deq__ENA;:reqAws.out$first;!portalWControl:user.write$enq__ENA;:writeData.out$deq__ENA;:writeData.out$first;writeCount == 0:writeDone.in$enq__ENA;
+//METABEFORE; RULE$lwrite__ENA; :MAXIGP0_O.AW__ENA
+//METAGUARD; RULE$lwrite; reqAws.out$first__RDY && writeData.out$first__RDY && ( ( portalWControl && writeData.out$deq__RDY && ( ( writeDone.in$enq__RDY && ( reqAws.out$deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone.in$enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && writeData.out$deq__RDY && ( ( writeDone.in$enq__RDY && ( ( ( writeCount == 0 ) && user.write$enq__RDY && reqAws.out$deq__RDY ) || ( ( !( writeCount == 0 ) ) && user.write$enq__RDY ) ) ) || ( ( !writeDone.in$enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user.write$enq__RDY ) ) ) ) ) ) );
+//METAINVOKE; RULE$writeResponse__ENA; :MAXIGP0_I.B__ENA;:writeDone.out$deq__ENA;:writeDone.out$first;
+//METAGUARD; RULE$writeResponse; writeDone.out$first__RDY && MAXIGP0_I.B__RDY && writeDone.out$deq__RDY;
 //METARULES; RULE$init; RULE$lread; RULE$lreadData; RULE$lwrite; RULE$writeResponse
-//METACONNECT; readUser$enq__ENA; user$read$enq__ENA
-//METACONNECT; readUser$enq__RDY; user$read$enq__RDY
+//METACONNECT; readUser.enq__ENA; user$read.enq__ENA
+//METACONNECT; readUser.enq__RDY; user$read.enq__RDY
+//METASTART; Fifo1
+//METAINTERNAL; fifo; Fifo1Base(width=6);
+//METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
+//METAGUARD; in.enq; fifo.in$enq__RDY;
+//METAINVOKE; out.deq__ENA; :fifo.out$deq__ENA;
+//METAGUARD; out.deq; fifo.out$deq__RDY;
+//METAINVOKE; out.first; :fifo.out$first;
+//METAGUARD; out.first; fifo.out$first__RDY;
+//METASTART; Fifo1_OC_16
+//METAINTERNAL; fifo; Fifo1Base(width=38);
+//METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
+//METAGUARD; in.enq; fifo.in$enq__RDY;
+//METAINVOKE; out.deq__ENA; :fifo.out$deq__ENA;
+//METAGUARD; out.deq; fifo.out$deq__RDY;
+//METAINVOKE; out.first; :fifo.out$first;
+//METAGUARD; out.first; fifo.out$first__RDY;
+//METASTART; Fifo1_OC_9
+//METAINTERNAL; fifo; Fifo1Base(width=32);
+//METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
+//METAGUARD; in.enq; fifo.in$enq__RDY;
+//METAINVOKE; out.deq__ENA; :fifo.out$deq__ENA;
+//METAGUARD; out.deq; fifo.out$deq__RDY;
+//METAINVOKE; out.first; :fifo.out$first;
+//METAGUARD; out.first; fifo.out$first__RDY;
 `endif

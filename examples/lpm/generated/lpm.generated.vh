@@ -2,12 +2,19 @@
 `define __lpm_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __NOCDataH_DEF__
+`define __NOCDataH_DEF__
+typedef struct packed {
+    logic [128 - 1:0] data;
+    logic [16 - 1:0] length;
+} NOCDataH;
+`endif
 `ifndef __ProcessData_DEF__
 `define __ProcessData_DEF__
 typedef struct packed {
-    logic [4 - 1:0] ticket;
-    logic [16 - 1:0] IPA;
     logic [3 - 1:0] state;
+    logic [16 - 1:0] IPA;
+    logic [4 - 1:0] ticket;
 } ProcessData;
 `endif
 `ifndef __TickIfc_DEF__

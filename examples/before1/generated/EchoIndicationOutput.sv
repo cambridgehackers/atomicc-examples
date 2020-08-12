@@ -10,12 +10,8 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     output wire [(32 + (32 + 32)) - 1:0]pipe$enq$v,
     input wire pipe$enq__RDY);
     reg even;
-    reg [32 - 1:0]ind0$data$heard$meth;
-    reg [32 - 1:0]ind0$data$heard$v;
-    reg [32 - 1:0]ind0$tag;
-    reg [32 - 1:0]ind1$data$heard$meth;
-    reg [32 - 1:0]ind1$data$heard$v;
-    reg [32 - 1:0]ind1$tag;
+    reg [(32 + (32 + 32)) - 1:0]ind0;
+    reg [(32 + (32 + 32)) - 1:0]ind1;
     reg ind_busy;
     wire [32 - 1:0]RULE$output_rulee$agg_2e_tmp$data$heard$meth;
     wire [32 - 1:0]RULE$output_rulee$agg_2e_tmp$data$heard$v;
@@ -25,8 +21,6 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     wire [32 - 1:0]RULE$output_ruleo$agg_2e_tmp$data$heard$v;
     wire [32 - 1:0]RULE$output_ruleo$agg_2e_tmp$tag;
     wire RULE$output_ruleo__RDY;
-    wire [(32 + (32 + 32)) - 1:0]ind0;
-    wire [(32 + (32 + 32)) - 1:0]ind1;
     assign indication$heard__RDY = !( 0 == ( ind_busy ^ 1 ) );
     assign pipe$enq$v = ( RULE$output_rulee__RDY ? { RULE$output_rulee$agg_2e_tmp$data$heard$v , RULE$output_rulee$agg_2e_tmp$data$heard$meth , RULE$output_rulee$agg_2e_tmp$tag } : 96'd0 ) | ( RULE$output_ruleo__RDY ? { RULE$output_ruleo$agg_2e_tmp$data$heard$v , RULE$output_ruleo$agg_2e_tmp$data$heard$meth , RULE$output_ruleo$agg_2e_tmp$tag } : 96'd0 );
     assign pipe$enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
@@ -39,18 +33,12 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     assign RULE$output_ruleo$agg_2e_tmp$data$heard$v = ind1[ 32 - 1 + 64 : 64 ];
     assign RULE$output_ruleo$agg_2e_tmp$tag = ind1[ 32 - 1 : 0 ];
     assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe$enq__RDY ) );
-    assign ind0 = { ind0$data$heard$v , ind0$data$heard$meth , ind0$tag };
-    assign ind1 = { ind1$data$heard$v , ind1$data$heard$meth , ind1$tag };
 
     always @( posedge CLK) begin
       if (!nRST) begin
         even <= 0;
-        ind0$data$heard$meth <= 0;
-        ind0$data$heard$v <= 0;
-        ind0$tag <= 0;
-        ind1$data$heard$meth <= 0;
-        ind1$data$heard$v <= 0;
-        ind1$tag <= 0;
+        ind0 <= 0;
+        ind1 <= 0;
         ind_busy <= 0;
       end // nRST
       else begin
@@ -64,15 +52,15 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
             ind_busy <= 1 != 0;
             even <= even ^ 1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 127 , even );
-            if (even) begin
-            ind1$tag <= 1;
-            ind1$data$heard$meth <= indication$heard$meth;
-            ind1$data$heard$v <= indication$heard$v;
-            end;
             if (!even) begin
             ind0$tag <= 1;
             ind0$data$heard$meth <= indication$heard$meth;
             ind0$data$heard$v <= indication$heard$v;
+            end;
+            if (even) begin
+            ind1$tag <= 1;
+            ind1$data$heard$meth <= indication$heard$meth;
+            ind1$data$heard$v <= indication$heard$v;
             end;
         end; // End of indication$heard__ENA
       end

@@ -21,10 +21,10 @@ module LfsrGal #(
       end // nRST
       else begin
         if (shiftBit__ENA) begin // shiftBit__ENA
-            if (!shiftBit$v)
-            sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] };
             if (shiftBit$v)
             sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] } ^ TAPS;
+            if (!shiftBit$v)
+            sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] };
         end; // End of shiftBit__ENA
       end
     end // always @ (posedge CLK)

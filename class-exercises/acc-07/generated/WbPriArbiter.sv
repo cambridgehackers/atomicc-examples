@@ -16,6 +16,7 @@ module WbPriArbiter #(
     output wire a$stall__RDY,
     output wire a$err,
     output wire a$err__RDY,
+    input wire acyc,
     input wire b$stb__ENA,
     input wire b$stb$we,
     input wire [32 - 1:0]b$stb$addr,
@@ -28,6 +29,7 @@ module WbPriArbiter #(
     output wire b$stall__RDY,
     output wire b$err,
     output wire b$err__RDY,
+    input wire bcyc,
     output wire o$stb__ENA,
     output wire o$stb$we,
     output wire [32 - 1:0]o$stb$addr,
@@ -40,8 +42,6 @@ module WbPriArbiter #(
     input wire o$stall__RDY,
     input wire o$err,
     input wire o$err__RDY,
-    input wire acyc,
-    input wire bcyc,
     input wire ocyc);
     reg r_a_owner;
     wire CLK;

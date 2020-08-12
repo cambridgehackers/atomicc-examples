@@ -47,19 +47,19 @@ module Bscan #(
         .I(tckbuf$I),
         .O(tckbuf$O));
     BscanLocal#(.width(width)) localBscan (
-        .toBscan$enq__ENA(toBscan$enq__ENA),
-        .toBscan$enq$v(localBscan$toBscan$enq$v),
-        .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),
-        .fromBscan$enq__ENA(fromBscan$enqS__ENA),
-        .fromBscan$enq$v(fromBscan$enq$v),
-        .fromBscan$enq__RDY(fromBscan$enq__RDY),
         .CLK(localBscan$CLK),
         .nRST(localBscan$nRST),
         .capture(localBscan$capture),
         .shift(localBscan$shift),
         .update(localBscan$update),
         .TDO(localBscan$TDO),
-        .TDI(localBscan$TDI));
+        .TDI(localBscan$TDI),
+        .toBscan$enq__ENA(toBscan$enq__ENA),
+        .toBscan$enq$v(localBscan$toBscan$enq$v),
+        .toBscan$enq__RDY(localBscan$toBscan$enq__RDY),
+        .fromBscan$enq__ENA(fromBscan$enqS__ENA),
+        .fromBscan$enq$v(fromBscan$enq$v),
+        .fromBscan$enq__RDY(fromBscan$enq__RDY));
     SyncFF fromBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
         .out(fromBscan$enq__ENA),
         .in(fromBscan$enqS__ENA));

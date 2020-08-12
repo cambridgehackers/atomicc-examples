@@ -478,9 +478,9 @@ INTERFACE ZynqInterrupt  {
     FIELD/input Bit(1) nRST
 }
 INTERFACE ZynqInterruptT  {
-    FIELD/output Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) interrupt
 }
 INTERFACE ZynqTopIFC  {
     INTERFACE ZynqClock _

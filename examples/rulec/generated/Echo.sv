@@ -4,7 +4,6 @@
 module Echo (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
-
     reg [16 - 1:0]a_delay;
     reg [16 - 1:0]a_temp;
     reg [16 - 1:0]b_delay;
@@ -16,22 +15,17 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
+    // Extra assigments, not to output wires
+    assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
+    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
     assign indication.heard$v = v_delay;
     assign indication.heard2$a = a_delay;
     assign indication.heard2$b = b_delay;
     assign indication.heard2__ENA = !( ( v_type == 1 ) || ( !RULE$respond_rule__RDY ) );
-    assign indication.heard3$a = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication.heard3$b = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication.heard3$c = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication.heard3$d = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign indication.heard3__ENA = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     assign indication.heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
     assign request.say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
     assign request.say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
     assign request.setLeds__RDY = 1;
-    // Extra assigments, not to output wires
-    assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
-    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin

@@ -85,8 +85,8 @@ class Gear {
     PipeOut<Out> out;
 };
 
-typedef struct {__uint(128) data;} NOCData;
-typedef struct {LenType length; __uint(128) data;} NOCDataH;
+typedef __uint(128) NOCData;
+typedef struct {LenType length; NOCData data;} NOCDataH;
 typedef PipeIn<NOCData>                   NOCPipe;
 
 class l_topIfc {
