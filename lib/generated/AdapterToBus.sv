@@ -17,6 +17,7 @@ module AdapterToBus #(
     assign out.enq$last = remain == 1;
     assign out.enq$v = RULE$copyRule$outVal;
     assign out.enq__ENA = RULE$copyRule__RDY;
+    wire NOCDataH noc = in.enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -27,14 +28,14 @@ module AdapterToBus #(
         if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
             buffer <= buffer << width;
-            if (!( 0 == 0 ))
+            //if (!( 0 == 0 ))
             $display( "adapterTOout %x remain %x" , RULE$copyRule$outVal , remain );
         end; // End of RULE$copyRule__ENA
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
-            buffer <= in.enq$v.data;
-            remain <= in.enq$v.length;
-            if (!( 0 == 0 ))
-            $display( "adapterTOin %x length %x" , in.enq$v.data , in.enq$v.length );
+            buffer <= noc.data;
+            remain <= noc.length;
+            //if (!( 0 == 0 ))
+            $display( "adapterTOin %x length %x" , noc.data , noc.length );
         end; // End of in.enq__ENA
       end
     end // always @ (posedge CLK)

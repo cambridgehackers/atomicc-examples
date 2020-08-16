@@ -4,8 +4,8 @@
 module UserTop (input wire CLK, input wire nRST,
     PipeInB.server write,
     PipeInB.client read);
-    PipeIn ctop$request;
-    PipeIn radapter_0$in;
+    PipeIn#(.width(16 + 128)) ctop$request();
+    PipeIn#(.width(16 + 128)) radapter_0$in();
     AdapterToBus#(.width(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
         .in(radapter_0$in),
         .out(read));

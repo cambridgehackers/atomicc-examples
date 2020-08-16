@@ -2,13 +2,6 @@
 `define __axiTop_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __NOCDataH_DEF__
-`define __NOCDataH_DEF__
-typedef struct packed {
-    logic [128 - 1:0] data;
-    logic [16 - 1:0] length;
-} NOCDataH;
-`endif
 `ifndef __ReadResp_DEF__
 `define __ReadResp_DEF__
 typedef struct packed {
@@ -69,212 +62,26 @@ interface MaxiI;
                     input  R__RDY, B__RDY);
 endinterface
 `endif
-`ifndef __PipeIn_OC_4_DEF__
-`define __PipeIn_OC_4_DEF__
-interface PipeIn_OC_4;
-    logic enq__ENA;
-    logic [6 - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeOut_OC_5_DEF__
-`define __PipeOut_OC_5_DEF__
-interface PipeOut_OC_5;
-    logic deq__ENA;
-    logic deq__RDY;
-    logic first;
-    logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_7_DEF__
-`define __PipeIn_OC_7_DEF__
-interface PipeIn_OC_7#(width = 32);
-    logic enq__ENA;
-    logic [width - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeOut_OC_8_DEF__
-`define __PipeOut_OC_8_DEF__
-interface PipeOut_OC_8#(width = 32);
-    logic deq__ENA;
-    logic deq__RDY;
-    logic first;
-    logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_14_DEF__
-`define __PipeIn_OC_14_DEF__
-interface PipeIn_OC_14#(width = 38);
-    logic enq__ENA;
-    logic [width - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeOut_OC_15_DEF__
-`define __PipeOut_OC_15_DEF__
-interface PipeOut_OC_15#(width = 38);
-    logic deq__ENA;
-    logic deq__RDY;
-    logic first;
-    logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_2_DEF__
-`define __PipeIn_OC_2_DEF__
-interface PipeIn_OC_2#(width = 6);
-    logic enq__ENA;
-    logic [width - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
 `ifndef __PipeOut_DEF__
 `define __PipeOut_DEF__
 interface PipeOut#(width = 6);
     logic deq__ENA;
     logic deq__RDY;
-    logic first;
+    logic [width - 1:0] first;
     logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_18_DEF__
-`define __PipeIn_OC_18_DEF__
-interface PipeIn_OC_18;
-    logic enq__ENA;
-    logic [(6 + 32) - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeOut_OC_19_DEF__
-`define __PipeOut_OC_19_DEF__
-interface PipeOut_OC_19;
-    logic deq__ENA;
-    logic deq__RDY;
-    logic first;
-    logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_11_DEF__
-`define __PipeIn_OC_11_DEF__
-interface PipeIn_OC_11;
-    logic enq__ENA;
-    logic [32 - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeOut_OC_12_DEF__
-`define __PipeOut_OC_12_DEF__
-interface PipeOut_OC_12;
-    logic deq__ENA;
-    logic deq__RDY;
-    logic first;
-    logic first__RDY;
-    modport server (input  deq__ENA, first,
-                    output deq__RDY, first__RDY);
-    modport client (output deq__ENA, first,
-                    input  deq__RDY, first__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_0_DEF__
-`define __PipeIn_OC_0_DEF__
-interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_1_DEF__
-`define __PipeIn_OC_1_DEF__
-interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeInB_DEF__
-`define __PipeInB_DEF__
-interface PipeInB#(width = 32);
-    logic enq__ENA;
-    logic [width - 1:0] enq$v;
-    logic  enq$last;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v, enq$last,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v, enq$last,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_DEF__
-`define __PipeIn_DEF__
-interface PipeIn;
-    logic enq__ENA;
-    logic [(16 + 128) - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
+    modport server (input  deq__ENA,
+                    output first, deq__RDY, first__RDY);
+    modport client (output deq__ENA,
+                    input  first, deq__RDY, first__RDY);
 endinterface
 `endif
 //METASTART; AxiTop
 //METAINTERNAL; reqArs; Fifo1;
 //METAINTERNAL; reqAws; Fifo1;
 //METAINTERNAL; writeDone; Fifo1;
-//METAINTERNAL; requestValue; Fifo1_OC_9;
-//METAINTERNAL; readData; Fifo1_OC_16;
-//METAINTERNAL; writeData; Fifo1_OC_9;
+//METAINTERNAL; requestValue; Fifo1_axiTop_9;
+//METAINTERNAL; readData; Fifo1_axiTop_16;
+//METAINTERNAL; writeData; Fifo1_axiTop_9;
 //METAINTERNAL; user; UserTop;
 //METAINVOKE; MAXIGP0_O.AR__ENA; :reqArs.in$enq__ENA;
 //METAEXCLUSIVE; MAXIGP0_O.AR__ENA; RULE$lread__ENA
@@ -309,7 +116,7 @@ endinterface
 //METAGUARD; out.deq; fifo.out$deq__RDY;
 //METAINVOKE; out.first; :fifo.out$first;
 //METAGUARD; out.first; fifo.out$first__RDY;
-//METASTART; Fifo1_OC_16
+//METASTART; Fifo1_axiTop_16
 //METAINTERNAL; fifo; Fifo1Base(width=38);
 //METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
 //METAGUARD; in.enq; fifo.in$enq__RDY;
@@ -317,7 +124,7 @@ endinterface
 //METAGUARD; out.deq; fifo.out$deq__RDY;
 //METAINVOKE; out.first; :fifo.out$first;
 //METAGUARD; out.first; fifo.out$first__RDY;
-//METASTART; Fifo1_OC_9
+//METASTART; Fifo1_axiTop_9
 //METAINTERNAL; fifo; Fifo1Base(width=32);
 //METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
 //METAGUARD; in.enq; fifo.in$enq__RDY;

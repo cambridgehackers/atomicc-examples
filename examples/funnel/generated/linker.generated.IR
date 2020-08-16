@@ -14,9 +14,9 @@ INTERFACE l_top_interface {
     FIELD/input  Bit(1) indication$enq__RDY
 }
 MODULE FunnelTest FunnelTest_interface {
-    FIELD FifoPBase fifo
+    FIELD FifoPBase__W20 fifo
     FIELD FunnelBufferedBase funnel
-    FIELD Fifo1Base result
+    FIELD Fifo1Base__W20 result
 }
 INTERFACE FunnelTest_interface {
     FIELD/input  Bit(1) CLK
@@ -52,8 +52,134 @@ INTERFACE ___P2MFunnelRequest_interface {
     FIELD/input  Bit(144) pipe$enq$v
     FIELD/output Bit(1) pipe$enq__RDY
 }
+MODULE FunnelBufferedBase FunnelBufferedBase_interface {
+    FIELD FifoPBase__W20 buffer
+    FIELD FunnelBase__F4_D20 base
+}
+INTERFACE FunnelBufferedBase_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) dataWidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE FifoPBase__W20 FifoPBase__W20_interface {
+    FIELD Fifo1Base__W20 fifo
+    FIELD Out2InBase__W20 base
+}
+INTERFACE FifoPBase__W20_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE FunnelBase__F4_D20 FunnelBase__F4_D20_interface {
+}
+INTERFACE FunnelBase__F4_D20_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) dataWidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE Fifo1Base__W20 Fifo1Base__W20_interface {
+}
+INTERFACE Fifo1Base__W20_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/input  Bit(1) out$deq__ENA
+    FIELD/output Bit(1) out$deq__RDY
+    FIELD/output Bit(32) out$first
+    FIELD/output Bit(1) out$first__RDY
+}
+MODULE Out2InBase__W20 Out2InBase__W20_interface {
+}
+INTERFACE Out2InBase__W20_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(1) in$deq__ENA
+    FIELD/input  Bit(1) in$deq__RDY
+    FIELD/input  Bit(32) in$first
+    FIELD/input  Bit(1) in$first__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE pipeFunnelHalf__F2 pipeFunnelHalf__F2_interface {
+}
+INTERFACE pipeFunnelHalf__F2_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) dataWidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
+MODULE pipeFunnelHalf__F4 pipeFunnelHalf__F4_interface {
+}
+INTERFACE pipeFunnelHalf__F4_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) dataWidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) in$enq__ENA
+    FIELD/input  Bit(32) in$enq$v
+    FIELD/output Bit(1) in$enq__RDY
+    FIELD/output Bit(1) out$enq__ENA
+    FIELD/output Bit(32) out$enq$v
+    FIELD/input  Bit(1) out$enq__RDY
+}
 FILE generated/l_top.sv
 FILE generated/funnel.generated.vh
+FILE ../../lib/generated/atomicclib.vh
+FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/bscan.generated.vh
+FILE ../../lib/generated/clockTop.generated.vh
+FILE ../../lib/generated/configCounter.generated.vh
+FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/grayCounter.generated.vh
+FILE ../../lib/generated/iobufVec.generated.vh
+FILE ../../lib/generated/mimo.generated.vh
+FILE ../../lib/generated/mux.generated.vh
+FILE ../../lib/generated/out2in.generated.vh
+FILE ../../lib/generated/printfStub.generated.vh
+FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/zynqTop.generated.vh
 FILE generated/FunnelTest.sv
 FILE generated/___M2PFunnelIndication.sv
 FILE generated/___P2MFunnelRequest.sv
+FILE ../../lib/generated/FifoPBase.sv
+FILE ../../lib/generated/FunnelBufferedBase.sv
+FILE ../../lib/generated/Fifo1Base.sv
+FILE ../../lib/generated/Out2InBase.sv
+FILE ../../lib/verilog/FunnelBase.sv

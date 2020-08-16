@@ -21,10 +21,10 @@
 // SOFTWARE.
 #include "funnel.h"
 
-template<int funnelWidth, int dataWidth>
-class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, dataWidth> {
-    FifoPBase<dataWidth>  buffer [funnelWidth];
-    FunnelBase<funnelWidth, dataWidth> base;
+template<int funnelWidth, int width>
+class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, width> {
+    FifoPBase<width>  buffer [funnelWidth];
+    FunnelBase<funnelWidth, width> base;
     __connect base.out  = this->out;
     __rule init {
         for (int i = 0; i < funnelWidth; i = i + 1) {

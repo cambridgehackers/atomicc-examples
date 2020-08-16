@@ -7,8 +7,8 @@ module VsimTop (
     input wire CLK_derivedClock,
     input wire nRST_derivedReset,
     input wire CLK_sys_clk);
-    PipeInB source_0$port;
-    PipeInB user$write;
+    PipeInB#(.width(32)) source_0$port();
+    PipeInB#(.width(32)) user$write();
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write(user$write),
         .read(source_0$port));

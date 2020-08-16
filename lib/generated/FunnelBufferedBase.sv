@@ -3,45 +3,45 @@
 `default_nettype none
 module FunnelBufferedBase #(
     parameter integer funnelWidth = 4,
-    parameter integer dataWidth = 32)(
+    parameter integer width = 32)(
     input wire CLK, input wire nRST,
-    input wire in$enq__ENA[funnelWidth - 1:0],
-    input wire [dataWidth - 1:0]in$enq$v[funnelWidth - 1:0],
-    output wire in$enq__RDY[funnelWidth - 1:0],
-    output wire out$enq__ENA,
-    output wire [dataWidth - 1:0]out$enq$v,
-    input wire out$enq__RDY);
-    wire [dataWidth - 1:0]base$in$enq$v [funnelWidth - 1:0];
-    wire base$in$enq__ENA [funnelWidth - 1:0];
-    wire base$in$enq__RDY [funnelWidth - 1:0];
-    wire [dataWidth - 1:0]buffer$in$enq$v [funnelWidth - 1:0];
-    wire buffer$in$enq__ENA [funnelWidth - 1:0];
-    wire buffer$in$enq__RDY [funnelWidth - 1:0];
-    wire [dataWidth - 1:0]buffer$out$enq$v [funnelWidth - 1:0];
-    wire buffer$out$enq__ENA [funnelWidth - 1:0];
-    wire buffer$out$enq__RDY [funnelWidth - 1:0];
+    PipeIn.server in [funnelWidth - 1: 0],
+    PipeIn.client out);
     genvar __inst$Genvar1;
-    FifoPBase#(.width(dataWidth)) buffer [funnelWidth - 1:0] (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(buffer$in$enq__ENA),
-        .in$enq$v(buffer$in$enq$v),
-        .in$enq__RDY(buffer$in$enq__RDY),
-        .out$enq__ENA(buffer$out$enq__ENA),
-        .out$enq$v(buffer$out$enq$v),
-        .out$enq__RDY(buffer$out$enq__RDY));
-    FunnelBase#(.funnelWidth ( funnelWidth),.dataWidth ( dataWidth)) base (.CLK(CLK), .nRST(nRST),
-        .in$enq__ENA(base$in$enq__ENA),
-        .in$enq$v(base$in$enq$v),
-        .in$enq__RDY(base$in$enq__RDY),
-        .out$enq__ENA(out$enq__ENA),
-        .out$enq$v(out$enq$v),
-        .out$enq__RDY(out$enq__RDY));
+
+    PipeIn#(.width(width)) buffer$in [funnelWidth - 1:0]();
+    PipeIn#(.width(width)) buffer$out [funnelWidth - 1:0]();
+    FifoPBase#(.width(width)) buffer [funnelWidth - 1:0] (.CLK(CLK), .nRST(nRST),
+        .in(in), //buffer$in),
+        .out(buffer$out));
+
+    //PipeIn#(.width(width)) base$in [funnelWidth - 1:0]();
+    FunnelBase#(.funnelWidth ( funnelWidth),.width ( width)) base (.CLK(CLK), .nRST(nRST),
+        .in(buffer$out), //base$in),
+        .out(out));
+
 for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign base$in$enq$v[ __inst$Genvar1 ] = buffer$out$enq$v[ __inst$Genvar1 ];
-        assign base$in$enq__ENA[ __inst$Genvar1 ] = buffer$out$enq__ENA[ __inst$Genvar1 ];
-        assign buffer$in$enq$v[ __inst$Genvar1 ] = in$enq$v[ __inst$Genvar1 ];
-        assign buffer$in$enq__ENA[ __inst$Genvar1 ] = in$enq__ENA[ __inst$Genvar1 ];
-        assign buffer$out$enq__RDY[ __inst$Genvar1 ] = base$in$enq__RDY[ __inst$Genvar1 ];
-        assign in$enq__RDY[ __inst$Genvar1 ] = buffer$in$enq__RDY[ __inst$Genvar1 ];
+        //assign buffer$in[ __inst$Genvar1 ].enq__ENA = in[ __inst$Genvar1 ].enq__ENA;
+        //assign buffer$in[ __inst$Genvar1 ].enq$v = in[ __inst$Genvar1 ].enq$v;
+        //assign buffer$in[ __inst$Genvar1 ].enq__RDY = in[ __inst$Genvar1 ].enq__RDY;
+        //assign buffer$out[ __inst$Genvar1 ].enq__ENA = base$in[ __inst$Genvar1 ].enq__ENA;
+        //assign buffer$out[ __inst$Genvar1 ].enq$v = base$in[ __inst$Genvar1 ].enq$v;
+        //assign buffer$out[ __inst$Genvar1 ].enq__RDY = base$in[ __inst$Genvar1 ].enq__RDY;
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (in[__inst$Genvar1].enq__ENA //&& in[__inst$Genvar1].enq__RDY
+) begin
+            $display( "funnelin %d = %x", __inst$Genvar1, in[__inst$Genvar1].enq$v);
+        end;
+        if (buffer$out[__inst$Genvar1].enq__ENA //&& buffer$out[__inst$Genvar1].enq__RDY
+) begin
+            $display( "funnelbufferout %d = %x", __inst$Genvar1, buffer$out[__inst$Genvar1].enq$v);
+        end;
+      end
+    end // always @ (posedge CLK)
+
     end;
 endmodule
 

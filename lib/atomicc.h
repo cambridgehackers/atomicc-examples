@@ -96,17 +96,17 @@ class l_topIfc {
 class l_top __implements l_topIfc; // force PipeIn<NOCDataH> to appear in IR
 
 // FunnelBufferedBase is now used in l_top
-template<int funnelWidth, int dataWidth>
+template<int funnelWidth, int width>
 class FunnelBaseIfc {
-    PipeIn<__uint(dataWidth)> in[funnelWidth];
-    PipeIn<__uint(dataWidth)> *out;
+    PipeIn<__uint(width)> in[funnelWidth];
+    PipeIn<__uint(width)> *out;
 };
 
-template<int funnelWidth, int dataWidth>
-class FunnelBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
+template<int funnelWidth, int width>
+class FunnelBase __implements FunnelBaseIfc<funnelWidth, width>;
 
-template<int funnelWidth, int dataWidth>
-class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, dataWidth>;
+template<int funnelWidth, int width>
+class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, width>;
 static FunnelBufferedBase<99, 32> dummyFunnel; // to force at least 1 instantiation of template into IR
 
 #if 0

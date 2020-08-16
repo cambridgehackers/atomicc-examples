@@ -83,30 +83,6 @@ interface ClockIfc;
     modport client (input  clockOut);
 endinterface
 `endif
-`ifndef __PipeIn_OC_0_DEF__
-`define __PipeIn_OC_0_DEF__
-interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_1_DEF__
-`define __PipeIn_OC_1_DEF__
-interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
 `ifndef __ZynqClock_DEF__
 `define __ZynqClock_DEF__
 interface ZynqClock;
@@ -669,18 +645,6 @@ interface Pps7saxihp;
                     output ARESETN, ARREADY, AWREADY, BID, BRESP, BVALID, RACOUNT, RCOUNT, RDATA, RID, RLAST, RRESP, RVALID, WACOUNT, WCOUNT, WREADY);
     modport client (output ACLK, ARADDR, ARBURST, ARCACHE, ARID, ARLEN, ARLOCK, ARPROT, ARQOS, ARSIZE, ARVALID, AWADDR, AWBURST, AWCACHE, AWID, AWLEN, AWLOCK, AWPROT, AWQOS, AWSIZE, AWVALID, BREADY, RDISSUECAP1EN, RREADY, WDATA, WID, WLAST, WRISSUECAP1EN, WSTRB, WVALID,
                     input  ARESETN, ARREADY, AWREADY, BID, BRESP, BVALID, RACOUNT, RCOUNT, RDATA, RID, RLAST, RRESP, RVALID, WACOUNT, WCOUNT, WREADY);
-endinterface
-`endif
-`ifndef __PipeIn_DEF__
-`define __PipeIn_DEF__
-interface PipeIn;
-    logic enq__ENA;
-    logic [(16 + 128) - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
 endinterface
 `endif
 //METASTART; P7Wrap
