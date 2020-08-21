@@ -2,18 +2,6 @@
 `define __funneltest_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __FunnelIndication_DEF__
-`define __FunnelIndication_DEF__
-interface FunnelIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$v,
-                    input  heard__RDY);
-endinterface
-`endif
 `ifndef __FunnelRequest_DEF__
 `define __FunnelRequest_DEF__
 interface FunnelRequest;
@@ -24,6 +12,18 @@ interface FunnelRequest;
                     output say__RDY);
     modport client (output say__ENA, say$v,
                     input  say__RDY);
+endinterface
+`endif
+`ifndef __FunnelIndication_DEF__
+`define __FunnelIndication_DEF__
+interface FunnelIndication;
+    logic heard__ENA;
+    logic [32 - 1:0] heard$v;
+    logic heard__RDY;
+    modport server (input  heard__ENA, heard$v,
+                    output heard__RDY);
+    modport client (output heard__ENA, heard$v,
+                    input  heard__RDY);
 endinterface
 `endif
 //METASTART; Fifo1
@@ -39,7 +39,7 @@ endinterface
 //METAINTERNAL; fifo1; FifoPBase(width=32);
 //METAINTERNAL; fifo2; FifoPBase(width=32);
 //METAINTERNAL; fifo3; FifoPBase(width=32);
-//METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=4,dataWidth=32);
+//METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=4,width=32);
 //METAINTERNAL; result; Fifo1;
 //METAINVOKE; request.say__ENA; :fifo.in.enq__ENA;
 //METAGUARD; request.say; fifo.in.enq__RDY;
@@ -65,6 +65,6 @@ endinterface
 //METAINVOKE; method.heard__ENA; :pipe.enq__ENA;
 //METAGUARD; method.heard; pipe.enq__RDY;
 //METASTART; ___P2MFunnelRequest
-//METAINVOKE; pipe.enq__ENA; pipe.enq.v == 16'd0:method.say__ENA;
-//METAGUARD; pipe.enq; method.say__RDY || ( !( pipe.enq.v == 16'd0 ) );
+//METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;
+//METAGUARD; pipe.enq; method.say__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0 ) );
 `endif

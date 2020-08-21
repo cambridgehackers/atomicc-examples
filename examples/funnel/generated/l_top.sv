@@ -1,20 +1,19 @@
 `include "funneltest.generated.vh"
 
 `default_nettype none
-
 module l_top (input wire CLK, input wire nRST,
     PipeIn.server request,
     PipeIn.client indication);
-    FunnelRequest DUT__FunnelTest$request();
-    FunnelIndication M2P__indication$method();
+    FunnelIndication DUT__FunnelTest$indication();
+    FunnelRequest P2M__request$method();
     FunnelTest DUT__FunnelTest (.CLK(CLK), .nRST(nRST),
-        .request(DUT__FunnelTest$request),
-        .indication(M2P__indication$method));
+        .request(P2M__request$method),
+        .indication(DUT__FunnelTest$indication));
     ___M2PFunnelIndication M2P__indication (.CLK(CLK), .nRST(nRST),
-        .method(M2P__indication$method),
+        .method(DUT__FunnelTest$indication),
         .pipe(indication));
     ___P2MFunnelRequest P2M__request (.CLK(CLK), .nRST(nRST),
-        .method(DUT__FunnelTest$request),
+        .method(P2M__request$method),
         .pipe(request));
 endmodule
 
