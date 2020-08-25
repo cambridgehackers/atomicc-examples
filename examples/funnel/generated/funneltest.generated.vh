@@ -26,25 +26,17 @@ interface FunnelIndication;
                     input  heard__RDY);
 endinterface
 `endif
-//METASTART; Fifo1
-//METAINTERNAL; fifo; Fifo1Base(width=32);
-//METAINVOKE; in.enq__ENA; :fifo.in$enq__ENA;
-//METAGUARD; in.enq; fifo.in$enq__RDY;
-//METAINVOKE; out.deq__ENA; :fifo.out$deq__ENA;
-//METAGUARD; out.deq; fifo.out$deq__RDY;
-//METAINVOKE; out.first; :fifo.out$first;
-//METAGUARD; out.first; fifo.out$first__RDY;
 //METASTART; FunnelTest
 //METAINTERNAL; fifo0; FifoPBase(width=32);
 //METAINTERNAL; fifo1; FifoPBase(width=32);
 //METAINTERNAL; fifo2; FifoPBase(width=32);
 //METAINTERNAL; fifo3; FifoPBase(width=32);
 //METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=4,width=32);
-//METAINTERNAL; result; Fifo1;
-//METAINVOKE; request.say__ENA; :fifo.in.enq__ENA;
-//METAGUARD; request.say; fifo.in.enq__RDY;
-//METAINVOKE; RULE$respond_rule__ENA; :indication.heard__ENA;:result.out$deq__ENA;:result.out$first;
-//METAGUARD; RULE$respond_rule; result.out$first__RDY && indication.heard__RDY && result.out$deq__RDY;
+//METAINTERNAL; result; Fifo1Base(width=32);
+//METAINVOKE; request.say__ENA; :fifo$in[__inst$Genvar1].enq__ENA;
+//METAGUARD; request.say; fifo$in__enq__RDY_or1;
+//METAINVOKE; RULE$respond_rule__ENA; :indication.heard__ENA;:result$out.deq__ENA;
+//METAGUARD; RULE$respond_rule; result$out.first__RDY && indication.heard__RDY && result$out.deq__RDY;
 //METAGUARD; RULE$init; 1;
 //METARULES; RULE$respond_rule; RULE$init
 //METACONNECT; funnel$out.enq__ENA; result$in.enq__ENA

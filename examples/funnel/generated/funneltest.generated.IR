@@ -124,7 +124,7 @@ MODULE FunnelTest FunnelTestIfc {
     FIELD Bit(8) index
     METHOD/Action request$say__ENA ( Bit(32) v ) {
         PRINTF :printf{"request.say %x index %d\n",request$say$v,index}
-        CALL/Action :fifo[index].in$enq__ENA{request$say$v}
+        CALL/Action :fifo$in[index].enq__ENA{request$say$v}
         STORE ((index) >= ((4) - (1))):index = 0
         STORE !((index) >= ((4) - (1))):index = (index) + (1)
     }
@@ -135,7 +135,7 @@ MODULE FunnelTest FunnelTestIfc {
         CALL/Action :result$out$deq__ENA{}
     }
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo[__inst$Genvar1].out PipeIn_OC_7
+        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo$out[__inst$Genvar1] PipeIn_OC_7
     }
     METHOD/Rule/Action RULE$init__ENA {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 4)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
