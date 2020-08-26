@@ -8,7 +8,9 @@ module FifoB1Base #(
     PipeOut.server out);
     reg [width - 1:0]element;
     reg full;
+    wire [width - 1:0]enq_v;
     // Extra assigments, not to output wires
+    assign enq_v = in.enq$v;
     assign in.enq__RDY = !( ( ( full ^ 1 ) | out.deq__ENA ) == 0 );
     assign out.deq__RDY = full || in.enq__ENA;
     assign out.first = full ? element : enq_v;
