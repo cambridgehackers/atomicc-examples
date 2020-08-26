@@ -2,69 +2,27 @@
 
 `default_nettype none
 module Connect (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [32 - 1:0]request$say$meth,
-    input wire [32 - 1:0]request$say$v,
-    output wire request$say__RDY,
-    output wire indication$heard__ENA,
-    output wire [32 - 1:0]indication$heard$meth,
-    output wire [32 - 1:0]indication$heard$v,
-    input wire indication$heard__RDY);
-    wire lEII_test$pipe$enq__RDY;
-    wire lEIO$indication$heard__RDY;
-    wire [(32 + (32 + 32)) - 1:0]lEIO$pipe$enq$v;
-    wire lEIO$pipe$enq__ENA;
-    wire lERI$pipe$enq__RDY;
-    wire [32 - 1:0]lERI$request$say$meth;
-    wire [32 - 1:0]lERI$request$say$v;
-    wire lERI$request$say__ENA;
-    wire [(32 + (32 + 32)) - 1:0]lERO_test$pipe$enq$v;
-    wire lERO_test$pipe$enq__ENA;
-    wire [32 - 1:0]lEcho$indication$heard$meth;
-    wire [32 - 1:0]lEcho$indication$heard$v;
-    wire lEcho$indication$heard__ENA;
-    wire lEcho$request$say__RDY;
+    EchoRequest.server request,
+    EchoIndication.client indication);
+    PipeIn#(.width(32 + 32 + 32)) lEIO$pipe();
+    EchoRequest lERI$request();
+    PipeIn#(.width(32 + 32 + 32)) lERO_test$pipe();
+    EchoIndication lEcho$indication();
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
-        .indication$heard__ENA(lEcho$indication$heard__ENA),
-        .indication$heard$meth(lEcho$indication$heard$meth),
-        .indication$heard$v(lEcho$indication$heard$v),
-        .indication$heard__RDY(lEIO$indication$heard__RDY),
-        .pipe$enq__ENA(lEIO$pipe$enq__ENA),
-        .pipe$enq$v(lEIO$pipe$enq$v),
-        .pipe$enq__RDY(lEII_test$pipe$enq__RDY));
+        .indication(lEcho$indication),
+        .pipe(lEIO$pipe));
     EchoRequestInput lERI (.CLK(CLK), .nRST(nRST),
-        .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
-        .pipe$enq$v(lERO_test$pipe$enq$v),
-        .pipe$enq__RDY(lERI$pipe$enq__RDY),
-        .request$say__ENA(lERI$request$say__ENA),
-        .request$say$meth(lERI$request$say$meth),
-        .request$say$v(lERI$request$say$v),
-        .request$say__RDY(lEcho$request$say__RDY));
+        .pipe(lERO_test$pipe),
+        .request(lERI$request));
     Echo lEcho (.CLK(CLK), .nRST(nRST),
-        .request$say__ENA(lERI$request$say__ENA),
-        .request$say$meth(lERI$request$say$meth),
-        .request$say$v(lERI$request$say$v),
-        .request$say__RDY(lEcho$request$say__RDY),
-        .indication$heard__ENA(lEcho$indication$heard__ENA),
-        .indication$heard$meth(lEcho$indication$heard$meth),
-        .indication$heard$v(lEcho$indication$heard$v),
-        .indication$heard__RDY(lEIO$indication$heard__RDY));
+        .request(lERI$request),
+        .indication(lEcho$indication));
     EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
-        .request$say__ENA(request$say__ENA),
-        .request$say$meth(request$say$meth),
-        .request$say$v(request$say$v),
-        .request$say__RDY(request$say__RDY),
-        .pipe$enq__ENA(lERO_test$pipe$enq__ENA),
-        .pipe$enq$v(lERO_test$pipe$enq$v),
-        .pipe$enq__RDY(lERI$pipe$enq__RDY));
+        .request(request),
+        .pipe(lERO_test$pipe));
     EchoIndicationInput lEII_test (.CLK(CLK), .nRST(nRST),
-        .pipe$enq__ENA(lEIO$pipe$enq__ENA),
-        .pipe$enq$v(lEIO$pipe$enq$v),
-        .pipe$enq__RDY(lEII_test$pipe$enq__RDY),
-        .indication$heard__ENA(indication$heard__ENA),
-        .indication$heard$meth(indication$heard$meth),
-        .indication$heard$v(indication$heard$v),
-        .indication$heard__RDY(indication$heard__RDY));
+        .pipe(lEIO$pipe),
+        .indication(indication));
 endmodule
 
 `default_nettype wire    // set back to default value
