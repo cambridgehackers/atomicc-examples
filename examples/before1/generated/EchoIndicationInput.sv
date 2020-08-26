@@ -2,23 +2,18 @@
 
 `default_nettype none
 module EchoIndicationInput (input wire CLK, input wire nRST,
-    input wire pipe$enq__ENA,
-    input wire [(32 + (32 + 32)) - 1:0]pipe$enq$v,
-    output wire pipe$enq__RDY,
-    output wire indication$heard__ENA,
-    output wire [32 - 1:0]indication$heard$meth,
-    output wire [32 - 1:0]indication$heard$v,
-    input wire indication$heard__RDY);
+    PipeIn.server pipe,
+    EchoIndication.client indication);
     reg busy_delay;
     reg [32 - 1:0]meth_delay;
     reg [32 - 1:0]v_delay;
     wire RULE$input_rule__RDY;
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = RULE$input_rule__RDY;
-    assign pipe$enq__RDY = !( 0 == ( busy_delay ^ 1 ) );
     // Extra assigments, not to output wires
-    assign RULE$input_rule__RDY = !( ( busy_delay == 0 ) || ( !indication$heard__RDY ) );
+    assign RULE$input_rule__RDY = !( ( busy_delay == 0 ) || ( !indication.heard__RDY ) );
+    assign indication.heard$meth = meth_delay;
+    assign indication.heard$v = v_delay;
+    assign indication.heard__ENA = RULE$input_rule__RDY;
+    assign pipe.enq__RDY = !( 0 == ( busy_delay ^ 1 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -31,14 +26,14 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
             busy_delay <= 0 != 0;
             $display( "input_rule: EchoIndicationInput" );
         end; // End of RULE$input_rule__ENA
-        if (pipe$enq__ENA && pipe$enq__RDY) begin // pipe$enq__ENA
-            $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe$enq$v$tag );
-            if (pipe$enq$v$tag == 1) begin
-            meth_delay <= pipe$enq$v$data$heard$meth;
-            v_delay <= pipe$enq$v$data$heard$v;
+        if (pipe.enq__ENA && pipe.enq__RDY) begin // pipe.enq__ENA
+            $display( "%s: EchoIndicationInput tag %d" , "pipe$enq" , pipe.enq$v$tag );
+            if (pipe.enq$v$tag == 1) begin
+            meth_delay <= pipe.enq$v$data$heard$meth;
+            v_delay <= pipe.enq$v$data$heard$v;
             busy_delay <= 1 != 0;
             end;
-        end; // End of pipe$enq__ENA
+        end; // End of pipe.enq__ENA
       end
     end // always @ (posedge CLK)
 endmodule

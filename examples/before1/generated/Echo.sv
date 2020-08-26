@@ -2,24 +2,9 @@
 
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [32 - 1:0]request$say$meth,
-    input wire [32 - 1:0]request$say$v,
-    output wire request$say__RDY,
-    input wire request$say2__ENA,
-    input wire [32 - 1:0]request$say2$meth,
-    input wire [32 - 1:0]request$say2$v,
-    output wire request$say2__RDY,
-    input wire swap$y2x__ENA,
-    output wire swap$y2x__RDY,
-    input wire swap$y2xnull__ENA,
-    output wire swap$y2xnull__RDY,
-    input wire swap$x2y__ENA,
-    output wire swap$x2y__RDY,
-    output wire indication$heard__ENA,
-    output wire [32 - 1:0]indication$heard$meth,
-    output wire [32 - 1:0]indication$heard$v,
-    input wire indication$heard__RDY);
+    EchoRequest.server request,
+    Swap.server swap,
+    EchoIndication.client indication);
     reg busy;
     reg busy_delay;
     reg [32 - 1:0]meth_delay;
@@ -30,17 +15,17 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]y;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
-    assign indication$heard$meth = meth_delay;
-    assign indication$heard$v = v_delay;
-    assign indication$heard__ENA = RULE$respond_rule__RDY;
-    assign request$say2__RDY = !( 0 == ( busy ^ 1 ) );
-    assign request$say__RDY = !( 0 == ( busy ^ 1 ) );
-    assign swap$x2y__RDY = 1;
-    assign swap$y2x__RDY = 1;
-    assign swap$y2xnull__RDY = 1;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
-    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !indication$heard__RDY ) );
+    assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !indication.heard__RDY ) );
+    assign indication.heard$meth = meth_delay;
+    assign indication.heard$v = v_delay;
+    assign indication.heard__ENA = RULE$respond_rule__RDY;
+    assign request.say2__RDY = !( 0 == ( busy ^ 1 ) );
+    assign request.say__RDY = !( 0 == ( busy ^ 1 ) );
+    assign swap.x2y__RDY = 1;
+    assign swap.y2x__RDY = 1;
+    assign swap.y2xnull__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -65,29 +50,29 @@ module Echo (input wire CLK, input wire nRST,
             busy_delay <= 0 != 0;
             $display( "respond_rule: Echo" );
         end; // End of RULE$respond_rule__ENA
-        if (request$say2__ENA && request$say2__RDY) begin // request$say2__ENA
-            meth_temp <= request$say2$meth;
-            v_temp <= request$say2$v;
+        if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA
+            meth_temp <= request.say2$meth;
+            v_temp <= request.say2$v;
             busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say2" , 211 );
-        end; // End of request$say2__ENA
-        if (request$say__ENA && request$say__RDY) begin // request$say__ENA
-            meth_temp <= request$say$meth;
-            v_temp <= request$say$v;
+        end; // End of request.say2__ENA
+        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+            meth_temp <= request.say$meth;
+            v_temp <= request.say$v;
             busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say" , 205 );
-        end; // End of request$say__ENA
-        if (swap$x2y__ENA) begin // swap$x2y__ENA
+        end; // End of request.say__ENA
+        if (swap.x2y__ENA) begin // swap.x2y__ENA
             y <= x;
             $display( "[%s:%d]Echo" , "swap$x2y" , 225 );
-        end; // End of swap$x2y__ENA
-        if (swap$y2x__ENA) begin // swap$y2x__ENA
+        end; // End of swap.x2y__ENA
+        if (swap.y2x__ENA) begin // swap.y2x__ENA
             x <= y;
             $display( "[%s:%d]Echo" , "swap$y2x" , 217 );
-        end; // End of swap$y2x__ENA
-        if (swap$y2xnull__ENA) begin // swap$y2xnull__ENA
+        end; // End of swap.y2x__ENA
+        if (swap.y2xnull__ENA) begin // swap.y2xnull__ENA
             $display( "[%s:%d]Echo" , "swap$y2xnull" , 221 );
-        end; // End of swap$y2xnull__ENA
+        end; // End of swap.y2xnull__ENA
       end
     end // always @ (posedge CLK)
 endmodule
