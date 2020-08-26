@@ -18,7 +18,7 @@ INTERFACE Fifo_OC_3  {
     INTERFACE PipeIn_OC_4 in
     INTERFACE PipeOut_OC_5 out
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
@@ -66,7 +66,7 @@ INTERFACE l_topIfc  {
 }
 EMODULE Fifo1Base(width=96) Fifo_OC_3 {
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
+EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
 }
 EMODULE IVectorInd IVectorIndication {
 }
