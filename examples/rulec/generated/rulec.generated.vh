@@ -2,13 +2,6 @@
 `define __rulec_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __NOCDataH_DEF__
-`define __NOCDataH_DEF__
-typedef struct packed {
-    logic [128 - 1:0] data;
-    logic [16 - 1:0] length;
-} NOCDataH;
-`endif
 `ifndef __EchoRequest_DEF__
 `define __EchoRequest_DEF__
 interface EchoRequest;
@@ -50,42 +43,6 @@ interface EchoIndication;
                     input  heard__RDY, heard2__RDY, heard3__RDY);
 endinterface
 `endif
-`ifndef __PipeIn_OC_0_DEF__
-`define __PipeIn_OC_0_DEF__
-interface PipeIn_OC_0#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_OC_1_DEF__
-`define __PipeIn_OC_1_DEF__
-interface PipeIn_OC_1#(dataWidth = 32, funnelWidth = 99);
-    logic enq__ENA;
-    logic [dataWidth - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
-`ifndef __PipeIn_DEF__
-`define __PipeIn_DEF__
-interface PipeIn;
-    logic enq__ENA;
-    logic [(16 + 128) - 1:0] enq$v;
-    logic enq__RDY;
-    modport server (input  enq__ENA, enq$v,
-                    output enq__RDY);
-    modport client (output enq__ENA, enq$v,
-                    input  enq__RDY);
-endinterface
-`endif
 //METASTART; Echo
 //METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA; request.say2__ENA
 //METAGUARD; request.say; 0 != ( ( busy != 0 ) ^ 1 );
@@ -114,8 +71,8 @@ endinterface
 //METACONNECT; DUT__Echo$request.say2__RDY; P2M__request$method.say2__RDY
 //METACONNECT; DUT__Echo$request.setLeds__ENA; P2M__request$method.setLeds__ENA
 //METACONNECT; DUT__Echo$request.setLeds__RDY; P2M__request$method.setLeds__RDY
-//METACONNECT; request.enq__ENA; P2M__request$pipe.enq__ENA
-//METACONNECT; request.enq__RDY; P2M__request$pipe.enq__RDY
+//METACONNECT; P2M__request$pipe.enq__ENA; request.enq__ENA
+//METACONNECT; P2M__request$pipe.enq__RDY; request.enq__RDY
 //METACONNECT; indication.enq__ENA; M2P__indication$pipe.enq__ENA
 //METACONNECT; indication.enq__RDY; M2P__indication$pipe.enq__RDY
 //METASTART; ___M2PEchoIndication
@@ -128,6 +85,6 @@ endinterface
 //METAINVOKE; method.heard3__ENA; :pipe.enq__ENA;
 //METAGUARD; method.heard3; pipe.enq__RDY;
 //METASTART; ___P2MEchoRequest
-//METAINVOKE; pipe.enq__ENA; pipe.enq.v == 16'd1:method.say2__ENA;pipe.enq.v == 16'd0:method.say__ENA;pipe.enq.v == 16'd2:method.setLeds__ENA;
-//METAGUARD; pipe.enq; ( method.say__RDY && ( ( method.say2__RDY && ( method.setLeds__RDY || ( !( pipe.enq.v == 16'd2 ) ) ) ) || ( ( !method.say2__RDY ) && ( !( ( pipe.enq.v == 16'd1 ) || ( !( method.setLeds__RDY || ( !( pipe.enq.v == 16'd2 ) ) ) ) ) ) ) ) ) || ( ( !method.say__RDY ) && ( !( ( method.say2__RDY && ( ( pipe.enq.v == 16'd0 ) || ( !( method.setLeds__RDY || ( !( pipe.enq.v == 16'd2 ) ) ) ) ) ) || ( ( !method.say2__RDY ) && ( ( pipe.enq.v == 16'd1 ) || ( pipe.enq.v == 16'd0 ) || ( !( method.setLeds__RDY || ( !( pipe.enq.v == 16'd2 ) ) ) ) ) ) ) ) );
+//METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.say2__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method.setLeds__ENA;
+//METAGUARD; pipe.enq; ( method.say__RDY && ( ( method.say2__RDY && ( method.setLeds__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ) ) || ( ( !method.say2__RDY ) && ( !( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1 ) || ( !( method.setLeds__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ) ) ) ) ) ) ) || ( ( !method.say__RDY ) && ( !( ( method.say2__RDY && ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0 ) || ( !( method.setLeds__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ) ) ) ) || ( ( !method.say2__RDY ) && ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1 ) || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0 ) || ( !( method.setLeds__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ) ) ) ) ) ) ) ) );
 `endif
