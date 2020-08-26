@@ -11,7 +11,7 @@ INTERFACE Ft600  {
     FIELD/output Bit(1) usb_oe_n
     FIELD/inout Bit(16) usb_ad
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,dataWidth=32)  {
+INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
@@ -38,7 +38,7 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,dataWidth=32) FunnelBaseIfc(funnelWidth=99,dataWidth=32) {
+EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
 }
 EMODULE IOBUF MIOBUF {
 }
@@ -50,7 +50,7 @@ MODULE ModFt600 Ft600 {
     FIELD Bit(1) usb_txe_delay
     FIELD/Count 16  IOBUF iobufs
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
-        LET Bit(1) :iobufs[__inst$Genvar1].IO = (usb_ad)  >>  (__inst$Genvar1)
+        LET Bit(1) :iobufs$IO[__inst$Genvar1] = (usb_ad)  >>  (__inst$Genvar1)
     }
     METHOD/Rule/Action RULE$handshake__ENA {
         LET Bit(1) :usb_rd_n = (usb_rxf_delay) != (0)
