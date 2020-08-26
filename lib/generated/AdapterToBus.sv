@@ -28,13 +28,13 @@ module AdapterToBus #(
         if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
             buffer <= buffer << width;
-            //if (!( 0 == 0 ))
+            if (!( 0 == 0 ))
             $display( "adapterTOout %x remain %x" , RULE$copyRule$outVal , remain );
         end; // End of RULE$copyRule__ENA
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
             buffer <= noc.data;
             remain <= noc.length;
-            //if (!( 0 == 0 ))
+            if (!( 0 == 0 ))
             $display( "adapterTOin %x length %x" , noc.data , noc.length );
         end; // End of in.enq__ENA
       end
