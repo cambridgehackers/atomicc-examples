@@ -22,6 +22,7 @@ module GrayCounter #(
     wire RULE$incdec$useLsb;
     wire RULE$incdec__RDY;
     wire [width - 1:0]counterBit;
+    wire [width - 1:0]m;
     wire [width - 1:0]readBin$rtemp;
     wire readBin$temp [width - 1:0];
     genvar __inst$Genvar1;
@@ -37,9 +38,9 @@ module GrayCounter #(
     assign RULE$incdec$useLsb = ( ^counterBit ) == decrement__ENA;
     assign RULE$incdec__RDY = !( increment__ENA == decrement__ENA );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-        assign counterBit[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
-        assign readBin$rtemp[ __inst$Genvar1 ] = readBin$temp[ __inst$Genvar1 ];
-        assign readBin$temp[ __inst$Genvar1 ] = ^counterBit[ ( width - 1 ) : __inst$Genvar1 ];
+    assign counterBit[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
+    assign readBin$rtemp[ __inst$Genvar1 ] = readBin$temp[ __inst$Genvar1 ];
+    assign readBin$temp[ __inst$Genvar1 ] = ^counterBit[ ( width - 1 ) : __inst$Genvar1 ];
     end;
 
     for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
