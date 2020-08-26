@@ -10,14 +10,6 @@ INTERFACE Fifo_OC_3  {
     INTERFACE PipeIn in
     INTERFACE PipeOut_OC_4 out
 }
-INTERFACE Fifo_OC_5  {
-    INTERFACE PipeIn_OC_6 in
-    INTERFACE PipeOut_OC_7 out
-}
-INTERFACE Fifo_OC_9  {
-    INTERFACE PipeIn_OC_10 in
-    INTERFACE PipeOut_OC_11 out
-}
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
@@ -36,38 +28,22 @@ INTERFACE PipeIn_OC_0  {
 INTERFACE PipeIn_OC_1  {
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE PipeIn_OC_10  {
-    METHOD/Action enq__ENA ( Bit(16) v )
-}
 INTERFACE PipeIn_OC_2  {
     METHOD/Action enq__ENA ( Bit(144) v )
-}
-INTERFACE PipeIn_OC_6  {
-    METHOD/Action enq__ENA ( Bit(16) v )
 }
 INTERFACE PipeOut  {
     METHOD/Action deq__ENA
     METHOD first Bit(144)
 }
-INTERFACE PipeOut_OC_11  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(16)
-}
 INTERFACE PipeOut_OC_4  {
     METHOD/Action deq__ENA
     METHOD first NOCDataH
-}
-INTERFACE PipeOut_OC_7  {
-    METHOD/Action deq__ENA
-    METHOD first Bit(16)
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=144) Fifo {
-}
-EMODULE Fifo1Base(width=16) Fifo_OC_5 {
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
 }
@@ -89,21 +65,8 @@ MODULE Fifo1 Fifo_OC_3 {
         LET Bit(144) :out$first$retval = fifo$out$first
     }
 }
-MODULE Fifo1_OC_8 Fifo_OC_9 {
-    FIELD Fifo1Base(width=16) fifo
-    METHOD/Action in$enq__ENA ( Bit(16) v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first Bit(16) = ((fifo$out$first)) {
-        CALL :fifo$out$first{}
-    }
-}
 MODULE MuxPipe MuxPipeIfc {
     FIELD Fifo1 forwardFifo
-    FIELD Fifo1_OC_8 forwardFifol
     METHOD/Action in$enq__ENA ( NOCDataH v ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v}
     }
