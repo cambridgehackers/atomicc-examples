@@ -30,7 +30,6 @@ typedef struct {
 
 class MuxPipe __implements MuxPipeIfc {
     Fifo1<NOCDataH>   forwardFifo;
-    Fifo1<__uint(16)>   forwardFifol;
     void in.enq(NOCDataH v) if (!__ready(forwardFifo.out.first)) {
         out->enq(v);
     }
