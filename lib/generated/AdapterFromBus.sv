@@ -37,10 +37,10 @@ module AdapterFromBus #(
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
             buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : width ] };
             length <= length + 1;
-            if (in.enq$last)
-            waitForEnq <= 1;
             if (!( 0 == 0 ))
             $display( "adapterFROMin %x last %x buffer %x" , in.enq$v , in.enq$last , buffer );
+            if (in.enq$last)
+            waitForEnq <= 1;
         end; // End of in.enq__ENA
       end
     end // always @ (posedge CLK)
