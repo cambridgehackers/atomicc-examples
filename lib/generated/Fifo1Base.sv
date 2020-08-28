@@ -24,7 +24,7 @@ module Fifo1Base #(
             element <= in.enq$v;
             full <= 1;
         end; // End of in.enq__ENA
-        if (!( ( 0 == full ) || ( !out.deq__ENA ) )) begin // out.deq__ENA
+        if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
             full <= 0;
         end; // End of out.deq__ENA
       end
