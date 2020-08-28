@@ -1,8 +1,6 @@
 MODULE WbPriArbiter WbPriArbiter_interface {
 }
 INTERFACE WbPriArbiter_interface {
-    FIELD/parameter Bit(32) OPT_ZERO_ON_IDLE
-    FIELD/parameter Bit(32) F_OPT_CLK2FFLOGIC
     FIELD/input  Bit(1) a$stb__ENA
     FIELD/input  Bit(1) a$stb$we
     FIELD/input  Bit(32) a$stb$addr
@@ -15,6 +13,7 @@ INTERFACE WbPriArbiter_interface {
     FIELD/output Bit(1) a$stall__RDY
     FIELD/output Bit(1) a$err
     FIELD/output Bit(1) a$err__RDY
+    FIELD/input  Bit(1) acyc
     FIELD/input  Bit(1) b$stb__ENA
     FIELD/input  Bit(1) b$stb$we
     FIELD/input  Bit(32) b$stb$addr
@@ -27,6 +26,7 @@ INTERFACE WbPriArbiter_interface {
     FIELD/output Bit(1) b$stall__RDY
     FIELD/output Bit(1) b$err
     FIELD/output Bit(1) b$err__RDY
+    FIELD/input  Bit(1) bcyc
     FIELD/output Bit(1) o$stb__ENA
     FIELD/output Bit(1) o$stb$we
     FIELD/output Bit(32) o$stb$addr
@@ -39,9 +39,28 @@ INTERFACE WbPriArbiter_interface {
     FIELD/input  Bit(1) o$stall__RDY
     FIELD/input  Bit(1) o$err
     FIELD/input  Bit(1) o$err__RDY
-    FIELD/input  Bit(1) acyc
-    FIELD/input  Bit(1) bcyc
     FIELD/input  Bit(1) ocyc
 }
 FILE generated/WbPriArbiter.sv
 FILE generated/wbpriarbiter.generated.vh
+FILE ../../lib/generated/atomicclib.vh
+FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/bscan.generated.vh
+FILE ../../lib/generated/clockTop.generated.vh
+FILE ../../lib/generated/configCounter.generated.vh
+FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/fifo.generated.vh
+FILE ../../lib/generated/funnel.generated.vh
+FILE ../../lib/generated/grayCounter.generated.vh
+FILE ../../lib/generated/iobufVec.generated.vh
+FILE ../../lib/generated/mimo.generated.vh
+FILE ../../lib/generated/mux.generated.vh
+FILE ../../lib/generated/out2in.generated.vh
+FILE ../../lib/generated/printfStub.generated.vh
+FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/zynqTop.generated.vh
