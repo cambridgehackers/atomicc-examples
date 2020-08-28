@@ -20,8 +20,8 @@ module IVector (input wire CLK, input wire nRST,
     assign fifo$in.enq$v = request.say$temp;
     assign fifo$in.enq__ENA = request.say__ENA;
     assign fifo$out.deq__ENA = fifo$out.first__RDY && ind.heard__RDY;
-    assign ind.heard$meth = RULE$respond$temp.a;
-    assign ind.heard$v = RULE$respond$temp.b;
+    assign ind.heard$meth = fifo$out.first[ 6 - 1 : 0 ];
+    assign ind.heard$v = fifo$out.first[ 4 - 1 + 6 : 6 ];
     assign ind.heard__ENA = fifo$out.first__RDY && fifo$out.deq__RDY;
     assign request$say$temp.a = request.say$meth;
     assign request$say$temp.b = request.say$v;
