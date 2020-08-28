@@ -24,7 +24,7 @@ module Pack (input wire CLK, input wire nRST,
         writeCount <= 0;
       end // nRST
       else begin
-        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+        if (request.say__ENA && indication.heard__RDY) begin // request.say__ENA
             seqval <= request.say$seqno;
             writeCount <= writeCount + 1;
             counter <= counter + ( -1 );
