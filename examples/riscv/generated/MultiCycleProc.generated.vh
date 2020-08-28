@@ -23,10 +23,10 @@ interface Decoder;
     logic [32 - 1:0] getAddr;
     logic [32 - 1:0] getAddr$inst;
     logic getAddr__RDY;
-    modport server (input  getOp, getOp$inst, getArithOp, getArithOp$inst, getSrc1, getSrc1$inst, getSrc2, getSrc2$inst, getDst, getDst$inst, getAddr, getAddr$inst,
-                    output getOp__RDY, getArithOp__RDY, getSrc1__RDY, getSrc2__RDY, getDst__RDY, getAddr__RDY);
-    modport client (output getOp, getOp$inst, getArithOp, getArithOp$inst, getSrc1, getSrc1$inst, getSrc2, getSrc2$inst, getDst, getDst$inst, getAddr, getAddr$inst,
-                    input  getOp__RDY, getArithOp__RDY, getSrc1__RDY, getSrc2__RDY, getDst__RDY, getAddr__RDY);
+    modport server (input  getOp$inst, getArithOp$inst, getSrc1$inst, getSrc2$inst, getDst$inst, getAddr$inst,
+                    output getOp, getOp__RDY, getArithOp, getArithOp__RDY, getSrc1, getSrc1__RDY, getSrc2, getSrc2__RDY, getDst, getDst__RDY, getAddr, getAddr__RDY);
+    modport client (output getOp$inst, getArithOp$inst, getSrc1$inst, getSrc2$inst, getDst$inst, getAddr$inst,
+                    input  getOp, getOp__RDY, getArithOp, getArithOp__RDY, getSrc1, getSrc1__RDY, getSrc2, getSrc2__RDY, getDst, getDst__RDY, getAddr, getAddr__RDY);
 endinterface
 `endif
 `ifndef __Executer_DEF__
@@ -37,10 +37,10 @@ interface Executer;
     logic [32 - 1:0] basicExec$src1;
     logic [32 - 1:0] basicExec$src2;
     logic basicExec__RDY;
-    modport server (input  basicExec, basicExec$op, basicExec$src1, basicExec$src2,
-                    output basicExec__RDY);
-    modport client (output basicExec, basicExec$op, basicExec$src1, basicExec$src2,
-                    input  basicExec__RDY);
+    modport server (input  basicExec$op, basicExec$src1, basicExec$src2,
+                    output basicExec, basicExec__RDY);
+    modport client (output basicExec$op, basicExec$src1, basicExec$src2,
+                    input  basicExec, basicExec__RDY);
 endinterface
 `endif
 `ifndef __RegFile_DEF__
@@ -53,10 +53,10 @@ interface RegFile;
     logic [32 - 1:0] write$regnum;
     logic [32 - 1:0] write$regval;
     logic write__RDY;
-    modport server (input  read, read$regnum, write__ENA, write$regnum, write$regval,
-                    output read__RDY, write__RDY);
-    modport client (output read, read$regnum, write__ENA, write$regnum, write$regval,
-                    input  read__RDY, write__RDY);
+    modport server (input  read$regnum, write__ENA, write$regnum, write$regval,
+                    output read, read__RDY, write__RDY);
+    modport client (output read$regnum, write__ENA, write$regnum, write$regval,
+                    input  read, read__RDY, write__RDY);
 endinterface
 `endif
 `ifndef __IMem_DEF__
@@ -65,10 +65,10 @@ interface IMem;
     logic [32 - 1:0] read;
     logic [32 - 1:0] read$pc;
     logic read__RDY;
-    modport server (input  read, read$pc,
-                    output read__RDY);
-    modport client (output read, read$pc,
-                    input  read__RDY);
+    modport server (input  read$pc,
+                    output read, read__RDY);
+    modport client (output read$pc,
+                    input  read, read__RDY);
 endinterface
 `endif
 `ifndef __DMem_DEF__
@@ -81,10 +81,10 @@ interface DMem;
     logic request__RDY;
     logic [32 - 1:0] response;
     logic response__RDY;
-    modport server (input  request__ENA, request$write_en, request$addr, request$data, response,
-                    output request__RDY, response__RDY);
-    modport client (output request__ENA, request$write_en, request$addr, request$data, response,
-                    input  request__RDY, response__RDY);
+    modport server (input  request__ENA, request$write_en, request$addr, request$data,
+                    output request__RDY, response, response__RDY);
+    modport client (output request__ENA, request$write_en, request$addr, request$data,
+                    input  request__RDY, response, response__RDY);
 endinterface
 `endif
 //METASTART; MultiCycleProc
