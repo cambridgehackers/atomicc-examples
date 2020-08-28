@@ -195,9 +195,6 @@ class Pps7irq {
     __input  __uint(20)       F2P;
     __output __uint(29)       P2F;
 };
-class Pps7m {
-    __inout  __uint(54)       IO;
-};
 class Pps7maxigp {
     __input  __uint(1)        ACLK;
     __output __uint(32)       ARADDR;
@@ -414,7 +411,7 @@ class Pps7PS7 {
     Pps7irq          IRQ;
     Pps7maxigp       MAXIGP0;
     Pps7maxigp       MAXIGP1;
-    Pps7m            M;
+    __inout  __uint(54) MIO;
     Pps7ps           PS;
     Pps7saxiacp      SAXIACP;
     Pps7saxigp       SAXIGP0;
@@ -424,5 +421,5 @@ class Pps7PS7 {
     Pps7saxihp       SAXIHP2;
     Pps7saxihp       SAXIHP3;
 };
-class PS7 __implements Pps7PS7;
+class PS7 __implements __verilog Pps7PS7;
 #endif

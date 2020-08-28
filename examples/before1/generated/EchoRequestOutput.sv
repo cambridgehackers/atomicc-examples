@@ -7,7 +7,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     EchoRequest_data request$say$ind;
     EchoRequest_data request$say2$ind;
     // Extra assigments, not to output wires
-    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? request.say$ind : 144'd0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? request.say2$ind : 144'd0 );
+    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? request.say$ind : 0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? request.say2$ind : 0 );
     assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;
     assign request$say$ind.data$say$meth = request.say$meth;
     assign request$say$ind.data$say$v = request.say$v;

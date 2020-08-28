@@ -51,10 +51,10 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
             counter[ __inst$Genvar1 ] <= counter[ __inst$Genvar1 ] ^ ( ( __inst$Genvar1 == 0 ) ? RULE$incdec$useLsb : ( ( ( RULE$incdec$useLsb != 0 ) ^ 1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | counterBit[ ( ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( |counterBit[ ( ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) ) : 0 ] ) != 0 ) ^ 1 ) ) ) );
         end; // End of RULE$incdec__ENA
         if (writeBin__ENA) begin // writeBin__ENA
-            if (!( __inst$Genvar1 == ( width - 1 ) ))
-            counter[ __inst$Genvar1 ] <= ^writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
             if (__inst$Genvar1 == ( width - 1 ))
             counter[ __inst$Genvar1 ] <= writeBin$v[ __inst$Genvar1 ];
+            if (!( __inst$Genvar1 == ( width - 1 ) ))
+            counter[ __inst$Genvar1 ] <= ^writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
         end; // End of writeBin__ENA
         if (writeGray__ENA) begin // writeGray__ENA
             counter[ __inst$Genvar1 ] <= writeGray$v[ __inst$Genvar1 ];

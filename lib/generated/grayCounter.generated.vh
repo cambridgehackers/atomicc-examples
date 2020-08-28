@@ -19,10 +19,10 @@ interface GrayCounterIfc#(width = 10);
     logic writeBin__ENA;
     logic [width - 1:0] writeBin$v;
     logic writeBin__RDY;
-    modport server (input  increment__ENA, decrement__ENA, readGray, writeGray__ENA, writeGray$v, readBin, writeBin__ENA, writeBin$v,
-                    output increment__RDY, decrement__RDY, readGray__RDY, writeGray__RDY, readBin__RDY, writeBin__RDY);
-    modport client (output increment__ENA, decrement__ENA, readGray, writeGray__ENA, writeGray$v, readBin, writeBin__ENA, writeBin$v,
-                    input  increment__RDY, decrement__RDY, readGray__RDY, writeGray__RDY, readBin__RDY, writeBin__RDY);
+    modport server (input  increment__ENA, decrement__ENA, writeGray__ENA, writeGray$v, writeBin__ENA, writeBin$v,
+                    output increment__RDY, decrement__RDY, readGray, readGray__RDY, writeGray__RDY, readBin, readBin__RDY, writeBin__RDY);
+    modport client (output increment__ENA, decrement__ENA, writeGray__ENA, writeGray$v, writeBin__ENA, writeBin$v,
+                    input  increment__RDY, decrement__RDY, readGray, readGray__RDY, writeGray__RDY, readBin, readBin__RDY, writeBin__RDY);
 endinterface
 `endif
 //METASTART; GrayCounter

@@ -56,14 +56,13 @@ class P7WrapIfc {
     ZynqInterrupt    intr;
     MaxiO            *MAXIGP0_O;
     MaxiI            MAXIGP0_I;
-    Pps7m            M;
+    __inout  __uint(54) MIO;
     Pps7fclk         FCLK;
 };
 
 class P7Wrap __implements P7WrapIfc {
     PS7 pps;
     ClockTop pclockTop;
-    __connect M = pps.M;
     __connect FCLK = pps.FCLK;
 
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, bool last, __uint(2) resp) if (pps.MAXIGP0.RREADY) {
@@ -77,6 +76,7 @@ class P7Wrap __implements P7WrapIfc {
         pps.MAXIGP0.BRESP = resp;
     }
     __rule init {
+        MIO = pps.MIO;
         pps.FPGAID.LEN = 1;
         pps.MAXIGP0.ACLK = __defaultClock;
         //pps.MAXIGP0.ARESETN = 1;
@@ -125,7 +125,7 @@ class P7Wrap __implements P7WrapIfc {
 };
 class ZynqTopIFC {
     ZynqClock        _;
-    Pps7m            M;
+    __inout  __uint(54) MIO;
 };
 
 class ZynqTop __implements ZynqTopIFC {
@@ -136,8 +136,8 @@ class ZynqTop __implements ZynqTopIFC {
     __connect test.MAXIGP0_O = ps7_ps7_foo.MAXIGP0_O;
     __connect test.MAXIGP0_I = ps7_ps7_foo.MAXIGP0_I;
     __connect _ = ps7_ps7_foo._;
-    __connect M = ps7_ps7_foo.M;
     __rule init {
+        MIO = ps7_ps7_foo.MIO;
         ps7_fclk_0_c.I = ps7_ps7_foo.FCLK.CLK; // [0]
         __defaultClock = ps7_fclk_0_c.O;
         ps7_freset_0_r.I = ps7_ps7_foo.FCLK.RESETN; // [0]

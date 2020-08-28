@@ -9,19 +9,17 @@ module Btest (input wire CLK, input wire nRST,
     reg ready;
     reg [8 - 1:0]writeCount;
     wire RULE$copyRule__RDY;
-    PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
-    PipeIn#(.width(width)) readUser();
+    PipeIn#(.width(32)) readUser();
     Bscan#(.id(4),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
         .toBscan(bscan$toBscan),
-        .fromBscan(bscan$fromBscan));
+        .fromBscan(readUser));
     // Extra assigments, not to output wires
     assign RULE$copyRule__RDY = bscan$toBscan.enq__RDY;
     assign bscan$toBscan.enq$v = nextV;
     assign bscan$toBscan.enq__ENA = 1;
-    assign indication.heard$v = readUser$enq$v;
-    assign indication.heard__ENA = bscan$fromBscan.enq__ENA && bscan$fromBscan.enq__RDY;
-    assign readUser = bscan$fromBscan;
+    assign indication.heard$v = readUser.enq$v;
+    assign indication.heard__ENA = readUser.enq__ENA;
     assign readUser.enq__RDY = indication.heard__RDY;
     assign request.say__RDY = 1;
 

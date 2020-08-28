@@ -35,7 +35,7 @@ INTERFACE P7WrapIfc  {
     INTERFACE ZynqInterrupt intr
     INTERFACE/Ptr MaxiO MAXIGP0_O
     INTERFACE MaxiI MAXIGP0_I
-    INTERFACE Pps7m M
+    FIELD/inout Bit(54) MIO
     INTERFACE Pps7fclk FCLK
 }
 INTERFACE PipeIn  {
@@ -82,7 +82,7 @@ INTERFACE Pps7PS7  {
     INTERFACE Pps7irq IRQ
     INTERFACE Pps7maxigp MAXIGP0
     INTERFACE Pps7maxigp MAXIGP1
-    INTERFACE Pps7m M
+    FIELD/inout Bit(54) MIO
     INTERFACE Pps7ps PS
     INTERFACE Pps7saxiacp SAXIACP
     INTERFACE Pps7saxigp SAXIGP0
@@ -265,9 +265,6 @@ INTERFACE Pps7ftmt  {
 INTERFACE Pps7irq  {
     FIELD/input Bit(20) F2P
     FIELD/output Bit(29) P2F
-}
-INTERFACE Pps7m  {
-    FIELD/inout Bit(54) IO
 }
 INTERFACE Pps7maxigp  {
     FIELD/input Bit(1) ACLK
@@ -484,7 +481,7 @@ INTERFACE ZynqInterruptT  {
 }
 INTERFACE ZynqTopIFC  {
     INTERFACE ZynqClock _
-    INTERFACE Pps7m M
+    FIELD/inout Bit(54) MIO
 }
 INTERFACE l_topIfc  {
     INTERFACE PipeIn request
@@ -498,12 +495,11 @@ EMODULE ClockTop ClockIfc {
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
 }
-EMODULE PS7 Pps7PS7 {
+EMODULE/Verilog PS7 Pps7PS7 {
 }
 EMODULE l_top l_topIfc {
 }
 MODULE P7Wrap P7WrapIfc {
-    INTERFACECONNECT M pps$M Pps7m
     INTERFACECONNECT FCLK pps$FCLK Pps7fclk
     FIELD PS7 pps
     FIELD ClockTop pclockTop
@@ -518,6 +514,7 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(2) :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
     METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(54) :MIO = pps$MIO
         LET Bit(1) :pps$FPGAIDLEN = 1
         LET Bit(1) :pps$MAXIGP0ACLK = __defaultClock
         LET Bit(1) :pps$MAXIGP0RVALID = MAXIGP0_I$R__ENA
@@ -546,9 +543,9 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(1) :FIXED_IO_ps_porb = pps$PSPORB
         LET Bit(1) :FIXED_IO_ps_srstb = pps$PSSRSTB
         LET Bit(4) :pps$DDRARB = 0
-        LET Bit(20) :pps$IRQF2P = intrinterrupt
-        LET Bit(1) :__defaultClock = intrCLK
-        LET Bit(1) :__defaultnReset = intrnRST
+        LET Bit(20) :pps$IRQF2P = intr.interrupt
+        LET Bit(1) :__defaultClock = intr.CLK
+        LET Bit(1) :__defaultnReset = intr.nRST
         LET Bit(1) :pclockTop$CLK = __defaultClock
         LET Bit(1) :pclockTop$nRST = __defaultnReset
     }
@@ -566,20 +563,20 @@ MODULE ZynqTop ZynqTopIFC {
     INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
     INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I MaxiI
     INTERFACECONNECT _ ps7_ps7_foo$_ ZynqClock
-    INTERFACECONNECT M ps7_ps7_foo$M Pps7m
     FIELD P7Wrap ps7_ps7_foo
     FIELD AxiTop test
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
     METHOD/Rule/Action RULE$init__ENA {
-        LET Bit(1) :ps7_fclk_0_c$I = ps7_ps7_foo$FCLKCLK
+        LET Bit(54) :MIO = ps7_ps7_foo$MIO
+        LET Bit(1) :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK.CLK
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
-        LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLKRESETN
+        LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLK.RESETN
         LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
-        LET Bit(1) :ps7_ps7_foo$intrinterrupt = test$interrupt
-        LET Bit(1) :ps7_ps7_foo$intrCLK = __defaultClock
-        LET Bit(1) :ps7_ps7_foo$intrnRST = __defaultnReset
-        LET Bit(1) :test$CLK = __defaultClock
-        LET Bit(1) :test$nRST = __defaultnReset
+        LET Bit(1) :ps7_ps7_foo$intr.interrupt = test.interrupt
+        LET Bit(1) :ps7_ps7_foo$intr.CLK = __defaultClock
+        LET Bit(1) :ps7_ps7_foo$intr.nRST = __defaultnReset
+        LET Bit(1) :test.CLK = __defaultClock
+        LET Bit(1) :test.nRST = __defaultnReset
     }
 }
