@@ -2,29 +2,28 @@
 
 `default_nettype none
 module Btest (input wire CLK, input wire nRST,
-    input wire request$say__ENA,
-    input wire [32 - 1:0]request$say$v,
-    output wire request$say__RDY,
-    output wire indication$heard__ENA,
-    output wire [32 - 1:0]indication$heard$v,
-    input wire indication$heard__RDY);
+    BtestRequest.server request,
+    BtestIndication.client indication);
     reg [32 - 1:0]nextV;
     reg [8 - 1:0]readCount;
     reg ready;
     reg [8 - 1:0]writeCount;
-    wire bscan$fromBscan$enq__ENA;
-    wire [32 - 1:0]bscan$toBscan$enq$v;
-    wire bscan$toBscan$enq__RDY;
+    wire RULE$copyRule__RDY;
+    PipeIn#(.width(32)) bscan$fromBscan();
+    PipeIn#(.width(32)) bscan$toBscan();
+    PipeIn#(.width(width)) readUser();
     Bscan#(.id(4),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
-        .toBscan$enq__ENA(1),
-        .toBscan$enq$v(bscan$toBscan$enq$v),
-        .toBscan$enq__RDY(bscan$toBscan$enq__RDY),
-        .fromBscan$enq__ENA(bscan$fromBscan$enq__ENA),
-        .fromBscan$enq$v(indication$heard$v),
-        .fromBscan$enq__RDY(indication$heard__RDY));
-    assign bscan$toBscan$enq$v = nextV;
-    assign indication$heard__ENA = bscan$fromBscan$enq__ENA;
-    assign request$say__RDY = 1;
+        .toBscan(bscan$toBscan),
+        .fromBscan(bscan$fromBscan));
+    // Extra assigments, not to output wires
+    assign RULE$copyRule__RDY = bscan$toBscan.enq__RDY;
+    assign bscan$toBscan.enq$v = nextV;
+    assign bscan$toBscan.enq__ENA = 1;
+    assign indication.heard$v = readUser$enq$v;
+    assign indication.heard__ENA = bscan$fromBscan.enq__ENA && bscan$fromBscan.enq__RDY;
+    assign readUser = bscan$fromBscan;
+    assign readUser.enq__RDY = indication.heard__RDY;
+    assign request.say__RDY = 1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -34,17 +33,17 @@ module Btest (input wire CLK, input wire nRST,
         writeCount <= 0;
       end // nRST
       else begin
-        if (bscan$toBscan$enq__RDY) begin // RULE$copyRule__ENA
+        if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             ready <= 0;
             writeCount <= writeCount + 1;
         end; // End of RULE$copyRule__ENA
-        if (bscan$fromBscan$enq__ENA && indication$heard__RDY) begin // readUser$enq__ENA
+        if (readUser.enq__ENA && indication.heard__RDY) begin // readUser.enq__ENA
             readCount <= readCount + 1;
-        end; // End of readUser$enq__ENA
-        if (request$say__ENA) begin // request$say__ENA
-            nextV <= request$say$v;
+        end; // End of readUser.enq__ENA
+        if (request.say__ENA) begin // request.say__ENA
+            nextV <= request.say$v;
             ready <= 1;
-        end; // End of request$say__ENA
+        end; // End of request.say__ENA
       end
     end // always @ (posedge CLK)
 endmodule
