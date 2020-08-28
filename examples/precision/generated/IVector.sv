@@ -15,13 +15,12 @@ module IVector (input wire CLK, input wire nRST,
         .in(fifo$in),
         .out(fifo$out));
     // Extra assigments, not to output wires
-    assign RULE$respond$temp.a = fifo$out.first[ 6 - 1 : 0 ];
-    assign RULE$respond$temp.b = fifo$out.first[ 4 - 1 + 6 : 6 ];
+    assign RULE$respond$temp = fifo$out.first;
     assign fifo$in.enq$v = request.say$temp;
     assign fifo$in.enq__ENA = request.say__ENA;
     assign fifo$out.deq__ENA = fifo$out.first__RDY && ind.heard__RDY;
-    assign ind.heard$meth = fifo$out.first[ 6 - 1 : 0 ];
-    assign ind.heard$v = fifo$out.first[ 4 - 1 + 6 : 6 ];
+    assign ind.heard$meth = RULE$respond$temp.a;
+    assign ind.heard$v = RULE$respond$temp.b;
     assign ind.heard__ENA = fifo$out.first__RDY && fifo$out.deq__RDY;
     assign request$say$temp.a = request.say$meth;
     assign request$say$temp.b = request.say$v;

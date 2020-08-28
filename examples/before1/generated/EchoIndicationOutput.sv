@@ -13,16 +13,12 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     EchoIndication_data RULE$output_ruleo$agg_2e_tmp;
     wire RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
-    assign RULE$output_rulee$agg_2e_tmp.data.heard.meth = ind0[ 32 - 1 + 32 : 32 ];
-    assign RULE$output_rulee$agg_2e_tmp.data.heard.v = ind0[ 32 - 1 + 64 : 64 ];
-    assign RULE$output_rulee$agg_2e_tmp.tag = ind0[ 32 - 1 : 0 ];
+    assign RULE$output_rulee$agg_2e_tmp = ind0;
     assign RULE$output_rulee__RDY = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
-    assign RULE$output_ruleo$agg_2e_tmp.data.heard.meth = ind1[ 32 - 1 + 32 : 32 ];
-    assign RULE$output_ruleo$agg_2e_tmp.data.heard.v = ind1[ 32 - 1 + 64 : 64 ];
-    assign RULE$output_ruleo$agg_2e_tmp.tag = ind1[ 32 - 1 : 0 ];
+    assign RULE$output_ruleo$agg_2e_tmp = ind1;
     assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign indication.heard__RDY = !( 0 == ( ind_busy ^ 1 ) );
-    assign pipe.enq$v = ( RULE$output_rulee__RDY ? RULE$output_rulee$agg_2e_tmp : 144'd0 ) | ( RULE$output_ruleo__RDY ? RULE$output_ruleo$agg_2e_tmp : 144'd0 );
+    assign pipe.enq$v = ( RULE$output_rulee__RDY ? ind0 : 144'd0 ) | ( RULE$output_ruleo__RDY ? ind1 : 144'd0 );
     assign pipe.enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
 
     always @( posedge CLK) begin
