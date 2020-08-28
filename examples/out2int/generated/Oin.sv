@@ -29,7 +29,7 @@ module Oin (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+        if (request.say__ENA && first$in.enq__RDY) begin // request.say__ENA
             $display( "REQUESTSAY v %x" , request.say$v );
         end; // End of request.say__ENA
       end
