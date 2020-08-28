@@ -13,15 +13,17 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_delay;
     reg [32 - 1:0]v_temp;
     reg [32 - 1:0]v_type;
+    wire RULE$delay_rule__ENA;
     wire RULE$delay_rule__RDY;
     wire RULE$respond_rule__RDY;
     // Extra assigments, not to output wires
+    assign RULE$delay_rule__ENA = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
     assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
     assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
     assign indication.heard$v = v_delay;
     assign indication.heard2$a = a_delay;
     assign indication.heard2$b = b_delay;
-    assign indication.heard2__ENA = !( ( v_type == 1 ) || ( !RULE$respond_rule__RDY ) );
+    assign indication.heard2__ENA = !( ( v_type == 1 ) || ( busy_delay == 0 ) || ( !RULE$respond_rule__RDY ) );
     assign indication.heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
     assign request.say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
     assign request.say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
@@ -40,7 +42,7 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
+        if (RULE$delay_rule__ENA && RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
             busy <= 0;
             busy_delay <= 1;
             v_delay <= v_temp;
