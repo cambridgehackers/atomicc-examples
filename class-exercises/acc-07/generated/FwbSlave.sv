@@ -13,8 +13,6 @@ module FwbSlave (input wire CLK, input wire nRST,
     reg f_past_valid;
     reg [(32 / 8) - 1:0]nacks;
     reg [(32 / 8) - 1:0]nreqs;
-    wire RULE$init3__RDY;
-    wire RULE$init4__RDY;
     wire [32 - 1:0]addr_share;
     wire [32 - 1:0]data_share;
     wire [(32 / 8) - 1:0]sel_share;
@@ -26,8 +24,6 @@ module FwbSlave (input wire CLK, input wire nRST,
     assign f_outstanding = acyc ? ( nreqs - nacks ) : 0;
     assign f_outstanding__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$init3__RDY = status.ack__RDY && ( status.ack || status.err__RDY );
-    assign RULE$init4__RDY = ( a.stb__ENA == 0 ) || status.stall__RDY;
     assign a.stb__RDY = 1;
     assign addr_share = a.stb$addr;
     assign data_share = a.stb$data;
@@ -45,15 +41,15 @@ module FwbSlave (input wire CLK, input wire nRST,
             if (!acyc)
             nacks <= 0;
         // End of RULE$init2__ENA
-        if (RULE$init3__RDY) begin // RULE$init3__ENA
+        if (status.ack__RDY && ( status.ack || status.err__RDY )) begin // RULE$init3__ENA
             if (status.ack || status.err)
             nacks <= nacks + 1;
         end; // End of RULE$init3__ENA
-        if (RULE$init4__RDY) begin // RULE$init4__ENA
-            if (!( status.stall || ( a.stb__ENA == 0 ) ))
-            nreqs <= nreqs + 1;
+        if (( a.stb__ENA == 0 ) || status.stall__RDY) begin // RULE$init4__ENA
             if (!acyc)
             nreqs <= 0;
+            if (!( status.stall || ( a.stb__ENA == 0 ) ))
+            nreqs <= nreqs + 1;
         end; // End of RULE$init4__ENA
         // RULE$init__ENA
             f_past_valid <= 1;
