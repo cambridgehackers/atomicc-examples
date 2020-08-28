@@ -10,9 +10,12 @@ module BusyCtr #(
     output wire busy__RDY);
     reg [16 - 1:0]counter;
     reg fPastValid;
+    wire RULE$decRule__RDY;
     assign busy = !( counter == 0 );
     assign busy__RDY = 1;
     assign startSignal__RDY = counter == 0;
+    // Extra assigments, not to output wires
+    assign RULE$decRule__RDY = !( counter == 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -20,10 +23,10 @@ module BusyCtr #(
         fPastValid <= 0;
       end // nRST
       else begin
-        if (!( counter == 0 )) begin // RULE$decRule__ENA
+        if (RULE$decRule__RDY) begin // RULE$decRule__ENA
             counter <= counter + ( -1 );
         end; // End of RULE$decRule__ENA
-        if (startSignal__ENA && ( counter == 0 )) begin // startSignal__ENA
+        if (startSignal__ENA && startSignal__RDY) begin // startSignal__ENA
             counter <= MAX_AMOUNT - 1;
         end; // End of startSignal__ENA
       end
