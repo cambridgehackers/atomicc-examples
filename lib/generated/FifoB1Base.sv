@@ -8,12 +8,10 @@ module FifoB1Base #(
     PipeOut.server out);
     reg [width - 1:0]element;
     reg full;
-    wire [width - 1:0]enq_v;
     // Extra assigments, not to output wires
-    assign enq_v = in.enq$v;
     assign in.enq__RDY = !( ( ( full ^ 1 ) | out.deq__ENA ) == 0 );
     assign out.deq__RDY = full || in.enq__ENA;
-    assign out.first = full ? element : enq_v;
+    assign out.first = full ? element : in.enq$v;
     assign out.first__RDY = full || in.enq__ENA;
 
     always @( posedge CLK) begin
@@ -27,7 +25,7 @@ module FifoB1Base #(
             if (out.deq__ENA == 0)
             full <= 1;
         end; // End of in.enq__ENA
-        if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
+        if (out.deq__ENA && ( full || in.enq__ENA )) begin // out.deq__ENA
             full <= 0;
         end; // End of out.deq__ENA
       end
