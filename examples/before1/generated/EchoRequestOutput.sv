@@ -7,7 +7,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     EchoRequest_data request$say$ind;
     EchoRequest_data request$say2$ind;
     // Extra assigments, not to output wires
-    assign pipe.enq$v = ( ( request.say__ENA && request.say__RDY ) ? request.say$ind : 144'd0 ) | ( ( request.say2__ENA && request.say2__RDY ) ? request.say2$ind : 144'd0 );
+    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? request.say$ind : 144'd0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? request.say2$ind : 144'd0 );
     assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;
     assign request$say$ind.data$say$meth = request.say$meth;
     assign request$say$ind.data$say$v = request.say$v;
@@ -22,10 +22,10 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA
+        if (request.say2__ENA && pipe.enq__RDY) begin // request.say2__ENA
             $display( "entered EchoRequestOutput::say2" );
         end; // End of request.say2__ENA
-        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+        if (request.say__ENA && pipe.enq__RDY) begin // request.say__ENA
             $display( "entered EchoRequestOutput::say" );
         end; // End of request.say__ENA
       end
