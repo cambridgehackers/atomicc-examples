@@ -83,12 +83,12 @@ endinterface
 //METASTART; WbPriArbiter
 //METAINVOKE; a.stb__ENA; :o.stb__ENA;
 //METAEXCLUSIVE; a.stb__ENA; b.stb__ENA
-//METAGUARD; a.stb; !( ( 0 == acyc ) || ( !o.stb__RDY ) );
+//METAGUARD; a.stb; !( ( 0 == a.cyc ) || ( !o.stb__RDY ) );
 //METAGUARD; a.ack; o.ack__RDY;
 //METAGUARD; a.stall; o.stall__RDY;
 //METAGUARD; a.err; o.err__RDY;
 //METAINVOKE; b.stb__ENA; :o.stb__ENA;
-//METAGUARD; b.stb; !( ( 0 == ( acyc ^ 1 ) ) || ( !o.stb__RDY ) );
+//METAGUARD; b.stb; !( ( 0 == ( a.cyc ^ 1 ) ) || ( !o.stb__RDY ) );
 //METAGUARD; b.ack; o.ack__RDY;
 //METAGUARD; b.stall; o.stall__RDY;
 //METAGUARD; b.err; o.err__RDY;

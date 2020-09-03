@@ -67,12 +67,12 @@ MODULE FwbSlave FwbSlaveIfc {
     }
     METHOD f_nreqs Bit((32 / 8)) = ((nreqs))
     METHOD f_nacks Bit((32 / 8)) = ((nacks))
-    METHOD f_outstanding Bit((32 / 8)) = ((__phi((acyc):((nreqs) - (nacks)), !(acyc):(0))))
+    METHOD f_outstanding Bit((32 / 8)) = ((__phi((a.cyc):((nreqs) - (nacks)), !(a.cyc):(0))))
     METHOD/Rule/Action RULE$init__ENA {
         STORE :f_past_valid = 1
     }
     METHOD/Rule/Action RULE$init2__ENA {
-        STORE !(acyc):nacks = 0
+        STORE !(a.cyc):nacks = 0
     }
     METHOD/Rule/Action RULE$init3__ENA {
         CALL :status$ack{}
@@ -80,48 +80,48 @@ MODULE FwbSlave FwbSlaveIfc {
         STORE ((status$ack) | ((status$err) & !(status$ack))):nacks = (nacks) + (1)
     }
     METHOD/Rule/Action RULE$init4__ENA {
-        STORE !(acyc):nreqs = 0
+        STORE !(a.cyc):nreqs = 0
         CALL ((a$stb__ENA) != (0)):status$stall{}
         STORE (!(status$stall) & ((a$stb__ENA) != (0))):nreqs = (nreqs) + (1)
     }
     METHOD/Rule/Action RULE$verify__ENA {
         ASSERT !(f_past_valid):assert(((__defaultnReset) != (0)) ^ (1))
-        ASSERT ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):assert((acyc) ^ (1))
+        ASSERT ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):assert((a.cyc) ^ (1))
         ASSERT ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):assert(((a$stb__ENA) != (0)) ^ (1))
         CALL ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):status$ack{}
         ASSERT ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):assert((status$ack) ^ (1))
         CALL ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):status$err{}
         ASSERT ((($past{((__defaultnReset) != (0)) ^ (1)}) != (0)) & (f_past_valid)):assert((status$err) ^ (1))
         CALL (f_past_valid):status$err{}
-        ASSERT ((($past{acyc}) != (0)) & ((($past{status$err}) != (0)) & (f_past_valid))):assert((acyc) ^ (1))
-        ASSERT ((a$stb__ENA) != (0)):assert(acyc)
+        ASSERT ((($past{a.cyc}) != (0)) & ((($past{status$err}) != (0)) & (f_past_valid))):assert((a.cyc) ^ (1))
+        ASSERT ((a$stb__ENA) != (0)):assert(a.cyc)
         CALL ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))):status$stall{}
-        ASSERT ((acyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert(a$stb__ENA)
-        ASSERT ((acyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((we_share) == ($past{we_share}))
-        ASSERT ((acyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((addr_share) == ($past{addr_share}))
-        ASSERT ((acyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((sel_share) == ($past{sel_share}))
-        ASSERT ((we_share) & ((acyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid)))))):assert((data_share) == ($past{data_share}))
+        ASSERT ((a.cyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert(a$stb__ENA)
+        ASSERT ((a.cyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((we_share) == ($past{we_share}))
+        ASSERT ((a.cyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((addr_share) == ($past{addr_share}))
+        ASSERT ((a.cyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid))))):assert((sel_share) == ($past{sel_share}))
+        ASSERT ((we_share) & ((a.cyc) & ((($past{status$stall}) != (0)) & ((($past{a$stb__ENA}) != (0)) & ((($past{__defaultnReset}) != (0)) & (f_past_valid)))))):assert((data_share) == ($past{data_share}))
         ASSERT (((a$stb__ENA) != (0)) & ((($past{a$stb__ENA}) != (0)) & (f_past_valid))):assert((we_share) == ($past{we_share}))
         ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i:(0))) > (0)) & (f_past_valid)):assert((we_share) == ($past{we_share}))
-        CALL (!(acyc) & (!(($past{acyc}) != (0)) & (f_past_valid))):status$ack{}
-        ASSERT (!(acyc) & (!(($past{acyc}) != (0)) & (f_past_valid))):assert((status$ack) ^ (1))
-        CALL (!(acyc) & (!(($past{acyc}) != (0)) & (f_past_valid))):status$err{}
-        ASSERT (!(acyc) & (!(($past{acyc}) != (0)) & (f_past_valid))):assert((status$err) ^ (1))
+        CALL (!(a.cyc) & (!(($past{a.cyc}) != (0)) & (f_past_valid))):status$ack{}
+        ASSERT (!(a.cyc) & (!(($past{a.cyc}) != (0)) & (f_past_valid))):assert((status$ack) ^ (1))
+        CALL (!(a.cyc) & (!(($past{a.cyc}) != (0)) & (f_past_valid))):status$err{}
+        ASSERT (!(a.cyc) & (!(($past{a.cyc}) != (0)) & (f_past_valid))):assert((status$err) ^ (1))
         CALL :status$ack{}
         CALL (status$ack):status$err{}
         ASSERT :assert((status$ack) && ((status$err) ^ (1)))
-        ASSERT :assert((__phi((acyc):((nreqs) - (nacks)), !(acyc):(0))) < (((1) << (4)) - (1)))
-        CALL (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):status$ack{}
-        CALL (((a$stb__ENA) != (0)) & ((status$ack) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)))):status$stall{}
-        ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):assert(__phi((((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):(1), ((status$ack) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc))):(((a$stb__ENA) != (0)) && ((status$stall) ^ (1)))))
-        CALL (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):status$err{}
-        CALL (((a$stb__ENA) != (0)) & ((status$err) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)))):status$stall{}
-        ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):assert(__phi((((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc)):(1), ((status$err) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (acyc))):(((a$stb__ENA) != (0)) && ((status$stall) ^ (1)))))
+        ASSERT :assert((__phi((a.cyc):((nreqs) - (nacks)), !(a.cyc):(0))) < (((1) << (4)) - (1)))
+        CALL (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):status$ack{}
+        CALL (((a$stb__ENA) != (0)) & ((status$ack) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)))):status$stall{}
+        ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):assert(__phi((((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):(1), ((status$ack) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc))):(((a$stb__ENA) != (0)) && ((status$stall) ^ (1)))))
+        CALL (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):status$err{}
+        CALL (((a$stb__ENA) != (0)) & ((status$err) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)))):status$stall{}
+        ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):assert(__phi((((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):(1), ((status$err) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc))):(((a$stb__ENA) != (0)) && ((status$stall) ^ (1)))))
     }
 }
 MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) {
     FIELD Bit(1) r_a_owner
-    METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if ((acyc)) {
+    METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if ((a.cyc)) {
         STORE :r_a_owner = 1
         CALL/Action :o$stb__ENA{a$stb$we,a$stb$addr,a$stb$data,a$stb$sel}
     }
@@ -134,7 +134,7 @@ MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_
     METHOD a$err Bit(1) = (((o$err) & (r_a_owner))) {
         CALL :o$err{}
     }
-    METHOD/Action b$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if (((acyc) ^ (1))) {
+    METHOD/Action b$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if (((a.cyc) ^ (1))) {
         STORE :r_a_owner = 0
         CALL/Action :o$stb__ENA{b$stb$we,b$stb$addr,b$stb$data,b$stb$sel}
     }
