@@ -1,50 +1,66 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FifoPIfc  {
+    FILE fifo_OC_h
     INTERFACE PipeIn_OC_4 in
     INTERFACE/Ptr PipeIn_OC_4 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=4,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_2 in
     INTERFACE/Ptr PipeIn_OC_3 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_3  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_4  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FifoPBase(width=32) FifoPIfc {
+    FILE fifo_OC_h
 }
 EMODULE FunnelBase(funnelWidth=4,width=32) FunnelBaseIfc(funnelWidth=4,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE FunnelBufferedBase(funnelWidth=4,width=32) FunnelBaseIfc(funnelWidth=4,width=32) {
+    FILE funnel_OC_cpp
     INTERFACECONNECT base$out out PipeIn_OC_3
     FIELD/Count funnelWidth  FifoPBase(width=32) buffer
     FIELD FunnelBase(funnelWidth=4,width=32) base

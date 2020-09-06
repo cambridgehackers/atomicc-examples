@@ -1,37 +1,48 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE ReqArbIfc  {
+    FILE reqarb_OC_cpp
     INTERFACE/Ptr ReqCallout out
     METHOD/Action a__ENA ( Bit(1) v )
     METHOD/Action b__ENA ( Bit(1) v )
 }
 INTERFACE ReqCallout  {
+    FILE reqarb_OC_cpp
     METHOD/Action a__ENA ( Bit(1) v )
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE ReqArb ReqArbIfc {
+    FILE reqarb_OC_cpp
     METHOD/Action a__ENA ( Bit(1) v ) if ((((b__ENA) != (0)) ^ (1))) {
         CALL/Action :out$a__ENA{a$v}
     }

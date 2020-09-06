@@ -24,7 +24,7 @@
  */
 #include "fifo.h"
 #include "mux.h"
-#include "lpmdef.h"
+#include "lpm.h"
 
 /* For reference, s/w implementation of LPM:
 int lpm(IPA ipa)

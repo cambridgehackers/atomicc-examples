@@ -19,7 +19,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "lpmdef.h"
+#include "lpm.h"
 
 class LpmMemory __implements LpmMem {
     int delayCount;

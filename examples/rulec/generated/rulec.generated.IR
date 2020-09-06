@@ -1,45 +1,57 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE EchoIfc  {
+    FILE rulec_OC_cpp
     SOFTWARE request
     SOFTWARE indication
     INTERFACE EchoRequest request
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EchoIndication  {
+    FILE rulec_OC_cpp
     METHOD/Action heard__ENA ( Bit(32) v )
     METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
 }
 INTERFACE EchoRequest  {
+    FILE rulec_OC_cpp
     METHOD/Action say__ENA ( Bit(32) v )
     METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action setLeds__ENA ( Bit(8) v )
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE Echo EchoIfc {
+    FILE rulec_OC_cpp
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
     FIELD Bit(32) v_temp

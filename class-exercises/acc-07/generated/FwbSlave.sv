@@ -46,10 +46,10 @@ module FwbSlave (input wire CLK, input wire nRST,
             nacks <= nacks + 1;
         end; // End of RULE$init3__ENA
         if (( a.stb__ENA == 0 ) || status.stall__RDY) begin // RULE$init4__ENA
-            if (!a.cyc)
-            nreqs <= 0;
             if (!( status.stall || ( a.stb__ENA == 0 ) ))
             nreqs <= nreqs + 1;
+            if (!a.cyc)
+            nreqs <= 0;
         end; // End of RULE$init4__ENA
         // RULE$init__ENA
             f_past_valid <= 1;

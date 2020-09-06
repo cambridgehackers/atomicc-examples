@@ -2,6 +2,53 @@
 `define __connect_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __EchoIndication_data_DEF__
+`define __EchoIndication_data_DEF__
+typedef struct packed {
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
+    logic [32 - 1:0] tag;
+} EchoIndication_data;
+`endif
+`ifndef __EchoRequest_data_DEF__
+`define __EchoRequest_data_DEF__
+typedef struct packed {
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data;
+    logic [32 - 1:0] tag;
+} EchoRequest_data;
+`endif
+`ifndef __ValueType_DEF__
+`define __ValueType_DEF__
+typedef struct packed {
+    logic [32 - 1:0] b;
+    logic [32 - 1:0] a;
+} ValueType;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
+typedef struct packed {
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
+typedef struct packed {
+    logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
+typedef struct packed {
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
+typedef struct packed {
+    logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
+`endif
 `ifndef __EchoRequest_DEF__
 `define __EchoRequest_DEF__
 interface EchoRequest;

@@ -1,40 +1,52 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE Out2InIfc  {
+    FILE out2in_OC_h
     INTERFACE/Ptr PipeOut in
     INTERFACE/Ptr PipeIn_OC_2 out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(999999) v )
 }
 INTERFACE PipeOut  {
+    FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(999999)
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE Out2InBase(width=999999) Out2InIfc {
+    FILE out2in_OC_cpp
     METHOD/Rule/Action RULE$copyRule__ENA {
         CALL :in$first{}
         CALL/Action :out$enq__ENA{in$first}

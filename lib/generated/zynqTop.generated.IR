@@ -1,36 +1,44 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE AxiTopIfc  {
+    FILE axiTop_OC_h
     INTERFACE ZynqInterruptT _
     INTERFACE MaxiO MAXIGP0_O
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
 INTERFACE ClockIfc  {
+    FILE clockTop_OC_h
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MaxiI  {
+    FILE axiTop_OC_h
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
     METHOD/Action B__ENA ( Bit(12) id , Bit(2) resp )
 }
 INTERFACE MaxiO  {
+    FILE axiTop_OC_h
     METHOD/Action AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
 INTERFACE MbufgBUFG  {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
     FIELD/input Bit(1) I
     FIELD/output Bit(1) O
 }
 INTERFACE P7WrapIfc  {
+    FILE zynqTop_OC_cpp
     INTERFACE ZynqClock _
     INTERFACE ZynqInterrupt intr
     INTERFACE/Ptr MaxiO MAXIGP0_O
@@ -39,15 +47,19 @@ INTERFACE P7WrapIfc  {
     INTERFACE Pps7fclk FCLK
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE Pps7PS7  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     INTERFACE Pps7ddr DDR
     INTERFACE Pps7dma DMA0
     INTERFACE Pps7dma DMA1
@@ -93,6 +105,7 @@ INTERFACE Pps7PS7  {
     INTERFACE Pps7saxihp SAXIHP3
 }
 INTERFACE Pps7ddr  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/inout Bit(15) A
     FIELD/input Bit(4) ARB
     FIELD/inout Bit(3) BA
@@ -113,6 +126,7 @@ INTERFACE Pps7ddr  {
     FIELD/inout Bit(1) WEB
 }
 INTERFACE Pps7dma  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(1) DAREADY
     FIELD/output Bit(2) DATYPE
@@ -124,10 +138,12 @@ INTERFACE Pps7dma  {
     FIELD/output Bit(1) RSTN
 }
 INTERFACE Pps7emiocan  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) PHYRX
     FIELD/output Bit(1) PHYTX
 }
 INTERFACE Pps7emioenet  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) EXTINTIN
     FIELD/input Bit(1) GMIICOL
     FIELD/input Bit(1) GMIICRS
@@ -155,11 +171,13 @@ INTERFACE Pps7emioenet  {
     FIELD/output Bit(1) SOFTX
 }
 INTERFACE Pps7emiogpio  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(64) I
     FIELD/output Bit(64) O
     FIELD/output Bit(64) TN
 }
 INTERFACE Pps7emioi2c  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) SCLI
     FIELD/output Bit(1) SCLO
     FIELD/output Bit(1) SCLTN
@@ -168,6 +186,7 @@ INTERFACE Pps7emioi2c  {
     FIELD/output Bit(1) SDATN
 }
 INTERFACE Pps7emiopjtag  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) TCK
     FIELD/input Bit(1) TDI
     FIELD/output Bit(1) TDO
@@ -175,6 +194,7 @@ INTERFACE Pps7emiopjtag  {
     FIELD/input Bit(1) TMS
 }
 INTERFACE Pps7emiosdio  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/output Bit(1) BUSPOW
     FIELD/output Bit(3) BUSVOLT
     FIELD/input Bit(1) CDN
@@ -190,6 +210,7 @@ INTERFACE Pps7emiosdio  {
     FIELD/input Bit(1) WP
 }
 INTERFACE Pps7emiospi  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) MI
     FIELD/output Bit(1) MO
     FIELD/output Bit(1) MOTN
@@ -204,18 +225,22 @@ INTERFACE Pps7emiospi  {
     FIELD/output Bit(1) STN
 }
 INTERFACE Pps7emiosramint  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) IN
 }
 INTERFACE Pps7emiotrace  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) CLK
     FIELD/output Bit(1) CTL
     FIELD/output Bit(32) DATA
 }
 INTERFACE Pps7emiottc  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(3) CLKI
     FIELD/output Bit(3) WAVEO
 }
 INTERFACE Pps7emiouart  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) CTSN
     FIELD/input Bit(1) DCDN
     FIELD/input Bit(1) DSRN
@@ -226,35 +251,42 @@ INTERFACE Pps7emiouart  {
     FIELD/output Bit(1) TX
 }
 INTERFACE Pps7emiousb  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/output Bit(2) PORTINDCTL
     FIELD/input Bit(1) VBUSPWRFAULT
     FIELD/output Bit(1) VBUSPWRSELECT
 }
 INTERFACE Pps7emiowdt  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) CLKI
     FIELD/output Bit(1) RSTO
 }
 INTERFACE Pps7event  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) EVENTI
     FIELD/output Bit(1) EVENTO
     FIELD/output Bit(2) STANDBYWFE
     FIELD/output Bit(2) STANDBYWFI
 }
 INTERFACE Pps7fclk  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/output Bit(4) CLK
     FIELD/input Bit(4) CLKTRIGN
     FIELD/output Bit(4) RESETN
 }
 INTERFACE Pps7fpgaid  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) LEN
 }
 INTERFACE Pps7ftmd  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(4) TRACEINATID
     FIELD/input Bit(1) TRACEINCLOCK
     FIELD/input Bit(32) TRACEINDATA
     FIELD/input Bit(1) TRACEINVALID
 }
 INTERFACE Pps7ftmt  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(32) F2PDEBUG
     FIELD/input Bit(4) F2PTRIG
     FIELD/output Bit(4) F2PTRIGACK
@@ -263,10 +295,12 @@ INTERFACE Pps7ftmt  {
     FIELD/input Bit(4) P2FTRIGACK
 }
 INTERFACE Pps7irq  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(20) F2P
     FIELD/output Bit(29) P2F
 }
 INTERFACE Pps7maxigp  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) ACLK
     FIELD/output Bit(32) ARADDR
     FIELD/output Bit(2) ARBURST
@@ -309,11 +343,13 @@ INTERFACE Pps7maxigp  {
     FIELD/output Bit(1) WVALID
 }
 INTERFACE Pps7ps  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/inout Bit(1) CLK
     FIELD/inout Bit(1) PORB
     FIELD/inout Bit(1) SRSTB
 }
 INTERFACE Pps7saxiacp  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -358,6 +394,7 @@ INTERFACE Pps7saxiacp  {
     FIELD/input Bit(1) WVALID
 }
 INTERFACE Pps7saxigp  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -400,6 +437,7 @@ INTERFACE Pps7saxigp  {
     FIELD/input Bit(1) WVALID
 }
 INTERFACE Pps7saxihp  {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
     FIELD/input Bit(1) ACLK
     FIELD/input Bit(32) ARADDR
     FIELD/input Bit(2) ARBURST
@@ -448,6 +486,7 @@ INTERFACE Pps7saxihp  {
     FIELD/input Bit(1) WVALID
 }
 INTERFACE ZynqClock  {
+    FILE zynqTop_OC_cpp
     FIELD/inout Bit(15) DDR_Addr
     FIELD/inout Bit(3) DDR_BankAddr
     FIELD/inout Bit(1) DDR_CAS_n
@@ -470,36 +509,47 @@ INTERFACE ZynqClock  {
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
 }
 INTERFACE ZynqInterrupt  {
+    FILE zynqTop_OC_cpp
     FIELD/input Bit(1) interrupt
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
 }
 INTERFACE ZynqInterruptT  {
+    FILE axiTop_OC_h
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) interrupt
 }
 INTERFACE ZynqTopIFC  {
+    FILE zynqTop_OC_cpp
     INTERFACE ZynqClock _
     FIELD/inout Bit(54) MIO
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE AxiTop AxiTopIfc {
+    FILE axiTop_OC_h
 }
 EMODULE BUFG MbufgBUFG {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
 EMODULE ClockTop ClockIfc {
+    FILE clockTop_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE/Verilog PS7 Pps7PS7 {
+    FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE P7Wrap P7WrapIfc {
+    FILE zynqTop_OC_cpp
     INTERFACECONNECT FCLK pps$FCLK Pps7fclk
     FIELD PS7 pps
     FIELD ClockTop pclockTop
@@ -560,6 +610,7 @@ MODULE P7Wrap P7WrapIfc {
     }
 }
 MODULE ZynqTop ZynqTopIFC {
+    FILE zynqTop_OC_cpp
     INTERFACECONNECT test$MAXIGP0_O ps7_ps7_foo$MAXIGP0_O MaxiO
     INTERFACECONNECT test$MAXIGP0_I ps7_ps7_foo$MAXIGP0_I MaxiI
     INTERFACECONNECT _ ps7_ps7_foo$_ ZynqClock

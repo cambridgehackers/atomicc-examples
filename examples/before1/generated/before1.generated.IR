@@ -1,107 +1,136 @@
 STRUCT EchoIndication_data  {
+    FILE before1_OC_cpp
     FIELD Bit(32) tag
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
 }
 STRUCT EchoRequest_data  {
+    FILE before1_OC_cpp
     FIELD Bit(32) tag
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
 }
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union  {
+    FILE before1_OC_cpp
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard  {
+    FILE before1_OC_cpp
     FIELD Bit(32) meth
     FIELD Bit(32) v
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union  {
+    FILE before1_OC_cpp
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
     FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say  {
+    FILE before1_OC_cpp
     FIELD Bit(32) meth
     FIELD Bit(32) v
 }
 STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2  {
+    FILE before1_OC_cpp
     FIELD Bit(32) meth
     FIELD Bit(32) v
     FIELD Bit(32) v2
 }
 INTERFACE ConnectIFC  {
+    FILE before1_OC_cpp
     INTERFACE EchoRequest request
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIIIfc  {
+    FILE before1_OC_cpp
     INTERFACE PipeIn_OC_3 pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
+    FILE before1_OC_cpp
     INTERFACE EchoIndication indication
     INTERFACE/Ptr PipeIn_OC_3 pipe
 }
 INTERFACE ERIIfc  {
+    FILE before1_OC_cpp
     INTERFACE PipeIn_OC_2 pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
+    FILE before1_OC_cpp
     INTERFACE EchoRequest request
     INTERFACE/Ptr PipeIn_OC_2 pipe
 }
 INTERFACE EchoIfc  {
+    FILE before1_OC_cpp
     INTERFACE EchoRequest request
     INTERFACE Swap swap
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EchoIndication  {
+    FILE before1_OC_cpp
     METHOD/Action heard__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE EchoRequest  {
+    FILE before1_OC_cpp
     METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
     METHOD/Action say2__ENA ( Bit(32) meth , Bit(32) v )
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MuxPipeIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
     INTERFACE PipeIn in
     INTERFACE PipeIn forward
     INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( EchoRequest_data v )
 }
 INTERFACE PipeIn_OC_3  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( EchoIndication_data v )
 }
 INTERFACE Swap  {
+    FILE before1_OC_cpp
     METHOD/Action y2x__ENA
     METHOD/Action y2xnull__ENA
     METHOD/Action x2y__ENA
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE Connect ConnectIFC {
+    FILE before1_OC_cpp
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
     INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn_OC_3
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
@@ -129,6 +158,7 @@ MODULE Connect ConnectIFC {
     }
 }
 MODULE Echo EchoIfc {
+    FILE before1_OC_cpp
     FIELD Bit(1) busy
     FIELD Bit(32) meth_temp
     FIELD Bit(32) v_temp
@@ -174,6 +204,7 @@ MODULE Echo EchoIfc {
     }
 }
 MODULE EchoIndicationInput EIIIfc {
+    FILE before1_OC_cpp
     FIELD Bit(1) busy_delay
     FIELD Bit(32) meth_delay
     FIELD Bit(32) v_delay
@@ -190,6 +221,7 @@ MODULE EchoIndicationInput EIIIfc {
     }
 }
 MODULE EchoIndicationOutput EIOIfc {
+    FILE before1_OC_cpp
     FIELD EchoIndication_data ind0
     FIELD EchoIndication_data ind1
     FIELD Bit(1) ind_busy
@@ -219,6 +251,7 @@ MODULE EchoIndicationOutput EIOIfc {
     }
 }
 MODULE EchoRequestInput ERIIfc {
+    FILE before1_OC_cpp
     METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
         PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",pipe$enq$v$tag}
         CALL/Action ((pipe$enq$v$tag) == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
@@ -226,6 +259,7 @@ MODULE EchoRequestInput ERIIfc {
     }
 }
 MODULE EchoRequestOutput EROIfc {
+    FILE before1_OC_cpp
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}

@@ -1,50 +1,66 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE AfB(width=32)  {
+    FILE adapter_OC_h
     INTERFACE PipeInB(width=32) in
     INTERFACE/Ptr PipeIn out
 }
 INTERFACE AtB(width=32)  {
+    FILE adapter_OC_h
     INTERFACE PipeIn in
     INTERFACE/Ptr PipeInB(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInB(width=32)  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE UserTopIfc  {
+    FILE userTop_OC_h
     INTERFACE PipeInB(width=32) write
     INTERFACE/Ptr PipeInB(width=32) read
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE AdapterFromBus(width=32) AfB(width=32) {
+    FILE adapter_OC_h
 }
 EMODULE AdapterToBus(width=32) AtB(width=32) {
+    FILE adapter_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE UserTop UserTopIfc {
+    FILE userTop_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE UserTop UserTopIfc {
+    FILE userTop_OC_cpp
     INTERFACECONNECT wadapter_0$in write PipeInB(width=32)
     INTERFACECONNECT read radapter_0$out PipeInB(width=32)
     INTERFACECONNECT ctop$request wadapter_0$out PipeIn

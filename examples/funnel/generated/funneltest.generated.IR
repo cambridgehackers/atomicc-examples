@@ -1,100 +1,130 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_8 in
     INTERFACE PipeOut out
 }
 INTERFACE FifoPIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn_OC_2 in
     INTERFACE/Ptr PipeIn_OC_2 out
 }
 INTERFACE FifoPIfc_OC_3  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn_OC_4 in
     INTERFACE/Ptr PipeIn_OC_4 out
 }
 INTERFACE Fifo_OC_9  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_10 in
     INTERFACE PipeOut_OC_11 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=4,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_5 in
     INTERFACE/Ptr PipeIn_OC_6 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE FunnelIfc(funnelWidth=4)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_funnel_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_7 in
     INTERFACE/Ptr PipeIn_OC_7 out
 }
 INTERFACE FunnelIndication  {
+    FILE funneltest_OC_cpp
     METHOD/Action heard__ENA ( Bit(32) v )
 }
 INTERFACE FunnelRequest  {
+    FILE funneltest_OC_cpp
     METHOD/Action say__ENA ( Bit(32) v )
 }
 INTERFACE FunnelTestIfc  {
+    FILE funneltest_OC_cpp
     SOFTWARE request
     SOFTWARE indication
     INTERFACE FunnelRequest request
     INTERFACE/Ptr FunnelIndication indication
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_10  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_4  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_5  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_6  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_7  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_8  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeOut  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
 INTERFACE PipeOut_OC_11  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=32) Fifo {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FifoPBase(width=32) FifoPIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=4,width=32) FunnelBaseIfc(funnelWidth=4,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE Fifo1 Fifo_OC_9 {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -107,16 +137,19 @@ MODULE Fifo1 Fifo_OC_9 {
     }
 }
 MODULE FifoP FifoPIfc_OC_3 {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACECONNECT fifo$in in PipeIn_OC_2
     INTERFACECONNECT fifo$out out PipeIn_OC_2
     FIELD FifoPBase(width=32) fifo
 }
 MODULE FunnelBuffered(funnelWidth=4) FunnelIfc(funnelWidth=4) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_funnel_OC_h
     INTERFACECONNECT base$in in PipeIn_OC_5
     INTERFACECONNECT base$out out PipeIn_OC_6
     FIELD FunnelBufferedBase(funnelWidth=4,width=32) base
 }
 MODULE FunnelTest FunnelTestIfc {
+    FILE funneltest_OC_cpp
     INTERFACECONNECT funnel$out result$in PipeIn_OC_7
     FIELD/Count 4  FifoP fifo
     FIELD FunnelBuffered(funnelWidth=4) funnel

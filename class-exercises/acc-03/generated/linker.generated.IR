@@ -13,6 +13,7 @@ FILE generated/BusyCtr.sv
 FILE generated/busyctr.generated.vh
 FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/atomicc.generated.vh
 FILE ../../lib/generated/axiTop.generated.vh
 FILE ../../lib/generated/bscan.generated.vh
 FILE ../../lib/generated/clockTop.generated.vh

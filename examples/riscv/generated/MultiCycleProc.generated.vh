@@ -2,6 +2,14 @@
 `define __MultiCycleProc_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __ExecResult_DEF__
+`define __ExecResult_DEF__
+typedef struct packed {
+    logic [32 - 1:0] data;
+    logic [32 - 1:0] addr;
+    logic [32 - 1:0] nextPC;
+} ExecResult;
+`endif
 `ifndef __Decoder_DEF__
 `define __Decoder_DEF__
 interface Decoder;

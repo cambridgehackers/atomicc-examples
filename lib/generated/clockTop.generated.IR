@@ -1,26 +1,32 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE ClockIfc  {
+    FILE clockTop_OC_h
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MResetInverterResetInverter  {
+    FILE VResetInverter_OC_h
     FIELD/input Bit(1) RESET_IN
     FIELD/output Bit(1) RESET_OUT
 }
 INTERFACE MbufgBUFG  {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
     FIELD/input Bit(1) I
     FIELD/output Bit(1) O
 }
 INTERFACE Mmcme2MMCME2_ADV  {
+    FILE _OC__OC__PC_xilinx_PC_VMMCME2_ADV_OC_h
     FIELD/Ptr/parameter Bit(8) BANDWIDTH
     FIELD/input Bit(1) CLKFBIN
     FIELD/output Bit(1) CLKFBOUT
@@ -104,31 +110,42 @@ INTERFACE Mmcme2MMCME2_ADV  {
     FIELD/Ptr/parameter Bit(8) STARTUP_WAIT
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE BUFG MbufgBUFG {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
 EMODULE ClockTop ClockIfc {
+    FILE clockTop_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {
+    FILE _OC__OC__PC_xilinx_PC_VMMCME2_ADV_OC_h
 }
 EMODULE ResetInverter MResetInverterResetInverter {
+    FILE resetInverter_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE ClockTop ClockIfc {
+    FILE clockTop_OC_cpp
     FIELD MMCME2_ADV ps7_clockGen_pll
     PARAMS ps7_clockGen_pll <REF_JITTER2:0.01;REF_JITTER1:0.01;CLKOUT6_PHASE:0.0;CLKOUT6_DUTY_CYCLE:0.5;CLKOUT6_DIVIDE:10;CLKOUT5_PHASE:0.0;CLKOUT5_DUTY_CYCLE:0.5;CLKOUT5_DIVIDE:10;CLKOUT4_PHASE:0.0;CLKOUT4_DUTY_CYCLE:0.5;CLKOUT4_DIVIDE:10;CLKOUT3_PHASE:0.0;CLKOUT3_DUTY_CYCLE:0.5;CLKOUT3_DIVIDE:10;CLKOUT2_PHASE:0.0;CLKOUT2_DUTY_CYCLE:0.5;CLKOUT2_DIVIDE:10;CLKOUT1_PHASE:0.0;CLKOUT1_DUTY_CYCLE:0.5;CLKOUT1_DIVIDE:10;CLKOUT0_PHASE:0.0;CLKOUT0_DUTY_CYCLE:0.5;CLKOUT0_DIVIDE_F:5.0;DIVCLK_DIVIDE:1;CLKIN2_PERIOD:0.0;CLKIN1_PERIOD:10.0;CLKFBOUT_PHASE:0.0;CLKFBOUT_MULT_F:10.0;STARTUP_WAIT:"FALSE";COMPENSATION:"ZHOLD";CLKOUT4_CASCADE:"FALSE";CLKOUT6_USE_FINE_PS:"FALSE";CLKOUT5_USE_FINE_PS:"FALSE";CLKOUT4_USE_FINE_PS:"FALSE";CLKOUT3_USE_FINE_PS:"FALSE";CLKOUT2_USE_FINE_PS:"FALSE";CLKOUT1_USE_FINE_PS:"FALSE";CLKOUT0_USE_FINE_PS:"FALSE";CLKFBOUT_USE_FINE_PS:"FALSE";BANDWIDTH:"OPTIMIZED">
     FIELD ResetInverter rinverter

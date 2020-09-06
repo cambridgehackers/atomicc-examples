@@ -2,6 +2,19 @@
 `define __clock_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __MIOBUF_DEF__
+`define __MIOBUF_DEF__
+interface MIOBUF;
+    logic  I;
+    logic  IO;
+    logic  O;
+    logic  T;
+    modport server (input  I, T,
+                    output O);
+    modport client (output I, T,
+                    input  O);
+endinterface
+`endif
 `ifndef __Ft600_DEF__
 `define __Ft600_DEF__
 interface Ft600;

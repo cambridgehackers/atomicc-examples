@@ -1,12 +1,15 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE BscanIfc(width=32)  {
+    FILE bscan_OC_h
     INTERFACE PipeIn_OC_2 toBscan
     INTERFACE/Ptr PipeIn_OC_3 fromBscan
 }
 INTERFACE BscanLocalIfc(width=32)  {
+    FILE bscan_OC_cpp
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) capture
@@ -18,10 +21,12 @@ INTERFACE BscanLocalIfc(width=32)  {
     INTERFACE/Ptr PipeInSync_OC_5 fromBscan
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MBSCANE2IFC  {
+    FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
     FIELD/output Bit(1) CAPTURE
     FIELD/Ptr/parameter Bit(8) DISABLE_JTAG
     FIELD/output Bit(1) DRCK
@@ -37,55 +42,73 @@ INTERFACE MBSCANE2IFC  {
     FIELD/output Bit(1) UPDATE
 }
 INTERFACE MbufgBUFG  {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
     FIELD/input Bit(1) I
     FIELD/output Bit(1) O
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeInSync  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn_OC_4 _
 }
 INTERFACE PipeInSync_OC_5  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn_OC_6 _
 }
 INTERFACE PipeInSync_OC_7  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn_OC_8 _
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_3  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_4  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_6  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_8  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(3) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE BSCANE2 MBSCANE2IFC {
+    FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
 }
 EMODULE BUFG MbufgBUFG {
+    FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
+    FILE bscan_OC_cpp
     INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync_OC_7
     FIELD BSCANE2 bscan
     PARAMS bscan <JTAG_CHAIN:id>
@@ -110,6 +133,7 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     }
 }
 MODULE BscanLocal(width=32) BscanLocalIfc(width=32) {
+    FILE bscan_OC_cpp
     FIELD Bit(32) shiftReg
     FIELD Bit(1) notReady
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((capture) & ((notReady) ^ (1)))) {

@@ -12,6 +12,10 @@ INTERFACE PipeIn  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
+INTERFACE PipeInB(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
 INTERFACE PipeIn_OC_0  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
@@ -20,12 +24,20 @@ INTERFACE PipeIn_OC_1  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
-INTERFACE SyncFFIfc  {
-    FILE syncFF_OC_h
-    FIELD/input Bit(1) CLK
-    FIELD/input Bit(1) nRST
-    FIELD/output Bit(1) out
-    FIELD/input Bit(1) in
+INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(32) v )
+}
+INTERFACE PipeOut  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(32)
+}
+INTERFACE atomiccDummyIfc  {
+    FILE atomicc_OC_cpp
+    INTERFACE PipeIn_OC_2 pi
+    INTERFACE PipeOut po
+    INTERFACE PipeInB(width=32) pib
 }
 INTERFACE l_topIfc  {
     FILE atomicc_OC_h
@@ -38,13 +50,6 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 EMODULE l_top l_topIfc {
     FILE atomicc_OC_h
 }
-MODULE SyncFF SyncFFIfc {
-    FILE syncFF_OC_cpp
-    FIELD Bit(1) one
-    FIELD Bit(1) two
-    METHOD/Rule/Action RULE$init__ENA {
-        STORE :one = in
-        STORE :two = one
-        LET Bit(1) :out = two
-    }
+MODULE atomiccDummy atomiccDummyIfc {
+    FILE atomicc_OC_cpp
 }

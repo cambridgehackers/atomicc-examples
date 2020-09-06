@@ -1,12 +1,15 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE FwbSlaveIfc  {
+    FILE fwbslave_OC_h
     INTERFACE WishboneRequestType a
     INTERFACE/Ptr WishboneStatusType status
     METHOD f_nreqs Bit((32 / 8))
@@ -14,29 +17,36 @@ INTERFACE FwbSlaveIfc  {
     METHOD f_outstanding Bit((32 / 8))
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1)  {
+    FILE wbpriarbiter_OC_cpp
     INTERFACE WishboneType a
     INTERFACE WishboneType b
     INTERFACE/Ptr WishboneType o
 }
 INTERFACE WishboneRequestType  {
+    FILE wishbone_OC_h
     FIELD/input Bit(1) cyc
     METHOD/Action stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel )
 }
 INTERFACE WishboneStatusType  {
+    FILE wishbone_OC_h
     METHOD ack Bit(1)
     METHOD stall Bit(1)
     METHOD err Bit(1)
 }
 INTERFACE WishboneType  {
+    FILE wishbone_OC_h
     FIELD/input Bit(1) cyc
     METHOD/Action stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel )
     METHOD ack Bit(1)
@@ -44,14 +54,18 @@ INTERFACE WishboneType  {
     METHOD err Bit(1)
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE FwbSlave FwbSlaveIfc {
+    FILE fwbslave_OC_h
     FIELD Bit(1) f_past_valid
     FIELD Bit((32 / 8)) nreqs
     FIELD Bit((32 / 8)) nacks
@@ -120,6 +134,7 @@ MODULE FwbSlave FwbSlaveIfc {
     }
 }
 MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) {
+    FILE wbpriarbiter_OC_cpp
     FIELD Bit(1) r_a_owner
     METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if ((a.cyc)) {
         STORE :r_a_owner = 1

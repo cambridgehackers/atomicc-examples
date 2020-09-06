@@ -1,106 +1,137 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 STRUCT ProcessData  {
+    FILE lpm_OC_h
     FIELD Bit(4) ticket
     FIELD Bit(16) IPA
     FIELD Bit(3) state
 }
 INTERFACE Fifo  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
 INTERFACE Fifo_OC_3  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_4 in
     INTERFACE PipeOut_OC_5 out
 }
 INTERFACE Fifo_OC_6  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_7 in
     INTERFACE PipeOut_OC_8 out
 }
 INTERFACE Fifo_OC_9  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn_OC_10 in
     INTERFACE PipeOut_OC_11 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE LpmIfc  {
+    FILE lpm_OC_cpp
     INTERFACE/Ptr PipeIn_OC_4 outQ
     METHOD/Action enter__ENA ( Bit(32) x )
 }
 INTERFACE LpmMem  {
+    FILE lpm_OC_h
     METHOD/Action req__ENA ( Bit(32) v )
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
 }
 INTERFACE MuxPipeIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
     INTERFACE PipeIn in
     INTERFACE PipeIn forward
     INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_10  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( ProcessData v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_4  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_7  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(23) v )
 }
 INTERFACE PipeOut  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
 INTERFACE PipeOut_OC_11  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first ProcessData
 }
 INTERFACE PipeOut_OC_5  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(32)
 }
 INTERFACE PipeOut_OC_8  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(23)
 }
 INTERFACE TickIfc  {
+    FILE lpm_OC_h
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE BufTicket TickIfc {
+    FILE lpm_OC_h
 }
 EMODULE Fifo1Base(width=32) Fifo {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FifoB1Base(width=23) Fifo_OC_6 {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE LpmMemory LpmMem {
+    FILE lpm_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE Fifo1 Fifo_OC_3 {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -113,6 +144,7 @@ MODULE Fifo1 Fifo_OC_3 {
     }
 }
 MODULE FifoB1 Fifo_OC_9 {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD FifoB1Base(width=23) fifo
     METHOD/Action in$enq__ENA ( ProcessData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -127,6 +159,7 @@ MODULE FifoB1 Fifo_OC_9 {
     }
 }
 MODULE Lpm LpmIfc {
+    FILE lpm_OC_cpp
     FIELD BufTicket compBuf
     FIELD Fifo1 inQ
     FIELD FifoB1 fifo

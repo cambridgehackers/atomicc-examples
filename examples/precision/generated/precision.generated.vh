@@ -2,6 +2,19 @@
 `define __precision_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __IVectorTest_DEF__
+`define __IVectorTest_DEF__
+typedef struct packed {
+    IVector ivector;
+} IVectorTest;
+`endif
+`ifndef __ValueType_DEF__
+`define __ValueType_DEF__
+typedef struct packed {
+    logic [4 - 1:0] b;
+    logic [6 - 1:0] a;
+} ValueType;
+`endif
 `ifndef __IVectorRequest_DEF__
 `define __IVectorRequest_DEF__
 interface IVectorRequest;

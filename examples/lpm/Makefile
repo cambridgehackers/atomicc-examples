@@ -10,4 +10,4 @@ include ../../makefile.in
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/lpm.ll lpm.cpp
-	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/memory.ll memory.cpp
+	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/lpmmemory.ll lpmmemory.cpp

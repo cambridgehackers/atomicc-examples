@@ -1,8 +1,10 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE ConfigCounterIfc(count_sz=10)  {
+    FILE configCounter_OC_cpp
     METHOD/Action decrement__ENA ( Bit(count_sz) v )
     METHOD/Action maybeDecrement ( Bit(10) v ) Bit(1)
     METHOD/Action increment__ENA ( Bit(count_sz) v )
@@ -10,27 +12,35 @@ INTERFACE ConfigCounterIfc(count_sz=10)  {
     METHOD positive Bit(1)
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {
+    FILE configCounter_OC_cpp
     FIELD/shared Bit(10) inc_wire
     FIELD/shared Bit(10) dec_wire
     FIELD Bit(10) cnt

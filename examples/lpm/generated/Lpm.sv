@@ -43,6 +43,7 @@ module Lpm (input wire CLK, input wire nRST,
         .resValue(mem$resValue),
         .resValue__RDY(mem$resValue__RDY));
     assign enter__RDY = inQ$in.enq__RDY;
+    assign mem$req$v = ( RULE$recirc__RDY ? ( mem$resValue + ( ( RULE$recirc$y.state == 1 ) ? RULE$recirc$y.IPA[ 15 : 8 ] : RULE$recirc$y.IPA[ 7 : 0 ] ) ) : 32'd0 ) | ( RULE$enter__RDY ? ( 32'd0 + RULE$enter$x[ 31 : 16 ] ) : 32'd0 );
     // Extra assigments, not to output wires
     assign RULE$enter$agg_2e_tmp.IPA = RULE$enter$x[ 15 : 0 ];
     assign RULE$enter$agg_2e_tmp.state = 3'd0;

@@ -2,6 +2,37 @@
 `define __bscan_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __MBSCANE2IFC_DEF__
+`define __MBSCANE2IFC_DEF__
+interface MBSCANE2IFC;
+    logic  CAPTURE;
+    logic  DRCK;
+    logic  RESET;
+    logic  RUNTEST;
+    logic  SEL;
+    logic  SHIFT;
+    logic  TCK;
+    logic  TDI;
+    logic  TDO;
+    logic  TMS;
+    logic  UPDATE;
+    modport server (input  TDO,
+                    output CAPTURE, DRCK, RESET, RUNTEST, SEL, SHIFT, TCK, TDI, TMS, UPDATE);
+    modport client (output TDO,
+                    input  CAPTURE, DRCK, RESET, RUNTEST, SEL, SHIFT, TCK, TDI, TMS, UPDATE);
+endinterface
+`endif
+`ifndef __MbufgBUFG_DEF__
+`define __MbufgBUFG_DEF__
+interface MbufgBUFG;
+    logic  I;
+    logic  O;
+    modport server (input  I,
+                    output O);
+    modport client (output I,
+                    input  O);
+endinterface
+`endif
 `ifndef __BscanLocalIfc_DEF__
 `define __BscanLocalIfc_DEF__
 interface BscanLocalIfc#(width = 32);

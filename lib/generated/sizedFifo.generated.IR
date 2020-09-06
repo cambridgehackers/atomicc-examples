@@ -1,40 +1,52 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(128) v )
 }
 INTERFACE PipeOut  {
+    FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(128)
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE SizedFifoBase(depth=20,width=128,bypass=999) Fifo {
+    FILE sizedFifo_OC_cpp
     FIELD/Count depth  Bit(128) q
     FIELD Bit((__builtin_clog2((20 + 0)) + 1)) c
     FIELD/shared Bit(128) x_wire

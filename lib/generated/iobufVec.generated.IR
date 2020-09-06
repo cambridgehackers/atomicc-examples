@@ -1,18 +1,22 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE IobufVecPins(iovecWidth=999999)  {
+    FILE iobufVec_OC_h
     FIELD/inout Bit(999999) IO
     FIELD/input Bit(999999) I
     FIELD/output Bit(999999) O
     FIELD/input Bit(1) T
 }
 INTERFACE MIOBUF  {
+    FILE _OC__OC__PC_xilinx_PC_VIOBUF_OC_h
     FIELD/parameter Bit(32) DRIVE
     FIELD/input Bit(1) I
     FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
@@ -23,25 +27,33 @@ INTERFACE MIOBUF  {
     FIELD/input Bit(1) T
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE IOBUF MIOBUF {
+    FILE _OC__OC__PC_xilinx_PC_VIOBUF_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE IobufVec(iovecWidth=999999) IobufVecPins(iovecWidth=999999) {
+    FILE iobufVec_OC_cpp
     FIELD/Count iovecWidth  IOBUF iobufs
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
         LET Bit(1) :iobufs$T[__inst$Genvar1] = T

@@ -1,37 +1,48 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE DblPipeIfc  {
+    FILE dblpipe_OC_cpp
     METHOD/Action shiftBit__ENA ( Bit(1) v )
     METHOD outBit Bit(1)
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE LfsrFibIfc(LN=8,TAPS=45)  {
+    FILE lfsrfib_OC_h
     METHOD/Action shiftBit__ENA ( Bit(1) v )
     METHOD outBit Bit(1)
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE DblPipe DblPipeIfc {
+    FILE dblpipe_OC_cpp
     FIELD LfsrFib(LN=8,TAPS=45) one
     FIELD LfsrFib(LN=8,TAPS=45) two
     FIELD Bit(1) o_data
@@ -47,6 +58,7 @@ MODULE DblPipe DblPipeIfc {
     }
 }
 MODULE LfsrFib(LN=8,TAPS=45) LfsrFibIfc(LN=8,TAPS=45) {
+    FILE lfsrfib_OC_h
     FIELD Bit(8) sreg
     METHOD/Action shiftBit__ENA ( Bit(1) v ) {
         STORE :sreg = __bitconcat{((__bitsubstr{sreg,0}) & (45)) ^ (shiftBit$v),__bitsubstr{sreg,(8) - (1),1}}

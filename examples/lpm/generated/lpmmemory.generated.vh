@@ -1,7 +1,20 @@
-`ifndef __memory_GENERATED__VH__
-`define __memory_GENERATED__VH__
+`ifndef __lpmmemory_GENERATED__VH__
+`define __lpmmemory_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __TickIfc_DEF__
+`define __TickIfc_DEF__
+interface TickIfc;
+    logic [4 - 1:0] getTicket;
+    logic getTicket__RDY;
+    logic allocateTicket__ENA;
+    logic allocateTicket__RDY;
+    modport server (input  allocateTicket__ENA,
+                    output getTicket, getTicket__RDY, allocateTicket__RDY);
+    modport client (output allocateTicket__ENA,
+                    input  getTicket, getTicket__RDY, allocateTicket__RDY);
+endinterface
+`endif
 `ifndef __LpmMem_DEF__
 `define __LpmMem_DEF__
 interface LpmMem;

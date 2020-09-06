@@ -2,6 +2,20 @@
 `define __ivector_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __IVectorTest_DEF__
+`define __IVectorTest_DEF__
+typedef struct packed {
+    IVector ivector;
+} IVectorTest;
+`endif
+`ifndef __ValuePair_DEF__
+`define __ValuePair_DEF__
+typedef struct packed {
+    logic [32 - 1:0] c;
+    logic [32 - 1:0] b;
+    logic [32 - 1:0] a;
+} ValuePair;
+`endif
 `ifndef __IVectorRequest_DEF__
 `define __IVectorRequest_DEF__
 interface IVectorRequest;

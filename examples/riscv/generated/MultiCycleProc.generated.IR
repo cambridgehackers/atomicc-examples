@@ -1,17 +1,21 @@
 STRUCT ExecResult  {
+    FILE MultiCycleProc_OC_cpp
     FIELD Bit(32) nextPC
     FIELD Bit(32) addr
     FIELD Bit(32) data
 }
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE DMem  {
+    FILE MultiCycleProc_OC_cpp
     METHOD/Action request__ENA ( Bit(32) write_en , Bit(32) addr , Bit(32) data )
     METHOD response Bit(32)
 }
 INTERFACE Decoder  {
+    FILE MultiCycleProc_OC_cpp
     METHOD getOp ( Bit(32) inst ) Bit(32)
     METHOD getArithOp ( Bit(32) inst ) Bit(32)
     METHOD getSrc1 ( Bit(32) inst ) Bit(32)
@@ -20,16 +24,20 @@ INTERFACE Decoder  {
     METHOD getAddr ( Bit(32) inst ) Bit(32)
 }
 INTERFACE Executer  {
+    FILE MultiCycleProc_OC_cpp
     METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE IMem  {
+    FILE MultiCycleProc_OC_cpp
     METHOD read ( Bit(32) pc ) Bit(32)
 }
 INTERFACE MultiCycleProcIfc  {
+    FILE MultiCycleProc_OC_cpp
     INTERFACE/Ptr Decoder dec
     INTERFACE/Ptr Executer exec
     INTERFACE/Ptr RegFile rf
@@ -37,27 +45,35 @@ INTERFACE MultiCycleProcIfc  {
     INTERFACE/Ptr DMem dmem
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE RegFile  {
+    FILE MultiCycleProc_OC_cpp
     METHOD read ( Bit(32) regnum ) Bit(32)
     METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE MultiCycleProc MultiCycleProcIfc {
+    FILE MultiCycleProc_OC_cpp
     FIELD Bit(32) pc
     FIELD Bit(32) d2e_valid
     FIELD Bit(32) d2e_op

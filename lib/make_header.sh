@@ -5,5 +5,6 @@ set -e
 sed -i -e 's/.*/`include "&"/' generated/atomicclib.vh
 sed -i -e '1i`ifndef __ATOMICCLIB_VH__' \
   -e '1i`define __ATOMICCLIB_VH__' \
+  -e '/atomicclib.vh/d' \
   -e '$a`endif' \
    generated/atomicclib.vh

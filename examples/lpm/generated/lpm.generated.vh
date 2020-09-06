@@ -2,6 +2,27 @@
 `define __lpm_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __ProcessData_DEF__
+`define __ProcessData_DEF__
+typedef struct packed {
+    logic [3 - 1:0] state;
+    logic [16 - 1:0] IPA;
+    logic [4 - 1:0] ticket;
+} ProcessData;
+`endif
+`ifndef __TickIfc_DEF__
+`define __TickIfc_DEF__
+interface TickIfc;
+    logic [4 - 1:0] getTicket;
+    logic getTicket__RDY;
+    logic allocateTicket__ENA;
+    logic allocateTicket__RDY;
+    modport server (input  allocateTicket__ENA,
+                    output getTicket, getTicket__RDY, allocateTicket__RDY);
+    modport client (output allocateTicket__ENA,
+                    input  getTicket, getTicket__RDY, allocateTicket__RDY);
+endinterface
+`endif
 `ifndef __LpmIfc_DEF__
 `define __LpmIfc_DEF__
 interface LpmIfc;
@@ -12,6 +33,22 @@ interface LpmIfc;
                     output enter__RDY);
     modport client (output enter__ENA, enter$x,
                     input  enter__RDY);
+endinterface
+`endif
+`ifndef __LpmMem_DEF__
+`define __LpmMem_DEF__
+interface LpmMem;
+    logic req__ENA;
+    logic [32 - 1:0] req$v;
+    logic req__RDY;
+    logic resAccept__ENA;
+    logic resAccept__RDY;
+    logic [32 - 1:0] resValue;
+    logic resValue__RDY;
+    modport server (input  req__ENA, req$v, resAccept__ENA,
+                    output req__RDY, resAccept__RDY, resValue, resValue__RDY);
+    modport client (output req__ENA, req$v, resAccept__ENA,
+                    input  req__RDY, resAccept__RDY, resValue, resValue__RDY);
 endinterface
 `endif
 //METASTART; Lpm

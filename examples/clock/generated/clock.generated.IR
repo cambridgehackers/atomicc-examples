@@ -1,8 +1,10 @@
 STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE Ft600  {
+    FILE clock_OC_cpp
     FIELD/input Bit(1) usb_clk
     FIELD/input Bit(1) usb_rxf
     FIELD/input Bit(1) usb_txe
@@ -12,10 +14,12 @@ INTERFACE Ft600  {
     FIELD/inout Bit(16) usb_ad
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MIOBUF  {
+    FILE _OC__OC__PC__OC__OC__PC_xilinx_PC_VIOBUF_OC_h
     FIELD/parameter Bit(32) DRIVE
     FIELD/input Bit(1) I
     FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
@@ -26,25 +30,33 @@ INTERFACE MIOBUF  {
     FIELD/input Bit(1) T
 }
 INTERFACE PipeIn  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE IOBUF MIOBUF {
+    FILE _OC__OC__PC__OC__OC__PC_xilinx_PC_VIOBUF_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE ModFt600 Ft600 {
+    FILE clock_OC_cpp
     FIELD Bit(1) usb_fifo_empty
     FIELD Bit(2) usb_rxf_delay
     FIELD Bit(1) usb_txe_delay

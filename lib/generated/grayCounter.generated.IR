@@ -1,12 +1,15 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE GrayCounterIfc(width=10)  {
+    FILE grayCounter_OC_h
     METHOD/Action increment__ENA
     METHOD/Action decrement__ENA
     METHOD readGray Bit(width)
@@ -15,23 +18,30 @@ INTERFACE GrayCounterIfc(width=10)  {
     METHOD/Action writeBin__ENA ( Bit(width) v )
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE GrayCounter(width=10) GrayCounterIfc(width=10) {
+    FILE grayCounter_OC_cpp
     FIELD/Count width  Bit(1) counter
     FIELD/shared Bit(10) m
     FIELD/shared Bit(10) counterBit

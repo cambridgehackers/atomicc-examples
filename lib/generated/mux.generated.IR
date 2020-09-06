@@ -1,57 +1,74 @@
 STRUCT NOCDataH  {
+    FILE atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
 INTERFACE Fifo  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn_OC_2 in
     INTERFACE PipeOut out
 }
 INTERFACE Fifo_OC_3  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn in
     INTERFACE PipeOut_OC_4 out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE atomicc_OC_h
     INTERFACE/Count funnelWidth  PipeIn_OC_0 in
     INTERFACE/Ptr PipeIn_OC_1 out
 }
 INTERFACE MuxPipeIfc  {
+    FILE mux_OC_h
     INTERFACE PipeIn in
     INTERFACE PipeIn forward
     INTERFACE/Ptr PipeIn out
 }
 INTERFACE PipeIn  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( NOCDataH v )
 }
 INTERFACE PipeIn_OC_0  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_1  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE PipeIn_OC_2  {
+    FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(144) v )
 }
 INTERFACE PipeOut  {
+    FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(144)
 }
 INTERFACE PipeOut_OC_4  {
+    FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first NOCDataH
 }
 INTERFACE l_topIfc  {
+    FILE atomicc_OC_h
     INTERFACE PipeIn request
     INTERFACE/Ptr PipeIn indication
 }
 EMODULE Fifo1Base(width=144) Fifo {
+    FILE fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
+    FILE mux_OC_h
 }
 EMODULE l_top l_topIfc {
+    FILE atomicc_OC_h
 }
 MODULE Fifo1 Fifo_OC_3 {
+    FILE fifo_OC_h
     FIELD Fifo1Base(width=144) fifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
@@ -66,6 +83,7 @@ MODULE Fifo1 Fifo_OC_3 {
     }
 }
 MODULE MuxPipe MuxPipeIfc {
+    FILE mux_OC_cpp
     FIELD Fifo1 forwardFifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v}

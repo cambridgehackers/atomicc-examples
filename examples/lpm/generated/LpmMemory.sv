@@ -1,4 +1,4 @@
-`include "memory.generated.vh"
+`include "lpmmemory.generated.vh"
 
 `default_nettype none
 module LpmMemory (input wire CLK, input wire nRST,
