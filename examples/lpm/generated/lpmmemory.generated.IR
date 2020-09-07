@@ -1,12 +1,7 @@
-STRUCT NOCDataH  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE LpmMem  {
     FILE lpm_OC_h
@@ -14,27 +9,14 @@ INTERFACE LpmMem  {
     METHOD/Action resAccept__ENA
     METHOD resValue Bit(32)
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE TickIfc  {
     FILE lpm_OC_h
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
-}
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
 }
 EMODULE BufTicket TickIfc {
     FILE lpm_OC_h
@@ -44,9 +26,6 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 }
 EMODULE LpmMemory LpmMem {
     FILE lpm_OC_h
-}
-EMODULE l_top l_topIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE LpmMemory LpmMem {
     FILE lpmmemory_OC_cpp

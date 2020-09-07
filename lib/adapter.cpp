@@ -26,12 +26,14 @@ template<class T, int width>
 class AdapterToBus __implements AtB<T, width> {
    NOCData                   buffer;
    LenType                   remain;
+   __shared T                temp;
 
    void in.enq(T v) if (remain == 0) {
-      buffer = v.data;
-      remain = v.length;
+      temp = v;
+      buffer = temp.data;
+      remain = temp.length;
       if (TRACE_ADAPTER)
-      printf ("adapterTOin %x length %x\n", v.data, v.length);
+      printf ("adapterTOin %x length %x\n", temp.data, temp.length);
    }
    __rule copyRule if (remain != 0) {
       __uint(width) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - width);

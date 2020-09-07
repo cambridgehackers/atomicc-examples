@@ -6,33 +6,29 @@ STRUCT NOCDataH  {
 INTERFACE AfB(width=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInB(width=32) in
-    INTERFACE/Ptr PipeIn out
+    INTERFACE/Ptr PipeIn(width=144) out
 }
 INTERFACE AtB(width=32)  {
     FILE adapter_OC_h
-    INTERFACE PipeIn in
+    INTERFACE PipeIn(width=144) in
     INTERFACE/Ptr PipeInB(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=144)  {
     FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE PipeInB(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
 }
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
@@ -40,9 +36,9 @@ INTERFACE UserTopIfc  {
     INTERFACE/Ptr PipeInB(width=32) read
 }
 INTERFACE l_topIfc  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
+    FILE userTop_OC_h
+    INTERFACE PipeIn(width=144) request
+    INTERFACE/Ptr PipeIn(width=144) indication
 }
 EMODULE AdapterFromBus(width=32) AfB(width=32) {
     FILE adapter_OC_h
@@ -57,14 +53,14 @@ EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h
 }
 EMODULE l_top l_topIfc {
-    FILE atomicc_OC_h
+    FILE userTop_OC_h
 }
 MODULE UserTop UserTopIfc {
     FILE userTop_OC_cpp
     INTERFACECONNECT wadapter_0$in write PipeInB(width=32)
     INTERFACECONNECT read radapter_0$out PipeInB(width=32)
-    INTERFACECONNECT ctop$request wadapter_0$out PipeIn
-    INTERFACECONNECT ctop$indication radapter_0$in PipeIn
+    INTERFACECONNECT ctop$request wadapter_0$out PipeIn(width=144)
+    INTERFACECONNECT ctop$indication radapter_0$in PipeIn(width=144)
     FIELD AdapterToBus(width=32) radapter_0
     FIELD AdapterFromBus(width=32) wadapter_0
     FIELD l_top ctop

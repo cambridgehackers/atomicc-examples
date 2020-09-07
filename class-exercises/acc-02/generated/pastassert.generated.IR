@@ -1,39 +1,18 @@
-STRUCT NOCDataH  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE PastAssertIfc(MAX_AMOUNT=22,F_TESTID=9999)  {
     FILE pastassert_OC_cpp
     METHOD/Action startSignal__ENA
     METHOD busy Bit(1)
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-}
-EMODULE l_top l_topIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE PastAssert(MAX_AMOUNT=22,F_TESTID=9999) PastAssertIfc(MAX_AMOUNT=22,F_TESTID=9999) {

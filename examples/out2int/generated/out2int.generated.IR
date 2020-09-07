@@ -1,22 +1,12 @@
-STRUCT NOCDataH  {
+INTERFACE Fifo(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
-INTERFACE Fifo  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut out
-}
-INTERFACE Fifo_OC_3  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn_OC_4 in
-    INTERFACE PipeOut_OC_5 out
+    INTERFACE PipeIn(width=32) in
+    INTERFACE PipeOut(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE OinIfc  {
     FILE out2int_OC_cpp
@@ -33,82 +23,30 @@ INTERFACE OinRequest  {
     FILE out2int_OC_cpp
     METHOD/Action say__ENA ( Bit(32) v )
 }
-INTERFACE Out2InIfc  {
+INTERFACE Out2InIfc(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_out2in_OC_h
-    INTERFACE/Ptr PipeOut_OC_6 in
-    INTERFACE/Ptr PipeIn_OC_7 out
+    INTERFACE/Ptr PipeOut(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE Out2InIfc_OC_8  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_out2in_OC_h
-    INTERFACE/Ptr PipeOut_OC_9 in
-    INTERFACE/Ptr PipeIn_OC_10 out
-}
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_0  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_10  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_2  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_4  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_7  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeOut  {
+INTERFACE PipeOut(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
-    METHOD first Bit(32)
+    METHOD first Bit(width)
 }
-INTERFACE PipeOut_OC_5  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_6  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE PipeOut_OC_9  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(32)
-}
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
-}
-EMODULE Fifo1Base(width=32) Fifo {
+EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
-EMODULE Out2InBase(width=32) Out2InIfc {
+EMODULE Out2InBase(width=32) Out2InIfc(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_out2in_OC_h
 }
-EMODULE l_top l_topIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-}
-MODULE Fifo1 Fifo_OC_3 {
+MODULE Fifo1(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {
@@ -123,11 +61,11 @@ MODULE Fifo1 Fifo_OC_3 {
 }
 MODULE Oin OinIfc {
     FILE out2int_OC_cpp
-    INTERFACECONNECT pipe$in first$out PipeOut_OC_9
-    INTERFACECONNECT pipe$out second$in PipeIn_OC_10
-    FIELD Fifo1 first
-    FIELD Fifo1 second
-    FIELD Out2In pipe
+    INTERFACECONNECT pipe$in first$out PipeOut(width=32)
+    INTERFACECONNECT pipe$out second$in PipeIn(width=32)
+    FIELD Fifo1(width=32) first
+    FIELD Fifo1(width=32) second
+    FIELD Out2In(width=32) pipe
     METHOD/Action request$say__ENA ( Bit(32) v ) {
         CALL/Action :first$in$enq__ENA{request$say$v}
         PRINTF :printf{"REQUESTSAY v %x\n",request$say$v}
@@ -138,9 +76,9 @@ MODULE Oin OinIfc {
         CALL/Action :second$out$deq__ENA{}
     }
 }
-MODULE Out2In Out2InIfc_OC_8 {
+MODULE Out2In(width=32) Out2InIfc(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_out2in_OC_h
-    INTERFACECONNECT base$in in PipeOut_OC_6
-    INTERFACECONNECT base$out out PipeIn_OC_7
+    INTERFACECONNECT base$in in PipeOut(width=32)
+    INTERFACECONNECT base$out out PipeIn(width=32)
     FIELD Out2InBase(width=32) base
 }

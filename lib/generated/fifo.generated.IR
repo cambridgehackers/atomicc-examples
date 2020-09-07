@@ -1,91 +1,43 @@
-STRUCT NOCDataH  {
+INTERFACE Fifo(width=999999)  {
     FILE atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
+    INTERFACE PipeIn(width=999999) in
+    INTERFACE PipeOut(width=999999) out
 }
-INTERFACE Fifo  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut out
-}
-INTERFACE FifoPIfc  {
+INTERFACE FifoPIfc(width=999999)  {
     FILE fifo_OC_h
-    INTERFACE PipeIn_OC_6 in
-    INTERFACE/Ptr PipeIn_OC_6 out
-}
-INTERFACE Fifo_OC_3  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn_OC_4 in
-    INTERFACE PipeOut_OC_5 out
+    INTERFACE PipeIn(width=999999) in
+    INTERFACE/Ptr PipeIn(width=999999) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE Out2InIfc  {
+INTERFACE Out2InIfc(width=999999)  {
     FILE out2in_OC_h
-    INTERFACE/Ptr PipeOut_OC_7 in
-    INTERFACE/Ptr PipeIn_OC_8 out
+    INTERFACE/Ptr PipeOut(width=999999) in
+    INTERFACE/Ptr PipeIn(width=999999) out
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_0  {
+INTERFACE PipeIn(width=999999)  {
     FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_1  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_2  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeIn_OC_4  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeIn_OC_6  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeIn_OC_8  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(999999) v )
-}
-INTERFACE PipeOut  {
+INTERFACE PipeOut(width=999999)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
-    METHOD first Bit(999999)
-}
-INTERFACE PipeOut_OC_5  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(999999)
-}
-INTERFACE PipeOut_OC_7  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(999999)
-}
-INTERFACE l_topIfc  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
+    METHOD first Bit(width)
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE atomicc_OC_h
 }
-EMODULE Out2InBase(width=999999) Out2InIfc {
+EMODULE Out2InBase(width=999999) Out2InIfc(width=999999) {
     FILE out2in_OC_h
 }
-EMODULE l_top l_topIfc {
-    FILE atomicc_OC_h
-}
-MODULE Fifo1Base(width=999999) Fifo {
+MODULE Fifo1Base(width=999999) Fifo(width=999999) {
     FILE fifo_OC_cpp
     FIELD Bit(999999) element
     FIELD Bit(1) full
@@ -98,7 +50,7 @@ MODULE Fifo1Base(width=999999) Fifo {
     }
     METHOD out$first Bit(width) = ((element)) if ((full))
 }
-MODULE FifoB1Base(width=999999) Fifo_OC_3 {
+MODULE FifoB1Base(width=999999) Fifo(width=999999) {
     FILE fifo_OC_cpp
     FIELD Bit(999999) element
     FIELD Bit(1) full
@@ -113,10 +65,10 @@ MODULE FifoB1Base(width=999999) Fifo_OC_3 {
     }
     METHOD out$first Bit(width) = ((__phi((full):(element), !(full):(enq_v)))) if (((full) | (in$enq__ENA)))
 }
-MODULE FifoPBase(width=999999) FifoPIfc {
+MODULE FifoPBase(width=999999) FifoPIfc(width=999999) {
     FILE fifo_OC_cpp
-    INTERFACECONNECT base$in fifo$out PipeOut_OC_7
-    INTERFACECONNECT base$out out PipeIn_OC_8
+    INTERFACECONNECT base$in fifo$out PipeOut(width=999999)
+    INTERFACECONNECT base$out out PipeIn(width=999999)
     FIELD Fifo1Base(width=999999) fifo
     FIELD Out2InBase(width=999999) base
     METHOD/Action in$enq__ENA ( Bit(width) v ) {

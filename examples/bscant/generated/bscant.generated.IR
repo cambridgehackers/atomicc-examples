@@ -1,12 +1,7 @@
-STRUCT NOCDataH  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
 INTERFACE BscanIfc(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_bscan_OC_h
-    INTERFACE PipeIn_OC_2 toBscan
-    INTERFACE/Ptr PipeIn_OC_3 fromBscan
+    INTERFACE PipeIn(width=32) toBscan
+    INTERFACE/Ptr PipeIn(width=32) fromBscan
 }
 INTERFACE BtestIfc  {
     FILE bscant_OC_cpp
@@ -25,33 +20,12 @@ INTERFACE BtestRequest  {
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_2  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_3  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 EMODULE Bscan(id=4,width=32) BscanIfc(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_bscan_OC_h
@@ -59,14 +33,11 @@ EMODULE Bscan(id=4,width=32) BscanIfc(width=32) {
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
-EMODULE l_top l_topIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-}
 MODULE Btest BtestIfc {
     FILE bscant_OC_cpp
-    INTERFACECONNECT readUser bscan$fromBscan PipeIn_OC_3
+    INTERFACECONNECT readUser bscan$fromBscan PipeIn(width=32)
     FIELD Bscan(id=4,width=32) bscan
-    INTERFACE PipeIn_OC_3 readUser
+    INTERFACE PipeIn(width=32) readUser
     FIELD Bit(8) readCount
     FIELD Bit(8) writeCount
     FIELD Bit(32) nextV

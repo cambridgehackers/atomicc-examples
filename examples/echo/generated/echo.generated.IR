@@ -18,63 +18,50 @@ INTERFACE EchoRequest  {
     FILE echo_OC_cpp
     METHOD/Action say__ENA ( Bit(32) v )
 }
-INTERFACE Fifo  {
+INTERFACE Fifo(width=18446744073709551615)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn_OC_2 in
-    INTERFACE PipeOut out
+    INTERFACE PipeIn(width=18446744073709551615) in
+    INTERFACE PipeOut(width=18446744073709551615) out
 }
-INTERFACE Fifo_OC_3  {
+INTERFACE Fifo(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn_OC_4 in
-    INTERFACE PipeOut_OC_5 out
+    INTERFACE PipeIn(width=32) in
+    INTERFACE PipeOut(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn in
-    INTERFACE PipeIn forward
-    INTERFACE/Ptr PipeIn out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_0  {
+INTERFACE PipeIn(width=18446744073709551615)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_1  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_2  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_4  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeOut  {
+INTERFACE PipeOut(width=18446744073709551615)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
-    METHOD first Bit(32)
+    METHOD first Bit(width)
 }
-INTERFACE PipeOut_OC_5  {
+INTERFACE PipeOut(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
-    METHOD first Bit(32)
+    METHOD first Bit(width)
 }
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
-}
-EMODULE Fifo1Base(width=32) Fifo {
+EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
@@ -83,12 +70,9 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
-EMODULE l_top l_topIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-}
 MODULE Echo EchoIfc {
     FILE echo_OC_cpp
-    FIELD Fifo1 fifo
+    FIELD Fifo1(width=18446744073709551615) fifo
     METHOD/Action sout$say__ENA ( Bit(32) v ) {
         CALL/Action :fifo$in$enq__ENA{sout$say$v}
     }
@@ -98,7 +82,7 @@ MODULE Echo EchoIfc {
         CALL/Action :ind$heard__ENA{fifo$out$first}
     }
 }
-MODULE Fifo1 Fifo_OC_3 {
+MODULE Fifo1(width=18446744073709551615) Fifo(width=18446744073709551615) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=32) fifo
     METHOD/Action in$enq__ENA ( Bit(32) v ) {

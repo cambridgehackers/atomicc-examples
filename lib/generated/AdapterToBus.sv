@@ -10,7 +10,7 @@ module AdapterToBus #(
     reg [16 - 1:0]remain;
     wire [width - 1:0]RULE$copyRule$outVal;
     wire RULE$copyRule__RDY;
-    NOCDataH temp$in$enq$v;
+    NOCDataH temp;
     // Extra assigments, not to output wires
     assign RULE$copyRule$outVal = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
     assign RULE$copyRule__RDY = !( ( remain == 0 ) || ( !out.enq__RDY ) );
@@ -18,7 +18,7 @@ module AdapterToBus #(
     assign out.enq$last = remain == 1;
     assign out.enq$v = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
     assign out.enq__ENA = RULE$copyRule__RDY;
-    assign temp$in$enq$v = in.enq$v;
+    assign temp = in.enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -33,10 +33,10 @@ module AdapterToBus #(
             $display( "adapterTOout %x remain %x" , RULE$copyRule$outVal , remain );
         end; // End of RULE$copyRule__ENA
         if (in.enq__ENA && ( remain == 0 )) begin // in.enq__ENA
-            buffer <= temp$in$enq$v.data;
-            remain <= temp$in$enq$v.length;
+            buffer <= temp.data;
+            remain <= temp.length;
             if (!( 0 == 0 ))
-            $display( "adapterTOin %x length %x" , temp$in$enq$v.data , temp$in$enq$v.length );
+            $display( "adapterTOin %x length %x" , temp.data , temp.length );
         end; // End of in.enq__ENA
       end
     end // always @ (posedge CLK)

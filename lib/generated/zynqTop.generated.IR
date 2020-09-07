@@ -1,8 +1,3 @@
-STRUCT NOCDataH  {
-    FILE atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
 INTERFACE AxiTopIfc  {
     FILE axiTop_OC_h
     INTERFACE ZynqInterruptT _
@@ -18,8 +13,8 @@ INTERFACE ClockIfc  {
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MaxiI  {
     FILE axiTop_OC_h
@@ -46,17 +41,9 @@ INTERFACE P7WrapIfc  {
     FIELD/inout Bit(54) MIO
     INTERFACE Pps7fclk FCLK
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE Pps7PS7  {
     FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
@@ -525,11 +512,6 @@ INTERFACE ZynqTopIFC  {
     INTERFACE ZynqClock _
     FIELD/inout Bit(54) MIO
 }
-INTERFACE l_topIfc  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
-}
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
 }
@@ -544,9 +526,6 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 }
 EMODULE/Verilog PS7 Pps7PS7 {
     FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
-}
-EMODULE l_top l_topIfc {
-    FILE atomicc_OC_h
 }
 MODULE P7Wrap P7WrapIfc {
     FILE zynqTop_OC_cpp

@@ -45,23 +45,23 @@ INTERFACE ConnectIFC  {
 }
 INTERFACE EIIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn_OC_3 pipe
+    INTERFACE PipeIn(width=144) pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn_OC_3 pipe
+    INTERFACE/Ptr PipeIn(width=144) pipe
 }
 INTERFACE ERIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn_OC_2 pipe
+    INTERFACE PipeIn(width=144) pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn_OC_2 pipe
+    INTERFACE/Ptr PipeIn(width=144) pipe
 }
 INTERFACE EchoIfc  {
     FILE before1_OC_cpp
@@ -80,34 +80,22 @@ INTERFACE EchoRequest  {
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn in
-    INTERFACE PipeIn forward
-    INTERFACE/Ptr PipeIn out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn_OC_0  {
+INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_2  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( EchoRequest_data v )
-}
-INTERFACE PipeIn_OC_3  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( EchoIndication_data v )
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE Swap  {
     FILE before1_OC_cpp
@@ -115,26 +103,18 @@ INTERFACE Swap  {
     METHOD/Action y2xnull__ENA
     METHOD/Action x2y__ENA
 }
-INTERFACE l_topIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
-}
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
-EMODULE l_top l_topIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-}
 MODULE Connect ConnectIFC {
     FILE before1_OC_cpp
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn_OC_3
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=144)
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn_OC_2
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=144)
     INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI

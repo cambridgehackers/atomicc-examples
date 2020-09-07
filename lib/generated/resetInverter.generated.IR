@@ -1,43 +1,22 @@
-STRUCT NOCDataH  {
-    FILE atomicc_OC_h
-    FIELD Bit(16) length
-    FIELD Bit(128) data
-}
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn_OC_0 in
-    INTERFACE/Ptr PipeIn_OC_1 out
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MResetInverterResetInverter  {
     FILE VResetInverter_OC_h
     FIELD/input Bit(1) RESET_IN
     FIELD/output Bit(1) RESET_OUT
 }
-INTERFACE PipeIn  {
+INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( NOCDataH v )
-}
-INTERFACE PipeIn_OC_0  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE PipeIn_OC_1  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(32) v )
-}
-INTERFACE l_topIfc  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn request
-    INTERFACE/Ptr PipeIn indication
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE atomicc_OC_h
 }
 EMODULE ResetInverter MResetInverterResetInverter {
     FILE resetInverter_OC_h
-}
-EMODULE l_top l_topIfc {
-    FILE atomicc_OC_h
 }
 MODULE ResetInverter MResetInverterResetInverter {
     FILE resetInverter_OC_cpp
