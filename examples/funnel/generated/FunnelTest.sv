@@ -49,10 +49,10 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1)
         end; // End of RULE$respond_rule__ENA
         if (request.say__ENA && fifo$in__enq__RDY_or1) begin // request.say__ENA
             $display( "request.say %x index %d" , request.say$v , index );
-            if (index >= ( 4 - 1 ))
-            index <= 0;
             if (!( index >= ( 4 - 1 ) ))
             index <= index + 1;
+            if (index >= ( 4 - 1 ))
+            index <= 0;
         end; // End of request.say__ENA
       end
     end // always @ (posedge CLK)
