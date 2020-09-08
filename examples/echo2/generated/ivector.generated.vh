@@ -40,6 +40,13 @@ interface IndIF;
                     input  heard__RDY);
 endinterface
 `endif
+//METASTART; IVector
+//METAINTERNAL; fifo; FifoPong(width=144);
+//METAINVOKE; request.say__ENA; :fifo$in.enq__ENA;
+//METAGUARD; request.say; fifo$in.enq__RDY;
+//METAINVOKE; RULE$respond__ENA; :fifo$out.deq__ENA;:ind.heard__ENA;
+//METAGUARD; RULE$respond; fifo$out.deq__RDY && fifo$out.first__RDY && ind.heard__RDY;
+//METARULES; RULE$respond
 //METASTART; FifoPong
 //METAINTERNAL; element1; Fifo1Base(width=704);
 //METAINTERNAL; element2; Fifo1Base(width=704);
@@ -48,11 +55,4 @@ endinterface
 //METAINVOKE; out.deq__ENA; !pong:element1$out.deq__ENA;pong:element2$out.deq__ENA;
 //METAGUARD; out.deq; ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !( pong || ( !element1$out.deq__RDY ) ) ) );
 //METAGUARD; out.first; ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !( pong || ( !element1$out.first__RDY ) ) ) );
-//METASTART; IVector
-//METAINTERNAL; fifo; FifoPong;
-//METAINVOKE; request.say__ENA; :fifo$in.enq__ENA;
-//METAGUARD; request.say; fifo$in.enq__RDY;
-//METAINVOKE; RULE$respond__ENA; :fifo$out.deq__ENA;:ind.heard__ENA;
-//METAGUARD; RULE$respond; fifo$out.deq__RDY && fifo$out.first__RDY && ind.heard__RDY;
-//METARULES; RULE$respond
 `endif

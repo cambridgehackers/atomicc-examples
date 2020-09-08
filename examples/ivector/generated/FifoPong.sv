@@ -1,7 +1,9 @@
 `include "ivector.generated.vh"
 
 `default_nettype none
-module FifoPong (input wire CLK, input wire nRST,
+module FifoPong #(
+    parameter integer width = 144)(
+    input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeOut.server out);
     reg pong;
@@ -10,7 +12,6 @@ module FifoPong (input wire CLK, input wire nRST,
     PipeIn#(.width(96)) element2$in();
     PipeOut#(.width(96)) element2$out();
     ValuePair out$first$retval;
-    ValuePair temp$in$enq$v;
     Fifo1Base#(.width(96)) element1 (.CLK(CLK), .nRST(nRST),
         .in(element1$in),
         .out(element1$out));
@@ -29,7 +30,6 @@ module FifoPong (input wire CLK, input wire nRST,
     assign out.first = out.first$retval;
     assign out.first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
     assign out.first__RDY = ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !( pong || ( !element1$out.first__RDY ) ) ) );
-    assign temp$in$enq$v = in.enq$v;
 
     always @( posedge CLK) begin
       if (!nRST) begin

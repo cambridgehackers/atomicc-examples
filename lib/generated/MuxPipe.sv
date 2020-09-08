@@ -9,8 +9,6 @@ module MuxPipe (input wire CLK, input wire nRST,
     wire RULE$fifoRule__RDY;
     PipeIn#(.width(144)) forwardFifo$in();
     PipeOut#(.width(144)) forwardFifo$out();
-    NOCDataH temp$forward$enq$v;
-    NOCDataH temp$in$enq$v;
     Fifo1Base#(.width(144)) forwardFifo (.CLK(CLK), .nRST(nRST),
         .in(forwardFifo$in),
         .out(forwardFifo$out));
@@ -24,8 +22,6 @@ module MuxPipe (input wire CLK, input wire nRST,
     assign in.enq__RDY = !( ( 0 == ( ( forwardFifo$out.first__RDY != 0 ) ^ 1 ) ) || ( !out.enq__RDY ) );
     assign out.enq$v = ( ( in.enq__ENA && in.enq__RDY ) ? in.enq$v : 0 ) | ( RULE$fifoRule__RDY ? forwardFifo$out.first : 0 );
     assign out.enq__ENA = ( in.enq__ENA && ( in.enq__RDY || RULE$fifoRule__RDY ) ) || ( ( !in.enq__ENA ) && RULE$fifoRule__RDY );
-    assign temp$forward$enq$v = forward.enq$v;
-    assign temp$in$enq$v = in.enq$v;
 endmodule
 
 `default_nettype wire    // set back to default value

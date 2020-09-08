@@ -87,13 +87,14 @@ class Gear {
 
 typedef __uint(128) NOCData;
 typedef struct {LenType length; NOCData data;} NOCDataH;
+#if 0
 typedef PipeIn<NOCData>                   NOCPipe;
-
 class l_topIfc {
     PipeIn<NOCDataH> request;
     PipeIn<NOCDataH> *indication;
 };
 class l_top __implements l_topIfc; // force PipeIn<NOCDataH> to appear in IR
+#endif
 
 // FunnelBufferedBase is now used in l_top
 template<int funnelWidth, int width>

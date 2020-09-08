@@ -26,4 +26,5 @@ PipeOut<__uint(32)>          po;
 PipeInB<32>                  pib;
 };
 class atomiccDummy __implements atomiccDummyIfc {
+    NOCDataH          dummyn;
 };
