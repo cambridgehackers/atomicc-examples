@@ -20,7 +20,7 @@ INTERFACE ReqCallout  {
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
-MODULE ReqArb ReqArbIfc {
+MODULE/Verilog ReqArb ReqArbIfc {
     FILE reqarb_OC_cpp
     METHOD/Action a__ENA ( Bit(1) v ) if ((((b__ENA) != (0)) ^ (1))) {
         CALL/Action :out$a__ENA{a$v}

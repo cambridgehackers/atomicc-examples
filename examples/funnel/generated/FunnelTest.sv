@@ -48,7 +48,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1)
             $display( "[%s:%d] index %d" , "RULE$respond_rule_block_invoke" , 55 , index );
         end; // End of RULE$respond_rule__ENA
         if (request.say__ENA && fifo$in__enq__RDY_or1) begin // request.say__ENA
-            $display( "request.say %x index %d" , request.say$v , index );
+            $display( "request$say %x index %d" , request.say$v , index );
             if (!( index >= ( 4 - 1 ) ))
             index <= index + 1;
             if (index >= ( 4 - 1 ))

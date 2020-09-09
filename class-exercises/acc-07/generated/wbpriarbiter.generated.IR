@@ -112,10 +112,10 @@ MODULE FwbSlave FwbSlaveIfc {
         ASSERT (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):assert(__phi((((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc)):(1), ((status$err) & (((__phi(BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179:((nreqs) - (nacks)), BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_false_OC_i180:(0))) == (0)) & (a.cyc))):(((a$stb__ENA) != (0)) && ((status$stall) ^ (1)))))
     }
 }
-MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) {
+MODULE/Verilog WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) {
     FILE wbpriarbiter_OC_cpp
     FIELD Bit(1) r_a_owner
-    METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if ((a.cyc)) {
+    METHOD/Action a$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if ((acyc)) {
         STORE :r_a_owner = 1
         CALL/Action :o$stb__ENA{a$stb$we,a$stb$addr,a$stb$data,a$stb$sel}
     }
@@ -128,7 +128,7 @@ MODULE WbPriArbiter(OPT_ZERO_ON_IDLE=0,F_OPT_CLK2FFLOGIC=1) WbPriArbiterIfc(OPT_
     METHOD a$err Bit(1) = (((o$err) & (r_a_owner))) {
         CALL :o$err{}
     }
-    METHOD/Action b$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if (((a.cyc) ^ (1))) {
+    METHOD/Action b$stb__ENA ( Bit(1) we , Bit(32) addr , Bit(32) data , Bit((32 / 8)) sel ) if (((acyc) ^ (1))) {
         STORE :r_a_owner = 0
         CALL/Action :o$stb__ENA{b$stb$we,b$stb$addr,b$stb$data,b$stb$sel}
     }

@@ -46,8 +46,7 @@ endinterface
 `endif
 `ifndef __WishboneType_DEF__
 `define __WishboneType_DEF__
-interface WishboneType#(F_OPT_CLK2FFLOGIC = 1, OPT_ZERO_ON_IDLE = 0);
-    logic  cyc;
+interface WishboneType;
     logic stb__ENA;
     logic  stb$we;
     logic [32 - 1:0] stb$addr;
@@ -60,10 +59,18 @@ interface WishboneType#(F_OPT_CLK2FFLOGIC = 1, OPT_ZERO_ON_IDLE = 0);
     logic stall__RDY;
     logic  err;
     logic err__RDY;
-    modport server (input  cyc, stb__ENA, stb$we, stb$addr, stb$data, stb$sel,
+    modport server (input  stb__ENA, stb$we, stb$addr, stb$data, stb$sel,
                     output stb__RDY, ack, ack__RDY, stall, stall__RDY, err, err__RDY);
-    modport client (output cyc, stb__ENA, stb$we, stb$addr, stb$data, stb$sel,
+    modport client (output stb__ENA, stb$we, stb$addr, stb$data, stb$sel,
                     input  stb__RDY, ack, ack__RDY, stall, stall__RDY, err, err__RDY);
+endinterface
+`endif
+`ifndef __WbPriArbiterIfc_DEF__
+`define __WbPriArbiterIfc_DEF__
+interface WbPriArbiterIfc#(F_OPT_CLK2FFLOGIC = 1, OPT_ZERO_ON_IDLE = 0);
+    logic  acyc;
+    modport server (input  acyc);
+    modport client (output acyc);
 endinterface
 `endif
 //METASTART; FwbSlave
@@ -81,15 +88,15 @@ endinterface
 //METAGUARD; RULE$verify; ( status.err__RDY && ( ( ( $past( a.stb__ENA ) == 0 ) && status.ack__RDY && ( ( a.stb__ENA == 0 ) || ( status.stall__RDY && ( status.stall__RDY || ( !status.err ) ) ) || ( ( !status.stall__RDY ) && ( !( status.ack || ( !( status.stall__RDY || ( !status.err ) ) ) ) ) ) || ( !BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179 ) || ( !( nreqs - nacks ) ) ) ) || ( ( !( $past( a.stb__ENA ) == 0 ) ) && status.ack__RDY && ( ( ( a.stb__ENA == 0 ) && ( status.stall__RDY || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) || ( ( !( a.stb__ENA == 0 ) ) && ( ( ( nreqs - nacks ) && ( ( BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179 && ( ( status.stall__RDY && ( status.stall__RDY || ( !status.err ) ) ) || ( ( !status.stall__RDY ) && ( !( status.ack || ( !( ( f_past_valid && ( $past( nRST ) == 0 ) && ( status.stall__RDY || ( !status.err ) ) ) || ( ( !f_past_valid ) && ( status.stall__RDY || ( !status.err ) ) ) ) ) ) ) ) ) ) || ( ( !BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179 ) && ( status.stall__RDY || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) ) || ( ( !( nreqs - nacks ) ) && ( status.stall__RDY || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) ) ) ) ) ) || ( ( !status.err__RDY ) && ( !( ( ( nreqs - nacks ) && ( BasicBlockCond__ZN8FwbSlave11RULE$verifyEv_cond_OC_true_OC_i179 || status.ack || f_past_valid ) ) || ( ( !( nreqs - nacks ) ) && ( status.ack || f_past_valid ) ) || ( !status.ack__RDY ) ) ) );
 //METARULES; RULE$init; RULE$init2; RULE$init3; RULE$init4; RULE$verify
 //METASTART; WbPriArbiter
-//METAINVOKE; a.stb__ENA; :o.stb__ENA;
+//METAINVOKE; a.stb__ENA; :o$stb__ENA;
 //METAEXCLUSIVE; a.stb__ENA; b.stb__ENA
-//METAGUARD; a.stb; !( ( 0 == a.cyc ) || ( !o.stb__RDY ) );
-//METAGUARD; a.ack; o.ack__RDY;
-//METAGUARD; a.stall; o.stall__RDY;
-//METAGUARD; a.err; o.err__RDY;
-//METAINVOKE; b.stb__ENA; :o.stb__ENA;
-//METAGUARD; b.stb; !( ( 0 == ( a.cyc ^ 1 ) ) || ( !o.stb__RDY ) );
-//METAGUARD; b.ack; o.ack__RDY;
-//METAGUARD; b.stall; o.stall__RDY;
-//METAGUARD; b.err; o.err__RDY;
+//METAGUARD; a.stb; !( ( 0 == acyc ) || ( !o$stb__RDY ) );
+//METAGUARD; a.ack; o$ack__RDY;
+//METAGUARD; a.stall; o$stall__RDY;
+//METAGUARD; a.err; o$err__RDY;
+//METAINVOKE; b.stb__ENA; :o$stb__ENA;
+//METAGUARD; b.stb; !( ( 0 == ( acyc ^ 1 ) ) || ( !o$stb__RDY ) );
+//METAGUARD; b.ack; o$ack__RDY;
+//METAGUARD; b.stall; o$stall__RDY;
+//METAGUARD; b.err; o$err__RDY;
 `endif

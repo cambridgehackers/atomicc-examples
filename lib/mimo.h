@@ -1,4 +1,4 @@
-/* Copyright (c) 2020 The Connectal Project
+/* Copyright (c) 2019 The Connectal Project
  *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
@@ -20,21 +20,13 @@
  */
 #include "atomicc.h"
 
-class ReqCallout {
-    void a(bool v);
-};
+template<int widthIn, int widthOut>
+class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)>;
 
-class ReqArbIfc {
-    void a(bool v);
-    void b(bool v);
-    ReqCallout *out;
-};
-
-class ReqArb __implements __verilog ReqArbIfc {
-    void a(bool v) if (!__valid(b)) {
-        out->a(v);
-    }
-    void b(bool v) if (!__valid(a)) {
-        out->a(v);
-    }
+template<class In, class Out>
+class MIMO __implements Gear<In, Out> {
+  MIMOBase<__bitsize(In), __bitsize(Out)> gear;
+  void in.enq(const In v) { gear.in.enq(__bit_cast<__uint(__bitsize(In))>(v)); };
+  void out.deq(void) { gear.out.deq(); }
+  Out out.first(void) { return __bit_cast<Out>(gear.out.first()); };
 };

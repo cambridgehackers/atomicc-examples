@@ -28,7 +28,7 @@ class WbPriArbiterIfc {
 };
 
 template<int OPT_ZERO_ON_IDLE, int F_OPT_CLK2FFLOGIC>
-class WbPriArbiter __implements WbPriArbiterIfc<OPT_ZERO_ON_IDLE, F_OPT_CLK2FFLOGIC> {
+class WbPriArbiter __implements __verilog WbPriArbiterIfc<OPT_ZERO_ON_IDLE, F_OPT_CLK2FFLOGIC> {
     bool r_a_owner;
 
     void a.stb(bool we, __uint(AW) addr, __uint(DW) data, __uint(DW/8) sel) if (this->a.cyc) {

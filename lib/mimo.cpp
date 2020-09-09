@@ -18,7 +18,7 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
+#include "mimo.h"
 
 template<int widthIn, int widthOut>
 class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)> {
@@ -41,12 +41,5 @@ class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)> {
     }
 };
 
-template<class In, class Out>
-class MIMO __implements Gear<In, Out> {
-  MIMOBase<__bitsize(In), __bitsize(Out)> gear;
-  void in.enq(const In v) { gear.in.enq(__bit_cast<__uint(__bitsize(In))>(v)); };
-  void out.deq(void) { gear.out.deq(); }
-  Out out.first(void) { return __bit_cast<Out>(gear.out.first()); };
-};
-MIMO<__uint(32), __uint(128//GENERIC_INT_TEMPLATE_FLAG
-)> bar;
+MIMOBase<32, 128//GENERIC_INT_TEMPLATE_FLAG
+> bar;

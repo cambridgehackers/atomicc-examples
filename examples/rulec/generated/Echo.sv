@@ -62,7 +62,7 @@ module Echo (input wire CLK, input wire nRST,
             v_temp <= request.say$v;
             busy <= 1;
             v_type <= 1;
-            $display( "request.say %x" , request.say$v );
+            $display( "request$say %x" , request.say$v );
         end; // End of request.say__ENA
       end
     end // always @ (posedge CLK)

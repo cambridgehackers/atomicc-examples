@@ -8,11 +8,6 @@ INTERFACE Gear  {
     INTERFACE PipeIn(width=32) in
     INTERFACE PipeOut(width=128) out
 }
-INTERFACE Gear_OC_2  {
-    FILE atomicc_OC_h
-    INTERFACE PipeIn(width=32) in
-    INTERFACE PipeOut(width=128) out
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -25,20 +20,7 @@ INTERFACE PipeOut(width=128)  {
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE atomicc_OC_h
 }
-MODULE MIMO Gear {
-    FILE mimo_OC_cpp
-    FIELD MIMOBase(widthIn=32,widthOut=128) gear
-    METHOD/Action in$enq__ENA ( Bit(32) v ) {
-        CALL/Action :gear$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :gear$out$deq__ENA{}
-    }
-    METHOD out$first Bit(128) = ((gear$out$first)) {
-        CALL :gear$out$first{}
-    }
-}
-MODULE MIMOBase(widthIn=32,widthOut=128) Gear_OC_2 {
+MODULE MIMOBase(widthIn=32,widthOut=128) Gear {
     FILE mimo_OC_cpp
     FIELD Bit((128 + 32)) buffer
     FIELD Bit((__builtin_clog2((128 + 32)) + 1)) c
