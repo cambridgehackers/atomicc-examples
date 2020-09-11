@@ -6,11 +6,16 @@ module Connect (input wire CLK, input wire nRST,
     EchoIndication.client indication);
     wire RULE$swap2_rule__RDY;
     wire RULE$swap_rule__RDY;
+    EchoIndication lEII_test$indication();
+    PipeIn#(.width(32 + 32 + 32)) lEII_test$pipe();
+    EchoIndication lEIO$indication();
     PipeIn#(.width(32 + 32 + 32)) lEIO$pipe();
+    PipeIn#(.width(32 + 32 + 32 + 32 + 32 + 32)) lERI$pipe();
     EchoRequest lERI$request();
     PipeIn#(.width(32 + 32 + 32 + 32 + 32 + 32)) lERO_test$pipe();
     EchoRequest lERO_test$request();
     EchoIndication lEcho$indication();
+    EchoRequest lEcho$request();
     Swap lEcho$swap();
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
         .indication(lEcho$indication),

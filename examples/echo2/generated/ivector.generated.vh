@@ -28,9 +28,9 @@ interface IVectorRequest;
                     input  say__RDY);
 endinterface
 `endif
-`ifndef __IndIF_DEF__
-`define __IndIF_DEF__
-interface IndIF;
+`ifndef __IVectorIndication_DEF__
+`define __IVectorIndication_DEF__
+interface IVectorIndication;
     logic heard__ENA;
     ValuePair heard$v;
     logic heard__RDY;
@@ -41,11 +41,11 @@ interface IndIF;
 endinterface
 `endif
 //METASTART; IVector
-//METAINTERNAL; fifo; FifoPong(width=144);
+//METAINTERNAL; fifo; FifoPong(width=(((32 + 32) + (32 * 20))));
 //METAINVOKE; request.say__ENA; :fifo$in.enq__ENA;
 //METAGUARD; request.say; fifo$in.enq__RDY;
-//METAINVOKE; RULE$respond__ENA; :fifo$out.deq__ENA;:ind.heard__ENA;
-//METAGUARD; RULE$respond; fifo$out.deq__RDY && fifo$out.first__RDY && ind.heard__RDY;
+//METAINVOKE; RULE$respond__ENA; :fifo$out.deq__ENA;:indication.heard__ENA;
+//METAGUARD; RULE$respond; fifo$out.deq__RDY && fifo$out.first__RDY && indication.heard__RDY;
 //METARULES; RULE$respond
 //METASTART; FifoPong
 //METAINTERNAL; element1; Fifo1Base(width=704);

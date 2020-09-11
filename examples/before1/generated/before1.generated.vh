@@ -152,8 +152,8 @@ endinterface
 //METAGUARD; RULE$output_ruleo; !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
 //METARULES; RULE$output_rulee; RULE$output_ruleo
 //METASTART; EchoRequestInput
-//METAINVOKE; pipe.enq__ENA; temp$pipe$enq$v.tag == 2:request.say2__ENA;temp$pipe$enq$v.tag == 1:request.say__ENA;
-//METAGUARD; pipe.enq; ( request.say__RDY && ( request.say2__RDY || ( !( temp$pipe$enq$v.tag == 2 ) ) ) ) || ( ( !request.say__RDY ) && ( !( ( temp$pipe$enq$v.tag == 1 ) || ( !( request.say2__RDY || ( !( temp$pipe$enq$v.tag == 2 ) ) ) ) ) ) );
+//METAINVOKE; pipe.enq__ENA; _pipe$enq$temp$v.tag == 2:request.say2__ENA;_pipe$enq$temp$v.tag == 1:request.say__ENA;
+//METAGUARD; pipe.enq; ( request.say__RDY && ( request.say2__RDY || ( !( _pipe$enq$temp$v.tag == 2 ) ) ) ) || ( ( !request.say__RDY ) && ( !( ( _pipe$enq$temp$v.tag == 1 ) || ( !( request.say2__RDY || ( !( _pipe$enq$temp$v.tag == 2 ) ) ) ) ) ) );
 //METASTART; EchoRequestOutput
 //METAINVOKE; request.say__ENA; :pipe.enq__ENA;
 //METAEXCLUSIVE; request.say__ENA; request.say2__ENA

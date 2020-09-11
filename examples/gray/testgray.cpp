@@ -44,7 +44,6 @@ extern "C" int global_sim_fd;
 
 int main(int argc, const char **argv)
 {
-    int ret;
     //atomiccPrintfInit("generated/rulec.generated.printf");
     Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
 #ifdef SIMULATION

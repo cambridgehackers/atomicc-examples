@@ -8,7 +8,7 @@ module MIMOBase #(
     PipeIn.server in,
     PipeOut.server out);
     reg [widthOut+widthIn - 1:0]buffer;
-    reg [$clog2( widthOut + widthIn )+1 - 1:0]c;
+    reg [$clog2(widthOut+widthIn)+1 - 1:0]c;
     wire [widthIn - 1:0]m;
     genvar __inst$Genvar1;
     // Extra assigments, not to output wires

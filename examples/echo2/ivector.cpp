@@ -18,7 +18,6 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "fifo.h"
 #include "mux.h"
 
@@ -28,20 +27,24 @@ typedef struct {
     int c[20];
 } ValuePair;
 
-#define USE_STRUCT
-#ifdef USE_STRUCT
-#define UTYPE ValuePair
-#else
-#define UTYPE int
-#endif
+class IVectorRequest {
+    void say(ValuePair v);
+};
+
+class IVectorIndication {
+    void heard(ValuePair v);
+};
+
+class IVectorIFC {
+    IVectorRequest     request;
+    IVectorIndication *indication;
+};
 
 template<class T>
 class FifoPong __implements Fifo<T> {
     Fifo1<T> element1;
     Fifo1<T> element2;
     bool pong;
-    //PipeIn<T> in;
-    //PipeOut<T> out;
     void in.enq(T v) {
         if (pong)
             element2.in.enq(v);
@@ -61,78 +64,27 @@ class FifoPong __implements Fifo<T> {
     };
 };
 
-static FifoPong<UTYPE> bozouseless;
-class IndIF {
-    void heard(UTYPE v);
-};
-class IVectorIndication __implements IndIF;
-
-class IVectorRequest {
-    void say(UTYPE v);
-};
-
-class IVectorIFC {
-    IVectorRequest request;
-    IndIF *ind;
-};
-
 class IVector __implements IVectorIFC {
-    Fifo<UTYPE> *fifo;
-    void request.say(UTYPE v) {
+    Fifo<ValuePair> *fifo;
+    void request.say(ValuePair v) {
         fifo->in.enq(v);
     }
-    IVector(IndIF *indarg) : fifo(new FifoPong<UTYPE>()) {
-        ind = indarg;
+    IVector() : fifo(new FifoPong<ValuePair>()) {
         printf("IVector: this %p size 0x%lx fifo %p csize 0x%lx\n", this, sizeof(*this), fifo, sizeof(IVector));
         __rule respond { 
 	    //module->response = PIPELINE(module->fifo->first(), module->pipetemp);
-	    this->fifo->out.deq();
-	    this->ind->heard(this->fifo->out.first());
+	    fifo->out.deq();
+	    indication->heard(fifo->out.first());
             };
     };
-    //~IVector() {}
 };
-
-////////////////////////////////////////////////////////////
-// Test Bench
-////////////////////////////////////////////////////////////
-
-#if 0
-void IVectorIndication::heard(UTYPE v)
-{
-    printf("Heard an ivector: %d %d\n", v
-#ifdef USE_STRUCT
-.a, v.b
-#else
-, 0
-#endif
-);
-    //stop_main_program = 1;
-}
-#endif
 
 class IVectorTest {
 public:
     IVector *ivector;
-    IVectorTest(): ivector(new IVector(new IVectorIndication())) {
+    IVectorTest(): ivector(new IVector()) {
         printf("IVectorTest: addr %p size 0x%lx csize 0x%lx\n", this, sizeof(*this), sizeof(IVectorTest));
     }
-    //~IVectorTest() {}
 };
 
 IVectorTest ivectorTest;
-
-//int main(int argc, const char *argv[])
-//{
-//    printf("[%s:%d] starting %d\n", __FUNCTION__, __LINE__, argc);
-//    while (!ivectorTest.ivector->say__RDY())
-//        ;
-//    ivectorTest.ivector->say(UTYPE{22
-//#ifdef USE_STRUCT
-//, 44
-//#endif
-//});
-//printf("[%s:%d]\n", __FUNCTION__, __LINE__);
-//    return 0;
-//}
-

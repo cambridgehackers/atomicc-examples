@@ -5,21 +5,23 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal l_top.sv FunnelTest.sv ___M2PFunnelIndication.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv FunnelBase.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv FunnelTest.sv ___M2PFunnelIndication.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv FunnelBase.sv 
 
-prep -top l_top
+prep -top VsimTop
 
 [files]
-generated/l_top.sv
-generated/funnel.generated.vh
+../../lib/generated/VsimTop.sv
+../../lib/generated/vsimTop.generated.vh
 ../../lib/generated/atomicclib.vh
 ../../lib/generated/adapter.generated.vh
+../../lib/generated/atomicc.generated.vh
 ../../lib/generated/axiTop.generated.vh
 ../../lib/generated/bscan.generated.vh
 ../../lib/generated/clockTop.generated.vh
 ../../lib/generated/configCounter.generated.vh
 ../../lib/generated/connectNet2.generated.vh
 ../../lib/generated/fifo.generated.vh
+../../lib/generated/funnel.generated.vh
 ../../lib/generated/grayCounter.generated.vh
 ../../lib/generated/iobufVec.generated.vh
 ../../lib/generated/mimo.generated.vh
@@ -30,8 +32,12 @@ generated/funnel.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/userTop.generated.vh
-../../lib/generated/vsimTop.generated.vh
 ../../lib/generated/zynqTop.generated.vh
+../../lib/generated/UserTop.sv
+../../lib/generated/AdapterToBus.sv
+../../lib/generated/AdapterFromBus.sv
+generated/l_top.sv
+generated/funneltest.generated.vh
 generated/FunnelTest.sv
 generated/___M2PFunnelIndication.sv
 generated/___P2MFunnelRequest.sv

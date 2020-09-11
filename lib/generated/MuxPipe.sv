@@ -5,7 +5,6 @@ module MuxPipe (input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeIn.server forward,
     PipeIn.client out);
-    NOCDataH RULE$fifoRule$agg_2e_tmp;
     wire RULE$fifoRule__RDY;
     PipeIn#(.width(144)) forwardFifo$in();
     PipeOut#(.width(144)) forwardFifo$out();
@@ -13,7 +12,6 @@ module MuxPipe (input wire CLK, input wire nRST,
         .in(forwardFifo$in),
         .out(forwardFifo$out));
     // Extra assigments, not to output wires
-    assign RULE$fifoRule$agg_2e_tmp = forwardFifo$out.first;
     assign RULE$fifoRule__RDY = !( ( 0 == ( ( in.enq__ENA != 0 ) ^ 1 ) ) || ( !( forwardFifo$out.first__RDY && out.enq__RDY && forwardFifo$out.deq__RDY ) ) );
     assign forward.enq__RDY = forwardFifo$in.enq__RDY;
     assign forwardFifo$in.enq$v = forward.enq$v;

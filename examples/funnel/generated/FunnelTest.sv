@@ -10,8 +10,9 @@ module FunnelTest (input wire CLK, input wire nRST,
     wire [ 4 - 1:0]fifo$in__enq__RDY_or;
     wire fifo$in__enq__RDY_or1;
     PipeIn#(.width(32)) fifo$out [4 - 1:0]();
-    PipeIn#(.width(32)) funnel$in [4 - 1:0]();
+    PipeIn#(.width(32)) funnel$in [funnelWidth - 1:0]();
     PipeIn#(.width(32)) funnel$out();
+    PipeIn#(.width(32)) result$in();
     PipeOut#(.width(32)) result$out();
     genvar __inst$Genvar1;
     FifoPBase#(.width(32)) fifo [4 - 1:0] (.CLK(CLK), .nRST(nRST),

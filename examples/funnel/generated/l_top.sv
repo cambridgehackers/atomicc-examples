@@ -5,7 +5,11 @@ module l_top (input wire CLK, input wire nRST,
     PipeIn.server request,
     PipeIn.client indication);
     FunnelIndication DUT__FunnelTest$indication();
+    FunnelRequest DUT__FunnelTest$request();
+    FunnelIndication M2P__indication$method();
+    PipeIn#(.width(16 + 128)) M2P__indication$pipe();
     FunnelRequest P2M__request$method();
+    PipeIn#(.width(16 + 128)) P2M__request$pipe();
     FunnelTest DUT__FunnelTest (.CLK(CLK), .nRST(nRST),
         .request(P2M__request$method),
         .indication(DUT__FunnelTest$indication));

@@ -5,8 +5,10 @@ module Oin (input wire CLK, input wire nRST,
     OinRequest.server request,
     OinIndication.client indication);
     PipeIn#(.width(32)) first$in();
+    PipeOut#(.width(32)) first$out();
     PipeOut#(.width(32)) pipe$in();
     PipeIn#(.width(32)) pipe$out();
+    PipeIn#(.width(32)) second$in();
     PipeOut#(.width(32)) second$out();
     Fifo1Base#(.width(32)) first (.CLK(CLK), .nRST(nRST),
         .in(first$in),

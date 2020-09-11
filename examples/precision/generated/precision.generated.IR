@@ -12,15 +12,15 @@ STRUCT IVectorTest  {
     FILE precision_OC_cpp
     FIELD IVector ivector
 }
+INTERFACE Fifo(width=(__bitsize(ValueType)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    INTERFACE PipeIn(width=(__bitsize(ValueType))) in
+    INTERFACE PipeOut(width=(__bitsize(ValueType))) out
+}
 INTERFACE Fifo(width=10)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     INTERFACE PipeIn(width=10) in
     INTERFACE PipeOut(width=10) out
-}
-INTERFACE Fifo(width=144)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeOut(width=144) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -42,15 +42,19 @@ INTERFACE IVectorRequest  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
 }
-INTERFACE PipeIn(width=10)  {
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(ValueType)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=10)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -58,12 +62,12 @@ INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeOut(width=10)  {
+INTERFACE PipeOut(width=(__bitsize(ValueType)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
-INTERFACE PipeOut(width=144)  {
+INTERFACE PipeOut(width=10)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
@@ -80,7 +84,7 @@ EMODULE IVectorInd IVectorIndication {
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
-MODULE Fifo1(width=144) Fifo(width=144) {
+MODULE Fifo1(width=(__bitsize(ValueType))) Fifo(width=(__bitsize(ValueType))) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=10) fifo
     METHOD/Action in$enq__ENA ( ValueType v ) {
@@ -89,29 +93,29 @@ MODULE Fifo1(width=144) Fifo(width=144) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ValueType = ((out$first$retval)) {
-        ALLOCA ValueType out$first$retval
+    METHOD out$first ValueType = ((_out$first$retval)) {
+        ALLOCA ValueType _out$first$retval
         CALL :fifo$out$first{}
-        LET Bit(10) :out$first$retval = fifo$out$first
+        LET Bit(10) :_out$first$retval = fifo$out$first
     }
 }
 MODULE IVector IVectorIFC {
     FILE precision_OC_cpp
-    FIELD Fifo1(width=144) fifo
+    FIELD Fifo1(width=(__bitsize(ValueType))) fifo
     FIELD Bit(((14 / 7) + (3 * 2))) fcounter
     FIELD Bit(9) counter
     FIELD Bit(9) gcounter
     METHOD/Action request$say__ENA ( Bit(6) meth , Bit(4) v ) if ((1)) {
-        ALLOCA ValueType request$say$temp
-        LET Bit(6) :request$say$temp$a = request$say$meth
-        LET Bit(4) :request$say$temp$b = request$say$v
-        CALL/Action :fifo$in$enq__ENA{request$say$temp}
+        ALLOCA ValueType _request$say$temp
+        LET Bit(6) :_request$say$temp$a = request$say$meth
+        LET Bit(4) :_request$say$temp$b = request$say$v
+        CALL/Action :fifo$in$enq__ENA{_request$say$temp}
     }
     METHOD/Rule/Action RULE$respond__ENA {
-        ALLOCA ValueType RULE$respond$temp
+        ALLOCA ValueType _RULE$respond$temp
         CALL :fifo$out$first{}
-        LET ValueType :RULE$respond$temp = fifo$out$first
+        LET ValueType :_RULE$respond$temp = fifo$out$first
         CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :ind$heard__ENA{RULE$respond$temp$a,RULE$respond$temp$b}
+        CALL/Action :ind$heard__ENA{_RULE$respond$temp$a,_RULE$respond$temp$b}
     }
 }

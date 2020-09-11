@@ -45,23 +45,23 @@ INTERFACE ConnectIFC  {
 }
 INTERFACE EIIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn(width=144) pipe
+    INTERFACE PipeIn(width=(__bitsize(EchoIndication_data))) pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn(width=144) pipe
+    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoIndication_data))) pipe
 }
 INTERFACE ERIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn(width=144) pipe
+    INTERFACE PipeIn(width=(__bitsize(EchoRequest_data))) pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn(width=144) pipe
+    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoRequest_data))) pipe
 }
 INTERFACE EchoIfc  {
     FILE before1_OC_cpp
@@ -85,11 +85,19 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(EchoIndication_data)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(EchoRequest_data)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -112,9 +120,9 @@ EMODULE MuxPipe MuxPipeIfc {
 MODULE Connect ConnectIFC {
     FILE before1_OC_cpp
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=144)
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=(__bitsize(EchoIndication_data)))
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=144)
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=(__bitsize(EchoRequest_data)))
     INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI
@@ -189,10 +197,12 @@ MODULE EchoIndicationInput EIIIfc {
     FIELD Bit(32) meth_delay
     FIELD Bit(32) v_delay
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) if (((busy_delay) ^ (1))) {
-        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",pipe$enq$v$tag}
-        STORE ((pipe$enq$v$tag) == 1):meth_delay = pipe$enq$v$data$heard$meth
-        STORE ((pipe$enq$v$tag) == 1):v_delay = pipe$enq$v$data$heard$v
-        STORE ((pipe$enq$v$tag) == 1):busy_delay = (1) != (0)
+        ALLOCA EchoIndication_data _pipe$enq$temp$v
+        LET EchoIndication_data :_pipe$enq$temp$v = pipe$enq$v
+        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",_pipe$enq$temp$v$tag}
+        STORE ((_pipe$enq$temp$v$tag) == 1):meth_delay = _pipe$enq$temp$v$data$heard$meth
+        STORE ((_pipe$enq$temp$v$tag) == 1):v_delay = _pipe$enq$temp$v$data$heard$v
+        STORE ((_pipe$enq$temp$v$tag) == 1):busy_delay = (1) != (0)
     }
     METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
@@ -218,42 +228,44 @@ MODULE EchoIndicationOutput EIOIfc {
         STORE :even = (even) ^ (1)
     }
     METHOD/Rule/Action RULE$output_rulee__ENA if (((((ind_busy) != (0)) & ((even) != (0))) != (0))) {
-        ALLOCA EchoIndication_data RULE$output_rulee$agg_2e_tmp
+        ALLOCA EchoIndication_data _RULE$output_rulee$agg_2e_tmp
         STORE :ind_busy = (0) != (0)
-        LET EchoIndication_data :RULE$output_rulee$agg_2e_tmp = ind0
-        CALL/Action :pipe$enq__ENA{RULE$output_rulee$agg_2e_tmp}
+        LET EchoIndication_data :_RULE$output_rulee$agg_2e_tmp = ind0
+        CALL/Action :pipe$enq__ENA{_RULE$output_rulee$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$output_ruleo__ENA if (((((ind_busy) != (0)) & ((even) == (0))) != (0))) {
-        ALLOCA EchoIndication_data RULE$output_ruleo$agg_2e_tmp
+        ALLOCA EchoIndication_data _RULE$output_ruleo$agg_2e_tmp
         STORE :ind_busy = (0) != (0)
-        LET EchoIndication_data :RULE$output_ruleo$agg_2e_tmp = ind1
-        CALL/Action :pipe$enq__ENA{RULE$output_ruleo$agg_2e_tmp}
+        LET EchoIndication_data :_RULE$output_ruleo$agg_2e_tmp = ind1
+        CALL/Action :pipe$enq__ENA{_RULE$output_ruleo$agg_2e_tmp}
     }
 }
 MODULE EchoRequestInput ERIIfc {
     FILE before1_OC_cpp
     METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
-        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",pipe$enq$v$tag}
-        CALL/Action ((pipe$enq$v$tag) == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
-        CALL/Action ((pipe$enq$v$tag) == 2):request$say2__ENA{pipe$enq$v$data$say2$meth,pipe$enq$v$data$say2$v}
+        ALLOCA EchoRequest_data _pipe$enq$temp$v
+        LET EchoRequest_data :_pipe$enq$temp$v = pipe$enq$v
+        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",_pipe$enq$temp$v$tag}
+        CALL/Action ((_pipe$enq$temp$v$tag) == 1):request$say__ENA{_pipe$enq$temp$v$data$say$meth,_pipe$enq$temp$v$data$say$v}
+        CALL/Action ((_pipe$enq$temp$v$tag) == 2):request$say2__ENA{_pipe$enq$temp$v$data$say2$meth,_pipe$enq$temp$v$data$say2$v}
     }
 }
 MODULE EchoRequestOutput EROIfc {
     FILE before1_OC_cpp
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoRequest_data request$say$ind
+        ALLOCA EchoRequest_data _request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET Bit(32) :request$say$ind$tag = 1
-        LET Bit(32) :request$say$ind$data$say$meth = request$say$meth
-        LET Bit(32) :request$say$ind$data$say$v = request$say$v
-        CALL/Action :pipe$enq__ENA{request$say$ind}
+        LET Bit(32) :_request$say$ind$tag = 1
+        LET Bit(32) :_request$say$ind$data$say$meth = request$say$meth
+        LET Bit(32) :_request$say$ind$data$say$v = request$say$v
+        CALL/Action :pipe$enq__ENA{_request$say$ind}
     }
     METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoRequest_data request$say2$ind
+        ALLOCA EchoRequest_data _request$say2$ind
         PRINTF :printf{"entered EchoRequestOutput::say2\n"}
-        LET Bit(32) :request$say2$ind$tag = 2
-        LET Bit(32) :request$say2$ind$data$say2$meth = request$say2$meth
-        LET Bit(32) :request$say2$ind$data$say2$v = request$say2$v
-        CALL/Action :pipe$enq__ENA{request$say2$ind}
+        LET Bit(32) :_request$say2$ind$tag = 2
+        LET Bit(32) :_request$say2$ind$data$say2$meth = request$say2$meth
+        LET Bit(32) :_request$say2$ind$data$say2$v = request$say2$v
+        CALL/Action :pipe$enq__ENA{_request$say2$ind}
     }
 }

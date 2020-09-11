@@ -5,6 +5,8 @@ module WbPriArbiter #(
     parameter integer OPT_ZERO_ON_IDLE = 0,
     parameter integer F_OPT_CLK2FFLOGIC = 1)(
     input wire acyc,
+    input wire bcyc,
+    input wire ocyc,
     input wire a$stb__ENA,
     input wire a$stb$we,
     input wire [32 - 1:0]a$stb$addr,

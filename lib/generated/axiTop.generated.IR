@@ -14,10 +14,10 @@ INTERFACE AxiTopIfc  {
     INTERFACE MaxiO MAXIGP0_O
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
-INTERFACE Fifo(width=144)  {
+INTERFACE Fifo(width=(__bitsize(ReadResp)))  {
     FILE atomicc_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeOut(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(ReadResp))) in
+    INTERFACE PipeOut(width=(__bitsize(ReadResp))) out
 }
 INTERFACE Fifo(width=32)  {
     FILE atomicc_OC_h
@@ -50,7 +50,11 @@ INTERFACE MaxiO  {
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(ReadResp)))  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -70,7 +74,7 @@ INTERFACE PipeInB(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
-INTERFACE PipeOut(width=144)  {
+INTERFACE PipeOut(width=(__bitsize(ReadResp)))  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
@@ -103,8 +107,8 @@ INTERFACE ZynqInterruptT  {
 }
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
-    INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeIn(width=144) indication
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) request
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) indication
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
@@ -144,7 +148,7 @@ MODULE AxiTop AxiTopIfc {
     FIELD Fifo1(width=6) reqAws
     FIELD Fifo1(width=6) writeDone
     FIELD Fifo1(width=32) requestValue
-    FIELD Fifo1(width=144) readData
+    FIELD Fifo1(width=(__bitsize(ReadResp))) readData
     FIELD Fifo1(width=32) writeData
     FIELD UserTop user
     INTERFACE PipeInB(width=32) readUser
@@ -172,51 +176,51 @@ MODULE AxiTop AxiTopIfc {
         LET Bit(1) :interrupt = ((requestValue$out$deq__RDY) != (0)) && (intEnable)
     }
     METHOD/Rule/Action RULE$lread__ENA {
-        ALLOCA ReadResp RULE$lread$agg_2e_tmp
-        ALLOCA Bit(1) RULE$lread$currentChannel
-        ALLOCA Bit(6) RULE$lread$currentRead
-        ALLOCA Bit(32) RULE$lread$res
+        ALLOCA ReadResp _RULE$lread$agg_2e_tmp
+        ALLOCA Bit(1) _RULE$lread$currentChannel
+        ALLOCA Bit(6) _RULE$lread$currentRead
+        ALLOCA Bit(32) _RULE$lread$res
         CALL :reqArs$out$first{}
-        LET Bit(6) :RULE$lread$currentRead = reqArs$out$first
-        LET Bit(1) :RULE$lread$currentChannel = __phi((selectRIndReq):(0), !(selectRIndReq):(requestValue$out$deq__RDY))
-        LET Bit(32) (((readAddr) == 0) & (portalRControl)):RULE$lread$res = RULE$lread$currentChannel
-        LET Bit(32) (((readAddr) == 8) & (portalRControl)):RULE$lread$res = 1
-        LET Bit(32) (((readAddr) == 12) & (portalRControl)):RULE$lread$res = RULE$lread$currentChannel
-        LET Bit(32) (((readAddr) == 16) & (portalRControl)):RULE$lread$res = (selectRIndReq) ? (6) : (5)
-        LET Bit(32) (((readAddr) == 20) & (portalRControl)):RULE$lread$res = 2
-        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)):RULE$lread$res = 0
+        LET Bit(6) :_RULE$lread$currentRead = reqArs$out$first
+        LET Bit(1) :_RULE$lread$currentChannel = __phi((selectRIndReq):(0), !(selectRIndReq):(requestValue$out$deq__RDY))
+        LET Bit(32) (((readAddr) == 0) & (portalRControl)):_RULE$lread$res = _RULE$lread$currentChannel
+        LET Bit(32) (((readAddr) == 8) & (portalRControl)):_RULE$lread$res = 1
+        LET Bit(32) (((readAddr) == 12) & (portalRControl)):_RULE$lread$res = _RULE$lread$currentChannel
+        LET Bit(32) (((readAddr) == 16) & (portalRControl)):_RULE$lread$res = (selectRIndReq) ? (6) : (5)
+        LET Bit(32) (((readAddr) == 20) & (portalRControl)):_RULE$lread$res = 2
+        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)):_RULE$lread$res = 0
         CALL (((readAddr) == 0) & !(portalRControl)):requestValue$out$first{}
-        LET Bit(32) (((readAddr) == 0) & !(portalRControl)):RULE$lread$res = requestValue$out$first
+        LET Bit(32) (((readAddr) == 0) & !(portalRControl)):_RULE$lread$res = requestValue$out$first
         CALL/Action (((readAddr) == 0) & !(portalRControl)):requestValue$out$deq__ENA{}
-        LET Bit(32) (((readAddr) == 4) & !(portalRControl)):RULE$lread$res = user$write$enq__RDY
-        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)):RULE$lread$res = 0
-        LET Bit(6) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):RULE$lread$agg_2e_tmp$id = RULE$lread$currentRead
-        LET Bit(32) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):RULE$lread$agg_2e_tmp$data = RULE$lread$res
-        CALL/Action ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readData$in$enq__ENA{RULE$lread$agg_2e_tmp}
+        LET Bit(32) (((readAddr) == 4) & !(portalRControl)):_RULE$lread$res = user$write$enq__RDY
+        LET Bit(32) (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)):_RULE$lread$res = 0
+        LET Bit(6) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):_RULE$lread$agg_2e_tmp$id = _RULE$lread$currentRead
+        LET Bit(32) ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):_RULE$lread$agg_2e_tmp$data = _RULE$lread$res
+        CALL/Action ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readData$in$enq__ENA{_RULE$lread$agg_2e_tmp}
         STORE ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readCount = (readCount) - (1)
         STORE ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl))):readAddr = (readAddr) + (4)
         CALL/Action (((readCount) == (0)) & ((((readAddr) == 0) & !(portalRControl)) | (((readAddr) == 4) & !(portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 4)) ^ 1) & !(portalRControl)) | (((readAddr) == 0) & (portalRControl)) | (((readAddr) == 8) & (portalRControl)) | (((readAddr) == 12) & (portalRControl)) | (((readAddr) == 16) & (portalRControl)) | (((readAddr) == 20) & (portalRControl)) | (((((readAddr) == 0) | ((readAddr) == 8) | ((readAddr) == 12) | ((readAddr) == 16) | ((readAddr) == 20)) ^ 1) & (portalRControl)))):reqArs$out$deq__ENA{}
     }
     METHOD/Rule/Action RULE$lreadData__ENA {
-        ALLOCA ReadResp RULE$lreadData$currentRData
+        ALLOCA ReadResp _RULE$lreadData$currentRData
         CALL :readData$out$first{}
-        LET ReadResp :RULE$lreadData$currentRData = readData$out$first
-        CALL/Action :MAXIGP0_I$R__ENA{RULE$lreadData$currentRData$data,RULE$lreadData$currentRData$id,(1) != (0),0}
+        LET ReadResp :_RULE$lreadData$currentRData = readData$out$first
+        CALL/Action :MAXIGP0_I$R__ENA{_RULE$lreadData$currentRData$data,_RULE$lreadData$currentRData$id,(1) != (0),0}
         CALL/Action :readData$out$deq__ENA{}
     }
     METHOD/Rule/Action RULE$lwrite__ENA {
-        ALLOCA Bit(32) RULE$lwrite$currentWData
-        ALLOCA Bit(6) RULE$lwrite$currentWrite
+        ALLOCA Bit(32) _RULE$lwrite$currentWData
+        ALLOCA Bit(6) _RULE$lwrite$currentWrite
         CALL :reqAws$out$first{}
-        LET Bit(6) :RULE$lwrite$currentWrite = reqAws$out$first
+        LET Bit(6) :_RULE$lwrite$currentWrite = reqAws$out$first
         CALL :writeData$out$first{}
-        LET Bit(32) :RULE$lwrite$currentWData = writeData$out$first
-        CALL/Action !(portalWControl):user$write$enq__ENA{RULE$lwrite$currentWData,(writeAddr) != (0)}
-        STORE (((writeAddr) == (4)) & (portalWControl)):intEnable = (__bitsubstr{RULE$lwrite$currentWData,0,0}) != (0)
+        LET Bit(32) :_RULE$lwrite$currentWData = writeData$out$first
+        CALL/Action !(portalWControl):user$write$enq__ENA{_RULE$lwrite$currentWData,(writeAddr) != (0)}
+        STORE (((writeAddr) == (4)) & (portalWControl)):intEnable = (__bitsubstr{_RULE$lwrite$currentWData,0,0}) != (0)
         STORE :writeCount = (writeCount) - (1)
         STORE :writeAddr = (writeAddr) + (4)
         CALL/Action :writeData$out$deq__ENA{}
-        CALL/Action ((writeCount) == (0)):writeDone$in$enq__ENA{RULE$lwrite$currentWrite}
+        CALL/Action ((writeCount) == (0)):writeDone$in$enq__ENA{_RULE$lwrite$currentWrite}
         CALL/Action ((writeCount) == (0)):reqAws$out$deq__ENA{}
     }
     METHOD/Rule/Action RULE$writeResponse__ENA {
@@ -225,7 +229,7 @@ MODULE AxiTop AxiTopIfc {
         CALL/Action :writeDone$out$deq__ENA{}
     }
 }
-MODULE Fifo1(width=144) Fifo(width=144) {
+MODULE Fifo1(width=(__bitsize(ReadResp))) Fifo(width=(__bitsize(ReadResp))) {
     FILE fifo_OC_h
     FIELD Fifo1Base(width=38) fifo
     METHOD/Action in$enq__ENA ( ReadResp v ) {
@@ -234,10 +238,10 @@ MODULE Fifo1(width=144) Fifo(width=144) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ReadResp = ((out$first$retval)) {
-        ALLOCA ReadResp out$first$retval
+    METHOD out$first ReadResp = ((_out$first$retval)) {
+        ALLOCA ReadResp _out$first$retval
         CALL :fifo$out$first{}
-        LET Bit(38) :out$first$retval = fifo$out$first
+        LET Bit(38) :_out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1(width=32) Fifo(width=32) {

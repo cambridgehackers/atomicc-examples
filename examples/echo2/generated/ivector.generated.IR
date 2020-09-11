@@ -13,10 +13,10 @@ STRUCT IVectorTest  {
     FILE ivector_OC_cpp
     FIELD IVector ivector
 }
-INTERFACE Fifo(width=144)  {
+INTERFACE Fifo(width=(__bitsize(ValuePair)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeOut(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(ValuePair))) in
+    INTERFACE PipeOut(width=(__bitsize(ValuePair))) out
 }
 INTERFACE Fifo(width=704)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -31,23 +31,27 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
 INTERFACE IVectorIFC  {
     FILE ivector_OC_cpp
     INTERFACE IVectorRequest request
-    INTERFACE/Ptr IndIF ind
+    INTERFACE/Ptr IVectorIndication indication
+}
+INTERFACE IVectorIndication  {
+    FILE ivector_OC_cpp
+    METHOD/Action heard__ENA ( ValuePair v )
 }
 INTERFACE IVectorRequest  {
     FILE ivector_OC_cpp
     METHOD/Action say__ENA ( ValuePair v )
 }
-INTERFACE IndIF  {
-    FILE ivector_OC_cpp
-    METHOD/Action heard__ENA ( ValuePair v )
-}
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(ValuePair)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -59,7 +63,7 @@ INTERFACE PipeIn(width=704)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeOut(width=144)  {
+INTERFACE PipeOut(width=(__bitsize(ValuePair)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
@@ -75,13 +79,10 @@ EMODULE Fifo1Base(width=704) Fifo(width=704) {
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
-EMODULE IVectorIndication IndIF {
-    FILE ivector_OC_cpp
-}
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
-MODULE Fifo1(width=144) Fifo(width=144) {
+MODULE Fifo1(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=704) fifo
     METHOD/Action in$enq__ENA ( ValuePair v ) {
@@ -90,16 +91,16 @@ MODULE Fifo1(width=144) Fifo(width=144) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ValuePair = ((out$first$retval)) {
-        ALLOCA ValuePair out$first$retval
+    METHOD out$first ValuePair = ((_out$first$retval)) {
+        ALLOCA ValuePair _out$first$retval
         CALL :fifo$out$first{}
-        LET Bit(704) :out$first$retval = fifo$out$first
+        LET Bit(704) :_out$first$retval = fifo$out$first
     }
 }
-MODULE FifoPong(width=144) Fifo(width=144) {
+MODULE FifoPong(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
     FILE ivector_OC_cpp
-    FIELD Fifo1(width=144) element1
-    FIELD Fifo1(width=144) element2
+    FIELD Fifo1(width=(__bitsize(ValuePair))) element1
+    FIELD Fifo1(width=(__bitsize(ValuePair))) element2
     FIELD Bit(1) pong
     METHOD/Action in$enq__ENA ( ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
@@ -110,27 +111,27 @@ MODULE FifoPong(width=144) Fifo(width=144) {
         CALL/Action !(pong):element1$out$deq__ENA{}
         STORE :pong = (pong) ^ (1)
     }
-    METHOD out$first ValuePair = ((out$first$retval)) {
-        ALLOCA ValuePair out$first$retval
+    METHOD out$first ValuePair = ((_out$first$retval)) {
+        ALLOCA ValuePair _out$first$retval
         CALL (pong):element2$out$first{}
-        LET ValuePair (pong):out$first$retval = element2$out$first
+        LET ValuePair (pong):_out$first$retval = element2$out$first
         CALL !(pong):element1$out$first{}
-        LET ValuePair !(pong):out$first$retval = element1$out$first
+        LET ValuePair !(pong):_out$first$retval = element1$out$first
     }
 }
 MODULE IVector IVectorIFC {
     FILE ivector_OC_cpp
-    FIELD FifoPong(width=144) fifo
+    FIELD FifoPong(width=(__bitsize(ValuePair))) fifo
     METHOD/Action request$say__ENA ( ValuePair v ) {
-        ALLOCA ValuePair request$say$agg_2e_tmp
-        LET ValuePair :request$say$agg_2e_tmp = request$say$v
-        CALL/Action :fifo$in$enq__ENA{request$say$agg_2e_tmp}
+        ALLOCA ValuePair _request$say$agg_2e_tmp
+        LET ValuePair :_request$say$agg_2e_tmp = request$say$v
+        CALL/Action :fifo$in$enq__ENA{_request$say$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$respond__ENA {
-        ALLOCA ValuePair RULE$respond$agg_2e_tmp
+        ALLOCA ValuePair _RULE$respond$agg_2e_tmp
         CALL/Action :fifo$out$deq__ENA{}
         CALL :fifo$out$first{}
-        LET ValuePair :RULE$respond$agg_2e_tmp = fifo$out$first
-        CALL/Action :ind$heard__ENA{RULE$respond$agg_2e_tmp}
+        LET ValuePair :_RULE$respond$agg_2e_tmp = fifo$out$first
+        CALL/Action :indication$heard__ENA{_RULE$respond$agg_2e_tmp}
     }
 }

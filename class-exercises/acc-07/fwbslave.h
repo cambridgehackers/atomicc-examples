@@ -29,7 +29,7 @@ class FwbSlaveIfc {
     __uint(F_LGDEPTH) f_outstanding();
 };
 
-class FwbSlave __implements FwbSlaveIfc {
+class FwbSlave __implements __verilog FwbSlaveIfc {
     bool f_past_valid;
     __uint(F_LGDEPTH) nreqs;
     __uint(F_LGDEPTH) nacks;

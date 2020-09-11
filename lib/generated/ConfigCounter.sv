@@ -20,7 +20,7 @@ module ConfigCounter #(
     output wire positive__RDY);
     reg [count_sz - 1:0]cnt;
     reg positive_reg;
-    wire [count_sz - 1:0]RULE$react$new_count;
+    wire [count_sz - 1:0]_RULE$react$new_count;
     wire [count_sz - 1:0]dec_wire;
     assign decrement__RDY = 1;
     assign increment__RDY = 1;
@@ -31,7 +31,7 @@ module ConfigCounter #(
     assign read = cnt;
     assign read__RDY = 1;
     // Extra assigments, not to output wires
-    assign RULE$react$new_count = ( cnt + increment$v ) - dec_wire;
+    assign _RULE$react$new_count = ( cnt + increment$v ) - dec_wire;
     assign dec_wire = decrement$v | ( ( cnt >= maybeDecrement$v ) ? maybeDecrement$v : 0 );
 
     always @( posedge CLK) begin
@@ -41,8 +41,8 @@ module ConfigCounter #(
       end // nRST
       else begin
         // RULE$react__ENA
-            cnt <= RULE$react$new_count;
-            positive_reg <= RULE$react$new_count > 0;
+            cnt <= _RULE$react$new_count;
+            positive_reg <= _RULE$react$new_count > 0;
         // End of RULE$react__ENA
       end
     end // always @ (posedge CLK)

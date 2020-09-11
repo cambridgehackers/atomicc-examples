@@ -30,9 +30,9 @@ MODULE GrayCounter(width=10) GrayCounterIfc(width=10) {
     METHOD/Action writeGray__ENA ( Bit(width) v ) {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$2Body__ENA
     }
-    METHOD readBin Bit(width) = ((readBin$rtemp)) {
-        ALLOCA Bit(width) readBin$rtemp
-        ALLOCA ARRAY_width_Bit(1) readBin$temp
+    METHOD readBin Bit(width) = ((_readBin$rtemp)) {
+        ALLOCA Bit(10) _readBin$rtemp
+        ALLOCA ARRAY_10_Bit(1) _readBin$temp
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$3Body__ENA
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$4Body__ENA
     }
@@ -43,8 +43,8 @@ MODULE GrayCounter(width=10) GrayCounterIfc(width=10) {
         STORE :counter[__inst$Genvar1] = (counter[__inst$Genvar1]) ^ (__phi(((__inst$Genvar1) == (0)):(RULE$incdec$useLsb), !((__inst$Genvar1) == (0)):(((((RULE$incdec$useLsb) != (0)) ^ (1)) & (((__inst$Genvar1) == ((10) - (1))) | (__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (1)))}))) & (((__inst$Genvar1) == (1)) | (((__reduce{"|",__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1))))))
     }
     METHOD/Rule/Action RULE$incdec__ENA if (((increment__ENA) != (decrement__ENA))) {
-        ALLOCA Bit(1) RULE$incdec$useLsb
-        LET Bit(1) :RULE$incdec$useLsb = (__reduce{"^",counterBit}) == (decrement__ENA)
+        ALLOCA Bit(1) _RULE$incdec$useLsb
+        LET Bit(1) :_RULE$incdec$useLsb = (__reduce{"^",counterBit}) == (decrement__ENA)
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
     }
     METHOD/Action FOR$1Body__ENA ( Bit(32) __inst$Genvar1 ) {

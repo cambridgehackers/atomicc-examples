@@ -3,6 +3,11 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE Fifo(width=(__bitsize(NOCDataH)))  {
+    FILE atomicc_OC_h
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeOut(width=(__bitsize(NOCDataH))) out
+}
 INTERFACE Fifo(width=144)  {
     FILE atomicc_OC_h
     INTERFACE PipeIn(width=144) in
@@ -15,9 +20,13 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
 }
 INTERFACE MuxPipeIfc  {
     FILE mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+}
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE PipeIn(width=144)  {
     FILE atomicc_OC_h
@@ -26,6 +35,11 @@ INTERFACE PipeIn(width=144)  {
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeOut(width=(__bitsize(NOCDataH)))  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
 }
 INTERFACE PipeOut(width=144)  {
     FILE atomicc_OC_h
@@ -41,7 +55,7 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 EMODULE MuxPipe MuxPipeIfc {
     FILE mux_OC_h
 }
-MODULE Fifo1(width=144) Fifo(width=144) {
+MODULE Fifo1(width=(__bitsize(NOCDataH))) Fifo(width=(__bitsize(NOCDataH))) {
     FILE fifo_OC_h
     FIELD Fifo1Base(width=144) fifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) {
@@ -50,15 +64,15 @@ MODULE Fifo1(width=144) Fifo(width=144) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first NOCDataH = ((out$first$retval)) {
-        ALLOCA NOCDataH out$first$retval
+    METHOD out$first NOCDataH = ((_out$first$retval)) {
+        ALLOCA NOCDataH _out$first$retval
         CALL :fifo$out$first{}
-        LET Bit(144) :out$first$retval = fifo$out$first
+        LET Bit(144) :_out$first$retval = fifo$out$first
     }
 }
 MODULE MuxPipe MuxPipeIfc {
     FILE mux_OC_cpp
-    FIELD Fifo1(width=144) forwardFifo
+    FIELD Fifo1(width=(__bitsize(NOCDataH))) forwardFifo
     METHOD/Action in$enq__ENA ( NOCDataH v ) if ((((forwardFifo$out$first__RDY) != (0)) ^ (1))) {
         CALL/Action :out$enq__ENA{in$enq$v}
     }
@@ -66,10 +80,10 @@ MODULE MuxPipe MuxPipeIfc {
         CALL/Action :forwardFifo$in$enq__ENA{forward$enq$v}
     }
     METHOD/Rule/Action RULE$fifoRule__ENA if ((((in$enq__ENA) != (0)) ^ (1))) {
-        ALLOCA NOCDataH RULE$fifoRule$agg_2e_tmp
+        ALLOCA NOCDataH _RULE$fifoRule$agg_2e_tmp
         CALL :forwardFifo$out$first{}
-        LET NOCDataH :RULE$fifoRule$agg_2e_tmp = forwardFifo$out$first
-        CALL/Action :out$enq__ENA{RULE$fifoRule$agg_2e_tmp}
+        LET NOCDataH :_RULE$fifoRule$agg_2e_tmp = forwardFifo$out$first
+        CALL/Action :out$enq__ENA{_RULE$fifoRule$agg_2e_tmp}
         CALL/Action :forwardFifo$out$deq__ENA{}
     }
 }

@@ -1,17 +1,62 @@
-MODULE l_top l_top_interface {
-    FIELD Echo DUT__Echo
-    FIELD ___M2PEchoIndication M2P__indication
-    FIELD ___P2MEchoRequest P2M__request
+MODULE VsimTop VsimTop_interface {
+    FIELD PipeInB sink_0$port
+    FIELD PipeInB source_0$port
+    FIELD PipeInB user$read
+    FIELD PipeInB user$write
+    FIELD UserTop user
+    FIELD VsimReceive sink_0
+    FIELD VsimSend source_0
 }
-INTERFACE l_top_interface {
+INTERFACE VsimTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) request$enq__ENA
-    FIELD/input  Bit(144) request$enq$v
-    FIELD/output Bit(1) request$enq__RDY
-    FIELD/output Bit(1) indication$enq__ENA
-    FIELD/output Bit(144) indication$enq$v
-    FIELD/input  Bit(1) indication$enq__RDY
+    FIELD/input  Bit(1) CLK_derivedClock
+    FIELD/input  Bit(1) nRST_derivedReset
+    FIELD/input  Bit(1) CLK_sys_clk
+}
+MODULE UserTop UserTop_interface {
+    FIELD PipeIn__W90 ctop$indication
+    FIELD PipeIn__W90 ctop$request
+    FIELD PipeIn__W90 radapter_0$in
+    FIELD PipeInB radapter_0$out
+    FIELD PipeInB wadapter_0$in
+    FIELD PipeIn__W90 wadapter_0$out
+    FIELD AdapterToBus__Iz1 radapter_0
+    FIELD AdapterFromBus__Oz2 wadapter_0
+    FIELD l_top__Rz2_Iz1 ctop
+}
+INTERFACE UserTop_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
+}
+INTERFACE AdapterToBus__Iz1_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE AdapterFromBus__Oz2 AdapterFromBus__Oz2_interface {
+}
+INTERFACE AdapterFromBus__Oz2_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE l_top__Rz2_Iz1 l_top__Rz2_Iz1_interface {
+    FIELD EchoIndication DUT__Echo$indication
+    FIELD EchoRequest DUT__Echo$request
+    FIELD EchoIndication M2P__indication$method
+    FIELD PipeIn__W90 M2P__indication$pipe
+    FIELD EchoRequest P2M__request$method
+    FIELD PipeIn__W90 P2M__request$pipe
+    FIELD Echo DUT__Echo
+    FIELD ___M2PEchoIndication__Pz3 M2P__indication
+    FIELD ___P2MEchoRequest__Pz3 P2M__request
+}
+INTERFACE l_top__Rz2_Iz1_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
 }
 MODULE Echo Echo_interface {
     FIELD Printf printfp
@@ -19,70 +64,18 @@ MODULE Echo Echo_interface {
 INTERFACE Echo_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) request$say__ENA
-    FIELD/input  Bit(32) request$say$v
-    FIELD/output Bit(1) request$say__RDY
-    FIELD/input  Bit(1) request$say2__ENA
-    FIELD/input  Bit(16) request$say2$a
-    FIELD/input  Bit(16) request$say2$b
-    FIELD/output Bit(1) request$say2__RDY
-    FIELD/input  Bit(1) request$setLeds__ENA
-    FIELD/input  Bit(8) request$setLeds$v
-    FIELD/output Bit(1) request$setLeds__RDY
-    FIELD/output Bit(1) indication$heard__ENA
-    FIELD/output Bit(32) indication$heard$v
-    FIELD/input  Bit(1) indication$heard__RDY
-    FIELD/output Bit(1) indication$heard2__ENA
-    FIELD/output Bit(16) indication$heard2$a
-    FIELD/output Bit(16) indication$heard2$b
-    FIELD/input  Bit(1) indication$heard2__RDY
-    FIELD/output Bit(1) indication$heard3__ENA
-    FIELD/output Bit(16) indication$heard3$a
-    FIELD/output Bit(32) indication$heard3$b
-    FIELD/output Bit(32) indication$heard3$c
-    FIELD/output Bit(16) indication$heard3$d
-    FIELD/input  Bit(1) indication$heard3__RDY
 }
-MODULE ___M2PEchoIndication ___M2PEchoIndication_interface {
+MODULE ___M2PEchoIndication__Pz3 ___M2PEchoIndication__Pz3_interface {
 }
-INTERFACE ___M2PEchoIndication_interface {
+INTERFACE ___M2PEchoIndication__Pz3_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) method$heard__ENA
-    FIELD/input  Bit(32) method$heard$v
-    FIELD/output Bit(1) method$heard__RDY
-    FIELD/input  Bit(1) method$heard2__ENA
-    FIELD/input  Bit(16) method$heard2$a
-    FIELD/input  Bit(16) method$heard2$b
-    FIELD/output Bit(1) method$heard2__RDY
-    FIELD/input  Bit(1) method$heard3__ENA
-    FIELD/input  Bit(16) method$heard3$a
-    FIELD/input  Bit(32) method$heard3$b
-    FIELD/input  Bit(32) method$heard3$c
-    FIELD/input  Bit(16) method$heard3$d
-    FIELD/output Bit(1) method$heard3__RDY
-    FIELD/output Bit(1) pipe$enq__ENA
-    FIELD/output Bit(144) pipe$enq$v
-    FIELD/input  Bit(1) pipe$enq__RDY
 }
-MODULE ___P2MEchoRequest ___P2MEchoRequest_interface {
+MODULE ___P2MEchoRequest__Pz3 ___P2MEchoRequest__Pz3_interface {
 }
-INTERFACE ___P2MEchoRequest_interface {
+INTERFACE ___P2MEchoRequest__Pz3_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/output Bit(1) method$say__ENA
-    FIELD/output Bit(32) method$say$v
-    FIELD/input  Bit(1) method$say__RDY
-    FIELD/output Bit(1) method$say2__ENA
-    FIELD/output Bit(16) method$say2$a
-    FIELD/output Bit(16) method$say2$b
-    FIELD/input  Bit(1) method$say2__RDY
-    FIELD/output Bit(1) method$setLeds__ENA
-    FIELD/output Bit(8) method$setLeds$v
-    FIELD/input  Bit(1) method$setLeds__RDY
-    FIELD/input  Bit(1) pipe$enq__ENA
-    FIELD/input  Bit(144) pipe$enq$v
-    FIELD/output Bit(1) pipe$enq__RDY
 }
 MODULE Printf Printf_interface {
 }
@@ -93,10 +86,11 @@ INTERFACE Printf_interface {
     FIELD/input  Bit(144) enq$v
     FIELD/output Bit(1) enq__RDY
 }
-FILE generated/l_top.sv
-FILE generated/printf.generated.vh
+FILE ../../lib/generated/VsimTop.sv
+FILE ../../lib/generated/vsimTop.generated.vh
 FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/atomicc.generated.vh
 FILE ../../lib/generated/axiTop.generated.vh
 FILE ../../lib/generated/bscan.generated.vh
 FILE ../../lib/generated/clockTop.generated.vh
@@ -114,8 +108,12 @@ FILE ../../lib/generated/resetInverter.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/vsimTop.generated.vh
 FILE ../../lib/generated/zynqTop.generated.vh
+FILE ../../lib/generated/UserTop.sv
+FILE ../../lib/generated/AdapterToBus.sv
+FILE ../../lib/generated/AdapterFromBus.sv
+FILE generated/l_top.sv
+FILE generated/printf.generated.vh
 FILE generated/Echo.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/___P2MEchoRequest.sv

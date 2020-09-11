@@ -2,16 +2,16 @@
 
 `default_nettype none
 module FifoPong #(
-    parameter integer width = 144)(
+    parameter integer width = 32+32+32)(
     input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeOut.server out);
     reg pong;
+    ValuePair _out$first$retval;
     PipeIn#(.width(96)) element1$in();
     PipeOut#(.width(96)) element1$out();
     PipeIn#(.width(96)) element2$in();
     PipeOut#(.width(96)) element2$out();
-    ValuePair out$first$retval;
     Fifo1Base#(.width(96)) element1 (.CLK(CLK), .nRST(nRST),
         .in(element1$in),
         .out(element1$out));
@@ -19,6 +19,7 @@ module FifoPong #(
         .in(element2$in),
         .out(element2$out));
     // Extra assigments, not to output wires
+    assign _out$first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
     assign element1$in.enq$v = in.enq$v;
     assign element1$in.enq__ENA = !( pong || ( !( in.enq__RDY && in.enq__ENA ) ) );
     assign element1$out.deq__ENA = !( pong || ( !( out.deq__RDY && out.deq__ENA ) ) );
@@ -27,8 +28,7 @@ module FifoPong #(
     assign element2$out.deq__ENA = out.deq__ENA && out.deq__RDY && pong;
     assign in.enq__RDY = ( element2$in.enq__RDY && ( pong || element1$in.enq__RDY ) ) || ( ( !element2$in.enq__RDY ) && ( !( pong || ( !element1$in.enq__RDY ) ) ) );
     assign out.deq__RDY = ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !( pong || ( !element1$out.deq__RDY ) ) ) );
-    assign out.first = out.first$retval;
-    assign out.first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
+    assign out.first = _out$first$retval;
     assign out.first__RDY = ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !( pong || ( !element1$out.first__RDY ) ) ) );
 
     always @( posedge CLK) begin

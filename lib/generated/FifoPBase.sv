@@ -7,7 +7,9 @@ module FifoPBase #(
     PipeIn.server in,
     PipeIn.client out);
     PipeOut#(.width(width)) base$in();
+    PipeIn#(.width(width)) base$out();
     PipeIn#(.width(width)) fifo$in();
+    PipeOut#(.width(width)) fifo$out();
     Fifo1Base#(.width(width)) fifo (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(base$in));

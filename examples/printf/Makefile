@@ -12,6 +12,6 @@ CPPFLAGS += -DUSE_PRINTF
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/printf.ll printf.cpp
-	$(ATOMICCDIR)/atomiccLinker l_top generated/linker
+	$(ATOMICCDIR)/atomiccLinker VsimTop generated/linker
 
 #-include $(DTOP)/generated/printf.generated.filelist

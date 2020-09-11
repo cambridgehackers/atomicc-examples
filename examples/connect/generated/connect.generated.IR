@@ -43,23 +43,23 @@ INTERFACE ConnectIfc  {
 }
 INTERFACE EIIIfc  {
     FILE connect_OC_cpp
-    INTERFACE PipeIn(width=144) pipe
+    INTERFACE PipeIn(width=(__bitsize(EchoIndication_data))) pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     FILE connect_OC_cpp
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn(width=144) pipe
+    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoIndication_data))) pipe
 }
 INTERFACE ERIIfc  {
     FILE connect_OC_cpp
-    INTERFACE PipeIn(width=144) pipe
+    INTERFACE PipeIn(width=(__bitsize(EchoRequest_data))) pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     FILE connect_OC_cpp
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn(width=144) pipe
+    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoRequest_data))) pipe
 }
 INTERFACE EchoIfc  {
     FILE connect_OC_cpp
@@ -81,11 +81,19 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(EchoIndication_data)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(EchoRequest_data)))  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -102,9 +110,9 @@ EMODULE MuxPipe MuxPipeIfc {
 MODULE Connect ConnectIfc {
     FILE connect_OC_cpp
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=144)
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=(__bitsize(EchoIndication_data)))
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=144)
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=(__bitsize(EchoRequest_data)))
     INTERFACECONNECT request lERO_test$request EchoRequest
     INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
@@ -114,9 +122,9 @@ MODULE Connect ConnectIfc {
     FIELD EchoIndicationInput lEII_test
     METHOD/Rule/Action RULE$connectRule__ENA {
         LET EchoRequest :lERI$request = lEcho$request
-        LET PipeIn(width=144) :lEIO$pipe = lEII_test$pipe
+        LET PipeIn(width=(__bitsize(EchoIndication_data))) :lEIO$pipe = lEII_test$pipe
         LET EchoIndication :lEcho$indication = lEIO$indication
-        LET PipeIn(width=144) :lERO_test$pipe = lERI$pipe
+        LET PipeIn(width=(__bitsize(EchoRequest_data))) :lERO_test$pipe = lERI$pipe
     }
 }
 MODULE Echo EchoIfc {
@@ -128,34 +136,38 @@ MODULE Echo EchoIfc {
 MODULE EchoIndicationInput EIIIfc {
     FILE connect_OC_cpp
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) {
-        CALL/Action ((pipe$enq$v$tag) == 1):indication$heard__ENA{pipe$enq$v$data$heard$meth,pipe$enq$v$data$heard$v}
+        ALLOCA EchoIndication_data _pipe$enq$temp$v
+        LET EchoIndication_data :_pipe$enq$temp$v = pipe$enq$v
+        CALL/Action ((_pipe$enq$temp$v$tag) == 1):indication$heard__ENA{_pipe$enq$temp$v$data$heard$meth,_pipe$enq$temp$v$data$heard$v}
     }
 }
 MODULE EchoIndicationOutput EIOIfc {
     FILE connect_OC_cpp
     METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoIndication_data indication$heard$ind
-        LET Bit(32) :indication$heard$ind$tag = 1
-        LET Bit(32) :indication$heard$ind$data$heard$meth = indication$heard$meth
-        LET Bit(32) :indication$heard$ind$data$heard$v = indication$heard$v
-        CALL/Action :pipe$enq__ENA{indication$heard$ind}
+        ALLOCA EchoIndication_data _indication$heard$ind
+        LET Bit(32) :_indication$heard$ind$tag = 1
+        LET Bit(32) :_indication$heard$ind$data$heard$meth = indication$heard$meth
+        LET Bit(32) :_indication$heard$ind$data$heard$v = indication$heard$v
+        CALL/Action :pipe$enq__ENA{_indication$heard$ind}
     }
 }
 MODULE EchoRequestInput ERIIfc {
     FILE connect_OC_cpp
     METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
+        ALLOCA EchoRequest_data _pipe$enq$temp$v
+        LET EchoRequest_data :_pipe$enq$temp$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
-        CALL/Action ((pipe$enq$v$tag) == 1):request$say__ENA{pipe$enq$v$data$say$meth,pipe$enq$v$data$say$v}
+        CALL/Action ((_pipe$enq$temp$v$tag) == 1):request$say__ENA{_pipe$enq$temp$v$data$say$meth,_pipe$enq$temp$v$data$say$v}
     }
 }
 MODULE EchoRequestOutput EROIfc {
     FILE connect_OC_cpp
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
-        ALLOCA EchoRequest_data request$say$ind
+        ALLOCA EchoRequest_data _request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET Bit(32) :request$say$ind$tag = 1
-        LET Bit(32) :request$say$ind$data$say$meth = request$say$meth
-        LET Bit(32) :request$say$ind$data$say$v = request$say$v
-        CALL/Action :pipe$enq__ENA{request$say$ind}
+        LET Bit(32) :_request$say$ind$tag = 1
+        LET Bit(32) :_request$say$ind$data$say$meth = request$say$meth
+        LET Bit(32) :_request$say$ind$data$say$v = request$say$v
+        CALL/Action :pipe$enq__ENA{_request$say$ind}
     }
 }

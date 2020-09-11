@@ -2,6 +2,8 @@ MODULE WbPriArbiter WbPriArbiter_interface {
 }
 INTERFACE WbPriArbiter_interface {
     FIELD/input  Bit(1) acyc
+    FIELD/input  Bit(1) bcyc
+    FIELD/input  Bit(1) ocyc
     FIELD/input  Bit(1) a$stb__ENA
     FIELD/input  Bit(1) a$stb$we
     FIELD/input  Bit(32) a$stb$addr

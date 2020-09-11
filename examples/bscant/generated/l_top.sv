@@ -5,7 +5,11 @@ module l_top (input wire CLK, input wire nRST,
     PipeIn.server request,
     PipeIn.client indication);
     BtestIndication DUT__Btest$indication();
+    BtestRequest DUT__Btest$request();
+    BtestIndication M2P__indication$method();
+    PipeIn#(.width(16 + 128)) M2P__indication$pipe();
     BtestRequest P2M__request$method();
+    PipeIn#(.width(16 + 128)) P2M__request$pipe();
     Btest DUT__Btest (.CLK(CLK), .nRST(nRST),
         .request(P2M__request$method),
         .indication(DUT__Btest$indication));

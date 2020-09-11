@@ -8,7 +8,7 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE PipeIn(width=144)  {
+INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -43,8 +43,8 @@ INTERFACE VsimSendIfc(width=32)  {
 }
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
-    INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeIn(width=144) indication
+    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) request
+    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) indication
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE atomicc_OC_h
