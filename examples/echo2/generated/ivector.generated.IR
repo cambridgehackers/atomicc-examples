@@ -14,19 +14,14 @@ STRUCT IVectorTest  {
     FIELD IVector ivector
 }
 INTERFACE Fifo(width=(__bitsize(ValuePair)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=(__bitsize(ValuePair))) in
     INTERFACE PipeOut(width=(__bitsize(ValuePair))) out
 }
 INTERFACE Fifo(width=704)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=704) in
     INTERFACE PipeOut(width=704) out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE IVectorIFC  {
     FILE ivector_OC_cpp
@@ -73,11 +68,11 @@ INTERFACE PipeOut(width=704)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
 EMODULE Fifo1Base(width=704) Fifo(width=704) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-}
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
@@ -91,10 +86,8 @@ MODULE Fifo1(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ValuePair = ((_out$first$retval)) {
-        ALLOCA ValuePair _out$first$retval
+    METHOD out$first ValuePair = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET Bit(704) :_out$first$retval = fifo$out$first
     }
 }
 MODULE FifoPong(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {

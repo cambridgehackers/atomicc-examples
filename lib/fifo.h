@@ -21,8 +21,13 @@
 // SOFTWARE.
 #ifndef _FIFO_H_
 #define _FIFO_H_
-#include "atomicc.h"
 #include "out2in.h"
+
+template<class T>
+class Fifo {
+    PipeIn<T> in;
+    PipeOut<T> out;
+};
 
 template<int width>
 class Fifo1Base __implements Fifo<__uint(width)>;

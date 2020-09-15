@@ -1,3 +1,8 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE BscanIfc(width=32)  {
     FILE bscan_OC_h
     INTERFACE PipeIn(width=32) toBscan
@@ -14,11 +19,6 @@ INTERFACE BscanLocalIfc(width=32)  {
     FIELD/input Bit(1) TDI
     INTERFACE PipeInSync(width=32) toBscan
     INTERFACE/Ptr PipeInSync(width=32) fromBscan
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MBSCANE2IFC  {
     FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
@@ -63,17 +63,17 @@ EMODULE BSCANE2 MBSCANE2IFC {
 EMODULE BUFG MbufgBUFG {
     FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     FILE bscan_OC_cpp
-    INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync(width=3)
+    INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync(width=32)
     FIELD BSCANE2 bscan
     PARAMS bscan <JTAG_CHAIN:id>
     FIELD BUFG tckbuf
     FIELD BscanLocal(width=32) localBscan
-    INTERFACE PipeInSync(width=3) readBscan
+    INTERFACE PipeInSync(width=32) readBscan
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
         CALL/Action :localBscan$toBscan$enq__ENA{toBscan$enq$v}
     }

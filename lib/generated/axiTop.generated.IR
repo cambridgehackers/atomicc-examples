@@ -15,27 +15,27 @@ INTERFACE AxiTopIfc  {
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
 INTERFACE Fifo(width=(__bitsize(ReadResp)))  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=(__bitsize(ReadResp))) in
     INTERFACE PipeOut(width=(__bitsize(ReadResp))) out
 }
 INTERFACE Fifo(width=32)  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=32) in
     INTERFACE PipeOut(width=32) out
 }
 INTERFACE Fifo(width=38)  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=38) in
     INTERFACE PipeOut(width=38) out
 }
 INTERFACE Fifo(width=6)  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=6) in
     INTERFACE PipeOut(width=6) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
+    FILE funnel_OC_h
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
 }
@@ -113,6 +113,9 @@ INTERFACE l_topIfc  {
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
 }
+EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
 EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE fifo_OC_h
 }
@@ -123,7 +126,7 @@ EMODULE Fifo1Base(width=6) Fifo(width=6) {
     FILE fifo_OC_h
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE atomicc_OC_h
+    FILE funnel_OC_h
 }
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h
@@ -238,10 +241,8 @@ MODULE Fifo1(width=(__bitsize(ReadResp))) Fifo(width=(__bitsize(ReadResp))) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ReadResp = ((_out$first$retval)) {
-        ALLOCA ReadResp _out$first$retval
+    METHOD out$first ReadResp = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET Bit(38) :_out$first$retval = fifo$out$first
     }
 }
 MODULE Fifo1(width=32) Fifo(width=32) {

@@ -14,7 +14,7 @@ INTERFACE AtB(width=32)  {
     INTERFACE/Ptr PipeInB(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
+    FILE funnel_OC_h
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
 }
@@ -46,8 +46,11 @@ EMODULE AdapterFromBus(width=32) AfB(width=32) {
 EMODULE AdapterToBus(width=32) AtB(width=32) {
     FILE adapter_OC_h
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE funnel_OC_h
 }
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h

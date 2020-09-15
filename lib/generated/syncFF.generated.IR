@@ -1,7 +1,7 @@
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+STRUCT NOCDataH  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
+    FIELD Bit(16) length
+    FIELD Bit(128) data
 }
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
@@ -14,7 +14,7 @@ INTERFACE SyncFFIfc  {
     FIELD/output Bit(1) out
     FIELD/input Bit(1) in
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE SyncFF SyncFFIfc {

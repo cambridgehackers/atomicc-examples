@@ -1,3 +1,8 @@
+STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE Ft600  {
     FILE clock_OC_cpp
     FIELD/input Bit(1) usb_clk
@@ -7,11 +12,6 @@ INTERFACE Ft600  {
     FIELD/output Bit(1) usb_wr_n
     FIELD/output Bit(1) usb_oe_n
     FIELD/inout Bit(16) usb_ad
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MIOBUF  {
     FILE _OC__OC__PC__OC__OC__PC_xilinx_PC_VIOBUF_OC_h
@@ -28,7 +28,7 @@ INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE IOBUF MIOBUF {

@@ -10,24 +10,19 @@ STRUCT ProcessData  {
     FIELD Bit(3) state
 }
 INTERFACE Fifo(width=(__bitsize(ProcessData)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=(__bitsize(ProcessData))) in
     INTERFACE PipeOut(width=(__bitsize(ProcessData))) out
 }
 INTERFACE Fifo(width=23)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=23) in
     INTERFACE PipeOut(width=23) out
 }
 INTERFACE Fifo(width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=32) in
     INTERFACE PipeOut(width=32) out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE LpmIfc  {
     FILE lpm_OC_cpp
@@ -85,14 +80,14 @@ INTERFACE TickIfc  {
 EMODULE BufTicket TickIfc {
     FILE lpm_OC_h
 }
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
 EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE FifoB1Base(width=23) Fifo(width=23) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-}
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE LpmMemory LpmMem {
     FILE lpm_OC_h
@@ -122,10 +117,8 @@ MODULE FifoB1(width=(__bitsize(ProcessData))) Fifo(width=(__bitsize(ProcessData)
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ProcessData = ((_out$first$retval)) {
-        ALLOCA ProcessData _out$first$retval
+    METHOD out$first ProcessData = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET Bit(23) :_out$first$retval = fifo$out$first
     }
 }
 MODULE Lpm LpmIfc {

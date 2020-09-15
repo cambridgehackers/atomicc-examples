@@ -20,6 +20,12 @@
  */
 #include "atomicc.h"
 
+template<class In, class Out>
+class Gear {
+    PipeIn<In> in;
+    PipeOut<Out> out;
+};
+
 template<int widthIn, int widthOut>
 class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)>;
 

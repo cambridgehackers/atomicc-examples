@@ -24,6 +24,7 @@ module ZynqTop (
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb);
     wire CLK;
+    wire nRST;
     wire ps7_fclk_0_c$O;
     wire ps7_freset_0_r$O;
     Pps7fclk ps7_ps7_foo$FCLK();
@@ -60,8 +61,8 @@ module ZynqTop (
         .MAXIGP0_I(test$MAXIGP0_I),
         .FCLK(ps7_ps7_foo$FCLK));
     AxiTop test (
-        .CLK(ps7_fclk_0_c$O),
-        .nRST(ps7_freset_0_r$O),
+        .CLK(CLK),
+        .nRST(nRST),
         .interrupt(test$interrupt),
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I));
@@ -73,9 +74,10 @@ module ZynqTop (
         .O(ps7_freset_0_r$O));
     // Extra assigments, not to output wires
     assign CLK = ps7_fclk_0_c$O;
-    assign ps7_ps7_foo$intr.CLK = ps7_fclk_0_c$O;
+    assign nRST = ps7_freset_0_r$O;
+    assign ps7_ps7_foo$intr.CLK = CLK;
     assign ps7_ps7_foo$intr.interrupt = test$interrupt;
-    assign ps7_ps7_foo$intr.nRST = ps7_freset_0_r$O;
+    assign ps7_ps7_foo$intr.nRST = nRST;
 endmodule
 
 `default_nettype wire    // set back to default value

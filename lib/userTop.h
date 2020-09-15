@@ -20,7 +20,7 @@
  */
 #ifndef __USER_TOP_H__
 #define __USER_TOP_H__
-#include "atomicc.h"
+#include "funnel.h"
 
 class l_topIfc {
     PipeIn<NOCDataH> request;

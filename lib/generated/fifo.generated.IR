@@ -1,5 +1,10 @@
-INTERFACE Fifo(width=999999)  {
+STRUCT NOCDataH  {
     FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE Fifo(width=999999)  {
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=999999) in
     INTERFACE PipeOut(width=999999) out
 }
@@ -7,11 +12,6 @@ INTERFACE FifoPIfc(width=999999)  {
     FILE fifo_OC_h
     INTERFACE PipeIn(width=999999) in
     INTERFACE/Ptr PipeIn(width=999999) out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE Out2InIfc(width=999999)  {
     FILE out2in_OC_h
@@ -31,7 +31,7 @@ INTERFACE PipeOut(width=999999)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 EMODULE Out2InBase(width=999999) Out2InIfc(width=999999) {

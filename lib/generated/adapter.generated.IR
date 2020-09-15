@@ -13,11 +13,6 @@ INTERFACE AtB(width=32)  {
     INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
     INTERFACE/Ptr PipeInB(width=32) out
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
-}
 INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -30,7 +25,7 @@ INTERFACE PipeInB(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE AdapterFromBus(width=32) AfB(width=32) {

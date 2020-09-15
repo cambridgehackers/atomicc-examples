@@ -8,4 +8,4 @@ CPPFILES = testecho.cpp
 all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
-	$(ATOMICCDIR)/atomiccLinker AxiTop generated/linker
+	$(ATOMICCDIR)/atomiccLinker VsimTop generated/linker

@@ -5,15 +5,17 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal AxiTop.sv Fifo1Base.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv Echo.sv ___M2PEchoIndication.sv ___P2MEchoRequest.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv Echo.sv ___M2PEchoIndication.sv ___P2MEchoRequest.sv 
 
-prep -top AxiTop
+prep -top VsimTop
 
 [files]
-../../lib/generated/AxiTop.sv
-../../lib/generated/axiTop.generated.vh
+../../lib/generated/VsimTop.sv
+../../lib/generated/vsimTop.generated.vh
 ../../lib/generated/atomicclib.vh
 ../../lib/generated/adapter.generated.vh
+../../lib/generated/atomicc.generated.vh
+../../lib/generated/axiTop.generated.vh
 ../../lib/generated/bscan.generated.vh
 ../../lib/generated/clockTop.generated.vh
 ../../lib/generated/configCounter.generated.vh
@@ -30,9 +32,7 @@ prep -top AxiTop
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/userTop.generated.vh
-../../lib/generated/vsimTop.generated.vh
 ../../lib/generated/zynqTop.generated.vh
-../../lib/generated/Fifo1Base.sv
 ../../lib/generated/UserTop.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/AdapterFromBus.sv

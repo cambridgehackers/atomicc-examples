@@ -4,7 +4,7 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
+    FILE funnel_OC_h
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
 }
@@ -46,8 +46,11 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn(width=(__bitsize(NOCDataH))) request
     INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) indication
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE funnel_OC_h
 }
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h

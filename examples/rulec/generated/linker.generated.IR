@@ -1,218 +1,87 @@
-MODULE AxiTop AxiTop_interface {
-    FIELD Fifo1Base__W6 reqArs
-    FIELD Fifo1Base__W6 reqAws
-    FIELD Fifo1Base__W6 writeDone
-    FIELD Fifo1Base__W20 requestValue
-    FIELD Fifo1Base__W26 readData
-    FIELD Fifo1Base__W20 writeData
+MODULE VsimTop VsimTop_interface {
+    FIELD PipeInB sink_0$port
+    FIELD PipeInB source_0$port
+    FIELD PipeInB user$read
+    FIELD PipeInB user$write
     FIELD UserTop user
+    FIELD VsimReceive sink_0
+    FIELD VsimSend source_0
 }
-INTERFACE AxiTop_interface {
-    FIELD/input  Bit(1) MAXIGP0_O$AR__ENA
-    FIELD/input  Bit(32) MAXIGP0_O$AR$addr
-    FIELD/input  Bit(12) MAXIGP0_O$AR$id
-    FIELD/input  Bit(4) MAXIGP0_O$AR$len
-    FIELD/output Bit(1) MAXIGP0_O$AR__RDY
-    FIELD/input  Bit(1) MAXIGP0_O$AW__ENA
-    FIELD/input  Bit(32) MAXIGP0_O$AW$addr
-    FIELD/input  Bit(12) MAXIGP0_O$AW$id
-    FIELD/input  Bit(4) MAXIGP0_O$AW$len
-    FIELD/output Bit(1) MAXIGP0_O$AW__RDY
-    FIELD/input  Bit(1) MAXIGP0_O$W__ENA
-    FIELD/input  Bit(32) MAXIGP0_O$W$data
-    FIELD/input  Bit(12) MAXIGP0_O$W$id
-    FIELD/input  Bit(1) MAXIGP0_O$W$last
-    FIELD/output Bit(1) MAXIGP0_O$W__RDY
-    FIELD/output Bit(1) MAXIGP0_I$R__ENA
-    FIELD/output Bit(32) MAXIGP0_I$R$data
-    FIELD/output Bit(12) MAXIGP0_I$R$id
-    FIELD/output Bit(1) MAXIGP0_I$R$last
-    FIELD/output Bit(2) MAXIGP0_I$R$resp
-    FIELD/input  Bit(1) MAXIGP0_I$R__RDY
-    FIELD/output Bit(1) MAXIGP0_I$B__ENA
-    FIELD/output Bit(12) MAXIGP0_I$B$id
-    FIELD/output Bit(2) MAXIGP0_I$B$resp
-    FIELD/input  Bit(1) MAXIGP0_I$B__RDY
-    FIELD/output Bit(1) interrupt
+INTERFACE VsimTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-}
-MODULE Fifo1Base__W26 Fifo1Base__W26_interface {
-}
-INTERFACE Fifo1Base__W26_interface {
-    FIELD/parameter Bit(32) width
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(38) in$enq$v
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/input  Bit(1) out$deq__ENA
-    FIELD/output Bit(1) out$deq__RDY
-    FIELD/output Bit(38) out$first
-    FIELD/output Bit(1) out$first__RDY
-}
-MODULE Fifo1Base__W20 Fifo1Base__W20_interface {
-}
-INTERFACE Fifo1Base__W20_interface {
-    FIELD/parameter Bit(32) width
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(32) in$enq$v
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/input  Bit(1) out$deq__ENA
-    FIELD/output Bit(1) out$deq__RDY
-    FIELD/output Bit(32) out$first
-    FIELD/output Bit(1) out$first__RDY
-}
-MODULE Fifo1Base__W6 Fifo1Base__W6_interface {
-}
-INTERFACE Fifo1Base__W6_interface {
-    FIELD/parameter Bit(32) width
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(6) in$enq$v
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/input  Bit(1) out$deq__ENA
-    FIELD/output Bit(1) out$deq__RDY
-    FIELD/output Bit(6) out$first
-    FIELD/output Bit(1) out$first__RDY
+    FIELD/input  Bit(1) CLK_derivedClock
+    FIELD/input  Bit(1) nRST_derivedReset
+    FIELD/input  Bit(1) CLK_sys_clk
 }
 MODULE UserTop UserTop_interface {
-    FIELD AdapterToBus radapter_0
-    FIELD AdapterFromBus wadapter_0
-    FIELD l_top ctop
+    FIELD PipeIn__W90 ctop$indication
+    FIELD PipeIn__W90 ctop$request
+    FIELD PipeIn__W90 radapter_0$in
+    FIELD PipeInB radapter_0$out
+    FIELD PipeInB wadapter_0$in
+    FIELD PipeIn__W90 wadapter_0$out
+    FIELD AdapterToBus__Iz1 radapter_0
+    FIELD AdapterFromBus__Oz2 wadapter_0
+    FIELD l_top__Rz2_Iz1 ctop
 }
 INTERFACE UserTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) write$enq__ENA
-    FIELD/input  Bit(32) write$enq$v
-    FIELD/input  Bit(1) write$enq$last
-    FIELD/output Bit(1) write$enq__RDY
-    FIELD/output Bit(1) read$enq__ENA
-    FIELD/output Bit(32) read$enq$v
-    FIELD/output Bit(1) read$enq$last
-    FIELD/input  Bit(1) read$enq__RDY
 }
-MODULE AdapterToBus AdapterToBus_interface {
+MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
 }
-INTERFACE AdapterToBus_interface {
+INTERFACE AdapterToBus__Iz1_interface {
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(144) in$enq$v
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/output Bit(1) out$enq__ENA
-    FIELD/output Bit(32) out$enq$v
-    FIELD/output Bit(1) out$enq$last
-    FIELD/input  Bit(1) out$enq__RDY
 }
-MODULE AdapterFromBus AdapterFromBus_interface {
+MODULE AdapterFromBus__Oz2 AdapterFromBus__Oz2_interface {
 }
-INTERFACE AdapterFromBus_interface {
+INTERFACE AdapterFromBus__Oz2_interface {
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) in$enq__ENA
-    FIELD/input  Bit(32) in$enq$v
-    FIELD/input  Bit(1) in$enq$last
-    FIELD/output Bit(1) in$enq__RDY
-    FIELD/output Bit(1) out$enq__ENA
-    FIELD/output Bit(144) out$enq$v
-    FIELD/input  Bit(1) out$enq__RDY
 }
-MODULE l_top l_top_interface {
+MODULE l_top__Rz2_Iz1 l_top__Rz2_Iz1_interface {
+    FIELD EchoIndication DUT__Echo$indication
+    FIELD EchoRequest DUT__Echo$request
+    FIELD EchoIndication M2P__indication$method
+    FIELD PipeIn__W90 M2P__indication$pipe
+    FIELD EchoRequest P2M__request$method
+    FIELD PipeIn__W90 P2M__request$pipe
     FIELD Echo DUT__Echo
-    FIELD ___M2PEchoIndication M2P__indication
-    FIELD ___P2MEchoRequest P2M__request
+    FIELD ___M2PEchoIndication__Pz3 M2P__indication
+    FIELD ___P2MEchoRequest__Pz3 P2M__request
 }
-INTERFACE l_top_interface {
+INTERFACE l_top__Rz2_Iz1_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) request$enq__ENA
-    FIELD/input  Bit(144) request$enq$v
-    FIELD/output Bit(1) request$enq__RDY
-    FIELD/output Bit(1) indication$enq__ENA
-    FIELD/output Bit(144) indication$enq$v
-    FIELD/input  Bit(1) indication$enq__RDY
 }
 MODULE Echo Echo_interface {
 }
 INTERFACE Echo_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) request$say__ENA
-    FIELD/input  Bit(32) request$say$v
-    FIELD/output Bit(1) request$say__RDY
-    FIELD/input  Bit(1) request$say2__ENA
-    FIELD/input  Bit(16) request$say2$a
-    FIELD/input  Bit(16) request$say2$b
-    FIELD/output Bit(1) request$say2__RDY
-    FIELD/input  Bit(1) request$setLeds__ENA
-    FIELD/input  Bit(8) request$setLeds$v
-    FIELD/output Bit(1) request$setLeds__RDY
-    FIELD/output Bit(1) indication$heard__ENA
-    FIELD/output Bit(32) indication$heard$v
-    FIELD/input  Bit(1) indication$heard__RDY
-    FIELD/output Bit(1) indication$heard2__ENA
-    FIELD/output Bit(16) indication$heard2$a
-    FIELD/output Bit(16) indication$heard2$b
-    FIELD/input  Bit(1) indication$heard2__RDY
-    FIELD/output Bit(1) indication$heard3__ENA
-    FIELD/output Bit(16) indication$heard3$a
-    FIELD/output Bit(32) indication$heard3$b
-    FIELD/output Bit(32) indication$heard3$c
-    FIELD/output Bit(16) indication$heard3$d
-    FIELD/input  Bit(1) indication$heard3__RDY
 }
-MODULE ___M2PEchoIndication ___M2PEchoIndication_interface {
+MODULE ___M2PEchoIndication__Pz3 ___M2PEchoIndication__Pz3_interface {
 }
-INTERFACE ___M2PEchoIndication_interface {
+INTERFACE ___M2PEchoIndication__Pz3_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) method$heard__ENA
-    FIELD/input  Bit(32) method$heard$v
-    FIELD/output Bit(1) method$heard__RDY
-    FIELD/input  Bit(1) method$heard2__ENA
-    FIELD/input  Bit(16) method$heard2$a
-    FIELD/input  Bit(16) method$heard2$b
-    FIELD/output Bit(1) method$heard2__RDY
-    FIELD/input  Bit(1) method$heard3__ENA
-    FIELD/input  Bit(16) method$heard3$a
-    FIELD/input  Bit(32) method$heard3$b
-    FIELD/input  Bit(32) method$heard3$c
-    FIELD/input  Bit(16) method$heard3$d
-    FIELD/output Bit(1) method$heard3__RDY
-    FIELD/output Bit(1) pipe$enq__ENA
-    FIELD/output Bit(144) pipe$enq$v
-    FIELD/input  Bit(1) pipe$enq__RDY
 }
-MODULE ___P2MEchoRequest ___P2MEchoRequest_interface {
+MODULE ___P2MEchoRequest__Pz3 ___P2MEchoRequest__Pz3_interface {
 }
-INTERFACE ___P2MEchoRequest_interface {
+INTERFACE ___P2MEchoRequest__Pz3_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/output Bit(1) method$say__ENA
-    FIELD/output Bit(32) method$say$v
-    FIELD/input  Bit(1) method$say__RDY
-    FIELD/output Bit(1) method$say2__ENA
-    FIELD/output Bit(16) method$say2$a
-    FIELD/output Bit(16) method$say2$b
-    FIELD/input  Bit(1) method$say2__RDY
-    FIELD/output Bit(1) method$setLeds__ENA
-    FIELD/output Bit(8) method$setLeds$v
-    FIELD/input  Bit(1) method$setLeds__RDY
-    FIELD/input  Bit(1) pipe$enq__ENA
-    FIELD/input  Bit(144) pipe$enq$v
-    FIELD/output Bit(1) pipe$enq__RDY
 }
-FILE ../../lib/generated/AxiTop.sv
-FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/VsimTop.sv
+FILE ../../lib/generated/vsimTop.generated.vh
 FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/atomicc.generated.vh
+FILE ../../lib/generated/axiTop.generated.vh
 FILE ../../lib/generated/bscan.generated.vh
 FILE ../../lib/generated/clockTop.generated.vh
 FILE ../../lib/generated/configCounter.generated.vh
@@ -229,9 +98,7 @@ FILE ../../lib/generated/resetInverter.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/vsimTop.generated.vh
 FILE ../../lib/generated/zynqTop.generated.vh
-FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/AdapterFromBus.sv

@@ -73,29 +73,9 @@ class PipeInB {
     void enq(__uint(width) v, bool last);
 };
 
-template<class T>
-class Fifo {
-    PipeIn<T> in;
-    PipeOut<T> out;
-};
-
-template<class In, class Out>
-class Gear {
-    PipeIn<In> in;
-    PipeOut<Out> out;
-};
-
 typedef __uint(128) NOCData;
-typedef struct {LenType length; NOCData data;} NOCDataH;
+typedef struct NOCDataH {LenType length; NOCData data;} NOCDataH;
 #if 0
-typedef PipeIn<NOCData>                   NOCPipe;
-class l_topIfc {
-    PipeIn<NOCDataH> request;
-    PipeIn<NOCDataH> *indication;
-};
-class l_top __implements l_topIfc; // force PipeIn<NOCDataH> to appear in IR
-#endif
-
 // FunnelBufferedBase is now used in l_top
 template<int funnelWidth, int width>
 class FunnelBaseIfc {
@@ -109,6 +89,9 @@ class FunnelBase __implements FunnelBaseIfc<funnelWidth, width>;
 template<int funnelWidth, int width>
 class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, width>;
 static FunnelBufferedBase<99, 32> dummyFunnel; // to force at least 1 instantiation of template into IR
+#endif
+class Dummy __implements PipeIn<__uint(32)>;
+static Dummy dummyp;
 
 #if 0
 template<class T> class M2P __implements T { // method -> pipe

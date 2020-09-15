@@ -7,6 +7,8 @@ module Bscan #(
     input wire CLK, input wire nRST,
     PipeIn.server toBscan,
     PipeIn.client fromBscan);
+    wire _fromBscan$enqS__ENA;
+    wire _toBscan$enqS__RDY;
     wire bscan$CAPTURE;
     wire bscan$SEL;
     wire bscan$SHIFT;
@@ -14,14 +16,13 @@ module Bscan #(
     wire bscan$TDI;
     wire bscan$TDO;
     wire bscan$UPDATE;
-    wire fromBscan$enqS__ENA;
     wire localBscan$capture;
+    PipeIn#(.width(width)) localBscan$fromBscan();
     wire localBscan$shift;
     PipeIn#(.width(width)) localBscan$toBscan();
     wire localBscan$update;
     PipeIn#(.width(width)) readBscan();
     wire tckbuf$O;
-    wire toBscan$enqS__RDY;
     BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),
@@ -49,20 +50,20 @@ module Bscan #(
         .fromBscan(readBscan));
     SyncFF fromBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
         .out(fromBscan.enq__ENA),
-        .in(fromBscan$enqS__ENA));
+        .in(_fromBscan$enqS__ENA));
     SyncFF toBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
         .out(toBscan.enq__RDY),
-        .in(toBscan$enqS__RDY));
+        .in(_toBscan$enqS__RDY));
     assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
     assign localBscan$shift = !( ( bscan$SEL & bscan$SHIFT ) == 0 );
     assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     // Extra assigments, not to output wires
     assign fromBscan.enq$v = readBscan.enq$v;
-    assign fromBscan$enqS__ENA = readBscan.enq__ENA;
+    assign _fromBscan$enqS__ENA = readBscan.enq__ENA;
     assign localBscan$toBscan.enq$v = toBscan.enq$v;
     assign localBscan$toBscan.enq__ENA = toBscan.enq__ENA;
     assign readBscan.enq__RDY = fromBscan.enq__RDY;
-    assign toBscan$enqS__RDY = localBscan$toBscan.enq__RDY;
+    assign _toBscan$enqS__RDY = localBscan$toBscan.enq__RDY;
 endmodule
 
 `default_nettype wire    // set back to default value

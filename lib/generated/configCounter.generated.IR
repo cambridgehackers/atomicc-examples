@@ -1,3 +1,8 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE ConfigCounterIfc(count_sz=10)  {
     FILE configCounter_OC_cpp
     METHOD/Action decrement__ENA ( Bit(count_sz) v )
@@ -6,16 +11,11 @@ INTERFACE ConfigCounterIfc(count_sz=10)  {
     METHOD read Bit(count_sz)
     METHOD positive Bit(1)
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE ConfigCounter(count_sz=10) ConfigCounterIfc(count_sz=10) {

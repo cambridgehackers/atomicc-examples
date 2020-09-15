@@ -1,7 +1,7 @@
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+STRUCT NOCDataH  {
     FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
+    FIELD Bit(16) length
+    FIELD Bit(128) data
 }
 INTERFACE IobufVecPins(iovecWidth=999999)  {
     FILE iobufVec_OC_h
@@ -25,7 +25,7 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 EMODULE IOBUF MIOBUF {

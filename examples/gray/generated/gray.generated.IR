@@ -1,7 +1,7 @@
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+STRUCT NOCDataH  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
+    FIELD Bit(16) length
+    FIELD Bit(128) data
 }
 INTERFACE GrayCounterIfc(width=4)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_grayCounter_OC_h
@@ -21,7 +21,7 @@ INTERFACE TestIfc  {
     SOFTWARE request
     INTERFACE GrayCounterIfc(width=4) request
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE GrayCounter(width=4) GrayCounterIfc(width=4) {

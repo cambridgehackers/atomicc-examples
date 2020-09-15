@@ -74,11 +74,6 @@ INTERFACE EchoRequest  {
     FILE connect_OC_cpp
     METHOD/Action say__ENA ( Bit(32) meth , Bit(32) v )
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
-}
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
     INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
@@ -101,7 +96,7 @@ INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {

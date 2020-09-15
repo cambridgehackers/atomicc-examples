@@ -4,19 +4,14 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 INTERFACE Fifo(width=(__bitsize(NOCDataH)))  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
     INTERFACE PipeOut(width=(__bitsize(NOCDataH))) out
 }
 INTERFACE Fifo(width=144)  {
-    FILE atomicc_OC_h
+    FILE fifo_OC_h
     INTERFACE PipeIn(width=144) in
     INTERFACE PipeOut(width=144) out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MuxPipeIfc  {
     FILE mux_OC_h
@@ -46,11 +41,11 @@ INTERFACE PipeOut(width=144)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
 EMODULE Fifo1Base(width=144) Fifo(width=144) {
     FILE fifo_OC_h
-}
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE atomicc_OC_h
 }
 EMODULE MuxPipe MuxPipeIfc {
     FILE mux_OC_h
@@ -64,10 +59,8 @@ MODULE Fifo1(width=(__bitsize(NOCDataH))) Fifo(width=(__bitsize(NOCDataH))) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first NOCDataH = ((_out$first$retval)) {
-        ALLOCA NOCDataH _out$first$retval
+    METHOD out$first NOCDataH = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET Bit(144) :_out$first$retval = fifo$out$first
     }
 }
 MODULE MuxPipe MuxPipeIfc {

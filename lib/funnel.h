@@ -23,6 +23,19 @@
 #define _FUNNEL_H_
 #include "fifo.h"
 
+template<int funnelWidth, int width>
+class FunnelBaseIfc {
+    PipeIn<__uint(width)> in[funnelWidth];
+    PipeIn<__uint(width)> *out;
+};
+
+template<int funnelWidth, int width>
+class FunnelBase __implements FunnelBaseIfc<funnelWidth, width>;
+
+template<int funnelWidth, int width>
+class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, width>;
+static FunnelBufferedBase<99, 32> dummyFunnel; // to force at least 1 instantiation of template into IR
+
 template<int funnelWidth, class T>
 class FunnelIfc {
     PipeIn<T> in[funnelWidth];

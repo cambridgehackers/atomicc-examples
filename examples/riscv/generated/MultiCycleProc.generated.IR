@@ -4,6 +4,11 @@ STRUCT ExecResult  {
     FIELD Bit(32) addr
     FIELD Bit(32) data
 }
+STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE DMem  {
     FILE MultiCycleProc_OC_cpp
     METHOD/Action request__ENA ( Bit(32) write_en , Bit(32) addr , Bit(32) data )
@@ -21,11 +26,6 @@ INTERFACE Decoder  {
 INTERFACE Executer  {
     FILE MultiCycleProc_OC_cpp
     METHOD basicExec ( Bit(32) op , Bit(32) src1 , Bit(32) src2 ) ExecResult
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE IMem  {
     FILE MultiCycleProc_OC_cpp
@@ -48,7 +48,7 @@ INTERFACE RegFile  {
     METHOD read ( Bit(32) regnum ) Bit(32)
     METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE MultiCycleProc MultiCycleProcIfc {

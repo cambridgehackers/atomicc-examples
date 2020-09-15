@@ -1,14 +1,14 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE ClockIfc  {
     FILE clockTop_OC_h
     FIELD/parameter FLOAT CLKIN1_PERIOD
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE MResetInverterResetInverter  {
     FILE VResetInverter_OC_h
@@ -114,7 +114,7 @@ EMODULE BUFG MbufgBUFG {
 EMODULE ClockTop ClockIfc {
     FILE clockTop_OC_h
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {

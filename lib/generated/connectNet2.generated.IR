@@ -1,3 +1,8 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
 INTERFACE CNCONNECTNET2  {
     FILE connectNet2_OC_h
     FIELD/input Bit(1) IN1
@@ -5,16 +10,11 @@ INTERFACE CNCONNECTNET2  {
     FIELD/output Bit(1) OUT1
     FIELD/output Bit(1) OUT2
 }
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE CONNECTNET2 CNCONNECTNET2 {

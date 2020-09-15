@@ -14,19 +14,14 @@ STRUCT IVectorTest  {
     FIELD IVector ivector
 }
 INTERFACE Fifo(width=(__bitsize(ValuePair)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=(__bitsize(ValuePair))) in
     INTERFACE PipeOut(width=(__bitsize(ValuePair))) out
 }
 INTERFACE Fifo(width=96)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=96) in
     INTERFACE PipeOut(width=96) out
-}
-INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    INTERFACE/Count funnelWidth  PipeIn(width=32) in
-    INTERFACE/Ptr PipeIn(width=32) out
 }
 INTERFACE IVectorIFC  {
     FILE ivector_OC_cpp
@@ -73,11 +68,11 @@ INTERFACE PipeOut(width=96)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
 EMODULE Fifo1Base(width=96) Fifo(width=96) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-}
-EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE IVectorInd IVectorIndication {
     FILE ivector_OC_cpp
@@ -94,10 +89,8 @@ MODULE Fifo1(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
     METHOD/Action out$deq__ENA {
         CALL/Action :fifo$out$deq__ENA{}
     }
-    METHOD out$first ValuePair = ((_out$first$retval)) {
-        ALLOCA ValuePair _out$first$retval
+    METHOD out$first ValuePair = ((fifo$out$first)) {
         CALL :fifo$out$first{}
-        LET Bit(96) :_out$first$retval = fifo$out$first
     }
 }
 MODULE FifoPong(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
@@ -134,7 +127,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :fifo$in[in$say$meth].enq__ENA{_in$say$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$respond_rule_0__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_0$i
+        ALLOCA Bit(32) _RULE$respond_rule_0$i
         ALLOCA ValuePair _RULE$respond_rule_0$temp
         CALL :fifo$out[0].first{}
         LET ValuePair :_RULE$respond_rule_0$temp = fifo$out[0].first
@@ -142,7 +135,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{0,_RULE$respond_rule_0$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_1__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_1$i
+        ALLOCA Bit(32) _RULE$respond_rule_1$i
         ALLOCA ValuePair _RULE$respond_rule_1$temp
         CALL :fifo$out[1].first{}
         LET ValuePair :_RULE$respond_rule_1$temp = fifo$out[1].first
@@ -150,7 +143,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{1,_RULE$respond_rule_1$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_2__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_2$i
+        ALLOCA Bit(32) _RULE$respond_rule_2$i
         ALLOCA ValuePair _RULE$respond_rule_2$temp
         CALL :fifo$out[2].first{}
         LET ValuePair :_RULE$respond_rule_2$temp = fifo$out[2].first
@@ -158,7 +151,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{2,_RULE$respond_rule_2$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_3__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_3$i
+        ALLOCA Bit(32) _RULE$respond_rule_3$i
         ALLOCA ValuePair _RULE$respond_rule_3$temp
         CALL :fifo$out[3].first{}
         LET ValuePair :_RULE$respond_rule_3$temp = fifo$out[3].first
@@ -166,7 +159,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{3,_RULE$respond_rule_3$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_4__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_4$i
+        ALLOCA Bit(32) _RULE$respond_rule_4$i
         ALLOCA ValuePair _RULE$respond_rule_4$temp
         CALL :fifo$out[4].first{}
         LET ValuePair :_RULE$respond_rule_4$temp = fifo$out[4].first
@@ -174,7 +167,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{4,_RULE$respond_rule_4$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_5__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_5$i
+        ALLOCA Bit(32) _RULE$respond_rule_5$i
         ALLOCA ValuePair _RULE$respond_rule_5$temp
         CALL :fifo$out[5].first{}
         LET ValuePair :_RULE$respond_rule_5$temp = fifo$out[5].first
@@ -182,7 +175,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{5,_RULE$respond_rule_5$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_6__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_6$i
+        ALLOCA Bit(32) _RULE$respond_rule_6$i
         ALLOCA ValuePair _RULE$respond_rule_6$temp
         CALL :fifo$out[6].first{}
         LET ValuePair :_RULE$respond_rule_6$temp = fifo$out[6].first
@@ -190,7 +183,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{6,_RULE$respond_rule_6$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_7__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_7$i
+        ALLOCA Bit(32) _RULE$respond_rule_7$i
         ALLOCA ValuePair _RULE$respond_rule_7$temp
         CALL :fifo$out[7].first{}
         LET ValuePair :_RULE$respond_rule_7$temp = fifo$out[7].first
@@ -198,7 +191,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{7,_RULE$respond_rule_7$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_8__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_8$i
+        ALLOCA Bit(32) _RULE$respond_rule_8$i
         ALLOCA ValuePair _RULE$respond_rule_8$temp
         CALL :fifo$out[8].first{}
         LET ValuePair :_RULE$respond_rule_8$temp = fifo$out[8].first
@@ -206,7 +199,7 @@ MODULE IVector IVectorIFC {
         CALL/Action :out$heard__ENA{8,_RULE$respond_rule_8$temp$b}
     }
     METHOD/Rule/Action RULE$respond_rule_9__ENA {
-        ALLOCA Bit(32) RULE$respond_rule_9$i
+        ALLOCA Bit(32) _RULE$respond_rule_9$i
         ALLOCA ValuePair _RULE$respond_rule_9$temp
         CALL :fifo$out[9].first{}
         LET ValuePair :_RULE$respond_rule_9$temp = fifo$out[9].first
