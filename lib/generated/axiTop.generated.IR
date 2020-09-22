@@ -14,11 +14,6 @@ INTERFACE AxiTopIfc  {
     INTERFACE MaxiO MAXIGP0_O
     INTERFACE/Ptr MaxiI MAXIGP0_I
 }
-INTERFACE Fifo(width=(__bitsize(ReadResp)))  {
-    FILE fifo_OC_h
-    INTERFACE PipeIn(width=(__bitsize(ReadResp))) in
-    INTERFACE PipeOut(width=(__bitsize(ReadResp))) out
-}
 INTERFACE Fifo(width=32)  {
     FILE fifo_OC_h
     INTERFACE PipeIn(width=32) in
@@ -50,11 +45,7 @@ INTERFACE MaxiO  {
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=(__bitsize(ReadResp)))  {
+INTERFACE PipeIn(width=144)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -73,11 +64,6 @@ INTERFACE PipeIn(width=6)  {
 INTERFACE PipeInB(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
-INTERFACE PipeOut(width=(__bitsize(ReadResp)))  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
 }
 INTERFACE PipeOut(width=32)  {
     FILE atomicc_OC_h
@@ -107,8 +93,8 @@ INTERFACE ZynqInterruptT  {
 }
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) request
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) indication
+    INTERFACE PipeIn(width=144) request
+    INTERFACE/Ptr PipeIn(width=144) indication
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
@@ -151,7 +137,7 @@ MODULE AxiTop AxiTopIfc {
     FIELD Fifo1(width=6) reqAws
     FIELD Fifo1(width=6) writeDone
     FIELD Fifo1(width=32) requestValue
-    FIELD Fifo1(width=(__bitsize(ReadResp))) readData
+    FIELD Fifo1(width=38) readData
     FIELD Fifo1(width=32) writeData
     FIELD UserTop user
     INTERFACE PipeInB(width=32) readUser
@@ -232,19 +218,6 @@ MODULE AxiTop AxiTopIfc {
         CALL/Action :writeDone$out$deq__ENA{}
     }
 }
-MODULE Fifo1(width=(__bitsize(ReadResp))) Fifo(width=(__bitsize(ReadResp))) {
-    FILE fifo_OC_h
-    FIELD Fifo1Base(width=38) fifo
-    METHOD/Action in$enq__ENA ( ReadResp v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first ReadResp = ((fifo$out$first)) {
-        CALL :fifo$out$first{}
-    }
-}
 MODULE Fifo1(width=32) Fifo(width=32) {
     FILE fifo_OC_h
     FIELD Fifo1Base(width=32) fifo
@@ -255,6 +228,19 @@ MODULE Fifo1(width=32) Fifo(width=32) {
         CALL/Action :fifo$out$deq__ENA{}
     }
     METHOD out$first Bit(32) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE Fifo1(width=38) Fifo(width=38) {
+    FILE fifo_OC_h
+    FIELD Fifo1Base(width=38) fifo
+    METHOD/Action in$enq__ENA ( ReadResp v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first ReadResp = ((fifo$out$first)) {
         CALL :fifo$out$first{}
     }
 }

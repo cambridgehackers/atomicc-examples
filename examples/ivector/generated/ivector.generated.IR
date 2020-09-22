@@ -13,11 +13,6 @@ STRUCT IVectorTest  {
     FILE ivector_OC_cpp
     FIELD IVector ivector
 }
-INTERFACE Fifo(width=(__bitsize(ValuePair)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-    INTERFACE PipeIn(width=(__bitsize(ValuePair))) in
-    INTERFACE PipeOut(width=(__bitsize(ValuePair))) out
-}
 INTERFACE Fifo(width=96)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=96) in
@@ -38,15 +33,11 @@ INTERFACE IVectorRequest  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=(__bitsize(ValuePair)))  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -57,11 +48,6 @@ INTERFACE PipeIn(width=32)  {
 INTERFACE PipeIn(width=96)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeOut(width=(__bitsize(ValuePair)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
 }
 INTERFACE PipeOut(width=96)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -80,7 +66,7 @@ EMODULE IVectorInd IVectorIndication {
 EMODULE MuxPipe MuxPipeIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
 }
-MODULE Fifo1(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
+MODULE Fifo1(width=96) Fifo(width=96) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD Fifo1Base(width=96) fifo
     METHOD/Action in$enq__ENA ( ValuePair v ) {
@@ -93,10 +79,10 @@ MODULE Fifo1(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoPong(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair))) {
+MODULE FifoPong(width=96) Fifo(width=96) {
     FILE ivector_OC_cpp
-    FIELD Fifo1(width=(__bitsize(ValuePair))) element1
-    FIELD Fifo1(width=(__bitsize(ValuePair))) element2
+    FIELD Fifo1(width=96) element1
+    FIELD Fifo1(width=96) element2
     FIELD Bit(1) pong
     METHOD/Action in$enq__ENA ( ValuePair v ) {
         CALL/Action (pong):element2$in$enq__ENA{in$enq$v}
@@ -117,7 +103,7 @@ MODULE FifoPong(width=(__bitsize(ValuePair))) Fifo(width=(__bitsize(ValuePair)))
 }
 MODULE IVector IVectorIFC {
     FILE ivector_OC_cpp
-    FIELD/Count 10  FifoPong(width=(__bitsize(ValuePair))) fifo
+    FIELD/Count 10  FifoPong(width=96) fifo
     FIELD Bit(32) vsize
     METHOD/Action in$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA ValuePair _in$say$agg_2e_tmp

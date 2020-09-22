@@ -41,7 +41,7 @@ interface IVectorIndication;
 endinterface
 `endif
 //METASTART; IVector
-//METAINTERNAL; fifo; FifoPong(width=(((32 + 32) + (32 * 20))));
+//METAINTERNAL; fifo; FifoPong(width=704);
 //METAINVOKE; request.say__ENA; :fifo$in.enq__ENA;
 //METAGUARD; request.say; fifo$in.enq__RDY;
 //METAINVOKE; RULE$respond__ENA; :fifo$out.deq__ENA;:indication.heard__ENA;

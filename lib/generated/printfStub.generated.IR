@@ -3,7 +3,7 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+INTERFACE PipeIn(width=144)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -14,7 +14,7 @@ INTERFACE PipeIn(width=32)  {
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
-MODULE Printf PipeIn(width=(__bitsize(NOCDataH))) {
+MODULE Printf PipeIn(width=144) {
     FILE printfStub_OC_cpp
     METHOD/Action enq__ENA ( NOCDataH v )
 }

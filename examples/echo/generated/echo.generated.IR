@@ -30,11 +30,11 @@ INTERFACE Fifo(width=32)  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }

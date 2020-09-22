@@ -7,12 +7,12 @@ module Connect (input wire CLK, input wire nRST,
     wire RULE$swap2_rule__RDY;
     wire RULE$swap_rule__RDY;
     EchoIndication lEII_test$indication();
-    PipeIn#(.width(32 + 32 + 32)) lEII_test$pipe();
+    PipeIn#(.width(96)) lEII_test$pipe();
     EchoIndication lEIO$indication();
-    PipeIn#(.width(32 + 32 + 32)) lEIO$pipe();
-    PipeIn#(.width(32 + 32 + 32 + 32 + 32 + 32)) lERI$pipe();
+    PipeIn#(.width(96)) lEIO$pipe();
+    PipeIn#(.width(192)) lERI$pipe();
     EchoRequest lERI$request();
-    PipeIn#(.width(32 + 32 + 32 + 32 + 32 + 32)) lERO_test$pipe();
+    PipeIn#(.width(192)) lERO_test$pipe();
     EchoRequest lERO_test$request();
     EchoIndication lEcho$indication();
     EchoRequest lEcho$request();

@@ -43,16 +43,16 @@ interface IVectorIndication;
 endinterface
 `endif
 //METASTART; IVector
-//METAINTERNAL; fifo0; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo1; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo2; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo3; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo4; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo5; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo6; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo7; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo8; FifoPong(width=(((32 + 32) + 32)));
-//METAINTERNAL; fifo9; FifoPong(width=(((32 + 32) + 32)));
+//METAINTERNAL; fifo0; FifoPong(width=96);
+//METAINTERNAL; fifo1; FifoPong(width=96);
+//METAINTERNAL; fifo2; FifoPong(width=96);
+//METAINTERNAL; fifo3; FifoPong(width=96);
+//METAINTERNAL; fifo4; FifoPong(width=96);
+//METAINTERNAL; fifo5; FifoPong(width=96);
+//METAINTERNAL; fifo6; FifoPong(width=96);
+//METAINTERNAL; fifo7; FifoPong(width=96);
+//METAINTERNAL; fifo8; FifoPong(width=96);
+//METAINTERNAL; fifo9; FifoPong(width=96);
 //METAINVOKE; in.say__ENA; :fifo$in[__inst$Genvar1].enq__ENA;
 //METAGUARD; in.say; fifo$in__enq__RDY_or1;
 //METAINVOKE; RULE$respond_rule_0__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;

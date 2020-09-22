@@ -27,15 +27,15 @@ module IVector (input wire CLK, input wire nRST,
     ValuePair _RULE$respond_rule_9$temp;
     ValuePair _in$say$agg_2e_tmp;
     ValuePair _in$say$temp;
-    PipeIn#(.width(32 + 32 + 32)) fifo$in [10 - 1:0]();
+    PipeIn#(.width(96)) fifo$in [10 - 1:0]();
     wire [ 10 - 1:0]fifo$in__enq__RDY_or;
     wire fifo$in__enq__RDY_or1;
-    PipeOut#(.width(32 + 32 + 32)) fifo$out [10 - 1:0]();
+    PipeOut#(.width(96)) fifo$out [10 - 1:0]();
     wire [ 10 - 1:0]fifo$out__deq__RDY_or;
     wire fifo$out__deq__RDY_or1;
     wire [ 10 - 1:0]fifo$out__first__RDY_or;
     wire fifo$out__first__RDY_or1;
-    FifoPong#(.width(32 + 32 + 32)) fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
+    FifoPong#(.width(96)) fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
     // Extra assigments, not to output wires

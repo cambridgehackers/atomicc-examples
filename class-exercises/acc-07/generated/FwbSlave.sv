@@ -2,18 +2,18 @@
 
 `default_nettype none
 module FwbSlave (
-    output wire [32/8 - 1:0]f_nreqs,
+    output wire [(32 / 8) - 1:0]f_nreqs,
     output wire f_nreqs__RDY,
-    output wire [32/8 - 1:0]f_nacks,
+    output wire [(32 / 8) - 1:0]f_nacks,
     output wire f_nacks__RDY,
-    output wire [32/8 - 1:0]f_outstanding,
+    output wire [(32 / 8) - 1:0]f_outstanding,
     output wire f_outstanding__RDY,
     input wire acyc,
     input wire a$stb__ENA,
     input wire a$stb$we,
     input wire [32 - 1:0]a$stb$addr,
     input wire [32 - 1:0]a$stb$data,
-    input wire [32/8 - 1:0]a$stb$sel,
+    input wire [(32 / 8) - 1:0]a$stb$sel,
     output wire a$stb__RDY,
     input wire status$ack,
     input wire status$ack__RDY,
@@ -22,13 +22,13 @@ module FwbSlave (
     input wire status$err,
     input wire status$err__RDY);
     reg f_past_valid;
-    reg [32/8 - 1:0]nacks;
-    reg [32/8 - 1:0]nreqs;
+    reg [(32 / 8) - 1:0]nacks;
+    reg [(32 / 8) - 1:0]nreqs;
     wire CLK;
     wire [32 - 1:0]addr_share;
     wire [32 - 1:0]data_share;
     wire nRST;
-    wire [32/8 - 1:0]sel_share;
+    wire [(32 / 8) - 1:0]sel_share;
     wire we_share;
     assign a$stb__RDY = 1;
     assign f_nacks = nacks;

@@ -45,23 +45,23 @@ INTERFACE ConnectIFC  {
 }
 INTERFACE EIIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn(width=(__bitsize(EchoIndication_data))) pipe
+    INTERFACE PipeIn(width=96) pipe
     INTERFACE/Ptr EchoIndication indication
 }
 INTERFACE EIOIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoIndication indication
-    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoIndication_data))) pipe
+    INTERFACE/Ptr PipeIn(width=96) pipe
 }
 INTERFACE ERIIfc  {
     FILE before1_OC_cpp
-    INTERFACE PipeIn(width=(__bitsize(EchoRequest_data))) pipe
+    INTERFACE PipeIn(width=192) pipe
     INTERFACE/Ptr EchoRequest request
 }
 INTERFACE EROIfc  {
     FILE before1_OC_cpp
     INTERFACE EchoRequest request
-    INTERFACE/Ptr PipeIn(width=(__bitsize(EchoRequest_data))) pipe
+    INTERFACE/Ptr PipeIn(width=192) pipe
 }
 INTERFACE EchoIfc  {
     FILE before1_OC_cpp
@@ -80,23 +80,23 @@ INTERFACE EchoRequest  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn(width=(__bitsize(EchoIndication_data)))  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn(width=(__bitsize(EchoRequest_data)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+INTERFACE PipeIn(width=192)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
 INTERFACE PipeIn(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeIn(width=96)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -115,9 +115,9 @@ EMODULE MuxPipe MuxPipeIfc {
 MODULE Connect ConnectIFC {
     FILE before1_OC_cpp
     INTERFACECONNECT lERI$request lEcho$request EchoRequest
-    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=(__bitsize(EchoIndication_data)))
+    INTERFACECONNECT lEIO$pipe lEII_test$pipe PipeIn(width=96)
     INTERFACECONNECT lEcho$indication lEIO$indication EchoIndication
-    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=(__bitsize(EchoRequest_data)))
+    INTERFACECONNECT lERO_test$pipe lERI$pipe PipeIn(width=192)
     INTERFACECONNECT indication lEII_test$indication EchoIndication
     FIELD EchoIndicationOutput lEIO
     FIELD EchoRequestInput lERI

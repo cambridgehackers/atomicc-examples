@@ -9,11 +9,6 @@ STRUCT ProcessData  {
     FIELD Bit(16) IPA
     FIELD Bit(3) state
 }
-INTERFACE Fifo(width=(__bitsize(ProcessData)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-    INTERFACE PipeIn(width=(__bitsize(ProcessData))) in
-    INTERFACE PipeOut(width=(__bitsize(ProcessData))) out
-}
 INTERFACE Fifo(width=23)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     INTERFACE PipeIn(width=23) in
@@ -37,15 +32,11 @@ INTERFACE LpmMem  {
 }
 INTERFACE MuxPipeIfc  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) forward
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+    INTERFACE PipeIn(width=144) in
+    INTERFACE PipeIn(width=144) forward
+    INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=(__bitsize(ProcessData)))  {
+INTERFACE PipeIn(width=144)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -56,11 +47,6 @@ INTERFACE PipeIn(width=23)  {
 INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeOut(width=(__bitsize(ProcessData)))  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
 }
 INTERFACE PipeOut(width=23)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -108,7 +94,7 @@ MODULE Fifo1(width=32) Fifo(width=32) {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoB1(width=(__bitsize(ProcessData))) Fifo(width=(__bitsize(ProcessData))) {
+MODULE FifoB1(width=23) Fifo(width=23) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
     FIELD FifoB1Base(width=23) fifo
     METHOD/Action in$enq__ENA ( ProcessData v ) {
@@ -125,7 +111,7 @@ MODULE Lpm LpmIfc {
     FILE lpm_OC_cpp
     FIELD BufTicket compBuf
     FIELD Fifo1(width=32) inQ
-    FIELD FifoB1(width=(__bitsize(ProcessData))) fifo
+    FIELD FifoB1(width=23) fifo
     FIELD LpmMemory mem
     METHOD/Action enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{enter$x}

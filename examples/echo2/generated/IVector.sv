@@ -4,9 +4,9 @@
 module IVector (input wire CLK, input wire nRST,
     IVectorRequest.server request,
     IVectorIndication.client indication);
-    PipeIn#(.width(32 + 32 + ( 32 * 20 ))) fifo$in();
-    PipeOut#(.width(32 + 32 + ( 32 * 20 ))) fifo$out();
-    FifoPong#(.width(32 + 32 + ( 32 * 20 ))) fifo (.CLK(CLK), .nRST(nRST),
+    PipeIn#(.width(704)) fifo$in();
+    PipeOut#(.width(704)) fifo$out();
+    FifoPong#(.width(704)) fifo (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
     // Extra assigments, not to output wires

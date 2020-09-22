@@ -5,9 +5,9 @@ module Connect (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
     EchoIndication lEII_test$indication();
-    PipeIn#(.width(32 + 32 + 32)) lEII_test$pipe();
+    PipeIn#(.width(96)) lEII_test$pipe();
     EchoIndication lEIO$indication();
-    PipeIn#(.width(32 + 32 + 32)) lERI$pipe();
+    PipeIn#(.width(96)) lERI$pipe();
     EchoRequest lERI$request();
     EchoRequest lERO_test$request();
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),

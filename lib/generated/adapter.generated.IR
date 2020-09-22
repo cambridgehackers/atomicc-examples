@@ -6,14 +6,14 @@ STRUCT NOCDataH  {
 INTERFACE AfB(width=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInB(width=32) in
-    INTERFACE/Ptr PipeIn(width=(__bitsize(NOCDataH))) out
+    INTERFACE/Ptr PipeIn(width=144) out
 }
 INTERFACE AtB(width=32)  {
     FILE adapter_OC_h
-    INTERFACE PipeIn(width=(__bitsize(NOCDataH))) in
+    INTERFACE PipeIn(width=144) in
     INTERFACE/Ptr PipeInB(width=32) out
 }
-INTERFACE PipeIn(width=(__bitsize(NOCDataH)))  {
+INTERFACE PipeIn(width=144)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }

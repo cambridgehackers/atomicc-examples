@@ -5,7 +5,7 @@ module IVector (input wire CLK, input wire nRST,
     IVectorRequest.server request,
     IVectorIndication.client ind);
     reg [9 - 1:0]counter;
-    reg [(14/7)+(3*2) - 1:0]fcounter;
+    reg [((14 / 7) + (3 * 2)) - 1:0]fcounter;
     reg [9 - 1:0]gcounter;
     ValueType _RULE$respond$temp;
     ValueType _request$say$temp;

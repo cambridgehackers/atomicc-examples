@@ -2,20 +2,20 @@
 
 `default_nettype none
 module FifoPong #(
-    parameter integer width = 32+32+(32*20))(
+    parameter integer width = 704)(
     input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeOut.server out);
     reg pong;
     ValuePair _out$first$retval;
-    PipeIn#(.width(704)) element1$in();
-    PipeOut#(.width(704)) element1$out();
-    PipeIn#(.width(704)) element2$in();
-    PipeOut#(.width(704)) element2$out();
-    Fifo1Base#(.width(704)) element1 (.CLK(CLK), .nRST(nRST),
+    PipeIn#(.width(width)) element1$in();
+    PipeOut#(.width(width)) element1$out();
+    PipeIn#(.width(width)) element2$in();
+    PipeOut#(.width(width)) element2$out();
+    Fifo1Base#(.width(width)) element1 (.CLK(CLK), .nRST(nRST),
         .in(element1$in),
         .out(element1$out));
-    Fifo1Base#(.width(704)) element2 (.CLK(CLK), .nRST(nRST),
+    Fifo1Base#(.width(width)) element2 (.CLK(CLK), .nRST(nRST),
         .in(element2$in),
         .out(element2$out));
     // Extra assigments, not to output wires
