@@ -6,8 +6,8 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     PipeIn.client pipe);
     EchoIndication_data _indication$heard$ind;
     // Extra assigments, not to output wires
-    assign _indication$heard$ind.data$heard$meth = indication.heard$meth;
-    assign _indication$heard$ind.data$heard$v = indication.heard$v;
+    assign _indication$heard$ind.data.heard.meth = indication.heard$meth;
+    assign _indication$heard$ind.data.heard.v = indication.heard$v;
     assign _indication$heard$ind.tag = 32'd1;
     assign indication.heard__RDY = pipe.enq__RDY;
     assign pipe.enq$v = _indication$heard$ind;

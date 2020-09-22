@@ -96,9 +96,9 @@ MODULE MultiCycleProc MultiCycleProcIfc {
         LET Bit(32) :_RULE$execArith$val2 = rf$read
         CALL :exec$basicExec{d2e_op,_RULE$execArith$val1,_RULE$execArith$val2}
         LET ExecResult :_RULE$execArith$val = exec$basicExec
-        STORE :e2w_val = _RULE$execArith$val$data
-        STORE :e2w_nextPC = _RULE$execArith$val$nextPC
-        STORE :e2w_addr = _RULE$execArith$val$addr
+        STORE :e2w_val = _RULE$execArith$val.data
+        STORE :e2w_nextPC = _RULE$execArith$val.nextPC
+        STORE :e2w_addr = _RULE$execArith$val.addr
         STORE :e2w_valid = 1
     }
     METHOD/Rule/Action RULE$writeBack__ENA if (((e2w_valid) == (1))) {

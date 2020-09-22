@@ -7,11 +7,11 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     EchoRequest_data _request$say$ind;
     EchoRequest_data _request$say2$ind;
     // Extra assigments, not to output wires
-    assign _request$say$ind.data$say$meth = request.say$meth;
-    assign _request$say$ind.data$say$v = request.say$v;
+    assign _request$say$ind.data.say.meth = request.say$meth;
+    assign _request$say$ind.data.say.v = request.say$v;
     assign _request$say$ind.tag = 32'd1;
-    assign _request$say2$ind.data$say2$meth = request.say2$meth;
-    assign _request$say2$ind.data$say2$v = request.say2$v;
+    assign _request$say2$ind.data.say2.meth = request.say2$meth;
+    assign _request$say2$ind.data.say2.v = request.say2$v;
     assign _request$say2$ind.tag = 32'd2;
     assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? _request$say$ind : 0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? _request$say2$ind : 0 );
     assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;

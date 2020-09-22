@@ -108,7 +108,7 @@ MODULE IVector IVectorIFC {
     METHOD/Action in$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA ValuePair _in$say$agg_2e_tmp
         ALLOCA ValuePair _in$say$temp
-        LET Bit(32) :_in$say$temp$b = in$say$v
+        LET Bit(32) :_in$say$temp.b = in$say$v
         LET ValuePair :_in$say$agg_2e_tmp = _in$say$temp
         CALL/Action :fifo$in[in$say$meth].enq__ENA{_in$say$agg_2e_tmp}
     }
@@ -118,7 +118,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[0].first{}
         LET ValuePair :_RULE$respond_rule_0$temp = fifo$out[0].first
         CALL/Action :fifo$out[0].deq__ENA{}
-        CALL/Action :out$heard__ENA{0,_RULE$respond_rule_0$temp$b}
+        CALL/Action :out$heard__ENA{0,_RULE$respond_rule_0$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_1__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_1$i
@@ -126,7 +126,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[1].first{}
         LET ValuePair :_RULE$respond_rule_1$temp = fifo$out[1].first
         CALL/Action :fifo$out[1].deq__ENA{}
-        CALL/Action :out$heard__ENA{1,_RULE$respond_rule_1$temp$b}
+        CALL/Action :out$heard__ENA{1,_RULE$respond_rule_1$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_2__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_2$i
@@ -134,7 +134,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[2].first{}
         LET ValuePair :_RULE$respond_rule_2$temp = fifo$out[2].first
         CALL/Action :fifo$out[2].deq__ENA{}
-        CALL/Action :out$heard__ENA{2,_RULE$respond_rule_2$temp$b}
+        CALL/Action :out$heard__ENA{2,_RULE$respond_rule_2$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_3__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_3$i
@@ -142,7 +142,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[3].first{}
         LET ValuePair :_RULE$respond_rule_3$temp = fifo$out[3].first
         CALL/Action :fifo$out[3].deq__ENA{}
-        CALL/Action :out$heard__ENA{3,_RULE$respond_rule_3$temp$b}
+        CALL/Action :out$heard__ENA{3,_RULE$respond_rule_3$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_4__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_4$i
@@ -150,7 +150,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[4].first{}
         LET ValuePair :_RULE$respond_rule_4$temp = fifo$out[4].first
         CALL/Action :fifo$out[4].deq__ENA{}
-        CALL/Action :out$heard__ENA{4,_RULE$respond_rule_4$temp$b}
+        CALL/Action :out$heard__ENA{4,_RULE$respond_rule_4$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_5__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_5$i
@@ -158,7 +158,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[5].first{}
         LET ValuePair :_RULE$respond_rule_5$temp = fifo$out[5].first
         CALL/Action :fifo$out[5].deq__ENA{}
-        CALL/Action :out$heard__ENA{5,_RULE$respond_rule_5$temp$b}
+        CALL/Action :out$heard__ENA{5,_RULE$respond_rule_5$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_6__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_6$i
@@ -166,7 +166,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[6].first{}
         LET ValuePair :_RULE$respond_rule_6$temp = fifo$out[6].first
         CALL/Action :fifo$out[6].deq__ENA{}
-        CALL/Action :out$heard__ENA{6,_RULE$respond_rule_6$temp$b}
+        CALL/Action :out$heard__ENA{6,_RULE$respond_rule_6$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_7__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_7$i
@@ -174,7 +174,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[7].first{}
         LET ValuePair :_RULE$respond_rule_7$temp = fifo$out[7].first
         CALL/Action :fifo$out[7].deq__ENA{}
-        CALL/Action :out$heard__ENA{7,_RULE$respond_rule_7$temp$b}
+        CALL/Action :out$heard__ENA{7,_RULE$respond_rule_7$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_8__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_8$i
@@ -182,7 +182,7 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[8].first{}
         LET ValuePair :_RULE$respond_rule_8$temp = fifo$out[8].first
         CALL/Action :fifo$out[8].deq__ENA{}
-        CALL/Action :out$heard__ENA{8,_RULE$respond_rule_8$temp$b}
+        CALL/Action :out$heard__ENA{8,_RULE$respond_rule_8$temp.b}
     }
     METHOD/Rule/Action RULE$respond_rule_9__ENA {
         ALLOCA Bit(32) _RULE$respond_rule_9$i
@@ -190,6 +190,6 @@ MODULE IVector IVectorIFC {
         CALL :fifo$out[9].first{}
         LET ValuePair :_RULE$respond_rule_9$temp = fifo$out[9].first
         CALL/Action :fifo$out[9].deq__ENA{}
-        CALL/Action :out$heard__ENA{9,_RULE$respond_rule_9$temp$b}
+        CALL/Action :out$heard__ENA{9,_RULE$respond_rule_9$temp.b}
     }
 }

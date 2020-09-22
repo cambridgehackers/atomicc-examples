@@ -129,16 +129,16 @@ MODULE EchoIndicationInput EIIIfc {
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) {
         ALLOCA EchoIndication_data _pipe$enq$temp$v
         LET EchoIndication_data :_pipe$enq$temp$v = pipe$enq$v
-        CALL/Action ((_pipe$enq$temp$v$tag) == 1):indication$heard__ENA{_pipe$enq$temp$v$data$heard$meth,_pipe$enq$temp$v$data$heard$v}
+        CALL/Action ((_pipe$enq$temp$v.tag) == 1):indication$heard__ENA{_pipe$enq$temp$v.data.heard.meth,_pipe$enq$temp$v.data.heard.v}
     }
 }
 MODULE EchoIndicationOutput EIOIfc {
     FILE connect_OC_cpp
     METHOD/Action indication$heard__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoIndication_data _indication$heard$ind
-        LET Bit(32) :_indication$heard$ind$tag = 1
-        LET Bit(32) :_indication$heard$ind$data$heard$meth = indication$heard$meth
-        LET Bit(32) :_indication$heard$ind$data$heard$v = indication$heard$v
+        LET Bit(32) :_indication$heard$ind.tag = 1
+        LET Bit(32) :_indication$heard$ind.data.heard.meth = indication$heard$meth
+        LET Bit(32) :_indication$heard$ind.data.heard.v = indication$heard$v
         CALL/Action :pipe$enq__ENA{_indication$heard$ind}
     }
 }
@@ -148,7 +148,7 @@ MODULE EchoRequestInput ERIIfc {
         ALLOCA EchoRequest_data _pipe$enq$temp$v
         LET EchoRequest_data :_pipe$enq$temp$v = pipe$enq$v
         PRINTF :printf{"entered EchoRequestInput::enq\n"}
-        CALL/Action ((_pipe$enq$temp$v$tag) == 1):request$say__ENA{_pipe$enq$temp$v$data$say$meth,_pipe$enq$temp$v$data$say$v}
+        CALL/Action ((_pipe$enq$temp$v.tag) == 1):request$say__ENA{_pipe$enq$temp$v.data.say.meth,_pipe$enq$temp$v.data.say.v}
     }
 }
 MODULE EchoRequestOutput EROIfc {
@@ -156,9 +156,9 @@ MODULE EchoRequestOutput EROIfc {
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data _request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET Bit(32) :_request$say$ind$tag = 1
-        LET Bit(32) :_request$say$ind$data$say$meth = request$say$meth
-        LET Bit(32) :_request$say$ind$data$say$v = request$say$v
+        LET Bit(32) :_request$say$ind.tag = 1
+        LET Bit(32) :_request$say$ind.data.say.meth = request$say$meth
+        LET Bit(32) :_request$say$ind.data.say.v = request$say$v
         CALL/Action :pipe$enq__ENA{_request$say$ind}
     }
 }

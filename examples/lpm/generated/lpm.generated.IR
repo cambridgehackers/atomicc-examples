@@ -125,11 +125,11 @@ MODULE Lpm LpmIfc {
         CALL :fifo$out$first{}
         LET ProcessData :_RULE$recirc$y = fifo$out$first
         CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :mem$req__ENA{(_RULE$recirc$x) + (__phi(((_RULE$recirc$y$state) == (1)):(__bitsubstr{_RULE$recirc$y$IPA,15,8}), !((_RULE$recirc$y$state) == (1)):(__bitsubstr{_RULE$recirc$y$IPA,7,0})))}
+        CALL/Action :mem$req__ENA{(_RULE$recirc$x) + (__phi(((_RULE$recirc$y.state) == (1)):(__bitsubstr{_RULE$recirc$y.IPA,15,8}), !((_RULE$recirc$y.state) == (1)):(__bitsubstr{_RULE$recirc$y.IPA,7,0})))}
         CALL/Action :fifo$out$deq__ENA{}
-        LET Bit(4) :_RULE$recirc$agg_2e_tmp$ticket = _RULE$recirc$y$ticket
-        LET Bit(16) :_RULE$recirc$agg_2e_tmp$IPA = _RULE$recirc$y$IPA
-        LET Bit(3) :_RULE$recirc$agg_2e_tmp$state = (_RULE$recirc$y$state) + (1)
+        LET Bit(4) :_RULE$recirc$agg_2e_tmp.ticket = _RULE$recirc$y.ticket
+        LET Bit(16) :_RULE$recirc$agg_2e_tmp.IPA = _RULE$recirc$y.IPA
+        LET Bit(3) :_RULE$recirc$agg_2e_tmp.state = (_RULE$recirc$y.state) + (1)
         CALL/Action :fifo$in$enq__ENA{_RULE$recirc$agg_2e_tmp}
     }
     METHOD/Rule/Action RULE$exitr__ENA if (((((mem$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
@@ -151,9 +151,9 @@ MODULE Lpm LpmIfc {
         LET Bit(32) :_RULE$enter$x = inQ$out$first
         LET Bit(4) :_RULE$enter$ticket = 0
         CALL/Action :inQ$out$deq__ENA{}
-        LET Bit(4) :_RULE$enter$agg_2e_tmp$ticket = _RULE$enter$ticket
-        LET Bit(16) :_RULE$enter$agg_2e_tmp$IPA = __bitsubstr{_RULE$enter$x,15,0}
-        LET Bit(3) :_RULE$enter$agg_2e_tmp$state = 0
+        LET Bit(4) :_RULE$enter$agg_2e_tmp.ticket = _RULE$enter$ticket
+        LET Bit(16) :_RULE$enter$agg_2e_tmp.IPA = __bitsubstr{_RULE$enter$x,15,0}
+        LET Bit(3) :_RULE$enter$agg_2e_tmp.state = 0
         CALL/Action :fifo$in$enq__ENA{_RULE$enter$agg_2e_tmp}
         CALL/Action :mem$req__ENA{(0) + (__bitsubstr{_RULE$enter$x,31,16})}
     }

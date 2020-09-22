@@ -43,8 +43,8 @@ MODULE AdapterFromBus(width=32) AfB(width=32) {
         ALLOCA NOCDataH _RULE$pushValue$agg_2e_tmp
         STORE :length = 0
         PRINTF ((0) != (0)):printf{"adapterFROMout %x\n",buffer}
-        LET Bit(16) :_RULE$pushValue$agg_2e_tmp$length = length
-        LET Bit(128) :_RULE$pushValue$agg_2e_tmp$data = buffer
+        LET Bit(16) :_RULE$pushValue$agg_2e_tmp.length = length
+        LET Bit(128) :_RULE$pushValue$agg_2e_tmp.data = buffer
         CALL/Action :out$enq__ENA{_RULE$pushValue$agg_2e_tmp}
         STORE :waitForEnq = 0
     }
@@ -56,9 +56,9 @@ MODULE AdapterToBus(width=32) AtB(width=32) {
     METHOD/Action in$enq__ENA ( NOCDataH v ) if (((remain) == (0))) {
         ALLOCA NOCDataH _in$enq$temp$v
         LET NOCDataH :_in$enq$temp$v = in$enq$v
-        STORE :buffer = _in$enq$temp$v$data
-        STORE :remain = _in$enq$temp$v$length
-        PRINTF ((0) != (0)):printf{"adapterTOin %x length %x\n",_in$enq$temp$v$data,_in$enq$temp$v$length}
+        STORE :buffer = _in$enq$temp$v.data
+        STORE :remain = _in$enq$temp$v.length
+        PRINTF ((0) != (0)):printf{"adapterTOin %x length %x\n",_in$enq$temp$v.data,_in$enq$temp$v.length}
     }
     METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
         ALLOCA Bit(32) _RULE$copyRule$outVal

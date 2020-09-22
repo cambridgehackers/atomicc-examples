@@ -194,10 +194,10 @@ MODULE EchoIndicationInput EIIIfc {
     METHOD/Action pipe$enq__ENA ( EchoIndication_data v ) if (((busy_delay) ^ (1))) {
         ALLOCA EchoIndication_data _pipe$enq$temp$v
         LET EchoIndication_data :_pipe$enq$temp$v = pipe$enq$v
-        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",_pipe$enq$temp$v$tag}
-        STORE ((_pipe$enq$temp$v$tag) == 1):meth_delay = _pipe$enq$temp$v$data$heard$meth
-        STORE ((_pipe$enq$temp$v$tag) == 1):v_delay = _pipe$enq$temp$v$data$heard$v
-        STORE ((_pipe$enq$temp$v$tag) == 1):busy_delay = (1) != (0)
+        PRINTF :printf{"%s: EchoIndicationInput tag %d\n","pipe$enq",_pipe$enq$temp$v.tag}
+        STORE ((_pipe$enq$temp$v.tag) == 1):meth_delay = _pipe$enq$temp$v.data.heard.meth
+        STORE ((_pipe$enq$temp$v.tag) == 1):v_delay = _pipe$enq$temp$v.data.heard.v
+        STORE ((_pipe$enq$temp$v.tag) == 1):busy_delay = (1) != (0)
     }
     METHOD/Rule/Action RULE$input_rule__ENA if (((busy_delay) != (0))) {
         PRINTF :printf{"input_rule: EchoIndicationInput\n"}
@@ -240,9 +240,9 @@ MODULE EchoRequestInput ERIIfc {
     METHOD/Action pipe$enq__ENA ( EchoRequest_data v ) {
         ALLOCA EchoRequest_data _pipe$enq$temp$v
         LET EchoRequest_data :_pipe$enq$temp$v = pipe$enq$v
-        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",_pipe$enq$temp$v$tag}
-        CALL/Action ((_pipe$enq$temp$v$tag) == 1):request$say__ENA{_pipe$enq$temp$v$data$say$meth,_pipe$enq$temp$v$data$say$v}
-        CALL/Action ((_pipe$enq$temp$v$tag) == 2):request$say2__ENA{_pipe$enq$temp$v$data$say2$meth,_pipe$enq$temp$v$data$say2$v}
+        PRINTF :printf{"entered EchoRequestInput::enq tag %d\n",_pipe$enq$temp$v.tag}
+        CALL/Action ((_pipe$enq$temp$v.tag) == 1):request$say__ENA{_pipe$enq$temp$v.data.say.meth,_pipe$enq$temp$v.data.say.v}
+        CALL/Action ((_pipe$enq$temp$v.tag) == 2):request$say2__ENA{_pipe$enq$temp$v.data.say2.meth,_pipe$enq$temp$v.data.say2.v}
     }
 }
 MODULE EchoRequestOutput EROIfc {
@@ -250,17 +250,17 @@ MODULE EchoRequestOutput EROIfc {
     METHOD/Action request$say__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data _request$say$ind
         PRINTF :printf{"entered EchoRequestOutput::say\n"}
-        LET Bit(32) :_request$say$ind$tag = 1
-        LET Bit(32) :_request$say$ind$data$say$meth = request$say$meth
-        LET Bit(32) :_request$say$ind$data$say$v = request$say$v
+        LET Bit(32) :_request$say$ind.tag = 1
+        LET Bit(32) :_request$say$ind.data.say.meth = request$say$meth
+        LET Bit(32) :_request$say$ind.data.say.v = request$say$v
         CALL/Action :pipe$enq__ENA{_request$say$ind}
     }
     METHOD/Action request$say2__ENA ( Bit(32) meth , Bit(32) v ) {
         ALLOCA EchoRequest_data _request$say2$ind
         PRINTF :printf{"entered EchoRequestOutput::say2\n"}
-        LET Bit(32) :_request$say2$ind$tag = 2
-        LET Bit(32) :_request$say2$ind$data$say2$meth = request$say2$meth
-        LET Bit(32) :_request$say2$ind$data$say2$v = request$say2$v
+        LET Bit(32) :_request$say2$ind.tag = 2
+        LET Bit(32) :_request$say2$ind.data.say2.meth = request$say2$meth
+        LET Bit(32) :_request$say2$ind.data.say2.v = request$say2$v
         CALL/Action :pipe$enq__ENA{_request$say2$ind}
     }
 }

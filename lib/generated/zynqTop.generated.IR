@@ -603,10 +603,10 @@ MODULE ZynqTop ZynqTopIFC {
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
         LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLK.RESETN
         LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
-        LET Bit(1) :ps7_ps7_foo$intr.interrupt = test.interrupt
+        LET Bit(1) :ps7_ps7_foo$intr.interrupt = test$interrupt
         LET Bit(1) :ps7_ps7_foo$intr.CLK = __defaultClock
         LET Bit(1) :ps7_ps7_foo$intr.nRST = __defaultnReset
-        LET Bit(1) :test.CLK = __defaultClock
-        LET Bit(1) :test.nRST = __defaultnReset
+        LET Bit(1) :test$CLK = __defaultClock
+        LET Bit(1) :test$nRST = __defaultnReset
     }
 }
