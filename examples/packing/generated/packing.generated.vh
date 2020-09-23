@@ -34,8 +34,8 @@ endinterface
 //METAINVOKE; request.say__ENA; :indication.heard__ENA;
 //METAGUARD; request.say; indication.heard__RDY;
 //METASTART; l_top
-//METAINTERNAL; DUT__Pack; Pack;
 //METAINTERNAL; M2P__indication; ___M2PPackIndication;
+//METAINTERNAL; DUT__Pack; Pack;
 //METAINTERNAL; P2M__request; ___P2MPackRequest;
 //METACONNECT; DUT__Pack$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__Pack$indication.heard__RDY; M2P__indication$method.heard__RDY

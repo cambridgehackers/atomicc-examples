@@ -17,8 +17,8 @@
 //METACONNECT; request.writeBin__ENA; counter.writeBin__ENA
 //METACONNECT; request.writeBin__RDY; counter.writeBin__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__Test; Test;
 //METAINTERNAL; P2M__request; ___P2MGrayCounterIfc(width=4);
+//METAINTERNAL; DUT__Test; Test;
 //METACONNECT; DUT__Test$request.increment__ENA; P2M__request$method.increment__ENA
 //METACONNECT; DUT__Test$request.increment__RDY; P2M__request$method.increment__RDY
 //METACONNECT; DUT__Test$request.decrement__ENA; P2M__request$method.decrement__ENA

@@ -5,51 +5,51 @@
 `ifndef __EchoIndication_data_DEF__
 `define __EchoIndication_data_DEF__
 typedef struct packed {
-    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data;
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union data;
     logic [32 - 1:0] tag;
 } EchoIndication_data;
 `endif
 `ifndef __EchoRequest_data_DEF__
 `define __EchoRequest_data_DEF__
 typedef struct packed {
-    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data;
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union data;
     logic [32 - 1:0] tag;
 } EchoRequest_data;
 `endif
-`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
-`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_DEF__
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_DEF__
 typedef struct packed {
-    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard;
-} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union;
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard heard;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union;
 `endif
-`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
-`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard_DEF__
-typedef struct packed {
-    logic [32 - 1:0] v;
-    logic [32 - 1:0] meth;
-} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard;
-`endif
-`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
-`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_DEF__
-typedef struct packed {
-    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2;
-    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say;
-} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union;
-`endif
-`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
-`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say_DEF__
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard_DEF__
 typedef struct packed {
     logic [32 - 1:0] v;
     logic [32 - 1:0] meth;
-} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard;
 `endif
-`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2_DEF__
-`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2_DEF__
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_DEF__
+typedef struct packed {
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2 say2;
+    _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say say;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say_DEF__
+typedef struct packed {
+    logic [32 - 1:0] v;
+    logic [32 - 1:0] meth;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say;
+`endif
+`ifndef ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2_DEF__
+`define ___IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2_DEF__
 typedef struct packed {
     logic [32 - 1:0] v2;
     logic [32 - 1:0] v;
     logic [32 - 1:0] meth;
-} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2;
+} _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2;
 `endif
 `ifndef __EchoRequest_DEF__
 `define __EchoRequest_DEF__

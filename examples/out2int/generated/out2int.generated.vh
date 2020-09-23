@@ -42,8 +42,8 @@ endinterface
 //METACONNECT; pipe$out.enq__ENA; second$in.enq__ENA
 //METACONNECT; pipe$out.enq__RDY; second$in.enq__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__Oin; Oin;
 //METAINTERNAL; M2P__indication; ___M2POinIndication;
+//METAINTERNAL; DUT__Oin; Oin;
 //METAINTERNAL; P2M__request; ___P2MOinRequest;
 //METACONNECT; DUT__Oin$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__Oin$indication.heard__RDY; M2P__indication$method.heard__RDY

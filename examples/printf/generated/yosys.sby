@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv Echo.sv ___M2PEchoIndication.sv ___P2MEchoRequest.sv Printf.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv Printf.sv 
 
 prep -top VsimTop
 
@@ -38,7 +38,7 @@ prep -top VsimTop
 ../../lib/generated/AdapterFromBus.sv
 generated/l_top.sv
 generated/printf.generated.vh
-generated/Echo.sv
 generated/___M2PEchoIndication.sv
+generated/Echo.sv
 generated/___P2MEchoRequest.sv
 ../../lib/generated/Printf.sv

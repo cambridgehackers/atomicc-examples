@@ -63,8 +63,8 @@ endinterface
 //METAGUARD; RULE$clockRule; 1;
 //METARULES; RULE$delay_rule; RULE$respond_rule; RULE$clockRule
 //METASTART; l_top
-//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; M2P__indication; ___M2PEchoIndication;
+//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; P2M__request; ___P2MEchoRequest;
 //METACONNECT; DUT__Echo$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__Echo$indication.heard__RDY; M2P__indication$method.heard__RDY

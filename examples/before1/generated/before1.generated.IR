@@ -1,38 +1,38 @@
 STRUCT EchoIndication_data  {
     FILE before1_OC_cpp
     FIELD Bit(32) tag
-    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union data
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union data
 }
 STRUCT EchoRequest_data  {
     FILE before1_OC_cpp
     FIELD Bit(32) tag
-    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union data
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union data
 }
 STRUCT NOCDataH  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union  {
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union  {
     FILE before1_OC_cpp
-    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard heard
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard heard
 }
-STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_union_KD__KD_EchoIndication_heard  {
-    FILE before1_OC_cpp
-    FIELD Bit(32) meth
-    FIELD Bit(32) v
-}
-STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union  {
-    FILE before1_OC_cpp
-    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say say
-    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2 say2
-}
-STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say  {
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoIndication_PF_union_KD__KD_EchoIndication_PF_heard  {
     FILE before1_OC_cpp
     FIELD Bit(32) meth
     FIELD Bit(32) v
 }
-STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_union_KD__KD_EchoRequest_say2  {
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union  {
+    FILE before1_OC_cpp
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say say
+    FIELD _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2 say2
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say  {
+    FILE before1_OC_cpp
+    FIELD Bit(32) meth
+    FIELD Bit(32) v
+}
+STRUCT _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2  {
     FILE before1_OC_cpp
     FIELD Bit(32) meth
     FIELD Bit(32) v

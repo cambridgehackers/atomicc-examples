@@ -278,7 +278,7 @@ module P7Wrap (
         .FTMTP2FTRIGACK(0),
         .IRQF2P(intr.interrupt),
         .IRQP2F(),
-        .MAXIGP0ACLK(CLK),
+        .MAXIGP0ACLK(intr.CLK),
         .MAXIGP0ARADDR(pps$MAXIGP0ARADDR),
         .MAXIGP0ARBURST(),
         .MAXIGP0ARCACHE(),
@@ -668,8 +668,8 @@ module P7Wrap (
         .SAXIHP3WSTRB(0),
         .SAXIHP3WVALID(0));
     ClockTop pclockTop (
-        .CLK(CLK),
-        .nRST(nRST),
+        .CLK(intr.CLK),
+        .nRST(intr.nRST),
         .clockOut());
     // Extra assigments, not to output wires
     assign CLK = intr.CLK;

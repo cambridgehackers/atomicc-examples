@@ -2,18 +2,6 @@
 `define __funneltest_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __FunnelIndication_DEF__
-`define __FunnelIndication_DEF__
-interface FunnelIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$v,
-                    input  heard__RDY);
-endinterface
-`endif
 `ifndef __FunnelRequest_DEF__
 `define __FunnelRequest_DEF__
 interface FunnelRequest;
@@ -24,6 +12,18 @@ interface FunnelRequest;
                     output say__RDY);
     modport client (output say__ENA, say$v,
                     input  say__RDY);
+endinterface
+`endif
+`ifndef __FunnelIndication_DEF__
+`define __FunnelIndication_DEF__
+interface FunnelIndication;
+    logic heard__ENA;
+    logic [32 - 1:0] heard$v;
+    logic heard__RDY;
+    modport server (input  heard__ENA, heard$v,
+                    output heard__RDY);
+    modport client (output heard__ENA, heard$v,
+                    input  heard__RDY);
 endinterface
 `endif
 //METASTART; FunnelTest
@@ -42,8 +42,8 @@ endinterface
 //METACONNECT; funnel$out.enq__ENA; result$in.enq__ENA
 //METACONNECT; funnel$out.enq__RDY; result$in.enq__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__FunnelTest; FunnelTest;
 //METAINTERNAL; M2P__indication; ___M2PFunnelIndication;
+//METAINTERNAL; DUT__FunnelTest; FunnelTest;
 //METAINTERNAL; P2M__request; ___P2MFunnelRequest;
 //METACONNECT; DUT__FunnelTest$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__FunnelTest$indication.heard__RDY; M2P__indication$method.heard__RDY

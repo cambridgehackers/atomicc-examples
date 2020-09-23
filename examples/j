@@ -26,3 +26,4 @@ cd ../acc-04; make
 cd ../acc-05; make
 cd ../acc-06; make
 cd ../acc-07; make
+git status

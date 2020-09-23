@@ -56,8 +56,8 @@ endinterface
 //METAGUARD; RULE$respond_rule; !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
 //METARULES; RULE$delay_rule; RULE$respond_rule
 //METASTART; l_top
-//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; M2P__indication; ___M2PEchoIndication;
+//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; P2M__request; ___P2MEchoRequest;
 //METACONNECT; DUT__Echo$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__Echo$indication.heard__RDY; M2P__indication$method.heard__RDY

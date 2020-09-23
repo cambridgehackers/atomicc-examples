@@ -34,8 +34,8 @@ endinterface
 //METAGUARD; RULE$respond_rule; fifo$out.deq__RDY && fifo$out.first__RDY && ind.heard__RDY;
 //METARULES; RULE$respond_rule
 //METASTART; l_top
-//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; M2P__ind; ___M2PEchoIndication;
+//METAINTERNAL; DUT__Echo; Echo;
 //METAINTERNAL; P2M__sout; ___P2MEchoRequest;
 //METACONNECT; DUT__Echo$ind.heard__ENA; M2P__ind$method.heard__ENA
 //METACONNECT; DUT__Echo$ind.heard__RDY; M2P__ind$method.heard__RDY

@@ -38,8 +38,8 @@ endinterface
 //METACONNECT; readUser.enq__ENA; bscan$fromBscan.enq__ENA
 //METACONNECT; readUser.enq__RDY; bscan$fromBscan.enq__RDY
 //METASTART; l_top
-//METAINTERNAL; DUT__Btest; Btest;
 //METAINTERNAL; M2P__indication; ___M2PBtestIndication;
+//METAINTERNAL; DUT__Btest; Btest;
 //METAINTERNAL; P2M__request; ___P2MBtestRequest;
 //METACONNECT; DUT__Btest$indication.heard__ENA; M2P__indication$method.heard__ENA
 //METACONNECT; DUT__Btest$indication.heard__RDY; M2P__indication$method.heard__RDY

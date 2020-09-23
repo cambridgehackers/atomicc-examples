@@ -61,8 +61,8 @@ module ZynqTop (
         .MAXIGP0_I(test$MAXIGP0_I),
         .FCLK(ps7_ps7_foo$FCLK));
     AxiTop test (
-        .CLK(CLK),
-        .nRST(nRST),
+        .CLK(ps7_fclk_0_c$O),
+        .nRST(ps7_freset_0_r$O),
         .interrupt(test$interrupt),
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I));

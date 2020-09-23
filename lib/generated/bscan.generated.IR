@@ -70,7 +70,7 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     FILE bscan_OC_cpp
     INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync(width=32)
     FIELD BSCANE2 bscan
-    PARAMS bscan <JTAG_CHAIN:id>
+    PARAMS bscan JTAG_CHAIN=id
     FIELD BUFG tckbuf
     FIELD BscanLocal(width=32) localBscan
     INTERFACE PipeInSync(width=32) readBscan

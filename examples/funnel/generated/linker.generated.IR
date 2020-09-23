@@ -50,11 +50,17 @@ MODULE l_top__Rz2_Iz1 l_top__Rz2_Iz1_interface {
     FIELD PipeIn__W90 M2P__indication$pipe
     FIELD FunnelRequest P2M__request$method
     FIELD PipeIn__W90 P2M__request$pipe
-    FIELD FunnelTest DUT__FunnelTest
     FIELD ___M2PFunnelIndication__pi1 M2P__indication
+    FIELD FunnelTest DUT__FunnelTest
     FIELD ___P2MFunnelRequest__Pz3 P2M__request
 }
 INTERFACE l_top__Rz2_Iz1_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE ___M2PFunnelIndication__pi1 ___M2PFunnelIndication__pi1_interface {
+}
+INTERFACE ___M2PFunnelIndication__pi1_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -70,12 +76,6 @@ MODULE FunnelTest FunnelTest_interface {
     FIELD Fifo1Base__W20 result
 }
 INTERFACE FunnelTest_interface {
-    FIELD/input  Bit(1) CLK
-    FIELD/input  Bit(1) nRST
-}
-MODULE ___M2PFunnelIndication__pi1 ___M2PFunnelIndication__pi1_interface {
-}
-INTERFACE ___M2PFunnelIndication__pi1_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -219,8 +219,8 @@ FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
 FILE generated/funneltest.generated.vh
-FILE generated/FunnelTest.sv
 FILE generated/___M2PFunnelIndication.sv
+FILE generated/FunnelTest.sv
 FILE generated/___P2MFunnelRequest.sv
 FILE ../../lib/generated/FifoPBase.sv
 FILE ../../lib/generated/FunnelBufferedBase.sv
