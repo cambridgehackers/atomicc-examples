@@ -45,19 +45,7 @@ INTERFACE MaxiO  {
     METHOD/Action AW__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len )
     METHOD/Action W__ENA ( Bit(32) data , Bit(12) id , Bit(1) last )
 }
-INTERFACE PipeIn(width=144)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=38)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
-INTERFACE PipeIn(width=6)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
@@ -66,16 +54,6 @@ INTERFACE PipeInB(width=32)  {
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
 INTERFACE PipeOut(width=32)  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
-}
-INTERFACE PipeOut(width=38)  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
-}
-INTERFACE PipeOut(width=6)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)

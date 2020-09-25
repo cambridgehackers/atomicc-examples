@@ -18,10 +18,6 @@ INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
 }
-INTERFACE PipeIn(width=144)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )

@@ -8,10 +8,6 @@ INTERFACE Fifo(width=128)  {
     INTERFACE PipeIn(width=128) in
     INTERFACE PipeOut(width=128) out
 }
-INTERFACE PipeIn(width=128)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )

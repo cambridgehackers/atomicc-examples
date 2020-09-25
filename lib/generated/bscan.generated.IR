@@ -41,10 +41,6 @@ INTERFACE MbufgBUFG  {
     FIELD/input Bit(1) I
     FIELD/output Bit(1) O
 }
-INTERFACE PipeIn(width=3)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )

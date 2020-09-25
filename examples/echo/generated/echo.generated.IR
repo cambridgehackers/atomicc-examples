@@ -29,10 +29,6 @@ INTERFACE MuxPipeIfc  {
     INTERFACE PipeIn(width=144) forward
     INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE PipeIn(width=144)  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )

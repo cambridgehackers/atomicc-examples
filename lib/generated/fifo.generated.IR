@@ -22,10 +22,6 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeIn(width=999999)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeOut(width=999999)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA

@@ -13,10 +13,6 @@ INTERFACE AtB(width=32)  {
     INTERFACE PipeIn(width=144) in
     INTERFACE/Ptr PipeInB(width=32) out
 }
-INTERFACE PipeIn(width=144)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v )
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
