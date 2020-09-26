@@ -22,6 +22,8 @@ module AxiTop (
     ReadResp _RULE$lread$agg_2e_tmp;
     wire _RULE$lread$currentChannel;
     wire [32 - 1:0]_RULE$lread$res;
+    logic [32 - 1:0]temp_RULE$lread$res;
+    assign _RULE$lread$res = temp_RULE$lread$res;
     ReadResp _RULE$lreadData$currentRData;
     wire [32 - 1:0]_RULE$lwrite$currentWData;
     PipeIn#(.width(38)) readData$in();
@@ -78,7 +80,19 @@ module AxiTop (
     assign _RULE$lread$agg_2e_tmp.data = _RULE$lread$res;
     assign _RULE$lread$agg_2e_tmp.id = reqArs$out.first;
     assign _RULE$lread$currentChannel = !( selectRIndReq || ( !requestValue$out.deq__RDY ) );
-    assign _RULE$lread$res = ( ( RULE$lread__RDY && ( readAddr == 0 ) && portalRControl ) ? ( !( selectRIndReq || ( !requestValue$out.deq__RDY ) ) ) : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 8 ) && portalRControl ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 12 ) && portalRControl ) ? ( !( selectRIndReq || ( !requestValue$out.deq__RDY ) ) ) : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 16 ) && portalRControl ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 20 ) && portalRControl ) ? 32'd2 : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ) ) ? requestValue$out.first : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ) ) ? user$write.enq__RDY : 32'd0 );
+    assign temp_RULE$lread$res = ( ( RULE$lread__RDY && ( readAddr == 0 ) && portalRControl ) ? ( !( selectRIndReq || ( !requestValue$out.deq__RDY ) ) ) : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 8 ) && portalRControl ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 12 ) && portalRControl ) ? ( !( selectRIndReq || ( !requestValue$out.deq__RDY ) ) ) : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 16 ) && portalRControl ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 20 ) && portalRControl ) ? 32'd2 : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ) ) ? requestValue$out.first : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ) ) ? user$write.enq__RDY : 32'd0 );
+    //always_comb begin
+    //temp_RULE$lread$res = 0;
+    //unique case (1'b1) 
+    //RULE$lread__RDY && ( readAddr == 0 ) && portalRControl: temp_RULE$lread$res = !( selectRIndReq || ( !requestValue$out.deq__RDY ) );
+    //RULE$lread__RDY && ( readAddr == 8 ) && portalRControl: temp_RULE$lread$res = 32'd1 ;
+    //RULE$lread__RDY && ( readAddr == 12 ) && portalRControl: temp_RULE$lread$res = !( selectRIndReq || ( !requestValue$out.deq__RDY ) );
+    //RULE$lread__RDY && ( readAddr == 16 ) && portalRControl: temp_RULE$lread$res = selectRIndReq ? 32'd6 : 32'd5 ;
+    //RULE$lread__RDY && ( readAddr == 20 ) && portalRControl: temp_RULE$lread$res = 32'd2 ;
+    //!( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ): temp_RULE$lread$res = requestValue$out.first ;
+    //!( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ): temp_RULE$lread$res = user$write.enq__RDY ;
+    //endcase
+    //end
     assign _RULE$lreadData$currentRData = readData$out.first;
     assign _RULE$lwrite$currentWData = writeData$out.first;
     assign readData$in.enq$v = _RULE$lread$agg_2e_tmp;
