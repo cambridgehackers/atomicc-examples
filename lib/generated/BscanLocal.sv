@@ -14,9 +14,9 @@ module BscanLocal #(
     PipeIn.client fromBscan);
     reg notReady;
     reg [width - 1:0]shiftReg;
-    wire RULE$updateRule__RDY;
-    wire _fromBscan$enqS__RDY;
-    wire _toBscan$enqS__ENA;
+    logic RULE$updateRule__RDY;
+    logic _fromBscan$enqS__RDY;
+    logic _toBscan$enqS__ENA;
     SyncFF fromBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
         .out(_fromBscan$enqS__RDY),
         .in(fromBscan.enq__RDY));

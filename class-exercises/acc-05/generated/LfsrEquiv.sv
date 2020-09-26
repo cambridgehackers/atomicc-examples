@@ -8,12 +8,12 @@ module LfsrEquiv (input wire CLK, input wire nRST,
     output wire outBit,
     output wire outBit__RDY);
     reg o_data;
-    wire fib$outBit;
-    wire fib$outBit__RDY;
-    wire fib$shiftBit__RDY;
-    wire gal$outBit;
-    wire gal$outBit__RDY;
-    wire gal$shiftBit__RDY;
+    logic fib$outBit;
+    logic fib$outBit__RDY;
+    logic fib$shiftBit__RDY;
+    logic gal$outBit;
+    logic gal$outBit__RDY;
+    logic gal$shiftBit__RDY;
     LfsrFib#(.LN(8),.TAPS(45)) fib (.CLK(CLK), .nRST(nRST),
         .shiftBit__ENA(shiftBit__ENA && gal$shiftBit__RDY),
         .shiftBit$v(shiftBit$v),

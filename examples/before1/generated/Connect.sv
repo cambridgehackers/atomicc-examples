@@ -4,8 +4,8 @@
 module Connect (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
-    wire RULE$swap2_rule__RDY;
-    wire RULE$swap_rule__RDY;
+    logic RULE$swap2_rule__RDY;
+    logic RULE$swap_rule__RDY;
     EchoIndication lEII_test$indication();
     PipeIn#(.width(96)) lEII_test$pipe();
     EchoIndication lEIO$indication();

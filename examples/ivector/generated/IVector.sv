@@ -5,16 +5,16 @@ module IVector (input wire CLK, input wire nRST,
     IVectorRequest.server in,
     IVectorIndication.client out);
     reg [32 - 1:0]vsize;
-    wire RULE$respond_rule_0__RDY;
-    wire RULE$respond_rule_1__RDY;
-    wire RULE$respond_rule_2__RDY;
-    wire RULE$respond_rule_3__RDY;
-    wire RULE$respond_rule_4__RDY;
-    wire RULE$respond_rule_5__RDY;
-    wire RULE$respond_rule_6__RDY;
-    wire RULE$respond_rule_7__RDY;
-    wire RULE$respond_rule_8__RDY;
-    wire RULE$respond_rule_9__RDY;
+    logic RULE$respond_rule_0__RDY;
+    logic RULE$respond_rule_1__RDY;
+    logic RULE$respond_rule_2__RDY;
+    logic RULE$respond_rule_3__RDY;
+    logic RULE$respond_rule_4__RDY;
+    logic RULE$respond_rule_5__RDY;
+    logic RULE$respond_rule_6__RDY;
+    logic RULE$respond_rule_7__RDY;
+    logic RULE$respond_rule_8__RDY;
+    logic RULE$respond_rule_9__RDY;
     ValuePair _RULE$respond_rule_0$temp;
     ValuePair _RULE$respond_rule_1$temp;
     ValuePair _RULE$respond_rule_2$temp;
@@ -28,13 +28,13 @@ module IVector (input wire CLK, input wire nRST,
     ValuePair _in$say$agg_2e_tmp;
     ValuePair _in$say$temp;
     PipeIn#(.width(96)) fifo$in [10 - 1:0]();
-    wire [ 10 - 1:0]fifo$in__enq__RDY_or;
-    wire fifo$in__enq__RDY_or1;
+    logic [ 10 - 1:0]fifo$in__enq__RDY_or;
+    logic fifo$in__enq__RDY_or1;
     PipeOut#(.width(96)) fifo$out [10 - 1:0]();
-    wire [ 10 - 1:0]fifo$out__deq__RDY_or;
-    wire fifo$out__deq__RDY_or1;
-    wire [ 10 - 1:0]fifo$out__first__RDY_or;
-    wire fifo$out__first__RDY_or1;
+    logic [ 10 - 1:0]fifo$out__deq__RDY_or;
+    logic fifo$out__deq__RDY_or1;
+    logic [ 10 - 1:0]fifo$out__first__RDY_or;
+    logic fifo$out__first__RDY_or1;
     FifoPong#(.width(96)) fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));

@@ -10,7 +10,7 @@ module SizedFifoBase #(
     PipeOut.server out);
     reg [$clog2(depth+0)+1 - 1:0]c;
     reg [width - 1:0]q [depth - 1:0];
-    wire [width - 1:0]x_wire;
+    logic [width - 1:0]x_wire;
     genvar __inst$Genvar1;
     // Extra assigments, not to output wires
     assign in.enq__RDY = !( 0 == ( ( c == depth ) ^ 1 ) );

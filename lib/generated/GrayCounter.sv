@@ -19,11 +19,11 @@ module GrayCounter #(
     input wire [width - 1:0]writeBin$v,
     output wire writeBin__RDY);
     reg counter [width - 1:0];
-    wire _RULE$incdec$useLsb;
-    wire [width - 1:0]_readBin$rtemp;
-    wire _readBin$temp [width - 1:0];
-    wire [width - 1:0]counterBit;
-    wire [width - 1:0]m;
+    logic _RULE$incdec$useLsb;
+    logic [width - 1:0]_readBin$rtemp;
+    logic _readBin$temp [width - 1:0];
+    logic [width - 1:0]counterBit;
+    logic [width - 1:0]m;
     genvar __inst$Genvar1;
     assign decrement__RDY = 1;
     assign increment__RDY = 1;

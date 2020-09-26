@@ -8,8 +8,8 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     EchoIndication_data ind0;
     EchoIndication_data ind1;
     reg ind_busy;
-    wire RULE$output_rulee__RDY;
-    wire RULE$output_ruleo__RDY;
+    logic RULE$output_rulee__RDY;
+    logic RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
     assign RULE$output_rulee__RDY = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );

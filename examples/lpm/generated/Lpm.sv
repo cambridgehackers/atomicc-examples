@@ -6,11 +6,11 @@ module Lpm (input wire CLK, input wire nRST,
     input wire [32 - 1:0]enter$x,
     output wire enter__RDY,
     PipeIn.client outQ);
-    wire RULE$enter__RDY;
-    wire RULE$exitr__RDY;
-    wire RULE$recirc__RDY;
+    logic RULE$enter__RDY;
+    logic RULE$exitr__RDY;
+    logic RULE$recirc__RDY;
     ProcessData _RULE$enter$agg_2e_tmp;
-    wire [32 - 1:0]_RULE$enter$x;
+    logic [32 - 1:0]_RULE$enter$x;
     ProcessData _RULE$exitr$y;
     ProcessData _RULE$recirc$agg_2e_tmp;
     ProcessData _RULE$recirc$y;
@@ -18,11 +18,11 @@ module Lpm (input wire CLK, input wire nRST,
     PipeOut#(.width(23)) fifo$out();
     PipeIn#(.width(32)) inQ$in();
     PipeOut#(.width(32)) inQ$out();
-    wire [32 - 1:0]mem$req$v;
-    wire mem$req__RDY;
-    wire mem$resAccept__RDY;
-    wire [32 - 1:0]mem$resValue;
-    wire mem$resValue__RDY;
+    logic [32 - 1:0]mem$req$v;
+    logic mem$req__RDY;
+    logic mem$resAccept__RDY;
+    logic [32 - 1:0]mem$resValue;
+    logic mem$resValue__RDY;
     BufTicket compBuf (.CLK(CLK), .nRST(nRST),
         .getTicket(),
         .getTicket__RDY(),

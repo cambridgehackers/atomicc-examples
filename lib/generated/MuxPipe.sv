@@ -5,7 +5,7 @@ module MuxPipe (input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeIn.server forward,
     PipeIn.client out);
-    wire RULE$fifoRule__RDY;
+    logic RULE$fifoRule__RDY;
     PipeIn#(.width(144)) forwardFifo$in();
     PipeOut#(.width(144)) forwardFifo$out();
     Fifo1Base#(.width(144)) forwardFifo (.CLK(CLK), .nRST(nRST),

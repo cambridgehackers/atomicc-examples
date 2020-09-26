@@ -8,7 +8,7 @@ module Btest (input wire CLK, input wire nRST,
     reg [8 - 1:0]readCount;
     reg ready;
     reg [8 - 1:0]writeCount;
-    wire RULE$copyRule__RDY;
+    logic RULE$copyRule__RDY;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
     PipeIn#(.width(32)) readUser();

@@ -20,11 +20,11 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     reg [32 - 1:0]e2w_val;
     reg [32 - 1:0]e2w_valid;
     reg [32 - 1:0]pc;
-    wire RULE$decode__ENA;
-    wire RULE$decode__RDY;
-    wire RULE$execArith__ENA;
-    wire RULE$execArith__RDY;
-    wire RULE$writeBack__RDY;
+    logic RULE$decode__ENA;
+    logic RULE$decode__RDY;
+    logic RULE$execArith__ENA;
+    logic RULE$execArith__RDY;
+    logic RULE$writeBack__RDY;
     ExecResult _RULE$execArith$val;
     // Extra assigments, not to output wires
     assign RULE$decode__ENA = ( d2e_valid == 0 ) && pgm.read__RDY && dec.getOp__RDY && dec.getArithOp__RDY && dec.getSrc1__RDY && dec.getSrc2__RDY && dec.getDst__RDY && dec.getAddr__RDY;

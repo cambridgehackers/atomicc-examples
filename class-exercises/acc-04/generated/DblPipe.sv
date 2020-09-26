@@ -8,12 +8,12 @@ module DblPipe (input wire CLK, input wire nRST,
     output wire outBit,
     output wire outBit__RDY);
     reg o_data;
-    wire one$outBit;
-    wire one$outBit__RDY;
-    wire one$shiftBit__RDY;
-    wire two$outBit;
-    wire two$outBit__RDY;
-    wire two$shiftBit__RDY;
+    logic one$outBit;
+    logic one$outBit__RDY;
+    logic one$shiftBit__RDY;
+    logic two$outBit;
+    logic two$outBit__RDY;
+    logic two$shiftBit__RDY;
     LfsrFib#(.LN(8),.TAPS(45)) one (.CLK(CLK), .nRST(nRST),
         .shiftBit__ENA(shiftBit__ENA && two$shiftBit__RDY),
         .shiftBit$v(shiftBit$v),

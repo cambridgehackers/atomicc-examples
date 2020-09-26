@@ -24,12 +24,12 @@ module FwbSlave (
     reg f_past_valid;
     reg [(32 / 8) - 1:0]nacks;
     reg [(32 / 8) - 1:0]nreqs;
-    wire CLK;
-    wire [32 - 1:0]addr_share;
-    wire [32 - 1:0]data_share;
-    wire nRST;
-    wire [(32 / 8) - 1:0]sel_share;
-    wire we_share;
+    logic CLK;
+    logic [32 - 1:0]addr_share;
+    logic [32 - 1:0]data_share;
+    logic nRST;
+    logic [(32 / 8) - 1:0]sel_share;
+    logic we_share;
     assign a$stb__RDY = 1;
     assign f_nacks = nacks;
     assign f_nacks__RDY = 1;

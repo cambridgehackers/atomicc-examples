@@ -7,7 +7,7 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
     reg busy_delay;
     reg [32 - 1:0]meth_delay;
     reg [32 - 1:0]v_delay;
-    wire RULE$input_rule__RDY;
+    logic RULE$input_rule__RDY;
     EchoIndication_data _pipe$enq$temp$v;
     // Extra assigments, not to output wires
     assign RULE$input_rule__RDY = !( ( busy_delay == 0 ) || ( !indication.heard__RDY ) );

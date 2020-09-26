@@ -44,8 +44,8 @@ module WbPriArbiter #(
     input wire o$err,
     input wire o$err__RDY);
     reg r_a_owner;
-    wire CLK;
-    wire nRST;
+    logic CLK;
+    logic nRST;
     assign a$ack = o$ack && r_a_owner;
     assign a$ack__RDY = o$ack__RDY;
     assign a$err = o$err && r_a_owner;

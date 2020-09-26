@@ -11,8 +11,8 @@ module LpmMemory (input wire CLK, input wire nRST,
     output wire resValue__RDY);
     reg [32 - 1:0]delayCount;
     reg [32 - 1:0]saved;
-    wire RULE$memdelay_rule__ENA;
-    wire RULE$memdelay_rule__RDY;
+    logic RULE$memdelay_rule__ENA;
+    logic RULE$memdelay_rule__RDY;
     assign req__RDY = delayCount == 0;
     assign resAccept__RDY = delayCount == 1;
     assign resValue = saved;

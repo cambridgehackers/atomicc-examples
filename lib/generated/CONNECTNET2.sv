@@ -6,8 +6,8 @@ module CONNECTNET2 (
     input wire IN2,
     output wire OUT1,
     output wire OUT2);
-    wire CLK;
-    wire nRST;
+    logic CLK;
+    logic nRST;
     assign OUT1 = IN1;
     assign OUT2 = IN2;
 endmodule

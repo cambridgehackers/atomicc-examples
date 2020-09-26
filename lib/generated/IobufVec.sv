@@ -7,12 +7,12 @@ module IobufVec #(
     input wire [iovecWidth - 1:0]I,
     output wire [iovecWidth - 1:0]O,
     input wire T);
-    wire CLK;
-    wire iobufs$I [iovecWidth - 1:0];
-    wire iobufs$IO [iovecWidth - 1:0];
-    wire iobufs$O [iovecWidth - 1:0];
-    wire iobufs$T [iovecWidth - 1:0];
-    wire nRST;
+    logic CLK;
+    logic iobufs$I [iovecWidth - 1:0];
+    logic iobufs$IO [iovecWidth - 1:0];
+    logic iobufs$O [iovecWidth - 1:0];
+    logic iobufs$T [iovecWidth - 1:0];
+    logic nRST;
     genvar __inst$Genvar1;
     IOBUF iobufs [iovecWidth - 1:0] (
         .I(iobufs$I),

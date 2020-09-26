@@ -4,8 +4,8 @@
 module ResetInverter (
     input wire RESET_IN,
     output wire RESET_OUT);
-    wire CLK;
-    wire nRST;
+    logic CLK;
+    logic nRST;
     assign RESET_OUT = RESET_IN == 0;
 endmodule
 

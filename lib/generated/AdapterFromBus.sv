@@ -9,7 +9,7 @@ module AdapterFromBus #(
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]length;
     reg waitForEnq;
-    wire RULE$pushValue__RDY;
+    logic RULE$pushValue__RDY;
     NOCDataH _RULE$pushValue$agg_2e_tmp;
     // Extra assigments, not to output wires
     assign RULE$pushValue__RDY = !( ( 0 == waitForEnq ) || ( !out.enq__RDY ) );

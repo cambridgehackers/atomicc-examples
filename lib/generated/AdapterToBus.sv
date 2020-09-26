@@ -8,8 +8,8 @@ module AdapterToBus #(
     PipeInB.client out);
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]remain;
-    wire RULE$copyRule__RDY;
-    wire [width - 1:0]_RULE$copyRule$outVal;
+    logic RULE$copyRule__RDY;
+    logic [width - 1:0]_RULE$copyRule$outVal;
     NOCDataH _in$enq$temp$v;
     // Extra assigments, not to output wires
     assign RULE$copyRule__RDY = !( ( remain == 0 ) || ( !out.enq__RDY ) );

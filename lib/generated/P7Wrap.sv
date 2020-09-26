@@ -27,25 +27,25 @@ module P7Wrap (
     MaxiO.client MAXIGP0_O,
     MaxiI.server MAXIGP0_I,
     Pps7fclk.server FCLK);
-    wire CLK;
-    wire RULE$gp0ar__RDY;
-    wire RULE$gp0aw__RDY;
-    wire RULE$gp0w__RDY;
-    wire nRST;
-    wire [32 - 1:0]pps$MAXIGP0ARADDR;
-    wire [12 - 1:0]pps$MAXIGP0ARID;
-    wire [4 - 1:0]pps$MAXIGP0ARLEN;
-    wire pps$MAXIGP0ARVALID;
-    wire [32 - 1:0]pps$MAXIGP0AWADDR;
-    wire [12 - 1:0]pps$MAXIGP0AWID;
-    wire [4 - 1:0]pps$MAXIGP0AWLEN;
-    wire pps$MAXIGP0AWVALID;
-    wire pps$MAXIGP0BREADY;
-    wire pps$MAXIGP0RREADY;
-    wire [32 - 1:0]pps$MAXIGP0WDATA;
-    wire [12 - 1:0]pps$MAXIGP0WID;
-    wire pps$MAXIGP0WLAST;
-    wire pps$MAXIGP0WVALID;
+    logic CLK;
+    logic RULE$gp0ar__RDY;
+    logic RULE$gp0aw__RDY;
+    logic RULE$gp0w__RDY;
+    logic nRST;
+    logic [32 - 1:0]pps$MAXIGP0ARADDR;
+    logic [12 - 1:0]pps$MAXIGP0ARID;
+    logic [4 - 1:0]pps$MAXIGP0ARLEN;
+    logic pps$MAXIGP0ARVALID;
+    logic [32 - 1:0]pps$MAXIGP0AWADDR;
+    logic [12 - 1:0]pps$MAXIGP0AWID;
+    logic [4 - 1:0]pps$MAXIGP0AWLEN;
+    logic pps$MAXIGP0AWVALID;
+    logic pps$MAXIGP0BREADY;
+    logic pps$MAXIGP0RREADY;
+    logic [32 - 1:0]pps$MAXIGP0WDATA;
+    logic [12 - 1:0]pps$MAXIGP0WID;
+    logic pps$MAXIGP0WLAST;
+    logic pps$MAXIGP0WVALID;
     PS7 pps (
         .MIO(MIO),
         .DDRA(DDR_Addr),

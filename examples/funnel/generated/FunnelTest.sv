@@ -5,10 +5,10 @@ module FunnelTest (input wire CLK, input wire nRST,
     FunnelRequest.server request,
     FunnelIndication.client indication);
     reg [8 - 1:0]index;
-    wire RULE$respond_rule__RDY;
+    logic RULE$respond_rule__RDY;
     PipeIn#(.width(32)) fifo$in [4 - 1:0]();
-    wire [ 4 - 1:0]fifo$in__enq__RDY_or;
-    wire fifo$in__enq__RDY_or1;
+    logic [ 4 - 1:0]fifo$in__enq__RDY_or;
+    logic fifo$in__enq__RDY_or1;
     PipeIn#(.width(32)) fifo$out [4 - 1:0]();
     PipeIn#(.width(32)) funnel$in [4 - 1:0]();
     PipeIn#(.width(32)) funnel$out();

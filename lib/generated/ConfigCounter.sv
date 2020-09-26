@@ -20,8 +20,8 @@ module ConfigCounter #(
     output wire positive__RDY);
     reg [count_sz - 1:0]cnt;
     reg positive_reg;
-    wire [count_sz - 1:0]_RULE$react$new_count;
-    wire [count_sz - 1:0]dec_wire;
+    logic [count_sz - 1:0]_RULE$react$new_count;
+    logic [count_sz - 1:0]dec_wire;
     assign decrement__RDY = 1;
     assign increment__RDY = 1;
     assign maybeDecrement = cnt >= maybeDecrement$v;

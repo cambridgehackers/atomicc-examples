@@ -23,17 +23,17 @@ module ZynqTop (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb);
-    wire CLK;
-    wire nRST;
-    wire ps7_fclk_0_c$O;
-    wire ps7_freset_0_r$O;
+    logic CLK;
+    logic nRST;
+    logic ps7_fclk_0_c$O;
+    logic ps7_freset_0_r$O;
     Pps7fclk ps7_ps7_foo$FCLK();
     MaxiI ps7_ps7_foo$MAXIGP0_I();
     MaxiO ps7_ps7_foo$MAXIGP0_O();
     ZynqInterrupt ps7_ps7_foo$intr();
     MaxiI test$MAXIGP0_I();
     MaxiO test$MAXIGP0_O();
-    wire test$interrupt;
+    logic test$interrupt;
     P7Wrap ps7_ps7_foo (
         .MIO(MIO),
         .DDR_Addr(DDR_Addr),

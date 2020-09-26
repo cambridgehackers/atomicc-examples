@@ -7,22 +7,22 @@ module Bscan #(
     input wire CLK, input wire nRST,
     PipeIn.server toBscan,
     PipeIn.client fromBscan);
-    wire _fromBscan$enqS__ENA;
-    wire _toBscan$enqS__RDY;
-    wire bscan$CAPTURE;
-    wire bscan$SEL;
-    wire bscan$SHIFT;
-    wire bscan$TCK;
-    wire bscan$TDI;
-    wire bscan$TDO;
-    wire bscan$UPDATE;
-    wire localBscan$capture;
+    logic _fromBscan$enqS__ENA;
+    logic _toBscan$enqS__RDY;
+    logic bscan$CAPTURE;
+    logic bscan$SEL;
+    logic bscan$SHIFT;
+    logic bscan$TCK;
+    logic bscan$TDI;
+    logic bscan$TDO;
+    logic bscan$UPDATE;
+    logic localBscan$capture;
     PipeIn#(.width(width)) localBscan$fromBscan();
-    wire localBscan$shift;
+    logic localBscan$shift;
     PipeIn#(.width(width)) localBscan$toBscan();
-    wire localBscan$update;
+    logic localBscan$update;
     PipeIn#(.width(width)) readBscan();
-    wire tckbuf$O;
+    logic tckbuf$O;
     BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),

@@ -12,12 +12,12 @@ module ModFt600 (
     reg usb_fifo_empty;
     reg [2 - 1:0]usb_rxf_delay;
     reg usb_txe_delay;
-    wire CLK;
-    wire iobufs$I [16 - 1:0];
-    wire iobufs$IO [16 - 1:0];
-    wire iobufs$O [16 - 1:0];
-    wire iobufs$T [16 - 1:0];
-    wire nRST;
+    logic CLK;
+    logic iobufs$I [16 - 1:0];
+    logic iobufs$IO [16 - 1:0];
+    logic iobufs$O [16 - 1:0];
+    logic iobufs$T [16 - 1:0];
+    logic nRST;
     genvar __inst$Genvar1;
     IOBUF iobufs [16 - 1:0] (
         .I(iobufs$I),
