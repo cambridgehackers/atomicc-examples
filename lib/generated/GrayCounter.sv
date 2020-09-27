@@ -34,7 +34,7 @@ module GrayCounter #(
     assign writeBin__RDY = 1;
     assign writeGray__RDY = 1;
     // Extra assigments, not to output wires
-    assign _RULE$incdec$useLsb = ( ^counterBit ) == decrement__ENA;
+    assign _RULE$incdec$useLsb = !( ( increment__ENA == decrement__ENA ) || ( !( ( ^counterBit ) == decrement__ENA ) ) );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign _readBin$rtemp[ __inst$Genvar1 ] = _readBin$temp[ __inst$Genvar1 ];
     assign _readBin$temp[ __inst$Genvar1 ] = ^counterBit[ ( width - 1 ) : __inst$Genvar1 ];

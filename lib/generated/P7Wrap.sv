@@ -685,7 +685,7 @@ module P7Wrap (
     assign MAXIGP0_O.AW__ENA = RULE$gp0aw__RDY;
     assign MAXIGP0_O.W$data = pps$MAXIGP0WDATA;
     assign MAXIGP0_O.W$id = pps$MAXIGP0WID;
-    assign MAXIGP0_O.W$last = pps$MAXIGP0WLAST != 0;
+    assign MAXIGP0_O.W$last = !( ( pps$MAXIGP0WLAST == 0 ) || ( !RULE$gp0w__RDY ) );
     assign MAXIGP0_O.W__ENA = RULE$gp0w__RDY;
     assign RULE$gp0ar__RDY = !( ( 0 == pps$MAXIGP0ARVALID ) || ( !MAXIGP0_O.AR__RDY ) );
     assign RULE$gp0aw__RDY = !( ( 0 == pps$MAXIGP0AWVALID ) || ( !MAXIGP0_O.AW__RDY ) );

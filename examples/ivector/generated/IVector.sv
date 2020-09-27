@@ -25,7 +25,6 @@ module IVector (input wire CLK, input wire nRST,
     ValuePair _RULE$respond_rule_7$temp;
     ValuePair _RULE$respond_rule_8$temp;
     ValuePair _RULE$respond_rule_9$temp;
-    ValuePair _in$say$agg_2e_tmp;
     ValuePair _in$say$temp;
     PipeIn#(.width(96)) fifo$in [10 - 1:0]();
     logic [ 10 - 1:0]fifo$in__enq__RDY_or;
@@ -59,23 +58,22 @@ module IVector (input wire CLK, input wire nRST,
     assign _RULE$respond_rule_7$temp = fifo$out[ 7 ].first;
     assign _RULE$respond_rule_8$temp = fifo$out[ 8 ].first;
     assign _RULE$respond_rule_9$temp = fifo$out[ 9 ].first;
-    assign _in$say$agg_2e_tmp = _in$say$temp;
     assign _in$say$temp.b = in.say$v;
     assign fifo$in__enq__RDY_or1 = |fifo$in__enq__RDY_or;
     assign fifo$out__deq__RDY_or1 = |fifo$out__deq__RDY_or;
     assign fifo$out__first__RDY_or1 = |fifo$out__first__RDY_or;
     assign in.say__RDY = fifo$in__enq__RDY_or1;
-    assign out.heard$meth = ( RULE$respond_rule_1__RDY ? 1 : 0 ) | ( RULE$respond_rule_2__RDY ? 2 : 0 ) | ( RULE$respond_rule_3__RDY ? 3 : 0 ) | ( RULE$respond_rule_4__RDY ? 4 : 0 ) | ( RULE$respond_rule_5__RDY ? 5 : 0 ) | ( RULE$respond_rule_6__RDY ? 6 : 0 ) | ( RULE$respond_rule_7__RDY ? 7 : 0 ) | ( RULE$respond_rule_8__RDY ? 8 : 0 ) | ( RULE$respond_rule_9__RDY ? 9 : 0 );
-    assign out.heard$v = ( RULE$respond_rule_0__RDY ? _RULE$respond_rule_0$temp.b : 0 ) | ( RULE$respond_rule_1__RDY ? _RULE$respond_rule_1$temp.b : 0 ) | ( RULE$respond_rule_2__RDY ? _RULE$respond_rule_2$temp.b : 0 ) | ( RULE$respond_rule_3__RDY ? _RULE$respond_rule_3$temp.b : 0 ) | ( RULE$respond_rule_4__RDY ? _RULE$respond_rule_4$temp.b : 0 ) | ( RULE$respond_rule_5__RDY ? _RULE$respond_rule_5$temp.b : 0 ) | ( RULE$respond_rule_6__RDY ? _RULE$respond_rule_6$temp.b : 0 ) | ( RULE$respond_rule_7__RDY ? _RULE$respond_rule_7$temp.b : 0 ) | ( RULE$respond_rule_8__RDY ? _RULE$respond_rule_8$temp.b : 0 ) | ( RULE$respond_rule_9__RDY ? _RULE$respond_rule_9$temp.b : 0 );
     assign out.heard__ENA = ( |fifo$out__first__RDY_or ) && ( |fifo$out__deq__RDY_or );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-    assign fifo$in[__inst$Genvar1].enq$v = _in$say$agg_2e_tmp;
+    assign fifo$in[__inst$Genvar1].enq$v = _in$say$temp;
     assign fifo$in[__inst$Genvar1].enq__ENA = in.say__ENA && ( |fifo$in__enq__RDY_or ) && ( in.say$meth == __inst$Genvar1 );
     assign fifo$in__enq__RDY_or[__inst$Genvar1] = fifo$in[ __inst$Genvar1 ].enq__RDY;
     assign fifo$out[__inst$Genvar1].deq__ENA = ( |fifo$out__first__RDY_or ) && ( |fifo$out__deq__RDY_or ) && out.heard__RDY && ( ( 0 == __inst$Genvar1 ) || ( 1 == __inst$Genvar1 ) || ( 2 == __inst$Genvar1 ) || ( 3 == __inst$Genvar1 ) || ( 4 == __inst$Genvar1 ) || ( 5 == __inst$Genvar1 ) || ( 6 == __inst$Genvar1 ) || ( 7 == __inst$Genvar1 ) || ( 8 == __inst$Genvar1 ) || ( 9 == __inst$Genvar1 ) );
     assign fifo$out__deq__RDY_or[__inst$Genvar1] = fifo$out[ __inst$Genvar1 ].deq__RDY;
     assign fifo$out__first__RDY_or[__inst$Genvar1] = fifo$out[ __inst$Genvar1 ].first__RDY;
     end;
+    assign out.heard$meth = ( RULE$respond_rule_1__RDY ? 1 : 0 ) | ( RULE$respond_rule_2__RDY ? 2 : 0 ) | ( RULE$respond_rule_3__RDY ? 3 : 0 ) | ( RULE$respond_rule_4__RDY ? 4 : 0 ) | ( RULE$respond_rule_5__RDY ? 5 : 0 ) | ( RULE$respond_rule_6__RDY ? 6 : 0 ) | ( RULE$respond_rule_7__RDY ? 7 : 0 ) | ( RULE$respond_rule_8__RDY ? 8 : 0 ) | ( RULE$respond_rule_9__RDY ? 9 : 0 );
+    assign out.heard$v = ( RULE$respond_rule_0__RDY ? _RULE$respond_rule_0$temp.b : 0 ) | ( RULE$respond_rule_1__RDY ? _RULE$respond_rule_1$temp.b : 0 ) | ( RULE$respond_rule_2__RDY ? _RULE$respond_rule_2$temp.b : 0 ) | ( RULE$respond_rule_3__RDY ? _RULE$respond_rule_3$temp.b : 0 ) | ( RULE$respond_rule_4__RDY ? _RULE$respond_rule_4$temp.b : 0 ) | ( RULE$respond_rule_5__RDY ? _RULE$respond_rule_5$temp.b : 0 ) | ( RULE$respond_rule_6__RDY ? _RULE$respond_rule_6$temp.b : 0 ) | ( RULE$respond_rule_7__RDY ? _RULE$respond_rule_7$temp.b : 0 ) | ( RULE$respond_rule_8__RDY ? _RULE$respond_rule_8$temp.b : 0 ) | ( RULE$respond_rule_9__RDY ? _RULE$respond_rule_9$temp.b : 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

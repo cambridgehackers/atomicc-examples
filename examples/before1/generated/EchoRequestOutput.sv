@@ -13,10 +13,10 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     assign _request$say2$ind.data.say2.meth = request.say2$meth;
     assign _request$say2$ind.data.say2.v = request.say2$v;
     assign _request$say2$ind.tag = 32'd2;
-    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? _request$say$ind : 0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? _request$say2$ind : 0 );
     assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;
     assign request.say2__RDY = pipe.enq__RDY;
     assign request.say__RDY = pipe.enq__RDY;
+    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? _request$say$ind : 0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? _request$say2$ind : 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

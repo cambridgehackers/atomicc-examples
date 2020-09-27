@@ -16,7 +16,7 @@ module AdapterToBus #(
     assign _RULE$copyRule$outVal = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
     assign _in$enq$temp$v = in.enq$v;
     assign in.enq__RDY = remain == 0;
-    assign out.enq$last = remain == 1;
+    assign out.enq$last = RULE$copyRule__RDY && ( remain == 1 );
     assign out.enq$v = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
     assign out.enq__ENA = RULE$copyRule__RDY;
 

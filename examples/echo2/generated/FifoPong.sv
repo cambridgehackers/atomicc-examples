@@ -19,7 +19,6 @@ module FifoPong #(
         .in(element2$in),
         .out(element2$out));
     // Extra assigments, not to output wires
-    assign _out$first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
     assign element1$in.enq$v = in.enq$v;
     assign element1$in.enq__ENA = !( pong || ( !( in.enq__RDY && in.enq__ENA ) ) );
     assign element1$out.deq__ENA = !( pong || ( !( out.deq__RDY && out.deq__ENA ) ) );
@@ -30,6 +29,7 @@ module FifoPong #(
     assign out.deq__RDY = ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !( pong || ( !element1$out.deq__RDY ) ) ) );
     assign out.first = _out$first$retval;
     assign out.first__RDY = ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !( pong || ( !element1$out.first__RDY ) ) ) );
+    assign _out$first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin

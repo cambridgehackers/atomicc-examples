@@ -7,6 +7,7 @@ module IVector (input wire CLK, input wire nRST,
     reg [9 - 1:0]counter;
     reg [((14 / 7) + (3 * 2)) - 1:0]fcounter;
     reg [9 - 1:0]gcounter;
+    logic RULE$respond__RDY;
     ValueType _RULE$respond$temp;
     ValueType _request$say$temp;
     PipeIn#(.width(10)) fifo$in();
@@ -15,6 +16,7 @@ module IVector (input wire CLK, input wire nRST,
         .in(fifo$in),
         .out(fifo$out));
     // Extra assigments, not to output wires
+    assign RULE$respond__RDY = fifo$out.first__RDY && fifo$out.deq__RDY && ind.heard__RDY;
     assign _RULE$respond$temp = fifo$out.first;
     assign _request$say$temp.a = request.say$meth;
     assign _request$say$temp.b = request.say$v;

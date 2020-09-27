@@ -60,11 +60,11 @@ module WbPriArbiter #(
     assign b$stall = o$stall || r_a_owner;
     assign b$stall__RDY = o$stall__RDY;
     assign b$stb__RDY = !( ( 0 == ( acyc ^ 1 ) ) || ( !o$stb__RDY ) );
+    assign o$stb$we = ( a$stb__ENA && ( ( a$stb__RDY && ( a$stb$we || ( b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__RDY ) && b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY && b$stb$we );
+    assign o$stb__ENA = ( a$stb__ENA && ( a$stb__RDY || ( b$stb__ENA && b$stb__RDY ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY );
     assign o$stb$addr = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$addr : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$addr : 32'd0 );
     assign o$stb$data = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$data : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$data : 32'd0 );
     assign o$stb$sel = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$sel : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$sel : 32'd0 );
-    assign o$stb$we = ( a$stb__ENA && ( ( a$stb__RDY && ( a$stb$we || ( b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__RDY ) && b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY && b$stb$we );
-    assign o$stb__ENA = ( a$stb__ENA && ( a$stb__RDY || ( b$stb__ENA && b$stb__RDY ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY );
 
     always @( posedge CLK) begin
       if (!nRST) begin

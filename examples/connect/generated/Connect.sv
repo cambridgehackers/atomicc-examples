@@ -5,25 +5,25 @@ module Connect (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
     EchoIndication lEII_test$indication();
-    PipeIn#(.width(96)) lEII_test$pipe();
-    EchoIndication lEIO$indication();
-    PipeIn#(.width(96)) lERI$pipe();
+    PipeIn#(.width(96)) lEIO$pipe();
     EchoRequest lERI$request();
+    PipeIn#(.width(96)) lERO_test$pipe();
     EchoRequest lERO_test$request();
+    EchoIndication lEcho$indication();
     EchoIndicationOutput lEIO (.CLK(CLK), .nRST(nRST),
-        .indication(lEIO$indication),
-        .pipe(lEII_test$pipe));
+        .indication(lEcho$indication),
+        .pipe(lEIO$pipe));
     EchoRequestInput lERI (.CLK(CLK), .nRST(nRST),
-        .pipe(lERI$pipe),
+        .pipe(lERO_test$pipe),
         .request(lERI$request));
     Echo lEcho (.CLK(CLK), .nRST(nRST),
         .request(lERI$request),
-        .indication(lEIO$indication));
+        .indication(lEcho$indication));
     EchoRequestOutput lERO_test (.CLK(CLK), .nRST(nRST),
         .request(request),
-        .pipe(lERI$pipe));
+        .pipe(lERO_test$pipe));
     EchoIndicationInput lEII_test (.CLK(CLK), .nRST(nRST),
-        .pipe(lEII_test$pipe),
+        .pipe(lEIO$pipe),
         .indication(indication));
 endmodule
 
