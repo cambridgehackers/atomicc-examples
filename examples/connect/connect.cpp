@@ -157,12 +157,6 @@ class Connect __implements ConnectIfc {
     __connect lEIO.pipe = lEII_test.pipe;
     __connect lEcho.indication = lEIO.indication;
     __connect lERO_test.pipe = lERI.pipe;
-    __rule connectRule {
-        lERI.request = &lEcho.request;
-        lEIO.pipe = &lEII_test.pipe;
-        lEcho.indication = &lEIO.indication;
-        lERO_test.pipe = &lERI.pipe;
-    }
     __connect request = lERO_test.request; // user request
     __connect *indication = lEII_test.indication; // user indication
 };
