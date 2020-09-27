@@ -63,8 +63,20 @@ module Lpm (input wire CLK, input wire nRST,
     assign inQ$out.deq__ENA = RULE$enter__RDY;
     assign outQ.enq$v = mem$resValue;
     assign outQ.enq__ENA = RULE$exitr__RDY;
-    assign fifo$in.enq$v = ( RULE$recirc__RDY ? _RULE$recirc$agg_2e_tmp : 0 ) | ( RULE$enter__RDY ? _RULE$enter$agg_2e_tmp : 0 );
-    assign mem$req$v = ( RULE$recirc__RDY ? ( mem$resValue + ( ( _RULE$recirc$y.state == 1 ) ? _RULE$recirc$y.IPA[ 15 : 8 ] : _RULE$recirc$y.IPA[ 7 : 0 ] ) ) : 0 ) | ( RULE$enter__RDY ? ( 0 + _RULE$enter$x[ 31 : 16 ] ) : 0 );
+    always_comb begin
+    fifo$in.enq$v = 0;
+    unique case(1'b1)
+    RULE$recirc__RDY && RULE$recirc__RDY: fifo$in.enq$v = _RULE$recirc$agg_2e_tmp;
+    RULE$enter__RDY && RULE$enter__RDY: fifo$in.enq$v = _RULE$enter$agg_2e_tmp;
+    endcase
+    end
+    always_comb begin
+    mem$req$v = 0;
+    unique case(1'b1)
+    RULE$recirc__RDY && RULE$recirc__RDY: mem$req$v = mem$resValue + ( ( _RULE$recirc$y.state == 1 ) ? _RULE$recirc$y.IPA[ 15 : 8 ] : _RULE$recirc$y.IPA[ 7 : 0 ] );
+    RULE$enter__RDY && RULE$enter__RDY: mem$req$v = 0 + _RULE$enter$x[ 31 : 16 ];
+    endcase
+    end
 endmodule
 
 `default_nettype wire    // set back to default value

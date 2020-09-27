@@ -106,7 +106,20 @@ module AxiTop (
     assign writeDone$in.enq$v = reqAws$out.first;
     assign writeDone$in.enq__ENA = RULE$lwrite__RDY && ( writeCount == 0 );
     assign writeDone$out.deq__ENA = writeDone$out.first__RDY && MAXIGP0_I.B__RDY;
-    assign _RULE$lread$res = ( ( RULE$lread__RDY && ( readAddr == 0 ) && portalRControl ) ? _RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 8 ) && portalRControl ) ? 32'd1 : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 12 ) && portalRControl ) ? _RULE$lread$currentChannel : 1'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 16 ) && portalRControl ) ? ( selectRIndReq ? 32'd6 : 32'd5 ) : 32'd0 ) | ( ( RULE$lread__RDY && ( readAddr == 20 ) && portalRControl ) ? 32'd2 : 32'd0 ) | ( ( !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) ) ) ? requestValue$out.first : 0 ) | ( ( !( portalRControl || ( !( ( readAddr == 4 ) && RULE$lread__RDY ) ) ) ) ? user$write.enq__RDY : 0 );
+    always_comb begin
+    _RULE$lread$res = 0;
+    unique case(1'b1)
+    RULE$lread__RDY && ( readAddr == 0 ) && portalRControl: _RULE$lread$res = _RULE$lread$currentChannel;
+    RULE$lread__RDY && ( readAddr == 8 ) && portalRControl: _RULE$lread$res = 32'd1;
+    RULE$lread__RDY && ( readAddr == 12 ) && portalRControl: _RULE$lread$res = _RULE$lread$currentChannel;
+    RULE$lread__RDY && ( readAddr == 16 ) && portalRControl: _RULE$lread$res = selectRIndReq ? 32'd6 : 32'd5;
+    RULE$lread__RDY && ( readAddr == 20 ) && portalRControl: _RULE$lread$res = 32'd2;
+    !( ( readAddr == 0 ) || ( readAddr == 8 ) || ( readAddr == 12 ) || ( readAddr == 16 ) || ( readAddr == 20 ) || ( !portalRControl ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = 32'd0;
+    !( portalRControl || ( !( readAddr == 0 ) ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = requestValue$out.first;
+    !( portalRControl || ( !( readAddr == 4 ) ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = user$write.enq__RDY;
+    !( ( readAddr == 0 ) || ( readAddr == 4 ) || portalRControl || ( !RULE$lread__RDY ) ): _RULE$lread$res = 32'd0;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin

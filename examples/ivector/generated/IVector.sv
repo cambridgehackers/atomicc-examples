@@ -72,8 +72,36 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1
     assign fifo$out__deq__RDY_or[__inst$Genvar1] = fifo$out[ __inst$Genvar1 ].deq__RDY;
     assign fifo$out__first__RDY_or[__inst$Genvar1] = fifo$out[ __inst$Genvar1 ].first__RDY;
     end;
-    assign out.heard$meth = ( RULE$respond_rule_1__RDY ? 1 : 0 ) | ( RULE$respond_rule_2__RDY ? 2 : 0 ) | ( RULE$respond_rule_3__RDY ? 3 : 0 ) | ( RULE$respond_rule_4__RDY ? 4 : 0 ) | ( RULE$respond_rule_5__RDY ? 5 : 0 ) | ( RULE$respond_rule_6__RDY ? 6 : 0 ) | ( RULE$respond_rule_7__RDY ? 7 : 0 ) | ( RULE$respond_rule_8__RDY ? 8 : 0 ) | ( RULE$respond_rule_9__RDY ? 9 : 0 );
-    assign out.heard$v = ( RULE$respond_rule_0__RDY ? _RULE$respond_rule_0$temp.b : 0 ) | ( RULE$respond_rule_1__RDY ? _RULE$respond_rule_1$temp.b : 0 ) | ( RULE$respond_rule_2__RDY ? _RULE$respond_rule_2$temp.b : 0 ) | ( RULE$respond_rule_3__RDY ? _RULE$respond_rule_3$temp.b : 0 ) | ( RULE$respond_rule_4__RDY ? _RULE$respond_rule_4$temp.b : 0 ) | ( RULE$respond_rule_5__RDY ? _RULE$respond_rule_5$temp.b : 0 ) | ( RULE$respond_rule_6__RDY ? _RULE$respond_rule_6$temp.b : 0 ) | ( RULE$respond_rule_7__RDY ? _RULE$respond_rule_7$temp.b : 0 ) | ( RULE$respond_rule_8__RDY ? _RULE$respond_rule_8$temp.b : 0 ) | ( RULE$respond_rule_9__RDY ? _RULE$respond_rule_9$temp.b : 0 );
+    always_comb begin
+    out.heard$meth = 0;
+    unique case(1'b1)
+    RULE$respond_rule_0__RDY && RULE$respond_rule_0__RDY: out.heard$meth = 0;
+    RULE$respond_rule_1__RDY && RULE$respond_rule_1__RDY: out.heard$meth = 1;
+    RULE$respond_rule_2__RDY && RULE$respond_rule_2__RDY: out.heard$meth = 2;
+    RULE$respond_rule_3__RDY && RULE$respond_rule_3__RDY: out.heard$meth = 3;
+    RULE$respond_rule_4__RDY && RULE$respond_rule_4__RDY: out.heard$meth = 4;
+    RULE$respond_rule_5__RDY && RULE$respond_rule_5__RDY: out.heard$meth = 5;
+    RULE$respond_rule_6__RDY && RULE$respond_rule_6__RDY: out.heard$meth = 6;
+    RULE$respond_rule_7__RDY && RULE$respond_rule_7__RDY: out.heard$meth = 7;
+    RULE$respond_rule_8__RDY && RULE$respond_rule_8__RDY: out.heard$meth = 8;
+    RULE$respond_rule_9__RDY && RULE$respond_rule_9__RDY: out.heard$meth = 9;
+    endcase
+    end
+    always_comb begin
+    out.heard$v = 0;
+    unique case(1'b1)
+    RULE$respond_rule_0__RDY && RULE$respond_rule_0__RDY: out.heard$v = _RULE$respond_rule_0$temp.b;
+    RULE$respond_rule_1__RDY && RULE$respond_rule_1__RDY: out.heard$v = _RULE$respond_rule_1$temp.b;
+    RULE$respond_rule_2__RDY && RULE$respond_rule_2__RDY: out.heard$v = _RULE$respond_rule_2$temp.b;
+    RULE$respond_rule_3__RDY && RULE$respond_rule_3__RDY: out.heard$v = _RULE$respond_rule_3$temp.b;
+    RULE$respond_rule_4__RDY && RULE$respond_rule_4__RDY: out.heard$v = _RULE$respond_rule_4$temp.b;
+    RULE$respond_rule_5__RDY && RULE$respond_rule_5__RDY: out.heard$v = _RULE$respond_rule_5$temp.b;
+    RULE$respond_rule_6__RDY && RULE$respond_rule_6__RDY: out.heard$v = _RULE$respond_rule_6$temp.b;
+    RULE$respond_rule_7__RDY && RULE$respond_rule_7__RDY: out.heard$v = _RULE$respond_rule_7$temp.b;
+    RULE$respond_rule_8__RDY && RULE$respond_rule_8__RDY: out.heard$v = _RULE$respond_rule_8$temp.b;
+    RULE$respond_rule_9__RDY && RULE$respond_rule_9__RDY: out.heard$v = _RULE$respond_rule_9$temp.b;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin

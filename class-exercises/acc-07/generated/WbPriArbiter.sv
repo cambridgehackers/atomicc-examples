@@ -62,9 +62,27 @@ module WbPriArbiter #(
     assign b$stb__RDY = !( ( 0 == ( acyc ^ 1 ) ) || ( !o$stb__RDY ) );
     assign o$stb$we = ( a$stb__ENA && ( ( a$stb__RDY && ( a$stb$we || ( b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__RDY ) && b$stb__ENA && b$stb__RDY && b$stb$we ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY && b$stb$we );
     assign o$stb__ENA = ( a$stb__ENA && ( a$stb__RDY || ( b$stb__ENA && b$stb__RDY ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb__RDY );
-    assign o$stb$addr = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$addr : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$addr : 32'd0 );
-    assign o$stb$data = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$data : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$data : 32'd0 );
-    assign o$stb$sel = ( ( a$stb__ENA && a$stb__RDY ) ? a$stb$sel : 32'd0 ) | ( ( b$stb__ENA && b$stb__RDY ) ? b$stb$sel : 32'd0 );
+    always_comb begin
+    o$stb$addr = 0;
+    unique case(1'b1)
+    a$stb__ENA && a$stb__RDY: o$stb$addr = a$stb$addr;
+    b$stb__ENA && b$stb__RDY: o$stb$addr = b$stb$addr;
+    endcase
+    end
+    always_comb begin
+    o$stb$data = 0;
+    unique case(1'b1)
+    a$stb__ENA && a$stb__RDY: o$stb$data = a$stb$data;
+    b$stb__ENA && b$stb__RDY: o$stb$data = b$stb$data;
+    endcase
+    end
+    always_comb begin
+    o$stb$sel = 0;
+    unique case(1'b1)
+    a$stb__ENA && a$stb__RDY: o$stb$sel = a$stb$sel;
+    b$stb__ENA && b$stb__RDY: o$stb$sel = b$stb$sel;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin

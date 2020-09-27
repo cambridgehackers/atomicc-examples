@@ -16,7 +16,13 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;
     assign request.say2__RDY = pipe.enq__RDY;
     assign request.say__RDY = pipe.enq__RDY;
-    assign pipe.enq$v = ( ( request.say__ENA && pipe.enq__RDY ) ? _request$say$ind : 0 ) | ( ( request.say2__ENA && pipe.enq__RDY ) ? _request$say2$ind : 0 );
+    always_comb begin
+    pipe.enq$v = 0;
+    unique case(1'b1)
+    request.say__ENA && pipe.enq__RDY: pipe.enq$v = _request$say$ind;
+    request.say2__ENA && pipe.enq__RDY: pipe.enq$v = _request$say2$ind;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin

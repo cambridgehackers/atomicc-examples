@@ -15,7 +15,13 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign indication.heard__RDY = !( 0 == ( ind_busy ^ 1 ) );
     assign pipe.enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
-    assign pipe.enq$v = ( RULE$output_rulee__RDY ? ind0 : 0 ) | ( RULE$output_ruleo__RDY ? ind1 : 0 );
+    always_comb begin
+    pipe.enq$v = 0;
+    unique case(1'b1)
+    RULE$output_rulee__RDY && RULE$output_rulee__RDY: pipe.enq$v = ind0;
+    RULE$output_ruleo__RDY && RULE$output_ruleo__RDY: pipe.enq$v = ind1;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin

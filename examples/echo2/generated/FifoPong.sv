@@ -29,7 +29,13 @@ module FifoPong #(
     assign out.deq__RDY = ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !( pong || ( !element1$out.deq__RDY ) ) ) );
     assign out.first = _out$first$retval;
     assign out.first__RDY = ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !( pong || ( !element1$out.first__RDY ) ) ) );
-    assign _out$first$retval = ( ( out.first__RDY && pong ) ? element2$out.first : 0 ) | ( ( !( pong || ( !out.first__RDY ) ) ) ? element1$out.first : 0 );
+    always_comb begin
+    _out$first$retval = 0;
+    unique case(1'b1)
+    out.first__RDY && pong: _out$first$retval = element2$out.first;
+    !( pong || ( !out.first__RDY ) ): _out$first$retval = element1$out.first;
+    endcase
+    end
 
     always @( posedge CLK) begin
       if (!nRST) begin
