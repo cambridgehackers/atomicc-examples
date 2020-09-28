@@ -5,8 +5,8 @@ module Echo (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
     // Extra assigments, not to output wires
-    assign indication.heard$meth = request.say$meth;
-    assign indication.heard$v = request.say$v;
+    assign indication.heard$meth = request.say__ENA ? request.say$meth : 0;
+    assign indication.heard$v = request.say__ENA ? request.say$v : 0;
     assign indication.heard__ENA = request.say__ENA;
     assign request.say__RDY = indication.heard__RDY;
 endmodule

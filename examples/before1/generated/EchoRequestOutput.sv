@@ -13,14 +13,14 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     assign _request$say2$ind.data.say2.meth = request.say2$meth;
     assign _request$say2$ind.data.say2.v = request.say2$v;
     assign _request$say2$ind.tag = 32'd2;
-    assign pipe.enq__ENA = request.say__ENA || request.say2__ENA;
+    assign pipe.enq__ENA = request.say__ENA | request.say2__ENA;
     assign request.say2__RDY = pipe.enq__RDY;
     assign request.say__RDY = pipe.enq__RDY;
     always_comb begin
     pipe.enq$v = 0;
     unique case(1'b1)
-    request.say__ENA && pipe.enq__RDY: pipe.enq$v = _request$say$ind;
-    request.say2__ENA && pipe.enq__RDY: pipe.enq$v = _request$say2$ind;
+    request.say__ENA: pipe.enq$v = _request$say$ind;
+    request.say2__ENA: pipe.enq$v = _request$say2$ind;
     endcase
     end
 

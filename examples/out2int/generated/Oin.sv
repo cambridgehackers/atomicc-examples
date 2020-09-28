@@ -4,7 +4,6 @@
 module Oin (input wire CLK, input wire nRST,
     OinRequest.server request,
     OinIndication.client indication);
-    logic RULE$copyRule__RDY;
     PipeIn#(.width(32)) first$in();
     PipeOut#(.width(32)) first$out();
     PipeOut#(.width(32)) pipe$in();
@@ -21,10 +20,9 @@ module Oin (input wire CLK, input wire nRST,
         .in(pipe$in),
         .out(pipe$out));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__RDY = second$out.first__RDY && indication.heard__RDY && second$out.deq__RDY;
-    assign first$in.enq$v = request.say$v;
+    assign first$in.enq$v = request.say__ENA ? request.say$v : 0;
     assign first$in.enq__ENA = request.say__ENA;
-    assign indication.heard$v = second$out.first;
+    assign indication.heard$v = ( second$out.first__RDY && second$out.deq__RDY ) ? second$out.first : 0;
     assign indication.heard__ENA = second$out.first__RDY && second$out.deq__RDY;
     assign request.say__RDY = first$in.enq__RDY;
     assign second$out.deq__ENA = second$out.first__RDY && indication.heard__RDY;

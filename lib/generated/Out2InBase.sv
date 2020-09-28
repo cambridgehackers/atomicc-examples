@@ -6,11 +6,9 @@ module Out2InBase #(
     input wire CLK, input wire nRST,
     PipeOut.client in,
     PipeIn.client out);
-    logic RULE$copyRule__RDY;
     // Extra assigments, not to output wires
-    assign RULE$copyRule__RDY = in.first__RDY && out.enq__RDY && in.deq__RDY;
     assign in.deq__ENA = in.first__RDY && out.enq__RDY;
-    assign out.enq$v = in.first;
+    assign out.enq$v = ( in.first__RDY && in.deq__RDY ) ? in.first : 0;
     assign out.enq__ENA = in.first__RDY && in.deq__RDY;
 endmodule
 

@@ -19,12 +19,12 @@ module FifoPong #(
         .in(element2$in),
         .out(element2$out));
     // Extra assigments, not to output wires
-    assign element1$in.enq$v = in.enq$v;
-    assign element1$in.enq__ENA = !( pong || ( !( in.enq__RDY && in.enq__ENA ) ) );
-    assign element1$out.deq__ENA = !( pong || ( !( out.deq__RDY && out.deq__ENA ) ) );
-    assign element2$in.enq$v = in.enq$v;
-    assign element2$in.enq__ENA = in.enq__ENA && in.enq__RDY && pong;
-    assign element2$out.deq__ENA = out.deq__ENA && out.deq__RDY && pong;
+    assign element1$in.enq$v = ( !( pong || ( !in.enq__ENA ) ) ) ? in.enq$v : 0;
+    assign element1$in.enq__ENA = !( pong || ( !in.enq__ENA ) );
+    assign element1$out.deq__ENA = !( pong || ( !out.deq__ENA ) );
+    assign element2$in.enq$v = ( in.enq__ENA && pong ) ? in.enq$v : 0;
+    assign element2$in.enq__ENA = in.enq__ENA && pong;
+    assign element2$out.deq__ENA = out.deq__ENA && pong;
     assign in.enq__RDY = ( element2$in.enq__RDY && ( pong || element1$in.enq__RDY ) ) || ( ( !element2$in.enq__RDY ) && ( !( pong || ( !element1$in.enq__RDY ) ) ) );
     assign out.deq__RDY = ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !( pong || ( !element1$out.deq__RDY ) ) ) );
     assign out.first = _out$first$retval;
@@ -32,8 +32,8 @@ module FifoPong #(
     always_comb begin
     _out$first$retval = 0;
     unique case(1'b1)
-    out.first__RDY && pong: _out$first$retval = element2$out.first;
-    !( pong || ( !out.first__RDY ) ): _out$first$retval = element1$out.first;
+    pong: _out$first$retval = element2$out.first;
+    !pong: _out$first$retval = element1$out.first;
     endcase
     end
 

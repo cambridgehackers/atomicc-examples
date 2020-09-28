@@ -8,7 +8,6 @@ module Btest (input wire CLK, input wire nRST,
     reg [8 - 1:0]readCount;
     reg ready;
     reg [8 - 1:0]writeCount;
-    logic RULE$copyRule__RDY;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
     PipeIn#(.width(32)) readUser();
@@ -16,13 +15,12 @@ module Btest (input wire CLK, input wire nRST,
         .toBscan(bscan$toBscan),
         .fromBscan(readUser));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__RDY = bscan$toBscan.enq__RDY;
     assign bscan$toBscan.enq$v = nextV;
-    assign bscan$toBscan.enq__ENA = 1;
-    assign indication.heard$v = readUser.enq$v;
+    assign bscan$toBscan.enq__ENA = 1'd1;
+    assign indication.heard$v = readUser.enq__ENA ? readUser.enq$v : 0;
     assign indication.heard__ENA = readUser.enq__ENA;
     assign readUser.enq__RDY = indication.heard__RDY;
-    assign request.say__RDY = 1;
+    assign request.say__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -32,7 +30,7 @@ module Btest (input wire CLK, input wire nRST,
         writeCount <= 0;
       end // nRST
       else begin
-        if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
+        if (bscan$toBscan.enq__RDY) begin // RULE$copyRule__ENA
             ready <= 0;
             writeCount <= writeCount + 1;
         end; // End of RULE$copyRule__ENA

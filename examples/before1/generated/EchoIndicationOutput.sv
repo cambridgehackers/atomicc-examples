@@ -8,18 +8,22 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     EchoIndication_data ind0;
     EchoIndication_data ind1;
     reg ind_busy;
+    logic RULE$output_rulee__ENA;
     logic RULE$output_rulee__RDY;
+    logic RULE$output_ruleo__ENA;
     logic RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
+    assign RULE$output_rulee__ENA = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign RULE$output_rulee__RDY = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
+    assign RULE$output_ruleo__ENA = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
     assign indication.heard__RDY = !( 0 == ( ind_busy ^ 1 ) );
-    assign pipe.enq__ENA = RULE$output_rulee__RDY || RULE$output_ruleo__RDY;
+    assign pipe.enq__ENA = ( !( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) ) | ( !( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) );
     always_comb begin
     pipe.enq$v = 0;
     unique case(1'b1)
-    RULE$output_rulee__RDY && RULE$output_rulee__RDY: pipe.enq$v = ind0;
-    RULE$output_ruleo__RDY && RULE$output_ruleo__RDY: pipe.enq$v = ind1;
+    !( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ): pipe.enq$v = ind0;
+    !( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ): pipe.enq$v = ind1;
     endcase
     end
 
@@ -31,10 +35,10 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         ind_busy <= 0;
       end // nRST
       else begin
-        if (RULE$output_rulee__RDY) begin // RULE$output_rulee__ENA
+        if (RULE$output_rulee__ENA && RULE$output_rulee__RDY) begin // RULE$output_rulee__ENA
             ind_busy <= 0 != 0;
         end; // End of RULE$output_rulee__ENA
-        if (RULE$output_ruleo__RDY) begin // RULE$output_ruleo__ENA
+        if (RULE$output_ruleo__ENA && RULE$output_ruleo__RDY) begin // RULE$output_ruleo__ENA
             ind_busy <= 0 != 0;
         end; // End of RULE$output_ruleo__ENA
         if (indication.heard__ENA && indication.heard__RDY) begin // indication.heard__ENA

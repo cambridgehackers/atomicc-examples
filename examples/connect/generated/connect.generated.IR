@@ -103,12 +103,6 @@ MODULE Connect ConnectIfc {
     FIELD Echo lEcho
     FIELD EchoRequestOutput lERO_test
     FIELD EchoIndicationInput lEII_test
-    METHOD/Rule/Action RULE$connectRule__ENA {
-        LET EchoRequest :lERI$request = lEcho$request
-        LET PipeIn(width=96) :lEIO$pipe = lEII_test$pipe
-        LET EchoIndication :lEcho$indication = lEIO$indication
-        LET PipeIn(width=96) :lERO_test$pipe = lERI$pipe
-    }
 }
 MODULE Echo EchoIfc {
     FILE connect_OC_cpp

@@ -25,15 +25,12 @@ module ZynqTop (
     inout wire FIXED_IO_ps_srstb);
     logic CLK;
     logic nRST;
-    logic ps7_fclk_0_c$O;
-    logic ps7_freset_0_r$O;
     Pps7fclk ps7_ps7_foo$FCLK();
     MaxiI ps7_ps7_foo$MAXIGP0_I();
     MaxiO ps7_ps7_foo$MAXIGP0_O();
     ZynqInterrupt ps7_ps7_foo$intr();
     MaxiI test$MAXIGP0_I();
     MaxiO test$MAXIGP0_O();
-    logic test$interrupt;
     P7Wrap ps7_ps7_foo (
         .MIO(MIO),
         .DDR_Addr(DDR_Addr),
@@ -61,22 +58,19 @@ module ZynqTop (
         .MAXIGP0_I(test$MAXIGP0_I),
         .FCLK(ps7_ps7_foo$FCLK));
     AxiTop test (
-        .CLK(ps7_fclk_0_c$O),
-        .nRST(ps7_freset_0_r$O),
-        .interrupt(test$interrupt),
+        .CLK(CLK),
+        .nRST(nRST),
+        .interrupt(ps7_ps7_foo$intr.interrupt),
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I));
     BUFG ps7_fclk_0_c (
         .I(ps7_ps7_foo$FCLK.CLK),
-        .O(ps7_fclk_0_c$O));
+        .O(CLK));
     BUFG ps7_freset_0_r (
         .I(ps7_ps7_foo$FCLK.RESETN),
-        .O(ps7_freset_0_r$O));
+        .O(nRST));
     // Extra assigments, not to output wires
-    assign CLK = ps7_fclk_0_c$O;
-    assign nRST = ps7_freset_0_r$O;
     assign ps7_ps7_foo$intr.CLK = CLK;
-    assign ps7_ps7_foo$intr.interrupt = test$interrupt;
     assign ps7_ps7_foo$intr.nRST = nRST;
 endmodule
 

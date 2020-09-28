@@ -15,19 +15,21 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]y;
     logic RULE$delay_rule__ENA;
     logic RULE$delay_rule__RDY;
+    logic RULE$respond_rule__ENA;
     logic RULE$respond_rule__RDY;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
     assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
+    assign RULE$respond_rule__ENA = !( ( busy_delay == 0 ) || ( !indication.heard__RDY ) );
     assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !indication.heard__RDY ) );
-    assign indication.heard$meth = meth_delay;
-    assign indication.heard$v = v_delay;
-    assign indication.heard__ENA = RULE$respond_rule__RDY;
+    assign indication.heard$meth = ( !( busy_delay == 0 ) ) ? meth_delay : 32'd0;
+    assign indication.heard$v = ( !( busy_delay == 0 ) ) ? v_delay : 32'd0;
+    assign indication.heard__ENA = !( busy_delay == 0 );
     assign request.say2__RDY = !( 0 == ( busy ^ 1 ) );
     assign request.say__RDY = !( 0 == ( busy ^ 1 ) );
-    assign swap.x2y__RDY = 1;
-    assign swap.y2x__RDY = 1;
-    assign swap.y2xnull__RDY = 1;
+    assign swap.x2y__RDY = 1'd1;
+    assign swap.y2x__RDY = 1'd1;
+    assign swap.y2xnull__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -48,7 +50,7 @@ module Echo (input wire CLK, input wire nRST,
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of RULE$delay_rule__ENA
-        if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__ENA && RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0 != 0;
             $display( "respond_rule: Echo" );
         end; // End of RULE$respond_rule__ENA

@@ -17,12 +17,11 @@ module AxiTop (
     reg [5 - 1:0]writeAddr;
     reg [4 - 1:0]writeCount;
     reg writeReady;
-    logic RULE$lreadData__RDY;
+    logic RULE$lread__ENA;
     logic RULE$lread__RDY;
+    logic RULE$lwrite__ENA;
     logic RULE$lwrite__RDY;
-    logic RULE$writeResponse__RDY;
     ReadResp _RULE$lread$agg_2e_tmp;
-    logic _RULE$lread$currentChannel;
     logic [32 - 1:0]_RULE$lread$res;
     ReadResp _RULE$lreadData$currentRData;
     logic [32 - 1:0]_RULE$lwrite$currentWData;
@@ -64,60 +63,59 @@ module AxiTop (
         .read(readUser));
     assign interrupt = !( ( requestValue$out.deq__RDY == 0 ) || ( !intEnable ) );
     // Extra assigments, not to output wires
-    assign MAXIGP0_I.B$id = writeDone$out.first;
+    assign MAXIGP0_I.B$id = ( writeDone$out.first__RDY && writeDone$out.deq__RDY ) ? writeDone$out.first : 0;
     assign MAXIGP0_I.B$resp = 0;
     assign MAXIGP0_I.B__ENA = writeDone$out.first__RDY && writeDone$out.deq__RDY;
-    assign MAXIGP0_I.R$data = _RULE$lreadData$currentRData.data;
-    assign MAXIGP0_I.R$id = _RULE$lreadData$currentRData.id;
-    assign MAXIGP0_I.R$last = !( ( 1 == 0 ) || ( !RULE$lreadData__RDY ) );
+    assign MAXIGP0_I.R$data = ( readData$out.first__RDY && readData$out.deq__RDY ) ? _RULE$lreadData$currentRData.data : 0;
+    assign MAXIGP0_I.R$id = ( readData$out.first__RDY && readData$out.deq__RDY ) ? _RULE$lreadData$currentRData.id : 0;
+    assign MAXIGP0_I.R$last = !( ( 1 == 0 ) || ( !readData$out.deq__RDY ) || ( !readData$out.first__RDY ) );
     assign MAXIGP0_I.R$resp = 0;
     assign MAXIGP0_I.R__ENA = readData$out.first__RDY && readData$out.deq__RDY;
     assign MAXIGP0_O.AR__RDY = reqArs$in.enq__RDY;
     assign MAXIGP0_O.AW__RDY = reqAws$in.enq__RDY;
     assign MAXIGP0_O.W__RDY = writeData$in.enq__RDY;
-    assign RULE$lreadData__RDY = readData$out.first__RDY && MAXIGP0_I.R__RDY && readData$out.deq__RDY;
+    assign RULE$lread__ENA = reqArs$out.first__RDY && ( ( portalRControl && readData$in.enq__RDY && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData$in.enq__RDY && ( ( reqArs$out.deq__RDY && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) || ( ( !reqArs$out.deq__RDY ) && ( !( ( readCount == 0 ) || ( !( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) ) ) ) ) ) );
     assign RULE$lread__RDY = reqArs$out.first__RDY && ( ( portalRControl && readData$in.enq__RDY && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData$in.enq__RDY && ( ( reqArs$out.deq__RDY && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) || ( ( !reqArs$out.deq__RDY ) && ( !( ( readCount == 0 ) || ( !( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) ) ) ) ) ) );
+    assign RULE$lwrite__ENA = reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( ( reqAws$out.deq__RDY && user$write.enq__RDY ) || ( ( !reqAws$out.deq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) );
     assign RULE$lwrite__RDY = reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( ( reqAws$out.deq__RDY && user$write.enq__RDY ) || ( ( !reqAws$out.deq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) );
-    assign RULE$writeResponse__RDY = writeDone$out.first__RDY && MAXIGP0_I.B__RDY && writeDone$out.deq__RDY;
     assign _RULE$lread$agg_2e_tmp.data = _RULE$lread$res;
     assign _RULE$lread$agg_2e_tmp.id = reqArs$out.first;
-    assign _RULE$lread$currentChannel = !( selectRIndReq || ( !( requestValue$out.deq__RDY && RULE$lread__RDY ) ) );
     assign _RULE$lreadData$currentRData = readData$out.first;
     assign _RULE$lwrite$currentWData = writeData$out.first;
-    assign readData$in.enq$v = _RULE$lread$agg_2e_tmp;
-    assign readData$in.enq__ENA = RULE$lread__RDY;
+    assign readData$in.enq$v = ( reqArs$out.first__RDY && ( ( portalRControl && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && ( ( reqArs$out.deq__RDY && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) || ( ( !reqArs$out.deq__RDY ) && ( !( ( readCount == 0 ) || ( !( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) ) ) ) ) ) ) ) ? _RULE$lread$agg_2e_tmp : 0;
+    assign readData$in.enq__ENA = reqArs$out.first__RDY && ( ( portalRControl && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && ( ( reqArs$out.deq__RDY && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) || ( ( !reqArs$out.deq__RDY ) && ( !( ( readCount == 0 ) || ( !( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) ) ) ) ) ) );
     assign readData$out.deq__ENA = readData$out.first__RDY && MAXIGP0_I.R__RDY;
     assign readUser.enq__RDY = requestValue$in.enq__RDY;
-    assign reqArs$in.enq$v = MAXIGP0_O.AR$id;
+    assign reqArs$in.enq$v = MAXIGP0_O.AR__ENA ? MAXIGP0_O.AR$id : 0;
     assign reqArs$in.enq__ENA = MAXIGP0_O.AR__ENA;
-    assign reqArs$out.deq__ENA = RULE$lread__RDY && ( readCount == 0 );
-    assign reqAws$in.enq$v = MAXIGP0_O.AW$id;
+    assign reqArs$out.deq__ENA = reqArs$out.first__RDY && ( ( portalRControl && readData$in.enq__RDY && ( readCount == 0 ) ) || ( ( !portalRControl ) && readData$in.enq__RDY && ( readCount == 0 ) && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( !( readAddr == 0 ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( readAddr == 0 ) ) ) ) ) );
+    assign reqAws$in.enq$v = MAXIGP0_O.AW__ENA ? MAXIGP0_O.AW$id : 0;
     assign reqAws$in.enq__ENA = MAXIGP0_O.AW__ENA;
-    assign reqAws$out.deq__ENA = RULE$lwrite__RDY && ( writeCount == 0 );
-    assign requestValue$in.enq$v = readUser.enq$v;
+    assign reqAws$out.deq__ENA = reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && writeDone$in.enq__RDY && ( writeCount == 0 ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && writeDone$in.enq__RDY && ( writeCount == 0 ) && user$write.enq__RDY ) );
+    assign requestValue$in.enq$v = readUser.enq__ENA ? readUser.enq$v : 0;
     assign requestValue$in.enq__ENA = readUser.enq__ENA;
-    assign requestValue$out.deq__ENA = !( portalRControl || ( !( ( readAddr == 0 ) && RULE$lread__RDY ) ) );
-    assign user$write.enq$last = !( portalWControl || ( writeAddr == 0 ) || ( !RULE$lwrite__RDY ) );
-    assign user$write.enq$v = writeData$out.first;
-    assign user$write.enq__ENA = !( portalWControl || ( !RULE$lwrite__RDY ) );
-    assign writeData$in.enq$v = MAXIGP0_O.W$data;
+    assign requestValue$out.deq__ENA = !( portalRControl || ( !( ( readAddr == 0 ) && reqArs$out.first__RDY && readData$in.enq__RDY && ( ( reqArs$out.deq__RDY && requestValue$out.first__RDY ) || ( ( !reqArs$out.deq__RDY ) && ( !( ( readCount == 0 ) || ( !requestValue$out.first__RDY ) ) ) ) ) ) ) );
+    assign user$write.enq$last = !( portalWControl || ( writeDone$in.enq__RDY && ( ( reqAws$out.deq__RDY && ( writeAddr == 0 ) ) || ( ( !reqAws$out.deq__RDY ) && ( ( writeCount == 0 ) || ( writeAddr == 0 ) ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( ( writeCount == 0 ) || ( writeAddr == 0 ) ) ) || ( !writeData$out.deq__RDY ) || ( !writeData$out.first__RDY ) || ( !reqAws$out.first__RDY ) );
+    assign user$write.enq$v = ( !( portalWControl || ( !( reqAws$out.first__RDY && writeData$out.first__RDY && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) ) ) ) ? writeData$out.first : 0;
+    assign user$write.enq__ENA = !( portalWControl || ( !( reqAws$out.first__RDY && writeData$out.first__RDY && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) ) );
+    assign writeData$in.enq$v = MAXIGP0_O.W__ENA ? MAXIGP0_O.W$data : 0;
     assign writeData$in.enq__ENA = MAXIGP0_O.W__ENA;
-    assign writeData$out.deq__ENA = RULE$lwrite__RDY;
-    assign writeDone$in.enq$v = reqAws$out.first;
-    assign writeDone$in.enq__ENA = RULE$lwrite__RDY && ( writeCount == 0 );
+    assign writeData$out.deq__ENA = reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( !( writeCount == 0 ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( writeCount == 0 ) ) ) ) ) || ( ( !portalWControl ) && ( ( writeDone$in.enq__RDY && ( ( reqAws$out.deq__RDY && user$write.enq__RDY ) || ( ( !reqAws$out.deq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( !( ( writeCount == 0 ) || ( !user$write.enq__RDY ) ) ) ) ) ) );
+    assign writeDone$in.enq$v = ( reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && reqAws$out.deq__RDY && ( writeCount == 0 ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && reqAws$out.deq__RDY && ( writeCount == 0 ) && user$write.enq__RDY ) ) ) ? reqAws$out.first : 0;
+    assign writeDone$in.enq__ENA = reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && reqAws$out.deq__RDY && ( writeCount == 0 ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && reqAws$out.deq__RDY && ( writeCount == 0 ) && user$write.enq__RDY ) );
     assign writeDone$out.deq__ENA = writeDone$out.first__RDY && MAXIGP0_I.B__RDY;
     always_comb begin
     _RULE$lread$res = 0;
     unique case(1'b1)
-    RULE$lread__RDY && ( readAddr == 0 ) && portalRControl: _RULE$lread$res = _RULE$lread$currentChannel;
-    RULE$lread__RDY && ( readAddr == 8 ) && portalRControl: _RULE$lread$res = 32'd1;
-    RULE$lread__RDY && ( readAddr == 12 ) && portalRControl: _RULE$lread$res = _RULE$lread$currentChannel;
-    RULE$lread__RDY && ( readAddr == 16 ) && portalRControl: _RULE$lread$res = selectRIndReq ? 32'd6 : 32'd5;
-    RULE$lread__RDY && ( readAddr == 20 ) && portalRControl: _RULE$lread$res = 32'd2;
-    !( ( readAddr == 0 ) || ( readAddr == 8 ) || ( readAddr == 12 ) || ( readAddr == 16 ) || ( readAddr == 20 ) || ( !portalRControl ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = 32'd0;
-    !( portalRControl || ( !( readAddr == 0 ) ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = requestValue$out.first;
-    !( portalRControl || ( !( readAddr == 4 ) ) || ( !RULE$lread__RDY ) ): _RULE$lread$res = user$write.enq__RDY;
-    !( ( readAddr == 0 ) || ( readAddr == 4 ) || portalRControl || ( !RULE$lread__RDY ) ): _RULE$lread$res = 32'd0;
+    ( readAddr == 0 ) && portalRControl: _RULE$lread$res = !( selectRIndReq || ( !requestValue$out.deq__RDY ) );
+    ( readAddr == 8 ) && portalRControl: _RULE$lread$res = 32'd1;
+    ( readAddr == 12 ) && portalRControl: _RULE$lread$res = !( selectRIndReq || ( !requestValue$out.deq__RDY ) );
+    ( readAddr == 16 ) && portalRControl: _RULE$lread$res = selectRIndReq ? 32'd6 : 32'd5;
+    ( readAddr == 20 ) && portalRControl: _RULE$lread$res = 32'd2;
+    !( ( readAddr == 0 ) || ( readAddr == 8 ) || ( readAddr == 12 ) || ( readAddr == 16 ) || ( readAddr == 20 ) || ( !portalRControl ) ): _RULE$lread$res = 32'd0;
+    !( portalRControl || ( !( readAddr == 0 ) ) ): _RULE$lread$res = requestValue$out.first;
+    !( portalRControl || ( !( readAddr == 4 ) ) ): _RULE$lread$res = user$write.enq__RDY;
+    !( ( readAddr == 0 ) || ( readAddr == 4 ) || portalRControl ): _RULE$lread$res = 32'd0;
     endcase
     end
 
@@ -147,11 +145,11 @@ module AxiTop (
             writeCount <= MAXIGP0_O.AW$len;
             writeAddr <= MAXIGP0_O.AW$addr;
         end; // End of MAXIGP0_O.AW__ENA
-        if (RULE$lread__RDY) begin // RULE$lread__ENA
+        if (RULE$lread__ENA && RULE$lread__RDY) begin // RULE$lread__ENA
             readCount <= readCount - 1;
             readAddr <= readAddr + 4;
         end; // End of RULE$lread__ENA
-        if (RULE$lwrite__RDY) begin // RULE$lwrite__ENA
+        if (RULE$lwrite__ENA && RULE$lwrite__RDY) begin // RULE$lwrite__ENA
             writeCount <= writeCount - 1;
             writeAddr <= writeAddr + 4;
             if (( writeAddr == 4 ) && portalWControl)

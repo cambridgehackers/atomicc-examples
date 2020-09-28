@@ -13,8 +13,8 @@ module ReqArb (input wire CLK, input wire nRST,
     input wire out$a__RDY);
     assign a__RDY = !( ( 0 == ( ( b__ENA != 0 ) ^ 1 ) ) || ( !out$a__RDY ) );
     assign b__RDY = !( ( 0 == ( ( a__ENA != 0 ) ^ 1 ) ) || ( !out$a__RDY ) );
-    assign out$a$v = ( a__ENA && ( ( a__RDY && ( a$v || ( b__ENA && b__RDY && b$v ) ) ) || ( ( !a__RDY ) && b__ENA && b__RDY && b$v ) ) ) || ( ( !a__ENA ) && b__ENA && b__RDY && b$v );
-    assign out$a__ENA = ( a__ENA && ( a__RDY || ( b__ENA && b__RDY ) ) ) || ( ( !a__ENA ) && b__ENA && b__RDY );
+    assign out$a$v = ( a__ENA && ( a$v || ( b__ENA && b$v ) ) ) || ( ( !a__ENA ) && b__ENA && b$v );
+    assign out$a__ENA = a__ENA | b__ENA;
 endmodule
 
 `default_nettype wire    // set back to default value

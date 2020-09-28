@@ -4,8 +4,6 @@
 module Connect (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
-    logic RULE$swap2_rule__RDY;
-    logic RULE$swap_rule__RDY;
     EchoIndication lEII_test$indication();
     PipeIn#(.width(96)) lEII_test$pipe();
     EchoIndication lEIO$indication();
@@ -34,17 +32,15 @@ module Connect (input wire CLK, input wire nRST,
         .pipe(lEIO$pipe),
         .indication(indication));
     // Extra assigments, not to output wires
-    assign RULE$swap2_rule__RDY = lEcho$swap.y2xnull__RDY;
-    assign RULE$swap_rule__RDY = lEcho$swap.x2y__RDY && lEcho$swap.y2x__RDY;
-    assign lERO_test$request.say$meth = request.say$meth;
-    assign lERO_test$request.say$v = request.say$v;
-    assign lERO_test$request.say2$meth = request.say2$meth;
-    assign lERO_test$request.say2$v = request.say2$v;
+    assign lERO_test$request.say$meth = request.say__ENA ? request.say$meth : 0;
+    assign lERO_test$request.say$v = request.say__ENA ? request.say$v : 0;
+    assign lERO_test$request.say2$meth = request.say2__ENA ? request.say2$meth : 0;
+    assign lERO_test$request.say2$v = request.say2__ENA ? request.say2$v : 0;
     assign lERO_test$request.say2__ENA = request.say2__ENA;
     assign lERO_test$request.say__ENA = request.say__ENA;
     assign lEcho$swap.x2y__ENA = lEcho$swap.y2x__RDY;
     assign lEcho$swap.y2x__ENA = lEcho$swap.x2y__RDY;
-    assign lEcho$swap.y2xnull__ENA = 1;
+    assign lEcho$swap.y2xnull__ENA = 1'd1;
     assign request.say2__RDY = lERO_test$request.say2__RDY;
     assign request.say__RDY = lERO_test$request.say__RDY;
 
@@ -52,10 +48,10 @@ module Connect (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (RULE$swap2_rule__RDY) begin // RULE$swap2_rule__ENA
+        if (lEcho$swap.y2xnull__RDY) begin // RULE$swap2_rule__ENA
             $display( "swap2_rule:Connect" );
         end; // End of RULE$swap2_rule__ENA
-        if (RULE$swap_rule__RDY) begin // RULE$swap_rule__ENA
+        if (lEcho$swap.x2y__RDY && lEcho$swap.y2x__RDY) begin // RULE$swap_rule__ENA
             $display( "swap_rule:Connect" );
         end; // End of RULE$swap_rule__ENA
       end

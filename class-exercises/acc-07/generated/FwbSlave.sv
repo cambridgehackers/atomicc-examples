@@ -30,18 +30,18 @@ module FwbSlave (
     logic nRST;
     logic [(32 / 8) - 1:0]sel_share;
     logic we_share;
-    assign a$stb__RDY = 1;
+    assign a$stb__RDY = 1'd1;
     assign f_nacks = nacks;
-    assign f_nacks__RDY = 1;
+    assign f_nacks__RDY = 1'd1;
     assign f_nreqs = nreqs;
-    assign f_nreqs__RDY = 1;
+    assign f_nreqs__RDY = 1'd1;
     assign f_outstanding = acyc ? ( nreqs - nacks ) : 0;
-    assign f_outstanding__RDY = 1;
+    assign f_outstanding__RDY = 1'd1;
     // Extra assigments, not to output wires
-    assign addr_share = a$stb$addr;
-    assign data_share = a$stb$data;
-    assign sel_share = a$stb$sel;
-    assign we_share = a$stb$we;
+    assign addr_share = a$stb__ENA ? a$stb$addr : 32'd0;
+    assign data_share = a$stb__ENA ? a$stb$data : 32'd0;
+    assign sel_share = a$stb__ENA ? a$stb$sel : 0;
+    assign we_share = a$stb__ENA && a$stb$we;
 
     always @( posedge CLK) begin
       if (!nRST) begin

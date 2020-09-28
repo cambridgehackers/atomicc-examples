@@ -8,17 +8,19 @@ module AdapterToBus #(
     PipeInB.client out);
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]remain;
+    logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
     logic [width - 1:0]_RULE$copyRule$outVal;
     NOCDataH _in$enq$temp$v;
     // Extra assigments, not to output wires
+    assign RULE$copyRule__ENA = !( ( remain == 0 ) || ( !out.enq__RDY ) );
     assign RULE$copyRule__RDY = !( ( remain == 0 ) || ( !out.enq__RDY ) );
     assign _RULE$copyRule$outVal = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
     assign _in$enq$temp$v = in.enq$v;
     assign in.enq__RDY = remain == 0;
-    assign out.enq$last = RULE$copyRule__RDY && ( remain == 1 );
-    assign out.enq$v = buffer[ ( 128 - 1 ) : ( 128 - width ) ];
-    assign out.enq__ENA = RULE$copyRule__RDY;
+    assign out.enq$last = !( ( remain == 0 ) || ( !( remain == 1 ) ) );
+    assign out.enq$v = ( !( remain == 0 ) ) ? buffer[ ( 128 - 1 ) : ( 128 - width ) ] : 0;
+    assign out.enq__ENA = !( remain == 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -26,7 +28,7 @@ module AdapterToBus #(
         remain <= 0;
       end // nRST
       else begin
-        if (RULE$copyRule__RDY) begin // RULE$copyRule__ENA
+        if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             remain <= remain + ( -1 );
             buffer <= buffer << width;
             if (!( 0 == 0 ))

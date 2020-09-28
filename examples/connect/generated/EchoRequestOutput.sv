@@ -9,7 +9,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     assign _request$say$ind.data.say.meth = request.say$meth;
     assign _request$say$ind.data.say.v = request.say$v;
     assign _request$say$ind.tag = 32'd1;
-    assign pipe.enq$v = _request$say$ind;
+    assign pipe.enq$v = request.say__ENA ? _request$say$ind : 0;
     assign pipe.enq__ENA = request.say__ENA;
     assign request.say__RDY = pipe.enq__RDY;
 

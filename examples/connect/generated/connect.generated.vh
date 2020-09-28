@@ -81,8 +81,6 @@ endinterface
 //METAINTERNAL; lEcho; Echo;
 //METAINTERNAL; lERO_test; EchoRequestOutput;
 //METAINTERNAL; lEII_test; EchoIndicationInput;
-//METAGUARD; RULE$connectRule; 1;
-//METARULES; RULE$connectRule
 //METACONNECT; lERI$request.say__ENA; lEcho$request.say__ENA
 //METACONNECT; lERI$request.say__RDY; lEcho$request.say__RDY
 //METACONNECT; lEIO$pipe.enq__ENA; lEII_test$pipe.enq__ENA

@@ -28,9 +28,6 @@ module P7Wrap (
     MaxiI.server MAXIGP0_I,
     Pps7fclk.server FCLK);
     logic CLK;
-    logic RULE$gp0ar__RDY;
-    logic RULE$gp0aw__RDY;
-    logic RULE$gp0w__RDY;
     logic nRST;
     logic [32 - 1:0]pps$MAXIGP0ARADDR;
     logic [12 - 1:0]pps$MAXIGP0ARID;
@@ -265,7 +262,7 @@ module P7Wrap (
         .FCLKCLK(FCLK.CLK),
         .FCLKCLKTRIGN(FCLK.CLKTRIGN),
         .FCLKRESETN(FCLK.RESETN),
-        .FPGAIDLEN(1),
+        .FPGAIDLEN(1'd1),
         .FTMDTRACEINATID(0),
         .FTMDTRACEINCLOCK(0),
         .FTMDTRACEINDATA(0),
@@ -278,7 +275,7 @@ module P7Wrap (
         .FTMTP2FTRIGACK(0),
         .IRQF2P(intr.interrupt),
         .IRQP2F(),
-        .MAXIGP0ACLK(intr.CLK),
+        .MAXIGP0ACLK(CLK),
         .MAXIGP0ARADDR(pps$MAXIGP0ARADDR),
         .MAXIGP0ARBURST(),
         .MAXIGP0ARCACHE(),
@@ -302,15 +299,15 @@ module P7Wrap (
         .MAXIGP0AWREADY(MAXIGP0_O.AW__RDY),
         .MAXIGP0AWSIZE(),
         .MAXIGP0AWVALID(pps$MAXIGP0AWVALID),
-        .MAXIGP0BID(MAXIGP0_I.B$id),
+        .MAXIGP0BID(MAXIGP0_I.B__ENA ? MAXIGP0_I.B$id : 12'd0),
         .MAXIGP0BREADY(pps$MAXIGP0BREADY),
-        .MAXIGP0BRESP(MAXIGP0_I.B$resp),
+        .MAXIGP0BRESP(MAXIGP0_I.B__ENA ? MAXIGP0_I.B$resp : 2'd0),
         .MAXIGP0BVALID(MAXIGP0_I.B__ENA),
-        .MAXIGP0RDATA(MAXIGP0_I.R$data),
-        .MAXIGP0RID(MAXIGP0_I.R$id),
-        .MAXIGP0RLAST(MAXIGP0_I.R$last),
+        .MAXIGP0RDATA(MAXIGP0_I.R__ENA ? MAXIGP0_I.R$data : 32'd0),
+        .MAXIGP0RID(MAXIGP0_I.R__ENA ? MAXIGP0_I.R$id : 12'd0),
+        .MAXIGP0RLAST(MAXIGP0_I.R__ENA && MAXIGP0_I.R$last),
         .MAXIGP0RREADY(pps$MAXIGP0RREADY),
-        .MAXIGP0RRESP(MAXIGP0_I.R$resp),
+        .MAXIGP0RRESP(MAXIGP0_I.R__ENA ? MAXIGP0_I.R$resp : 2'd0),
         .MAXIGP0RVALID(MAXIGP0_I.R__ENA),
         .MAXIGP0WDATA(pps$MAXIGP0WDATA),
         .MAXIGP0WID(pps$MAXIGP0WID),
@@ -668,28 +665,25 @@ module P7Wrap (
         .SAXIHP3WSTRB(0),
         .SAXIHP3WVALID(0));
     ClockTop pclockTop (
-        .CLK(intr.CLK),
-        .nRST(intr.nRST),
+        .CLK(CLK),
+        .nRST(nRST),
         .clockOut());
     // Extra assigments, not to output wires
     assign CLK = intr.CLK;
     assign MAXIGP0_I.B__RDY = !( 0 == pps$MAXIGP0BREADY );
     assign MAXIGP0_I.R__RDY = !( 0 == pps$MAXIGP0RREADY );
-    assign MAXIGP0_O.AR$addr = pps$MAXIGP0ARADDR;
-    assign MAXIGP0_O.AR$id = pps$MAXIGP0ARID;
-    assign MAXIGP0_O.AR$len = pps$MAXIGP0ARLEN;
-    assign MAXIGP0_O.AR__ENA = RULE$gp0ar__RDY;
-    assign MAXIGP0_O.AW$addr = pps$MAXIGP0AWADDR;
-    assign MAXIGP0_O.AW$id = pps$MAXIGP0AWID;
-    assign MAXIGP0_O.AW$len = pps$MAXIGP0AWLEN;
-    assign MAXIGP0_O.AW__ENA = RULE$gp0aw__RDY;
-    assign MAXIGP0_O.W$data = pps$MAXIGP0WDATA;
-    assign MAXIGP0_O.W$id = pps$MAXIGP0WID;
-    assign MAXIGP0_O.W$last = !( ( pps$MAXIGP0WLAST == 0 ) || ( !RULE$gp0w__RDY ) );
-    assign MAXIGP0_O.W__ENA = RULE$gp0w__RDY;
-    assign RULE$gp0ar__RDY = !( ( 0 == pps$MAXIGP0ARVALID ) || ( !MAXIGP0_O.AR__RDY ) );
-    assign RULE$gp0aw__RDY = !( ( 0 == pps$MAXIGP0AWVALID ) || ( !MAXIGP0_O.AW__RDY ) );
-    assign RULE$gp0w__RDY = !( ( 0 == pps$MAXIGP0WVALID ) || ( !MAXIGP0_O.W__RDY ) );
+    assign MAXIGP0_O.AR$addr = ( !( 0 == pps$MAXIGP0ARVALID ) ) ? pps$MAXIGP0ARADDR : 32'd0;
+    assign MAXIGP0_O.AR$id = ( !( 0 == pps$MAXIGP0ARVALID ) ) ? pps$MAXIGP0ARID : 12'd0;
+    assign MAXIGP0_O.AR$len = ( !( 0 == pps$MAXIGP0ARVALID ) ) ? pps$MAXIGP0ARLEN : 4'd0;
+    assign MAXIGP0_O.AR__ENA = !( 0 == pps$MAXIGP0ARVALID );
+    assign MAXIGP0_O.AW$addr = ( !( 0 == pps$MAXIGP0AWVALID ) ) ? pps$MAXIGP0AWADDR : 32'd0;
+    assign MAXIGP0_O.AW$id = ( !( 0 == pps$MAXIGP0AWVALID ) ) ? pps$MAXIGP0AWID : 12'd0;
+    assign MAXIGP0_O.AW$len = ( !( 0 == pps$MAXIGP0AWVALID ) ) ? pps$MAXIGP0AWLEN : 4'd0;
+    assign MAXIGP0_O.AW__ENA = !( 0 == pps$MAXIGP0AWVALID );
+    assign MAXIGP0_O.W$data = ( !( 0 == pps$MAXIGP0WVALID ) ) ? pps$MAXIGP0WDATA : 32'd0;
+    assign MAXIGP0_O.W$id = ( !( 0 == pps$MAXIGP0WVALID ) ) ? pps$MAXIGP0WID : 12'd0;
+    assign MAXIGP0_O.W$last = !( ( 0 == pps$MAXIGP0WVALID ) || ( pps$MAXIGP0WLAST == 0 ) );
+    assign MAXIGP0_O.W__ENA = !( 0 == pps$MAXIGP0WVALID );
     assign nRST = intr.nRST;
 endmodule
 

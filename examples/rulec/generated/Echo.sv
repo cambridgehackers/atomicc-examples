@@ -15,19 +15,21 @@ module Echo (input wire CLK, input wire nRST,
     reg [32 - 1:0]v_type;
     logic RULE$delay_rule__ENA;
     logic RULE$delay_rule__RDY;
+    logic RULE$respond_rule__ENA;
     logic RULE$respond_rule__RDY;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
     assign RULE$delay_rule__RDY = !( ( ( busy != 0 ) & ( busy_delay == 0 ) ) == 0 );
+    assign RULE$respond_rule__ENA = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
     assign RULE$respond_rule__RDY = !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !indication.heard2__RDY ) ) ) ) ) ) );
-    assign indication.heard$v = v_delay;
-    assign indication.heard2$a = a_delay;
-    assign indication.heard2$b = b_delay;
-    assign indication.heard2__ENA = !( ( v_type == 1 ) || ( busy_delay == 0 ) || ( !RULE$respond_rule__RDY ) );
-    assign indication.heard__ENA = RULE$respond_rule__RDY && ( v_type == 1 );
+    assign indication.heard$v = ( !( ( busy_delay == 0 ) || ( !( v_type == 1 ) ) ) ) ? v_delay : 32'd0;
+    assign indication.heard2$a = ( !( ( v_type == 1 ) || ( busy_delay == 0 ) ) ) ? a_delay : 16'd0;
+    assign indication.heard2$b = ( !( ( v_type == 1 ) || ( busy_delay == 0 ) ) ) ? b_delay : 16'd0;
+    assign indication.heard2__ENA = !( ( v_type == 1 ) || ( busy_delay == 0 ) );
+    assign indication.heard__ENA = !( ( busy_delay == 0 ) || ( !( v_type == 1 ) ) );
     assign request.say2__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
     assign request.say__RDY = !( 0 == ( ( busy != 0 ) ^ 1 ) );
-    assign request.setLeds__RDY = 1;
+    assign request.setLeds__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -49,7 +51,7 @@ module Echo (input wire CLK, input wire nRST,
             a_delay <= a_temp;
             b_delay <= b_temp;
         end; // End of RULE$delay_rule__ENA
-        if (RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__ENA && RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
             busy_delay <= 0;
         end; // End of RULE$respond_rule__ENA
         if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA

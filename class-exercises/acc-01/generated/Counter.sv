@@ -10,7 +10,7 @@ module Counter #(
     output wire busy__RDY);
     reg [16 - 1:0]counter;
     assign busy = !( counter == 0 );
-    assign busy__RDY = 1;
+    assign busy__RDY = 1'd1;
     assign startSignal__RDY = counter == 0;
 
     always @( posedge CLK) begin

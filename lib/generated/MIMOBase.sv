@@ -13,7 +13,7 @@ module MIMOBase #(
     genvar __inst$Genvar1;
     // Extra assigments, not to output wires
     assign in.enq__RDY = !( 0 == ( ( c >= widthOut ) ^ 1 ) );
-    assign m = in.enq$v;
+    assign m = in.enq__ENA ? in.enq$v : 0;
     assign out.deq__RDY = !( 0 == ( c >= widthOut ) );
     assign out.first = buffer;
     assign out.first__RDY = !( 0 == ( c >= widthOut ) );

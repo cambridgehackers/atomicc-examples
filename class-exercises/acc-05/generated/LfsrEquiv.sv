@@ -15,19 +15,19 @@ module LfsrEquiv (input wire CLK, input wire nRST,
     logic gal$outBit__RDY;
     logic gal$shiftBit__RDY;
     LfsrFib#(.LN(8),.TAPS(45)) fib (.CLK(CLK), .nRST(nRST),
-        .shiftBit__ENA(shiftBit__ENA && gal$shiftBit__RDY),
-        .shiftBit$v(shiftBit__ENA && fib$shiftBit__RDY && gal$shiftBit__RDY && shiftBit$v),
+        .shiftBit__ENA(shiftBit__ENA),
+        .shiftBit$v(shiftBit__ENA && shiftBit$v),
         .shiftBit__RDY(fib$shiftBit__RDY),
         .outBit(fib$outBit),
         .outBit__RDY(fib$outBit__RDY));
     LfsrGal#(.LN(8),.TAPS(45)) gal (.CLK(CLK), .nRST(nRST),
-        .shiftBit__ENA(shiftBit__ENA && fib$shiftBit__RDY),
-        .shiftBit$v(shiftBit__ENA && fib$shiftBit__RDY && gal$shiftBit__RDY && shiftBit$v),
+        .shiftBit__ENA(shiftBit__ENA),
+        .shiftBit$v(shiftBit__ENA && shiftBit$v),
         .shiftBit__RDY(gal$shiftBit__RDY),
         .outBit(gal$outBit),
         .outBit__RDY(gal$outBit__RDY));
     assign outBit = o_data;
-    assign outBit__RDY = 1;
+    assign outBit__RDY = 1'd1;
     assign shiftBit__RDY = fib$shiftBit__RDY && gal$shiftBit__RDY;
 
     always @( posedge CLK) begin

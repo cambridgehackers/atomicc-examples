@@ -9,15 +9,17 @@ module AdapterFromBus #(
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]length;
     reg waitForEnq;
+    logic RULE$pushValue__ENA;
     logic RULE$pushValue__RDY;
     NOCDataH _RULE$pushValue$agg_2e_tmp;
     // Extra assigments, not to output wires
+    assign RULE$pushValue__ENA = !( ( 0 == waitForEnq ) || ( !out.enq__RDY ) );
     assign RULE$pushValue__RDY = !( ( 0 == waitForEnq ) || ( !out.enq__RDY ) );
     assign _RULE$pushValue$agg_2e_tmp.data = buffer;
     assign _RULE$pushValue$agg_2e_tmp.length = length;
     assign in.enq__RDY = !( 0 == ( waitForEnq ^ 1 ) );
-    assign out.enq$v = _RULE$pushValue$agg_2e_tmp;
-    assign out.enq__ENA = RULE$pushValue__RDY;
+    assign out.enq$v = ( !( 0 == waitForEnq ) ) ? _RULE$pushValue$agg_2e_tmp : 0;
+    assign out.enq__ENA = !( 0 == waitForEnq );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -26,7 +28,7 @@ module AdapterFromBus #(
         waitForEnq <= 0;
       end // nRST
       else begin
-        if (RULE$pushValue__RDY) begin // RULE$pushValue__ENA
+        if (RULE$pushValue__ENA && RULE$pushValue__RDY) begin // RULE$pushValue__ENA
             length <= 0;
             waitForEnq <= 0;
             if (!( 0 == 0 ))

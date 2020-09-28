@@ -16,8 +16,8 @@ module SizedFifoBase #(
     assign in.enq__RDY = !( 0 == ( ( c == depth ) ^ 1 ) );
     assign out.deq__RDY = !( 0 == ( ( c == 0 ) ^ 1 ) );
     assign out.first = q[ 0 ];
-    assign out.first__RDY = 1;
-    assign x_wire = in.enq$v;
+    assign out.first__RDY = 1'd1;
+    assign x_wire = in.enq__ENA ? in.enq$v : 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -44,7 +44,7 @@ module SizedFifoBase #(
       end // nRST
       else begin
         if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
-            q[ __inst$Genvar1 ] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in.enq__ENA ) == 0 ) ) ? x_wire : q[ ( __inst$Genvar1 + 1 ) ];
+            q[ __inst$Genvar1 ] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in.enq__ENA ) == 0 ) ) ? x_wire : q[ __inst$Genvar1 + 1 ];
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

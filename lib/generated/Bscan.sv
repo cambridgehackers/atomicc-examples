@@ -58,9 +58,9 @@ module Bscan #(
     assign localBscan$shift = !( ( bscan$SEL & bscan$SHIFT ) == 0 );
     assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     // Extra assigments, not to output wires
-    assign fromBscan.enq$v = readBscan.enq$v;
+    assign fromBscan.enq$v = readBscan.enq__ENA ? readBscan.enq$v : 0;
     assign _fromBscan$enqS__ENA = readBscan.enq__ENA;
-    assign localBscan$toBscan.enq$v = toBscan.enq$v;
+    assign localBscan$toBscan.enq$v = toBscan.enq__ENA ? toBscan.enq$v : 0;
     assign localBscan$toBscan.enq__ENA = toBscan.enq__ENA;
     assign readBscan.enq__RDY = fromBscan.enq__RDY;
     assign _toBscan$enqS__RDY = localBscan$toBscan.enq__RDY;

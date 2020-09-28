@@ -14,6 +14,7 @@ module BscanLocal #(
     PipeIn.client fromBscan);
     reg notReady;
     reg [width - 1:0]shiftReg;
+    logic RULE$updateRule__ENA;
     logic RULE$updateRule__RDY;
     logic _fromBscan$enqS__RDY;
     logic _toBscan$enqS__ENA;
@@ -25,9 +26,10 @@ module BscanLocal #(
         .in(toBscan.enq__ENA));
     assign TDO = shiftReg[ 0 : 0 ];
     // Extra assigments, not to output wires
+    assign RULE$updateRule__ENA = !( ( 0 == update ) || ( !_fromBscan$enqS__RDY ) );
     assign RULE$updateRule__RDY = !( ( 0 == update ) || ( !_fromBscan$enqS__RDY ) );
-    assign fromBscan.enq$v = shiftReg;
-    assign fromBscan.enq__ENA = RULE$updateRule__RDY;
+    assign fromBscan.enq$v = ( !( 0 == update ) ) ? shiftReg : 0;
+    assign fromBscan.enq__ENA = !( 0 == update );
     assign toBscan.enq__RDY = !( notReady || ( !capture ) );
 
     always @( posedge CLK) begin
@@ -39,7 +41,7 @@ module BscanLocal #(
         if (!( 0 == shift )) begin // RULE$shiftRule__ENA
             shiftReg <= { TDI , shiftReg[ ( width - 1 ) : 1 ] };
         end; // End of RULE$shiftRule__ENA
-        if (RULE$updateRule__RDY) begin // RULE$updateRule__ENA
+        if (RULE$updateRule__ENA && RULE$updateRule__RDY) begin // RULE$updateRule__ENA
             notReady <= 0;
         end; // End of RULE$updateRule__ENA
         if (!( notReady || ( !capture ) || ( !_toBscan$enqS__ENA ) )) begin // toBscan.enq__ENA

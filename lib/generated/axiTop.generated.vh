@@ -84,7 +84,7 @@ endinterface
 //METAGUARD; readUser.enq; requestValue$in.enq__RDY;
 //METABEFORE; RULE$init__ENA; :RULE$lwrite__ENA
 //METAGUARD; RULE$init; 1;
-//METAINVOKE; RULE$lread__ENA; 1:readData$in.enq__ENA;readCount == 0:reqArs$out.deq__ENA;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue$out.deq__ENA;
+//METAINVOKE; RULE$lread__ENA; :readData$in.enq__ENA;readCount == 0:reqArs$out.deq__ENA;!( portalRControl || ( !( readAddr == 0 ) ) ):requestValue$out.deq__ENA;
 //METABEFORE; RULE$lread__ENA; :MAXIGP0_O.AR__ENA
 //METAGUARD; RULE$lread; reqArs$out.first__RDY && ( ( portalRControl && readData$in.enq__RDY && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !portalRControl ) && readData$in.enq__RDY && ( ( requestValue$out.first__RDY && ( ( requestValue$out.deq__RDY && ( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) || ( ( !requestValue$out.deq__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) || ( ( !requestValue$out.first__RDY ) && ( !( ( readAddr == 0 ) || ( !( reqArs$out.deq__RDY || ( !( readCount == 0 ) ) ) ) ) ) ) ) ) );
 //METAINVOKE; RULE$lreadData__ENA; :MAXIGP0_I.R__ENA;:readData$out.deq__ENA;
