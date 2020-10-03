@@ -1,0 +1,58 @@
+STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE BRAMIfc(width=4,depth=1024)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
+    METHOD/Action write__ENA ( Bit(__builtin_clog2(width)) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2(width)) addr )
+    METHOD dataOut Bit(width)
+}
+INTERFACE BtestIfc  {
+    FILE bramt_OC_cpp
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE BtestRequest request
+    INTERFACE/Ptr BtestIndication indication
+}
+INTERFACE BtestIndication  {
+    FILE bramt_OC_cpp
+    METHOD/Action heard__ENA ( Bit(32) v )
+}
+INTERFACE BtestRequest  {
+    FILE bramt_OC_cpp
+    METHOD/Action read__ENA ( Bit(32) addr )
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data )
+}
+INTERFACE PipeIn(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+EMODULE BRAM(width=4,depth=1024) BRAMIfc(width=4,depth=1024) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+MODULE Btest BtestIfc {
+    FILE bramt_OC_cpp
+    FIELD BRAM(width=4,depth=1024) bram
+    FIELD Bit(1) waitRead
+    METHOD/Action request$write__ENA ( Bit(32) addr , Bit(32) data ) {
+        PRINTF :printf{"write: addr %x data %x\n",request$write$addr,request$write$data}
+        CALL/Action :bram$write__ENA{__bitsubstr{request$write$addr,9,0},__bitsubstr{request$write$data,3,0}}
+    }
+    METHOD/Action request$read__ENA ( Bit(32) addr ) {
+        PRINTF :printf{"read: addr %x\n",request$read$addr}
+        CALL/Action :bram$read__ENA{__bitsubstr{request$read$addr,9,0}}
+        STORE :waitRead = 1
+    }
+    METHOD/Rule/Action RULE$callBack__ENA if ((waitRead)) {
+        CALL :bram$dataOut{}
+        PRINTF :printf{"callback: data %x\n",bram$dataOut}
+        CALL :bram$dataOut{}
+        CALL/Action :indication$heard__ENA{bram$dataOut}
+        STORE :waitRead = 0
+    }
+}

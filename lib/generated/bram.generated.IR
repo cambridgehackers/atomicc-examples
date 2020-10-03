@@ -1,0 +1,34 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE BRAMIfc(width=4,depth=1024)  {
+    FILE bram_OC_h
+    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
+    METHOD dataOut Bit(width)
+}
+INTERFACE PipeIn(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+MODULE BRAM(width=4,depth=1024) BRAMIfc(width=4,depth=1024) {
+    FILE bram_OC_cpp
+    FIELD/Count depth  Bit(4) RAM
+    FIELD Bit(4) readB
+    FIELD Bit(1) writeEnable
+    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data ) {
+        STORE ((writeEnable) != (0)):RAM[write$addr] = write$data
+    }
+    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr ) {
+        STORE :readB = RAM[read$addr]
+    }
+    METHOD dataOut Bit(width) = ((readB)) if ((((read__ENA) != (0)) ^ (1)))
+    METHOD/Rule/Action RULE$init__ENA {
+        STORE :writeEnable = 1
+    }
+}

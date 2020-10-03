@@ -86,6 +86,11 @@ trace:
 	#VERILATOR_TRACE=--trace make verilator
 	#rm -f dump.vcd
 	DUMP_VCD=dump.vcd make run
+#add to Makefile:
+#   FILEGENFLAGS += -DVERILATOR_PROJECT_ARGS="--trace"
+
+tracedump:
+	$(ATOMICCDIR)/../verilog-vcd-parser/build/vcd-parse verilator/dump.vcd
 
 dump:
 	vivado -mode batch -source $(TOPDIR)/shownets.sh 

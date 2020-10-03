@@ -3,6 +3,7 @@
 `include "adapter.generated.vh"
 `include "atomicc.generated.vh"
 `include "axiTop.generated.vh"
+`include "bram.generated.vh"
 `include "bscan.generated.vh"
 `include "clockTop.generated.vh"
 `include "configCounter.generated.vh"
