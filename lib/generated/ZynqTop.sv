@@ -64,10 +64,10 @@ module ZynqTop (
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I));
     BUFG ps7_fclk_0_c (
-        .I(ps7_ps7_foo$FCLK.CLK),
+        .I(ps7_ps7_foo$FCLK.CLK[ 0 : 0 ]),
         .O(CLK));
     BUFG ps7_freset_0_r (
-        .I(ps7_ps7_foo$FCLK.RESETN),
+        .I(ps7_ps7_foo$FCLK.RESETN[ 0 : 0 ]),
         .O(nRST));
     // Extra assigments, not to output wires
     assign ps7_ps7_foo$intr.CLK = CLK;

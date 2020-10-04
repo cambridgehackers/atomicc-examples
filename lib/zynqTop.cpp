@@ -138,9 +138,9 @@ class ZynqTop __implements ZynqTopIFC {
     __connect _ = ps7_ps7_foo._;
     __rule init {
         MIO = ps7_ps7_foo.MIO;
-        ps7_fclk_0_c.I = ps7_ps7_foo.FCLK.CLK; // [0]
+        ps7_fclk_0_c.I = __bitsubstr(ps7_ps7_foo.FCLK.CLK, 0, 0);
         __defaultClock = ps7_fclk_0_c.O;
-        ps7_freset_0_r.I = ps7_ps7_foo.FCLK.RESETN; // [0]
+        ps7_freset_0_r.I = __bitsubstr(ps7_ps7_foo.FCLK.RESETN, 0, 0);
         __defaultnReset = ps7_freset_0_r.O;
         ps7_ps7_foo.intr.interrupt = test._.interrupt;
         ps7_ps7_foo.intr.CLK = __defaultClock;

@@ -599,9 +599,9 @@ MODULE ZynqTop ZynqTopIFC {
     FIELD BUFG ps7_freset_0_r
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(54) :MIO = ps7_ps7_foo$MIO
-        LET Bit(1) :ps7_fclk_0_c$I = ps7_ps7_foo$FCLK.CLK
+        LET Bit(1) :ps7_fclk_0_c$I = __bitsubstr{ps7_ps7_foo$FCLK.CLK,0,0}
         LET Bit(1) :__defaultClock = ps7_fclk_0_c$O
-        LET Bit(1) :ps7_freset_0_r$I = ps7_ps7_foo$FCLK.RESETN
+        LET Bit(1) :ps7_freset_0_r$I = __bitsubstr{ps7_ps7_foo$FCLK.RESETN,0,0}
         LET Bit(1) :__defaultnReset = ps7_freset_0_r$O
         LET Bit(1) :ps7_ps7_foo$intr.interrupt = test$interrupt
         LET Bit(1) :ps7_ps7_foo$intr.CLK = __defaultClock
