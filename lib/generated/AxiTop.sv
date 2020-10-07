@@ -61,6 +61,11 @@ module AxiTop (
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write(user$write),
         .read(readUser));
+    Trace#(.width(1+1+32+12+4+1+1+32+12+4+1+1+32+12+1+1+1+32+12+1+2+1+1+12+2+1+32),.depth(1024)) __traceMemory (
+        .CLK(CLK),
+        .nRST(nRST),
+        .enable(1'd1),
+        .data({ 32'd0 , interrupt , MAXIGP0_O.AR__ENA , MAXIGP0_O.AR$addr , MAXIGP0_O.AR$id , MAXIGP0_O.AR$len , MAXIGP0_O.AR__RDY , MAXIGP0_O.AW__ENA , MAXIGP0_O.AW$addr , MAXIGP0_O.AW$id , MAXIGP0_O.AW$len , MAXIGP0_O.AW__RDY , MAXIGP0_O.W__ENA , MAXIGP0_O.W$data , MAXIGP0_O.W$id , MAXIGP0_O.W$last , MAXIGP0_O.W__RDY , MAXIGP0_I.R__ENA , MAXIGP0_I.R$data , MAXIGP0_I.R$id , MAXIGP0_I.R$last , MAXIGP0_I.R$resp , MAXIGP0_I.R__RDY , MAXIGP0_I.B__ENA , MAXIGP0_I.B$id , MAXIGP0_I.B$resp , MAXIGP0_I.B__RDY }));
     assign interrupt = !( ( requestValue$out.deq__RDY == 0 ) || ( !intEnable ) );
     // Extra assigments, not to output wires
     assign MAXIGP0_I.B$id = ( writeDone$out.first__RDY && writeDone$out.deq__RDY ) ? writeDone$out.first : 0;

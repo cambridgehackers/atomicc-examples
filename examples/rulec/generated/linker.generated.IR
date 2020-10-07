@@ -82,6 +82,7 @@ FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
 FILE ../../lib/generated/axiTop.generated.vh
+FILE ../../lib/generated/bram.generated.vh
 FILE ../../lib/generated/bscan.generated.vh
 FILE ../../lib/generated/clockTop.generated.vh
 FILE ../../lib/generated/configCounter.generated.vh
@@ -97,6 +98,7 @@ FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
+FILE ../../lib/generated/trace.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
 FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/generated/UserTop.sv

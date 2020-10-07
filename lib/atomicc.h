@@ -43,6 +43,8 @@ typedef int _IO_lock_t;
 #define __software __attribute__(( atomicc_software ))
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
+#define __trace(A) __attribute__(( atomicc_trace(A) ))
+#define __printf __attribute__(( atomicc_printf ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
 extern "C" int __bitconcat(int, ...);
 extern "C" int __bitsubstr(int, ...);
@@ -75,21 +77,6 @@ class PipeInB {
 
 typedef __uint(128) NOCData;
 typedef struct NOCDataH {LenType length; NOCData data;} NOCDataH;
-#if 0
-// FunnelBufferedBase is now used in l_top
-template<int funnelWidth, int width>
-class FunnelBaseIfc {
-    PipeIn<__uint(width)> in[funnelWidth];
-    PipeIn<__uint(width)> *out;
-};
-
-template<int funnelWidth, int width>
-class FunnelBase __implements FunnelBaseIfc<funnelWidth, width>;
-
-template<int funnelWidth, int width>
-class FunnelBufferedBase __implements FunnelBaseIfc<funnelWidth, width>;
-static FunnelBufferedBase<99, 32> dummyFunnel; // to force at least 1 instantiation of template into IR
-#endif
 class Dummy __implements PipeIn<__uint(32)>;
 static Dummy dummyp;
 

@@ -21,7 +21,9 @@
 #include "fifo.h"
 #include "axiTop.h"
 #include "userTop.h"
+#include "trace.h"
 
+Trace<4, 1024> dummy;
 // Datatypes for holding request info during processing
 typedef __uint(5) AXIAddr;
 typedef __uint(6) AXIId;
@@ -31,7 +33,8 @@ typedef struct {
     BusData    data;
 } ReadResp;
 
-class AxiTop __implements AxiTopIfc {
+#define TRACEAXI __trace((1024))
+class TRACEAXI AxiTop __implements AxiTopIfc {
     bool intEnable, writeReady, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;
     AXIAddr readAddr, writeAddr;

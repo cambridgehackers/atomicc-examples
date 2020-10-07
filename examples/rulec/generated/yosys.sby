@@ -16,6 +16,7 @@ prep -top VsimTop
 ../../lib/generated/adapter.generated.vh
 ../../lib/generated/atomicc.generated.vh
 ../../lib/generated/axiTop.generated.vh
+../../lib/generated/bram.generated.vh
 ../../lib/generated/bscan.generated.vh
 ../../lib/generated/clockTop.generated.vh
 ../../lib/generated/configCounter.generated.vh
@@ -31,6 +32,7 @@ prep -top VsimTop
 ../../lib/generated/resetInverter.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
+../../lib/generated/trace.generated.vh
 ../../lib/generated/userTop.generated.vh
 ../../lib/generated/zynqTop.generated.vh
 ../../lib/generated/UserTop.sv

@@ -19,6 +19,7 @@
 `include "resetInverter.generated.vh"
 `include "sizedFifo.generated.vh"
 `include "syncFF.generated.vh"
+`include "trace.generated.vh"
 `include "userTop.generated.vh"
 `include "vsimTop.generated.vh"
 `include "zynqTop.generated.vh"

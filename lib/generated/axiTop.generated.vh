@@ -64,6 +64,17 @@ interface MaxiI;
                     input  R__RDY, B__RDY);
 endinterface
 `endif
+`ifndef __TraceIfc_DEF__
+`define __TraceIfc_DEF__
+interface TraceIfc#(depth = 1024, width = 4);
+    logic  CLK;
+    logic  nRST;
+    logic  enable;
+    logic [width - 1:0] data;
+    modport server (input  CLK, nRST, enable, data);
+    modport client (output CLK, nRST, enable, data);
+endinterface
+`endif
 //METASTART; AxiTop
 //METAINTERNAL; reqArs; Fifo1Base(width=6);
 //METAINTERNAL; reqAws; Fifo1Base(width=6);
@@ -72,6 +83,7 @@ endinterface
 //METAINTERNAL; readData; Fifo1Base(width=38);
 //METAINTERNAL; writeData; Fifo1Base(width=32);
 //METAINTERNAL; user; UserTop;
+//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024);
 //METAINVOKE; MAXIGP0_O.AR__ENA; :reqArs$in.enq__ENA;
 //METAEXCLUSIVE; MAXIGP0_O.AR__ENA; RULE$lread__ENA
 //METAGUARD; MAXIGP0_O.AR; reqArs$in.enq__RDY;

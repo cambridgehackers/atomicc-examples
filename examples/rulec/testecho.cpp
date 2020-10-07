@@ -104,6 +104,9 @@ int main(int argc, const char **argv)
     call_say2(v, v*3);
     printf("TEST TYPE: SEM\n");
     echoRequestProxy->setLeds(9);
-sleep(2);
+    echoRequestProxy->setLeds(9);
+    echoRequestProxy->setLeds(9);
+    echoRequestProxy->setLeds(9);
+//sleep(2);
     return 0;
 }
