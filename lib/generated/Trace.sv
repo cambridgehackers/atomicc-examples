@@ -47,7 +47,7 @@ module Trace #(
     assign bram$read$addr = ( !( 0 == ( waitRead ^ 1 ) ) ) ? readAddr : 11'd0;
     assign bram$read__ENA = !( 0 == ( waitRead ^ 1 ) );
     assign bram$write$addr = ( !( ( enable == 0 ) || ( buffer == data ) ) ) ? addr : 11'd0;
-    assign bram$write$data = ( !( ( enable == 0 ) || ( buffer == data ) ) ) ? { timestamp , data[ ( width-32 ) : 0 ] } : 0;
+    assign bram$write$data = ( !( ( enable == 0 ) || ( buffer == data ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0;
     assign bram$write__ENA = !( ( enable == 0 ) || ( buffer == data ) );
     // Extra assigments, not to output wires
     assign RULE$callBack__ENA = !( ( 0 == waitRead ) || ( !( bram$dataOut__RDY && bscan$toBscan.enq__RDY ) ) );

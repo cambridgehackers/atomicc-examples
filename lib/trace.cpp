@@ -39,7 +39,7 @@ class Trace __implements TraceIfc<width, depth> {
     }
     __rule copyRule if (this->enable && buffer != this->data) {
         // write next entry to trace buffer
-        bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32, 0)));
+        bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
         addr++;
         buffer = this->data;
     }

@@ -47,7 +47,7 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     INTERFACE PipeIn(width=64) readUser
     METHOD/Action readUser$enq__ENA ( Bit(64) v )
     METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (data)))) {
-        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,-(32),0}}}
+        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,(64) - (32),0}}}
         STORE :addr = (addr) + (1)
         STORE :buffer = data
     }
