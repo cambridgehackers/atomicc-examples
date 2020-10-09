@@ -1,4 +1,4 @@
-export FILEGENFLAGS = --implconstraint $(PWD)/../../xilinx/clockBscan.xdc
+#export FILEGENFLAGS = --implconstraint $(PWD)/../../xilinx/clockBscan.xdc
 include ../../makefile.in
 
 CPPFILES = testbscan.cpp

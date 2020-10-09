@@ -78,7 +78,7 @@ gen:
 	touch $(BOARD)/Makefile.autotop
 
 clean:
-	rm -rf SWSOCK* verilator $(allarchlist) generated/yosys
+	rm -rf SWSOCK* verilator $(allarchlist) generated/yosys vivado.jou vivado.log
 
 trace:
 	#make

@@ -21,7 +21,7 @@
 #include "fifo.h"
 #include "axiTop.h"
 #include "userTop.h"
-#include "trace.h"
+#include "tracebuf.h"
 
 Trace<4, 1024> dummy;
 // Datatypes for holding request info during processing

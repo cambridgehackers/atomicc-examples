@@ -66,7 +66,7 @@ class BscanLocal __implements BscanLocalIfc<width> {
 template <int id, int width>
 class Bscan __implements BscanIfc<width> {
     BSCANE2#(JTAG_CHAIN = id) bscan;
-    BUFG tckbuf;
+    BUFG bscan_mytck;
     BscanLocal<width> localBscan;
     __implements localBscan.fromBscan readBscan;
 
@@ -78,8 +78,8 @@ class Bscan __implements BscanIfc<width> {
     }
 
     __rule init {
-        tckbuf.I = bscan.TCK;
-        localBscan.CLK = tckbuf.O;
+        bscan_mytck.I = bscan.TCK;
+        localBscan.CLK = bscan_mytck.O;
         localBscan.nRST = __defaultnReset;
         localBscan.TDI = bscan.TDI;
         localBscan.TDO = bscan.TDO;

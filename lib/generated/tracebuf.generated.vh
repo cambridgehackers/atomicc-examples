@@ -1,5 +1,5 @@
-`ifndef __trace_GENERATED__VH__
-`define __trace_GENERATED__VH__
+`ifndef __tracebuf_GENERATED__VH__
+`define __tracebuf_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __BRAMIfc_DEF__
@@ -34,16 +34,15 @@ endinterface
 //METASTART; Trace
 //METAINTERNAL; bram; BRAM(width=64,depth=1024);
 //METAINTERNAL; bscan; Bscan(id=3,width=64);
-//METAGUARD; readUser.enq; 1;
+//METAINVOKE; readUser.enq__ENA; !dataAvail:bram$read__ENA;
+//METAEXCLUSIVE; readUser.enq__ENA; RULE$callBack__ENA
+//METAGUARD; readUser.enq; dataAvail || bram$read__RDY;
 //METAINVOKE; RULE$copyRule__ENA; :bram$write__ENA;
 //METAGUARD; RULE$copyRule; !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
-//METAINVOKE; RULE$copyBRule__ENA; :bram$read__ENA;
-//METAEXCLUSIVE; RULE$copyBRule__ENA; RULE$callBack__ENA
-//METAGUARD; RULE$copyBRule; !( ( 0 == ( waitRead ^ 1 ) ) || ( !bram$read__RDY ) );
 //METAINVOKE; RULE$callBack__ENA; :bscan$toBscan.enq__ENA;
-//METAGUARD; RULE$callBack; !( ( 0 == waitRead ) || ( !( bram$dataOut__RDY && bscan$toBscan.enq__RDY ) ) );
+//METAGUARD; RULE$callBack; bram$dataOut__RDY && bscan$toBscan.enq__RDY;
 //METAGUARD; RULE$init; 1;
-//METARULES; RULE$copyRule; RULE$copyBRule; RULE$callBack; RULE$init
+//METARULES; RULE$copyRule; RULE$callBack; RULE$init
 //METACONNECT; readUser.enq__ENA; bscan$fromBscan.enq__ENA
 //METACONNECT; readUser.enq__RDY; bscan$fromBscan.enq__RDY
 `endif

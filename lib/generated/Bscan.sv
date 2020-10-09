@@ -16,13 +16,13 @@ module Bscan #(
     logic bscan$TDI;
     logic bscan$TDO;
     logic bscan$UPDATE;
+    logic bscan_mytck$O;
     logic localBscan$capture;
     PipeIn#(.width(width)) localBscan$fromBscan();
     logic localBscan$shift;
     PipeIn#(.width(width)) localBscan$toBscan();
     logic localBscan$update;
     PipeIn#(.width(width)) readBscan();
-    logic tckbuf$O;
     BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),
@@ -35,11 +35,11 @@ module Bscan #(
         .TDO(bscan$TDO),
         .TMS(),
         .UPDATE(bscan$UPDATE));
-    BUFG tckbuf (
+    BUFG bscan_mytck (
         .I(bscan$TCK),
-        .O(tckbuf$O));
+        .O(bscan_mytck$O));
     BscanLocal#(.width(width)) localBscan (
-        .CLK(tckbuf$O),
+        .CLK(bscan_mytck$O),
         .nRST(nRST),
         .capture(localBscan$capture),
         .shift(localBscan$shift),

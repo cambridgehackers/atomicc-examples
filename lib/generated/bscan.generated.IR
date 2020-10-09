@@ -67,7 +67,7 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     INTERFACECONNECT readBscan localBscan$fromBscan PipeInSync(width=32)
     FIELD BSCANE2 bscan
     PARAMS bscan JTAG_CHAIN=id
-    FIELD BUFG tckbuf
+    FIELD BUFG bscan_mytck
     FIELD BscanLocal(width=32) localBscan
     INTERFACE PipeInSync(width=32) readBscan
     METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
@@ -77,8 +77,8 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
         CALL/Action :fromBscan$enq__ENA{readBscan$enq$v}
     }
     METHOD/Rule/Action RULE$init__ENA {
-        LET Bit(1) :tckbuf$I = bscan$TCK
-        LET Bit(1) :localBscan$CLK = tckbuf$O
+        LET Bit(1) :bscan_mytck$I = bscan$TCK
+        LET Bit(1) :localBscan$CLK = bscan_mytck$O
         LET Bit(1) :localBscan$nRST = __defaultnReset
         LET Bit(1) :localBscan$TDI = bscan$TDI
         LET Bit(1) :localBscan$TDO = bscan$TDO

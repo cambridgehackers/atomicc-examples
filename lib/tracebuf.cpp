@@ -19,7 +19,7 @@
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-#include "trace.h"
+#include "tracebuf.h"
 #include "bram.h"
 #include "bscan.h"
 
@@ -32,10 +32,16 @@ class Trace __implements TraceIfc<width, depth> {
     BRAM<width, depth> bram;
     __uint(__clog2(depth)) addr, readAddr;
     Bscan<3,width> bscan;
-    bool waitRead;
     __implements bscan.fromBscan readUser;
+    bool dataAvail;
 
-    void readUser.enq(__uint(64) v) { // data from jtag
+    void readUser.enq(__uint(width) v) { // data from jtag
+        // rate limit the read from trace buffer
+        if (!dataAvail) {
+            bram.read(readAddr);
+            readAddr++;
+            dataAvail = true;
+        }
     }
     __rule copyRule if (this->enable && buffer != this->data) {
         // write next entry to trace buffer
@@ -43,17 +49,11 @@ class Trace __implements TraceIfc<width, depth> {
         addr++;
         buffer = this->data;
     }
-    __rule copyBRule if (!waitRead) {
-        // read trace buffer
-        bram.read(readAddr);
-        waitRead = true;
-        readAddr++;
-    }
 
-    __rule callBack if (waitRead) {
+    __rule callBack {
         // send to trace buffer to jtag
         bscan.toBscan.enq(bram.dataOut());
-        waitRead = false;
+        dataAvail = false;
     }
     __rule init {
         timestamp++;
