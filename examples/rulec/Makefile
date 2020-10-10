@@ -1,4 +1,5 @@
 #export FILEGENFLAGS = --implconstraint $(PWD)/../../xilinx/clockBscan.xdc
+FILEGENFLAGS += -DVERILATOR_PROJECT_ARGS="--trace"
 include ../../makefile.in
 
 CPPFILES = testecho.cpp
