@@ -3,8 +3,8 @@
 `include "atomicclib.vh"
 
 //METASTART; UserTop
-//METAINTERNAL; radapter_0; AdapterToBus(width=32);
-//METAINTERNAL; wadapter_0; AdapterFromBus(width=32);
+//METAINTERNAL; radapter_0; AdapterToBus(width=144,owidth=32);
+//METAINTERNAL; wadapter_0; AdapterFromBus(owidth=32,width=144);
 //METAINTERNAL; ctop; l_top;
 //METACONNECT; wadapter_0$in.enq__ENA; write.enq__ENA
 //METACONNECT; wadapter_0$in.enq__RDY; write.enq__RDY

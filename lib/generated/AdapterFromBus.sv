@@ -2,7 +2,8 @@
 
 `default_nettype none
 module AdapterFromBus #(
-    parameter integer width = 32)(
+    parameter integer owidth = 32,
+    parameter integer width = 144)(
     input wire CLK, input wire nRST,
     PipeInB.server in,
     PipeIn.client out);
@@ -35,7 +36,7 @@ module AdapterFromBus #(
             $display( "adapterFROMout %x" , buffer );
         end; // End of RULE$pushValue__ENA
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
-            buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : width ] };
+            buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : owidth ] };
             length <= length + 1;
             if (!( 0 == 0 ))
             $display( "adapterFROMin %x last %x buffer %x" , in.enq$v , in.enq$last , buffer );

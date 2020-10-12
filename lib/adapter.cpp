@@ -22,8 +22,8 @@
 #include "adapter.h"
 
 #define TRACE_ADAPTER 0
-template<class T, int width>
-class AdapterToBus __implements AtB<T, width> {
+template<class T, int owidth>
+class AdapterToBus __implements AtB<T, owidth> {
    NOCData                   buffer;
    LenType                   remain;
 
@@ -34,25 +34,25 @@ class AdapterToBus __implements AtB<T, width> {
       printf ("adapterTOin %x length %x\n", v.data, v.length);
    }
    __rule copyRule if (remain != 0) {
-      __uint(width) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - width);
+      __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
       if (TRACE_ADAPTER)
       printf ("adapterTOout %x remain %x\n", outVal, remain);
       this->out->enq(outVal, remain == 1);
       remain--;
-      buffer <<= width;
+      buffer <<= owidth;
    }
 };
 
-template<int width, class T>
-class AdapterFromBus __implements AfB<width, T> {
+template<int owidth, class T>
+class AdapterFromBus __implements AfB<owidth, T> {
    NOCData              buffer;
    bool                 waitForEnq;
    LenType              length;
 
-   void in.enq(__uint(width) v, bool last) if (!waitForEnq) {
+   void in.enq(__uint(owidth) v, bool last) if (!waitForEnq) {
       if (TRACE_ADAPTER)
       printf("adapterFROMin %x last %x buffer %x\n", v, last, buffer);
-      buffer = __bitconcat(v, __bitsubstr(buffer, __bitsize(buffer) - 1, width));
+      buffer = __bitconcat(v, __bitsubstr(buffer, __bitsize(buffer) - 1, owidth));
       length = length + 1;
       if (last)  // this is the last beat
           waitForEnq = true;

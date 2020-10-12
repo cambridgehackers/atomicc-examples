@@ -10,10 +10,10 @@ module UserTop (input wire CLK, input wire nRST,
     PipeInB#(.width(32)) radapter_0$out();
     PipeInB#(.width(32)) wadapter_0$in();
     PipeIn#(.width(144)) wadapter_0$out();
-    AdapterToBus#(.width(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
+    AdapterToBus#(.width(144),.owidth(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
         .in(ctop$indication),
         .out(read));
-    AdapterFromBus#(.width(32)) wadapter_0 (.CLK(CLK), .nRST(nRST),
+    AdapterFromBus#(.owidth(32),.width(144)) wadapter_0 (.CLK(CLK), .nRST(nRST),
         .in(write),
         .out(wadapter_0$out));
     l_top ctop (.CLK(CLK), .nRST(nRST),

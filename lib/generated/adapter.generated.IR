@@ -3,12 +3,12 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE AfB(width=32)  {
+INTERFACE AfB(owidth=32,width=144)  {
     FILE adapter_OC_h
     INTERFACE PipeInB(width=32) in
     INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE AtB(width=32)  {
+INTERFACE AtB(width=144,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeIn(width=144) in
     INTERFACE/Ptr PipeInB(width=32) out
@@ -24,12 +24,12 @@ INTERFACE PipeInB(width=32)  {
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
-MODULE AdapterFromBus(width=32) AfB(width=32) {
+MODULE AdapterFromBus(owidth=32,width=144) AfB(owidth=32,width=144) {
     FILE adapter_OC_cpp
     FIELD Bit(128) buffer
     FIELD Bit(1) waitForEnq
     FIELD Bit(16) length
-    METHOD/Action in$enq__ENA ( Bit(width) v , Bit(1) last ) if (((waitForEnq) ^ (1))) {
+    METHOD/Action in$enq__ENA ( Bit(owidth) v , Bit(1) last ) if (((waitForEnq) ^ (1))) {
         PRINTF ((0) != (0)):printf{"adapterFROMin %x last %x buffer %x\n",in$enq$v,in$enq$last,buffer}
         STORE :buffer = __bitconcat{in$enq$v,__bitsubstr{buffer,(128) - (1),32}}
         STORE :length = (length) + (1)
@@ -45,7 +45,7 @@ MODULE AdapterFromBus(width=32) AfB(width=32) {
         STORE :waitForEnq = 0
     }
 }
-MODULE AdapterToBus(width=32) AtB(width=32) {
+MODULE AdapterToBus(width=144,owidth=32) AtB(width=144,owidth=32) {
     FILE adapter_OC_cpp
     FIELD Bit(128) buffer
     FIELD Bit(16) remain

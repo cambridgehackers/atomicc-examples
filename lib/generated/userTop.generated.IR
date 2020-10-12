@@ -3,12 +3,12 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE AfB(width=32)  {
+INTERFACE AfB(owidth=32,width=144)  {
     FILE adapter_OC_h
     INTERFACE PipeInB(width=32) in
     INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE AtB(width=32)  {
+INTERFACE AtB(width=144,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeIn(width=144) in
     INTERFACE/Ptr PipeInB(width=32) out
@@ -36,10 +36,10 @@ INTERFACE l_topIfc  {
     INTERFACE PipeIn(width=144) request
     INTERFACE/Ptr PipeIn(width=144) indication
 }
-EMODULE AdapterFromBus(width=32) AfB(width=32) {
+EMODULE AdapterFromBus(owidth=32,width=144) AfB(owidth=32,width=144) {
     FILE adapter_OC_h
 }
-EMODULE AdapterToBus(width=32) AtB(width=32) {
+EMODULE AdapterToBus(width=144,owidth=32) AtB(width=144,owidth=32) {
     FILE adapter_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
@@ -60,7 +60,7 @@ MODULE UserTop UserTopIfc {
     INTERFACECONNECT read radapter_0$out PipeInB(width=32)
     INTERFACECONNECT ctop$request wadapter_0$out PipeIn(width=144)
     INTERFACECONNECT ctop$indication radapter_0$in PipeIn(width=144)
-    FIELD AdapterToBus(width=32) radapter_0
-    FIELD AdapterFromBus(width=32) wadapter_0
+    FIELD AdapterToBus(width=144,owidth=32) radapter_0
+    FIELD AdapterFromBus(owidth=32,width=144) wadapter_0
     FIELD l_top ctop
 }
