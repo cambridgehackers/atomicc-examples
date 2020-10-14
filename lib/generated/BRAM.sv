@@ -29,7 +29,7 @@ module BRAM #(
       end // nRST
       else begin
         // RULE$init__ENA
-            writeEnable <= 1;
+            writeEnable <= 1'd1;
         // End of RULE$init__ENA
         if (read__ENA) begin // read__ENA
             readB <= RAM[ read$addr ];
