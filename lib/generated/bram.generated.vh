@@ -21,9 +21,9 @@ interface BRAMIfc#(depth = 1024, width = 4);
 endinterface
 `endif
 //METASTART; BRAM
-//METAGUARD; write; 1;
-//METAGUARD; read; 1;
+//METAGUARD; write; 1'd1;
+//METAGUARD; read; 1'd1;
 //METAGUARD; dataOut; 0 != ( ( read__ENA != 0 ) ^ 1 );
-//METAGUARD; RULE$init; 1;
+//METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 `endif
