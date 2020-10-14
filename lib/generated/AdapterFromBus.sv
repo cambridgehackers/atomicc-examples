@@ -30,18 +30,18 @@ module AdapterFromBus #(
       end // nRST
       else begin
         if (RULE$pushValue__ENA && RULE$pushValue__RDY) begin // RULE$pushValue__ENA
-            length <= 0;
-            waitForEnq <= 0;
+            length <= 16'd0;
+            waitForEnq <= 1'd0;
             if (!( 0 == 0 ))
             $display( "adapterFROMout %x" , buffer );
         end; // End of RULE$pushValue__ENA
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
             buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : owidth ] };
-            length <= length + 1;
+            length <= length + ( (16'(owidth)) );
             if (!( 0 == 0 ))
             $display( "adapterFROMin %x last %x buffer %x" , in.enq$v , in.enq$last , buffer );
             if (in.enq$last)
-            waitForEnq <= 1;
+            waitForEnq <= 1'd1;
         end; // End of in.enq__ENA
       end
     end // always @ (posedge CLK)

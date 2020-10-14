@@ -32,7 +32,7 @@ MODULE AdapterFromBus(owidth=32,width=144) AfB(owidth=32,width=144) {
     METHOD/Action in$enq__ENA ( Bit(owidth) v , Bit(1) last ) if (((waitForEnq) ^ (1))) {
         PRINTF ((0) != (0)):printf{"adapterFROMin %x last %x buffer %x\n",in$enq$v,in$enq$last,buffer}
         STORE :buffer = __bitconcat{in$enq$v,__bitsubstr{buffer,(128) - (1),32}}
-        STORE :length = (length) + (1)
+        STORE :length = (length) + (32)
         STORE (in$enq$last):waitForEnq = 1
     }
     METHOD/Rule/Action RULE$pushValue__ENA if ((waitForEnq)) {
@@ -60,8 +60,9 @@ MODULE AdapterToBus(width=144,owidth=32) AtB(width=144,owidth=32) {
         ALLOCA Bit(32) _RULE$copyRule$outVal
         LET Bit(32) :_RULE$copyRule$outVal = __bitsubstr{buffer,(128) - (1),(128) - (32)}
         PRINTF ((0) != (0)):printf{"adapterTOout %x remain %x\n",_RULE$copyRule$outVal,remain}
-        CALL/Action :out$enq__ENA{_RULE$copyRule$outVal,(remain) == (1)}
-        STORE :remain = (remain) + (-1)
+        CALL/Action :out$enq__ENA{_RULE$copyRule$outVal,(remain) <= (32)}
+        STORE ((remain) <= (32)):remain = 0
+        STORE !((remain) <= (32)):remain = (remain) - (32)
         STORE :buffer = (buffer) << (32)
     }
 }

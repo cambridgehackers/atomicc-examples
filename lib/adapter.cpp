@@ -37,8 +37,11 @@ class AdapterToBus __implements AtB<T, owidth> {
       __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
       if (TRACE_ADAPTER)
       printf ("adapterTOout %x remain %x\n", outVal, remain);
-      this->out->enq(outVal, remain == 1);
-      remain--;
+      this->out->enq(outVal, remain <= owidth);
+      if (remain <= owidth)
+          remain = 0;
+      else
+          remain -= owidth;
       buffer <<= owidth;
    }
 };
@@ -53,7 +56,7 @@ class AdapterFromBus __implements AfB<owidth, T> {
       if (TRACE_ADAPTER)
       printf("adapterFROMin %x last %x buffer %x\n", v, last, buffer);
       buffer = __bitconcat(v, __bitsubstr(buffer, __bitsize(buffer) - 1, owidth));
-      length = length + 1;
+      length += owidth;
       if (last)  // this is the last beat
           waitForEnq = true;
    }

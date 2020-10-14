@@ -19,7 +19,7 @@ module AdapterToBus #(
     assign _RULE$copyRule$outVal = buffer[ ( 128 - 1 ) : ( 128 - owidth ) ];
     assign _in$enq$temp$v = in.enq$v;
     assign in.enq__RDY = remain == 0;
-    assign out.enq$last = !( ( remain == 0 ) || ( !( remain == 1 ) ) );
+    assign out.enq$last = !( ( remain == 0 ) || ( !( remain <= 16'(owidth) ) ) );
     assign out.enq$v = ( !( remain == 0 ) ) ? buffer[ ( 128 - 1 ) : ( 128 - owidth ) ] : 0;
     assign out.enq__ENA = !( remain == 0 );
 
@@ -30,10 +30,13 @@ module AdapterToBus #(
       end // nRST
       else begin
         if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
-            remain <= remain + ( -1 );
             buffer <= buffer << owidth;
             if (!( 0 == 0 ))
             $display( "adapterTOout %x remain %x" , _RULE$copyRule$outVal , remain );
+            if (!( remain <= 16'(owidth) ))
+            remain <= remain - ( (16'(owidth)) );
+            if (remain <= 16'(owidth))
+            remain <= 16'd0;
         end; // End of RULE$copyRule__ENA
         if (in.enq__ENA && ( remain == 0 )) begin // in.enq__ENA
             buffer <= _in$enq$temp$v.data;

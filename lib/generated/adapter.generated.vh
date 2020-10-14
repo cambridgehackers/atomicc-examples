@@ -12,6 +12,7 @@
 //METAEXCLUSIVE; in.enq__ENA; RULE$copyRule__ENA
 //METAGUARD; in.enq; remain == 0;
 //METAINVOKE; RULE$copyRule__ENA; :out.enq__ENA;
+//METABEFORE; RULE$copyRule__ENA; :in.enq__ENA
 //METAGUARD; RULE$copyRule; !( ( remain == 0 ) || ( !out.enq__RDY ) );
 //METARULES; RULE$copyRule
 `endif
