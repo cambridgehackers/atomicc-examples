@@ -42,11 +42,11 @@ module BscanLocal #(
             shiftReg <= { TDI , shiftReg[ ( width - 1 ) : 1 ] };
         end; // End of RULE$shiftRule__ENA
         if (RULE$updateRule__ENA && RULE$updateRule__RDY) begin // RULE$updateRule__ENA
-            notReady <= 0;
+            notReady <= 1'd0;
         end; // End of RULE$updateRule__ENA
         if (!( notReady || ( !capture ) || ( !_toBscan$enqS__ENA ) )) begin // toBscan.enq__ENA
             shiftReg <= toBscan.enq$v;
-            notReady <= 1;
+            notReady <= 1'd1;
         end; // End of toBscan.enq__ENA
       end
     end // always @ (posedge CLK)

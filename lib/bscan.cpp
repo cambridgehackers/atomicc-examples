@@ -69,12 +69,17 @@ class Bscan __implements BscanIfc<width> {
     BUFG bscan_mytck;
     BscanLocal<width> localBscan;
     __implements localBscan.fromBscan readBscan;
+    bool delayedIndication, delayedRequest;
 
-    void toBscan.enq(__uint(width) v) {
+    void toBscan.enq(__uint(width) v) if (!delayedRequest) {
         localBscan.toBscan._.enq(v);
     }
-    void readBscan._.enq(__uint(width) v) {
+    void readBscan._.enq(__uint(width) v) if (!delayedIndication) {
         this->fromBscan->enq(v);
+    }
+    __rule delay1 {
+        delayedIndication = __valid(readBscan._.enq);
+        delayedRequest = __valid(toBscan.enq);
     }
 
     __rule init {

@@ -70,11 +70,17 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     FIELD BUFG bscan_mytck
     FIELD BscanLocal(width=32) localBscan
     INTERFACE PipeInSync(width=32) readBscan
-    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) {
+    FIELD Bit(1) delayedIndication
+    FIELD Bit(1) delayedRequest
+    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((delayedRequest) ^ (1))) {
         CALL/Action :localBscan$toBscan$enq__ENA{toBscan$enq$v}
     }
-    METHOD/Action readBscan$enq__ENA ( Bit(width) v ) {
+    METHOD/Action readBscan$enq__ENA ( Bit(width) v ) if (((delayedIndication) ^ (1))) {
         CALL/Action :fromBscan$enq__ENA{readBscan$enq$v}
+    }
+    METHOD/Rule/Action RULE$delay1__ENA {
+        STORE :delayedIndication = (readBscan$enq__ENA) != (0)
+        STORE :delayedRequest = (toBscan$enq__ENA) != (0)
     }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :bscan_mytck$I = bscan$TCK
