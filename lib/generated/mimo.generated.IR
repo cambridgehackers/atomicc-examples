@@ -27,7 +27,8 @@ MODULE MIMOBase(widthIn=32,widthOut=128) Gear {
     FIELD/shared Bit(32) m
     METHOD/Action out$deq__ENA if (((c) >= (128))) {
         STORE :buffer = __bitsubstr{buffer,((128) + (32)) - (1),128}
-        STORE :c = (c) - (128)
+        STORE ((c) <= (128)):c = 0
+        STORE !((c) <= (128)):c = (c) - (128)
     }
     METHOD out$first Bit(widthOut) = ((buffer)) if (((c) >= (128)))
     METHOD/Action in$enq__ENA ( Bit(widthIn) v ) if ((((c) >= (128)) ^ (1))) {

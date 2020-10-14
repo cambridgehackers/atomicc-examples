@@ -29,7 +29,10 @@ module MIMOBase #(
         end; // End of in.enq__ENA
         if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
             buffer <= buffer[ ( ( widthOut + widthIn ) - 1 ) : widthOut ];
+            if (!( c <= widthOut ))
             c <= c - widthOut;
+            if (c <= widthOut)
+            c <= 0;
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

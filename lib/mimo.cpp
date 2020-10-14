@@ -29,7 +29,10 @@ class MIMOBase __implements Gear<__uint(widthIn), __uint(widthOut)> {
     void out.deq() if (readyOut()) {
         //shift down buffer by width of output
         buffer = __bitsubstr(buffer, widthOut + widthIn-1, widthOut);
-        c -= widthOut;
+        if (c <= widthOut)
+            c = 0;
+        else
+            c -= widthOut;
     }
     __uint(widthOut) out.first() if (readyOut()) { return buffer; }
     void in.enq(__uint(widthIn) v) if (!readyOut()) {
