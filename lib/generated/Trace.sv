@@ -10,68 +10,106 @@ module Trace #(
     input wire [width - 1:0]data);
     reg [11 - 1:0]addr;
     reg [width - 1:0]buffer;
-    reg dataAvail;
+    reg [8 - 1:0]countCB;
+    reg [8 - 1:0]countFrom;
+    reg [8 - 1:0]countJtag;
+    reg [8 - 1:0]countTo;
+    reg dataNotAvail;
+    reg [32 - 1:0]dataToJtag;
     reg [11 - 1:0]readAddr;
     reg [32 - 1:0]timestamp;
     logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
+    logic RULE$readCallBack__ENA;
+    logic RULE$readCallBack__RDY;
     logic [width - 1:0]bram$dataOut;
-    logic [$clog2(depth) - 1:0]bram$read$addr;
+    logic bram$dataOut__RDY;
+    logic bram$read__ENA;
     logic bram$read__RDY;
-    logic [$clog2(depth) - 1:0]bram$write$addr;
-    logic [width - 1:0]bram$write$data;
     logic bram$write__ENA;
     logic bram$write__RDY;
-    PipeIn#(.width(width)) bscan$fromBscan();
-    PipeIn#(.width(width)) bscan$toBscan();
-    PipeIn#(.width(width)) readUser();
+    PipeIn#(.width(32)) bscan$fromBscan();
+    PipeIn#(.width(32)) bscan$toBscan();
+    PipeIn#(.width(32)) dataFromMem$in();
+    PipeOut#(.width(32)) dataFromMem$out();
+    PipeIn#(.width(width)) radapter$in();
+    PipeInB#(.width(32)) radapter$out();
+    PipeInB#(.width(32)) readMem();
+    PipeIn#(.width(32)) readUser();
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
-        .write__ENA(bram$write__ENA),
-        .write$addr(bram$write$addr),
-        .write$data(bram$write$data),
+        .write__ENA(!( ( enable == 0 ) || ( buffer == data ) )),
+        .write$addr(( !( ( enable == 0 ) || ( buffer == data ) ) ) ? addr : 11'd0),
+        .write$data(( !( ( enable == 0 ) || ( buffer == data ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
-        .read__ENA(!( dataAvail || ( !readUser.enq__ENA ) )),
-        .read$addr(bram$read$addr),
+        .read__ENA(readMem.enq__ENA && readMem.enq$last),
+        .read$addr(( readMem.enq__ENA && readMem.enq$last ) ? readAddr : 11'd0),
         .read__RDY(bram$read__RDY),
         .dataOut(bram$dataOut),
-        .dataOut__RDY(bscan$toBscan.enq__ENA));
-    Bscan#(.id(3),.width(width)) bscan (.CLK(CLK), .nRST(nRST),
+        .dataOut__RDY(bram$dataOut__RDY));
+    Bscan#(.id(3),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
         .toBscan(bscan$toBscan),
         .fromBscan(readUser));
-    assign bram$read$addr = ( !( dataAvail || ( !readUser.enq__ENA ) ) ) ? readAddr : 11'd0;
-    assign bram$write$addr = ( !( ( enable == 0 ) || ( buffer == data ) ) ) ? addr : 11'd0;
-    assign bram$write$data = ( !( ( enable == 0 ) || ( buffer == data ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0;
+    Fifo1Base#(.width(32)) dataFromMem (.CLK(CLK), .nRST(nRST),
+        .in(dataFromMem$in),
+        .out(dataFromMem$out));
+    AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
+        .in(radapter$in),
+        .out(readMem));
+    assign bram$read__ENA = readMem.enq__ENA && readMem.enq$last;
     assign bram$write__ENA = !( ( enable == 0 ) || ( buffer == data ) );
     // Extra assigments, not to output wires
     assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
     assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
-    assign bscan$toBscan.enq$v = bscan$toBscan.enq__ENA ? bram$dataOut : 0;
-    assign readUser.enq__RDY = dataAvail || bram$read__RDY;
+    assign RULE$readCallBack__ENA = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
+    assign RULE$readCallBack__RDY = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
+    assign bscan$toBscan.enq$v = dataToJtag;
+    assign bscan$toBscan.enq__ENA = 1'd1;
+    assign dataFromMem$in.enq$v = readMem.enq__ENA ? readMem.enq$last : 0;
+    assign dataFromMem$in.enq__ENA = readMem.enq__ENA;
+    assign dataFromMem$out.deq__ENA = readUser.enq__ENA;
+    assign radapter$in.enq$v = ( !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) ) ) ? { bram$dataOut , (16'(width)) } : 0;
+    assign radapter$in.enq__ENA = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) );
+    assign readMem.enq__RDY = dataFromMem$in.enq__RDY && ( bram$read__RDY || ( !readMem.enq$last ) );
+    assign readUser.enq__RDY = dataFromMem$out.deq__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         addr <= 0;
         buffer <= 0;
-        dataAvail <= 0;
+        countCB <= 0;
+        countFrom <= 0;
+        countJtag <= 0;
+        countTo <= 0;
+        dataNotAvail <= 0;
+        dataToJtag <= 0;
         readAddr <= 0;
         timestamp <= 0;
       end // nRST
       else begin
-        if (bscan$toBscan.enq__ENA && bscan$toBscan.enq__RDY) begin // RULE$callBack__ENA
-            dataAvail <= 0;
+        if (bscan$toBscan.enq__RDY) begin // RULE$callBack__ENA
+            countCB <= countCB + 8'd1;
         end; // End of RULE$callBack__ENA
         if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
-            addr <= addr + 1;
+            addr <= addr + 11'd1;
             buffer <= data;
         end; // End of RULE$copyRule__ENA
         // RULE$init__ENA
-            timestamp <= timestamp + 1;
+            timestamp <= timestamp + 32'd1;
         // End of RULE$init__ENA
-        if (readUser.enq__ENA && ( dataAvail || bram$read__RDY )) begin // readUser.enq__ENA
-            if (!dataAvail) begin
-            readAddr <= readAddr + 1;
-            dataAvail <= 1;
+        if (RULE$readCallBack__ENA && RULE$readCallBack__RDY) begin // RULE$readCallBack__ENA
+            dataNotAvail <= 1'd1;
+            countTo <= countTo + 8'd1;
+        end; // End of RULE$readCallBack__ENA
+        if (readMem.enq__ENA && readMem.enq__RDY) begin // readMem.enq__ENA
+            dataToJtag <= readMem.enq$v;
+            countFrom <= countFrom + 8'd1;
+            if (readMem.enq$last) begin
+            readAddr <= readAddr + 11'd1;
+            dataNotAvail <= 1'd0;
             end;
+        end; // End of readMem.enq__ENA
+        if (readUser.enq__ENA && dataFromMem$out.deq__RDY) begin // readUser.enq__ENA
+            countJtag <= countJtag + 8'd1;
         end; // End of readUser.enq__ENA
       end
     end // always @ (posedge CLK)

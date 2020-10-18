@@ -22,41 +22,67 @@
 #include "tracebuf.h"
 #include "bram.h"
 #include "bscan.h"
+#include "adapter.h"
+#include "fifo.h"
 
 #define TIMESTAMP_WIDTH 32
 
 template <int width, int depth>    // 'width' includes TIMESTAMP_WIDTH
 class Trace __implements TraceIfc<width, depth> {
+    BRAM<width, depth> bram;
+__uint(8) countFrom, countTo, countJtag, countCB;
+
+    // trace capture to bram
     __uint(TIMESTAMP_WIDTH) timestamp;
     __uint(width) buffer;
-    BRAM<width, depth> bram;
-    __uint(__clog2(depth)) addr, readAddr;
-    Bscan<3,width> bscan;
-    __implements bscan.fromBscan readUser;
-    bool dataAvail;
-
-    void readUser.enq(__uint(width) v) { // data from jtag
-        // rate limit the read from trace buffer
-        if (!dataAvail) {
-            bram.read(readAddr);
-            readAddr++;
-            dataAvail = true;
-        }
-    }
+    __uint(__clog2(depth)) addr;
     __rule copyRule if (this->enable && buffer != this->data) {
         // write next entry to trace buffer
         bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
         addr++;
         buffer = this->data;
     }
-
-    __rule callBack {
-        // send to trace buffer to jtag
-        bscan.toBscan.enq(bram.dataOut());
-        dataAvail = false;
-    }
     __rule init {
         timestamp++;
+    }
+
+    // trace readout to bscan
+    __uint(__clog2(depth)) readAddr;
+    Bscan<3,32> bscan;
+    __implements bscan.fromBscan readUser;
+    bool dataNotAvail;
+    Fifo1<__uint(32)> dataFromMem;
+    void readUser.enq(__uint(32) v) { // data from jtag
+        dataFromMem.out.deq(); // clear after toBscan.enq finished
+countJtag++;
+    }
+
+    // chop up data
+    AdapterToBus<__uint(width), 32> radapter;
+    __rule readCallBack if (!dataNotAvail) {
+        LenType packetWidth = width;
+        radapter.in.enq(__bitconcat(bram.dataOut(), packetWidth));
+        dataNotAvail = true;
+countTo++;
+    }
+
+    // pass chopped up data to jtag
+    __uint(32) dataToJtag;
+    __implements radapter.out readMem;
+    void readMem.enq(__uint(32) v, bool last) { // data from adapter(PipeInB), heading to jtag
+        dataToJtag = v;
+        dataFromMem.in.enq(last);
+        if (last) {
+            bram.read(readAddr++);
+            dataNotAvail = false;
+        }
+countFrom++;
+    }
+    __rule callBack {
+        // send to trace buffer to jtag
+        bscan.toBscan.enq(dataToJtag);
+                                   //__bitconcat(countTo, countFrom, __bitsubstr(countCB, 7, 0), countJtag));
+countCB++;
     }
 };
 

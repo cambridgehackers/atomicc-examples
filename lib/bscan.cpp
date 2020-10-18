@@ -38,28 +38,22 @@ class BscanLocalIfc {
     __input  bool       update;
     __output __uint(1)  TDO;
     __input  __uint(1)  TDI;
-    PipeInSync<__uint(width)> toBscan;
-    PipeInSync<__uint(width)> *fromBscan;
+    __input __uint(width) toBscan;
+    __output __uint(width) fromBscan;
 };
 
 template <int width>
 class BscanLocal __implements BscanLocalIfc<width> {
     __uint(width) shiftReg;
-    bool notReady;
 
-    void toBscan._.enq(__uint(width) v) if (this->capture & !notReady) {
-        shiftReg = v;
-        notReady = true;
-    };
     __rule shiftRule   if (this->shift) {
         shiftReg = __bitconcat(this->TDI, __bitsubstr(shiftReg, width - 1, 1));
     };
-    __rule updateRule  if (this->update) {
-        this->fromBscan->_.enq(shiftReg);
-        notReady = false;
-    };
     __rule init {
         this->TDO = __bitsubstr(shiftReg, 0, 0);
+        if (this->capture)
+            shiftReg = this->toBscan;
+        this->fromBscan = shiftReg;
     };
 };
 
@@ -68,20 +62,19 @@ class Bscan __implements BscanIfc<width> {
     BSCANE2#(JTAG_CHAIN = id) bscan;
     BUFG bscan_mytck;
     BscanLocal<width> localBscan;
-    __implements localBscan.fromBscan readBscan;
-    bool delayedIndication, delayedRequest;
+    bool updateMode;
+    bool updateFlag1, updateFlag2;
+    bool captureFlag1, captureFlag2;
+    __shared __uint(width) enqv;
 
-    void toBscan.enq(__uint(width) v) if (!delayedRequest) {
-        localBscan.toBscan._.enq(v);
+    void toBscan.enq(__uint(width) v) if (!updateMode & captureFlag2) {
+        enqv = v;
+        updateMode = true;
     }
-    void readBscan._.enq(__uint(width) v) if (!delayedIndication) {
-        this->fromBscan->enq(v);
+    __rule updateRule if (updateMode & updateFlag2) {
+        this->fromBscan->enq(localBscan.fromBscan);
+        updateMode = false;
     }
-    __rule delay1 {
-        delayedIndication = __valid(readBscan._.enq);
-        delayedRequest = __valid(toBscan.enq);
-    }
-
     __rule init {
         bscan_mytck.I = bscan.TCK;
         localBscan.CLK = bscan_mytck.O;
@@ -91,6 +84,11 @@ class Bscan __implements BscanIfc<width> {
         localBscan.capture = (bscan.SEL & bscan.CAPTURE) != 0;
         localBscan.shift = (bscan.SEL & bscan.SHIFT) != 0;
         localBscan.update = (bscan.SEL & bscan.UPDATE) != 0;
+        updateFlag1 = localBscan.update;
+        updateFlag2 = updateFlag1;
+        captureFlag1 = localBscan.capture;
+        captureFlag2 = captureFlag1;
+        localBscan.toBscan = enqv;
     };
 };
 

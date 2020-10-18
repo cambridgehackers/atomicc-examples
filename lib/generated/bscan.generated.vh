@@ -43,30 +43,28 @@ interface BscanLocalIfc#(width = 32);
     logic  update;
     logic  TDO;
     logic  TDI;
-    modport server (input  CLK, nRST, capture, shift, update, TDI,
-                    output TDO);
-    modport client (output CLK, nRST, capture, shift, update, TDI,
-                    input  TDO);
+    logic [width - 1:0] toBscan;
+    logic [width - 1:0] fromBscan;
+    modport server (input  CLK, nRST, capture, shift, update, TDI, toBscan,
+                    output TDO, fromBscan);
+    modport client (output CLK, nRST, capture, shift, update, TDI, toBscan,
+                    input  TDO, fromBscan);
 endinterface
 `endif
 //METASTART; Bscan
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; bscan_mytck; BUFG;
 //METAINTERNAL; localBscan; BscanLocal(width=32);
-//METAINVOKE; toBscan.enq__ENA; :localBscan$toBscan.enq__ENA;
-//METAGUARD; toBscan.enq; !( ( 0 == ( delayedRequest ^ 1 ) ) || ( !localBscan$toBscan.enq__RDY ) );
-//METAINVOKE; readBscan.enq__ENA; :fromBscan.enq__ENA;
-//METAGUARD; readBscan.enq; !( ( 0 == ( delayedIndication ^ 1 ) ) || ( !fromBscan.enq__RDY ) );
-//METAGUARD; RULE$delay1; 1'd1;
-//METAGUARD; RULE$init; 1'd1;
-//METARULES; RULE$delay1; RULE$init
-//METASTART; BscanLocal
-//METAEXCLUSIVE; toBscan.enq__ENA; RULE$shiftRule__ENA; RULE$updateRule__ENA
-//METAGUARD; toBscan.enq; capture & ( notReady ^ 1'd1 );
-//METAGUARD; RULE$shiftRule; 0 != shift;
+//METAEXCLUSIVE; toBscan.enq__ENA; RULE$updateRule__ENA
+//METAGUARD; toBscan.enq; ( updateMode ^ 1'd1 ) & captureFlag2;
 //METAINVOKE; RULE$updateRule__ENA; :fromBscan.enq__ENA;
-//METAGUARD; RULE$updateRule; !( ( 0 == update ) || ( !fromBscan.enq__RDY ) );
-//METABEFORE; RULE$init__ENA; :RULE$shiftRule__ENA; :toBscan.enq__ENA
+//METAGUARD; RULE$updateRule; updateMode && updateFlag2 && fromBscan.enq__RDY;
 //METAGUARD; RULE$init; 1'd1;
-//METARULES; RULE$shiftRule; RULE$updateRule; RULE$init
+//METARULES; RULE$updateRule; RULE$init
+//METASTART; BscanLocal
+//METAEXCLUSIVE; RULE$shiftRule__ENA; RULE$init__ENA
+//METAGUARD; RULE$shiftRule; 0 != shift;
+//METABEFORE; RULE$init__ENA; :RULE$shiftRule__ENA
+//METAGUARD; RULE$init; 1'd1;
+//METARULES; RULE$shiftRule; RULE$init
 `endif

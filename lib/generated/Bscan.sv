@@ -7,10 +7,11 @@ module Bscan #(
     input wire CLK, input wire nRST,
     PipeIn.server toBscan,
     PipeIn.client fromBscan);
-    reg delayedIndication;
-    reg delayedRequest;
-    logic _fromBscan$enqS__ENA;
-    logic _toBscan$enqS__RDY;
+    reg captureFlag1;
+    reg captureFlag2;
+    reg updateFlag1;
+    reg updateFlag2;
+    reg updateMode;
     logic bscan$CAPTURE;
     logic bscan$SEL;
     logic bscan$SHIFT;
@@ -24,12 +25,11 @@ module Bscan #(
     logic localBscan$TDI;
     logic localBscan$TDO;
     logic localBscan$capture;
-    PipeIn#(.width(width)) localBscan$fromBscan();
+    logic [width - 1:0]localBscan$fromBscan;
     logic localBscan$nRST;
     logic localBscan$shift;
-    PipeIn#(.width(width)) localBscan$toBscan();
+    logic [width - 1:0]localBscan$toBscan;
     logic localBscan$update;
-    PipeIn#(.width(width)) readBscan();
     BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
         .DRCK(),
@@ -53,40 +53,43 @@ module Bscan #(
         .update(!( ( bscan$SEL & bscan$UPDATE ) == 0 )),
         .TDO(bscan$TDO),
         .TDI(bscan$TDI),
-        .toBscan(localBscan$toBscan),
-        .fromBscan(readBscan));
-    SyncFF fromBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
-        .out(fromBscan.enq__ENA),
-        .in(_fromBscan$enqS__ENA));
-    SyncFF toBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
-        .out(toBscan.enq__RDY),
-        .in(_toBscan$enqS__RDY));
+        .toBscan(toBscan.enq__ENA ? toBscan.enq$v : 0),
+        .fromBscan(localBscan$fromBscan));
     assign bscan_mytck$I = bscan$TCK;
     assign localBscan$CLK = bscan_mytck$O;
     assign localBscan$TDI = bscan$TDI;
     assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
     assign localBscan$nRST = nRST;
     assign localBscan$shift = !( ( bscan$SEL & bscan$SHIFT ) == 0 );
+    assign localBscan$toBscan = toBscan.enq__ENA ? toBscan.enq$v : 0;
     assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     // Extra assigments, not to output wires
-    assign fromBscan.enq$v = readBscan.enq__ENA ? readBscan.enq$v : 0;
-    assign _fromBscan$enqS__ENA = readBscan.enq__ENA;
+    assign fromBscan.enq$v = ( updateMode && updateFlag2 ) ? localBscan$fromBscan : 0;
+    assign fromBscan.enq__ENA = updateMode && updateFlag2;
     assign localBscan$TDO = bscan$TDO;
-    assign localBscan$toBscan.enq$v = toBscan.enq__ENA ? toBscan.enq$v : 0;
-    assign localBscan$toBscan.enq__ENA = toBscan.enq__ENA;
-    assign readBscan.enq__RDY = !( ( 0 == ( delayedIndication ^ 1 ) ) || ( !fromBscan.enq__RDY ) );
-    assign _toBscan$enqS__RDY = !( ( 0 == ( delayedRequest ^ 1 ) ) || ( !localBscan$toBscan.enq__RDY ) );
+    assign toBscan.enq__RDY = !( updateMode || ( !captureFlag2 ) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        delayedIndication <= 0;
-        delayedRequest <= 0;
+        captureFlag1 <= 0;
+        captureFlag2 <= 0;
+        updateFlag1 <= 0;
+        updateFlag2 <= 0;
+        updateMode <= 0;
       end // nRST
       else begin
-        // RULE$delay1__ENA
-            delayedIndication <= readBscan.enq__ENA != 0;
-            delayedRequest <= toBscan.enq__ENA != 0;
-        // End of RULE$delay1__ENA
+        // RULE$init__ENA
+            updateFlag1 <= localBscan$update;
+            updateFlag2 <= updateFlag1;
+            captureFlag1 <= localBscan$capture;
+            captureFlag2 <= captureFlag1;
+        // End of RULE$init__ENA
+        if (updateMode && updateFlag2 && fromBscan.enq__RDY) begin // RULE$updateRule__ENA
+            updateMode <= 1'd0;
+        end; // End of RULE$updateRule__ENA
+        if (!( updateMode || ( !captureFlag2 ) || ( !toBscan.enq__ENA ) )) begin // toBscan.enq__ENA
+            updateMode <= 1'd1;
+        end; // End of toBscan.enq__ENA
       end
     end // always @ (posedge CLK)
 endmodule

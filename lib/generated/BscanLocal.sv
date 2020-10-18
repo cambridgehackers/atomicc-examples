@@ -10,44 +10,24 @@ module BscanLocal #(
     input wire update,
     output wire TDO,
     input wire TDI,
-    PipeIn.server toBscan,
-    PipeIn.client fromBscan);
-    reg notReady;
+    input wire [width - 1:0]toBscan,
+    output wire [width - 1:0]fromBscan);
     reg [width - 1:0]shiftReg;
-    logic RULE$updateRule__ENA;
-    logic RULE$updateRule__RDY;
-    logic _fromBscan$enqS__RDY;
-    logic _toBscan$enqS__ENA;
-    SyncFF fromBscan$enq__RDYSyncFF (.CLK(CLK), .nRST(nRST),
-        .out(_fromBscan$enqS__RDY),
-        .in(fromBscan.enq__RDY));
-    SyncFF toBscan$enq__ENASyncFF (.CLK(CLK), .nRST(nRST),
-        .out(_toBscan$enqS__ENA),
-        .in(toBscan.enq__ENA));
     assign TDO = shiftReg[ 0 : 0 ];
-    // Extra assigments, not to output wires
-    assign RULE$updateRule__ENA = !( ( 0 == update ) || ( !_fromBscan$enqS__RDY ) );
-    assign RULE$updateRule__RDY = !( ( 0 == update ) || ( !_fromBscan$enqS__RDY ) );
-    assign fromBscan.enq$v = ( !( 0 == update ) ) ? shiftReg : 0;
-    assign fromBscan.enq__ENA = !( 0 == update );
-    assign toBscan.enq__RDY = !( notReady || ( !capture ) );
+    assign fromBscan = shiftReg;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        notReady <= 0;
         shiftReg <= 0;
       end // nRST
       else begin
+        // RULE$init__ENA
+            if (capture)
+            shiftReg <= toBscan;
+        // End of RULE$init__ENA
         if (!( 0 == shift )) begin // RULE$shiftRule__ENA
             shiftReg <= { TDI , shiftReg[ ( width - 1 ) : 1 ] };
         end; // End of RULE$shiftRule__ENA
-        if (RULE$updateRule__ENA && RULE$updateRule__RDY) begin // RULE$updateRule__ENA
-            notReady <= 1'd0;
-        end; // End of RULE$updateRule__ENA
-        if (!( notReady || ( !capture ) || ( !_toBscan$enqS__ENA ) )) begin // toBscan.enq__ENA
-            shiftReg <= toBscan.enq$v;
-            notReady <= 1'd1;
-        end; // End of toBscan.enq__ENA
       end
     end // always @ (posedge CLK)
 endmodule
