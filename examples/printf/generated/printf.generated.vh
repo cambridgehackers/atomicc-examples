@@ -60,7 +60,7 @@ endinterface
 //METAINVOKE; RULE$respond_rule__ENA; !( v_type == 1 ):indication.heard2__ENA;v_type == 1:indication.heard__ENA;:printfp$enq__ENA;
 //METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
 //METAGUARD; RULE$respond_rule; !( ( busy_delay == 0 ) || ( !( ( indication.heard__RDY && ( ( ( v_type == 1 ) && printfp$enq__RDY ) || ( ( !( v_type == 1 ) ) && indication.heard2__RDY && printfp$enq__RDY ) ) ) || ( ( !indication.heard__RDY ) && ( !( ( v_type == 1 ) || ( !( indication.heard2__RDY && printfp$enq__RDY ) ) ) ) ) ) ) );
-//METAGUARD; RULE$clockRule; 1;
+//METAGUARD; RULE$clockRule; 1'd1;
 //METARULES; RULE$delay_rule; RULE$respond_rule; RULE$clockRule
 //METASTART; l_top
 //METAINTERNAL; M2P__indication; ___M2PEchoIndication;

@@ -31,7 +31,7 @@ endinterface
 //METAINVOKE; readUser.enq__ENA; :indication.heard__ENA;
 //METAGUARD; readUser.enq; indication.heard__RDY;
 //METAEXCLUSIVE; request.say__ENA; RULE$copyRule__ENA
-//METAGUARD; request.say; 1;
+//METAGUARD; request.say; 1'd1;
 //METAINVOKE; RULE$copyRule__ENA; :bscan$toBscan.enq__ENA;
 //METAGUARD; RULE$copyRule; bscan$toBscan.enq__RDY;
 //METARULES; RULE$copyRule

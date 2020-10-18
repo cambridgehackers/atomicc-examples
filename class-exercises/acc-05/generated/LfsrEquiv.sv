@@ -16,13 +16,13 @@ module LfsrEquiv (input wire CLK, input wire nRST,
     logic gal$shiftBit__RDY;
     LfsrFib#(.LN(8),.TAPS(45)) fib (.CLK(CLK), .nRST(nRST),
         .shiftBit__ENA(shiftBit__ENA),
-        .shiftBit$v(shiftBit__ENA && shiftBit$v),
+        .shiftBit$v(shiftBit__ENA && 1'(shiftBit$v)),
         .shiftBit__RDY(fib$shiftBit__RDY),
         .outBit(fib$outBit),
         .outBit__RDY(fib$outBit__RDY));
     LfsrGal#(.LN(8),.TAPS(45)) gal (.CLK(CLK), .nRST(nRST),
         .shiftBit__ENA(shiftBit__ENA),
-        .shiftBit$v(shiftBit__ENA && shiftBit$v),
+        .shiftBit$v(shiftBit__ENA && 1'(shiftBit$v)),
         .shiftBit__RDY(gal$shiftBit__RDY),
         .outBit(gal$outBit),
         .outBit__RDY(gal$outBit__RDY));

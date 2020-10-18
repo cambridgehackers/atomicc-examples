@@ -48,7 +48,7 @@ endinterface
 //METAGUARD; request.say; 0 != ( ( busy != 0 ) ^ 1 );
 //METAEXCLUSIVE; request.say2__ENA; RULE$delay_rule__ENA
 //METAGUARD; request.say2; 0 != ( ( busy != 0 ) ^ 1 );
-//METAGUARD; request.setLeds; 1;
+//METAGUARD; request.setLeds; 1'd1;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA
 //METAGUARD; RULE$delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAINVOKE; RULE$respond_rule__ENA; !( v_type == 1 ):indication.heard2__ENA;v_type == 1:indication.heard__ENA;

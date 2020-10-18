@@ -22,10 +22,10 @@ module Fifo1Base #(
       else begin
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
             element <= in.enq$v;
-            full <= 1;
+            full <= 1'd1;
         end; // End of in.enq__ENA
         if (!( ( 0 == full ) || ( !out.deq__ENA ) )) begin // out.deq__ENA
-            full <= 0;
+            full <= 1'd0;
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

@@ -14,6 +14,6 @@ interface MResetInverterResetInverter;
 endinterface
 `endif
 //METASTART; ResetInverter
-//METAGUARD; RULE$init; 1;
+//METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 `endif

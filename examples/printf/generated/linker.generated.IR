@@ -22,7 +22,7 @@ MODULE UserTop UserTop_interface {
     FIELD PipeInB wadapter_0$in
     FIELD PipeIn__W90 wadapter_0$out
     FIELD AdapterToBus__Iz1 radapter_0
-    FIELD AdapterFromBus__Oz2 wadapter_0
+    FIELD AdapterFromBus__OBz2 wadapter_0
     FIELD l_top__Rz2_Iz1 ctop
 }
 INTERFACE UserTop_interface {
@@ -33,13 +33,14 @@ MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
 }
 INTERFACE AdapterToBus__Iz1_interface {
     FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE AdapterFromBus__Oz2 AdapterFromBus__Oz2_interface {
+MODULE AdapterFromBus__OBz2 AdapterFromBus__OBz2_interface {
 }
-INTERFACE AdapterFromBus__Oz2_interface {
-    FIELD/parameter Bit(32) width
+INTERFACE AdapterFromBus__OBz2_interface {
+    FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -108,7 +109,7 @@ FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
-FILE ../../lib/generated/trace.generated.vh
+FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
 FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/generated/UserTop.sv

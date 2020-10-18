@@ -16,6 +16,6 @@ interface CNCONNECTNET2;
 endinterface
 `endif
 //METASTART; CONNECTNET2
-//METAGUARD; RULE$assign; 1;
+//METAGUARD; RULE$assign; 1'd1;
 //METARULES; RULE$assign
 `endif

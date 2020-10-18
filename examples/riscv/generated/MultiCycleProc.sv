@@ -59,18 +59,18 @@ module MultiCycleProc (input wire CLK, input wire nRST,
             d2e_src2 <= dec.getSrc2;
             d2e_dst <= dec.getDst;
             d2e_addr <= dec.getAddr;
-            d2e_valid <= 1;
+            d2e_valid <= 32'd1;
         end; // End of RULE$decode__ENA
         if (RULE$execArith__ENA && RULE$execArith__RDY) begin // RULE$execArith__ENA
-            d2e_valid <= 0;
+            d2e_valid <= 32'd0;
             e2w_dst <= d2e_dst;
             e2w_val <= _RULE$execArith$val.data;
             e2w_nextPC <= _RULE$execArith$val.nextPC;
             e2w_addr <= _RULE$execArith$val.addr;
-            e2w_valid <= 1;
+            e2w_valid <= 32'd1;
         end; // End of RULE$execArith__ENA
         if (( e2w_valid == 1 ) && rf.write__RDY) begin // RULE$writeBack__ENA
-            e2w_valid <= 0;
+            e2w_valid <= 32'd0;
             pc <= e2w_nextPC;
         end; // End of RULE$writeBack__ENA
       end

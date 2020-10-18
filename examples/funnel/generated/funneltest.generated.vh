@@ -37,7 +37,7 @@ endinterface
 //METAGUARD; request.say; fifo$in__enq__RDY_or1;
 //METAINVOKE; RULE$respond_rule__ENA; :indication.heard__ENA;:result$out.deq__ENA;
 //METAGUARD; RULE$respond_rule; result$out.first__RDY && indication.heard__RDY && result$out.deq__RDY;
-//METAGUARD; RULE$init; 1;
+//METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$respond_rule; RULE$init
 //METACONNECT; funnel$out.enq__ENA; result$in.enq__ENA
 //METACONNECT; funnel$out.enq__RDY; result$in.enq__RDY

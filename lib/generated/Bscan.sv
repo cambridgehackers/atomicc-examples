@@ -19,16 +19,9 @@ module Bscan #(
     logic bscan$TDI;
     logic bscan$TDO;
     logic bscan$UPDATE;
-    logic bscan_mytck$I;
     logic bscan_mytck$O;
-    logic localBscan$CLK;
-    logic localBscan$TDI;
-    logic localBscan$TDO;
     logic localBscan$capture;
     logic [width - 1:0]localBscan$fromBscan;
-    logic localBscan$nRST;
-    logic localBscan$shift;
-    logic [width - 1:0]localBscan$toBscan;
     logic localBscan$update;
     BSCANE2#(.JTAG_CHAIN(id)) bscan (
         .CAPTURE(bscan$CAPTURE),
@@ -55,18 +48,11 @@ module Bscan #(
         .TDI(bscan$TDI),
         .toBscan(toBscan.enq__ENA ? toBscan.enq$v : 0),
         .fromBscan(localBscan$fromBscan));
-    assign bscan_mytck$I = bscan$TCK;
-    assign localBscan$CLK = bscan_mytck$O;
-    assign localBscan$TDI = bscan$TDI;
     assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
-    assign localBscan$nRST = nRST;
-    assign localBscan$shift = !( ( bscan$SEL & bscan$SHIFT ) == 0 );
-    assign localBscan$toBscan = toBscan.enq__ENA ? toBscan.enq$v : 0;
     assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     // Extra assigments, not to output wires
     assign fromBscan.enq$v = ( updateMode && updateFlag2 ) ? localBscan$fromBscan : 0;
     assign fromBscan.enq__ENA = updateMode && updateFlag2;
-    assign localBscan$TDO = bscan$TDO;
     assign toBscan.enq__RDY = !( updateMode || ( !captureFlag2 ) );
 
     always @( posedge CLK) begin

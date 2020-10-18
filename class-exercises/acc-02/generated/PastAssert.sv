@@ -22,29 +22,29 @@ module PastAssert #(
       end // nRST
       else begin
         if (!( counter == 0 )) begin // RULE$decRule__ENA
-            counter <= counter + ( -1 );
+            counter <= counter + ( -16'd1 );
         end; // End of RULE$decRule__ENA
         // RULE$verifyRule__ENA
             if (F_TESTID == 4)
             fPastValid <= 1 != 0;
         // End of RULE$verifyRule__ENA
         if (startSignal__ENA && ( counter == 0 )) begin // startSignal__ENA
-            counter <= MAX_AMOUNT - 1;
+            counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
         end; // End of startSignal__ENA
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     always @(*)
-        assert( counter < MAX_AMOUNT );
+        assert( counter < ( (16'(MAX_AMOUNT)) ) );
     always @(*)
         if (F_TESTID == 1)
-            assert( ( startSignal__ENA != 0 ) ^ 1 );
+            assert( ( startSignal__ENA != 0 ) ^ 1'd1 );
     always @(*)
         if (F_TESTID == 1)
             assert( $past( counter == 0 ) );
     always @(*)
         if (F_TESTID == 2)
-            assert( ( startSignal__ENA != 0 ) ^ 1 );
+            assert( ( startSignal__ENA != 0 ) ^ 1'd1 );
     always @(*)
         if (F_TESTID == 2)
             assert( counter == 0 );

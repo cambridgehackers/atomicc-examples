@@ -26,9 +26,9 @@ module Pack (input wire CLK, input wire nRST,
       else begin
         if (request.say__ENA && indication.heard__RDY) begin // request.say__ENA
             seqval <= request.say$seqno;
-            writeCount <= writeCount + 1;
-            counter <= counter + ( -1 );
-            readCount <= readCount + 16;
+            writeCount <= writeCount + 8'd1;
+            counter <= counter + ( -32'd1 );
+            readCount <= readCount + 8'd16;
             $display( "REQUESTSAY v %x write %x read %x seqno %x" , request.say$v , writeCount + 32 , readCount + 64 , request.say$seqno );
         end; // End of request.say__ENA
       end

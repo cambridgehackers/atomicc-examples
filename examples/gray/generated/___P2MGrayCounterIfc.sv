@@ -19,8 +19,8 @@ module ___P2MGrayCounterIfc #(
     always_comb begin
     returnInd.enq$v = 0;
     unique case(1'b1)
-    pipe.enq__ENA && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ): returnInd.enq$v = { 16'd2 , 16'd5 , 12'd0 , method.readGray , 16'd10 , 64'd0 , 16'd2 };
-    pipe.enq__ENA && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width ): returnInd.enq$v = { width , 16'd5 , 12'd0 , method.readBin , 16'd10 , 64'd0 , 16'd2 };
+    pipe.enq__ENA && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2 ): returnInd.enq$v = { 16'd2 , 16'd5 , 12'd0 , method.readGray , 16'd10 , 64'd0 , 16'd64 };
+    pipe.enq__ENA && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == width ): returnInd.enq$v = { width , 16'd5 , 12'd0 , method.readBin , 16'd10 , 64'd0 , 16'd64 };
     endcase
     end
 endmodule

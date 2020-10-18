@@ -32,7 +32,7 @@ generated/wbpriarbiter.generated.vh
 ../../lib/generated/resetInverter.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
-../../lib/generated/trace.generated.vh
+../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
 ../../lib/generated/vsimTop.generated.vh
 ../../lib/generated/zynqTop.generated.vh

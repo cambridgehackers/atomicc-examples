@@ -43,7 +43,7 @@ module FifoPong #(
       end // nRST
       else begin
         if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
-            pong <= pong ^ 1;
+            pong <= pong ^ 1'd1;
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

@@ -151,12 +151,12 @@ module AxiTop (
             writeAddr <= MAXIGP0_O.AW$addr;
         end; // End of MAXIGP0_O.AW__ENA
         if (RULE$lread__ENA && RULE$lread__RDY) begin // RULE$lread__ENA
-            readCount <= readCount - 1;
-            readAddr <= readAddr + 4;
+            readCount <= readCount - 4'd1;
+            readAddr <= readAddr + 5'd4;
         end; // End of RULE$lread__ENA
         if (RULE$lwrite__ENA && RULE$lwrite__RDY) begin // RULE$lwrite__ENA
-            writeCount <= writeCount - 1;
-            writeAddr <= writeAddr + 4;
+            writeCount <= writeCount - 4'd1;
+            writeAddr <= writeAddr + 5'd4;
             if (( writeAddr == 4 ) && portalWControl)
             intEnable <= _RULE$lwrite$currentWData[ 0 : 0 ] != 0;
         end; // End of RULE$lwrite__ENA

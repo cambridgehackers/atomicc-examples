@@ -18,8 +18,8 @@ endinterface
 //METASTART; BusyCtr
 //METAEXCLUSIVE; startSignal__ENA; RULE$decRule__ENA
 //METAGUARD; startSignal; counter == 0;
-//METAGUARD; busy; 1;
+//METAGUARD; busy; 1'd1;
 //METAGUARD; RULE$decRule; counter != 0;
-//METAGUARD; RULE$verify0; 1;
+//METAGUARD; RULE$verify0; 1'd1;
 //METARULES; RULE$decRule; RULE$verify0
 `endif

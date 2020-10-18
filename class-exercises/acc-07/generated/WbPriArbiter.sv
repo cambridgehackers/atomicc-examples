@@ -60,8 +60,9 @@ module WbPriArbiter #(
     assign b$stall = o$stall || r_a_owner;
     assign b$stall__RDY = o$stall__RDY;
     assign b$stb__RDY = !( ( 0 == ( acyc ^ 1 ) ) || ( !o$stb__RDY ) );
-    assign o$stb$we = ( a$stb__ENA && ( a$stb$we || ( b$stb__ENA && b$stb$we ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && b$stb$we );
     assign o$stb__ENA = a$stb__ENA | b$stb__ENA;
+    // Extra assigments, not to output wires
+    assign o$stb$we = ( a$stb__ENA && ( 1'(a$stb$we) || ( b$stb__ENA && 1'(b$stb$we) ) ) ) || ( ( !a$stb__ENA ) && b$stb__ENA && 1'(b$stb$we) );
     always_comb begin
     o$stb$addr = 0;
     unique case(1'b1)
@@ -90,10 +91,10 @@ module WbPriArbiter #(
       end // nRST
       else begin
         if (a$stb__ENA && a$stb__RDY) begin // a$stb__ENA
-            r_a_owner <= 1;
+            r_a_owner <= 1'd1;
         end; // End of a$stb__ENA
         if (b$stb__ENA && b$stb__RDY) begin // b$stb__ENA
-            r_a_owner <= 0;
+            r_a_owner <= 1'd0;
         end; // End of b$stb__ENA
       end
     end // always @ (posedge CLK)

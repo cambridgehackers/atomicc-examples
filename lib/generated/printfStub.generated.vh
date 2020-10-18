@@ -3,5 +3,5 @@
 `include "atomicclib.vh"
 
 //METASTART; Printf
-//METAGUARD; enq; 1;
+//METAGUARD; enq; 1'd1;
 `endif

@@ -83,6 +83,6 @@ endinterface
 //METAINTERNAL; rinverter; ResetInverter;
 //METAINTERNAL; clkbuf; BUFG;
 //METAINTERNAL; clkbuf0; BUFG;
-//METAGUARD; RULE$init; 1;
+//METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 `endif

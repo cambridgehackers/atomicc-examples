@@ -48,7 +48,7 @@ endinterface
 //METAINTERNAL; iobufs13; IOBUF;
 //METAINTERNAL; iobufs14; IOBUF;
 //METAINTERNAL; iobufs15; IOBUF;
-//METAGUARD; RULE$handshake; 1;
-//METAGUARD; RULE$iobufs; 1;
+//METAGUARD; RULE$handshake; 1'd1;
+//METAGUARD; RULE$iobufs; 1'd1;
 //METARULES; RULE$handshake; RULE$iobufs
 `endif

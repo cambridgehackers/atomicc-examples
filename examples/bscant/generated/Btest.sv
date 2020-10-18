@@ -31,15 +31,15 @@ module Btest (input wire CLK, input wire nRST,
       end // nRST
       else begin
         if (bscan$toBscan.enq__RDY) begin // RULE$copyRule__ENA
-            ready <= 0;
-            writeCount <= writeCount + 1;
+            ready <= 1'd0;
+            writeCount <= writeCount + 8'd1;
         end; // End of RULE$copyRule__ENA
         if (readUser.enq__ENA && indication.heard__RDY) begin // readUser.enq__ENA
-            readCount <= readCount + 1;
+            readCount <= readCount + 8'd1;
         end; // End of readUser.enq__ENA
         if (request.say__ENA) begin // request.say__ENA
             nextV <= request.say$v;
-            ready <= 1;
+            ready <= 1'd1;
         end; // End of request.say__ENA
       end
     end // always @ (posedge CLK)

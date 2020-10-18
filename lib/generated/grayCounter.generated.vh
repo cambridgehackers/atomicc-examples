@@ -26,13 +26,13 @@ interface GrayCounterIfc#(width = 10);
 endinterface
 `endif
 //METASTART; GrayCounter
-//METAGUARD; increment; 1;
-//METAGUARD; decrement; 1;
-//METAGUARD; readGray; 1;
-//METAGUARD; writeGray; 1;
-//METAGUARD; readBin; 1;
-//METAGUARD; writeBin; 1;
+//METAGUARD; increment; 1'd1;
+//METAGUARD; decrement; 1'd1;
+//METAGUARD; readGray; 1'd1;
+//METAGUARD; writeGray; 1'd1;
+//METAGUARD; readBin; 1'd1;
+//METAGUARD; writeBin; 1'd1;
 //METAGUARD; RULE$incdec; increment__ENA != decrement__ENA;
-//METAGUARD; RULE$init; 1;
+//METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$incdec; RULE$init
 `endif

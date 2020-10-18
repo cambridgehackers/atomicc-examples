@@ -24,9 +24,7 @@ module Trace #(
     logic RULE$readCallBack__RDY;
     logic [width - 1:0]bram$dataOut;
     logic bram$dataOut__RDY;
-    logic bram$read__ENA;
     logic bram$read__RDY;
-    logic bram$write__ENA;
     logic bram$write__RDY;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
@@ -55,8 +53,6 @@ module Trace #(
     AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
         .in(radapter$in),
         .out(readMem));
-    assign bram$read__ENA = readMem.enq__ENA && readMem.enq$last;
-    assign bram$write__ENA = !( ( enable == 0 ) || ( buffer == data ) );
     // Extra assigments, not to output wires
     assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
     assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );

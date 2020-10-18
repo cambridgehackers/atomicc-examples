@@ -3,13 +3,13 @@
 `include "atomicclib.vh"
 
 //METASTART; FwbSlave
-//METAGUARD; a$stb; 1;
-//METAGUARD; f_nreqs; 1;
-//METAGUARD; f_nacks; 1;
-//METAGUARD; f_outstanding; 1;
-//METAGUARD; RULE$init; 1;
+//METAGUARD; a$stb; 1'd1;
+//METAGUARD; f_nreqs; 1'd1;
+//METAGUARD; f_nacks; 1'd1;
+//METAGUARD; f_outstanding; 1'd1;
+//METAGUARD; RULE$init; 1'd1;
 //METAEXCLUSIVE; RULE$init2__ENA; RULE$init3__ENA
-//METAGUARD; RULE$init2; 1;
+//METAGUARD; RULE$init2; 1'd1;
 //METABEFORE; RULE$init3__ENA; :RULE$init2__ENA
 //METAGUARD; RULE$init3; status$ack__RDY && ( status$ack || status$err__RDY );
 //METAGUARD; RULE$init4; ( a$stb__ENA == 0 ) || status$stall__RDY;

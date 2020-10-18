@@ -25,10 +25,10 @@ module FifoB1Base #(
         if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
             element <= in.enq$v;
             if (out.deq__ENA == 0)
-            full <= 1;
+            full <= 1'd1;
         end; // End of in.enq__ENA
         if (out.deq__ENA && ( full || in.enq__ENA )) begin // out.deq__ENA
-            full <= 0;
+            full <= 1'd0;
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)
