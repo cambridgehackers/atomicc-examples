@@ -1,5 +1,7 @@
 # source filename
 open_checkpoint zedboard/bin/top-post-route.dcp
+report_timing -verbose -file zedboard/timing_all.txt
+report_utilization -hierarchical  -file zedboard/utilization.txt
 
 set fp [open zedboard/layoutnets.txt w]
 set all_nets   [get_nets -hsc "/" -quiet -hierarchical ]
