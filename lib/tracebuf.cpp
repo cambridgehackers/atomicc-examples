@@ -36,14 +36,16 @@ __uint(8) countFrom, countTo, countJtag, countCB;
     __uint(TIMESTAMP_WIDTH) timestamp;
     __uint(width) buffer;
     __uint(__clog2(depth)) addr;
-    __rule copyRule if (this->enable && buffer != this->data) {
+    bool writeNext;
+    __rule copyRule if (this->enable && writeNext) {
         // write next entry to trace buffer
-        bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
+        bram.write(addr, __bitconcat(timestamp, __bitsubstr(buffer, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
         addr++;
-        buffer = this->data;
     }
     __rule init {
         timestamp++;
+        buffer = this->data;
+        writeNext = (buffer != this->data);
     }
 
     // trace readout to bscan
@@ -58,7 +60,7 @@ countJtag++;
     }
 
     // chop up data
-    AdapterToBus<__uint(width), 32> radapter;
+    AdapterToBus<__uint(width+16), 32> radapter;
     __rule readCallBack if (!dataNotAvail) {
         LenType packetWidth = width;
         radapter.in.enq(__bitconcat(bram.dataOut(), packetWidth));

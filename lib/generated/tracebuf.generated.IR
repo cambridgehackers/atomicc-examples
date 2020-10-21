@@ -3,9 +3,9 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE AtB(width=64,owidth=32)  {
+INTERFACE AtB(width=16,owidth=32)  {
     FILE adapter_OC_h
-    INTERFACE PipeIn(width=64) in
+    INTERFACE PipeIn(width=16) in
     INTERFACE/Ptr PipeInB(width=32) out
 }
 INTERFACE BRAMIfc(width=64,depth=1024)  {
@@ -48,7 +48,7 @@ INTERFACE TraceIfc(width=64,depth=1024)  {
     FIELD/input Bit(1) enable
     FIELD/input Bit(64) data
 }
-EMODULE AdapterToBus(width=64,owidth=32) AtB(width=64,owidth=32) {
+EMODULE AdapterToBus(width=16,owidth=32) AtB(width=16,owidth=32) {
     FILE adapter_OC_h
 }
 EMODULE BRAM(width=64,depth=1024) BRAMIfc(width=64,depth=1024) {
@@ -88,21 +88,23 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     FIELD Bit(32) timestamp
     FIELD Bit(64) buffer
     FIELD Bit(11) addr
+    FIELD Bit(1) writeNext
     FIELD Bit(11) readAddr
     FIELD Bscan(id=3,width=32) bscan
     INTERFACE PipeIn(width=32) readUser
     FIELD Bit(1) dataNotAvail
     FIELD Fifo1(width=32) dataFromMem
-    FIELD AdapterToBus(width=64,owidth=32) radapter
+    FIELD AdapterToBus(width=16,owidth=32) radapter
     FIELD Bit(32) dataToJtag
     INTERFACE PipeInB(width=32) readMem
-    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (data)))) {
-        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,(64) - (32),0}}}
+    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && (writeNext))) {
+        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{buffer,(64) - (32),0}}}
         STORE :addr = (addr) + (1)
-        STORE :buffer = data
     }
     METHOD/Rule/Action RULE$init__ENA {
         STORE :timestamp = (timestamp) + (1)
+        STORE :buffer = data
+        STORE :writeNext = (buffer) != (data)
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
         CALL/Action :dataFromMem$out$deq__ENA{}

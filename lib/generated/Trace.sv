@@ -18,6 +18,7 @@ module Trace #(
     reg [32 - 1:0]dataToJtag;
     reg [11 - 1:0]readAddr;
     reg [32 - 1:0]timestamp;
+    reg writeNext;
     logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
     logic RULE$readCallBack__ENA;
@@ -34,12 +35,10 @@ module Trace #(
     PipeInB#(.width(32)) radapter$out();
     PipeInB#(.width(32)) readMem();
     PipeIn#(.width(32)) readUser();
-    logic foo;
-    assign foo = ( enable == 0 ) || !( |( buffer ^ data ));
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
-        .write__ENA(!( foo )),
-        .write$addr(( !( foo ) ) ? addr : 11'd0),
-        .write$data(( !( foo ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
+        .write__ENA(!( ( enable == 0 ) || ( !writeNext ) )),
+        .write$addr(( !( ( enable == 0 ) || ( !writeNext ) ) ) ? addr : 11'd0),
+        .write$data(( !( ( enable == 0 ) || ( !writeNext ) ) ) ? { timestamp , buffer[ ( width - 32 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
         .read__ENA(readMem.enq__ENA && readMem.enq$last),
         .read$addr(( readMem.enq__ENA && readMem.enq$last ) ? readAddr : 11'd0),
@@ -56,8 +55,8 @@ module Trace #(
         .in(radapter$in),
         .out(readMem));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__ENA = !( foo || ( !bram$write__RDY ) );
-    assign RULE$copyRule__RDY = !( foo || ( !bram$write__RDY ) );
+    assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
+    assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
     assign RULE$readCallBack__ENA = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
     assign RULE$readCallBack__RDY = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
     assign bscan$toBscan.enq$v = dataToJtag;
@@ -82,6 +81,7 @@ module Trace #(
         dataToJtag <= 0;
         readAddr <= 0;
         timestamp <= 0;
+        writeNext <= 0;
       end // nRST
       else begin
         if (bscan$toBscan.enq__RDY) begin // RULE$callBack__ENA
@@ -89,10 +89,11 @@ module Trace #(
         end; // End of RULE$callBack__ENA
         if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             addr <= addr + 11'd1;
-            buffer <= data;
         end; // End of RULE$copyRule__ENA
         // RULE$init__ENA
             timestamp <= timestamp + 32'd1;
+            buffer <= data;
+            writeNext <= buffer != data;
         // End of RULE$init__ENA
         if (RULE$readCallBack__ENA && RULE$readCallBack__RDY) begin // RULE$readCallBack__ENA
             dataNotAvail <= 1'd1;
