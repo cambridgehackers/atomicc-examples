@@ -7,7 +7,7 @@ module AdapterToBus #(
     input wire CLK, input wire nRST,
     PipeIn.server in,
     PipeInB.client out);
-    reg [128 - 1:0]buffer;
+    reg [width-16 - 1:0]buffer;
     reg [16 - 1:0]remain;
     logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
@@ -16,11 +16,11 @@ module AdapterToBus #(
     // Extra assigments, not to output wires
     assign RULE$copyRule__ENA = !( ( remain == 0 ) || ( !out.enq__RDY ) );
     assign RULE$copyRule__RDY = !( ( remain == 0 ) || ( !out.enq__RDY ) );
-    assign _RULE$copyRule$outVal = buffer[ ( 128 - 1 ) : ( 128 - owidth ) ];
+    assign _RULE$copyRule$outVal = buffer[ ( width-16 - 1 ) : ( width-16 - owidth ) ];
     assign _in$enq$temp$v = in.enq$v;
     assign in.enq__RDY = remain == 0;
     assign out.enq$last = !( ( remain == 0 ) || ( !( remain <= 16'(owidth) ) ) );
-    assign out.enq$v = ( !( remain == 0 ) ) ? buffer[ ( 128 - 1 ) : ( 128 - owidth ) ] : 0;
+    assign out.enq$v = buffer[ ( width-16 - 1 ) : ( width-16 - owidth ) ];
     assign out.enq__ENA = !( remain == 0 );
 
     always @( posedge CLK) begin
@@ -39,8 +39,8 @@ module AdapterToBus #(
             remain <= 16'd0;
         end; // End of RULE$copyRule__ENA
         if (in.enq__ENA && ( remain == 0 )) begin // in.enq__ENA
-            buffer <= _in$enq$temp$v.data;
-            remain <= _in$enq$temp$v.length;
+            buffer <= in.enq$v[width-1:16];
+            remain <= in.enq$v[16-1:0];
             if (!( 0 == 0 ))
             $display( "adapterTOin %x length %x" , _in$enq$temp$v.data , _in$enq$temp$v.length );
         end; // End of in.enq__ENA
