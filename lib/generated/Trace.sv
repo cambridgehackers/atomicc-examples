@@ -30,14 +30,16 @@ module Trace #(
     PipeIn#(.width(32)) bscan$toBscan();
     PipeIn#(.width(32)) dataFromMem$in();
     PipeOut#(.width(32)) dataFromMem$out();
-    PipeIn#(.width(width)) radapter$in();
+    PipeIn#(.width(width+16)) radapter$in();
     PipeInB#(.width(32)) radapter$out();
     PipeInB#(.width(32)) readMem();
     PipeIn#(.width(32)) readUser();
+    logic foo;
+    assign foo = ( enable == 0 ) || !( |( buffer ^ data ));
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
-        .write__ENA(!( ( enable == 0 ) || ( buffer == data ) )),
-        .write$addr(( !( ( enable == 0 ) || ( buffer == data ) ) ) ? addr : 11'd0),
-        .write$data(( !( ( enable == 0 ) || ( buffer == data ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
+        .write__ENA(!( foo )),
+        .write$addr(( !( foo ) ) ? addr : 11'd0),
+        .write$data(( !( foo ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
         .read__ENA(readMem.enq__ENA && readMem.enq$last),
         .read$addr(( readMem.enq__ENA && readMem.enq$last ) ? readAddr : 11'd0),
@@ -50,12 +52,12 @@ module Trace #(
     Fifo1Base#(.width(32)) dataFromMem (.CLK(CLK), .nRST(nRST),
         .in(dataFromMem$in),
         .out(dataFromMem$out));
-    AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
+    AdapterToBus#(.width(width+16),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
         .in(radapter$in),
         .out(readMem));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
-    assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( buffer == data ) || ( !bram$write__RDY ) );
+    assign RULE$copyRule__ENA = !( foo || ( !bram$write__RDY ) );
+    assign RULE$copyRule__RDY = !( foo || ( !bram$write__RDY ) );
     assign RULE$readCallBack__ENA = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
     assign RULE$readCallBack__RDY = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
     assign bscan$toBscan.enq$v = dataToJtag;
