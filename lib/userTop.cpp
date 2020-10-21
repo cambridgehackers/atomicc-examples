@@ -24,12 +24,12 @@
 #define IfcNames_EchoIndicationH2S 5
 
 class UserTop __implements UserTopIfc {
-    AdapterToBus<NOCDataH, BusTypeWidth> radapter_0;
+    AdapterToBus<__bitsize(NOCData), BusTypeWidth> radapter_0;
     AdapterFromBus<BusTypeWidth, NOCDataH> wadapter_0;
     l_top       ctop;
     __connect wadapter_0.in = write;
     __connect read = radapter_0.out;
-#if 1
+#if 0
     __connect ctop.request = wadapter_0.out;
     __connect ctop.indication = radapter_0.in;
 #else
@@ -41,7 +41,7 @@ class UserTop __implements UserTopIfc {
     }
     void indication.enq(NOCDataH v) {
         printf("indConnect.enq v %x length %x\n", v.data, v.length);
-        radapter_0.in.enq(v);
+        radapter_0.in.enq(v.data, v.length);
     }
 #endif
 };

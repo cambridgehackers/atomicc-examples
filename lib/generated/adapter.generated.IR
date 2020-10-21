@@ -5,21 +5,25 @@ STRUCT NOCDataH  {
 }
 INTERFACE AfB(owidth=32,width=144)  {
     FILE adapter_OC_h
-    INTERFACE PipeInB(width=32) in
+    INTERFACE PipeInLast(width=32) in
     INTERFACE/Ptr PipeIn(width=144) out
 }
-INTERFACE AtB(width=144,owidth=32)  {
+INTERFACE AtB(width=128,owidth=32)  {
     FILE adapter_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE/Ptr PipeInB(width=32) out
+    INTERFACE PipeInLength(width=128) in
+    INTERFACE/Ptr PipeInLast(width=32) out
 }
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInB(width=32)  {
+INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeInLength(width=128)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
@@ -45,16 +49,14 @@ MODULE AdapterFromBus(owidth=32,width=144) AfB(owidth=32,width=144) {
         STORE :waitForEnq = 0
     }
 }
-MODULE AdapterToBus(width=144,owidth=32) AtB(width=144,owidth=32) {
+MODULE AdapterToBus(width=128,owidth=32) AtB(width=128,owidth=32) {
     FILE adapter_OC_cpp
     FIELD Bit(128) buffer
     FIELD Bit(16) remain
-    METHOD/Action in$enq__ENA ( NOCDataH v ) if (((remain) == (0))) {
-        ALLOCA NOCDataH _in$enq$temp$v
-        LET NOCDataH :_in$enq$temp$v = in$enq$v
-        STORE :buffer = _in$enq$temp$v.data
-        STORE :remain = _in$enq$temp$v.length
-        PRINTF ((0) != (0)):printf{"adapterTOin %x length %x\n",_in$enq$temp$v.data,_in$enq$temp$v.length}
+    METHOD/Action in$enq__ENA ( Bit(width) v , Bit(16) size ) if (((remain) == (0))) {
+        STORE :buffer = in$enq$v
+        STORE :remain = in$enq$size
+        PRINTF ((0) != (0)):printf{"adapterTOin %x length %x\n",in$enq$v,in$enq$size}
     }
     METHOD/Rule/Action RULE$copyRule__ENA if (((remain) != (0))) {
         ALLOCA Bit(32) _RULE$copyRule$outVal

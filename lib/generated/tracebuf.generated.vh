@@ -35,7 +35,7 @@ endinterface
 //METAINTERNAL; bram; BRAM(width=64,depth=1024);
 //METAINTERNAL; bscan; Bscan(id=3,width=32);
 //METAINTERNAL; dataFromMem; Fifo1Base(width=32);
-//METAINTERNAL; radapter; AdapterToBus(width=16,owidth=32);
+//METAINTERNAL; radapter; AdapterToBus(width=64,owidth=32);
 //METAINVOKE; RULE$copyRule__ENA; :bram$write__ENA;
 //METAGUARD; RULE$copyRule; !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
 //METAGUARD; RULE$init; 1'd1;

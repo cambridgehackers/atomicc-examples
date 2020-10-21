@@ -23,18 +23,18 @@
 #define _ADAPTER_H_
 #include "atomicc.h"
 
-template<class T, int owidth>
+template<int width, int owidth>
 class AtB {
-   PipeIn<T>        in;
-   PipeInB<owidth> *out;
+   PipeInLength<width> in;
+   PipeInLast<owidth> *out;
 };
 
-template<class T, int owidth>
-class AdapterToBus __implements AtB<T, owidth>;
+template<int width, int owidth>
+class AdapterToBus __implements AtB<width, owidth>;
 
 template<int owidth, class T>
 class AfB {
-   PipeInB<owidth>  in;
+   PipeInLast<owidth>  in;
    PipeIn<T>       *out;
 };
 

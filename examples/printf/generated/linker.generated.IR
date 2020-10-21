@@ -1,8 +1,8 @@
 MODULE VsimTop VsimTop_interface {
-    FIELD PipeInB sink_0$port
-    FIELD PipeInB source_0$port
-    FIELD PipeInB user$read
-    FIELD PipeInB user$write
+    FIELD PipeInLast sink_0$port
+    FIELD PipeInLast source_0$port
+    FIELD PipeInLast user$read
+    FIELD PipeInLast user$write
     FIELD UserTop user
     FIELD VsimReceive sink_0
     FIELD VsimSend source_0
@@ -18,8 +18,8 @@ MODULE UserTop UserTop_interface {
     FIELD PipeIn__W90 ctop$indication
     FIELD PipeIn__W90 ctop$request
     FIELD PipeIn__W90 radapter_0$in
-    FIELD PipeInB radapter_0$out
-    FIELD PipeInB wadapter_0$in
+    FIELD PipeInLast radapter_0$out
+    FIELD PipeInLast wadapter_0$in
     FIELD PipeIn__W90 wadapter_0$out
     FIELD AdapterToBus__Iz1 radapter_0
     FIELD AdapterFromBus__OBz2 wadapter_0
@@ -32,7 +32,6 @@ INTERFACE UserTop_interface {
 MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
 }
 INTERFACE AdapterToBus__Iz1_interface {
-    FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST

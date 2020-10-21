@@ -60,10 +60,10 @@ countJtag++;
     }
 
     // chop up data
-    AdapterToBus<__uint(width+16), 32> radapter;
+    AdapterToBus<width, 32> radapter;
     __rule readCallBack if (!dataNotAvail) {
         LenType packetWidth = width;
-        radapter.in.enq(__bitconcat(bram.dataOut(), packetWidth));
+        radapter.in.enq(bram.dataOut(), packetWidth);
         dataNotAvail = true;
 countTo++;
     }
@@ -71,7 +71,7 @@ countTo++;
     // pass chopped up data to jtag
     __uint(32) dataToJtag;
     __implements radapter.out readMem;
-    void readMem.enq(__uint(32) v, bool last) { // data from adapter(PipeInB), heading to jtag
+    void readMem.enq(__uint(32) v, bool last) { // data from adapter(PipeInLast), heading to jtag
         dataToJtag = v;
         dataFromMem.in.enq(last);
         if (last) {

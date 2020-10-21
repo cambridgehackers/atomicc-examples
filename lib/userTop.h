@@ -29,8 +29,8 @@ class l_topIfc {
 class l_top __implements l_topIfc; // force PipeIn<NOCDataH> to appear in IR
 
 class UserTopIfc {
-    PipeInB<BusTypeWidth> write;
-    PipeInB<BusTypeWidth> *read;
+    PipeInLast<BusTypeWidth> write;
+    PipeInLast<BusTypeWidth> *read;
 };
 class UserTop __implements UserTopIfc;
 #endif // __USER_TOP_H__

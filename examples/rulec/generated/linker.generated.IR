@@ -1,8 +1,8 @@
 MODULE VsimTop VsimTop_interface {
-    FIELD PipeInB sink_0$port
-    FIELD PipeInB source_0$port
-    FIELD PipeInB user$read
-    FIELD PipeInB user$write
+    FIELD PipeInLast sink_0$port
+    FIELD PipeInLast source_0$port
+    FIELD PipeInLast user$read
+    FIELD PipeInLast user$write
     FIELD UserTop user
     FIELD VsimReceive sink_0
     FIELD VsimSend source_0
@@ -17,13 +17,15 @@ INTERFACE VsimTop_interface {
 MODULE UserTop UserTop_interface {
     FIELD PipeIn__W90 ctop$indication
     FIELD PipeIn__W90 ctop$request
-    FIELD PipeIn__W90 radapter_0$in
-    FIELD PipeInB radapter_0$out
-    FIELD PipeInB wadapter_0$in
+    FIELD PipeIn__W90 indication
+    FIELD PipeInLength__W80 radapter_0$in
+    FIELD PipeInLast radapter_0$out
+    FIELD PipeIn__W90 wad
+    FIELD PipeInLast wadapter_0$in
     FIELD PipeIn__W90 wadapter_0$out
     FIELD AdapterToBus__Iz1 radapter_0
     FIELD AdapterFromBus__OBz2 wadapter_0
-    FIELD l_top__Rz2_Iz1 ctop
+    FIELD l_top__Rz3_Iz4 ctop
 }
 INTERFACE UserTop_interface {
     FIELD/input  Bit(1) CLK
@@ -44,24 +46,24 @@ INTERFACE AdapterFromBus__OBz2_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE l_top__Rz2_Iz1 l_top__Rz2_Iz1_interface {
+MODULE l_top__Rz3_Iz4 l_top__Rz3_Iz4_interface {
     FIELD EchoIndication DUT__Echo$indication
     FIELD EchoRequest DUT__Echo$request
     FIELD EchoIndication M2P__indication$method
     FIELD PipeIn__W90 M2P__indication$pipe
     FIELD EchoRequest P2M__request$method
     FIELD PipeIn__W90 P2M__request$pipe
-    FIELD ___M2PEchoIndication__Pz3 M2P__indication
+    FIELD ___M2PEchoIndication__Pz5 M2P__indication
     FIELD Echo DUT__Echo
-    FIELD ___P2MEchoRequest__Pz3 P2M__request
+    FIELD ___P2MEchoRequest__Pz5 P2M__request
 }
-INTERFACE l_top__Rz2_Iz1_interface {
+INTERFACE l_top__Rz3_Iz4_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE ___M2PEchoIndication__Pz3 ___M2PEchoIndication__Pz3_interface {
+MODULE ___M2PEchoIndication__Pz5 ___M2PEchoIndication__Pz5_interface {
 }
-INTERFACE ___M2PEchoIndication__Pz3_interface {
+INTERFACE ___M2PEchoIndication__Pz5_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -71,9 +73,9 @@ INTERFACE Echo_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE ___P2MEchoRequest__Pz3 ___P2MEchoRequest__Pz3_interface {
+MODULE ___P2MEchoRequest__Pz5 ___P2MEchoRequest__Pz5_interface {
 }
-INTERFACE ___P2MEchoRequest__Pz3_interface {
+INTERFACE ___P2MEchoRequest__Pz5_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }

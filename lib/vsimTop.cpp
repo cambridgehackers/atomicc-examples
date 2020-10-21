@@ -23,14 +23,14 @@
 // Modules from SystemVerilog runtime
 template<int width>
 class VsimReceiveIfc {
-    PipeInB<width> *port;
+    PipeInLast<width> *port;
 };
 template<int width>
 class VsimReceive __implements VsimReceiveIfc<width>;
 
 template<int width>
 class VsimSendIfc {
-    PipeInB<width> port;
+    PipeInLast<width> port;
 };
 template<int width>
 class VsimSend __implements VsimSendIfc<width>;

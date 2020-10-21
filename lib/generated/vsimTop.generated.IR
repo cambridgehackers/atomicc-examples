@@ -12,14 +12,18 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInB(width=32)  {
+INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
+INTERFACE PipeInLength(width=144)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
+}
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
-    INTERFACE PipeInB(width=32) write
-    INTERFACE/Ptr PipeInB(width=32) read
+    INTERFACE PipeInLast(width=32) write
+    INTERFACE/Ptr PipeInLast(width=32) read
 }
 INTERFACE VsimInterface  {
     FILE vsimTop_OC_cpp
@@ -31,16 +35,16 @@ INTERFACE VsimInterface  {
 }
 INTERFACE VsimReceiveIfc(width=32)  {
     FILE vsimTop_OC_cpp
-    INTERFACE/Ptr PipeInB(width=32) port
+    INTERFACE/Ptr PipeInLast(width=32) port
 }
 INTERFACE VsimSendIfc(width=32)  {
     FILE vsimTop_OC_cpp
-    INTERFACE PipeInB(width=32) port
+    INTERFACE PipeInLast(width=32) port
 }
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
     INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeIn(width=144) indication
+    INTERFACE/Ptr PipeInLength(width=144) indication
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
@@ -62,8 +66,8 @@ EMODULE l_top l_topIfc {
 }
 MODULE VsimTop VsimInterface {
     FILE vsimTop_OC_cpp
-    INTERFACECONNECT user$write sink_0$port PipeInB(width=32)
-    INTERFACECONNECT user$read source_0$port PipeInB(width=32)
+    INTERFACECONNECT user$write sink_0$port PipeInLast(width=32)
+    INTERFACECONNECT user$read source_0$port PipeInLast(width=32)
     FIELD UserTop user
     FIELD VsimReceive(width=32) sink_0
     FIELD VsimSend(width=32) source_0

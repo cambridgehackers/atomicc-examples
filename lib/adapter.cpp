@@ -22,16 +22,16 @@
 #include "adapter.h"
 
 #define TRACE_ADAPTER 0
-template<class T, int owidth>
-class AdapterToBus __implements AtB<T, owidth> {
-   NOCData                   buffer;
-   LenType                   remain;
+template<int width, int owidth>
+class AdapterToBus __implements AtB<width, owidth> {
+   __uint(width)     buffer;
+   LenType           remain;
 
-   void in.enq(T v) if (remain == 0) {
-      buffer = v.data;
-      remain = v.length;
+   void in.enq(__uint(width) v, LenType size) if (remain == 0) {
+      buffer = v;
+      remain = size;
       if (TRACE_ADAPTER)
-      printf ("adapterTOin %x length %x\n", v.data, v.length);
+      printf ("adapterTOin %x length %x\n", v, size);
    }
    __rule copyRule if (remain != 0) {
       __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
@@ -69,5 +69,5 @@ class AdapterFromBus __implements AfB<owidth, T> {
    }
 };
 
-static AdapterToBus<NOCDataH, BusTypeWidth> radapter_0;
+static AdapterToBus<__bitsize(NOCData), BusTypeWidth> radapter_0;
 static AdapterFromBus<BusTypeWidth, NOCDataH> wadapter_0;

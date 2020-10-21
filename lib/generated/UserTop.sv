@@ -2,23 +2,50 @@
 
 `default_nettype none
 module UserTop (input wire CLK, input wire nRST,
-    PipeInB.server write,
-    PipeInB.client read);
+    PipeInLast.server write,
+    PipeInLast.client read);
+    NOCDataH _indication$enq$temp$v;
+    NOCDataH _wad$enq$temp$v;
     PipeIn#(.width(144)) ctop$indication();
     PipeIn#(.width(144)) ctop$request();
-    PipeIn#(.width(144)) radapter_0$in();
-    PipeInB#(.width(32)) radapter_0$out();
-    PipeInB#(.width(32)) wadapter_0$in();
+    PipeIn#(.width(144)) indication();
+    PipeInLength#(.width(128)) radapter_0$in();
+    PipeInLast#(.width(32)) radapter_0$out();
+    PipeIn#(.width(144)) wad();
+    PipeInLast#(.width(32)) wadapter_0$in();
     PipeIn#(.width(144)) wadapter_0$out();
-    AdapterToBus#(.width(144),.owidth(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
-        .in(ctop$indication),
+    AdapterToBus#(.width(128),.owidth(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
+        .in(radapter_0$in),
         .out(read));
     AdapterFromBus#(.owidth(32),.width(144)) wadapter_0 (.CLK(CLK), .nRST(nRST),
         .in(write),
-        .out(wadapter_0$out));
+        .out(wad));
     l_top ctop (.CLK(CLK), .nRST(nRST),
-        .request(wadapter_0$out),
-        .indication(ctop$indication));
+        .request(ctop$request),
+        .indication(indication));
+    // Extra assigments, not to output wires
+    assign _indication$enq$temp$v = indication.enq$v;
+    assign _wad$enq$temp$v = wad.enq$v;
+    assign ctop$request.enq$v = wad.enq__ENA ? wad.enq$v : 0;
+    assign ctop$request.enq__ENA = wad.enq__ENA;
+    assign indication.enq__RDY = radapter_0$in.enq__RDY;
+    assign radapter_0$in.enq$size = indication.enq__ENA ? _indication$enq$temp$v.length : 0;
+    assign radapter_0$in.enq$v = indication.enq__ENA ? _indication$enq$temp$v.data : 0;
+    assign radapter_0$in.enq__ENA = indication.enq__ENA;
+    assign wad.enq__RDY = ctop$request.enq__RDY;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (indication.enq__ENA && radapter_0$in.enq__RDY) begin // indication.enq__ENA
+            $display( "indConnect$enq v %x length %x" , _indication$enq$temp$v.data , _indication$enq$temp$v.length );
+        end; // End of indication.enq__ENA
+        if (wad.enq__ENA && ctop$request.enq__RDY) begin // wad.enq__ENA
+            $display( "reqConnect$enq v %x length %x" , _wad$enq$temp$v.data , _wad$enq$temp$v.length );
+        end; // End of wad.enq__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule
 
 `default_nettype wire    // set back to default value

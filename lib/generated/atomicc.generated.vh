@@ -34,9 +34,9 @@ interface PipeOut#(width = 32);
                     input  deq__RDY, first, first__RDY);
 endinterface
 `endif
-`ifndef __PipeInB_DEF__
-`define __PipeInB_DEF__
-interface PipeInB#(width = 32);
+`ifndef __PipeInLast_DEF__
+`define __PipeInLast_DEF__
+interface PipeInLast#(width = 32);
     logic enq__ENA;
     logic [width - 1:0] enq$v;
     logic  enq$last;
@@ -44,6 +44,19 @@ interface PipeInB#(width = 32);
     modport server (input  enq__ENA, enq$v, enq$last,
                     output enq__RDY);
     modport client (output enq__ENA, enq$v, enq$last,
+                    input  enq__RDY);
+endinterface
+`endif
+`ifndef __PipeInLength_DEF__
+`define __PipeInLength_DEF__
+interface PipeInLength#(width = 32);
+    logic enq__ENA;
+    logic [width - 1:0] enq$v;
+    logic [16 - 1:0] enq$size;
+    logic enq__RDY;
+    modport server (input  enq__ENA, enq$v, enq$size,
+                    output enq__RDY);
+    modport client (output enq__ENA, enq$v, enq$size,
                     input  enq__RDY);
 endinterface
 `endif

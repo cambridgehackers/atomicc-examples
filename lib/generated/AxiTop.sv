@@ -27,15 +27,15 @@ module AxiTop (
     logic [32 - 1:0]_RULE$lwrite$currentWData;
     PipeIn#(.width(38)) readData$in();
     PipeOut#(.width(38)) readData$out();
-    PipeInB#(.width(32)) readUser();
+    PipeInLast#(.width(32)) readUser();
     PipeIn#(.width(6)) reqArs$in();
     PipeOut#(.width(6)) reqArs$out();
     PipeIn#(.width(6)) reqAws$in();
     PipeOut#(.width(6)) reqAws$out();
     PipeIn#(.width(32)) requestValue$in();
     PipeOut#(.width(32)) requestValue$out();
-    PipeInB#(.width(32)) user$read();
-    PipeInB#(.width(32)) user$write();
+    PipeInLast#(.width(32)) user$read();
+    PipeInLast#(.width(32)) user$write();
     PipeIn#(.width(32)) writeData$in();
     PipeOut#(.width(32)) writeData$out();
     PipeIn#(.width(6)) writeDone$in();

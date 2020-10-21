@@ -7,9 +7,13 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInB(width=32)  {
+INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeInLength(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
 }
 INTERFACE PipeOut(width=32)  {
     FILE atomicc_OC_h
@@ -20,7 +24,8 @@ INTERFACE atomiccDummyIfc  {
     FILE atomicc_OC_cpp
     INTERFACE PipeIn(width=32) pi
     INTERFACE PipeOut(width=32) po
-    INTERFACE PipeInB(width=32) pib
+    INTERFACE PipeInLast(width=32) pilast
+    INTERFACE PipeInLength(width=32) pilength
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h

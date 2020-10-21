@@ -23,7 +23,8 @@
 class atomiccDummyIfc {
 PipeIn<__uint(32)>           pi;
 PipeOut<__uint(32)>          po;
-PipeInB<32>                  pib;
+PipeInLast<32>               pilast;
+PipeInLength<32>             pilength;
 };
 class atomiccDummy __implements atomiccDummyIfc {
     NOCDataH          dummyn;

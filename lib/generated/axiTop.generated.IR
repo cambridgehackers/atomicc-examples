@@ -49,9 +49,13 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInB(width=32)  {
+INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
+}
+INTERFACE PipeInLength(width=144)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
 }
 INTERFACE PipeOut(width=32)  {
     FILE atomicc_OC_h
@@ -67,8 +71,8 @@ INTERFACE TraceIfc(width=4,depth=1024)  {
 }
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
-    INTERFACE PipeInB(width=32) write
-    INTERFACE/Ptr PipeInB(width=32) read
+    INTERFACE PipeInLast(width=32) write
+    INTERFACE/Ptr PipeInLast(width=32) read
 }
 INTERFACE ZynqInterruptT  {
     FILE axiTop_OC_h
@@ -79,7 +83,7 @@ INTERFACE ZynqInterruptT  {
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
     INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeIn(width=144) indication
+    INTERFACE/Ptr PipeInLength(width=144) indication
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
@@ -110,7 +114,7 @@ EMODULE l_top l_topIfc {
 }
 MODULE/Trace=1024 AxiTop AxiTopIfc {
     FILE axiTop_OC_cpp
-    INTERFACECONNECT readUser user$read PipeInB(width=32)
+    INTERFACECONNECT readUser user$read PipeInLast(width=32)
     FIELD Bit(1) intEnable
     FIELD Bit(1) writeReady
     FIELD Bit(1) selectRIndReq
@@ -128,7 +132,7 @@ MODULE/Trace=1024 AxiTop AxiTopIfc {
     FIELD Fifo1(width=38) readData
     FIELD Fifo1(width=32) writeData
     FIELD UserTop user
-    INTERFACE PipeInB(width=32) readUser
+    INTERFACE PipeInLast(width=32) readUser
     METHOD/Action MAXIGP0_O$AR__ENA ( Bit(32) addr , Bit(12) id , Bit(4) len ) {
         CALL/Action :reqArs$in$enq__ENA{MAXIGP0_O$AR$id}
         STORE :portalRControl = (__bitsubstr{MAXIGP0_O$AR$addr,11,5}) == (0)

@@ -5,7 +5,7 @@ module AdapterFromBus #(
     parameter integer owidth = 32,
     parameter integer width = 144)(
     input wire CLK, input wire nRST,
-    PipeInB.server in,
+    PipeInLast.server in,
     PipeIn.client out);
     reg [128 - 1:0]buffer;
     reg [16 - 1:0]length;

@@ -71,8 +71,12 @@ class PipeOut {
 
 typedef __int(16) LenType;
 template<int width>
-class PipeInB {
+class PipeInLast {
     void enq(__uint(width) v, bool last);
+};
+template<int width>
+class PipeInLength {
+    void enq(__uint(width) v, LenType size);  // size in bits
 };
 
 typedef __uint(128) NOCData;

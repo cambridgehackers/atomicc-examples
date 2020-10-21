@@ -31,9 +31,9 @@ module Trace #(
     PipeIn#(.width(32)) bscan$toBscan();
     PipeIn#(.width(32)) dataFromMem$in();
     PipeOut#(.width(32)) dataFromMem$out();
-    PipeIn#(.width(width+16)) radapter$in();
-    PipeInB#(.width(32)) radapter$out();
-    PipeInB#(.width(32)) readMem();
+    PipeInLength#(.width(width)) radapter$in();
+    PipeInLast#(.width(32)) radapter$out();
+    PipeInLast#(.width(32)) readMem();
     PipeIn#(.width(32)) readUser();
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
         .write__ENA(!( ( enable == 0 ) || ( !writeNext ) )),
@@ -51,7 +51,7 @@ module Trace #(
     Fifo1Base#(.width(32)) dataFromMem (.CLK(CLK), .nRST(nRST),
         .in(dataFromMem$in),
         .out(dataFromMem$out));
-    AdapterToBus#(.width(width+16),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
+    AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
         .in(radapter$in),
         .out(readMem));
     // Extra assigments, not to output wires
@@ -64,7 +64,8 @@ module Trace #(
     assign dataFromMem$in.enq$v = readMem.enq__ENA ? readMem.enq$last : 0;
     assign dataFromMem$in.enq__ENA = readMem.enq__ENA;
     assign dataFromMem$out.deq__ENA = readUser.enq__ENA;
-    assign radapter$in.enq$v = ( !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) ) ) ? { bram$dataOut , (16'(width)) } : 0;
+    assign radapter$in.enq$size = ( !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) ) ) ? ( (16'(width)) ) : 0;
+    assign radapter$in.enq$v = ( !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) ) ) ? bram$dataOut : 0;
     assign radapter$in.enq__ENA = !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !bram$dataOut__RDY ) );
     assign readMem.enq__RDY = dataFromMem$in.enq__RDY && ( bram$read__RDY || ( !readMem.enq$last ) );
     assign readUser.enq__RDY = dataFromMem$out.deq__RDY;

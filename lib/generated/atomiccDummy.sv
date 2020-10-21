@@ -4,7 +4,8 @@
 module atomiccDummy (input wire CLK, input wire nRST,
     PipeIn.server pi,
     PipeOut.server po,
-    PipeInB.server pib);
+    PipeInLast.server pilast,
+    PipeInLength.server pilength);
     NOCDataH dummyn;
 
     always @( posedge CLK) begin
