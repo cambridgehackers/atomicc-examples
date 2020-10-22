@@ -36,4 +36,13 @@ class Out2In __implements Out2InIfc<T> {
     __connect base.in = this->in;
     __connect base.out = this->out;
 };
+
+template <int width>
+class Out2InLastIfc {
+    PipeOutLast<width> *in;
+    PipeInLast<width> *out;
+};
+
+template <int width>
+class Out2InLast __implements Out2InLastIfc<width>;
 #endif  // __OUT2IN_H__

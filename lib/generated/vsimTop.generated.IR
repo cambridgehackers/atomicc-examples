@@ -16,10 +16,6 @@ INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
-INTERFACE PipeInLength(width=144)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
-}
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
     INTERFACE PipeInLast(width=32) write
@@ -44,7 +40,7 @@ INTERFACE VsimSendIfc(width=32)  {
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
     INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeInLength(width=144) indication
+    INTERFACE/Ptr PipeIn(width=144) indication
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h

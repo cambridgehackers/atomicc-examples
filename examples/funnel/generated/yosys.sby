@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv AdapterFromBus.sv l_top.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv FunnelBase.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv FunnelBase.sv 
 
 prep -top VsimTop
 
@@ -37,6 +37,7 @@ prep -top VsimTop
 ../../lib/generated/zynqTop.generated.vh
 ../../lib/generated/UserTop.sv
 ../../lib/generated/AdapterToBus.sv
+../../lib/generated/Out2InLast.sv
 ../../lib/generated/AdapterFromBus.sv
 generated/l_top.sv
 generated/funneltest.generated.vh

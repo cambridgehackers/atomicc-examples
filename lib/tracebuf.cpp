@@ -70,6 +70,7 @@ countTo++;
 
     // pass chopped up data to jtag
     __uint(32) dataToJtag;
+#if 0
     __implements radapter.out readMem;
     void readMem.enq(__uint(32) v, bool last) { // data from adapter(PipeInLast), heading to jtag
         dataToJtag = v;
@@ -80,6 +81,18 @@ countTo++;
         }
 countFrom++;
     }
+#else
+    __rule copyFromAdapter {
+        dataToJtag = radapter.out.first();
+        dataFromMem.in.enq(radapter.out.last());
+        if (radapter.out.last()) {
+            bram.read(readAddr++);
+            dataNotAvail = false;
+        }
+        radapter.out.deq();
+countFrom++;
+    }
+#endif
     __rule callBack {
         // send to trace buffer to jtag
         bscan.toBscan.enq(dataToJtag);

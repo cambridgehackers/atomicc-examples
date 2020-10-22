@@ -26,7 +26,7 @@
 template<int width, int owidth>
 class AtB {
    PipeInLength<width> in;
-   PipeInLast<owidth> *out;
+   PipeOutLast<owidth> out;
 };
 
 template<int width, int owidth>

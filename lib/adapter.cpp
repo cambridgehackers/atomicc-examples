@@ -33,11 +33,16 @@ class AdapterToBus __implements AtB<width, owidth> {
       if (TRACE_ADAPTER)
       printf ("adapterTOin %x length %x\n", v, size);
    }
-   __rule copyRule if (remain != 0) {
-      __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
+   bool out.last(void) if (remain != 0) {
+       return remain <= owidth;
+   }
+   __uint(width) out.first(void) if (remain != 0) {
+        __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
+       return outVal;
+   }
+   void out.deq(void) if (remain != 0) {
       if (TRACE_ADAPTER)
-      printf ("adapterTOout %x remain %x\n", outVal, remain);
-      this->out->enq(outVal, remain <= owidth);
+      printf ("adapterTOout remain %x\n", remain);
       if (remain <= owidth)
           remain = 0;
       else

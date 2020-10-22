@@ -42,15 +42,13 @@ endinterface
 //METAINVOKE; readUser.enq__ENA; :dataFromMem$out.deq__ENA;
 //METAGUARD; readUser.enq; dataFromMem$out.deq__RDY;
 //METAINVOKE; RULE$readCallBack__ENA; :radapter$in.enq__ENA;
-//METAEXCLUSIVE; RULE$readCallBack__ENA; readMem.enq__ENA
+//METAEXCLUSIVE; RULE$readCallBack__ENA; RULE$copyFromAdapter__ENA
 //METAGUARD; RULE$readCallBack; !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
-//METAINVOKE; readMem.enq__ENA; readMem$enq$last:bram$read__ENA;:dataFromMem$in.enq__ENA;
-//METAGUARD; readMem.enq; dataFromMem$in.enq__RDY && ( bram$read__RDY || ( !readMem$enq$last ) );
+//METAINVOKE; RULE$copyFromAdapter__ENA; radapter$out$last:bram$read__ENA;:dataFromMem$in.enq__ENA;:radapter$out.deq__ENA;
+//METAGUARD; RULE$copyFromAdapter; radapter$out.first__RDY && radapter$out.last__RDY && dataFromMem$in.enq__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out$last || ( !radapter$out.deq__RDY ) ) ) ) );
 //METAINVOKE; RULE$callBack__ENA; :bscan$toBscan.enq__ENA;
 //METAGUARD; RULE$callBack; bscan$toBscan.enq__RDY;
-//METARULES; RULE$copyRule; RULE$init; RULE$readCallBack; RULE$callBack
+//METARULES; RULE$copyRule; RULE$init; RULE$readCallBack; RULE$copyFromAdapter; RULE$callBack
 //METACONNECT; readUser.enq__ENA; bscan$fromBscan.enq__ENA
 //METACONNECT; readUser.enq__RDY; bscan$fromBscan.enq__RDY
-//METACONNECT; readMem.enq__ENA; radapter$out.enq__ENA
-//METACONNECT; readMem.enq__RDY; radapter$out.enq__RDY
 `endif

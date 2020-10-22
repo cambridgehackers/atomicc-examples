@@ -11,12 +11,17 @@ INTERFACE AfB(owidth=32,width=144)  {
 INTERFACE AtB(width=128,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=128) in
-    INTERFACE/Ptr PipeInLast(width=32) out
+    INTERFACE PipeOutLast(width=32) out
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE funnel_OC_h
     INTERFACE/Count funnelWidth  PipeIn(width=32) in
     INTERFACE/Ptr PipeIn(width=32) out
+}
+INTERFACE Out2InLastIfc(width=32)  {
+    FILE out2in_OC_h
+    INTERFACE/Ptr PipeOutLast(width=32) in
+    INTERFACE/Ptr PipeInLast(width=32) out
 }
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
@@ -29,6 +34,12 @@ INTERFACE PipeInLast(width=32)  {
 INTERFACE PipeInLength(width=128)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
+}
+INTERFACE PipeOutLast(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+    METHOD last Bit(1)
 }
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
@@ -52,6 +63,9 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE funnel_OC_h
 }
+EMODULE Out2InLast(width=32) Out2InLastIfc(width=32) {
+    FILE out2in_OC_h
+}
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h
 }
@@ -61,10 +75,12 @@ EMODULE l_top l_topIfc {
 MODULE UserTop UserTopIfc {
     FILE userTop_OC_cpp
     INTERFACECONNECT wadapter_0$in write PipeInLast(width=32)
-    INTERFACECONNECT read radapter_0$out PipeInLast(width=32)
+    INTERFACECONNECT out2$in radapter_0$out PipeOutLast(width=32)
+    INTERFACECONNECT read out2$out PipeInLast(width=32)
     INTERFACECONNECT wad wadapter_0$out PipeIn(width=144)
     INTERFACECONNECT indication ctop$indication PipeIn(width=144)
     FIELD AdapterToBus(width=128,owidth=32) radapter_0
+    FIELD Out2InLast(width=32) out2
     FIELD AdapterFromBus(owidth=32,width=144) wadapter_0
     FIELD l_top ctop
     INTERFACE PipeIn(width=144) wad

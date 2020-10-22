@@ -20,11 +20,18 @@ INTERFACE PipeOut(width=32)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+INTERFACE PipeOutLast(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+    METHOD last Bit(1)
+}
 INTERFACE atomiccDummyIfc  {
     FILE atomicc_OC_cpp
     INTERFACE PipeIn(width=32) pi
     INTERFACE PipeOut(width=32) po
     INTERFACE PipeInLast(width=32) pilast
+    INTERFACE PipeOutLast(width=32) polast
     INTERFACE PipeInLength(width=32) pilength
 }
 EMODULE Dummy PipeIn(width=32) {

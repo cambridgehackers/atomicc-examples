@@ -6,7 +6,7 @@ STRUCT NOCDataH  {
 INTERFACE AtB(width=64,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=64) in
-    INTERFACE/Ptr PipeInLast(width=32) out
+    INTERFACE PipeOutLast(width=32) out
 }
 INTERFACE BRAMIfc(width=64,depth=1024)  {
     FILE bram_OC_h
@@ -28,14 +28,6 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInLast(width=1024)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
-INTERFACE PipeInLast(width=32)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
-}
 INTERFACE PipeInLength(width=64)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
@@ -44,6 +36,12 @@ INTERFACE PipeOut(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
+}
+INTERFACE PipeOutLast(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+    METHOD last Bit(1)
 }
 INTERFACE TraceIfc(width=64,depth=1024)  {
     FILE tracebuf_OC_h
@@ -83,7 +81,6 @@ MODULE Fifo1(width=32) Fifo(width=32) {
 MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     FILE tracebuf_OC_cpp
     INTERFACECONNECT readUser bscan$fromBscan PipeIn(width=32)
-    INTERFACECONNECT readMem radapter$out PipeInLast(width=32)
     FIELD BRAM(width=64,depth=1024) bram
     FIELD Bit(8) countFrom
     FIELD Bit(8) countTo
@@ -100,7 +97,6 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     FIELD Fifo1(width=32) dataFromMem
     FIELD AdapterToBus(width=64,owidth=32) radapter
     FIELD Bit(32) dataToJtag
-    INTERFACE PipeInLast(width=32) readMem
     METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && (writeNext))) {
         CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{buffer,(64) - (32),0}}}
         STORE :addr = (addr) + (1)
@@ -122,12 +118,16 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
         STORE :dataNotAvail = 1
         STORE :countTo = (countTo) + (1)
     }
-    METHOD/Action readMem$enq__ENA ( Bit(32) v , Bit(1) last ) {
-        STORE :dataToJtag = readMem$enq$v
-        CALL/Action :dataFromMem$in$enq__ENA{readMem$enq$last}
-        STORE (readMem$enq$last):readAddr = (readAddr) + (1)
-        CALL/Action (readMem$enq$last):bram$read__ENA{readAddr}
-        STORE (readMem$enq$last):dataNotAvail = 0
+    METHOD/Rule/Action RULE$copyFromAdapter__ENA {
+        CALL :radapter$out$first{}
+        STORE :dataToJtag = radapter$out$first
+        CALL :radapter$out$last{}
+        CALL/Action :dataFromMem$in$enq__ENA{radapter$out$last}
+        CALL :radapter$out$last{}
+        STORE (radapter$out$last):readAddr = (readAddr) + (1)
+        CALL/Action (radapter$out$last):bram$read__ENA{readAddr}
+        STORE (radapter$out$last):dataNotAvail = 0
+        CALL/Action :radapter$out$deq__ENA{}
         STORE :countFrom = (countFrom) + (1)
     }
     METHOD/Rule/Action RULE$callBack__ENA {

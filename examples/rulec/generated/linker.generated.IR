@@ -18,12 +18,15 @@ MODULE UserTop UserTop_interface {
     FIELD PipeIn__W90 ctop$indication
     FIELD PipeIn__W90 ctop$request
     FIELD PipeIn__W90 indication
+    FIELD PipeOutLast out2$in
+    FIELD PipeInLast out2$out
     FIELD PipeInLength__W80 radapter_0$in
-    FIELD PipeInLast radapter_0$out
+    FIELD PipeOutLast radapter_0$out
     FIELD PipeIn__W90 wad
     FIELD PipeInLast wadapter_0$in
     FIELD PipeIn__W90 wadapter_0$out
     FIELD AdapterToBus__Iz1 radapter_0
+    FIELD Out2InLast__W20 out2
     FIELD AdapterFromBus__OBz2 wadapter_0
     FIELD l_top__Rz3_Iz4 ctop
 }
@@ -36,6 +39,12 @@ MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
 INTERFACE AdapterToBus__Iz1_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE Out2InLast__W20 Out2InLast__W20_interface {
+}
+INTERFACE Out2InLast__W20_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -106,6 +115,7 @@ FILE ../../lib/generated/userTop.generated.vh
 FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/AdapterToBus.sv
+FILE ../../lib/generated/Out2InLast.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
 FILE generated/rulec.generated.vh

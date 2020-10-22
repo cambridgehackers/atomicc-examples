@@ -5,6 +5,7 @@ module atomiccDummy (input wire CLK, input wire nRST,
     PipeIn.server pi,
     PipeOut.server po,
     PipeInLast.server pilast,
+    PipeOutLast.server polast,
     PipeInLength.server pilength);
     NOCDataH dummyn;
 

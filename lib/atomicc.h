@@ -75,6 +75,13 @@ class PipeInLast {
     void enq(__uint(width) v, bool last);
 };
 template<int width>
+class PipeOutLast {
+    void deq(void);
+    __uint(width) first(void);
+    bool last(void);
+};
+
+template<int width>
 class PipeInLength {
     void enq(__uint(width) v, LenType size);  // size in bits
 };

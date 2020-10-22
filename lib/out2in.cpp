@@ -28,4 +28,13 @@ class Out2InBase __implements Out2InIfc<__uint(width)> {
     }
 };
 
+template <int width>
+class Out2InLast __implements Out2InLastIfc<width> {
+    __rule copyRule {
+        this->out->enq(this->in->first(), this->in->last());
+        this->in->deq();
+    }
+};
+
 static Out2InBase<GENERIC_INT_TEMPLATE_FLAG> dummy;
+static Out2InLast<GENERIC_INT_TEMPLATE_FLAG> dummyLast;

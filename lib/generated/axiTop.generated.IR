@@ -53,10 +53,6 @@ INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
-INTERFACE PipeInLength(width=144)  {
-    FILE atomicc_OC_h
-    METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
-}
 INTERFACE PipeOut(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
@@ -83,7 +79,7 @@ INTERFACE ZynqInterruptT  {
 INTERFACE l_topIfc  {
     FILE userTop_OC_h
     INTERFACE PipeIn(width=144) request
-    INTERFACE/Ptr PipeInLength(width=144) indication
+    INTERFACE/Ptr PipeIn(width=144) indication
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h

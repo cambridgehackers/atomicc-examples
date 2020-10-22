@@ -8,14 +8,29 @@ INTERFACE Out2InIfc(width=999999)  {
     INTERFACE/Ptr PipeOut(width=999999) in
     INTERFACE/Ptr PipeIn(width=999999) out
 }
+INTERFACE Out2InLastIfc(width=999999)  {
+    FILE out2in_OC_h
+    INTERFACE/Ptr PipeOutLast(width=999999) in
+    INTERFACE/Ptr PipeInLast(width=999999) out
+}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeInLast(width=999999)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
 INTERFACE PipeOut(width=999999)  {
     FILE atomicc_OC_h
     METHOD/Action deq__ENA
     METHOD first Bit(width)
+}
+INTERFACE PipeOutLast(width=999999)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+    METHOD last Bit(1)
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
@@ -25,6 +40,15 @@ MODULE Out2InBase(width=999999) Out2InIfc(width=999999) {
     METHOD/Rule/Action RULE$copyRule__ENA {
         CALL :in$first{}
         CALL/Action :out$enq__ENA{in$first}
+        CALL/Action :in$deq__ENA{}
+    }
+}
+MODULE Out2InLast(width=999999) Out2InLastIfc(width=999999) {
+    FILE out2in_OC_cpp
+    METHOD/Rule/Action RULE$copyRule__ENA {
+        CALL :in$first{}
+        CALL :in$last{}
+        CALL/Action :out$enq__ENA{in$first,in$last}
         CALL/Action :in$deq__ENA{}
     }
 }

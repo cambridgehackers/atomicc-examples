@@ -24,6 +24,7 @@ class atomiccDummyIfc {
 PipeIn<__uint(32)>           pi;
 PipeOut<__uint(32)>          po;
 PipeInLast<32>               pilast;
+PipeOutLast<32>              polast;
 PipeInLength<32>             pilength;
 };
 class atomiccDummy __implements atomiccDummyIfc {
