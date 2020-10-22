@@ -19,11 +19,6 @@ INTERFACE BscanIfc(width=32)  {
     INTERFACE PipeIn(width=32) toBscan
     INTERFACE/Ptr PipeIn(width=32) fromBscan
 }
-INTERFACE Fifo(width=32)  {
-    FILE fifo_OC_h
-    INTERFACE PipeIn(width=32) in
-    INTERFACE PipeOut(width=32) out
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -31,11 +26,6 @@ INTERFACE PipeIn(width=32)  {
 INTERFACE PipeInLength(width=64)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
-}
-INTERFACE PipeOut(width=32)  {
-    FILE atomicc_OC_h
-    METHOD/Action deq__ENA
-    METHOD first Bit(width)
 }
 INTERFACE PipeOutLast(width=32)  {
     FILE atomicc_OC_h
@@ -62,30 +52,10 @@ EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
-EMODULE Fifo1Base(width=32) Fifo(width=32) {
-    FILE fifo_OC_h
-}
-MODULE Fifo1(width=32) Fifo(width=32) {
-    FILE fifo_OC_h
-    FIELD Fifo1Base(width=32) fifo
-    METHOD/Action in$enq__ENA ( Bit(32) v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first Bit(32) = ((fifo$out$first)) {
-        CALL :fifo$out$first{}
-    }
-}
 MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     FILE tracebuf_OC_cpp
     INTERFACECONNECT readUser bscan$fromBscan PipeIn(width=32)
     FIELD BRAM(width=64,depth=1024) bram
-    FIELD Bit(8) countFrom
-    FIELD Bit(8) countTo
-    FIELD Bit(8) countJtag
-    FIELD Bit(8) countCB
     FIELD Bit(32) timestamp
     FIELD Bit(64) buffer
     FIELD Bit(11) addr
@@ -93,10 +63,7 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
     FIELD Bit(11) readAddr
     FIELD Bscan(id=3,width=32) bscan
     INTERFACE PipeIn(width=32) readUser
-    FIELD Bit(1) dataNotAvail
-    FIELD Fifo1(width=32) dataFromMem
     FIELD AdapterToBus(width=64,owidth=32) radapter
-    FIELD Bit(32) dataToJtag
     METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && (writeNext))) {
         CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{buffer,(64) - (32),0}}}
         STORE :addr = (addr) + (1)
@@ -107,31 +74,17 @@ MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
         STORE :writeNext = (buffer) != (data)
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
-        CALL/Action :dataFromMem$out$deq__ENA{}
-        STORE :countJtag = (countJtag) + (1)
-    }
-    METHOD/Rule/Action RULE$readCallBack__ENA if (((dataNotAvail) ^ (1))) {
-        ALLOCA Bit(16) _RULE$readCallBack$packetWidth
-        LET Bit(16) :_RULE$readCallBack$packetWidth = 64
-        CALL :bram$dataOut{}
-        CALL/Action :radapter$in$enq__ENA{bram$dataOut,_RULE$readCallBack$packetWidth}
-        STORE :dataNotAvail = 1
-        STORE :countTo = (countTo) + (1)
-    }
-    METHOD/Rule/Action RULE$copyFromAdapter__ENA {
-        CALL :radapter$out$first{}
-        STORE :dataToJtag = radapter$out$first
-        CALL :radapter$out$last{}
-        CALL/Action :dataFromMem$in$enq__ENA{radapter$out$last}
         CALL :radapter$out$last{}
         STORE (radapter$out$last):readAddr = (readAddr) + (1)
         CALL/Action (radapter$out$last):bram$read__ENA{readAddr}
-        STORE (radapter$out$last):dataNotAvail = 0
         CALL/Action :radapter$out$deq__ENA{}
-        STORE :countFrom = (countFrom) + (1)
+    }
+    METHOD/Rule/Action RULE$readCallBack__ENA {
+        CALL :bram$dataOut{}
+        CALL/Action :radapter$in$enq__ENA{bram$dataOut,64}
     }
     METHOD/Rule/Action RULE$callBack__ENA {
-        CALL/Action :bscan$toBscan$enq__ENA{dataToJtag}
-        STORE :countCB = (countCB) + (1)
+        CALL :radapter$out$first{}
+        CALL/Action :bscan$toBscan$enq__ENA{radapter$out$first}
     }
 }

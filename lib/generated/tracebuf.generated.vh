@@ -34,21 +34,17 @@ endinterface
 //METASTART; Trace
 //METAINTERNAL; bram; BRAM(width=64,depth=1024);
 //METAINTERNAL; bscan; Bscan(id=3,width=32);
-//METAINTERNAL; dataFromMem; Fifo1Base(width=32);
 //METAINTERNAL; radapter; AdapterToBus(width=64,owidth=32);
 //METAINVOKE; RULE$copyRule__ENA; :bram$write__ENA;
 //METAGUARD; RULE$copyRule; !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
 //METAGUARD; RULE$init; 1'd1;
-//METAINVOKE; readUser.enq__ENA; :dataFromMem$out.deq__ENA;
-//METAGUARD; readUser.enq; dataFromMem$out.deq__RDY;
+//METAINVOKE; readUser.enq__ENA; radapter$out$last:bram$read__ENA;:radapter$out.deq__ENA;
+//METAGUARD; readUser.enq; radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out$last || ( !radapter$out.deq__RDY ) ) ) ) );
 //METAINVOKE; RULE$readCallBack__ENA; :radapter$in.enq__ENA;
-//METAEXCLUSIVE; RULE$readCallBack__ENA; RULE$copyFromAdapter__ENA
-//METAGUARD; RULE$readCallBack; !( ( 0 == ( dataNotAvail ^ 1 ) ) || ( !( bram$dataOut__RDY && radapter$in.enq__RDY ) ) );
-//METAINVOKE; RULE$copyFromAdapter__ENA; radapter$out$last:bram$read__ENA;:dataFromMem$in.enq__ENA;:radapter$out.deq__ENA;
-//METAGUARD; RULE$copyFromAdapter; radapter$out.first__RDY && radapter$out.last__RDY && dataFromMem$in.enq__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out$last || ( !radapter$out.deq__RDY ) ) ) ) );
+//METAGUARD; RULE$readCallBack; bram$dataOut__RDY && radapter$in.enq__RDY;
 //METAINVOKE; RULE$callBack__ENA; :bscan$toBscan.enq__ENA;
-//METAGUARD; RULE$callBack; bscan$toBscan.enq__RDY;
-//METARULES; RULE$copyRule; RULE$init; RULE$readCallBack; RULE$copyFromAdapter; RULE$callBack
+//METAGUARD; RULE$callBack; radapter$out.first__RDY && bscan$toBscan.enq__RDY;
+//METARULES; RULE$copyRule; RULE$init; RULE$readCallBack; RULE$callBack
 //METACONNECT; readUser.enq__ENA; bscan$fromBscan.enq__ENA
 //METACONNECT; readUser.enq__RDY; bscan$fromBscan.enq__RDY
 `endif

@@ -30,7 +30,6 @@
 template <int width, int depth>    // 'width' includes TIMESTAMP_WIDTH
 class Trace __implements TraceIfc<width, depth> {
     BRAM<width, depth> bram;
-__uint(8) countFrom, countTo, countJtag, countCB;
 
     // trace capture to bram
     __uint(TIMESTAMP_WIDTH) timestamp;
@@ -52,52 +51,22 @@ __uint(8) countFrom, countTo, countJtag, countCB;
     __uint(__clog2(depth)) readAddr;
     Bscan<3,32> bscan;
     __implements bscan.fromBscan readUser;
-    bool dataNotAvail;
-    Fifo1<__uint(32)> dataFromMem;
+    AdapterToBus<width, 32> radapter;
     void readUser.enq(__uint(32) v) { // data from jtag
-        dataFromMem.out.deq(); // clear after toBscan.enq finished
-countJtag++;
+        if (radapter.out.last())
+            bram.read(readAddr++);
+        radapter.out.deq();
     }
 
     // chop up data
-    AdapterToBus<width, 32> radapter;
-    __rule readCallBack if (!dataNotAvail) {
-        LenType packetWidth = width;
-        radapter.in.enq(bram.dataOut(), packetWidth);
-        dataNotAvail = true;
-countTo++;
+    __rule readCallBack {
+        radapter.in.enq(bram.dataOut(), width);
     }
 
     // pass chopped up data to jtag
-    __uint(32) dataToJtag;
-#if 0
-    __implements radapter.out readMem;
-    void readMem.enq(__uint(32) v, bool last) { // data from adapter(PipeInLast), heading to jtag
-        dataToJtag = v;
-        dataFromMem.in.enq(last);
-        if (last) {
-            bram.read(readAddr++);
-            dataNotAvail = false;
-        }
-countFrom++;
-    }
-#else
-    __rule copyFromAdapter {
-        dataToJtag = radapter.out.first();
-        dataFromMem.in.enq(radapter.out.last());
-        if (radapter.out.last()) {
-            bram.read(readAddr++);
-            dataNotAvail = false;
-        }
-        radapter.out.deq();
-countFrom++;
-    }
-#endif
     __rule callBack {
         // send to trace buffer to jtag
-        bscan.toBscan.enq(dataToJtag);
-                                   //__bitconcat(countTo, countFrom, __bitsubstr(countCB, 7, 0), countJtag));
-countCB++;
+        bscan.toBscan.enq(radapter.out.first());
     }
 };
 
