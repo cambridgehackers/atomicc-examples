@@ -27,24 +27,22 @@
 
 #define TIMESTAMP_WIDTH 32
 
-template <int width, int depth>    // 'width' includes TIMESTAMP_WIDTH
-class Trace __implements TraceIfc<width, depth> {
+template <int width, int depth, int sensitivity>    // 'width' includes TIMESTAMP_WIDTH
+class Trace __implements TraceIfc<width, depth, sensitivity> {
     BRAM<width, depth> bram;
 
     // trace capture to bram
     __uint(TIMESTAMP_WIDTH) timestamp;
-    __uint(width) buffer;
+    __uint(sensitivity) buffer;
     __uint(__clog2(depth)) addr;
-    bool writeNext;
-    __rule copyRule if (this->enable && writeNext) {
+    __rule copyRule if (this->enable && buffer != __bitsubstr(this->data, width - 32L - 1, width - 32L - sensitivity)) {
         // write next entry to trace buffer
-        bram.write(addr, __bitconcat(timestamp, __bitsubstr(buffer, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
+        bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
         addr++;
+        buffer = __bitsubstr(this->data, width - 32L - 1, width - 32L - sensitivity);
     }
     __rule init {
         timestamp++;
-        buffer = this->data;
-        writeNext = (buffer != this->data);
     }
 
     // trace readout to bscan
@@ -70,4 +68,4 @@ class Trace __implements TraceIfc<width, depth> {
     }
 };
 
-Trace<64, 1024> dummy;
+Trace<64, 1024, 99> dummy;

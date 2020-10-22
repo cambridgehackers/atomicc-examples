@@ -3,16 +3,16 @@
 `default_nettype none
 module Trace #(
     parameter integer width = 64,
-    parameter integer depth = 1024)(
+    parameter integer depth = 1024,
+    parameter integer sensitivity = 99)(
     input wire CLK,
     input wire nRST,
     input wire enable,
     input wire [width - 1:0]data);
     reg [11 - 1:0]addr;
-    reg [width - 1:0]buffer;
+    reg [sensitivity - 1:0]buffer;
     reg [11 - 1:0]readAddr;
     reg [32 - 1:0]timestamp;
-    reg writeNext;
     logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
     logic [width - 1:0]bram$dataOut;
@@ -24,9 +24,9 @@ module Trace #(
     PipeOutLast#(.width(32)) radapter$out();
     PipeIn#(.width(32)) readUser();
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
-        .write__ENA(!( ( enable == 0 ) || ( !writeNext ) )),
-        .write$addr(( !( ( enable == 0 ) || ( !writeNext ) ) ) ? addr : 11'd0),
-        .write$data(( !( ( enable == 0 ) || ( !writeNext ) ) ) ? { timestamp , buffer[ ( width - 32 ) : 0 ] } : 0),
+        .write__ENA(!( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) )),
+        .write$addr(( !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) ) ) ? addr : 11'd0),
+        .write$data(( !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
         .read__ENA(readUser.enq__ENA && radapter$out.last),
         .read$addr(( readUser.enq__ENA && radapter$out.last ) ? readAddr : 11'd0),
@@ -40,8 +40,8 @@ module Trace #(
         .in(radapter$in),
         .out(radapter$out));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
-    assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
+    assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) || ( !bram$write__RDY ) );
+    assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) || ( !bram$write__RDY ) );
     assign bscan$toBscan.enq$v = radapter$out.first__RDY ? radapter$out.first : 0;
     assign bscan$toBscan.enq__ENA = radapter$out.first__RDY;
     assign radapter$in.enq$size = radapter$in.enq__ENA ? ( (32'(width)) ) : 32'd0;
@@ -55,16 +55,14 @@ module Trace #(
         buffer <= 0;
         readAddr <= 0;
         timestamp <= 0;
-        writeNext <= 0;
       end // nRST
       else begin
         if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
             addr <= addr + 11'd1;
+            buffer <= data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ];
         end; // End of RULE$copyRule__ENA
         // RULE$init__ENA
             timestamp <= timestamp + 32'd1;
-            buffer <= data;
-            writeNext <= buffer != data;
         // End of RULE$init__ENA
         if (readUser.enq__ENA && readUser.enq__RDY) begin // readUser.enq__ENA
             if (radapter$out.last)

@@ -20,7 +20,7 @@
 // CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 #include "atomicc.h"
-template <int width, int depth>
+template <int width, int depth, int sensitivity>
 class TraceIfc {
     __input __uint(1) CLK;
     __input __uint(1) nRST;
@@ -28,7 +28,7 @@ class TraceIfc {
     __input __uint(width) data;
 };
 
-template <int width, int depth>
-class Trace __implements TraceIfc<width, depth>;
+template <int width, int depth, int sensitivity>
+class Trace __implements TraceIfc<width, depth, sensitivity>;
 
 

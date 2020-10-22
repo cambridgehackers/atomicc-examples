@@ -33,7 +33,7 @@ INTERFACE PipeOutLast(width=32)  {
     METHOD first Bit(width)
     METHOD last Bit(1)
 }
-INTERFACE TraceIfc(width=64,depth=1024)  {
+INTERFACE TraceIfc(width=64,depth=1024,sensitivity=99)  {
     FILE tracebuf_OC_h
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
@@ -52,26 +52,24 @@ EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
-MODULE Trace(width=64,depth=1024) TraceIfc(width=64,depth=1024) {
+MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,sensitivity=99) {
     FILE tracebuf_OC_cpp
     INTERFACECONNECT readUser bscan$fromBscan PipeIn(width=32)
     FIELD BRAM(width=64,depth=1024) bram
     FIELD Bit(32) timestamp
-    FIELD Bit(64) buffer
+    FIELD Bit(99) buffer
     FIELD Bit(11) addr
-    FIELD Bit(1) writeNext
     FIELD Bit(11) readAddr
     FIELD Bscan(id=3,width=32) bscan
     INTERFACE PipeIn(width=32) readUser
     FIELD AdapterToBus(width=64,owidth=32) radapter
-    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && (writeNext))) {
-        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{buffer,(64) - (32),0}}}
+    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (__bitsubstr{data,((64) - (32)) - (1),((64) - (32)) - (99)})))) {
+        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,(64) - (32),0}}}
         STORE :addr = (addr) + (1)
+        STORE :buffer = __bitsubstr{data,((64) - (32)) - (1),((64) - (32)) - (99)}
     }
     METHOD/Rule/Action RULE$init__ENA {
         STORE :timestamp = (timestamp) + (1)
-        STORE :buffer = data
-        STORE :writeNext = (buffer) != (data)
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
         CALL :radapter$out$last{}

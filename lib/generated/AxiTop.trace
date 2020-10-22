@@ -1,0 +1,5 @@
+
+static int width[] = {32,
+ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 32, 12, 4, 32, 12, 4, 32, 12, 1, 32, 12, 1, 2, 12, 2,-1};
+static const char *fullname[] = {"TIME",
+ "interrupt", "MAXIGP0_O.AR__ENA", "MAXIGP0_O.AR__RDY", "MAXIGP0_O.AW__ENA", "MAXIGP0_O.AW__RDY", "MAXIGP0_O.W__ENA", "MAXIGP0_O.W__RDY", "MAXIGP0_I.R__ENA", "MAXIGP0_I.R__RDY", "MAXIGP0_I.B__ENA", "MAXIGP0_I.B__RDY", "MAXIGP0_O.AR$addr", "MAXIGP0_O.AR$id", "MAXIGP0_O.AR$len", "MAXIGP0_O.AW$addr", "MAXIGP0_O.AW$id", "MAXIGP0_O.AW$len", "MAXIGP0_O.W$data", "MAXIGP0_O.W$id", "MAXIGP0_O.W$last", "MAXIGP0_I.R$data", "MAXIGP0_I.R$id", "MAXIGP0_I.R$last", "MAXIGP0_I.R$resp", "MAXIGP0_I.B$id", "MAXIGP0_I.B$resp",};

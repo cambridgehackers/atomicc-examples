@@ -23,7 +23,7 @@
 #include "userTop.h"
 #include "tracebuf.h"
 
-Trace<4, 1024> dummy;
+Trace<4, 1024, 99> dummy;
 // Datatypes for holding request info during processing
 typedef __uint(5) AXIAddr;
 typedef __uint(6) AXIId;

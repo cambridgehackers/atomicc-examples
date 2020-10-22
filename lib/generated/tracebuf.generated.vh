@@ -22,7 +22,7 @@ endinterface
 `endif
 `ifndef __TraceIfc_DEF__
 `define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, width = 64);
+interface TraceIfc#(depth = 1024, sensitivity = 99, width = 64);
     logic  CLK;
     logic  nRST;
     logic  enable;
@@ -36,7 +36,7 @@ endinterface
 //METAINTERNAL; bscan; Bscan(id=3,width=32);
 //METAINTERNAL; radapter; AdapterToBus(width=64,owidth=32);
 //METAINVOKE; RULE$copyRule__ENA; :bram$write__ENA;
-//METAGUARD; RULE$copyRule; !( ( enable == 0 ) || ( !( writeNext && bram$write__RDY ) ) );
+//METAGUARD; RULE$copyRule; !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) || ( !bram$write__RDY ) );
 //METAGUARD; RULE$init; 1'd1;
 //METAINVOKE; readUser.enq__ENA; radapter$out$last:bram$read__ENA;:radapter$out.deq__ENA;
 //METAGUARD; readUser.enq; radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out$last || ( !radapter$out.deq__RDY ) ) ) ) );
