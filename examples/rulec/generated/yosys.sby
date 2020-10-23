@@ -5,13 +5,13 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv 
+read_verilog -sv -formal ZynqTop.sv P7Wrap.sv AxiTop.sv Bscan.sv ClockTop.sv Fifo1Base.sv UserTop.sv Trace.sv BscanLocal.sv ResetInverter.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv BRAM.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv 
 
-prep -top VsimTop
+prep -top ZynqTop
 
 [files]
-../../lib/generated/VsimTop.sv
-../../lib/generated/vsimTop.generated.vh
+../../lib/generated/ZynqTop.sv
+../../lib/generated/zynqTop.generated.vh
 ../../lib/generated/atomicclib.vh
 ../../lib/generated/adapter.generated.vh
 ../../lib/generated/atomicc.generated.vh
@@ -34,13 +34,22 @@ prep -top VsimTop
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
-../../lib/generated/zynqTop.generated.vh
+../../lib/generated/vsimTop.generated.vh
+../../lib/generated/P7Wrap.sv
+../../lib/generated/AxiTop.sv
+../../lib/generated/Bscan.sv
+../../lib/generated/ClockTop.sv
+../../lib/generated/Fifo1Base.sv
 ../../lib/generated/UserTop.sv
+../../lib/generated/Trace.sv
+../../lib/generated/BscanLocal.sv
+../../lib/generated/ResetInverter.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/Out2InLast.sv
 ../../lib/generated/AdapterFromBus.sv
 generated/l_top.sv
 generated/rulec.generated.vh
+../../lib/generated/BRAM.sv
 generated/___M2PEchoIndication.sv
 generated/Echo.sv
 generated/___P2MEchoRequest.sv

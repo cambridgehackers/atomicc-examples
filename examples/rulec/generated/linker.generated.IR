@@ -1,18 +1,155 @@
-MODULE VsimTop VsimTop_interface {
-    FIELD PipeInLast sink_0$port
-    FIELD PipeInLast source_0$port
+MODULE ZynqTop ZynqTop_interface {
+    FIELD PipeIn bscan$fromBscan
+    FIELD PipeIn bscan$toBscan
+    FIELD Pps7fclk ps7_ps7_foo$FCLK
+    FIELD MaxiI ps7_ps7_foo$MAXIGP0_I
+    FIELD MaxiO ps7_ps7_foo$MAXIGP0_O
+    FIELD ZynqInterrupt ps7_ps7_foo$intr
+    FIELD PipeIn readUser
+    FIELD MaxiI test$MAXIGP0_I
+    FIELD MaxiO test$MAXIGP0_O
+    FIELD P7Wrap ps7_ps7_foo
+    FIELD AxiTop test
+    FIELD BUFG ps7_fclk_0_c
+    FIELD BUFG ps7_freset_0_r
+    FIELD Bscan bscan
+}
+INTERFACE ZynqTop_interface {
+    FIELD/inout Bit(54) MIO
+    FIELD/inout Bit(15) DDR_Addr
+    FIELD/inout Bit(3) DDR_BankAddr
+    FIELD/inout Bit(1) DDR_CAS_n
+    FIELD/inout Bit(1) DDR_CKE
+    FIELD/inout Bit(1) DDR_Clk_n
+    FIELD/inout Bit(1) DDR_Clk_p
+    FIELD/inout Bit(1) DDR_CS_n
+    FIELD/inout Bit(4) DDR_DM
+    FIELD/inout Bit(32) DDR_DQ
+    FIELD/inout Bit(4) DDR_DQS_n
+    FIELD/inout Bit(4) DDR_DQS_p
+    FIELD/inout Bit(1) DDR_DRSTB
+    FIELD/inout Bit(1) DDR_ODT
+    FIELD/inout Bit(1) DDR_RAS_n
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrn
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrp
+    FIELD/inout Bit(1) DDR_WEB
+    FIELD/inout Bit(1) FIXED_IO_ps_clk
+    FIELD/inout Bit(1) FIXED_IO_ps_porb
+    FIELD/inout Bit(1) FIXED_IO_ps_srstb
+}
+MODULE P7Wrap P7Wrap_interface {
+    FIELD PS7 pps
+    FIELD ClockTop pclockTop
+}
+INTERFACE P7Wrap_interface {
+    FIELD/inout Bit(54) MIO
+    FIELD/inout Bit(15) DDR_Addr
+    FIELD/inout Bit(3) DDR_BankAddr
+    FIELD/inout Bit(1) DDR_CAS_n
+    FIELD/inout Bit(1) DDR_CKE
+    FIELD/inout Bit(1) DDR_Clk_n
+    FIELD/inout Bit(1) DDR_Clk_p
+    FIELD/inout Bit(1) DDR_CS_n
+    FIELD/inout Bit(4) DDR_DM
+    FIELD/inout Bit(32) DDR_DQ
+    FIELD/inout Bit(4) DDR_DQS_n
+    FIELD/inout Bit(4) DDR_DQS_p
+    FIELD/inout Bit(1) DDR_DRSTB
+    FIELD/inout Bit(1) DDR_ODT
+    FIELD/inout Bit(1) DDR_RAS_n
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrn
+    FIELD/inout Bit(1) FIXED_IO_ddr_vrp
+    FIELD/inout Bit(1) DDR_WEB
+    FIELD/inout Bit(1) FIXED_IO_ps_clk
+    FIELD/inout Bit(1) FIXED_IO_ps_porb
+    FIELD/inout Bit(1) FIXED_IO_ps_srstb
+}
+MODULE AxiTop AxiTop_interface {
+    FIELD PipeOut __traceMemory$out
+    FIELD PipeIn__W26 readData$in
+    FIELD PipeOut__W26 readData$out
+    FIELD PipeInLast readUser
+    FIELD PipeIn__W6 reqArs$in
+    FIELD PipeOut__W6 reqArs$out
+    FIELD PipeIn__W6 reqAws$in
+    FIELD PipeOut__W6 reqAws$out
+    FIELD PipeIn requestValue$in
+    FIELD PipeOut requestValue$out
     FIELD PipeInLast user$read
     FIELD PipeInLast user$write
+    FIELD PipeIn writeData$in
+    FIELD PipeOut writeData$out
+    FIELD PipeIn__W6 writeDone$in
+    FIELD PipeOut__W6 writeDone$out
+    FIELD Fifo1Base__W6_Iz1_Oz2 reqArs
+    FIELD Fifo1Base__W6_Iz3_Oz4 reqAws
+    FIELD Fifo1Base__W6_Iz5_Oz6 writeDone
+    FIELD Fifo1Base__W20 requestValue
+    FIELD Fifo1Base__W26_Iz7_Oz8 readData
+    FIELD Fifo1Base__W20 writeData
     FIELD UserTop user
-    FIELD VsimReceive sink_0
-    FIELD VsimSend source_0
+    FIELD Trace__Wf5_Sb __traceMemory
 }
-INTERFACE VsimTop_interface {
+INTERFACE AxiTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
-    FIELD/input  Bit(1) CLK_derivedClock
-    FIELD/input  Bit(1) nRST_derivedReset
-    FIELD/input  Bit(1) CLK_sys_clk
+    FIELD/output Bit(1) interrupt
+}
+MODULE Bscan Bscan_interface {
+    FIELD BSCANE2 bscan
+    FIELD BUFG bscan_mytck
+    FIELD BscanLocal__W20 localBscan
+}
+INTERFACE Bscan_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE ClockTop ClockTop_interface {
+    FIELD MMCME2_ADV ps7_clockGen_pll
+    FIELD ResetInverter rinverter
+    FIELD BUFG clkbuf
+    FIELD BUFG clkbuf0
+}
+INTERFACE ClockTop_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(1) clockOut
+}
+MODULE Fifo1Base__W26_Iz7_Oz8 Fifo1Base__W26_Iz7_Oz8_interface {
+}
+INTERFACE Fifo1Base__W26_Iz7_Oz8_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE Fifo1Base__W20 Fifo1Base__W20_interface {
+}
+INTERFACE Fifo1Base__W20_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE Fifo1Base__W6_Iz5_Oz6 Fifo1Base__W6_Iz5_Oz6_interface {
+}
+INTERFACE Fifo1Base__W6_Iz5_Oz6_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE Fifo1Base__W6_Iz3_Oz4 Fifo1Base__W6_Iz3_Oz4_interface {
+}
+INTERFACE Fifo1Base__W6_Iz3_Oz4_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE Fifo1Base__W6_Iz1_Oz2 Fifo1Base__W6_Iz1_Oz2_interface {
+}
+INTERFACE Fifo1Base__W6_Iz1_Oz2_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
 }
 MODULE UserTop UserTop_interface {
     FIELD PipeIn__W90 ctop$indication
@@ -25,18 +162,60 @@ MODULE UserTop UserTop_interface {
     FIELD PipeIn__W90 wad
     FIELD PipeInLast wadapter_0$in
     FIELD PipeIn__W90 wadapter_0$out
-    FIELD AdapterToBus__Iz1 radapter_0
+    FIELD AdapterToBus__Iz9 radapter_0
     FIELD Out2InLast__W20 out2
-    FIELD AdapterFromBus__OBz2 wadapter_0
-    FIELD l_top__Rz3_Iz4 ctop
+    FIELD AdapterFromBus__OBz10 wadapter_0
+    FIELD l_top__Rz11_Iz12 ctop
 }
 INTERFACE UserTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
+MODULE Trace__Wf5_Sb Trace__Wf5_Sb_interface {
+    FIELD PipeInLength__Wf5 radapter$in
+    FIELD PipeOutLast radapter$out
+    FIELD BRAM__Wf5_D400 bram
+    FIELD AdapterToBus__Wf5_Iz13 radapter
 }
-INTERFACE AdapterToBus__Iz1_interface {
+INTERFACE Trace__Wf5_Sb_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) sensitivity
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) enable
+    FIELD/input  Bit(245) data
+}
+MODULE BscanLocal__W20 BscanLocal__W20_interface {
+}
+INTERFACE BscanLocal__W20_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) capture
+    FIELD/input  Bit(1) shift
+    FIELD/input  Bit(1) update
+    FIELD/output Bit(1) TDO
+    FIELD/input  Bit(1) TDI
+    FIELD/input  Bit(32) toBscan
+    FIELD/output Bit(32) fromBscan
+}
+MODULE ResetInverter ResetInverter_interface {
+}
+INTERFACE ResetInverter_interface {
+    FIELD/input  Bit(1) RESET_IN
+    FIELD/output Bit(1) RESET_OUT
+}
+MODULE AdapterToBus__Wf5_Iz13 AdapterToBus__Wf5_Iz13_interface {
+}
+INTERFACE AdapterToBus__Wf5_Iz13_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) owidth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+}
+MODULE AdapterToBus__Iz9 AdapterToBus__Iz9_interface {
+}
+INTERFACE AdapterToBus__Iz9_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
@@ -48,31 +227,48 @@ INTERFACE Out2InLast__W20_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE AdapterFromBus__OBz2 AdapterFromBus__OBz2_interface {
+MODULE AdapterFromBus__OBz10 AdapterFromBus__OBz10_interface {
 }
-INTERFACE AdapterFromBus__OBz2_interface {
+INTERFACE AdapterFromBus__OBz10_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE l_top__Rz3_Iz4 l_top__Rz3_Iz4_interface {
+MODULE l_top__Rz11_Iz12 l_top__Rz11_Iz12_interface {
     FIELD EchoIndication DUT__Echo$indication
     FIELD EchoRequest DUT__Echo$request
     FIELD EchoIndication M2P__indication$method
     FIELD PipeIn__W90 M2P__indication$pipe
     FIELD EchoRequest P2M__request$method
     FIELD PipeIn__W90 P2M__request$pipe
-    FIELD ___M2PEchoIndication__Pz5 M2P__indication
+    FIELD ___M2PEchoIndication__Pz14 M2P__indication
     FIELD Echo DUT__Echo
-    FIELD ___P2MEchoRequest__Pz5 P2M__request
+    FIELD ___P2MEchoRequest__Pz14 P2M__request
 }
-INTERFACE l_top__Rz3_Iz4_interface {
+INTERFACE l_top__Rz11_Iz12_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE ___M2PEchoIndication__Pz5 ___M2PEchoIndication__Pz5_interface {
+MODULE BRAM__Wf5_D400 BRAM__Wf5_D400_interface {
 }
-INTERFACE ___M2PEchoIndication__Pz5_interface {
+INTERFACE BRAM__Wf5_D400_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) depth
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) write__ENA
+    FIELD/input  Bit(10) write$addr
+    FIELD/input  Bit(245) write$data
+    FIELD/output Bit(1) write__RDY
+    FIELD/input  Bit(1) read__ENA
+    FIELD/input  Bit(10) read$addr
+    FIELD/output Bit(1) read__RDY
+    FIELD/output Bit(245) dataOut
+    FIELD/output Bit(1) dataOut__RDY
+}
+MODULE ___M2PEchoIndication__Pz14 ___M2PEchoIndication__Pz14_interface {
+}
+INTERFACE ___M2PEchoIndication__Pz14_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -82,14 +278,14 @@ INTERFACE Echo_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE ___P2MEchoRequest__Pz5 ___P2MEchoRequest__Pz5_interface {
+MODULE ___P2MEchoRequest__Pz14 ___P2MEchoRequest__Pz14_interface {
 }
-INTERFACE ___P2MEchoRequest__Pz5_interface {
+INTERFACE ___P2MEchoRequest__Pz14_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-FILE ../../lib/generated/VsimTop.sv
-FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/ZynqTop.sv
+FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
@@ -112,13 +308,22 @@ FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/zynqTop.generated.vh
+FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/P7Wrap.sv
+FILE ../../lib/generated/AxiTop.sv
+FILE ../../lib/generated/Bscan.sv
+FILE ../../lib/generated/ClockTop.sv
+FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/UserTop.sv
+FILE ../../lib/generated/Trace.sv
+FILE ../../lib/generated/BscanLocal.sv
+FILE ../../lib/generated/ResetInverter.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
 FILE generated/rulec.generated.vh
+FILE ../../lib/generated/BRAM.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/Echo.sv
 FILE generated/___P2MEchoRequest.sv
