@@ -23,6 +23,7 @@
 #include "VBUFG.h"
 #include "axiTop.h"
 #include "clockTop.h"
+#include "bscan.h"
 
 class ZynqClock {
     __inout __uint(15) DDR_Addr;
@@ -148,4 +149,14 @@ class ZynqTop __implements ZynqTopIFC {
         test._.CLK = __defaultClock;
         test._.nRST = __defaultnReset;
     }
+    // trace readout to bscan
+    Bscan<3,32> bscan;
+    __implements bscan.fromBscan readUser;
+    void readUser.enq(__uint(32) v) { // data from jtag
+        //test.__traceMemory$out.deq();
+    }
+    //__rule callBack {
+        // send to trace buffer to jtag
+        //bscan.toBscan.enq(test.__traceMemory$out.first());
+    //}
 };

@@ -157,7 +157,9 @@ endinterface
 //METAINTERNAL; test; AxiTop;
 //METAINTERNAL; ps7_fclk_0_c; BUFG;
 //METAINTERNAL; ps7_freset_0_r; BUFG;
+//METAINTERNAL; bscan; Bscan(id=3,width=32);
 //METAGUARD; RULE$init; 1'd1;
+//METAGUARD; readUser.enq; 1'd1;
 //METARULES; RULE$init
 //METACONNECT; test$MAXIGP0_O.AR__ENA; ps7_ps7_foo$MAXIGP0_O.AR__ENA
 //METACONNECT; test$MAXIGP0_O.AR__RDY; ps7_ps7_foo$MAXIGP0_O.AR__RDY
@@ -169,4 +171,6 @@ endinterface
 //METACONNECT; test$MAXIGP0_I.R__RDY; ps7_ps7_foo$MAXIGP0_I.R__RDY
 //METACONNECT; test$MAXIGP0_I.B__ENA; ps7_ps7_foo$MAXIGP0_I.B__ENA
 //METACONNECT; test$MAXIGP0_I.B__RDY; ps7_ps7_foo$MAXIGP0_I.B__RDY
+//METACONNECT; readUser.enq__ENA; bscan$fromBscan.enq__ENA
+//METACONNECT; readUser.enq__RDY; bscan$fromBscan.enq__RDY
 `endif

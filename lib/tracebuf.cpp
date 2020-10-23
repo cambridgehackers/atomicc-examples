@@ -47,24 +47,21 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
 
     // trace readout to bscan
     __uint(__clog2(depth)) readAddr;
-    Bscan<3,32> bscan;
-    __implements bscan.fromBscan readUser;
     AdapterToBus<width, 32> radapter;
-    void readUser.enq(__uint(32) v) { // data from jtag
-        if (radapter.out.last())
-            bram.read(readAddr++);
-        radapter.out.deq();
-    }
 
-    // chop up data
+    // chop trace data into __uint(32) packets
     __rule readCallBack {
         radapter.in.enq(bram.dataOut(), width);
     }
 
     // pass chopped up data to jtag
-    __rule callBack {
-        // send to trace buffer to jtag
-        bscan.toBscan.enq(radapter.out.first());
+    __uint(32) out.first(void) {
+        return radapter.out.first();
+    }
+    void out.deq(void) {
+        if (radapter.out.last())
+            bram.read(readAddr++);
+        radapter.out.deq();
     }
 };
 

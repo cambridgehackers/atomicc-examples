@@ -24,11 +24,14 @@ module ZynqTop (
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb);
     logic CLK;
+    PipeIn#(.width(32)) bscan$fromBscan();
+    PipeIn#(.width(32)) bscan$toBscan();
     logic nRST;
     Pps7fclk ps7_ps7_foo$FCLK();
     MaxiI ps7_ps7_foo$MAXIGP0_I();
     MaxiO ps7_ps7_foo$MAXIGP0_O();
     ZynqInterrupt ps7_ps7_foo$intr();
+    PipeIn#(.width(32)) readUser();
     MaxiI test$MAXIGP0_I();
     MaxiO test$MAXIGP0_O();
     P7Wrap ps7_ps7_foo (
@@ -69,9 +72,18 @@ module ZynqTop (
     BUFG ps7_freset_0_r (
         .I(ps7_ps7_foo$FCLK.RESETN[ 0 : 0 ]),
         .O(nRST));
+    Bscan#(.id(3),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
+        .toBscan(bscan$toBscan),
+        .fromBscan(readUser));
     // Extra assigments, not to output wires
     assign ps7_ps7_foo$intr.CLK = CLK;
     assign ps7_ps7_foo$intr.nRST = nRST;
+//////////////////////////////////////////////////////////
+    assign bscan$toBscan.enq$v = test.__traceMemory$out.first;
+    assign bscan$toBscan.enq__ENA = test.__traceMemory$out.first__RDY;
+    assign test.__traceMemory$out.deq__ENA = readUser.enq__ENA;
+//////////////////////////////////////////////////////////
+    assign readUser.enq__RDY = 1'd1;
 endmodule
 
 `default_nettype wire    // set back to default value

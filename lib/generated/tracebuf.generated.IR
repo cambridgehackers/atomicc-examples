@@ -14,11 +14,6 @@ INTERFACE BRAMIfc(width=64,depth=1024)  {
     METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
     METHOD dataOut Bit(width)
 }
-INTERFACE BscanIfc(width=32)  {
-    FILE bscan_OC_h
-    INTERFACE PipeIn(width=32) toBscan
-    INTERFACE/Ptr PipeIn(width=32) fromBscan
-}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -26,6 +21,11 @@ INTERFACE PipeIn(width=32)  {
 INTERFACE PipeInLength(width=64)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
+}
+INTERFACE PipeOut(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
 }
 INTERFACE PipeOutLast(width=32)  {
     FILE atomicc_OC_h
@@ -39,6 +39,7 @@ INTERFACE TraceIfc(width=64,depth=1024,sensitivity=99)  {
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) enable
     FIELD/input Bit(64) data
+    INTERFACE PipeOut(width=32) out
 }
 EMODULE AdapterToBus(width=64,owidth=32) AtB(width=64,owidth=32) {
     FILE adapter_OC_h
@@ -46,22 +47,16 @@ EMODULE AdapterToBus(width=64,owidth=32) AtB(width=64,owidth=32) {
 EMODULE BRAM(width=64,depth=1024) BRAMIfc(width=64,depth=1024) {
     FILE bram_OC_h
 }
-EMODULE Bscan(id=3,width=32) BscanIfc(width=32) {
-    FILE bscan_OC_h
-}
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
 MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,sensitivity=99) {
     FILE tracebuf_OC_cpp
-    INTERFACECONNECT readUser bscan$fromBscan PipeIn(width=32)
     FIELD BRAM(width=64,depth=1024) bram
     FIELD Bit(32) timestamp
     FIELD Bit(99) buffer
     FIELD Bit(11) addr
     FIELD Bit(11) readAddr
-    FIELD Bscan(id=3,width=32) bscan
-    INTERFACE PipeIn(width=32) readUser
     FIELD AdapterToBus(width=64,owidth=32) radapter
     METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (__bitsubstr{data,((64) - (32)) - (1),((64) - (32)) - (99)})))) {
         CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,(64) - (32),0}}}
@@ -71,18 +66,17 @@ MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,se
     METHOD/Rule/Action RULE$init__ENA {
         STORE :timestamp = (timestamp) + (1)
     }
-    METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
-        CALL :radapter$out$last{}
-        STORE (radapter$out$last):readAddr = (readAddr) + (1)
-        CALL/Action (radapter$out$last):bram$read__ENA{readAddr}
-        CALL/Action :radapter$out$deq__ENA{}
-    }
     METHOD/Rule/Action RULE$readCallBack__ENA {
         CALL :bram$dataOut{}
         CALL/Action :radapter$in$enq__ENA{bram$dataOut,64}
     }
-    METHOD/Rule/Action RULE$callBack__ENA {
+    METHOD out$first Bit(32) = ((radapter$out$first)) {
         CALL :radapter$out$first{}
-        CALL/Action :bscan$toBscan$enq__ENA{radapter$out$first}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL :radapter$out$last{}
+        STORE (radapter$out$last):readAddr = (readAddr) + (1)
+        CALL/Action (radapter$out$last):bram$read__ENA{readAddr}
+        CALL/Action :radapter$out$deq__ENA{}
     }
 }
