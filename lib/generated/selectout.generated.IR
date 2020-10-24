@@ -1,0 +1,36 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE PipeIn(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeOut(width=16)  {
+    FILE atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+}
+INTERFACE SelectOutIfc(funnelWidth=8,width=16)  {
+    FILE selectout_OC_h
+    INTERFACE/Ptr/Count funnelWidth  PipeOut(width=16) in
+    INTERFACE PipeOut(width=16) out
+    METHOD/Action select__ENA ( Bit(32) v )
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+MODULE SelectOut(funnelWidth=8,width=16) SelectOutIfc(funnelWidth=8,width=16) {
+    FILE selectout_OC_cpp
+    FIELD Bit(4) index
+    METHOD/Action select__ENA ( Bit(32) v ) {
+        STORE :index = select$v
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :in[index].deq__ENA{}
+    }
+    METHOD out$first Bit(width) = ((in[index].first)) {
+        CALL :in[index].first{}
+    }
+}

@@ -1,0 +1,10 @@
+#
+set -x
+#set -e
+make clean
+#make
+#make verilator
+#DUMP_VCD=foo make run
+
+make zedboard
+grep ERROR zedboard/vivado.log 

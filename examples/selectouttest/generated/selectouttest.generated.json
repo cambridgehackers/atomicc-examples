@@ -1,0 +1,30 @@
+{
+    "bsvdefines": [ ],
+    "globaldecls": [
+        { "dtype": "TypeDef",
+            "tdtype": { "name": "Bit", "params": [ { "name": "32" } ] },
+            "tname": "SpecialTypeForSendingFd"
+        },
+        { "dtype": "TypeDef",
+            "tdtype": {
+                "elements": [ [ "IfcNames_SelectOutIndicationH2S", "5" ], [ "IfcNames_SelectOutRequestS2H", "6" ] ],
+                "name": "IfcNames",
+                "type": "Enum"
+            },
+            "tname": "IfcNames"
+        }
+    ],
+    "interfaces": [
+        { "cdecls": [
+                { "dname": "heard", "dparams": [
+                        { "pname": "rindex", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] }
+            ], "direction": "1", "cname": "SelectOutIndication" },
+        { "cdecls": [
+                { "dname": "say", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] }
+            ], "direction": "0", "cname": "SelectOutRequest" }
+    ]
+}

@@ -17,6 +17,7 @@
 `include "out2in.generated.vh"
 `include "printfStub.generated.vh"
 `include "resetInverter.generated.vh"
+`include "selectout.generated.vh"
 `include "sizedFifo.generated.vh"
 `include "syncFF.generated.vh"
 `include "tracebuf.generated.vh"

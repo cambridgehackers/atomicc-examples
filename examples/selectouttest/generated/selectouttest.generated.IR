@@ -1,0 +1,92 @@
+STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE Fifo(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    INTERFACE PipeIn(width=32) in
+    INTERFACE PipeOut(width=32) out
+}
+INTERFACE PipeIn(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE PipeOut(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+}
+INTERFACE SelectOutIfc(funnelWidth=4,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_selectout_OC_h
+    INTERFACE/Ptr/Count funnelWidth  PipeOut(width=32) in
+    INTERFACE PipeOut(width=32) out
+    METHOD/Action select__ENA ( Bit(32) v )
+}
+INTERFACE SelectOutIndication  {
+    FILE selectouttest_OC_cpp
+    METHOD/Action heard__ENA ( Bit(8) rindex , Bit(32) v )
+}
+INTERFACE SelectOutRequest  {
+    FILE selectouttest_OC_cpp
+    METHOD/Action say__ENA ( Bit(32) v )
+}
+INTERFACE SelectOutTestIfc  {
+    FILE selectouttest_OC_cpp
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE SelectOutRequest request
+    INTERFACE/Ptr SelectOutIndication indication
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE Fifo1Base(width=32) Fifo(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+}
+EMODULE SelectOut(funnelWidth=4,width=32) SelectOutIfc(funnelWidth=4,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_selectout_OC_h
+}
+MODULE Fifo1(width=32) Fifo(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    FIELD Fifo1Base(width=32) fifo
+    METHOD/Action in$enq__ENA ( Bit(32) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(32) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
+MODULE SelectOutTest SelectOutTestIfc {
+    FILE selectouttest_OC_cpp
+    FIELD/Count 4  Fifo1(width=32) fifo
+    FIELD SelectOut(funnelWidth=4,width=32) funnel
+    FIELD Bit(8) index
+    FIELD Bit(8) rindex
+    METHOD/Action request$say__ENA ( Bit(32) v ) {
+        PRINTF :printf{"request.say %x index %d limit %d increment %d\n",request$say$v,index,0,0}
+        CALL/Action :fifo$in[index].enq__ENA{request$say$v}
+        STORE ((index) >= ((4) - (1))):index = 0
+        STORE !((index) >= ((4) - (1))):index = (index) + (1)
+    }
+    METHOD/Rule/Action RULE$respondRule__ENA {
+        PRINTF :printf{"[%s:%d] rindex %d limit %d increment %d\n","RULE$respondRule_block_invoke",53,rindex,0,0}
+        CALL :funnel$out$first{}
+        CALL/Action :indication$heard__ENA{rindex,funnel$out$first}
+        CALL/Action :funnel$out$deq__ENA{}
+    }
+    METHOD/Rule/Action RULE$rotateRule__ENA {
+        STORE ((rindex) >= ((4) - (1))):rindex = 0
+        STORE !((rindex) >= ((4) - (1))):rindex = (rindex) + (1)
+        CALL/Action :funnel$select__ENA{rindex}
+    }
+    METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 ) {
+        INTERFACECONNECT funnel$in[__inst$Genvar1] fifo$out[__inst$Genvar1] PipeOut(width=32)
+    }
+    METHOD/Rule/Action RULE$init__ENA {
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < 4)),((__inst$Genvar1 + 1)),FOR$0Body__ENA
+    }
+}
