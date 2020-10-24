@@ -66,4 +66,6 @@ FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
 FILE ../../lib/generated/vsimTop.generated.vh
+FILE ../../lib/generated/VsimTop.linker.vh
 FILE ../../lib/generated/zynqTop.generated.vh
+FILE ../../lib/generated/ZynqTop.linker.vh

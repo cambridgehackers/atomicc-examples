@@ -122,7 +122,9 @@ FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
+FILE ../../lib/generated/VsimTop.linker.vh
 FILE ../../lib/generated/zynqTop.generated.vh
+FILE ../../lib/generated/ZynqTop.linker.vh
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv

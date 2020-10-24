@@ -34,7 +34,9 @@ prep -top VsimTop
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
+../../lib/generated/VsimTop.linker.vh
 ../../lib/generated/zynqTop.generated.vh
+../../lib/generated/ZynqTop.linker.vh
 ../../lib/generated/UserTop.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/Out2InLast.sv

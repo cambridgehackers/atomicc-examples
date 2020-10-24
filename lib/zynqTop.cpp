@@ -129,7 +129,7 @@ class ZynqTopIFC {
     __inout  __uint(54) MIO;
 };
 
-class ZynqTop __implements ZynqTopIFC {
+class __topModule ZynqTop __implements ZynqTopIFC {
     P7Wrap           ps7_ps7_foo;
     AxiTop          test;
     BUFG ps7_fclk_0_c;

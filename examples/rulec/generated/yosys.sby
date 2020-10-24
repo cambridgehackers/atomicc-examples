@@ -35,6 +35,7 @@ prep -top ZynqTop
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
 ../../lib/generated/vsimTop.generated.vh
+generated/zynqTop.linker.vh
 ../../lib/generated/P7Wrap.sv
 ../../lib/generated/AxiTop.sv
 ../../lib/generated/Bscan.sv

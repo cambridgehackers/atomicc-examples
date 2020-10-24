@@ -44,6 +44,7 @@ typedef int _IO_lock_t;
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
 #define __trace(A) __attribute__(( atomicc_trace(A) ))
+#define __topModule __attribute__(( atomicc_topModule ))
 #define __printf __attribute__(( atomicc_printf ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
 extern "C" int __bitconcat(int, ...);

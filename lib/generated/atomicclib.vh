@@ -22,5 +22,7 @@
 `include "tracebuf.generated.vh"
 `include "userTop.generated.vh"
 `include "vsimTop.generated.vh"
+`include "VsimTop.linker.vh"
 `include "zynqTop.generated.vh"
+`include "ZynqTop.linker.vh"
 `endif

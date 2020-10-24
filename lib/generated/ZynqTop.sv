@@ -78,12 +78,8 @@ module ZynqTop (
     // Extra assigments, not to output wires
     assign ps7_ps7_foo$intr.CLK = CLK;
     assign ps7_ps7_foo$intr.nRST = nRST;
-//////////////////////////////////////////////////////////
-    assign bscan$toBscan.enq$v = test.__traceMemory$out.first;
-    assign bscan$toBscan.enq__ENA = test.__traceMemory$out.first__RDY;
-    assign test.__traceMemory$out.deq__ENA = readUser.enq__ENA;
-//////////////////////////////////////////////////////////
     assign readUser.enq__RDY = 1'd1;
+`include "ZynqTop.linker.vh"
 endmodule
 
 `default_nettype wire    // set back to default value

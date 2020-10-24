@@ -60,7 +60,7 @@ EMODULE VsimSend(width=32) VsimSendIfc(width=32) {
 EMODULE l_top l_topIfc {
     FILE userTop_OC_h
 }
-MODULE VsimTop VsimInterface {
+MODULE/Top VsimTop VsimInterface {
     FILE vsimTop_OC_cpp
     INTERFACECONNECT user$write sink_0$port PipeInLast(width=32)
     INTERFACECONNECT user$read source_0$port PipeInLast(width=32)

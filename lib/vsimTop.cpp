@@ -44,7 +44,7 @@ class VsimInterface {
    __input  __uint(1)  CLK_sys_clk;
 };
 
-class VsimTop __implements VsimInterface {
+class __topModule VsimTop __implements VsimInterface {
     UserTop                    user;
     VsimReceive<BusTypeWidth> sink_0;
     VsimSend<BusTypeWidth>    source_0;

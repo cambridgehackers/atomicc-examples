@@ -18,6 +18,7 @@ module VsimTop (
         .port(sink_0$port));
     VsimSend#(.width(32)) source_0 (.CLK(CLK), .nRST(nRST),
         .port(user$read));
+`include "VsimTop.linker.vh"
 endmodule
 
 `default_nettype wire    // set back to default value

@@ -309,6 +309,7 @@ FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
 FILE ../../lib/generated/vsimTop.generated.vh
+FILE generated/zynqTop.linker.vh
 FILE ../../lib/generated/P7Wrap.sv
 FILE ../../lib/generated/AxiTop.sv
 FILE ../../lib/generated/Bscan.sv

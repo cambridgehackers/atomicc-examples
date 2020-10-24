@@ -133,7 +133,7 @@ MODELSIM_FILES= %(modelsim)s
 FPGAMAKE=$(CONNECTALDIR)/../fpgamake/fpgamake
 fpgamake.mk: $(VFILE) Makefile prepare_bin_target
 	$(Q)if [ -f ../synth-ip.tcl ]; then vivado -mode batch -source ../synth-ip.tcl; fi
-	$(Q)$(FPGAMAKE) $(FPGAMAKE_VERBOSE) -o fpgamake.mk --board=%(boardname)s --part=%(partname)s %(partitions)s --floorplan=%(floorplan)s %(xdc)s %(xci)s %(sourceTcl)s %(qsf)s %(chipscope)s -t $(MKTOP) %(FPGAMAKE_DEFINE)s %(cachedir)s -b hw/mkTop.bit %(prtop)s %(reconfig)s $(VERILOG_PATH)
+	$(Q)$(FPGAMAKE) $(FPGAMAKE_VERBOSE) -o fpgamake.mk --board=%(boardname)s --part=%(partname)s %(partitions)s --floorplan=%(floorplan)s %(xdc)s %(xci)s %(sourceTcl)s %(qsf)s %(chipscope)s -t $(MKTOP) %(FPGAMAKE_DEFINE)s %(cachedir)s -b hw/mkTop.bit %(prtop)s %(reconfig)s --header $(MKTOP).linker.vh $(VERILOG_PATH)
 
 synth.%%:fpgamake.mk
 	$(MAKE) -f fpgamake.mk Synth/$*/$*-synth.dcp
@@ -381,12 +381,12 @@ if __name__=='__main__':
         suffix = None
 
     print 'fpga_vendor', fpga_vendor
+    options.verilog.append(os.path.join(project_dir, '../generated'))
     if fpga_vendor:
         options.verilog.append(os.path.join(connectaldir, 'verilog', fpga_vendor))
-    options.verilog.append(os.path.join(connectaldir, 'verilog'))
+    #options.verilog.append(os.path.join(connectaldir, 'verilog'))
     options.verilog.append(os.path.join(connectalsdir, '../lib/generated'))
     options.verilog.append(os.path.join(connectalsdir, '../lib/verilog'))
-    options.verilog.append(os.path.join(project_dir, '../generated'))
 
     if noisyFlag:
         pprint.pprint(options.__dict__)
