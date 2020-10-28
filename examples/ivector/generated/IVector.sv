@@ -17,12 +17,17 @@ module IVector (input wire CLK, input wire nRST,
     ValuePair _RULE$respond_rule_9$temp;
     ValuePair _in$say$temp;
     PipeIn#(.width(96)) fifo$in [10 - 1:0]();
-    logic [ 10 - 1:0]fifo$in__enq__RDY_or;
+    logic fifo$in__enq__RDY_or [10 - 1:0];
     logic fifo$in__enq__RDY_or1;
     PipeOut#(.width(96)) fifo$out [10 - 1:0]();
+    genvar __inst$Genvar1;
     FifoPong#(.width(96)) fifo [10 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
+    SelectIndex#(.width(1),.funnelWidth(10)) fifo$in__enq__RDY_orCC (
+        .out(fifo$in__enq__RDY_or1),
+        .in(fifo$in__enq__RDY_or),
+        .index(in.say$meth));
     // Extra assigments, not to output wires
     assign _RULE$respond_rule_0$temp = fifo$out[ 0 ].first;
     assign _RULE$respond_rule_1$temp = fifo$out[ 1 ].first;
@@ -35,7 +40,6 @@ module IVector (input wire CLK, input wire nRST,
     assign _RULE$respond_rule_8$temp = fifo$out[ 8 ].first;
     assign _RULE$respond_rule_9$temp = fifo$out[ 9 ].first;
     assign _in$say$temp.b = in.say$v;
-    assign fifo$in__enq__RDY_or1 = |fifo$in__enq__RDY_or;
     assign in.say__RDY = fifo$in__enq__RDY_or1;
     assign out.heard__ENA = ( fifo$out[ 0 ].first__RDY && fifo$out[ 0 ].deq__RDY ) | ( fifo$out[ 1 ].first__RDY && fifo$out[ 1 ].deq__RDY ) | ( fifo$out[ 2 ].first__RDY && fifo$out[ 2 ].deq__RDY ) | ( fifo$out[ 3 ].first__RDY && fifo$out[ 3 ].deq__RDY ) | ( fifo$out[ 4 ].first__RDY && fifo$out[ 4 ].deq__RDY ) | ( fifo$out[ 5 ].first__RDY && fifo$out[ 5 ].deq__RDY ) | ( fifo$out[ 6 ].first__RDY && fifo$out[ 6 ].deq__RDY ) | ( fifo$out[ 7 ].first__RDY && fifo$out[ 7 ].deq__RDY ) | ( fifo$out[ 8 ].first__RDY && fifo$out[ 8 ].deq__RDY ) | ( fifo$out[ 9 ].first__RDY && fifo$out[ 9 ].deq__RDY );
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genvar1 + 1) begin

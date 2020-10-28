@@ -8,7 +8,7 @@ module SelectOutTest (input wire CLK, input wire nRST,
     reg [8 - 1:0]rindex;
     logic RULE$rotateRule__RDY;
     PipeIn#(.width(32)) fifo$in [4 - 1:0]();
-    logic [ 4 - 1:0]fifo$in__enq__RDY_or;
+    logic fifo$in__enq__RDY_or [4 - 1:0];
     logic fifo$in__enq__RDY_or1;
     PipeOut#(.width(32)) fifo$out [4 - 1:0]();
     PipeOut#(.width(32)) funnel$in [4 - 1:0]();
@@ -23,8 +23,11 @@ module SelectOutTest (input wire CLK, input wire nRST,
         .select__RDY(RULE$rotateRule__RDY),
         .in(funnel$in),
         .out(funnel$out));
+    SelectIndex#(.width(1),.funnelWidth(4)) fifo$in__enq__RDY_orCC (
+        .out(fifo$in__enq__RDY_or1),
+        .in(fifo$in__enq__RDY_or),
+        .index(index));
     // Extra assigments, not to output wires
-    assign fifo$in__enq__RDY_or1 = |fifo$in__enq__RDY_or;
     assign funnel$out.deq__ENA = funnel$out.first__RDY && indication.heard__RDY;
     assign indication.heard$rindex = ( funnel$out.first__RDY && funnel$out.deq__RDY ) ? rindex : 8'd0;
     assign indication.heard$v = ( funnel$out.first__RDY && funnel$out.deq__RDY ) ? funnel$out.first : 0;

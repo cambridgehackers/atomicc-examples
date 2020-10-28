@@ -6,6 +6,7 @@ module Lpm (input wire CLK, input wire nRST,
     input wire [32 - 1:0]enter$x,
     output wire enter__RDY,
     PipeIn.client outQ);
+    logic RULE$recirc__ENA;
     ProcessData _RULE$enter$agg_2e_tmp;
     logic [32 - 1:0]_RULE$enter$x;
     logic [32 - 1:0]_RULE$exitr$x;
@@ -40,6 +41,7 @@ module Lpm (input wire CLK, input wire nRST,
         .resValue__RDY(mem$resValue__RDY));
     assign enter__RDY = inQ$in.enq__RDY;
     // Extra assigments, not to output wires
+    assign RULE$recirc__ENA = !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) );
     assign _RULE$enter$agg_2e_tmp.IPA = _RULE$enter$x[ 15 : 0 ];
     assign _RULE$enter$agg_2e_tmp.state = 0;
     assign _RULE$enter$agg_2e_tmp.ticket = 4'd0;

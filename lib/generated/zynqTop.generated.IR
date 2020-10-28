@@ -477,6 +477,12 @@ INTERFACE Pps7saxihp  {
     FIELD/input Bit(8) WSTRB
     FIELD/input Bit(1) WVALID
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 INTERFACE ZynqClock  {
     FILE zynqTop_OC_cpp
     FIELD/inout Bit(15) DDR_Addr
@@ -534,6 +540,9 @@ EMODULE Dummy PipeIn(width=32) {
 }
 EMODULE/Verilog PS7 Pps7PS7 {
     FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE atomicc_OC_h
 }
 MODULE P7Wrap P7WrapIfc {
     FILE zynqTop_OC_cpp

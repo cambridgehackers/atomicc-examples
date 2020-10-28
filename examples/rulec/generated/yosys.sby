@@ -30,12 +30,13 @@ prep -top ZynqTop
 ../../lib/generated/out2in.generated.vh
 ../../lib/generated/printfStub.generated.vh
 ../../lib/generated/resetInverter.generated.vh
+../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
 ../../lib/generated/vsimTop.generated.vh
-generated/zynqTop.linker.vh
+generated/ZynqTop.linker.vh
 ../../lib/generated/P7Wrap.sv
 ../../lib/generated/AxiTop.sv
 ../../lib/generated/Bscan.sv

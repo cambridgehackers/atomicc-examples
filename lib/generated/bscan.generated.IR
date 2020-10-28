@@ -45,6 +45,12 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 EMODULE BSCANE2 MBSCANE2IFC {
     FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
 }
@@ -52,6 +58,9 @@ EMODULE BUFG MbufgBUFG {
     FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
 MODULE Bscan(id=3,width=32) BscanIfc(width=32) {

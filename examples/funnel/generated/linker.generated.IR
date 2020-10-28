@@ -86,6 +86,7 @@ MODULE FunnelTest FunnelTest_interface {
     FIELD FifoPBase__W20 fifo
     FIELD FunnelBufferedBase funnel
     FIELD Fifo1Base__W20 result
+    FIELD SelectIndex__W1 fifo$in__enq__RDY_orCC
 }
 INTERFACE FunnelTest_interface {
     FIELD/input  Bit(1) CLK
@@ -109,6 +110,18 @@ INTERFACE FunnelBufferedBase_interface {
     FIELD/parameter Bit(32) funnelWidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+}
+MODULE SelectIndex__W1 SelectIndex__W1_interface {
+}
+INTERFACE SelectIndex__W1_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(1) out
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
+    FIELD/output Bit(1) encode
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
 }
 MODULE FifoPBase__W20_Iz6_Oz7 FifoPBase__W20_Iz6_Oz7_interface {
     FIELD PipeOut__W20 base$in
@@ -223,13 +236,13 @@ FILE ../../lib/generated/mux.generated.vh
 FILE ../../lib/generated/out2in.generated.vh
 FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/selectout.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/verilog/VsimTop.linker.vh
 FILE ../../lib/generated/zynqTop.generated.vh
-FILE ../../lib/verilog/ZynqTop.linker.vh
+FILE ../../lib/verilog/VsimTop.linker.vh
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv
@@ -242,5 +255,6 @@ FILE generated/___P2MFunnelRequest.sv
 FILE ../../lib/generated/FifoPBase.sv
 FILE ../../lib/generated/FunnelBufferedBase.sv
 FILE ../../lib/generated/Fifo1Base.sv
+FILE ../../lib/verilog/SelectIndex.sv
 FILE ../../lib/generated/Out2InBase.sv
 FILE ../../lib/verilog/FunnelBase.sv

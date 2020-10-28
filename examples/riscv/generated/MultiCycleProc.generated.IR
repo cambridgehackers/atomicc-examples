@@ -48,7 +48,16 @@ INTERFACE RegFile  {
     METHOD read ( Bit(32) regnum ) Bit(32)
     METHOD/Action write__ENA ( Bit(32) regnum , Bit(32) regval )
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 MODULE MultiCycleProc MultiCycleProcIfc {

@@ -32,6 +32,5 @@ class SelectOutIfc {
 
 template<int funnelWidth, int width>
 class SelectOut __implements SelectOutIfc<funnelWidth, width>;
-
 #endif // _SELECTOUT_H_
 

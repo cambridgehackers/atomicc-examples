@@ -87,10 +87,20 @@ class PipeInLength {
     void enq(__uint(width) v, LenType size);  // size in bits
 };
 
+template<int funnelWidth, int width>
+class SelectIndexIfc {
+    __uint(width) out;
+    __uint(width) *in[funnelWidth];
+    __uint(__clog2(funnelWidth)) index;
+};
+template<int funnelWidth, int width>
+class SelectIndex __implements __verilog SelectIndexIfc<funnelWidth, width>;
+
 typedef __uint(128) NOCData;
 typedef struct NOCDataH {LenType length; NOCData data;} NOCDataH;
 class Dummy __implements PipeIn<__uint(32)>;
 static Dummy dummyp;
+static SelectIndex<20, 14> dummySelectIndex;
 
 #if 0
 template<class T> class M2P __implements T { // method -> pipe

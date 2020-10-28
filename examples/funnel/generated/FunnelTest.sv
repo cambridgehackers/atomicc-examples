@@ -6,7 +6,7 @@ module FunnelTest (input wire CLK, input wire nRST,
     FunnelIndication.client indication);
     reg [8 - 1:0]index;
     PipeIn#(.width(32)) fifo$in [4 - 1:0]();
-    logic [ 4 - 1:0]fifo$in__enq__RDY_or;
+    logic fifo$in__enq__RDY_or [4 - 1:0];
     logic fifo$in__enq__RDY_or1;
     PipeIn#(.width(32)) fifo$out [4 - 1:0]();
     PipeIn#(.width(32)) funnel$in [4 - 1:0]();
@@ -23,8 +23,11 @@ module FunnelTest (input wire CLK, input wire nRST,
     Fifo1Base#(.width(32)) result (.CLK(CLK), .nRST(nRST),
         .in(funnel$out),
         .out(result$out));
+    SelectIndex#(.width(1),.funnelWidth(4)) fifo$in__enq__RDY_orCC (
+        .out(fifo$in__enq__RDY_or1),
+        .in(fifo$in__enq__RDY_or),
+        .index(index));
     // Extra assigments, not to output wires
-    assign fifo$in__enq__RDY_or1 = |fifo$in__enq__RDY_or;
     assign indication.heard$v = ( result$out.first__RDY && result$out.deq__RDY ) ? result$out.first : 0;
     assign indication.heard__ENA = result$out.first__RDY && result$out.deq__RDY;
     assign request.say__RDY = fifo$in__enq__RDY_or1;

@@ -41,6 +41,12 @@ INTERFACE PipeOutLast(width=32)  {
     METHOD first Bit(width)
     METHOD last Bit(1)
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
     INTERFACE PipeInLast(width=32) write
@@ -65,6 +71,9 @@ EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99
 }
 EMODULE Out2InLast(width=32) Out2InLastIfc(width=32) {
     FILE out2in_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE atomicc_OC_h
 }
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h

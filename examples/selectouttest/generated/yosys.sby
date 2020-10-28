@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PSelectOutIndication.sv SelectOutTest.sv ___P2MSelectOutRequest.sv Fifo1Base.sv SelectOut.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PSelectOutIndication.sv SelectOutTest.sv ___P2MSelectOutRequest.sv Fifo1Base.sv SelectOut.sv SelectIndex.sv 
 
 prep -top VsimTop
 
@@ -48,3 +48,4 @@ generated/SelectOutTest.sv
 generated/___P2MSelectOutRequest.sv
 ../../lib/generated/Fifo1Base.sv
 ../../lib/generated/SelectOut.sv
+../../lib/verilog/SelectIndex.sv

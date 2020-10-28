@@ -53,6 +53,7 @@ endinterface
 //METAINTERNAL; fifo7; FifoPong(width=96);
 //METAINTERNAL; fifo8; FifoPong(width=96);
 //METAINTERNAL; fifo9; FifoPong(width=96);
+//METAINTERNAL; fifo$in__enq__RDY_orCC; SelectIndex(funnelWidth=20,width=14);
 //METAINVOKE; in.say__ENA; :fifo$in[__inst$Genvar1].enq__ENA;
 //METAGUARD; in.say; fifo$in__enq__RDY_or1;
 //METAINVOKE; RULE$respond_rule_0__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;

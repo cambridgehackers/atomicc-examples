@@ -44,6 +44,7 @@ FILE ../../lib/generated/mux.generated.vh
 FILE ../../lib/generated/out2in.generated.vh
 FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/selectout.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh

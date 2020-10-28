@@ -118,13 +118,13 @@ FILE ../../lib/generated/mux.generated.vh
 FILE ../../lib/generated/out2in.generated.vh
 FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
+FILE ../../lib/generated/selectout.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/verilog/VsimTop.linker.vh
 FILE ../../lib/generated/zynqTop.generated.vh
-FILE ../../lib/verilog/ZynqTop.linker.vh
+FILE ../../lib/verilog/VsimTop.linker.vh
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv

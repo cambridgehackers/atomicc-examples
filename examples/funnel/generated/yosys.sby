@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv Out2InBase.sv FunnelBase.sv 
+read_verilog -sv -formal VsimTop.sv UserTop.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv SelectIndex.sv Out2InBase.sv FunnelBase.sv 
 
 prep -top VsimTop
 
@@ -30,13 +30,13 @@ prep -top VsimTop
 ../../lib/generated/out2in.generated.vh
 ../../lib/generated/printfStub.generated.vh
 ../../lib/generated/resetInverter.generated.vh
+../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
-../../lib/verilog/VsimTop.linker.vh
 ../../lib/generated/zynqTop.generated.vh
-../../lib/verilog/ZynqTop.linker.vh
+../../lib/verilog/VsimTop.linker.vh
 ../../lib/generated/UserTop.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/Out2InLast.sv
@@ -49,5 +49,6 @@ generated/___P2MFunnelRequest.sv
 ../../lib/generated/FifoPBase.sv
 ../../lib/generated/FunnelBufferedBase.sv
 ../../lib/generated/Fifo1Base.sv
+../../lib/verilog/SelectIndex.sv
 ../../lib/generated/Out2InBase.sv
 ../../lib/verilog/FunnelBase.sv

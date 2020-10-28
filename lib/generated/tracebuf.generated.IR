@@ -33,6 +33,12 @@ INTERFACE PipeOutLast(width=32)  {
     METHOD first Bit(width)
     METHOD last Bit(1)
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 INTERFACE TraceIfc(width=64,depth=1024,sensitivity=99)  {
     FILE tracebuf_OC_h
     FIELD/input Bit(1) CLK
@@ -48,6 +54,9 @@ EMODULE BRAM(width=64,depth=1024) BRAMIfc(width=64,depth=1024) {
     FILE bram_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
 MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,sensitivity=99) {

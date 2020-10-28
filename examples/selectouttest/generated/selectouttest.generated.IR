@@ -17,6 +17,12 @@ INTERFACE PipeOut(width=32)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 INTERFACE SelectOutIfc(funnelWidth=4,width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_selectout_OC_h
     INTERFACE/Ptr/Count funnelWidth  PipeOut(width=32) in
@@ -43,6 +49,9 @@ EMODULE Dummy PipeIn(width=32) {
 }
 EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE SelectOut(funnelWidth=4,width=32) SelectOutIfc(funnelWidth=4,width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_selectout_OC_h

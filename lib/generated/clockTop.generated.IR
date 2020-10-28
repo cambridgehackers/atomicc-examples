@@ -108,6 +108,12 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 EMODULE BUFG MbufgBUFG {
     FILE _OC__OC__PC_xilinx_PC_VBUFG_OC_h
 }
@@ -122,6 +128,9 @@ EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {
 }
 EMODULE ResetInverter MResetInverterResetInverter {
     FILE resetInverter_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE atomicc_OC_h
 }
 MODULE ClockTop ClockIfc {
     FILE clockTop_OC_cpp

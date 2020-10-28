@@ -82,7 +82,8 @@ MODULE SelectOutTest SelectOutTest_interface {
     FIELD PipeOut funnel$in
     FIELD PipeOut funnel$out
     FIELD Fifo1Base__W20 fifo
-    FIELD SelectOut__F4 funnel
+    FIELD SelectOut__F4_W20 funnel
+    FIELD SelectIndex__W1 fifo$in__enq__RDY_orCC
 }
 INTERFACE SelectOutTest_interface {
     FIELD/input  Bit(1) CLK
@@ -101,9 +102,12 @@ INTERFACE Fifo1Base__W20_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE SelectOut__F4 SelectOut__F4_interface {
+MODULE SelectOut__F4_W20 SelectOut__F4_W20_interface {
+    FIELD SelectIndex__W1_F4 in__deq__RDY_orCC
+    FIELD SelectIndex__W20_F4 in__first_orCC
+    FIELD SelectIndex__W1_F4 in__first__RDY_orCC
 }
-INTERFACE SelectOut__F4_interface {
+INTERFACE SelectOut__F4_W20_interface {
     FIELD/parameter Bit(32) funnelWidth
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
@@ -111,8 +115,41 @@ INTERFACE SelectOut__F4_interface {
     FIELD/input  Bit(1) select__ENA
     FIELD/input  Bit(32) select$v
     FIELD/output Bit(1) select__RDY
+}
+MODULE SelectIndex__W20_F4 SelectIndex__W20_F4_interface {
+}
+INTERFACE SelectIndex__W20_F4_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(32) out
+    FIELD/input  Bit(32) in
+    FIELD/input  Bit(2) index
     FIELD/output Bit(32) encode
-    FIELD/input  Bit(32) firstval
+    FIELD/input  Bit(32) in
+    FIELD/input  Bit(2) index
+}
+MODULE SelectIndex__W1_F4 SelectIndex__W1_F4_interface {
+}
+INTERFACE SelectIndex__W1_F4_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(1) out
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
+    FIELD/output Bit(1) encode
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
+}
+MODULE SelectIndex__W1 SelectIndex__W1_interface {
+}
+INTERFACE SelectIndex__W1_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(1) out
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
+    FIELD/output Bit(1) encode
+    FIELD/input  Bit(1) in
     FIELD/input  Bit(2) index
 }
 FILE ../../lib/generated/VsimTop.sv
@@ -153,3 +190,4 @@ FILE generated/SelectOutTest.sv
 FILE generated/___P2MSelectOutRequest.sv
 FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/SelectOut.sv
+FILE ../../lib/verilog/SelectIndex.sv

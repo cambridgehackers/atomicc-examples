@@ -16,6 +16,12 @@ INTERFACE PipeInLast(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(1) last )
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h
     INTERFACE PipeInLast(width=32) write
@@ -47,6 +53,9 @@ EMODULE Dummy PipeIn(width=32) {
 }
 EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
     FILE funnel_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE atomicc_OC_h
 }
 EMODULE UserTop UserTopIfc {
     FILE userTop_OC_h

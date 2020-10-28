@@ -30,13 +30,13 @@ prep -top VsimTop
 ../../lib/generated/out2in.generated.vh
 ../../lib/generated/printfStub.generated.vh
 ../../lib/generated/resetInverter.generated.vh
+../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh
-../../lib/verilog/VsimTop.linker.vh
 ../../lib/generated/zynqTop.generated.vh
-../../lib/verilog/ZynqTop.linker.vh
+../../lib/verilog/VsimTop.linker.vh
 ../../lib/generated/UserTop.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/Out2InLast.sv

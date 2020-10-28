@@ -17,7 +17,16 @@ INTERFACE PipeOut(width=128)  {
     METHOD/Action deq__ENA
     METHOD first Bit(width)
 }
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
 EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
 MODULE SizedFifoBase(depth=20,width=128,bypass=999) Fifo(width=128) {

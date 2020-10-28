@@ -33,6 +33,7 @@ endinterface
 //METAINTERNAL; fifo3; FifoPBase(width=32);
 //METAINTERNAL; funnel; FunnelBufferedBase(funnelWidth=4,width=32);
 //METAINTERNAL; result; Fifo1Base(width=32);
+//METAINTERNAL; fifo$in__enq__RDY_orCC; SelectIndex(funnelWidth=20,width=14);
 //METAINVOKE; request.say__ENA; :fifo$in[__inst$Genvar1].enq__ENA;
 //METAGUARD; request.say; fifo$in__enq__RDY_or1;
 //METAINVOKE; RULE$respond_rule__ENA; :indication.heard__ENA;:result$out.deq__ENA;

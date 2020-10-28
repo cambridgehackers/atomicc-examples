@@ -30,6 +30,7 @@ generated/busyctr.generated.vh
 ../../lib/generated/out2in.generated.vh
 ../../lib/generated/printfStub.generated.vh
 ../../lib/generated/resetInverter.generated.vh
+../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
