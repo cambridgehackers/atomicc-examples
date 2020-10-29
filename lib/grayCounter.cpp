@@ -19,7 +19,9 @@
  * DEALINGS IN THE SOFTWARE.
  */
 #include "grayCounter.h"
+#include "tracebuf.h"
 
+Trace<4, 1024, 99> dummytr;
 #define TRACEGRAY __trace((1024))
 template <int width>
 class TRACEGRAY GrayCounter __implements GrayCounterIfc<width> {

@@ -1,0 +1,19 @@
+WIDTH 32+1+1+1+1+1+1+1+1+1+1+width+width+width+width
+DEPTH 1024
+COUNT 15
+------------
+TIME 32
+increment__ENA 1
+increment__RDY 1
+decrement__ENA 1
+decrement__RDY 1
+readGray__RDY 1
+writeGray__ENA 1
+writeGray__RDY 1
+readBin__RDY 1
+writeBin__ENA 1
+writeBin__RDY 1
+readGray width
+writeGray$v width
+readBin width
+writeBin$v width

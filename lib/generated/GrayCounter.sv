@@ -20,11 +20,18 @@ module GrayCounter #(
     output wire writeBin__RDY);
     reg counter [width - 1:0];
     logic _RULE$incdec$useLsb;
+    PipeOut#(.width(32)) __traceMemory$out();
     logic [width - 1:0]_readBin$rtemp;
     logic _readBin$temp [width - 1:0];
     logic [width - 1:0]counterBit;
     logic [width - 1:0]m;
     genvar __inst$Genvar1;
+    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+width+width+width+width),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1)) __traceMemory (
+        .CLK(CLK),
+        .nRST(nRST),
+        .enable(1'd1),
+        .data({ 32'd0 , increment__ENA , increment__RDY , decrement__ENA , decrement__RDY , readGray__RDY , writeGray__ENA , writeGray__RDY , readBin__RDY , writeBin__ENA , writeBin__RDY , readGray , writeGray$v , readBin , writeBin$v }),
+        .out(__traceMemory$out));
     assign decrement__RDY = 1'd1;
     assign increment__RDY = 1'd1;
     assign readBin = _readBin$rtemp;

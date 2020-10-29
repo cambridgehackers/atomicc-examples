@@ -25,7 +25,19 @@ interface GrayCounterIfc#(width = 10);
                     input  increment__RDY, decrement__RDY, readGray, readGray__RDY, writeGray__RDY, readBin, readBin__RDY, writeBin__RDY);
 endinterface
 `endif
+`ifndef __TraceIfc_DEF__
+`define __TraceIfc_DEF__
+interface TraceIfc#(depth = 1024, sensitivity = 99, width = 4);
+    logic  CLK;
+    logic  nRST;
+    logic  enable;
+    logic [width - 1:0] data;
+    modport server (input  CLK, nRST, enable, data);
+    modport client (output CLK, nRST, enable, data);
+endinterface
+`endif
 //METASTART; GrayCounter
+//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024,sensitivity=99);
 //METAGUARD; increment; 1'd1;
 //METAGUARD; decrement; 1'd1;
 //METAGUARD; readGray; 1'd1;
