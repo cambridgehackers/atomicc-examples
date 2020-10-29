@@ -34,7 +34,7 @@ module Btest (input wire CLK, input wire nRST,
             ready <= 1'd0;
             writeCount <= writeCount + 8'd1;
         end; // End of RULE$copyRule__ENA
-        if (readUser.enq__ENA && indication.heard__RDY) begin // readUser.enq__ENA
+        if (indication.heard__RDY && readUser.enq__ENA) begin // readUser.enq__ENA
             readCount <= readCount + 8'd1;
         end; // End of readUser.enq__ENA
         if (request.say__ENA) begin // request.say__ENA

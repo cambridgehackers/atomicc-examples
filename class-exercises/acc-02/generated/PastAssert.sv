@@ -28,7 +28,7 @@ module PastAssert #(
             if (F_TESTID == 4)
             fPastValid <= 1 != 0;
         // End of RULE$verifyRule__ENA
-        if (startSignal__ENA && ( counter == 0 )) begin // startSignal__ENA
+        if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA
             counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
         end; // End of startSignal__ENA
       end

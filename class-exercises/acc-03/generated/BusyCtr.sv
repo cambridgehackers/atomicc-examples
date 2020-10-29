@@ -23,7 +23,7 @@ module BusyCtr #(
         if (!( counter == 0 )) begin // RULE$decRule__ENA
             counter <= counter + ( -16'd1 );
         end; // End of RULE$decRule__ENA
-        if (startSignal__ENA && ( counter == 0 )) begin // startSignal__ENA
+        if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA
             counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
         end; // End of startSignal__ENA
       end

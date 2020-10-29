@@ -140,23 +140,23 @@ module AxiTop (
         writeReady <= 0;
       end // nRST
       else begin
-        if (MAXIGP0_O.AR__ENA && reqArs$in.enq__RDY) begin // MAXIGP0_O.AR__ENA
+        if (reqArs$in.enq__RDY && MAXIGP0_O.AR__ENA) begin // MAXIGP0_O.AR__ENA
             portalRControl <= MAXIGP0_O.AR$addr[ 11 : 5 ] == 0;
             selectRIndReq <= MAXIGP0_O.AR$addr[ 12 ] != 0;
             readCount <= MAXIGP0_O.AR$len;
             readAddr <= MAXIGP0_O.AR$addr;
         end; // End of MAXIGP0_O.AR__ENA
-        if (MAXIGP0_O.AW__ENA && reqAws$in.enq__RDY) begin // MAXIGP0_O.AW__ENA
+        if (reqAws$in.enq__RDY && MAXIGP0_O.AW__ENA) begin // MAXIGP0_O.AW__ENA
             portalWControl <= MAXIGP0_O.AW$addr[ 11 : 5 ] == 0;
             selectWIndReq <= MAXIGP0_O.AW$addr[ 12 ] != 0;
             writeCount <= MAXIGP0_O.AW$len;
             writeAddr <= MAXIGP0_O.AW$addr;
         end; // End of MAXIGP0_O.AW__ENA
-        if (RULE$lread__ENA && RULE$lread__RDY) begin // RULE$lread__ENA
+        if (RULE$lread__RDY && RULE$lread__ENA) begin // RULE$lread__ENA
             readCount <= readCount - 4'd1;
             readAddr <= readAddr + 5'd4;
         end; // End of RULE$lread__ENA
-        if (RULE$lwrite__ENA && RULE$lwrite__RDY) begin // RULE$lwrite__ENA
+        if (RULE$lwrite__RDY && RULE$lwrite__ENA) begin // RULE$lwrite__ENA
             writeCount <= writeCount - 4'd1;
             writeAddr <= writeAddr + 5'd4;
             if (( writeAddr == 4 ) && portalWControl)

@@ -22,12 +22,12 @@ module FifoB1Base #(
         full <= 0;
       end // nRST
       else begin
-        if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
+        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
             element <= in.enq$v;
             if (out.deq__ENA == 0)
             full <= 1'd1;
         end; // End of in.enq__ENA
-        if (out.deq__ENA && ( full || in.enq__ENA )) begin // out.deq__ENA
+        if (( full && out.deq__ENA ) || ( ( !full ) && in.enq__ENA && out.deq__ENA )) begin // out.deq__ENA
             full <= 1'd0;
         end; // End of out.deq__ENA
       end

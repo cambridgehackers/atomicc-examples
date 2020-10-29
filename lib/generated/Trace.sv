@@ -52,14 +52,14 @@ module Trace #(
         timestamp <= 0;
       end // nRST
       else begin
-        if (RULE$copyRule__ENA && RULE$copyRule__RDY) begin // RULE$copyRule__ENA
+        if (RULE$copyRule__RDY && RULE$copyRule__ENA) begin // RULE$copyRule__ENA
             addr <= addr + 11'd1;
             buffer <= data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ];
         end; // End of RULE$copyRule__ENA
         // RULE$init__ENA
             timestamp <= timestamp + 32'd1;
         // End of RULE$init__ENA
-        if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
+        if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA
             if (radapter$out.last)
             readAddr <= readAddr + 11'd1;
         end; // End of out.deq__ENA

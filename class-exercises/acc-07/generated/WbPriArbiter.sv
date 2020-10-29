@@ -90,10 +90,10 @@ module WbPriArbiter #(
         r_a_owner <= 0;
       end // nRST
       else begin
-        if (a$stb__ENA && a$stb__RDY) begin // a$stb__ENA
+        if (a$stb__RDY && a$stb__ENA) begin // a$stb__ENA
             r_a_owner <= 1'd1;
         end; // End of a$stb__ENA
-        if (b$stb__ENA && b$stb__RDY) begin // b$stb__ENA
+        if (b$stb__RDY && b$stb__ENA) begin // b$stb__ENA
             r_a_owner <= 1'd0;
         end; // End of b$stb__ENA
       end

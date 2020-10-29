@@ -18,11 +18,11 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
-#include "atomicc.h"
 #include "grayCounter.h"
 
+#define TRACEGRAY __trace((1024))
 template <int width>
-class GrayCounter __implements GrayCounterIfc<width> {
+class TRACEGRAY GrayCounter __implements GrayCounterIfc<width> {
     __uint(1) counter[width];
     __shared __uint(width) m;
 

@@ -29,13 +29,13 @@ module AdapterFromBus #(
         waitForEnq <= 0;
       end // nRST
       else begin
-        if (RULE$pushValue__ENA && RULE$pushValue__RDY) begin // RULE$pushValue__ENA
+        if (RULE$pushValue__RDY && RULE$pushValue__ENA) begin // RULE$pushValue__ENA
             length <= 16'd0;
             waitForEnq <= 1'd0;
             if (!( 0 == 0 ))
             $display( "adapterFROMout %x" , buffer );
         end; // End of RULE$pushValue__ENA
-        if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
+        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
             buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : owidth ] };
             length <= length + ( (16'(owidth)) );
             if (!( 0 == 0 ))

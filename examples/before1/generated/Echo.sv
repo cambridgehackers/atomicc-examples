@@ -43,24 +43,24 @@ module Echo (input wire CLK, input wire nRST,
         y <= 0;
       end // nRST
       else begin
-        if (RULE$delay_rule__ENA && RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
+        if (RULE$delay_rule__RDY && RULE$delay_rule__ENA) begin // RULE$delay_rule__ENA
             busy <= 0 != 0;
             busy_delay <= 1 != 0;
             meth_delay <= meth_temp;
             v_delay <= v_temp;
             $display( "delay_rule: Echo" );
         end; // End of RULE$delay_rule__ENA
-        if (RULE$respond_rule__ENA && RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA
             busy_delay <= 0 != 0;
             $display( "respond_rule: Echo" );
         end; // End of RULE$respond_rule__ENA
-        if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA
+        if (request.say2__RDY && request.say2__ENA) begin // request.say2__ENA
             meth_temp <= request.say2$meth;
             v_temp <= request.say2$v;
             busy <= 1 != 0;
             $display( "[%s:%d]Echo" , "request$say2" , 211 );
         end; // End of request.say2__ENA
-        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+        if (request.say__RDY && request.say__ENA) begin // request.say__ENA
             meth_temp <= request.say$meth;
             v_temp <= request.say$v;
             busy <= 1 != 0;

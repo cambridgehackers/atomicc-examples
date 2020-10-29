@@ -19,7 +19,7 @@ module EchoRequestInput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (pipe.enq__ENA && pipe.enq__RDY) begin // pipe.enq__ENA
+        if (pipe.enq__RDY && pipe.enq__ENA) begin // pipe.enq__ENA
             $display( "entered EchoRequestInput::enq tag %d" , _pipe$enq$temp$v.tag );
         end; // End of pipe.enq__ENA
       end

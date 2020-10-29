@@ -44,23 +44,23 @@ module Echo (input wire CLK, input wire nRST,
         v_type <= 0;
       end // nRST
       else begin
-        if (RULE$delay_rule__ENA && RULE$delay_rule__RDY) begin // RULE$delay_rule__ENA
+        if (RULE$delay_rule__RDY && RULE$delay_rule__ENA) begin // RULE$delay_rule__ENA
             busy <= 1'd0;
             busy_delay <= 1'd1;
             v_delay <= v_temp;
             a_delay <= a_temp;
             b_delay <= b_temp;
         end; // End of RULE$delay_rule__ENA
-        if (RULE$respond_rule__ENA && RULE$respond_rule__RDY) begin // RULE$respond_rule__ENA
+        if (RULE$respond_rule__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA
             busy_delay <= 1'd0;
         end; // End of RULE$respond_rule__ENA
-        if (request.say2__ENA && request.say2__RDY) begin // request.say2__ENA
+        if (request.say2__RDY && request.say2__ENA) begin // request.say2__ENA
             a_temp <= request.say2$a;
             b_temp <= request.say2$b;
             busy <= 1'd1;
             v_type <= 32'd2;
         end; // End of request.say2__ENA
-        if (request.say__ENA && request.say__RDY) begin // request.say__ENA
+        if (request.say__RDY && request.say__ENA) begin // request.say__ENA
             v_temp <= request.say$v;
             busy <= 1'd1;
             v_type <= 32'd1;

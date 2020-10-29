@@ -24,10 +24,10 @@ module MIMOBase #(
         c <= 0;
       end // nRST
       else begin
-        if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
+        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
             c <= c + widthIn;
         end; // End of in.enq__ENA
-        if (out.deq__ENA && out.deq__RDY) begin // out.deq__ENA
+        if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA
             buffer <= buffer[ ( ( widthOut + widthIn ) - 1 ) : widthOut ];
             if (!( c <= widthOut ))
             c <= c - widthOut;
@@ -43,7 +43,7 @@ module MIMOBase #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (in.enq__ENA && in.enq__RDY) begin // in.enq__ENA
+        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
             if (( widthOut - __inst$Genvar1 ) == c)
             buffer[ ( ( __inst$Genvar1 + widthIn ) - 1 ) : __inst$Genvar1 ] <= m;
         end; // End of in.enq__ENA

@@ -17,7 +17,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
       if (!nRST) begin
       end // nRST
       else begin
-        if (request.say__ENA && pipe.enq__RDY) begin // request.say__ENA
+        if (pipe.enq__RDY && request.say__ENA) begin // request.say__ENA
             $display( "entered EchoRequestOutput::say" );
         end; // End of request.say__ENA
       end

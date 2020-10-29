@@ -23,7 +23,7 @@ module AdapterToBus #(
         remain <= 0;
       end // nRST
       else begin
-        if (in.enq__ENA && ( remain == 0 )) begin // in.enq__ENA
+        if (( remain == 0 ) && in.enq__ENA) begin // in.enq__ENA
             buffer <= in.enq$v;
             remain <= in.enq$size;
             if (!( 0 == 0 ))

@@ -73,7 +73,7 @@ module Bscan #(
         if (updateMode && updateFlag2 && fromBscan.enq__RDY) begin // RULE$updateRule__ENA
             updateMode <= 1'd0;
         end; // End of RULE$updateRule__ENA
-        if (!( updateMode || ( !captureFlag2 ) || ( !toBscan.enq__ENA ) )) begin // toBscan.enq__ENA
+        if (!( updateMode || ( !( captureFlag2 && toBscan.enq__ENA ) ) )) begin // toBscan.enq__ENA
             updateMode <= 1'd1;
         end; // End of toBscan.enq__ENA
       end
