@@ -5,6 +5,8 @@ module Trace #(
     parameter integer width = 64,
     parameter integer depth = 1024,
     parameter integer sensitivity = 99)(
+    input wire clear__ENA,
+    output wire clear__RDY,
     input wire CLK,
     input wire nRST,
     input wire enable,
@@ -32,6 +34,8 @@ module Trace #(
         .dataOut(bram$dataOut),
         .dataOut__RDY(radapter$in.enq__ENA));
     AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
+        .clear__ENA(clear__ENA),
+        .clear__RDY(clear__RDY),
         .in(radapter$in),
         .out(radapter$out));
     // Extra assigments, not to output wires

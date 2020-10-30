@@ -2,6 +2,17 @@
 `define __userTop_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __AtB_DEF__
+`define __AtB_DEF__
+interface AtB#(owidth = 32, width = 128);
+    logic clear__ENA;
+    logic clear__RDY;
+    modport server (input  clear__ENA,
+                    output clear__RDY);
+    modport client (output clear__ENA,
+                    input  clear__RDY);
+endinterface
+`endif
 //METASTART; UserTop
 //METAINTERNAL; radapter_0; AdapterToBus(width=128,owidth=32);
 //METAINTERNAL; out2; Out2InLast(width=32);

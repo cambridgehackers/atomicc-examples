@@ -7,6 +7,7 @@ INTERFACE AtB(width=64,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=64) in
     INTERFACE PipeOutLast(width=32) out
+    METHOD/Action clear__ENA
 }
 INTERFACE BRAMIfc(width=64,depth=1024)  {
     FILE bram_OC_h
@@ -46,6 +47,7 @@ INTERFACE TraceIfc(width=64,depth=1024,sensitivity=99)  {
     FIELD/input Bit(1) enable
     FIELD/input Bit(64) data
     INTERFACE PipeOut(width=32) out
+    METHOD/Action clear__ENA
 }
 EMODULE AdapterToBus(width=64,owidth=32) AtB(width=64,owidth=32) {
     FILE adapter_OC_h
@@ -78,6 +80,9 @@ MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,se
     METHOD/Rule/Action RULE$readCallBack__ENA {
         CALL :bram$dataOut{}
         CALL/Action :radapter$in$enq__ENA{bram$dataOut,64}
+    }
+    METHOD/Action clear__ENA {
+        CALL/Action :radapter$clear__ENA{}
     }
     METHOD out$first Bit(32) = ((radapter$out$first)) {
         CALL :radapter$out$first{}

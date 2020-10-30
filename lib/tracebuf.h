@@ -26,6 +26,7 @@ class TraceIfc {
     __input __uint(1) nRST;
     __input __uint(1) enable;
     __input __uint(width) data;
+    void clear(void);
     PipeOut<__uint(32)> out;
 };
 

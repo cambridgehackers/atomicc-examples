@@ -15,7 +15,7 @@ MODULE ZynqTop ZynqTop_interface {
     FIELD Bscan bscan
     FIELD PipeOut funnel$in
     FIELD PipeOut funnel$out
-    FIELD SelectOut__F1_W20 funnel
+    FIELD SelectOut__F2_W20 funnel
 }
 INTERFACE ZynqTop_interface {
     FIELD/inout Bit(54) MIO
@@ -108,12 +108,12 @@ INTERFACE Bscan_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
-MODULE SelectOut__F1_W20 SelectOut__F1_W20_interface {
-    FIELD SelectIndex__W1_F1 in__deq__RDY_orCC
-    FIELD SelectIndex__W20_F1 in__first_orCC
-    FIELD SelectIndex__W1_F1 in__first__RDY_orCC
+MODULE SelectOut__F2_W20 SelectOut__F2_W20_interface {
+    FIELD SelectIndex__W1_F2 in__deq__RDY_orCC
+    FIELD SelectIndex__W20_F2 in__first_orCC
+    FIELD SelectIndex__W1_F2 in__first__RDY_orCC
 }
-INTERFACE SelectOut__F1_W20_interface {
+INTERFACE SelectOut__F2_W20_interface {
     FIELD/parameter Bit(32) funnelWidth
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
@@ -202,29 +202,29 @@ INTERFACE BscanLocal__W20_interface {
     FIELD/input  Bit(32) toBscan
     FIELD/output Bit(32) fromBscan
 }
-MODULE SelectIndex__W20_F1 SelectIndex__W20_F1_interface {
+MODULE SelectIndex__W20_F2 SelectIndex__W20_F2_interface {
 }
-INTERFACE SelectIndex__W20_F1_interface {
+INTERFACE SelectIndex__W20_F2_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) funnelWidth
     FIELD/output Bit(32) out
     FIELD/input  Bit(32) in
-    FIELD/input  Bit(2) index
+    FIELD/input  Bit(1) index
     FIELD/output Bit(32) encode
     FIELD/input  Bit(32) in
-    FIELD/input  Bit(2) index
+    FIELD/input  Bit(1) index
 }
-MODULE SelectIndex__W1_F1 SelectIndex__W1_F1_interface {
+MODULE SelectIndex__W1_F2 SelectIndex__W1_F2_interface {
 }
-INTERFACE SelectIndex__W1_F1_interface {
+INTERFACE SelectIndex__W1_F2_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) funnelWidth
     FIELD/output Bit(1) out
     FIELD/input  Bit(1) in
-    FIELD/input  Bit(2) index
+    FIELD/input  Bit(1) index
     FIELD/output Bit(1) encode
     FIELD/input  Bit(1) in
-    FIELD/input  Bit(2) index
+    FIELD/input  Bit(1) index
 }
 MODULE ResetInverter ResetInverter_interface {
 }
@@ -303,6 +303,8 @@ MODULE Trace__W3a_Sa Trace__W3a_Sa_interface {
 INTERFACE Trace__W3a_Sa_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) sensitivity
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
@@ -317,6 +319,8 @@ MODULE Trace__Wf5_Sb Trace__Wf5_Sb_interface {
 INTERFACE Trace__Wf5_Sb_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) sensitivity
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
@@ -329,6 +333,8 @@ INTERFACE AdapterToBus__W3a_Iz16_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE AdapterToBus__Wf5_Iz15 AdapterToBus__Wf5_Iz15_interface {
 }
@@ -337,6 +343,8 @@ INTERFACE AdapterToBus__Wf5_Iz15_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE AdapterToBus__Iz9 AdapterToBus__Iz9_interface {
 }
@@ -345,6 +353,8 @@ INTERFACE AdapterToBus__Iz9_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE BRAM__W3a_D400 BRAM__W3a_D400_interface {
 }

@@ -180,6 +180,8 @@ MODULE Trace__Wf5_Sb Trace__Wf5_Sb_interface {
 INTERFACE Trace__Wf5_Sb_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) sensitivity
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
@@ -212,6 +214,8 @@ INTERFACE AdapterToBus__Wf5_Iz13_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE AdapterToBus__Iz9 AdapterToBus__Iz9_interface {
 }
@@ -220,6 +224,8 @@ INTERFACE AdapterToBus__Iz9_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE Out2InLast__W20 Out2InLast__W20_interface {
 }

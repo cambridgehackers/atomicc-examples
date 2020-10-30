@@ -12,6 +12,7 @@ INTERFACE AtB(width=128,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=128) in
     INTERFACE PipeOutLast(width=32) out
+    METHOD/Action clear__ENA
 }
 INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
     FILE funnel_OC_h

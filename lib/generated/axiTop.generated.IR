@@ -71,6 +71,7 @@ INTERFACE TraceIfc(width=4,depth=1024,sensitivity=99)  {
     FIELD/input Bit(1) enable
     FIELD/input Bit(4) data
     INTERFACE PipeOut(width=32) out
+    METHOD/Action clear__ENA
 }
 INTERFACE UserTopIfc  {
     FILE userTop_OC_h

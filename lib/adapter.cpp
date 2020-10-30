@@ -27,20 +27,23 @@ class AdapterToBus __implements AtB<width, owidth> {
    __uint(width)     buffer;
    LenType           remain;
 
-   void in.enq(__uint(width) v, LenType size) if (remain == 0) {
+   void clear(void) {
+       remain = 0;
+   }
+   void in.enq(__uint(width) v, LenType size) if (!__valid(clear) && remain == 0) {
       buffer = v;
       remain = size;
       if (TRACE_ADAPTER)
       printf ("adapterTOin %x length %x\n", v, size);
    }
-   bool out.last(void) if (remain != 0) {
+   bool out.last(void) if (!__valid(clear) && remain != 0) {
        return remain <= owidth;
    }
-   __uint(width) out.first(void) if (remain != 0) {
+   __uint(width) out.first(void) if (!__valid(clear) && remain != 0) {
         __uint(owidth) outVal = __bitsubstr(buffer, __bitsize(buffer) - 1, __bitsize(buffer) - owidth);
        return outVal;
    }
-   void out.deq(void) if (remain != 0) {
+   void out.deq(void) if (!__valid(clear) && remain != 0) {
       if (TRACE_ADAPTER)
       printf ("adapterTOout remain %x\n", remain);
       if (remain <= owidth)

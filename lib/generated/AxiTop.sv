@@ -25,6 +25,7 @@ module AxiTop (
     logic [32 - 1:0]_RULE$lread$res;
     ReadResp _RULE$lreadData$currentRData;
     logic [32 - 1:0]_RULE$lwrite$currentWData;
+    logic __traceMemory$clear__ENA;
     PipeOut#(.width(32)) __traceMemory$out();
     PipeIn#(.width(38)) readData$in();
     PipeOut#(.width(38)) readData$out();
@@ -63,6 +64,8 @@ module AxiTop (
         .write(user$write),
         .read(readUser));
     Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+2+12+2),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
+        .clear__ENA(__traceMemory$clear__ENA),
+        .clear__RDY(),
         .CLK(CLK),
         .nRST(nRST),
         .enable(1'd1),

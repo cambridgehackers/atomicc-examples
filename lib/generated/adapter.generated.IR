@@ -12,6 +12,7 @@ INTERFACE AtB(width=128,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=128) in
     INTERFACE PipeOutLast(width=32) out
+    METHOD/Action clear__ENA
 }
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
@@ -68,17 +69,20 @@ MODULE AdapterToBus(width=128,owidth=32) AtB(width=128,owidth=32) {
     FILE adapter_OC_cpp
     FIELD Bit(128) buffer
     FIELD Bit(16) remain
-    METHOD/Action in$enq__ENA ( Bit(width) v , Bit(16) size ) if (((remain) == (0))) {
+    METHOD/Action clear__ENA {
+        STORE :remain = 0
+    }
+    METHOD/Action in$enq__ENA ( Bit(width) v , Bit(16) size ) if ((((clear__ENA) != (0)) || ((remain) == (0)))) {
         STORE :buffer = in$enq$v
         STORE :remain = in$enq$size
         PRINTF ((0) != (0)):printf{"adapterTOin %x length %x\n",in$enq$v,in$enq$size}
     }
-    METHOD out$last Bit(1) = (((remain) <= (32))) if (((remain) != (0)))
-    METHOD out$first Bit(width) = ((_out$first$outVal)) if (((remain) != (0))) {
+    METHOD out$last Bit(1) = (((remain) <= (32))) if ((((clear__ENA) != (0)) || ((remain) != (0))))
+    METHOD out$first Bit(width) = ((_out$first$outVal)) if ((((clear__ENA) != (0)) || ((remain) != (0)))) {
         ALLOCA Bit(32) _out$first$outVal
         LET Bit(32) :_out$first$outVal = __bitsubstr{buffer,(128) - (1),(128) - (32)}
     }
-    METHOD/Action out$deq__ENA if (((remain) != (0))) {
+    METHOD/Action out$deq__ENA if ((((clear__ENA) != (0)) || ((remain) != (0)))) {
         PRINTF ((0) != (0)):printf{"adapterTOout remain %x\n",remain}
         STORE ((remain) <= (32)):remain = 0
         STORE !((remain) <= (32)):remain = (remain) - (32)

@@ -41,6 +41,8 @@ INTERFACE AdapterToBus__Iz1_interface {
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) clear__ENA
+    FIELD/output Bit(1) clear__RDY
 }
 MODULE Out2InLast__W20 Out2InLast__W20_interface {
 }

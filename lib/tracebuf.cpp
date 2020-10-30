@@ -54,6 +54,9 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
         radapter.in.enq(bram.dataOut(), width);
     }
 
+    void clear(void) {
+        radapter.clear();
+    }
     // pass chopped up data to jtag
     __uint(32) out.first(void) {
         return radapter.out.first();

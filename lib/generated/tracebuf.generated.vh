@@ -2,6 +2,17 @@
 `define __tracebuf_GENERATED__VH__
 `include "atomicclib.vh"
 
+`ifndef __AtB_DEF__
+`define __AtB_DEF__
+interface AtB#(owidth = 32, width = 64);
+    logic clear__ENA;
+    logic clear__RDY;
+    modport server (input  clear__ENA,
+                    output clear__RDY);
+    modport client (output clear__ENA,
+                    input  clear__RDY);
+endinterface
+`endif
 `ifndef __BRAMIfc_DEF__
 `define __BRAMIfc_DEF__
 interface BRAMIfc#(depth = 1024, width = 64);
@@ -27,8 +38,12 @@ interface TraceIfc#(depth = 1024, sensitivity = 99, width = 64);
     logic  nRST;
     logic  enable;
     logic [width - 1:0] data;
-    modport server (input  CLK, nRST, enable, data);
-    modport client (output CLK, nRST, enable, data);
+    logic clear__ENA;
+    logic clear__RDY;
+    modport server (input  CLK, nRST, enable, data, clear__ENA,
+                    output clear__RDY);
+    modport client (output CLK, nRST, enable, data, clear__ENA,
+                    input  clear__RDY);
 endinterface
 `endif
 //METASTART; Trace
@@ -39,6 +54,8 @@ endinterface
 //METAGUARD; RULE$init; 1'd1;
 //METAINVOKE; RULE$readCallBack__ENA; :radapter$in.enq__ENA;
 //METAGUARD; RULE$readCallBack; bram$dataOut__RDY && radapter$in.enq__RDY;
+//METAINVOKE; clear__ENA; :radapter$clear__ENA;
+//METAGUARD; clear; radapter$clear__RDY;
 //METAGUARD; out.first; radapter$out.first__RDY;
 //METAINVOKE; out.deq__ENA; radapter$out$last:bram$read__ENA;:radapter$out.deq__ENA;
 //METAGUARD; out.deq; radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out$last || ( !radapter$out.deq__RDY ) ) ) ) );
