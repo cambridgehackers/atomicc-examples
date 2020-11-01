@@ -57,14 +57,14 @@ int main(int argc, const char **argv)
     GrayCounterIfc_IC_width_ND_4_JC_Proxy *request = new GrayCounterIfc_IC_width_ND_4_JC_Proxy(
         IfcNames_GrayCounterIfc_IC_width_ND_4_JC_S2H, &transportMux, &param);
     request->writeGray(1);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 20; i++) {
         int gray = request->readGray();
         int bin = request->readBin();
 printf("[%s:%d] bin %x gray %x\n", __FUNCTION__, __LINE__, bin, gray);
         request->increment();
     }
     request->writeBin(0x8);
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < 20; i++) {
         int gray = request->readGray();
         int bin = request->readBin();
 printf("[%s:%d] dec bin %x gray %x\n", __FUNCTION__, __LINE__, bin, gray);
