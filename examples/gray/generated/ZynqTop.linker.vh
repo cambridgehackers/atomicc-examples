@@ -4,8 +4,6 @@
     wire funnel$select__ENA;
     wire [32 - 1: 0] funnel$select$v;
     wire funnel$select__RDY;
-    reg resetFunnel;
-    reg [4:0] selectIndex;
     SelectOut#(.funnelWidth(2),.width(32)) funnel (.CLK(CLK), .nRST(nRST),
         .select__ENA(funnel$select__ENA),
         .select$v(funnel$select$v),
@@ -30,18 +28,3 @@
 
     assign funnel$select__ENA = resetFunnel && funnel$select__RDY;
     assign funnel$select$v = selectIndex;
-    assign readUser.enq__RDY = 1;
-    always @( posedge CLK) begin
-      if (!nRST) begin
-          resetFunnel <= 0;
-          selectIndex <= 0;
-      end // nRST
-      else begin
-          if (readUser.enq__ENA) begin
-              resetFunnel <= readUser.enq$v != 32'hffffffff;
-              selectIndex <= readUser.enq$v;
-          end;
-          if (resetFunnel)
-              resetFunnel <= 0;
-      end;
-    end;

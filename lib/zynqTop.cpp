@@ -151,9 +151,15 @@ class __topModule ZynqTop __implements ZynqTopIFC {
     }
     // trace readout to bscan
     Bscan<3,32> bscan;
+    bool resetFunnel;
+    __uint(32) selectIndex;
     __implements bscan.fromBscan readUser;
     void readUser.enq(__uint(32) v) { // data from jtag
-        //test.__traceMemory$out.deq();
+        resetFunnel = (v != -1);
+        selectIndex = v;
+    }
+    __rule resetOneShot if (resetFunnel) {
+        resetFunnel = false;
     }
     //__rule callBack {
         // send to trace buffer to jtag

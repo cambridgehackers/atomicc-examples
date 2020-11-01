@@ -23,6 +23,8 @@ module ZynqTop (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb);
+    reg resetFunnel;
+    reg [32 - 1:0]selectIndex;
     logic CLK;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
@@ -79,6 +81,22 @@ module ZynqTop (
     assign ps7_ps7_foo$intr.CLK = CLK;
     assign ps7_ps7_foo$intr.nRST = nRST;
     assign readUser.enq__RDY = 1'd1;
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+        resetFunnel <= 0;
+        selectIndex <= 0;
+      end // nRST
+      else begin
+        if (!( 0 == resetFunnel )) begin // RULE$resetOneShot__ENA
+            resetFunnel <= 1'd0;
+        end; // End of RULE$resetOneShot__ENA
+        if (readUser.enq__ENA) begin // readUser.enq__ENA
+            resetFunnel <= readUser.enq$v != ( -1 );
+            selectIndex <= readUser.enq$v;
+        end; // End of readUser.enq__ENA
+      end
+    end // always @ (posedge CLK)
 `include "ZynqTop.linker.vh"
 endmodule
 

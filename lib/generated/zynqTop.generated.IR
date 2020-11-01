@@ -616,6 +616,8 @@ MODULE/Top ZynqTop ZynqTopIFC {
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
     FIELD Bscan(id=3,width=32) bscan
+    FIELD Bit(1) resetFunnel
+    FIELD Bit(32) selectIndex
     INTERFACE PipeIn(width=32) readUser
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(54) :MIO = ps7_ps7_foo$MIO
@@ -629,5 +631,11 @@ MODULE/Top ZynqTop ZynqTopIFC {
         LET Bit(1) :test$CLK = __defaultClock
         LET Bit(1) :test$nRST = __defaultnReset
     }
-    METHOD/Action readUser$enq__ENA ( Bit(32) v )
+    METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
+        STORE :resetFunnel = (readUser$enq$v) != (-(1))
+        STORE :selectIndex = readUser$enq$v
+    }
+    METHOD/Rule/Action RULE$resetOneShot__ENA if ((resetFunnel)) {
+        STORE :resetFunnel = 0
+    }
 }
