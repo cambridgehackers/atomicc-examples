@@ -23,11 +23,13 @@ module ZynqTop (
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
     inout wire FIXED_IO_ps_srstb);
+    reg enqDelay;
     reg resetFunnel;
     reg [32 - 1:0]selectIndex;
     logic CLK;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
+    logic enqFinished;
     logic nRST;
     Pps7fclk ps7_ps7_foo$FCLK();
     MaxiI ps7_ps7_foo$MAXIGP0_I();
@@ -78,16 +80,21 @@ module ZynqTop (
         .toBscan(bscan$toBscan),
         .fromBscan(readUser));
     // Extra assigments, not to output wires
+    assign enqFinished = enqDelay && ( bscan$toBscan.enq__RDY == 0 );
     assign ps7_ps7_foo$intr.CLK = CLK;
     assign ps7_ps7_foo$intr.nRST = nRST;
     assign readUser.enq__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        enqDelay <= 0;
         resetFunnel <= 0;
         selectIndex <= 0;
       end // nRST
       else begin
+        // RULE$enqDelayRule__ENA
+            enqDelay <= bscan$toBscan.enq__RDY != 0;
+        // End of RULE$enqDelayRule__ENA
         if (!( 0 == resetFunnel )) begin // RULE$resetOneShot__ENA
             resetFunnel <= 1'd0;
         end; // End of RULE$resetOneShot__ENA

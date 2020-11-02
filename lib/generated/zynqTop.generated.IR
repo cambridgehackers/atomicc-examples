@@ -619,6 +619,8 @@ MODULE/Top ZynqTop ZynqTopIFC {
     FIELD Bit(1) resetFunnel
     FIELD Bit(32) selectIndex
     INTERFACE PipeIn(width=32) readUser
+    FIELD Bit(1) enqDelay
+    FIELD/shared Bit(1) enqFinished
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(54) :MIO = ps7_ps7_foo$MIO
         LET Bit(1) :ps7_fclk_0_c$I = __bitsubstr{ps7_ps7_foo$FCLK.CLK,0,0}
@@ -637,5 +639,9 @@ MODULE/Top ZynqTop ZynqTopIFC {
     }
     METHOD/Rule/Action RULE$resetOneShot__ENA if ((resetFunnel)) {
         STORE :resetFunnel = 0
+    }
+    METHOD/Rule/Action RULE$enqDelayRule__ENA {
+        STORE :enqDelay = (bscan$toBscan$enq__RDY) != (0)
+        LET Bit(1) :enqFinished = (enqDelay) & (((bscan$toBscan$enq__RDY) != (0)) ^ (1))
     }
 }

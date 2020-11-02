@@ -62,18 +62,15 @@ class Bscan __implements BscanIfc<width> {
     BSCANE2#(JTAG_CHAIN = id) bscan;
     BUFG bscan_mytck;
     BscanLocal<width> localBscan;
-    bool updateMode;
-    bool updateFlag1, updateFlag2;
+    bool updateFlag1, updateFlag2, updateFlag3;
     bool captureFlag1, captureFlag2;
     __shared __uint(width) enqv;
 
-    void toBscan.enq(__uint(width) v) if (!updateMode & captureFlag2) {
+    void toBscan.enq(__uint(width) v) if (captureFlag2) {
         enqv = v;
-        updateMode = true;
     }
-    __rule updateRule if (updateMode & updateFlag2) {
+    __rule updateRule if (!updateFlag3 & updateFlag2) { // capture on leading edge
         this->fromBscan->enq(localBscan.fromBscan);
-        updateMode = false;
     }
     __rule init {
         bscan_mytck.I = bscan.TCK;
@@ -86,6 +83,7 @@ class Bscan __implements BscanIfc<width> {
         localBscan.update = (bscan.SEL & bscan.UPDATE) != 0;
         updateFlag1 = localBscan.update;
         updateFlag2 = updateFlag1;
+        updateFlag3 = updateFlag2;
         captureFlag1 = localBscan.capture;
         captureFlag2 = captureFlag1;
         localBscan.toBscan = enqv;

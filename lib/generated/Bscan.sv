@@ -11,7 +11,7 @@ module Bscan #(
     reg captureFlag2;
     reg updateFlag1;
     reg updateFlag2;
-    reg updateMode;
+    reg updateFlag3;
     logic bscan$CAPTURE;
     logic bscan$SEL;
     logic bscan$SHIFT;
@@ -51,9 +51,9 @@ module Bscan #(
     assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
     assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
     // Extra assigments, not to output wires
-    assign fromBscan.enq$v = ( updateMode && updateFlag2 ) ? localBscan$fromBscan : 0;
-    assign fromBscan.enq__ENA = updateMode && updateFlag2;
-    assign toBscan.enq__RDY = !( updateMode || ( !captureFlag2 ) );
+    assign fromBscan.enq$v = ( !( updateFlag3 || ( !updateFlag2 ) ) ) ? localBscan$fromBscan : 0;
+    assign fromBscan.enq__ENA = !( updateFlag3 || ( !updateFlag2 ) );
+    assign toBscan.enq__RDY = !( 0 == captureFlag2 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -61,21 +61,16 @@ module Bscan #(
         captureFlag2 <= 0;
         updateFlag1 <= 0;
         updateFlag2 <= 0;
-        updateMode <= 0;
+        updateFlag3 <= 0;
       end // nRST
       else begin
         // RULE$init__ENA
             updateFlag1 <= localBscan$update;
             updateFlag2 <= updateFlag1;
+            updateFlag3 <= updateFlag2;
             captureFlag1 <= localBscan$capture;
             captureFlag2 <= captureFlag1;
         // End of RULE$init__ENA
-        if (updateMode && updateFlag2 && fromBscan.enq__RDY) begin // RULE$updateRule__ENA
-            updateMode <= 1'd0;
-        end; // End of RULE$updateRule__ENA
-        if (!( updateMode || ( !( captureFlag2 && toBscan.enq__ENA ) ) )) begin // toBscan.enq__ENA
-            updateMode <= 1'd1;
-        end; // End of toBscan.enq__ENA
       end
     end // always @ (posedge CLK)
 endmodule

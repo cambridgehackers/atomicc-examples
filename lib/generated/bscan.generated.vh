@@ -55,10 +55,9 @@ endinterface
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; bscan_mytck; BUFG;
 //METAINTERNAL; localBscan; BscanLocal(width=32);
-//METAEXCLUSIVE; toBscan.enq__ENA; RULE$updateRule__ENA
-//METAGUARD; toBscan.enq; ( updateMode ^ 1'd1 ) & captureFlag2;
+//METAGUARD; toBscan.enq; 0 != captureFlag2;
 //METAINVOKE; RULE$updateRule__ENA; :fromBscan.enq__ENA;
-//METAGUARD; RULE$updateRule; updateMode && updateFlag2 && fromBscan.enq__RDY;
+//METAGUARD; RULE$updateRule; !( updateFlag3 || ( !( updateFlag2 && fromBscan.enq__RDY ) ) );
 //METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$updateRule; RULE$init
 //METASTART; BscanLocal

@@ -1,3 +1,1 @@
 test ../../../lib/generated/AxiTop.trace
-:width 4
-test.user.ctop.DUT__Test.counter ../../../lib/generated/GrayCounter.trace

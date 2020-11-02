@@ -69,19 +69,17 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
     PARAMS bscan JTAG_CHAIN=id
     FIELD BUFG bscan_mytck
     FIELD BscanLocal(width=32) localBscan
-    FIELD Bit(1) updateMode
     FIELD Bit(1) updateFlag1
     FIELD Bit(1) updateFlag2
+    FIELD Bit(1) updateFlag3
     FIELD Bit(1) captureFlag1
     FIELD Bit(1) captureFlag2
     FIELD/shared Bit(32) enqv
-    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if ((((updateMode) ^ (1)) & (captureFlag2))) {
+    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if ((captureFlag2)) {
         LET Bit(32) :enqv = toBscan$enq$v
-        STORE :updateMode = 1
     }
-    METHOD/Rule/Action RULE$updateRule__ENA if (((updateMode) & (updateFlag2))) {
+    METHOD/Rule/Action RULE$updateRule__ENA if ((((updateFlag3) ^ (1)) & (updateFlag2))) {
         CALL/Action :fromBscan$enq__ENA{localBscan$fromBscan}
-        STORE :updateMode = 0
     }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :bscan_mytck$I = bscan$TCK
@@ -94,6 +92,7 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
         LET Bit(1) :localBscan$update = ((bscan$SEL) & (bscan$UPDATE)) != (0)
         STORE :updateFlag1 = localBscan$update
         STORE :updateFlag2 = updateFlag1
+        STORE :updateFlag3 = updateFlag2
         STORE :captureFlag1 = localBscan$capture
         STORE :captureFlag2 = captureFlag1
         LET Bit(32) :localBscan$toBscan = enqv
