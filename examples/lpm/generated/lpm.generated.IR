@@ -4,10 +4,16 @@ STRUCT NOCDataH  {
     FIELD Bit(128) data
 }
 STRUCT ProcessData  {
-    FILE lpm_OC_h
+    FILE lpm_OC_cpp
     FIELD Bit(4) ticket
     FIELD Bit(16) IPA
     FIELD Bit(3) state
+}
+INTERFACE BRAMIfc(width=32,depth=1024)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
+    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
+    METHOD dataOut Bit(width)
 }
 INTERFACE Fifo(width=23)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
@@ -23,18 +29,29 @@ INTERFACE LpmIfc  {
     FILE lpm_OC_cpp
     INTERFACE/Ptr PipeIn(width=32) outQ
     METHOD/Action enter__ENA ( Bit(32) x )
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data )
 }
-INTERFACE LpmMem  {
-    FILE lpm_OC_h
-    METHOD/Action req__ENA ( Bit(32) v )
-    METHOD/Action resAccept__ENA
-    METHOD resValue Bit(32)
+INTERFACE LpmIndication  {
+    FILE lpm_OC_cpp
+    METHOD/Action out__ENA ( Bit(32) data )
 }
-INTERFACE MuxPipeIfc  {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-    INTERFACE PipeIn(width=144) in
-    INTERFACE PipeIn(width=144) forward
-    INTERFACE/Ptr PipeIn(width=144) out
+INTERFACE LpmMemIfc  {
+    FILE lpm_OC_cpp
+    INTERFACE PipeOut(width=32) out
+    METHOD/Action read__ENA ( Bit(32) addr )
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data )
+}
+INTERFACE LpmRequest  {
+    FILE lpm_OC_cpp
+    METHOD/Action enter__ENA ( Bit(32) data )
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data )
+}
+INTERFACE LpmTestIfc  {
+    FILE lpm_OC_cpp
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE LpmRequest request
+    INTERFACE/Ptr LpmIndication indication
 }
 INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -52,30 +69,46 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD Bit(5) index
 }
 INTERFACE TickIfc  {
-    FILE lpm_OC_h
+    FILE lpm_OC_cpp
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
 }
-EMODULE BufTicket TickIfc {
-    FILE lpm_OC_h
+EMODULE BRAM(width=32,depth=1024) BRAMIfc(width=32,depth=1024) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
+EMODULE Fifo1Base(width=23) Fifo(width=23) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+}
 EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
-EMODULE FifoB1Base(width=23) Fifo(width=23) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-}
-EMODULE LpmMemory LpmMem {
-    FILE lpm_OC_h
-}
-EMODULE MuxPipe MuxPipeIfc {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_mux_OC_h
-}
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+MODULE BufTicket TickIfc {
+    FILE lpm_OC_cpp
+    FIELD Bit(4) current
+    METHOD getTicket Bit(4) = ((current))
+    METHOD/Action allocateTicket__ENA {
+        PRINTF :printf{"BufTicket allocateTicket %x\n",current}
+        STORE :current = (current) + (1)
+    }
+}
+MODULE Fifo1(width=23) Fifo(width=23) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    FIELD Fifo1Base(width=23) fifo
+    METHOD/Action in$enq__ENA ( ProcessData v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first ProcessData = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
 }
 MODULE Fifo1(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
@@ -90,67 +123,97 @@ MODULE Fifo1(width=32) Fifo(width=32) {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoB1(width=23) Fifo(width=23) {
-    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-    FIELD FifoB1Base(width=23) fifo
-    METHOD/Action in$enq__ENA ( ProcessData v ) {
-        CALL/Action :fifo$in$enq__ENA{in$enq$v}
-    }
-    METHOD/Action out$deq__ENA {
-        CALL/Action :fifo$out$deq__ENA{}
-    }
-    METHOD out$first ProcessData = ((fifo$out$first)) {
-        CALL :fifo$out$first{}
-    }
-}
 MODULE Lpm LpmIfc {
     FILE lpm_OC_cpp
-    FIELD BufTicket compBuf
     FIELD Fifo1(width=32) inQ
-    FIELD FifoB1(width=23) fifo
-    FIELD LpmMemory mem
+    FIELD BufTicket compBuf
+    FIELD Fifo1(width=23) fifo
+    FIELD LpmMem mem
     METHOD/Action enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{enter$x}
     }
-    METHOD/Rule/Action RULE$recirc__ENA if (((((mem$resValue) & (1)) == (1)) ^ (1))) {
-        ALLOCA ProcessData _RULE$recirc$agg_2e_tmp
-        ALLOCA Bit(32) _RULE$recirc$x
-        ALLOCA ProcessData _RULE$recirc$y
-        CALL :mem$resValue{}
-        LET Bit(32) :_RULE$recirc$x = mem$resValue
-        CALL :fifo$out$first{}
-        LET ProcessData :_RULE$recirc$y = fifo$out$first
-        CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :mem$req__ENA{(_RULE$recirc$x) + (__phi(((_RULE$recirc$y.state) == (1)):(__bitsubstr{_RULE$recirc$y.IPA,15,8}), !((_RULE$recirc$y.state) == (1)):(__bitsubstr{_RULE$recirc$y.IPA,7,0})))}
-        CALL/Action :fifo$out$deq__ENA{}
-        LET Bit(4) :_RULE$recirc$agg_2e_tmp.ticket = _RULE$recirc$y.ticket
-        LET Bit(16) :_RULE$recirc$agg_2e_tmp.IPA = _RULE$recirc$y.IPA
-        LET Bit(3) :_RULE$recirc$agg_2e_tmp.state = (_RULE$recirc$y.state) + (1)
-        CALL/Action :fifo$in$enq__ENA{_RULE$recirc$agg_2e_tmp}
-    }
-    METHOD/Rule/Action RULE$exitr__ENA if (((((mem$resValue) & (1)) == (1)) & (((RULE$recirc__ENA) != (0)) ^ (1)))) {
-        ALLOCA Bit(32) _RULE$exitr$x
-        ALLOCA ProcessData _RULE$exitr$y
-        CALL :mem$resValue{}
-        LET Bit(32) :_RULE$exitr$x = mem$resValue
-        CALL :fifo$out$first{}
-        LET ProcessData :_RULE$exitr$y = fifo$out$first
-        CALL/Action :mem$resAccept__ENA{}
-        CALL/Action :fifo$out$deq__ENA{}
-        CALL/Action :outQ$enq__ENA{_RULE$exitr$x}
-    }
-    METHOD/Rule/Action RULE$enter__ENA if ((((RULE$recirc__ENA) != (0)) ^ (1))) {
-        ALLOCA ProcessData _RULE$enter$agg_2e_tmp
-        ALLOCA Bit(4) _RULE$enter$ticket
-        ALLOCA Bit(32) _RULE$enter$x
+    METHOD/Rule/Action RULE$enterRule__ENA if ((((RULE$recircRule__ENA) != (0)) ^ (1))) {
+        ALLOCA ProcessData _RULE$enterRule$agg_2e_tmp
+        ALLOCA Bit(4) _RULE$enterRule$ticket
+        ALLOCA Bit(32) _RULE$enterRule$x
         CALL :inQ$out$first{}
-        LET Bit(32) :_RULE$enter$x = inQ$out$first
-        LET Bit(4) :_RULE$enter$ticket = 0
+        LET Bit(32) :_RULE$enterRule$x = inQ$out$first
+        CALL :compBuf$getTicket{}
+        LET Bit(4) :_RULE$enterRule$ticket = compBuf$getTicket
+        PRINTF :printf{"enterRule: in %x ticket %x\n",_RULE$enterRule$x,_RULE$enterRule$ticket}
+        CALL/Action :compBuf$allocateTicket__ENA{}
         CALL/Action :inQ$out$deq__ENA{}
-        LET Bit(4) :_RULE$enter$agg_2e_tmp.ticket = _RULE$enter$ticket
-        LET Bit(16) :_RULE$enter$agg_2e_tmp.IPA = __bitsubstr{_RULE$enter$x,15,0}
-        LET Bit(3) :_RULE$enter$agg_2e_tmp.state = 0
-        CALL/Action :fifo$in$enq__ENA{_RULE$enter$agg_2e_tmp}
-        CALL/Action :mem$req__ENA{(0) + (__bitsubstr{_RULE$enter$x,31,16})}
+        LET Bit(4) :_RULE$enterRule$agg_2e_tmp.ticket = _RULE$enterRule$ticket
+        LET Bit(16) :_RULE$enterRule$agg_2e_tmp.IPA = __bitsubstr{_RULE$enterRule$x,(6) - (1),0}
+        LET Bit(3) :_RULE$enterRule$agg_2e_tmp.state = 0
+        CALL/Action :fifo$in$enq__ENA{_RULE$enterRule$agg_2e_tmp}
+        CALL/Action :mem$read__ENA{(0) + (__bitsubstr{_RULE$enterRule$x,9,6})}
+    }
+    METHOD/Rule/Action RULE$recircRule__ENA if (((((mem$out$first) & (1)) == (1)) ^ (1))) {
+        ALLOCA ProcessData _RULE$recircRule$agg_2e_tmp
+        ALLOCA Bit(32) _RULE$recircRule$x
+        ALLOCA ProcessData _RULE$recircRule$y
+        CALL :mem$out$first{}
+        LET Bit(32) :_RULE$recircRule$x = mem$out$first
+        CALL :fifo$out$first{}
+        LET ProcessData :_RULE$recircRule$y = fifo$out$first
+        PRINTF :printf{"recircRule: mem %x fifo: ticket %x IPA %x state %x\n",_RULE$recircRule$x,_RULE$recircRule$y.ticket,_RULE$recircRule$y.IPA,_RULE$recircRule$y.state}
+        CALL/Action :mem$out$deq__ENA{}
+        CALL/Action :mem$read__ENA{(_RULE$recircRule$x) + (__phi(((_RULE$recircRule$y.state) == (1)):(__bitsubstr{_RULE$recircRule$y.IPA,(6) - (1),3}), !((_RULE$recircRule$y.state) == (1)):(__bitsubstr{_RULE$recircRule$y.IPA,(3) - (1),0})))}
+        CALL/Action :fifo$out$deq__ENA{}
+        LET Bit(4) :_RULE$recircRule$agg_2e_tmp.ticket = _RULE$recircRule$y.ticket
+        LET Bit(16) :_RULE$recircRule$agg_2e_tmp.IPA = _RULE$recircRule$y.IPA
+        LET Bit(3) :_RULE$recircRule$agg_2e_tmp.state = (_RULE$recircRule$y.state) + (1)
+        CALL/Action :fifo$in$enq__ENA{_RULE$recircRule$agg_2e_tmp}
+    }
+    METHOD/Rule/Action RULE$exitRule__ENA if (((((mem$out$first) & (1)) == (1)) & (((RULE$recircRule__ENA) != (0)) ^ (1)))) {
+        ALLOCA Bit(32) _RULE$exitRule$x
+        ALLOCA ProcessData _RULE$exitRule$y
+        CALL :mem$out$first{}
+        LET Bit(32) :_RULE$exitRule$x = mem$out$first
+        CALL :fifo$out$first{}
+        LET ProcessData :_RULE$exitRule$y = fifo$out$first
+        PRINTF :printf{"exitRule: mem %x fifo: ticket %x IPA %x state %x\n",_RULE$exitRule$x,_RULE$exitRule$y.ticket,_RULE$exitRule$y.IPA,_RULE$exitRule$y.state}
+        CALL/Action :outQ$enq__ENA{_RULE$exitRule$x}
+        CALL/Action :mem$out$deq__ENA{}
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data ) {
+        CALL/Action :mem$write__ENA{write$addr,write$data}
+    }
+}
+MODULE LpmMem LpmMemIfc {
+    FILE lpm_OC_cpp
+    FIELD BRAM(width=32,depth=1024) RAM
+    FIELD Bit(1) valid
+    METHOD/Action read__ENA ( Bit(32) addr ) if (((valid) ^ (1))) {
+        PRINTF :printf{"LpmMem read: %x\n",read$addr}
+        CALL/Action :RAM$read__ENA{read$addr}
+        STORE :valid = 1
+    }
+    METHOD out$first Bit(32) = ((RAM$dataOut)) if ((valid)) {
+        CALL :RAM$dataOut{}
+    }
+    METHOD/Action out$deq__ENA if ((valid)) {
+        PRINTF :printf{"LpmMem out.deq:\n"}
+        STORE :valid = 0
+    }
+    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data ) {
+        CALL/Action :RAM$write__ENA{write$addr,write$data}
+    }
+}
+MODULE LpmTest LpmTestIfc {
+    FILE lpm_OC_cpp
+    INTERFACECONNECT response test$outQ PipeIn(width=32)
+    FIELD Lpm test
+    INTERFACE PipeIn(width=32) response
+    METHOD/Action request$enter__ENA ( Bit(32) data ) {
+        CALL/Action :test$enter__ENA{request$enter$data}
+    }
+    METHOD/Action request$write__ENA ( Bit(32) addr , Bit(32) data ) {
+        CALL/Action :test$write__ENA{request$write$addr,request$write$data}
+    }
+    METHOD/Action response$enq__ENA ( Bit(32) v ) {
+        CALL/Action :indication$out__ENA{response$enq$v}
     }
 }

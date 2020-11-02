@@ -5,73 +5,111 @@ module Lpm (input wire CLK, input wire nRST,
     input wire enter__ENA,
     input wire [32 - 1:0]enter$x,
     output wire enter__RDY,
+    input wire write__ENA,
+    input wire [32 - 1:0]write$addr,
+    input wire [32 - 1:0]write$data,
+    output wire write__RDY,
     PipeIn.client outQ);
-    logic RULE$recirc__ENA;
-    ProcessData _RULE$enter$agg_2e_tmp;
-    logic [32 - 1:0]_RULE$enter$x;
-    logic [32 - 1:0]_RULE$exitr$x;
-    ProcessData _RULE$exitr$y;
-    ProcessData _RULE$recirc$agg_2e_tmp;
-    ProcessData _RULE$recirc$y;
+    logic RULE$enterRule__ENA;
+    logic RULE$enterRule__RDY;
+    logic RULE$exitRule__ENA;
+    logic RULE$exitRule__RDY;
+    logic RULE$recircRule__ENA;
+    logic RULE$recircRule__RDY;
+    ProcessData _RULE$enterRule$agg_2e_tmp;
+    logic [4 - 1:0]_RULE$enterRule$ticket;
+    logic [32 - 1:0]_RULE$enterRule$x;
+    logic [32 - 1:0]_RULE$exitRule$x;
+    ProcessData _RULE$exitRule$y;
+    ProcessData _RULE$recircRule$agg_2e_tmp;
+    logic [32 - 1:0]_RULE$recircRule$x;
+    ProcessData _RULE$recircRule$y;
+    logic compBuf$allocateTicket__RDY;
+    logic compBuf$getTicket__RDY;
     PipeIn#(.width(23)) fifo$in();
     PipeOut#(.width(23)) fifo$out();
     PipeIn#(.width(32)) inQ$in();
     PipeOut#(.width(32)) inQ$out();
-    logic mem$req__RDY;
-    logic mem$resAccept__RDY;
-    logic mem$resValue__RDY;
-    BufTicket compBuf (.CLK(CLK), .nRST(nRST),
-        .getTicket(),
-        .getTicket__RDY(),
-        .allocateTicket__ENA(0),
-        .allocateTicket__RDY());
+    PipeOut#(.width(32)) mem$out();
+    logic [32-1: 0] mem$read$addr;
+    logic mem$read__RDY;
     Fifo1Base#(.width(32)) inQ (.CLK(CLK), .nRST(nRST),
         .in(inQ$in),
         .out(inQ$out));
-    FifoB1Base#(.width(23)) fifo (.CLK(CLK), .nRST(nRST),
+    BufTicket compBuf (.CLK(CLK), .nRST(nRST),
+        .getTicket(_RULE$enterRule$ticket),
+        .getTicket__RDY(compBuf$getTicket__RDY),
+        .allocateTicket__ENA(!( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) )),
+        .allocateTicket__RDY(compBuf$allocateTicket__RDY));
+    Fifo1Base#(.width(23)) fifo (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
-    LpmMemory mem (.CLK(CLK), .nRST(nRST),
-        .req__ENA(( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( !( ( 0 == ( ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && 1 && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) )),
-        .req$v(mem$req$v),
-        .req__RDY(mem$req__RDY),
-        .resAccept__ENA(( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( _RULE$exitr$x & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && 1 && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$resValue__RDY && fifo$out.first__RDY && fifo$out.deq__RDY && outQ.enq__RDY )),
-        .resAccept__RDY(mem$resAccept__RDY),
-        .resValue(_RULE$exitr$x),
-        .resValue__RDY(mem$resValue__RDY));
+    LpmMem mem (.CLK(CLK), .nRST(nRST),
+        .read__ENA(( !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && 1 && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) )),
+        .read$addr(mem$read$addr),
+        .read__RDY(mem$read__RDY),
+        .write__ENA(write__ENA),
+        .write$addr(write__ENA ? 32'(write$addr) : 32'd0),
+        .write$data(write__ENA ? 32'(write$data) : 32'd0),
+        .write__RDY(write__RDY),
+        .out(mem$out));
     assign enter__RDY = inQ$in.enq__RDY;
     // Extra assigments, not to output wires
-    assign RULE$recirc__ENA = !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) );
-    assign _RULE$enter$agg_2e_tmp.IPA = _RULE$enter$x[ 15 : 0 ];
-    assign _RULE$enter$agg_2e_tmp.state = 0;
-    assign _RULE$enter$agg_2e_tmp.ticket = 4'd0;
-    assign _RULE$enter$x = inQ$out.first;
-    assign _RULE$exitr$y = fifo$out.first;
-    assign _RULE$recirc$agg_2e_tmp.IPA = _RULE$recirc$y.IPA;
-    assign _RULE$recirc$agg_2e_tmp.state = _RULE$recirc$y.state + 3'd1;
-    assign _RULE$recirc$agg_2e_tmp.ticket = _RULE$recirc$y.ticket;
-    assign _RULE$recirc$y = fifo$out.first;
-    assign fifo$in.enq__ENA = ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY ) ) ) ) | ( !( ( 0 == ( ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && 1 ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && inQ$out.deq__RDY && mem$req__RDY ) ) ) );
-    assign fifo$out.deq__ENA = ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( _RULE$exitr$x & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && 1 && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && outQ.enq__RDY );
+    assign RULE$enterRule__ENA = !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) );
+    assign RULE$enterRule__RDY = !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) );
+    assign RULE$exitRule__ENA = ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
+    assign RULE$exitRule__RDY = ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
+    assign RULE$recircRule__ENA = !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) );
+    assign RULE$recircRule__RDY = !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) );
+    assign _RULE$enterRule$agg_2e_tmp.IPA = _RULE$enterRule$x[ ( 6 - 1 ) : 0 ];
+    assign _RULE$enterRule$agg_2e_tmp.state = 0;
+    assign _RULE$enterRule$agg_2e_tmp.ticket = _RULE$enterRule$ticket;
+    assign _RULE$enterRule$x = inQ$out.first;
+    assign _RULE$exitRule$x = mem$out.first;
+    assign _RULE$exitRule$y = fifo$out.first;
+    assign _RULE$recircRule$agg_2e_tmp.IPA = _RULE$recircRule$y.IPA;
+    assign _RULE$recircRule$agg_2e_tmp.state = _RULE$recircRule$y.state + 3'd1;
+    assign _RULE$recircRule$agg_2e_tmp.ticket = _RULE$recircRule$y.ticket;
+    assign _RULE$recircRule$x = mem$out.first;
+    assign _RULE$recircRule$y = fifo$out.first;
+    assign fifo$in.enq__ENA = ( !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && 1 ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && mem$read__RDY ) ) ) ) | ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY ) ) ) );
+    assign fifo$out.deq__ENA = ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && 1 && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && mem$out.deq__RDY );
     assign inQ$in.enq$v = enter__ENA ? ( (32'(enter$x)) ) : 32'd0;
     assign inQ$in.enq__ENA = enter__ENA;
-    assign inQ$out.deq__ENA = !( ( 0 == ( ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && fifo$in.enq__RDY && mem$req__RDY ) ) );
-    assign outQ.enq$v = ( ( ( _RULE$exitr$x & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && fifo$out.deq__RDY ) ? _RULE$exitr$x : 32'd0;
-    assign outQ.enq__ENA = ( ( _RULE$exitr$x & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && fifo$out.deq__RDY;
+    assign inQ$out.deq__ENA = !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) );
+    assign mem$out.deq__ENA = ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && 1 && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && fifo$out.deq__RDY );
+    assign outQ.enq$v = ( ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY ) ? mem$out.first : 0;
+    assign outQ.enq__ENA = ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
     always_comb begin
     fifo$in.enq$v = 0;
     unique case(1'b1)
-    !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY ) ) ): fifo$in.enq$v = _RULE$recirc$agg_2e_tmp;
-    !( ( 0 == ( ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && mem$req__RDY && fifo$out.deq__RDY && 1 ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && inQ$out.deq__RDY && mem$req__RDY ) ) ): fifo$in.enq$v = _RULE$enter$agg_2e_tmp;
+    !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && 1 ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && mem$read__RDY ) ) ): fifo$in.enq$v = _RULE$enterRule$agg_2e_tmp;
+    !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY ) ) ): fifo$in.enq$v = _RULE$recircRule$agg_2e_tmp;
     endcase
     end
     always_comb begin
-    mem$req$v = 0;
+    mem$read$addr = 0;
     unique case(1'b1)
-    !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ): mem$req$v = _RULE$exitr$x + ( ( _RULE$recirc$y.state == 1 ) ? _RULE$recirc$y.IPA[ 15 : 8 ] : _RULE$recirc$y.IPA[ 7 : 0 ] );
-    !( ( 0 == ( ( ( !( ( 0 == ( ( ( _RULE$exitr$x & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$resValue__RDY && fifo$out.first__RDY && mem$resAccept__RDY && 1 && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ): mem$req$v = 0 + _RULE$enter$x[ 31 : 16 ];
+    !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && 1 && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ): mem$read$addr = 0 + _RULE$enterRule$x[ 9 : 6 ];
+    !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ): mem$read$addr = mem$out.first + ( ( _RULE$recircRule$y.state == 1 ) ? _RULE$recircRule$y.IPA[ ( 6 - 1 ) : 3 ] : _RULE$recircRule$y.IPA[ ( 3 - 1 ) : 0 ] );
     endcase
     end
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (RULE$enterRule__RDY && RULE$enterRule__ENA) begin // RULE$enterRule__ENA
+            $display( "enterRule: in %x ticket %x" , _RULE$enterRule$x , _RULE$enterRule$ticket );
+        end; // End of RULE$enterRule__ENA
+        if (RULE$exitRule__RDY && RULE$exitRule__ENA) begin // RULE$exitRule__ENA
+            $display( "exitRule: mem %x fifo: ticket %x IPA %x state %x" , _RULE$exitRule$x , _RULE$exitRule$y.ticket , _RULE$exitRule$y.IPA , _RULE$exitRule$y.state );
+        end; // End of RULE$exitRule__ENA
+        if (RULE$recircRule__RDY && RULE$recircRule__ENA) begin // RULE$recircRule__ENA
+            $display( "recircRule: mem %x fifo: ticket %x IPA %x state %x" , _RULE$recircRule$x , _RULE$recircRule$y.ticket , _RULE$recircRule$y.IPA , _RULE$recircRule$y.state );
+        end; // End of RULE$recircRule__ENA
+      end
+    end // always @ (posedge CLK)
 endmodule
 
 `default_nettype wire    // set back to default value
