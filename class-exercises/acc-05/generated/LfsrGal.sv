@@ -21,9 +21,9 @@ module LfsrGal #(
       end // nRST
       else begin
         if (shiftBit__ENA) begin // shiftBit__ENA
-            if (!1'(shiftBit$v))
+            if (!shiftBit$v)
             sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] };
-            if (1'(shiftBit$v))
+            if (shiftBit$v)
             sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] } ^ TAPS;
         end; // End of shiftBit__ENA
       end

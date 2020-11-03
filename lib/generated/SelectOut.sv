@@ -48,7 +48,7 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Ge
       end // nRST
       else begin
         if (select__ENA) begin // select__ENA
-            index <= (4'(select$v));
+            index <= select$v[ 3 : 0 ];
         end; // End of select__ENA
       end
     end // always @ (posedge CLK)

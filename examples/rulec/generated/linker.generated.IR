@@ -13,6 +13,9 @@ MODULE ZynqTop ZynqTop_interface {
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
     FIELD Bscan bscan
+    FIELD PipeOut funnel$in
+    FIELD PipeOut funnel$out
+    FIELD SelectOut__F1_W20 funnel
 }
 INTERFACE ZynqTop_interface {
     FIELD/inout Bit(54) MIO
@@ -104,6 +107,20 @@ INTERFACE Bscan_interface {
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+}
+MODULE SelectOut__F1_W20 SelectOut__F1_W20_interface {
+    FIELD SelectIndex__W1_F1 in__deq__RDY_orCC
+    FIELD SelectIndex__W20_F1 in__first_orCC
+    FIELD SelectIndex__W1_F1 in__first__RDY_orCC
+}
+INTERFACE SelectOut__F1_W20_interface {
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/parameter Bit(32) width
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(1) select__ENA
+    FIELD/input  Bit(32) select$v
+    FIELD/output Bit(1) select__RDY
 }
 MODULE ClockTop ClockTop_interface {
     FIELD MMCME2_ADV ps7_clockGen_pll
@@ -200,6 +217,30 @@ INTERFACE BscanLocal__W20_interface {
     FIELD/input  Bit(1) TDI
     FIELD/input  Bit(32) toBscan
     FIELD/output Bit(32) fromBscan
+}
+MODULE SelectIndex__W20_F1 SelectIndex__W20_F1_interface {
+}
+INTERFACE SelectIndex__W20_F1_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(32) out
+    FIELD/input  Bit(32) in
+    FIELD/input  Bit(2) index
+    FIELD/output Bit(32) encode
+    FIELD/input  Bit(32) in
+    FIELD/input  Bit(2) index
+}
+MODULE SelectIndex__W1_F1 SelectIndex__W1_F1_interface {
+}
+INTERFACE SelectIndex__W1_F1_interface {
+    FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) funnelWidth
+    FIELD/output Bit(1) out
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
+    FIELD/output Bit(1) encode
+    FIELD/input  Bit(1) in
+    FIELD/input  Bit(2) index
 }
 MODULE ResetInverter ResetInverter_interface {
 }
@@ -320,11 +361,13 @@ FILE generated/ZynqTop.linker.vh
 FILE ../../lib/generated/P7Wrap.sv
 FILE ../../lib/generated/AxiTop.sv
 FILE ../../lib/generated/Bscan.sv
+FILE ../../lib/generated/SelectOut.sv
 FILE ../../lib/generated/ClockTop.sv
 FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/Trace.sv
 FILE ../../lib/generated/BscanLocal.sv
+FILE ../../lib/verilog/SelectIndex.sv
 FILE ../../lib/generated/ResetInverter.sv
 FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv

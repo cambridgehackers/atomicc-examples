@@ -31,7 +31,7 @@ module Lpm (input wire CLK, input wire nRST,
     PipeIn#(.width(32)) inQ$in();
     PipeOut#(.width(32)) inQ$out();
     PipeOut#(.width(32)) mem$out();
-    logic [32-1: 0] mem$read$addr;
+    logic [32 - 1:0]mem$read$addr;
     logic mem$read__RDY;
     Fifo1Base#(.width(32)) inQ (.CLK(CLK), .nRST(nRST),
         .in(inQ$in),
@@ -49,8 +49,8 @@ module Lpm (input wire CLK, input wire nRST,
         .read$addr(mem$read$addr),
         .read__RDY(mem$read__RDY),
         .write__ENA(write__ENA),
-        .write$addr(write__ENA ? 32'(write$addr) : 32'd0),
-        .write$data(write__ENA ? 32'(write$data) : 32'd0),
+        .write$addr(write__ENA ? write$addr : 32'd0),
+        .write$data(write__ENA ? write$data : 32'd0),
         .write__RDY(write__RDY),
         .out(mem$out));
     assign enter__RDY = inQ$in.enq__RDY;
@@ -74,7 +74,7 @@ module Lpm (input wire CLK, input wire nRST,
     assign _RULE$recircRule$y = fifo$out.first;
     assign fifo$in.enq__ENA = ( !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && 1 ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && mem$read__RDY ) ) ) ) | ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY ) ) ) );
     assign fifo$out.deq__ENA = ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && 1 && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && mem$out.deq__RDY );
-    assign inQ$in.enq$v = enter__ENA ? ( (32'(enter$x)) ) : 32'd0;
+    assign inQ$in.enq$v = enter__ENA ? enter$x : 32'd0;
     assign inQ$in.enq__ENA = enter__ENA;
     assign inQ$out.deq__ENA = !( ( 0 == ( ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) );
     assign mem$out.deq__ENA = ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( mem$out.first & 1 ) == 1 ) && ( ( !( ( 0 == ( ( ( mem$out.first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && 1 && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && fifo$out.deq__RDY );

@@ -5,7 +5,7 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal ZynqTop.sv P7Wrap.sv AxiTop.sv Bscan.sv ClockTop.sv Fifo1Base.sv UserTop.sv Trace.sv BscanLocal.sv ResetInverter.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv BRAM.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv 
+read_verilog -sv -formal ZynqTop.sv P7Wrap.sv AxiTop.sv Bscan.sv SelectOut.sv ClockTop.sv Fifo1Base.sv UserTop.sv Trace.sv BscanLocal.sv SelectIndex.sv ResetInverter.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv BRAM.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv 
 
 prep -top ZynqTop
 
@@ -40,11 +40,13 @@ generated/ZynqTop.linker.vh
 ../../lib/generated/P7Wrap.sv
 ../../lib/generated/AxiTop.sv
 ../../lib/generated/Bscan.sv
+../../lib/generated/SelectOut.sv
 ../../lib/generated/ClockTop.sv
 ../../lib/generated/Fifo1Base.sv
 ../../lib/generated/UserTop.sv
 ../../lib/generated/Trace.sv
 ../../lib/generated/BscanLocal.sv
+../../lib/verilog/SelectIndex.sv
 ../../lib/generated/ResetInverter.sv
 ../../lib/generated/AdapterToBus.sv
 ../../lib/generated/Out2InLast.sv
