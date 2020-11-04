@@ -9,10 +9,10 @@ module Fifo1Base #(
     reg [width - 1:0]element;
     reg full;
     // Extra assigments, not to output wires
-    assign in.enq__RDY = !( 0 == ( full ^ 1 ) );
-    assign out.deq__RDY = !( 0 == full );
+    assign in.enq__RDY = !full;
+    assign out.deq__RDY = full;
     assign out.first = element;
-    assign out.first__RDY = !( 0 == full );
+    assign out.first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -20,11 +20,11 @@ module Fifo1Base #(
         full <= 0;
       end // nRST
       else begin
-        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
+        if (( !full ) && in.enq__ENA) begin // in.enq__ENA
             element <= in.enq$v;
             full <= 1'd1;
         end; // End of in.enq__ENA
-        if (!( ( 0 == full ) || ( !out.deq__ENA ) )) begin // out.deq__ENA
+        if (full && out.deq__ENA) begin // out.deq__ENA
             full <= 1'd0;
         end; // End of out.deq__ENA
       end

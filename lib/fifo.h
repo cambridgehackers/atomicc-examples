@@ -40,6 +40,7 @@ class Fifo1 __implements Fifo<T> {
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
 
+// FifoB -- bypass fifos (simultaneous enq/deq when empty)
 template<int width>
 class FifoB1Base __implements Fifo<__uint(width)>;
 
@@ -50,6 +51,20 @@ class FifoB1 __implements Fifo<T> {
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
+
+// FifoPipe -- pipeline fifos (simultaneous enq/deq when full)
+template<int width>
+class FifoPipe1Base __implements Fifo<__uint(width)>;
+
+template<class T>
+class FifoPipe1 __implements Fifo<T> {
+  FifoPipe1Base<__bitsize(T)> fifo;
+  void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
+  void out.deq(void) { fifo.out.deq(); }
+  T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
+};
+
+// Sized fifo
 
 template<int depth, int width, int bypass = 0>
 class SizedFifoBase __implements Fifo<__uint(width)>;

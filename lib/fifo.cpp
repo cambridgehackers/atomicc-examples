@@ -43,20 +43,20 @@ class Fifo1Base __implements Fifo<__uint(width)> {
 static Fifo1Base<GENERIC_INT_TEMPLATE_FLAG> dummy;
 
 /*
- * Bypass/pipeline fifo: enq() and deq() are allowed on same cycle
+ * Bypass fifo: enq() and deq() are allowed on same cycle when empty
  */
 template<int width>
 class FifoB1Base __implements Fifo<__uint(width)> {
   __uint(width) element;
   bool full;
   __shared __uint(width) enq_v;
-  void in.enq(const __uint(width) v) if (notFull() | __valid(out.deq)) {
+  void in.enq(const __uint(width) v) if (notFull()) {
     enq_v = v;
     element = v;
     if (!__valid(out.deq))
         full = true;
   };
-  void out.deq(void) if (notEmpty()) { full = false; };
+  void out.deq(void) if (notEmpty() | __valid(in.enq)) { full = false; };
   __uint(width) out.first(void) if (notEmpty()) { return full ? element : enq_v; };
   bool notEmpty() const { return full | __valid(in.enq); };
   bool notFull() const { return !full; };
@@ -64,6 +64,27 @@ class FifoB1Base __implements Fifo<__uint(width)> {
 };
 
 static FifoB1Base<GENERIC_INT_TEMPLATE_FLAG> dummyb;
+
+/*
+ * Pipeline fifo: enq() and deq() are allowed on same cycle when full
+ */
+template<int width>
+class FifoPipe1Base __implements Fifo<__uint(width)> {
+  __uint(width) element;
+  bool full;
+  void in.enq(const __uint(width) v) if (notFull() | __valid(out.deq)) {
+    element = v;
+    if (!__valid(out.deq))
+        full = true;
+  };
+  void out.deq(void) if (notEmpty()) { full = !__valid(in.enq); };
+  __uint(width) out.first(void) if (notEmpty()) { return element; };
+  bool notEmpty() const { return full; };
+  bool notFull() const { return !full; };
+  FifoPipe1Base(): full(false) { };
+};
+
+static FifoPipe1Base<GENERIC_INT_TEMPLATE_FLAG> dummyPipe;
 
 /*
  * FifoP: both in and out interfaces are PipeIn
