@@ -17,7 +17,7 @@ endinterface
 //METAEXCLUSIVE; in.enq__ENA; RULE$pushValue__ENA
 //METAGUARD; in.enq; 0 != ( waitForEnq ^ 1 );
 //METAINVOKE; RULE$pushValue__ENA; :out.enq__ENA;
-//METAGUARD; RULE$pushValue; !( ( 0 == waitForEnq ) || ( !out.enq__RDY ) );
+//METAGUARD; RULE$pushValue; waitForEnq && out.enq__RDY;
 //METARULES; RULE$pushValue
 //METASTART; AdapterToBus
 //METAEXCLUSIVE; clear__ENA; in.enq__ENA; out.deq__ENA

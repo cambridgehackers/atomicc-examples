@@ -27,10 +27,13 @@ module ZynqTop (
     reg resetFunnel;
     reg [32 - 1:0]selectIndex;
     logic CLK;
+    logic RULE$resetOneShot__ENA;
     PipeIn#(.width(32)) bscan$fromBscan();
     PipeIn#(.width(32)) bscan$toBscan();
     logic enqFinished;
     logic nRST;
+    logic ps7_fclk_0_c$O;
+    logic ps7_freset_0_r$O;
     Pps7fclk ps7_ps7_foo$FCLK();
     MaxiI ps7_ps7_foo$MAXIGP0_I();
     MaxiO ps7_ps7_foo$MAXIGP0_O();
@@ -38,6 +41,7 @@ module ZynqTop (
     PipeIn#(.width(32)) readUser();
     MaxiI test$MAXIGP0_I();
     MaxiO test$MAXIGP0_O();
+    logic test$interrupt;
     P7Wrap ps7_ps7_foo (
         .MIO(MIO),
         .DDR_Addr(DDR_Addr),
@@ -67,21 +71,25 @@ module ZynqTop (
     AxiTop test (
         .CLK(CLK),
         .nRST(nRST),
-        .interrupt(ps7_ps7_foo$intr.interrupt),
+        .interrupt(test$interrupt),
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I));
     BUFG ps7_fclk_0_c (
         .I(ps7_ps7_foo$FCLK.CLK[ 0 : 0 ]),
-        .O(CLK));
+        .O(ps7_fclk_0_c$O));
     BUFG ps7_freset_0_r (
         .I(ps7_ps7_foo$FCLK.RESETN[ 0 : 0 ]),
-        .O(nRST));
+        .O(ps7_freset_0_r$O));
     Bscan#(.id(3),.width(32)) bscan (.CLK(CLK), .nRST(nRST),
         .toBscan(bscan$toBscan),
         .fromBscan(readUser));
     // Extra assigments, not to output wires
+    assign CLK = ps7_fclk_0_c$O;
+    assign RULE$resetOneShot__ENA = resetFunnel;
     assign enqFinished = enqDelay && ( bscan$toBscan.enq__RDY == 0 );
+    assign nRST = ps7_freset_0_r$O;
     assign ps7_ps7_foo$intr.CLK = CLK;
+    assign ps7_ps7_foo$intr.interrupt = test$interrupt;
     assign ps7_ps7_foo$intr.nRST = nRST;
     assign readUser.enq__RDY = 1'd1;
 
@@ -95,7 +103,7 @@ module ZynqTop (
         // RULE$enqDelayRule__ENA
             enqDelay <= bscan$toBscan.enq__RDY != 0;
         // End of RULE$enqDelayRule__ENA
-        if (!( 0 == resetFunnel )) begin // RULE$resetOneShot__ENA
+        if (resetFunnel && RULE$resetOneShot__ENA) begin // RULE$resetOneShot__ENA
             resetFunnel <= 1'd0;
         end; // End of RULE$resetOneShot__ENA
         if (readUser.enq__ENA) begin // readUser.enq__ENA

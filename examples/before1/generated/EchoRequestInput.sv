@@ -7,7 +7,7 @@ module EchoRequestInput (input wire CLK, input wire nRST,
     EchoRequest_data _pipe$enq$temp$v;
     // Extra assigments, not to output wires
     assign _pipe$enq$temp$v = pipe.enq$v;
-    assign pipe.enq__RDY = ( request.say__RDY && ( request.say2__RDY || ( !( _pipe$enq$temp$v.tag == 2 ) ) ) ) || ( ( !request.say__RDY ) && ( !( ( request.say2__RDY && ( _pipe$enq$temp$v.tag == 1 ) ) || ( ( !request.say2__RDY ) && ( ( _pipe$enq$temp$v.tag == 2 ) || ( _pipe$enq$temp$v.tag == 1 ) ) ) ) ) );
+    assign pipe.enq__RDY = ( request.say__RDY && ( request.say2__RDY || ( _pipe$enq$temp$v.tag != 2 ) ) ) || ( ( !request.say__RDY ) && ( ( !request.say2__RDY ) || ( _pipe$enq$temp$v.tag != 1 ) ) && ( request.say2__RDY || ( ( _pipe$enq$temp$v.tag != 2 ) && ( _pipe$enq$temp$v.tag != 1 ) ) ) );
     assign request.say$meth = ( pipe.enq__ENA && ( _pipe$enq$temp$v.tag == 1 ) ) ? _pipe$enq$temp$v.data$say$meth : 0;
     assign request.say$v = ( pipe.enq__ENA && ( _pipe$enq$temp$v.tag == 1 ) ) ? _pipe$enq$temp$v.data$say$v : 0;
     assign request.say2$meth = ( pipe.enq__ENA && ( _pipe$enq$temp$v.tag == 2 ) ) ? _pipe$enq$temp$v.data$say2$meth : 0;

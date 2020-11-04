@@ -12,11 +12,11 @@ module MIMOBase #(
     logic [widthIn - 1:0]m;
     genvar __inst$Genvar1;
     // Extra assigments, not to output wires
-    assign in.enq__RDY = !( 0 == ( ( c >= widthOut ) ^ 1 ) );
+    assign in.enq__RDY = !( c >= widthOut );
     assign m = in.enq__ENA ? in.enq$v : 0;
-    assign out.deq__RDY = !( 0 == ( c >= widthOut ) );
+    assign out.deq__RDY = ( c >= widthOut ) != 0;
     assign out.first = buffer;
-    assign out.first__RDY = !( 0 == ( c >= widthOut ) );
+    assign out.first__RDY = ( c >= widthOut ) != 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -24,10 +24,10 @@ module MIMOBase #(
         c <= 0;
       end // nRST
       else begin
-        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
+        if (( !( c >= widthOut ) ) && in.enq__ENA) begin // in.enq__ENA
             c <= c + widthIn;
         end; // End of in.enq__ENA
-        if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA
+        if (( ( c >= widthOut ) != 0 ) && out.deq__ENA) begin // out.deq__ENA
             buffer <= buffer[ ( ( widthOut + widthIn ) - 1 ) : widthOut ];
             if (!( c <= widthOut ))
             c <= c - widthOut;
@@ -43,7 +43,7 @@ module MIMOBase #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
+        if (( !( c >= widthOut ) ) && in.enq__ENA) begin // in.enq__ENA
             if (( widthOut - __inst$Genvar1 ) == c)
             buffer[ ( ( __inst$Genvar1 + widthIn ) - 1 ) : __inst$Genvar1 ] <= m;
         end; // End of in.enq__ENA

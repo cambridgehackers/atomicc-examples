@@ -12,19 +12,19 @@
 //METAGUARD; RULE$init2; 1'd1;
 //METABEFORE; RULE$init3__ENA; :RULE$init2__ENA
 //METAGUARD; RULE$init3; status$ack__RDY && ( status$ack || status$err__RDY );
-//METAGUARD; RULE$init4; ( a$stb__ENA == 0 ) || status$stall__RDY;
+//METAGUARD; RULE$init4; status$stall__RDY || ( !a$stb__ENA );
 //METABEFORE; RULE$verify__ENA; :RULE$init2__ENA; :RULE$init3__ENA; :RULE$init4__ENA
-//METAGUARD; RULE$verify; ( status$err__RDY && ( ( ( $past( a$stb__ENA ) == 0 ) && status$ack__RDY && ( status$stall__RDY || ( a$stb__ENA == 0 ) || ( !( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 && ( nreqs - nacks ) && ( status$ack || status$err ) ) ) ) ) || ( ( !( $past( a$stb__ENA ) == 0 ) ) && status$ack__RDY && ( status$stall__RDY || ( ( a$stb__ENA == 0 ) && ( ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) || ( ( !( a$stb__ENA == 0 ) ) && ( !( ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 && ( ( ( nreqs - nacks ) && ( status$ack || ( ( $past( nRST ) == 0 ) && status$err ) || ( ( !( $past( nRST ) == 0 ) ) && ( f_past_valid || status$err ) ) ) ) || ( ( !( nreqs - nacks ) ) && ( !( ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) ) ) || ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) && ( !( ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !( ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 && ( ( nreqs - nacks ) || status$ack || f_past_valid ) ) || ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) && ( status$ack || f_past_valid ) ) || ( !status$ack__RDY ) ) ) );
+//METAGUARD; RULE$verify; ( status$err__RDY && ( ( ( $past( a$stb__ENA ) == 0 ) && status$ack__RDY && ( status$stall__RDY || ( ( ( !status$ack ) || ( !a$stb__ENA ) || ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( !( nreqs - nacks ) ) ) && ( status$ack || ( !a$stb__ENA ) || ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( !( nreqs - nacks ) ) || ( !status$err ) ) ) ) ) || ( ( $past( a$stb__ENA ) != 0 ) && status$ack__RDY && ( status$stall__RDY || ( ( ( !status$ack ) || ( ( ( !a$stb__ENA ) || ( ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( !( nreqs - nacks ) ) && ( ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) && ( a$stb__ENA || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) && ( status$ack || ( ( ( !a$stb__ENA ) || ( ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( ( !( nreqs - nacks ) ) || ( ( ( $past( nRST ) != 0 ) || ( !status$err ) ) && ( ( $past( nRST ) == 0 ) || ( ( !f_past_valid ) && ( !status$err ) ) ) ) ) && ( ( nreqs - nacks ) || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) && ( a$stb__ENA || ( $past( nRST ) == 0 ) || ( !f_past_valid ) ) ) ) ) ) ) ) ) || ( ( !status$err__RDY ) && ( !status$ack ) && ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( !( nreqs - nacks ) ) && ( !f_past_valid ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( !f_past_valid ) ) && status$ack__RDY );
 //METARULES; RULE$init; RULE$init2; RULE$init3; RULE$init4; RULE$verify
 //METASTART; WbPriArbiter
 //METAINVOKE; a$stb__ENA; :o$stb__ENA;
 //METAEXCLUSIVE; a$stb__ENA; b$stb__ENA
-//METAGUARD; a$stb; !( ( 0 == acyc ) || ( !o$stb__RDY ) );
+//METAGUARD; a$stb; acyc && o$stb__RDY;
 //METAGUARD; a$ack; o$ack__RDY;
 //METAGUARD; a$stall; o$stall__RDY;
 //METAGUARD; a$err; o$err__RDY;
 //METAINVOKE; b$stb__ENA; :o$stb__ENA;
-//METAGUARD; b$stb; !( ( 0 == ( acyc ^ 1 ) ) || ( !o$stb__RDY ) );
+//METAGUARD; b$stb; ( !acyc ) && o$stb__RDY;
 //METAGUARD; b$ack; o$ack__RDY;
 //METAGUARD; b$stall; o$stall__RDY;
 //METAGUARD; b$err; o$err__RDY;

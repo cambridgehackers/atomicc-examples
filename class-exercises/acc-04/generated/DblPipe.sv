@@ -8,6 +8,7 @@ module DblPipe (input wire CLK, input wire nRST,
     output wire outBit,
     output wire outBit__RDY);
     reg o_data;
+    logic RULE$updateRule__ENA;
     logic one$outBit;
     logic one$outBit__RDY;
     logic one$shiftBit__RDY;
@@ -29,13 +30,15 @@ module DblPipe (input wire CLK, input wire nRST,
     assign outBit = o_data;
     assign outBit__RDY = 1'd1;
     assign shiftBit__RDY = one$shiftBit__RDY && two$shiftBit__RDY;
+    // Extra assigments, not to output wires
+    assign RULE$updateRule__ENA = one$outBit__RDY && two$outBit__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         o_data <= 0;
       end // nRST
       else begin
-        if (one$outBit__RDY && two$outBit__RDY) begin // RULE$updateRule__ENA
+        if (one$outBit__RDY && two$outBit__RDY && RULE$updateRule__ENA) begin // RULE$updateRule__ENA
             o_data <= one$outBit ^ two$outBit;
         end; // End of RULE$updateRule__ENA
       end

@@ -9,16 +9,19 @@ module Counter #(
     output wire busy,
     output wire busy__RDY);
     reg [16 - 1:0]counter;
-    assign busy = !( counter == 0 );
+    logic RULE$decRule__ENA;
+    assign busy = counter != 0;
     assign busy__RDY = 1'd1;
     assign startSignal__RDY = counter == 0;
+    // Extra assigments, not to output wires
+    assign RULE$decRule__ENA = counter != 0;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         counter <= 0;
       end // nRST
       else begin
-        if (!( counter == 0 )) begin // RULE$decRule__ENA
+        if (( counter != 0 ) && RULE$decRule__ENA) begin // RULE$decRule__ENA
             counter <= counter + ( -16'd1 );
         end; // End of RULE$decRule__ENA
         if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA

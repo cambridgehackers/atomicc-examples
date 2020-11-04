@@ -18,7 +18,7 @@ module BRAM #(
     reg [width - 1:0]readB;
     reg writeEnable;
     assign dataOut = readB;
-    assign dataOut__RDY = !( 0 == ( ( read__ENA != 0 ) ^ 1 ) );
+    assign dataOut__RDY = !read__ENA;
     assign read__RDY = 1'd1;
     assign write__RDY = 1'd1;
 
@@ -35,7 +35,7 @@ module BRAM #(
             readB <= RAM[ read$addr ];
         end; // End of read__ENA
         if (write__ENA) begin // write__ENA
-            if (!( writeEnable == 0 ))
+            if (writeEnable)
             RAM[ write$addr ] <= write$data;
         end; // End of write__ENA
       end

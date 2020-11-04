@@ -19,6 +19,7 @@ module GrayCounter #(
     input wire [width - 1:0]writeBin$v,
     output wire writeBin__RDY);
     reg counter [width - 1:0];
+    logic RULE$incdec__ENA;
     logic _RULE$incdec$useLsb;
     logic __traceMemory$clear__ENA;
     PipeOut#(.width(32)) __traceMemory$out();
@@ -44,6 +45,7 @@ module GrayCounter #(
     assign writeBin__RDY = 1'd1;
     assign writeGray__RDY = 1'd1;
     // Extra assigments, not to output wires
+    assign RULE$incdec__ENA = increment__ENA != decrement__ENA;
     assign _RULE$incdec$useLsb = ( ^counterBit ) == decrement__ENA;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign _readBin$rtemp[ __inst$Genvar1 ] = _readBin$temp[ __inst$Genvar1 ];
@@ -57,11 +59,11 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
       if (!nRST) begin
       end // nRST
       else begin
-        if (!( increment__ENA == decrement__ENA )) begin // RULE$incdec__ENA
-            counter[ __inst$Genvar1 ] <= counter[ __inst$Genvar1 ] ^ ( ( __inst$Genvar1 == 0 ) ? _RULE$incdec$useLsb : ( ( ( _RULE$incdec$useLsb != 0 ) ^ 1'd1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | counterBit[ ( ( !( ( __inst$Genvar1 < 1 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( |counterBit[ ( ( !( ( __inst$Genvar1 < 2 ) || ( __inst$Genvar1 == 0 ) ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) : 0 ] ) != 0 ) ^ 1'd1 ) ) ) );
+        if (( increment__ENA != decrement__ENA ) && RULE$incdec__ENA) begin // RULE$incdec__ENA
+            counter[ __inst$Genvar1 ] <= counter[ __inst$Genvar1 ] ^ ( ( __inst$Genvar1 == 0 ) ? _RULE$incdec$useLsb : ( ( ( _RULE$incdec$useLsb != 0 ) ^ 1'd1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | counterBit[ ( ( ( !( __inst$Genvar1 < 1 ) ) && ( __inst$Genvar1 != 0 ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( |counterBit[ ( ( ( !( __inst$Genvar1 < 2 ) ) && ( __inst$Genvar1 != 0 ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) : 0 ] ) != 0 ) ^ 1'd1 ) ) ) );
         end; // End of RULE$incdec__ENA
         if (writeBin__ENA) begin // writeBin__ENA
-            if (!( __inst$Genvar1 == ( width - 1 ) ))
+            if (__inst$Genvar1 != ( width - 1 ))
             counter[ __inst$Genvar1 ] <= ^writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
             if (__inst$Genvar1 == ( width - 1 ))
             counter[ __inst$Genvar1 ] <= writeBin$v[ __inst$Genvar1 ];

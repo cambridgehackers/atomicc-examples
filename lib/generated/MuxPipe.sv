@@ -14,14 +14,14 @@ module MuxPipe (input wire CLK, input wire nRST,
     assign forward.enq__RDY = forwardFifo$in.enq__RDY;
     assign forwardFifo$in.enq$v = forward.enq__ENA ? forward.enq$v : 0;
     assign forwardFifo$in.enq__ENA = forward.enq__ENA;
-    assign forwardFifo$out.deq__ENA = !( ( 0 == ( ( in.enq__ENA != 0 ) ^ 1 ) ) || ( !( forwardFifo$out.first__RDY && out.enq__RDY ) ) );
-    assign in.enq__RDY = !( ( 0 == ( ( forwardFifo$out.first__RDY != 0 ) ^ 1 ) ) || ( !out.enq__RDY ) );
-    assign out.enq__ENA = in.enq__ENA | ( !( ( 0 == ( ( in.enq__ENA != 0 ) ^ 1 ) ) || ( !( forwardFifo$out.first__RDY && forwardFifo$out.deq__RDY ) ) ) );
+    assign forwardFifo$out.deq__ENA = ( !in.enq__ENA ) && forwardFifo$out.first__RDY && out.enq__RDY;
+    assign in.enq__RDY = ( !forwardFifo$out.first__RDY ) && out.enq__RDY;
+    assign out.enq__ENA = in.enq__ENA | ( ( !in.enq__ENA ) && forwardFifo$out.first__RDY && forwardFifo$out.deq__RDY );
     always_comb begin
     out.enq$v = 0;
     unique case(1'b1)
     in.enq__ENA: out.enq$v = in.enq$v;
-    !( ( 0 == ( ( in.enq__ENA != 0 ) ^ 1 ) ) || ( !( forwardFifo$out.first__RDY && forwardFifo$out.deq__RDY ) ) ): out.enq$v = forwardFifo$out.first;
+    ( !in.enq__ENA ) && forwardFifo$out.first__RDY && forwardFifo$out.deq__RDY: out.enq$v = forwardFifo$out.first;
     endcase
     end
 endmodule

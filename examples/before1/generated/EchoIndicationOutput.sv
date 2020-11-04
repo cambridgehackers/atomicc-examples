@@ -13,17 +13,17 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     logic RULE$output_ruleo__ENA;
     logic RULE$output_ruleo__RDY;
     // Extra assigments, not to output wires
-    assign RULE$output_rulee__ENA = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
-    assign RULE$output_rulee__RDY = !( ( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
-    assign RULE$output_ruleo__ENA = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
-    assign RULE$output_ruleo__RDY = !( ( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) || ( !pipe.enq__RDY ) );
-    assign indication.heard__RDY = !( 0 == ( ind_busy ^ 1 ) );
-    assign pipe.enq__ENA = ( !( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ) ) | ( !( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ) );
+    assign RULE$output_rulee__ENA = ( ( ind_busy & even ) != 0 ) && pipe.enq__RDY;
+    assign RULE$output_rulee__RDY = ( ( ind_busy & even ) != 0 ) && pipe.enq__RDY;
+    assign RULE$output_ruleo__ENA = ( ( ind_busy & ( !even ) ) != 0 ) && pipe.enq__RDY;
+    assign RULE$output_ruleo__RDY = ( ( ind_busy & ( !even ) ) != 0 ) && pipe.enq__RDY;
+    assign indication.heard__RDY = !ind_busy;
+    assign pipe.enq__ENA = ( ( ind_busy & even ) != 0 ) | ( ( ind_busy & ( !even ) ) != 0 );
     always_comb begin
     pipe.enq$v = 0;
     unique case(1'b1)
-    !( ( ( ind_busy != 0 ) & ( even != 0 ) ) == 0 ): pipe.enq$v = ind0;
-    !( ( ( ind_busy != 0 ) & ( even == 0 ) ) == 0 ): pipe.enq$v = ind1;
+    ( ind_busy & even ) != 0: pipe.enq$v = ind0;
+    ( ind_busy & ( !even ) ) != 0: pipe.enq$v = ind1;
     endcase
     end
 
@@ -41,7 +41,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
         if (RULE$output_ruleo__RDY && RULE$output_ruleo__ENA) begin // RULE$output_ruleo__ENA
             ind_busy <= 0 != 0;
         end; // End of RULE$output_ruleo__ENA
-        if (indication.heard__RDY && indication.heard__ENA) begin // indication.heard__ENA
+        if (( !ind_busy ) && indication.heard__ENA) begin // indication.heard__ENA
             ind_busy <= 1 != 0;
             even <= even ^ 1'd1;
             $display( "[%s:%d]EchoIndicationOutput even %d" , "indication$heard" , 127 , even );

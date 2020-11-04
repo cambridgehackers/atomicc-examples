@@ -89,18 +89,18 @@ endinterface
 //METASTART; Lpm
 //METAINTERNAL; inQ; Fifo1Base(width=32);
 //METAINTERNAL; compBuf; BufTicket;
-//METAINTERNAL; fifo; Fifo1Base(width=23);
+//METAINTERNAL; fifo; FifoPipe1Base(width=23);
 //METAINTERNAL; mem; LpmMem;
 //METAINVOKE; enter__ENA; :inQ$in.enq__ENA;
 //METAGUARD; enter; inQ$in.enq__RDY;
 //METAINVOKE; RULE$enterRule__ENA; :compBuf$allocateTicket__ENA;:fifo$in.enq__ENA;:inQ$out.deq__ENA;:mem$read__ENA;
 //METAEXCLUSIVE; RULE$enterRule__ENA; RULE$recircRule__ENA
-//METAGUARD; RULE$enterRule; !( ( 0 == ( ( RULE$recircRule__ENA != 0 ) ^ 1 ) ) || ( !( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY ) ) );
+//METAGUARD; RULE$enterRule; ( !RULE$recircRule__ENA ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY;
 //METAINVOKE; RULE$recircRule__ENA; :fifo$in.enq__ENA;:fifo$out.deq__ENA;:mem$out.deq__ENA;:mem$read__ENA;
 //METAEXCLUSIVE; RULE$recircRule__ENA; RULE$exitRule__ENA
-//METAGUARD; RULE$recircRule; !( ( 0 == ( ( ( mem$out$first & 1 ) == 1 ) ^ 1 ) ) || ( !( mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY ) ) );
+//METAGUARD; RULE$recircRule; ( ( mem$out$first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY;
 //METAINVOKE; RULE$exitRule__ENA; :fifo$out.deq__ENA;:mem$out.deq__ENA;:outQ.enq__ENA;
-//METAGUARD; RULE$exitRule; ( ( mem$out$first & 1 ) == 1 ) && ( RULE$recircRule__ENA == 0 ) && mem$out.first__RDY && fifo$out.first__RDY && outQ.enq__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
+//METAGUARD; RULE$exitRule; ( !RULE$recircRule__ENA ) && mem$out.first__RDY && fifo$out.first__RDY && ( ( mem$out$first & 1 ) == 1 ) && outQ.enq__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
 //METAINVOKE; write__ENA; :mem$write__ENA;
 //METAGUARD; write; mem$write__RDY;
 //METARULES; RULE$enterRule; RULE$recircRule; RULE$exitRule
@@ -108,8 +108,8 @@ endinterface
 //METAINTERNAL; RAM; BRAM(width=32,depth=1024);
 //METAINVOKE; read__ENA; :RAM$read__ENA;
 //METAEXCLUSIVE; read__ENA; out.deq__ENA
-//METAGUARD; read; !( ( 0 == ( valid ^ 1 ) ) || ( !RAM$read__RDY ) );
-//METAGUARD; out.first; !( ( 0 == valid ) || ( !RAM$dataOut__RDY ) );
+//METAGUARD; read; ( !valid ) && RAM$read__RDY;
+//METAGUARD; out.first; valid && RAM$dataOut__RDY;
 //METAGUARD; out.deq; 0 != valid;
 //METAINVOKE; write__ENA; :RAM$write__ENA;
 //METAGUARD; write; RAM$write__RDY;
@@ -142,5 +142,5 @@ endinterface
 //METAGUARD; method.out; pipe.enq__RDY;
 //METASTART; ___P2MLpmRequest
 //METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.enter__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.write__ENA;
-//METAGUARD; pipe.enq; ( method.enter__RDY && ( method.write__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1 ) ) ) ) || ( ( !method.enter__RDY ) && ( !( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0 ) || ( !( method.write__RDY || ( !( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1 ) ) ) ) ) ) );
+//METAGUARD; pipe.enq; ( method.enter__RDY && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) ) || ( ( !method.enter__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) );
 `endif

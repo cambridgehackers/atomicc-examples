@@ -22,7 +22,6 @@ module ConfigCounter #(
     reg positive_reg;
     logic [count_sz - 1:0]_RULE$react$new_count;
     logic [count_sz - 1:0]dec_wire;
-    logic [count_sz - 1:0]inc_wire;
     assign decrement__RDY = 1'd1;
     assign increment__RDY = 1'd1;
     assign maybeDecrement = cnt >= maybeDecrement$v;
@@ -33,7 +32,6 @@ module ConfigCounter #(
     assign read__RDY = 1'd1;
     // Extra assigments, not to output wires
     assign _RULE$react$new_count = ( cnt + ( increment__ENA ? increment$v : 0 ) ) - dec_wire;
-    assign inc_wire = increment__ENA ? increment$v : 0;
     always_comb begin
     dec_wire = 0;
     unique case(1'b1)

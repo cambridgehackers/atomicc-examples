@@ -8,6 +8,7 @@ module LfsrEquiv (input wire CLK, input wire nRST,
     output wire outBit,
     output wire outBit__RDY);
     reg o_data;
+    logic RULE$updateRule__ENA;
     logic fib$outBit;
     logic fib$outBit__RDY;
     logic fib$shiftBit__RDY;
@@ -29,13 +30,15 @@ module LfsrEquiv (input wire CLK, input wire nRST,
     assign outBit = o_data;
     assign outBit__RDY = 1'd1;
     assign shiftBit__RDY = fib$shiftBit__RDY && gal$shiftBit__RDY;
+    // Extra assigments, not to output wires
+    assign RULE$updateRule__ENA = fib$outBit__RDY && gal$outBit__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         o_data <= 0;
       end // nRST
       else begin
-        if (fib$outBit__RDY && gal$outBit__RDY) begin // RULE$updateRule__ENA
+        if (fib$outBit__RDY && gal$outBit__RDY && RULE$updateRule__ENA) begin // RULE$updateRule__ENA
             o_data <= fib$outBit ^ gal$outBit;
         end; // End of RULE$updateRule__ENA
       end

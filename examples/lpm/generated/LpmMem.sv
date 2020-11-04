@@ -23,21 +23,21 @@ module LpmMem (input wire CLK, input wire nRST,
         .read__RDY(RAM$read__RDY),
         .dataOut(out.first),
         .dataOut__RDY(RAM$dataOut__RDY));
-    assign read__RDY = !( ( 0 == ( valid ^ 1 ) ) || ( !RAM$read__RDY ) );
+    assign read__RDY = ( !valid ) && RAM$read__RDY;
     // Extra assigments, not to output wires
-    assign out.deq__RDY = !( 0 == valid );
-    assign out.first__RDY = !( ( 0 == valid ) || ( !RAM$dataOut__RDY ) );
+    assign out.deq__RDY = valid;
+    assign out.first__RDY = valid && RAM$dataOut__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
         valid <= 0;
       end // nRST
       else begin
-        if (!( ( 0 == valid ) || ( !out.deq__ENA ) )) begin // out.deq__ENA
+        if (valid && out.deq__ENA) begin // out.deq__ENA
             valid <= 1'd0;
             $display( "LpmMem out$deq:" );
         end; // End of out.deq__ENA
-        if (read__RDY && read__ENA) begin // read__ENA
+        if (( !valid ) && RAM$read__RDY && read__ENA) begin // read__ENA
             valid <= 1'd1;
             $display( "LpmMem read: %x" , read$addr );
         end; // End of read__ENA

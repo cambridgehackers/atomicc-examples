@@ -24,9 +24,9 @@ module Trace #(
     PipeInLength#(.width(width)) radapter$in();
     PipeOutLast#(.width(32)) radapter$out();
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
-        .write__ENA(!( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) )),
-        .write$addr(( !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) ) ) ? addr : 11'd0),
-        .write$data(( !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) ) ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
+        .write__ENA(( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable),
+        .write$addr(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? addr : 11'd0),
+        .write$data(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
         .read__ENA(out.deq__ENA && radapter$out.last),
         .read$addr(( out.deq__ENA && radapter$out.last ) ? readAddr : 11'd0),
@@ -39,9 +39,9 @@ module Trace #(
         .in(radapter$in),
         .out(radapter$out));
     // Extra assigments, not to output wires
-    assign RULE$copyRule__ENA = !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) || ( !bram$write__RDY ) );
-    assign RULE$copyRule__RDY = !( ( enable == 0 ) || ( buffer == data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) || ( !bram$write__RDY ) );
-    assign out.deq__RDY = radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !( radapter$out.last || ( !radapter$out.deq__RDY ) ) ) ) );
+    assign RULE$copyRule__ENA = ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && bram$write__RDY && enable;
+    assign RULE$copyRule__RDY = ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && bram$write__RDY && enable;
+    assign out.deq__RDY = radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !radapter$out.last ) && radapter$out.deq__RDY ) );
     assign out.first = radapter$out.first;
     assign out.first__RDY = radapter$out.first__RDY;
     assign radapter$in.enq$size = radapter$in.enq__ENA ? ( (32'(width)) ) : 32'd0;

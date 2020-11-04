@@ -41,19 +41,19 @@ module Bscan #(
     BscanLocal#(.width(width)) localBscan (
         .CLK(bscan_mytck$O),
         .nRST(nRST),
-        .capture(!( ( bscan$SEL & bscan$CAPTURE ) == 0 )),
-        .shift(!( ( bscan$SEL & bscan$SHIFT ) == 0 )),
-        .update(!( ( bscan$SEL & bscan$UPDATE ) == 0 )),
+        .capture(( ( bscan$SEL & bscan$CAPTURE ) != 0 ) && 1'd1),
+        .shift(( ( bscan$SEL & bscan$SHIFT ) != 0 ) && 1'd1),
+        .update(( ( bscan$SEL & bscan$UPDATE ) != 0 ) && 1'd1),
         .TDO(bscan$TDO),
         .TDI(bscan$TDI),
         .toBscan(toBscan.enq__ENA ? toBscan.enq$v : 0),
         .fromBscan(localBscan$fromBscan));
-    assign localBscan$capture = !( ( bscan$SEL & bscan$CAPTURE ) == 0 );
-    assign localBscan$update = !( ( bscan$SEL & bscan$UPDATE ) == 0 );
+    assign localBscan$capture = ( ( bscan$SEL & bscan$CAPTURE ) != 0 ) && 1'd1;
+    assign localBscan$update = ( ( bscan$SEL & bscan$UPDATE ) != 0 ) && 1'd1;
     // Extra assigments, not to output wires
-    assign fromBscan.enq$v = ( !( updateFlag3 || ( !updateFlag2 ) ) ) ? localBscan$fromBscan : 0;
-    assign fromBscan.enq__ENA = !( updateFlag3 || ( !updateFlag2 ) );
-    assign toBscan.enq__RDY = !( 0 == captureFlag2 );
+    assign fromBscan.enq$v = ( ( !updateFlag3 ) && updateFlag2 ) ? localBscan$fromBscan : 0;
+    assign fromBscan.enq__ENA = ( !updateFlag3 ) && updateFlag2;
+    assign toBscan.enq__RDY = captureFlag2;
 
     always @( posedge CLK) begin
       if (!nRST) begin

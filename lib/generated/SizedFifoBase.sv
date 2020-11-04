@@ -13,8 +13,8 @@ module SizedFifoBase #(
     logic [width - 1:0]x_wire;
     genvar __inst$Genvar1;
     // Extra assigments, not to output wires
-    assign in.enq__RDY = !( 0 == ( ( c == depth ) ^ 1 ) );
-    assign out.deq__RDY = !( 0 == ( ( c == 0 ) ^ 1 ) );
+    assign in.enq__RDY = c != depth;
+    assign out.deq__RDY = c != 0;
     assign out.first = q[ 0 ];
     assign out.first__RDY = 1'd1;
     assign x_wire = in.enq__ENA ? in.enq$v : 0;
@@ -24,14 +24,14 @@ module SizedFifoBase #(
         c <= 0;
       end // nRST
       else begin
-        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
-            if (( bypass == 0 ) || ( out.deq__ENA == 0 )) begin
+        if (( c != depth ) && in.enq__ENA) begin // in.enq__ENA
+            if (( bypass == 0 ) || ( !out.deq__ENA )) begin
             q[ c ] <= in.enq$v;
             c <= c + 1;
             end;
         end; // End of in.enq__ENA
-        if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA
-            if (( bypass == 0 ) || ( in.enq__ENA == 0 ))
+        if (( c != 0 ) && out.deq__ENA) begin // out.deq__ENA
+            if (( bypass == 0 ) || ( !in.enq__ENA ))
             c <= c + ( -1 );
         end; // End of out.deq__ENA
       end
@@ -43,8 +43,8 @@ module SizedFifoBase #(
       if (!nRST) begin
       end // nRST
       else begin
-        if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA
-            q[ __inst$Genvar1 ] <= ( !( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in.enq__ENA ) == 0 ) ) ? x_wire : q[ __inst$Genvar1 + 1 ];
+        if (( c != 0 ) && out.deq__ENA) begin // out.deq__ENA
+            q[ __inst$Genvar1 ] <= ( ( ( __inst$Genvar1 == ( c - 1 ) ) & ( bypass != 0 ) & in.enq__ENA ) != 0 ) ? x_wire : q[ __inst$Genvar1 + 1 ];
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

@@ -11,7 +11,7 @@ module LfsrGal #(
     output wire outBit,
     output wire outBit__RDY);
     reg [LN - 1:0]sreg;
-    assign outBit = !( sreg[ 0 ] == 0 );
+    assign outBit = sreg[ 0 ] != 0;
     assign outBit__RDY = 1'd1;
     assign shiftBit__RDY = 1'd1;
 

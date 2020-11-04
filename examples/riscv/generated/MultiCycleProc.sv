@@ -24,12 +24,14 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     logic RULE$decode__RDY;
     logic RULE$execArith__ENA;
     logic RULE$execArith__RDY;
+    logic RULE$writeBack__ENA;
     ExecResult _RULE$execArith$val;
     // Extra assigments, not to output wires
     assign RULE$decode__ENA = ( d2e_valid == 0 ) && pgm.read__RDY && dec.getOp__RDY && dec.getArithOp__RDY && dec.getSrc1__RDY && dec.getSrc2__RDY && dec.getDst__RDY && dec.getAddr__RDY;
     assign RULE$decode__RDY = ( d2e_valid == 0 ) && pgm.read__RDY && dec.getOp__RDY && dec.getArithOp__RDY && dec.getSrc1__RDY && dec.getSrc2__RDY && dec.getDst__RDY && dec.getAddr__RDY;
     assign RULE$execArith__ENA = ( d2e_valid == 1 ) && ( e2w_valid == 0 ) && rf.read__RDY && exec.basicExec__RDY;
     assign RULE$execArith__RDY = ( d2e_valid == 1 ) && ( e2w_valid == 0 ) && rf.read__RDY && exec.basicExec__RDY;
+    assign RULE$writeBack__ENA = ( e2w_valid == 1 ) && rf.write__RDY;
     assign _RULE$execArith$val = exec.basicExec;
     assign rf.write$regnum = ( e2w_valid == 1 ) ? e2w_dst : 32'd0;
     assign rf.write$regval = ( e2w_valid == 1 ) ? e2w_val : 32'd0;
@@ -69,7 +71,7 @@ module MultiCycleProc (input wire CLK, input wire nRST,
             e2w_addr <= _RULE$execArith$val.addr;
             e2w_valid <= 32'd1;
         end; // End of RULE$execArith__ENA
-        if (( e2w_valid == 1 ) && rf.write__RDY) begin // RULE$writeBack__ENA
+        if (( e2w_valid == 1 ) && rf.write__RDY && RULE$writeBack__ENA) begin // RULE$writeBack__ENA
             e2w_valid <= 32'd0;
             pc <= e2w_nextPC;
         end; // End of RULE$writeBack__ENA

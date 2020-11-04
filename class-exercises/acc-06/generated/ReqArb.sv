@@ -11,8 +11,8 @@ module ReqArb (input wire CLK, input wire nRST,
     output wire out$a__ENA,
     output wire out$a$v,
     input wire out$a__RDY);
-    assign a__RDY = !( ( 0 == ( ( b__ENA != 0 ) ^ 1 ) ) || ( !out$a__RDY ) );
-    assign b__RDY = !( ( 0 == ( ( a__ENA != 0 ) ^ 1 ) ) || ( !out$a__RDY ) );
+    assign a__RDY = ( !b__ENA ) && out$a__RDY;
+    assign b__RDY = ( !a__ENA ) && out$a__RDY;
     assign out$a$v = ( a__ENA && ( a$v || ( b__ENA && b$v ) ) ) || ( ( !a__ENA ) && b__ENA && b$v );
     assign out$a__ENA = a__ENA | b__ENA;
 endmodule

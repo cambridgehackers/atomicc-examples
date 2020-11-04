@@ -98,13 +98,13 @@ endinterface
 //METAGUARD; request.say; indication.heard__RDY;
 //METASTART; EchoIndicationInput
 //METAINVOKE; pipe.enq__ENA; _pipe$enq$temp$v.tag == 1:indication.heard__ENA;
-//METAGUARD; pipe.enq; indication.heard__RDY || ( !( _pipe$enq$temp$v.tag == 1 ) );
+//METAGUARD; pipe.enq; indication.heard__RDY || ( _pipe$enq$temp$v.tag != 1 );
 //METASTART; EchoIndicationOutput
 //METAINVOKE; indication.heard__ENA; :pipe.enq__ENA;
 //METAGUARD; indication.heard; pipe.enq__RDY;
 //METASTART; EchoRequestInput
 //METAINVOKE; pipe.enq__ENA; _pipe$enq$temp$v.tag == 1:request.say__ENA;
-//METAGUARD; pipe.enq; request.say__RDY || ( !( _pipe$enq$temp$v.tag == 1 ) );
+//METAGUARD; pipe.enq; request.say__RDY || ( _pipe$enq$temp$v.tag != 1 );
 //METASTART; EchoRequestOutput
 //METAINVOKE; request.say__ENA; :pipe.enq__ENA;
 //METAGUARD; request.say; pipe.enq__RDY;
