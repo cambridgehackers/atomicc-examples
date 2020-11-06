@@ -1,7 +1,7 @@
 `include "fifo.generated.vh"
 
 `default_nettype none
-module FifoPipe1Base #(
+module FifoPipeline1Base #(
     parameter integer width = 999999)(
     input wire CLK, input wire nRST,
     PipeIn.server in,
@@ -9,7 +9,7 @@ module FifoPipe1Base #(
     reg [width - 1:0]element;
     reg full;
     // Extra assigments, not to output wires
-    assign in.enq__RDY = ( ( full ^ 1 ) | out.deq__ENA ) != 0;
+    assign in.enq__RDY = !full;
     assign out.deq__RDY = full;
     assign out.first = element;
     assign out.first__RDY = full;
@@ -20,7 +20,7 @@ module FifoPipe1Base #(
         full <= 0;
       end // nRST
       else begin
-        if (in.enq__RDY && in.enq__ENA) begin // in.enq__ENA
+        if (( !full ) && in.enq__ENA) begin // in.enq__ENA
             element <= in.enq$v;
             if (!out.deq__ENA)
             full <= 1'd1;

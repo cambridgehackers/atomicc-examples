@@ -82,8 +82,9 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE Fifo1Base(width=32) Fifo(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
-EMODULE FifoPipe1Base(width=23) Fifo(width=23) {
+EMODULE FifoPipeline1Base(width=23) Fifo(width=23) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    OVERRIDE in$enq out$deq
 }
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
@@ -110,9 +111,10 @@ MODULE Fifo1(width=32) Fifo(width=32) {
         CALL :fifo$out$first{}
     }
 }
-MODULE FifoPipe1(width=23) Fifo(width=23) {
+MODULE FifoPipeline1(width=23) Fifo(width=23) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
-    FIELD FifoPipe1Base(width=23) fifo
+    FIELD FifoPipeline1Base(width=23) fifo
+    OVERRIDE in$enq out$deq
     METHOD/Action in$enq__ENA ( ProcessData v ) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
@@ -127,7 +129,7 @@ MODULE Lpm LpmIfc {
     FILE lpm_OC_cpp
     FIELD Fifo1(width=32) inQ
     FIELD BufTicket compBuf
-    FIELD FifoPipe1(width=23) fifo
+    FIELD FifoPipeline1(width=23) fifo
     FIELD LpmMem mem
     METHOD/Action enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{enter$x}

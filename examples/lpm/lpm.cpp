@@ -110,7 +110,7 @@ class LpmIfc {
 class Lpm __implements LpmIfc {
     Fifo1<IPA>          inQ;
     BufTicket           compBuf;
-    FifoPipe1<ProcessData> fifo;
+    FifoPipeline1<ProcessData> fifo;
     LpmMem              mem;
     void enter(IPA x) {
 	inQ.in.enq(x);

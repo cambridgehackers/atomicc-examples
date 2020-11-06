@@ -42,23 +42,25 @@ class Fifo1 __implements Fifo<T> {
 
 // FifoB -- bypass fifos (simultaneous enq/deq when empty)
 template<int width>
-class FifoB1Base __implements Fifo<__uint(width)>;
+class FifoBypass1Base __implements Fifo<__uint(width)> __override(out.deq, in.enq) __override(out.first, in.enq);
+
 
 template<class T>
-class FifoB1 __implements Fifo<T> {
-  FifoB1Base<__bitsize(T)> fifo;
+class FifoBypass1 __implements Fifo<T> __override(out.deq, in.enq) {
+  FifoBypass1Base<__bitsize(T)> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };
 };
 
-// FifoPipe -- pipeline fifos (simultaneous enq/deq when full)
+// FifoPipeline -- pipeline fifos (simultaneous enq/deq when full)
 template<int width>
-class FifoPipe1Base __implements Fifo<__uint(width)>;
+class FifoPipeline1Base __implements Fifo<__uint(width)> __override(in.enq, out.deq);
+
 
 template<class T>
-class FifoPipe1 __implements Fifo<T> {
-  FifoPipe1Base<__bitsize(T)> fifo;
+class FifoPipeline1 __implements Fifo<T> __override(in.enq, out.deq) {
+  FifoPipeline1Base<__bitsize(T)> fifo;
   void in.enq(const T v) { fifo.in.enq(__bit_cast<__uint(__bitsize(T))>(v)); };
   void out.deq(void) { fifo.out.deq(); }
   T out.first(void) { return __bit_cast<T>(fifo.out.first()); };

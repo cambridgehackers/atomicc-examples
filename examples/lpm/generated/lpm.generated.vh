@@ -89,7 +89,7 @@ endinterface
 //METASTART; Lpm
 //METAINTERNAL; inQ; Fifo1Base(width=32);
 //METAINTERNAL; compBuf; BufTicket;
-//METAINTERNAL; fifo; FifoPipe1Base(width=23);
+//METAINTERNAL; fifo; FifoPipeline1Base(width=23);
 //METAINTERNAL; mem; LpmMem;
 //METAINVOKE; enter__ENA; :inQ$in.enq__ENA;
 //METAGUARD; enter; inQ$in.enq__RDY;
@@ -98,7 +98,7 @@ endinterface
 //METAGUARD; RULE$enterRule; ( !RULE$recircRule__ENA ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY && mem$read__RDY;
 //METAINVOKE; RULE$recircRule__ENA; :fifo$in.enq__ENA;:fifo$out.deq__ENA;:mem$out.deq__ENA;:mem$read__ENA;
 //METAEXCLUSIVE; RULE$recircRule__ENA; RULE$exitRule__ENA
-//METAGUARD; RULE$recircRule; ( ( mem$out$first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY && fifo$in.enq__RDY;
+//METAGUARD; RULE$recircRule; ( ( mem$out$first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY;
 //METAINVOKE; RULE$exitRule__ENA; :fifo$out.deq__ENA;:mem$out.deq__ENA;:outQ.enq__ENA;
 //METAGUARD; RULE$exitRule; ( !RULE$recircRule__ENA ) && mem$out.first__RDY && fifo$out.first__RDY && ( ( mem$out$first & 1 ) == 1 ) && outQ.enq__RDY && mem$out.deq__RDY && fifo$out.deq__RDY;
 //METAINVOKE; write__ENA; :mem$write__ENA;

@@ -55,20 +55,22 @@ MODULE Fifo1Base(width=999999) Fifo(width=999999) {
     }
     METHOD out$first Bit(width) = ((element)) if ((full))
 }
-MODULE FifoB1Base(width=999999) Fifo(width=999999) {
+MODULE FifoBypass1Base(width=999999) Fifo(width=999999) {
     FILE fifo_OC_cpp
     FIELD Bit(999999) element
     FIELD Bit(1) full
     FIELD/shared Bit(999999) enq_v
+    OVERRIDE out$deq in$enq
+    OVERRIDE out$first in$enq
     METHOD/Action in$enq__ENA ( Bit(width) v ) if (((full) ^ (1))) {
         LET Bit(999999) :enq_v = in$enq$v
         STORE :element = in$enq$v
         STORE !((out$deq__ENA) != (0)):full = 1
     }
-    METHOD/Action out$deq__ENA if (((((full) | (in$enq__ENA)) | (in$enq__ENA)) != (0))) {
+    METHOD/Action out$deq__ENA if ((full)) {
         STORE :full = 0
     }
-    METHOD out$first Bit(width) = ((__phi((full):(element), !(full):(enq_v)))) if (((full) | (in$enq__ENA)))
+    METHOD out$first Bit(width) = ((__phi((full):(element), !(full):(enq_v)))) if ((full))
 }
 MODULE FifoPBase(width=999999) FifoPIfc(width=999999) {
     FILE fifo_OC_cpp
@@ -80,11 +82,12 @@ MODULE FifoPBase(width=999999) FifoPIfc(width=999999) {
         CALL/Action :fifo$in$enq__ENA{in$enq$v}
     }
 }
-MODULE FifoPipe1Base(width=999999) Fifo(width=999999) {
+MODULE FifoPipeline1Base(width=999999) Fifo(width=999999) {
     FILE fifo_OC_cpp
     FIELD Bit(999999) element
     FIELD Bit(1) full
-    METHOD/Action in$enq__ENA ( Bit(width) v ) if (((((full) ^ (1)) | (out$deq__ENA)) != (0))) {
+    OVERRIDE in$enq out$deq
+    METHOD/Action in$enq__ENA ( Bit(width) v ) if (((full) ^ (1))) {
         STORE :element = in$enq$v
         STORE !((out$deq__ENA) != (0)):full = 1
     }

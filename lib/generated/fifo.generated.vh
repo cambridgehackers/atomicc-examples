@@ -7,11 +7,11 @@
 //METAGUARD; in.enq; 0 != ( full ^ 1 );
 //METAGUARD; out.deq; 0 != full;
 //METAGUARD; out.first; 0 != full;
-//METASTART; FifoB1Base
+//METASTART; FifoBypass1Base
 //METAEXCLUSIVE; in.enq__ENA; out.deq__ENA
 //METAGUARD; in.enq; 0 != ( full ^ 1 );
-//METAGUARD; out.deq; ( full | in$enq__ENA | in$enq__ENA ) != 0;
-//METAGUARD; out.first; full | in$enq__ENA;
+//METAGUARD; out.deq; 0 != full;
+//METAGUARD; out.first; 0 != full;
 //METASTART; FifoPBase
 //METAINTERNAL; fifo; Fifo1Base(width=999999);
 //METAINTERNAL; base; Out2InBase(width=999999);
@@ -23,9 +23,9 @@
 //METACONNECT; base$in.first__RDY; fifo$out.first__RDY
 //METACONNECT; base$out.enq__ENA; out.enq__ENA
 //METACONNECT; base$out.enq__RDY; out.enq__RDY
-//METASTART; FifoPipe1Base
+//METASTART; FifoPipeline1Base
 //METAEXCLUSIVE; in.enq__ENA; out.deq__ENA
-//METAGUARD; in.enq; ( ( full ^ 1 ) | out$deq__ENA ) != 0;
+//METAGUARD; in.enq; 0 != ( full ^ 1 );
 //METAGUARD; out.deq; 0 != full;
 //METAGUARD; out.first; 0 != full;
 `endif
