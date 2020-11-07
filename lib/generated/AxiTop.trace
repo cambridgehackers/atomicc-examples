@@ -1,8 +1,18 @@
-WIDTH 32+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+2+12+2
+WIDTH 32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+2+12+2
 DEPTH 1024
-COUNT 27
+COUNT 37
 ------------
 TIME 32
+RULE__init__ENA 1
+RULE__init__RDY 1
+RULE__lread__ENA 1
+RULE__lread__RDY 1
+RULE__lreadData__ENA 1
+RULE__lreadData__RDY 1
+RULE__lwrite__ENA 1
+RULE__lwrite__RDY 1
+RULE__writeResponse__ENA 1
+RULE__writeResponse__RDY 1
 interrupt 1
 MAXIGP0_O.AR__ENA 1
 MAXIGP0_O.AR__RDY 1

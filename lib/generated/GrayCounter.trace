@@ -1,8 +1,12 @@
-WIDTH 32+1+1+1+1+1+1+1+1+1+1+width+width+width+width
+WIDTH 32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+width+width+width+width
 DEPTH 1024
-COUNT 15
+COUNT 19
 ------------
 TIME 32
+RULE__incdec__ENA 1
+RULE__incdec__RDY 1
+RULE__init__ENA 1
+RULE__init__RDY 1
 increment__ENA 1
 increment__RDY 1
 decrement__ENA 1

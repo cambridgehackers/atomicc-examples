@@ -28,13 +28,13 @@ module GrayCounter #(
     logic [width - 1:0]counterBit;
     logic [width - 1:0]m;
     genvar __inst$Genvar1;
-    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+width+width+width+width),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1)) __traceMemory (
+    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+width+width+width+width),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
         .clear__ENA(__traceMemory$clear__ENA),
         .clear__RDY(),
         .CLK(CLK),
         .nRST(nRST),
         .enable(1'd1),
-        .data({ 32'd0 , increment__ENA , increment__RDY , decrement__ENA , decrement__RDY , readGray__RDY , writeGray__ENA , writeGray__RDY , readBin__RDY , writeBin__ENA , writeBin__RDY , readGray , writeGray$v , readBin , writeBin$v }),
+        .data({ 32'd0 , RULE$incdec__ENA , increment__ENA != decrement__ENA , 1'd1 , 1'd1 , increment__ENA , 1'd1 , decrement__ENA , 1'd1 , 1'd1 , writeGray__ENA , 1'd1 , 1'd1 , writeBin__ENA , 1'd1 , counterBit , writeGray$v , _readBin$rtemp , writeBin$v }),
         .out(__traceMemory$out));
     assign decrement__RDY = 1'd1;
     assign increment__RDY = 1'd1;
