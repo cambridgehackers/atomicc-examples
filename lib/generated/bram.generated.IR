@@ -30,14 +30,16 @@ MODULE BRAM(width=4,depth=1024) BRAMIfc(width=4,depth=1024) {
     FIELD/Count depth  Bit(4) RAM
     FIELD Bit(4) readB
     FIELD Bit(1) writeEnable
+    FIELD Bit(1) afterRead
     METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data ) {
         STORE ((writeEnable) != (0)):RAM[write$addr] = write$data
     }
     METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr ) {
         STORE :readB = RAM[read$addr]
     }
-    METHOD dataOut Bit(width) = ((readB)) if ((((read__ENA) != (0)) ^ (1)))
+    METHOD dataOut Bit(width) = ((readB)) if (((afterRead) != (0)))
     METHOD/Rule/Action RULE$init__ENA {
         STORE :writeEnable = 1
+        STORE :afterRead = read__ENA
     }
 }

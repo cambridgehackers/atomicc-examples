@@ -23,7 +23,7 @@ endinterface
 //METASTART; BRAM
 //METAGUARD; write; 1'd1;
 //METAGUARD; read; 1'd1;
-//METAGUARD; dataOut; 0 != ( ( read__ENA != 0 ) ^ 1 );
+//METAGUARD; dataOut; afterRead != 0;
 //METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 `endif
