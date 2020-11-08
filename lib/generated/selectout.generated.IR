@@ -33,10 +33,12 @@ EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=
 MODULE SelectOut(funnelWidth=8,width=16) SelectOutIfc(funnelWidth=8,width=16) {
     FILE selectout_OC_cpp
     FIELD Bit(4) index
+    FIELD Bit(1) indexValid
     METHOD/Action select__ENA ( Bit(32) v ) {
         STORE :index = select$v
+        STORE :indexValid = 1
     }
-    METHOD/Action out$deq__ENA {
+    METHOD/Action out$deq__ENA if ((indexValid)) {
         CALL/Action :in[index].deq__ENA{}
     }
     METHOD out$first Bit(width) = ((in[index].first)) {

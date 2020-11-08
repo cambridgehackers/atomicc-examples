@@ -1,22 +1,13 @@
-WIDTH 32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+width+width+width+width
+WIDTH 32+1+1+1+1+1+width+width+width+width
 DEPTH 1024
-COUNT 19
+COUNT 10
 ------------
 TIME 32
 RULE__incdec__ENA 1
-RULE__incdec__RDY 1
-RULE__init__ENA 1
-RULE__init__RDY 1
 increment__ENA 1
-increment__RDY 1
 decrement__ENA 1
-decrement__RDY 1
-readGray__RDY 1
 writeGray__ENA 1
-writeGray__RDY 1
-readBin__RDY 1
 writeBin__ENA 1
-writeBin__RDY 1
 readGray width
 writeGray$v width
 readBin width

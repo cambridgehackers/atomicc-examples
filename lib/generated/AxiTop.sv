@@ -65,13 +65,13 @@ module AxiTop (
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write(user$write),
         .read(readUser));
-    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+2+12+2),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
+    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+12),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
         .clear__ENA(__traceMemory$clear__ENA),
         .clear__RDY(),
         .CLK(CLK),
         .nRST(nRST),
         .enable(1'd1),
-        .data({ 32'd0 , 1'd1 , 1'd1 , RULE$lread__ENA , reqArs$out.first__RDY && ( ( portalRControl && readData$in.enq__RDY && ( reqArs$out.deq__RDY || ( readCount != 0 ) ) ) || ( ( !portalRControl ) && readData$in.enq__RDY && ( ( reqArs$out.deq__RDY && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( readAddr != 0 ) ) ) || ( ( !requestValue$out.first__RDY ) && ( readAddr != 0 ) ) ) ) || ( ( !reqArs$out.deq__RDY ) && ( readCount != 0 ) && ( ( requestValue$out.first__RDY && ( requestValue$out.deq__RDY || ( readAddr != 0 ) ) ) || ( ( !requestValue$out.first__RDY ) && ( readAddr != 0 ) ) ) ) ) ) ) , RULE$lreadData__ENA , readData$out.first__RDY && MAXIGP0_I.R__RDY && readData$out.deq__RDY , RULE$lwrite__ENA , reqAws$out.first__RDY && writeData$out.first__RDY && ( ( portalWControl && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( reqAws$out.deq__RDY || ( writeCount != 0 ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( writeCount != 0 ) ) ) ) || ( ( !portalWControl ) && writeData$out.deq__RDY && ( ( writeDone$in.enq__RDY && ( ( reqAws$out.deq__RDY && user$write.enq__RDY ) || ( ( !reqAws$out.deq__RDY ) && ( writeCount != 0 ) && user$write.enq__RDY ) ) ) || ( ( !writeDone$in.enq__RDY ) && ( writeCount != 0 ) && user$write.enq__RDY ) ) ) ) , RULE$writeResponse__ENA , writeDone$out.first__RDY && MAXIGP0_I.B__RDY && writeDone$out.deq__RDY , interrupt , MAXIGP0_O.AR__ENA , reqArs$in.enq__RDY , MAXIGP0_O.AW__ENA , reqAws$in.enq__RDY , MAXIGP0_O.W__ENA , writeData$in.enq__RDY , MAXIGP0_I.R__ENA , MAXIGP0_I.R__RDY , MAXIGP0_I.B__ENA , MAXIGP0_I.B__RDY , MAXIGP0_O.AR$addr , MAXIGP0_O.AR$id , MAXIGP0_O.AR$len , MAXIGP0_O.AW$addr , MAXIGP0_O.AW$id , MAXIGP0_O.AW$len , MAXIGP0_O.W$data , MAXIGP0_O.W$id , MAXIGP0_O.W$last , MAXIGP0_I.R$data , MAXIGP0_I.R$id , MAXIGP0_I.R$last , 0 , MAXIGP0_I.B$id , 0 }),
+        .data({ 32'd0 , RULE$lread__ENA , RULE$lreadData__ENA , RULE$lwrite__ENA , RULE$writeResponse__ENA , interrupt , MAXIGP0_O.AR__ENA , MAXIGP0_O.AR__RDY , MAXIGP0_O.AW__ENA , MAXIGP0_O.AW__RDY , MAXIGP0_O.W__ENA , MAXIGP0_O.W__RDY , MAXIGP0_I.R__ENA , MAXIGP0_I.R__RDY , MAXIGP0_I.B__ENA , MAXIGP0_I.B__RDY , MAXIGP0_O.AR$addr , MAXIGP0_O.AR$id , MAXIGP0_O.AR$len , MAXIGP0_O.AW$addr , MAXIGP0_O.AW$id , MAXIGP0_O.AW$len , MAXIGP0_O.W$data , MAXIGP0_O.W$id , MAXIGP0_O.W$last , MAXIGP0_I.R$data , MAXIGP0_I.R$id , MAXIGP0_I.R$last , MAXIGP0_I.B$id }),
         .out(__traceMemory$out));
     assign interrupt = ( requestValue$out.deq__RDY != 0 ) && intEnable && 1'd1;
     // Extra assigments, not to output wires
@@ -147,13 +147,13 @@ module AxiTop (
         writeReady <= 0;
       end // nRST
       else begin
-        if (reqArs$in.enq__RDY && MAXIGP0_O.AR__ENA) begin // MAXIGP0_O.AR__ENA
+        if (MAXIGP0_O.AR__RDY && MAXIGP0_O.AR__ENA) begin // MAXIGP0_O.AR__ENA
             portalRControl <= MAXIGP0_O.AR$addr[ 11 : 5 ] == 0;
             selectRIndReq <= MAXIGP0_O.AR$addr[ 12 ] != 0;
             readCount <= MAXIGP0_O.AR$len;
             readAddr <= MAXIGP0_O.AR$addr;
         end; // End of MAXIGP0_O.AR__ENA
-        if (reqAws$in.enq__RDY && MAXIGP0_O.AW__ENA) begin // MAXIGP0_O.AW__ENA
+        if (MAXIGP0_O.AW__RDY && MAXIGP0_O.AW__ENA) begin // MAXIGP0_O.AW__ENA
             portalWControl <= MAXIGP0_O.AW$addr[ 11 : 5 ] == 0;
             selectWIndReq <= MAXIGP0_O.AW$addr[ 12 ] != 0;
             writeCount <= MAXIGP0_O.AW$len;

@@ -91,7 +91,7 @@ MODULE AxiTop AxiTop_interface {
     FIELD Fifo1Base__W26_Iz7_Oz8 readData
     FIELD Fifo1Base__W20 writeData
     FIELD UserTop user
-    FIELD Trace__Wf5_Sb __traceMemory
+    FIELD Trace__Wff_S15 __traceMemory
 }
 INTERFACE AxiTop_interface {
     FIELD/input  Bit(1) CLK
@@ -310,13 +310,13 @@ INTERFACE Trace__W3a_Sa_interface {
     FIELD/input  Bit(1) enable
     FIELD/input  Bit(58) data
 }
-MODULE Trace__Wf5_Sb Trace__Wf5_Sb_interface {
-    FIELD PipeInLength__Wf5 radapter$in
+MODULE Trace__Wff_S15 Trace__Wff_S15_interface {
+    FIELD PipeInLength__Wff radapter$in
     FIELD PipeOutLast radapter$out
-    FIELD BRAM__Wf5_D400 bram
-    FIELD AdapterToBus__Wf5_Iz15 radapter
+    FIELD BRAM__Wff_D400 bram
+    FIELD AdapterToBus__Wff_Iz15 radapter
 }
-INTERFACE Trace__Wf5_Sb_interface {
+INTERFACE Trace__Wff_S15_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) sensitivity
     FIELD/input  Bit(1) clear__ENA
@@ -324,7 +324,7 @@ INTERFACE Trace__Wf5_Sb_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
-    FIELD/input  Bit(245) data
+    FIELD/input  Bit(255) data
 }
 MODULE AdapterToBus__W3a_Iz16 AdapterToBus__W3a_Iz16_interface {
 }
@@ -336,9 +336,9 @@ INTERFACE AdapterToBus__W3a_Iz16_interface {
     FIELD/input  Bit(1) clear__ENA
     FIELD/output Bit(1) clear__RDY
 }
-MODULE AdapterToBus__Wf5_Iz15 AdapterToBus__Wf5_Iz15_interface {
+MODULE AdapterToBus__Wff_Iz15 AdapterToBus__Wff_Iz15_interface {
 }
-INTERFACE AdapterToBus__Wf5_Iz15_interface {
+INTERFACE AdapterToBus__Wff_Iz15_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
@@ -373,21 +373,21 @@ INTERFACE BRAM__W3a_D400_interface {
     FIELD/output Bit(58) dataOut
     FIELD/output Bit(1) dataOut__RDY
 }
-MODULE BRAM__Wf5_D400 BRAM__Wf5_D400_interface {
+MODULE BRAM__Wff_D400 BRAM__Wff_D400_interface {
 }
-INTERFACE BRAM__Wf5_D400_interface {
+INTERFACE BRAM__Wff_D400_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) depth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) write__ENA
     FIELD/input  Bit(10) write$addr
-    FIELD/input  Bit(245) write$data
+    FIELD/input  Bit(255) write$data
     FIELD/output Bit(1) write__RDY
     FIELD/input  Bit(1) read__ENA
     FIELD/input  Bit(10) read$addr
     FIELD/output Bit(1) read__RDY
-    FIELD/output Bit(245) dataOut
+    FIELD/output Bit(255) dataOut
     FIELD/output Bit(1) dataOut__RDY
 }
 FILE ../../lib/generated/ZynqTop.sv

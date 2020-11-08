@@ -13,6 +13,7 @@ module SelectOut #(
     reg [4 - 1:0]index;
     logic in__deq__RDY_or [funnelWidth - 1:0];
     logic in__deq__RDY_or1;
+    reg indexValid;
     logic in__first__RDY_or [funnelWidth - 1:0];
     logic in__first__RDY_or1;
     logic [width - 1:0]in__first_or [funnelWidth - 1:0];
@@ -32,12 +33,11 @@ module SelectOut #(
         .index(index));
     assign select__RDY = 1'd1;
     // Extra assigments, not to output wires
-    assign out.deq__RDY = in__deq__RDY_or1;
+    assign out.deq__RDY = indexValid && in__deq__RDY_or1;
     assign out.first = in__first_or1;
     assign out.first__RDY = in__first__RDY_or1;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign in[__inst$Genvar1].deq__ENA = out.deq__ENA && ( index == __inst$Genvar1 );
-    assign in__deq__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].deq__RDY;
     assign in__first__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].first__RDY;
     assign in__first_or[__inst$Genvar1] = in[__inst$Genvar1].first;
     end;
@@ -45,10 +45,12 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Ge
     always @( posedge CLK) begin
       if (!nRST) begin
         index <= 0;
+        indexValid <= 0;
       end // nRST
       else begin
         if (select__ENA) begin // select__ENA
             index <= select$v[ 3 : 0 ];
+            indexValid <= 1'd1;
         end; // End of select__ENA
       end
     end // always @ (posedge CLK)

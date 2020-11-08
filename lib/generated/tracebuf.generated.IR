@@ -3,13 +3,13 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
-INTERFACE AtB(width=64,owidth=32)  {
+INTERFACE AtB(width=48,owidth=32)  {
     FILE adapter_OC_h
-    INTERFACE PipeInLength(width=64) in
+    INTERFACE PipeInLength(width=48) in
     INTERFACE PipeOutLast(width=32) out
     METHOD/Action clear__ENA
 }
-INTERFACE BRAMIfc(width=64,depth=1024)  {
+INTERFACE BRAMIfc(width=48,depth=1024)  {
     FILE bram_OC_h
     METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
     METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
@@ -19,7 +19,7 @@ INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
-INTERFACE PipeInLength(width=64)  {
+INTERFACE PipeInLength(width=48)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v , Bit(16) size )
 }
@@ -40,19 +40,19 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD/Ptr/Count funnelWidth  Bit(14) in
     FIELD Bit(5) index
 }
-INTERFACE TraceIfc(width=64,depth=1024,sensitivity=99)  {
+INTERFACE TraceIfc(width=48,depth=1024,sensitivity=99)  {
     FILE tracebuf_OC_h
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) enable
-    FIELD/input Bit(64) data
+    FIELD/input Bit(48) data
     INTERFACE PipeOut(width=32) out
     METHOD/Action clear__ENA
 }
-EMODULE AdapterToBus(width=64,owidth=32) AtB(width=64,owidth=32) {
+EMODULE AdapterToBus(width=48,owidth=32) AtB(width=48,owidth=32) {
     FILE adapter_OC_h
 }
-EMODULE BRAM(width=64,depth=1024) BRAMIfc(width=64,depth=1024) {
+EMODULE BRAM(width=48,depth=1024) BRAMIfc(width=48,depth=1024) {
     FILE bram_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
@@ -61,25 +61,29 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
-MODULE Trace(width=64,depth=1024,sensitivity=99) TraceIfc(width=64,depth=1024,sensitivity=99) {
+MODULE Trace(width=48,depth=1024,sensitivity=99) TraceIfc(width=48,depth=1024,sensitivity=99) {
     FILE tracebuf_OC_cpp
-    FIELD BRAM(width=64,depth=1024) bram
+    FIELD BRAM(width=48,depth=1024) bram
     FIELD Bit(32) timestamp
     FIELD Bit(99) buffer
     FIELD Bit(11) addr
     FIELD Bit(11) readAddr
-    FIELD AdapterToBus(width=64,owidth=32) radapter
-    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (__bitsubstr{data,((64) - (32)) - (1),((64) - (32)) - (99)})))) {
-        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,(64) - (32),0}}}
+    FIELD AdapterToBus(width=48,owidth=32) radapter
+    METHOD/Rule/Action RULE$copyRule__ENA if ((((enable) != (0)) && ((buffer) != (__bitsubstr{data,((48) - (32)) - (1),((48) - (32)) - (99)})))) {
+        ALLOCA Bit(32) _RULE$copyRule$prefix
+        ALLOCA Bit(32) _RULE$copyRule$suffix
+        LET Bit(32) :_RULE$copyRule$prefix = 4293844428
+        LET Bit(32) :_RULE$copyRule$suffix = 2864434397
+        CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,((48) - (32)) - (1),0}}}
         STORE :addr = (addr) + (1)
-        STORE :buffer = __bitsubstr{data,((64) - (32)) - (1),((64) - (32)) - (99)}
+        STORE :buffer = __bitsubstr{data,((48) - (32)) - (1),((48) - (32)) - (99)}
     }
     METHOD/Rule/Action RULE$init__ENA {
         STORE :timestamp = (timestamp) + (1)
     }
     METHOD/Rule/Action RULE$readCallBack__ENA {
         CALL :bram$dataOut{}
-        CALL/Action :radapter$in$enq__ENA{bram$dataOut,64}
+        CALL/Action :radapter$in$enq__ENA{bram$dataOut,48}
     }
     METHOD/Action clear__ENA {
         CALL/Action :radapter$clear__ENA{}

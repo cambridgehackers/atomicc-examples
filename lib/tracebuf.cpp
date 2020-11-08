@@ -26,6 +26,7 @@
 #include "fifo.h"
 
 #define TIMESTAMP_WIDTH 32
+//#define DEBUG
 
 template <int width, int depth, int sensitivity>    // 'width' includes TIMESTAMP_WIDTH
 class Trace __implements TraceIfc<width, depth, sensitivity> {
@@ -36,8 +37,16 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
     __uint(sensitivity) buffer;
     __uint(__clog2(depth)) addr;
     __rule copyRule if (this->enable && buffer != __bitsubstr(this->data, width - 32L - 1, width - 32L - sensitivity)) {
+        __uint(32) prefix = 0xffeeddcc;
+        __uint(32) suffix = 0xaabbccdd;
         // write next entry to trace buffer
-        bram.write(addr, __bitconcat(timestamp, __bitsubstr(this->data, width - 32L, 0))); // clang weirdly truncates 'width' to int[6]
+        bram.write(addr, __bitconcat(timestamp, 
+#ifndef DEBUG
+             __bitsubstr(this->data, width - 32L - 1, 0)
+#else
+             prefix, __bitsubstr(this->data, width - 32L - 64L - 1, 0), suffix
+#endif
+        )); // clang weirdly truncates 'width' to int[6]
         addr++;
         buffer = __bitsubstr(this->data, width - 32L - 1, width - 32L - sensitivity);
     }
@@ -68,4 +77,4 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
     }
 };
 
-Trace<64, 1024, 99> dummy;
+Trace<48, 1024, 99> dummy;

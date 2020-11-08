@@ -4,7 +4,7 @@
 
 `ifndef __AtB_DEF__
 `define __AtB_DEF__
-interface AtB#(owidth = 32, width = 64);
+interface AtB#(owidth = 32, width = 48);
     logic clear__ENA;
     logic clear__RDY;
     modport server (input  clear__ENA,
@@ -15,7 +15,7 @@ endinterface
 `endif
 `ifndef __BRAMIfc_DEF__
 `define __BRAMIfc_DEF__
-interface BRAMIfc#(depth = 1024, width = 64);
+interface BRAMIfc#(depth = 1024, width = 48);
     logic write__ENA;
     logic [$clog2(depth) - 1:0] write$addr;
     logic [width - 1:0] write$data;
@@ -33,7 +33,7 @@ endinterface
 `endif
 `ifndef __TraceIfc_DEF__
 `define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, sensitivity = 99, width = 64);
+interface TraceIfc#(depth = 1024, sensitivity = 99, width = 48);
     logic  CLK;
     logic  nRST;
     logic  enable;
@@ -47,8 +47,8 @@ interface TraceIfc#(depth = 1024, sensitivity = 99, width = 64);
 endinterface
 `endif
 //METASTART; Trace
-//METAINTERNAL; bram; BRAM(width=64,depth=1024);
-//METAINTERNAL; radapter; AdapterToBus(width=64,owidth=32);
+//METAINTERNAL; bram; BRAM(width=48,depth=1024);
+//METAINTERNAL; radapter; AdapterToBus(width=48,owidth=32);
 //METAINVOKE; RULE$copyRule__ENA; :bram$write__ENA;
 //METAGUARD; RULE$copyRule; enable && ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && bram$write__RDY;
 //METAGUARD; RULE$init; 1'd1;

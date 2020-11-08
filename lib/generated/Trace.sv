@@ -2,7 +2,7 @@
 
 `default_nettype none
 module Trace #(
-    parameter integer width = 64,
+    parameter integer width = 48,
     parameter integer depth = 1024,
     parameter integer sensitivity = 99)(
     input wire clear__ENA,
@@ -26,7 +26,7 @@ module Trace #(
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
         .write__ENA(( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable),
         .write$addr(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? addr : 11'd0),
-        .write$data(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? { timestamp , data[ ( width - 32 ) : 0 ] } : 0),
+        .write$data(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? { timestamp , data[ ( ( width - 32 ) - 1 ) : 0 ] } : 0),
         .write__RDY(bram$write__RDY),
         .read__ENA(out.deq__ENA && radapter$out.last),
         .read$addr(( out.deq__ENA && radapter$out.last ) ? readAddr : 11'd0),

@@ -24,10 +24,12 @@
 template<int funnelWidth, int width>
 class SelectOut __implements SelectOutIfc<funnelWidth, width> {
     __uint(__clog2(funnelWidth)) index;
+    bool indexValid;
     void select(int v) {
         index = v;
+        indexValid = true;
     }
-    void out.deq(void) {
+    void out.deq(void) if (indexValid) {
         this->in[index]->deq();
     }
     __uint(width) out.first(void) {
