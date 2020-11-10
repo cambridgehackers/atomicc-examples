@@ -33,7 +33,7 @@ typedef struct {
     BusData    data;
 } ReadResp;
 
-#define TRACEAXI __trace((1024))
+#define TRACEAXI __trace(1024, 0)
 class TRACEAXI AxiTop __implements AxiTopIfc {
     bool intEnable, writeReady, selectRIndReq, portalRControl, selectWIndReq, portalWControl;
     AXICount readCount, writeCount;

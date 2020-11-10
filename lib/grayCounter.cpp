@@ -22,7 +22,7 @@
 #include "tracebuf.h"
 
 Trace<4, 1024, 99> dummytr;
-#define TRACEGRAY __trace((1024))
+#define TRACEGRAY __trace(1024, 0)
 template <int width>
 class TRACEGRAY GrayCounter __implements GrayCounterIfc<width> {
     __uint(1) counter[width];

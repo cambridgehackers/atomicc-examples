@@ -40,7 +40,7 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD/Ptr/Count funnelWidth  Bit(14) in
     FIELD Bit(5) index
 }
-INTERFACE TraceIfc(width=48,depth=1024,sensitivity=99)  {
+INTERFACE TraceIfc(width=48,depth=1024,sensitivity=99,head=77)  {
     FILE tracebuf_OC_h
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
@@ -61,7 +61,7 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
-MODULE Trace(width=48,depth=1024,sensitivity=99) TraceIfc(width=48,depth=1024,sensitivity=99) {
+MODULE Trace(width=48,depth=1024,sensitivity=99,head=77) TraceIfc(width=48,depth=1024,sensitivity=99,head=77) {
     FILE tracebuf_OC_cpp
     FIELD BRAM(width=48,depth=1024) bram
     FIELD Bit(32) timestamp
@@ -75,7 +75,7 @@ MODULE Trace(width=48,depth=1024,sensitivity=99) TraceIfc(width=48,depth=1024,se
         LET Bit(32) :_RULE$copyRule$prefix = 4293844428
         LET Bit(32) :_RULE$copyRule$suffix = 2864434397
         CALL/Action :bram$write__ENA{addr,__bitconcat{timestamp,__bitsubstr{data,((48) - (32)) - (1),0}}}
-        STORE :addr = (addr) + (1)
+        STORE ((addr) != ((1024) - (1))):addr = (addr) + (1)
         STORE :buffer = __bitsubstr{data,((48) - (32)) - (1),((48) - (32)) - (99)}
     }
     METHOD/Rule/Action RULE$init__ENA {

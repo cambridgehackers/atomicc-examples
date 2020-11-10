@@ -65,7 +65,7 @@ module AxiTop (
     UserTop user (.CLK(CLK), .nRST(nRST),
         .write(user$write),
         .read(readUser));
-    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+12),.depth(1024),.sensitivity(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
+    Trace#(.width(32+1+1+1+1+1+1+1+1+1+1+1+1+1+1+1+32+12+4+32+12+4+32+12+1+32+12+1+12),.depth(1024),.head(0),.sensitivity(1+1+1+1+1+1+1+1+1+1+1+1+1+1+1)) __traceMemory (
         .clear__ENA(__traceMemory$clear__ENA),
         .clear__RDY(),
         .CLK(CLK),

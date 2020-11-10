@@ -28,7 +28,7 @@ module GrayCounter #(
     logic [width - 1:0]counterBit;
     logic [width - 1:0]m;
     genvar __inst$Genvar1;
-    Trace#(.width(32+1+1+1+1+1+width+width+width+width),.depth(1024),.sensitivity(1+1+1+1+1)) __traceMemory (
+    Trace#(.width(32+1+1+1+1+1+width+width+width+width),.depth(1024),.head(0),.sensitivity(1+1+1+1+1)) __traceMemory (
         .clear__ENA(__traceMemory$clear__ENA),
         .clear__RDY(),
         .CLK(CLK),

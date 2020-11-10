@@ -45,7 +45,7 @@ EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=
 EMODULE Trace(width=4,depth=1024,sensitivity=99) TraceIfc(width=4,depth=1024,sensitivity=99) {
     FILE tracebuf_OC_h
 }
-MODULE/Trace=1024 GrayCounter(width=10) GrayCounterIfc(width=10) {
+MODULE/Trace=1024:0 GrayCounter(width=10) GrayCounterIfc(width=10) {
     FILE grayCounter_OC_cpp
     FIELD/Count width  Bit(1) counter
     FIELD/shared Bit(10) m

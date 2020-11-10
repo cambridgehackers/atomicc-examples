@@ -4,7 +4,8 @@
 module Trace #(
     parameter integer width = 48,
     parameter integer depth = 1024,
-    parameter integer sensitivity = 99)(
+    parameter integer sensitivity = 99,
+    parameter integer head = 77)(
     input wire clear__ENA,
     output wire clear__RDY,
     input wire CLK,
@@ -57,8 +58,9 @@ module Trace #(
       end // nRST
       else begin
         if (RULE$copyRule__RDY && RULE$copyRule__ENA) begin // RULE$copyRule__ENA
-            addr <= addr + 11'd1;
             buffer <= data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ];
+            if (addr != ( depth - 1 ))
+            addr <= addr + 11'd1;
         end; // End of RULE$copyRule__ENA
         // RULE$init__ENA
             timestamp <= timestamp + 32'd1;

@@ -119,7 +119,7 @@ EMODULE UserTop UserTopIfc {
 EMODULE l_top l_topIfc {
     FILE userTop_OC_h
 }
-MODULE/Trace=1024 AxiTop AxiTopIfc {
+MODULE/Trace=1024:0 AxiTop AxiTopIfc {
     FILE axiTop_OC_cpp
     INTERFACECONNECT readUser user$read PipeInLast(width=32)
     FIELD Bit(1) intEnable

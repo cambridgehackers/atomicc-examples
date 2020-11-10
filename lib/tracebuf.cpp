@@ -28,8 +28,8 @@
 #define TIMESTAMP_WIDTH 32
 //#define DEBUG
 
-template <int width, int depth, int sensitivity>    // 'width' includes TIMESTAMP_WIDTH
-class Trace __implements TraceIfc<width, depth, sensitivity> {
+template <int width, int depth, int sensitivity, int head>    // 'width' includes TIMESTAMP_WIDTH
+class Trace __implements TraceIfc<width, depth, sensitivity, head> {
     BRAM<width, depth> bram;
 
     // trace capture to bram
@@ -47,7 +47,8 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
              prefix, __bitsubstr(this->data, width - 32L - 64L - 1, 0), suffix
 #endif
         )); // clang weirdly truncates 'width' to int[6]
-        addr++;
+        if (head == 0 || addr != depth - 1)
+            addr++;
         buffer = __bitsubstr(this->data, width - 32L - 1, width - 32L - sensitivity);
     }
     __rule init {
@@ -77,4 +78,4 @@ class Trace __implements TraceIfc<width, depth, sensitivity> {
     }
 };
 
-Trace<48, 1024, 99> dummy;
+Trace<48, 1024, 99, 77> dummy;

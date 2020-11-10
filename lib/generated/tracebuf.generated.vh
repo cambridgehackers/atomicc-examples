@@ -33,7 +33,7 @@ endinterface
 `endif
 `ifndef __TraceIfc_DEF__
 `define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, sensitivity = 99, width = 48);
+interface TraceIfc#(depth = 1024, head = 77, sensitivity = 99, width = 48);
     logic  CLK;
     logic  nRST;
     logic  enable;
