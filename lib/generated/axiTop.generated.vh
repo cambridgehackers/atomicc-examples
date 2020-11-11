@@ -66,7 +66,7 @@ endinterface
 `endif
 `ifndef __TraceIfc_DEF__
 `define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, sensitivity = 99, width = 4);
+interface TraceIfc#(depth = 1024, head = 77, sensitivity = 99, width = 4);
     logic  CLK;
     logic  nRST;
     logic  enable;
@@ -87,7 +87,7 @@ endinterface
 //METAINTERNAL; readData; Fifo1Base(width=38);
 //METAINTERNAL; writeData; Fifo1Base(width=32);
 //METAINTERNAL; user; UserTop;
-//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024,sensitivity=99);
+//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024,sensitivity=99,head=77);
 //METAINVOKE; MAXIGP0_O.AR__ENA; :reqArs$in.enq__ENA;
 //METAEXCLUSIVE; MAXIGP0_O.AR__ENA; RULE$lread__ENA
 //METAGUARD; MAXIGP0_O.AR; reqArs$in.enq__RDY;

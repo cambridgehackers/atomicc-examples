@@ -27,7 +27,7 @@ endinterface
 `endif
 `ifndef __TraceIfc_DEF__
 `define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, sensitivity = 99, width = 4);
+interface TraceIfc#(depth = 1024, head = 77, sensitivity = 99, width = 4);
     logic  CLK;
     logic  nRST;
     logic  enable;
@@ -41,7 +41,7 @@ interface TraceIfc#(depth = 1024, sensitivity = 99, width = 4);
 endinterface
 `endif
 //METASTART; GrayCounter
-//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024,sensitivity=99);
+//METAINTERNAL; __traceMemory; Trace(width=4,depth=1024,sensitivity=99,head=77);
 //METAGUARD; increment; 1'd1;
 //METAGUARD; decrement; 1'd1;
 //METAGUARD; readGray; 1'd1;
