@@ -41,25 +41,28 @@ interface BscanLocalIfc#(width = 32);
     logic  capture;
     logic  shift;
     logic  update;
+    logic  capture_out;
     logic  TDO;
     logic  TDI;
     logic [width - 1:0] toBscan;
     logic [width - 1:0] fromBscan;
     modport server (input  CLK, nRST, capture, shift, update, TDI, toBscan,
-                    output TDO, fromBscan);
+                    output capture_out, TDO, fromBscan);
     modport client (output CLK, nRST, capture, shift, update, TDI, toBscan,
-                    input  TDO, fromBscan);
+                    input  capture_out, TDO, fromBscan);
 endinterface
 `endif
 //METASTART; Bscan
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; bscan_mytck; BUFG;
 //METAINTERNAL; localBscan; BscanLocal(width=32);
-//METAGUARD; toBscan.enq; 0 != captureFlag2;
+//METAEXCLUSIVE; toBscan.enq__ENA; RULE$clearOneShot__ENA
+//METAGUARD; toBscan.enq; captureFlag2 & ( captureOnce ^ 1'd1 );
 //METAINVOKE; RULE$updateRule__ENA; :fromBscan.enq__ENA;
 //METAGUARD; RULE$updateRule; ( !updateFlag3 ) && updateFlag2 && fromBscan.enq__RDY;
+//METAGUARD; RULE$clearOneShot; ( captureFlag2 ^ 1'd1 ) & captureOnce;
 //METAGUARD; RULE$init; 1'd1;
-//METARULES; RULE$updateRule; RULE$init
+//METARULES; RULE$updateRule; RULE$clearOneShot; RULE$init
 //METASTART; BscanLocal
 //METAEXCLUSIVE; RULE$shiftRule__ENA; RULE$init__ENA
 //METAGUARD; RULE$shiftRule; 0 != shift;

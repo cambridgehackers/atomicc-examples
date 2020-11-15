@@ -36,6 +36,7 @@ class BscanLocalIfc {
     __input  bool       capture;
     __input  bool       shift;
     __input  bool       update;
+    __output bool       capture_out;
     __output __uint(1)  TDO;
     __input  __uint(1)  TDI;
     __input __uint(width) toBscan;
@@ -45,6 +46,7 @@ class BscanLocalIfc {
 template <int width>
 class BscanLocal __implements BscanLocalIfc<width> {
     __uint(width) shiftReg;
+    bool wasCaptured;
 
     __rule shiftRule   if (this->shift) {
         shiftReg = __bitconcat(this->TDI, __bitsubstr(shiftReg, width - 1, 1));
@@ -54,6 +56,8 @@ class BscanLocal __implements BscanLocalIfc<width> {
         if (this->capture)
             shiftReg = this->toBscan;
         this->fromBscan = shiftReg;
+        wasCaptured = this->capture;
+        this->capture_out = wasCaptured;
     };
 };
 
@@ -64,13 +68,18 @@ class Bscan __implements BscanIfc<width> {
     BscanLocal<width> localBscan;
     bool updateFlag1, updateFlag2, updateFlag3;
     bool captureFlag1, captureFlag2;
+    bool captureOnce;
     __shared __uint(width) enqv;
 
-    void toBscan.enq(__uint(width) v) if (captureFlag2) {
+    void toBscan.enq(__uint(width) v) if (captureFlag2 & !captureOnce) {
         enqv = v;
+        captureOnce = true;
     }
     __rule updateRule if (!updateFlag3 & updateFlag2) { // capture on leading edge
         this->fromBscan->enq(localBscan.fromBscan);
+    }
+    __rule clearOneShot if ((!captureFlag2) & captureOnce) {
+        captureOnce = false;
     }
     __rule init {
         bscan_mytck.I = bscan.TCK;
@@ -84,7 +93,7 @@ class Bscan __implements BscanIfc<width> {
         updateFlag1 = localBscan.update;
         updateFlag2 = updateFlag1;
         updateFlag3 = updateFlag2;
-        captureFlag1 = localBscan.capture;
+        captureFlag1 = localBscan.capture_out;
         captureFlag2 = captureFlag1;
         localBscan.toBscan = enqv;
     };

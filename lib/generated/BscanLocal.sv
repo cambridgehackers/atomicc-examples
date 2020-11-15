@@ -8,13 +8,16 @@ module BscanLocal #(
     input wire capture,
     input wire shift,
     input wire update,
+    output wire capture_out,
     output wire TDO,
     input wire TDI,
     input wire [width - 1:0]toBscan,
     output wire [width - 1:0]fromBscan);
     reg [width - 1:0]shiftReg;
+    reg wasCaptured;
     logic RULE$shiftRule__ENA;
     assign TDO = shiftReg[ 0 : 0 ];
+    assign capture_out = wasCaptured;
     assign fromBscan = shiftReg;
     // Extra assigments, not to output wires
     assign RULE$shiftRule__ENA = shift;
@@ -22,9 +25,11 @@ module BscanLocal #(
     always @( posedge CLK) begin
       if (!nRST) begin
         shiftReg <= 0;
+        wasCaptured <= 0;
       end // nRST
       else begin
         // RULE$init__ENA
+            wasCaptured <= capture;
             if (capture)
             shiftReg <= toBscan;
         // End of RULE$init__ENA
