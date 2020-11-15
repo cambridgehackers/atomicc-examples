@@ -154,8 +154,6 @@ class __topModule ZynqTop __implements ZynqTopIFC {
     bool resetFunnel;
     __uint(32) selectIndex;
     __implements bscan.fromBscan readUser;
-    bool enqDelay;
-    __shared bool enqFinished;
     void readUser.enq(__uint(32) v) { // data from jtag
         resetFunnel = (v != -1);
         selectIndex = v;
@@ -167,8 +165,4 @@ class __topModule ZynqTop __implements ZynqTopIFC {
         // send to trace buffer to jtag
         //bscan.toBscan.enq(test.__traceMemory$out.first());
     //}
-    __rule enqDelayRule {
-        enqDelay = __ready(bscan.toBscan.enq);
-        enqFinished = enqDelay & !__ready(bscan.toBscan.enq); // pulse on trailing edge
-    }
 };

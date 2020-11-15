@@ -26,3 +26,4 @@ class SyncFFIfc {
     __output __uint(1)  out;
     __input  __uint(1)  in;
 };
+class SyncFF __implements SyncFFIfc;

@@ -162,8 +162,7 @@ endinterface
 //METAEXCLUSIVE; readUser.enq__ENA; RULE$resetOneShot__ENA
 //METAGUARD; readUser.enq; 1'd1;
 //METAGUARD; RULE$resetOneShot; 0 != resetFunnel;
-//METAGUARD; RULE$enqDelayRule; 1'd1;
-//METARULES; RULE$init; RULE$resetOneShot; RULE$enqDelayRule
+//METARULES; RULE$init; RULE$resetOneShot
 //METACONNECT; test$MAXIGP0_O.AR__ENA; ps7_ps7_foo$MAXIGP0_O.AR__ENA
 //METACONNECT; test$MAXIGP0_O.AR__RDY; ps7_ps7_foo$MAXIGP0_O.AR__RDY
 //METACONNECT; test$MAXIGP0_O.AW__ENA; ps7_ps7_foo$MAXIGP0_O.AW__ENA

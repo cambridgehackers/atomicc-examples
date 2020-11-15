@@ -52,6 +52,13 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD/Ptr/Count funnelWidth  Bit(14) in
     FIELD Bit(5) index
 }
+INTERFACE SyncFFIfc  {
+    FILE syncFF_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/output Bit(1) out
+    FIELD/input Bit(1) in
+}
 EMODULE BSCANE2 MBSCANE2IFC {
     FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
 }
@@ -64,28 +71,22 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
-MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
+EMODULE SyncFF SyncFFIfc {
+    FILE syncFF_OC_h
+}
+MODULE Bscan(id=99,width=32) BscanIfc(width=32) {
     FILE bscan_OC_cpp
     FIELD BSCANE2 bscan
     PARAMS bscan JTAG_CHAIN=id
     FIELD BUFG bscan_mytck
     FIELD BscanLocal(width=32) localBscan
-    FIELD Bit(1) updateFlag1
-    FIELD Bit(1) updateFlag2
-    FIELD Bit(1) updateFlag3
-    FIELD Bit(1) captureFlag1
-    FIELD Bit(1) captureFlag2
-    FIELD Bit(1) captureOnce
-    FIELD/shared Bit(32) enqv
-    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((captureFlag2) & ((captureOnce) ^ (1)))) {
-        LET Bit(32) :enqv = toBscan$enq$v
-        STORE :captureOnce = 1
+    FIELD SyncFF updateF
+    FIELD SyncFF captureF
+    METHOD/Action toBscan$enq__ENA ( Bit(width) v ) if (((captureF$out) != (0))) {
+        LET Bit(32) :localBscan$toBscan = toBscan$enq$v
     }
-    METHOD/Rule/Action RULE$updateRule__ENA if ((((updateFlag3) ^ (1)) & (updateFlag2))) {
+    METHOD/Rule/Action RULE$updateRule__ENA if (((updateF$out) != (0))) {
         CALL/Action :fromBscan$enq__ENA{localBscan$fromBscan}
-    }
-    METHOD/Rule/Action RULE$clearOneShot__ENA if ((((captureFlag2) ^ (1)) & (captureOnce))) {
-        STORE :captureOnce = 0
     }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :bscan_mytck$I = bscan$TCK
@@ -96,12 +97,12 @@ MODULE Bscan(id=3,width=32) BscanIfc(width=32) {
         LET Bit(1) :localBscan$capture = ((bscan$SEL) & (bscan$CAPTURE)) != (0)
         LET Bit(1) :localBscan$shift = ((bscan$SEL) & (bscan$SHIFT)) != (0)
         LET Bit(1) :localBscan$update = ((bscan$SEL) & (bscan$UPDATE)) != (0)
-        STORE :updateFlag1 = localBscan$update
-        STORE :updateFlag2 = updateFlag1
-        STORE :updateFlag3 = updateFlag2
-        STORE :captureFlag1 = localBscan$capture_out
-        STORE :captureFlag2 = captureFlag1
-        LET Bit(32) :localBscan$toBscan = enqv
+        LET Bit(1) :updateF$CLK = __defaultClock
+        LET Bit(1) :updateF$nRST = __defaultnReset
+        LET Bit(1) :updateF$in = localBscan$update
+        LET Bit(1) :captureF$CLK = __defaultClock
+        LET Bit(1) :captureF$nRST = __defaultnReset
+        LET Bit(1) :captureF$in = localBscan$capture_out
     }
 }
 MODULE BscanLocal(width=32) BscanLocalIfc(width=32) {
@@ -113,7 +114,7 @@ MODULE BscanLocal(width=32) BscanLocalIfc(width=32) {
     }
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :TDO = __bitsubstr{shiftReg,0,0}
-        STORE (capture):shiftReg = toBscan
+        STORE ((capture) & ((wasCaptured) ^ (1))):shiftReg = toBscan
         LET Bit(32) :fromBscan = shiftReg
         STORE :wasCaptured = capture
         LET Bit(1) :capture_out = wasCaptured

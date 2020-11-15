@@ -30,7 +30,7 @@ module BscanLocal #(
       else begin
         // RULE$init__ENA
             wasCaptured <= capture;
-            if (capture)
+            if (( !wasCaptured ) && capture)
             shiftReg <= toBscan;
         // End of RULE$init__ENA
         if (shift && RULE$shiftRule__ENA) begin // RULE$shiftRule__ENA

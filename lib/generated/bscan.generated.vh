@@ -52,17 +52,30 @@ interface BscanLocalIfc#(width = 32);
                     input  capture_out, TDO, fromBscan);
 endinterface
 `endif
+`ifndef __SyncFFIfc_DEF__
+`define __SyncFFIfc_DEF__
+interface SyncFFIfc;
+    logic  CLK;
+    logic  nRST;
+    logic  out;
+    logic  in;
+    modport server (input  CLK, nRST, in,
+                    output out);
+    modport client (output CLK, nRST, in,
+                    input  out);
+endinterface
+`endif
 //METASTART; Bscan
 //METAINTERNAL; bscan; BSCANE2;
 //METAINTERNAL; bscan_mytck; BUFG;
 //METAINTERNAL; localBscan; BscanLocal(width=32);
-//METAEXCLUSIVE; toBscan.enq__ENA; RULE$clearOneShot__ENA
-//METAGUARD; toBscan.enq; captureFlag2 & ( captureOnce ^ 1'd1 );
+//METAINTERNAL; updateF; SyncFF;
+//METAINTERNAL; captureF; SyncFF;
+//METAGUARD; toBscan.enq; captureF$out != 0;
 //METAINVOKE; RULE$updateRule__ENA; :fromBscan.enq__ENA;
-//METAGUARD; RULE$updateRule; ( !updateFlag3 ) && updateFlag2 && fromBscan.enq__RDY;
-//METAGUARD; RULE$clearOneShot; ( captureFlag2 ^ 1'd1 ) & captureOnce;
+//METAGUARD; RULE$updateRule; updateF$out && fromBscan.enq__RDY;
 //METAGUARD; RULE$init; 1'd1;
-//METARULES; RULE$updateRule; RULE$clearOneShot; RULE$init
+//METARULES; RULE$updateRule; RULE$init
 //METASTART; BscanLocal
 //METAEXCLUSIVE; RULE$shiftRule__ENA; RULE$init__ENA
 //METAGUARD; RULE$shiftRule; 0 != shift;

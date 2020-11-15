@@ -22,6 +22,7 @@
 #include "VBscanE2.h"
 #include "VBUFG.h"
 #include "bscan.h"
+#include "syncFF.h"
 
 // If curious why we need to say 'this->capture' instead of 'capture'
 // in class BscanLocal:
@@ -53,7 +54,7 @@ class BscanLocal __implements BscanLocalIfc<width> {
     };
     __rule init {
         this->TDO = __bitsubstr(shiftReg, 0, 0);
-        if (this->capture)
+        if (this->capture & !wasCaptured)
             shiftReg = this->toBscan;
         this->fromBscan = shiftReg;
         wasCaptured = this->capture;
@@ -66,20 +67,14 @@ class Bscan __implements BscanIfc<width> {
     BSCANE2#(JTAG_CHAIN = id) bscan;
     BUFG bscan_mytck;
     BscanLocal<width> localBscan;
-    bool updateFlag1, updateFlag2, updateFlag3;
-    bool captureFlag1, captureFlag2;
-    bool captureOnce;
-    __shared __uint(width) enqv;
+    SyncFF updateF;
+    SyncFF captureF;
 
-    void toBscan.enq(__uint(width) v) if (captureFlag2 & !captureOnce) {
-        enqv = v;
-        captureOnce = true;
+    void toBscan.enq(__uint(width) v) if (captureF.out) { // capture on leading edge
+        localBscan.toBscan = v;
     }
-    __rule updateRule if (!updateFlag3 & updateFlag2) { // capture on leading edge
+    __rule updateRule if (updateF.out) { // capture on leading edge
         this->fromBscan->enq(localBscan.fromBscan);
-    }
-    __rule clearOneShot if ((!captureFlag2) & captureOnce) {
-        captureOnce = false;
     }
     __rule init {
         bscan_mytck.I = bscan.TCK;
@@ -90,13 +85,13 @@ class Bscan __implements BscanIfc<width> {
         localBscan.capture = (bscan.SEL & bscan.CAPTURE) != 0;
         localBscan.shift = (bscan.SEL & bscan.SHIFT) != 0;
         localBscan.update = (bscan.SEL & bscan.UPDATE) != 0;
-        updateFlag1 = localBscan.update;
-        updateFlag2 = updateFlag1;
-        updateFlag3 = updateFlag2;
-        captureFlag1 = localBscan.capture_out;
-        captureFlag2 = captureFlag1;
-        localBscan.toBscan = enqv;
+        updateF.CLK = __defaultClock;
+        updateF.nRST = __defaultnReset;
+        updateF.in = localBscan.update;
+        captureF.CLK = __defaultClock;
+        captureF.nRST = __defaultnReset;
+        captureF.in = localBscan.capture_out;
     };
 };
 
-Bscan<3, 32> dummyBscan;
+Bscan<99, 32> dummyBscan;

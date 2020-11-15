@@ -26,13 +26,14 @@ EMODULE Dummy PipeIn(width=32) {
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE atomicc_OC_h
 }
+EMODULE SyncFF SyncFFIfc {
+    FILE syncFF_OC_h
+}
 MODULE SyncFF SyncFFIfc {
     FILE syncFF_OC_cpp
-    FIELD Bit(1) one
-    FIELD Bit(1) two
+    FIELD Bit(3) flag
     METHOD/Rule/Action RULE$init__ENA {
-        STORE :one = in
-        STORE :two = one
-        LET Bit(1) :out = two
+        LET Bit(1) :out = (__bitsubstr{flag,1}) & (((__bitsubstr{flag,2}) != (0)) ^ (1))
+        STORE :flag = __bitconcat{__bitsubstr{flag,1,0},in}
     }
 }

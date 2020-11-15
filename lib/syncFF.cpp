@@ -21,10 +21,9 @@
 #include "syncFF.h"
 
 class SyncFF __implements SyncFFIfc {
-    __uint(1) one, two;
+    __uint(3) flag;
     __rule init {
-         one = in;
-         two = one;
-         out = two;
+         out = __bitsubstr(flag,1) & !__bitsubstr(flag,2);
+         flag = __bitconcat(__bitsubstr(flag, 1, 0), in);
     };
 };

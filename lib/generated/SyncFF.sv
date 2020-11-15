@@ -6,19 +6,16 @@ module SyncFF (
     input wire nRST,
     output wire out,
     input wire in);
-    reg one;
-    reg two;
-    assign out = two;
+    reg [3 - 1:0]flag;
+    assign out = flag[ 1 ] && ( flag[ 2 ] == 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        one <= 0;
-        two <= 0;
+        flag <= 0;
       end // nRST
       else begin
         // RULE$init__ENA
-            one <= in;
-            two <= one;
+            flag <= { flag[ 1 : 0 ] , in };
         // End of RULE$init__ENA
       end
     end // always @ (posedge CLK)

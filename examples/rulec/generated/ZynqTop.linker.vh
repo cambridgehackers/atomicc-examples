@@ -18,7 +18,7 @@
 
     assign bscan$toBscan.enq$v = funnel$out.first;
     assign bscan$toBscan.enq__ENA = funnel$out.first__RDY;
-    assign funnel$out.deq__ENA = enqFinished;
+    assign funnel$out.deq__ENA = bscan$toBscan.enq__RDY;
 
     assign funnel$select__ENA = resetFunnel && funnel$select__RDY;
     assign funnel$select$v = selectIndex;
