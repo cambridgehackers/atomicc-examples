@@ -1,6 +1,7 @@
 `include "zynqTop.generated.vh"
 
 `default_nettype none
+`include "ZynqTop.linker.vh"
 module ZynqTop (
     inout wire [54 - 1:0]MIO,
     inout wire [15 - 1:0]DDR_Addr,
@@ -22,7 +23,8 @@ module ZynqTop (
     inout wire DDR_WEB,
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
-    inout wire FIXED_IO_ps_srstb);
+    inout wire FIXED_IO_ps_srstb
+    `TopAppendPort );
     reg resetFunnel;
     reg [32 - 1:0]selectIndex;
     logic CLK;
@@ -105,7 +107,7 @@ module ZynqTop (
         end; // End of readUser.enq__ENA
       end
     end // always @ (posedge CLK)
-`include "ZynqTop.linker.vh"
+`TopAppendCode
 endmodule
 
 `default_nettype wire    // set back to default value

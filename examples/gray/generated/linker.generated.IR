@@ -12,7 +12,7 @@ MODULE ZynqTop ZynqTop_interface {
     FIELD AxiTop test
     FIELD BUFG ps7_fclk_0_c
     FIELD BUFG ps7_freset_0_r
-    FIELD Bscan bscan
+    FIELD Bscan__I3 bscan
     FIELD PipeOut funnel$in
     FIELD PipeOut funnel$out
     FIELD SelectOut__F2_W20 funnel
@@ -91,19 +91,21 @@ MODULE AxiTop AxiTop_interface {
     FIELD Fifo1Base__W26_Iz7_Oz8 readData
     FIELD Fifo1Base__W20 writeData
     FIELD UserTop user
-    FIELD Trace__Wff_S15 __traceMemory
+    FIELD Trace__Wf5_H0_Sf __traceMemory
 }
 INTERFACE AxiTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/output Bit(1) interrupt
 }
-MODULE Bscan Bscan_interface {
+MODULE Bscan__I3 Bscan__I3_interface {
     FIELD BSCANE2 bscan
     FIELD BUFG bscan_mytck
     FIELD BscanLocal__W20 localBscan
+    FIELD SyncFF updateF
+    FIELD SyncFF captureF
 }
-INTERFACE Bscan_interface {
+INTERFACE Bscan__I3_interface {
     FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
@@ -197,10 +199,19 @@ INTERFACE BscanLocal__W20_interface {
     FIELD/input  Bit(1) capture
     FIELD/input  Bit(1) shift
     FIELD/input  Bit(1) update
+    FIELD/output Bit(1) capture_out
     FIELD/output Bit(1) TDO
     FIELD/input  Bit(1) TDI
     FIELD/input  Bit(32) toBscan
     FIELD/output Bit(32) fromBscan
+}
+MODULE SyncFF SyncFF_interface {
+}
+INTERFACE SyncFF_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(1) out
+    FIELD/input  Bit(1) in
 }
 MODULE SelectIndex__W20_F2 SelectIndex__W20_F2_interface {
 }
@@ -273,7 +284,7 @@ INTERFACE Test__Rz13_interface {
 }
 MODULE GrayCounter__W4 GrayCounter__W4_interface {
     FIELD PipeOut __traceMemory$out
-    FIELD Trace__W3a_Sa __traceMemory
+    FIELD Trace__W35_H0_S5 __traceMemory
 }
 INTERFACE GrayCounter__W4_interface {
     FIELD/parameter Bit(32) width
@@ -294,41 +305,43 @@ INTERFACE GrayCounter__W4_interface {
     FIELD/input  Bit(4) writeBin$v
     FIELD/output Bit(1) writeBin__RDY
 }
-MODULE Trace__W3a_Sa Trace__W3a_Sa_interface {
-    FIELD PipeInLength__W3a radapter$in
+MODULE Trace__W35_H0_S5 Trace__W35_H0_S5_interface {
+    FIELD PipeInLength__W35 radapter$in
     FIELD PipeOutLast radapter$out
-    FIELD BRAM__W3a_D400 bram
-    FIELD AdapterToBus__W3a_Iz16 radapter
+    FIELD BRAM__W35_D400 bram
+    FIELD AdapterToBus__W35_Iz16 radapter
 }
-INTERFACE Trace__W3a_Sa_interface {
+INTERFACE Trace__W35_H0_S5_interface {
     FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) depth
     FIELD/parameter Bit(32) sensitivity
     FIELD/input  Bit(1) clear__ENA
     FIELD/output Bit(1) clear__RDY
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
-    FIELD/input  Bit(58) data
+    FIELD/input  Bit(53) data
 }
-MODULE Trace__Wff_S15 Trace__Wff_S15_interface {
-    FIELD PipeInLength__Wff radapter$in
+MODULE Trace__Wf5_H0_Sf Trace__Wf5_H0_Sf_interface {
+    FIELD PipeInLength__Wf5 radapter$in
     FIELD PipeOutLast radapter$out
-    FIELD BRAM__Wff_D400 bram
-    FIELD AdapterToBus__Wff_Iz15 radapter
+    FIELD BRAM__Wf5_D400 bram
+    FIELD AdapterToBus__Wf5_Iz15 radapter
 }
-INTERFACE Trace__Wff_S15_interface {
+INTERFACE Trace__Wf5_H0_Sf_interface {
     FIELD/parameter Bit(32) width
+    FIELD/parameter Bit(32) depth
     FIELD/parameter Bit(32) sensitivity
     FIELD/input  Bit(1) clear__ENA
     FIELD/output Bit(1) clear__RDY
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) enable
-    FIELD/input  Bit(255) data
+    FIELD/input  Bit(245) data
 }
-MODULE AdapterToBus__W3a_Iz16 AdapterToBus__W3a_Iz16_interface {
+MODULE AdapterToBus__W35_Iz16 AdapterToBus__W35_Iz16_interface {
 }
-INTERFACE AdapterToBus__W3a_Iz16_interface {
+INTERFACE AdapterToBus__W35_Iz16_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
@@ -336,9 +349,9 @@ INTERFACE AdapterToBus__W3a_Iz16_interface {
     FIELD/input  Bit(1) clear__ENA
     FIELD/output Bit(1) clear__RDY
 }
-MODULE AdapterToBus__Wff_Iz15 AdapterToBus__Wff_Iz15_interface {
+MODULE AdapterToBus__Wf5_Iz15 AdapterToBus__Wf5_Iz15_interface {
 }
-INTERFACE AdapterToBus__Wff_Iz15_interface {
+INTERFACE AdapterToBus__Wf5_Iz15_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) owidth
     FIELD/input  Bit(1) CLK
@@ -356,38 +369,38 @@ INTERFACE AdapterToBus__Iz9_interface {
     FIELD/input  Bit(1) clear__ENA
     FIELD/output Bit(1) clear__RDY
 }
-MODULE BRAM__W3a_D400 BRAM__W3a_D400_interface {
+MODULE BRAM__W35_D400 BRAM__W35_D400_interface {
 }
-INTERFACE BRAM__W3a_D400_interface {
+INTERFACE BRAM__W35_D400_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) depth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) write__ENA
     FIELD/input  Bit(10) write$addr
-    FIELD/input  Bit(58) write$data
+    FIELD/input  Bit(53) write$data
     FIELD/output Bit(1) write__RDY
     FIELD/input  Bit(1) read__ENA
     FIELD/input  Bit(10) read$addr
     FIELD/output Bit(1) read__RDY
-    FIELD/output Bit(58) dataOut
+    FIELD/output Bit(53) dataOut
     FIELD/output Bit(1) dataOut__RDY
 }
-MODULE BRAM__Wff_D400 BRAM__Wff_D400_interface {
+MODULE BRAM__Wf5_D400 BRAM__Wf5_D400_interface {
 }
-INTERFACE BRAM__Wff_D400_interface {
+INTERFACE BRAM__Wf5_D400_interface {
     FIELD/parameter Bit(32) width
     FIELD/parameter Bit(32) depth
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) write__ENA
     FIELD/input  Bit(10) write$addr
-    FIELD/input  Bit(255) write$data
+    FIELD/input  Bit(245) write$data
     FIELD/output Bit(1) write__RDY
     FIELD/input  Bit(1) read__ENA
     FIELD/input  Bit(10) read$addr
     FIELD/output Bit(1) read__RDY
-    FIELD/output Bit(255) dataOut
+    FIELD/output Bit(245) dataOut
     FIELD/output Bit(1) dataOut__RDY
 }
 FILE ../../lib/generated/ZynqTop.sv
@@ -426,6 +439,7 @@ FILE ../../lib/generated/Fifo1Base.sv
 FILE ../../lib/generated/UserTop.sv
 FILE ../../lib/generated/Trace.sv
 FILE ../../lib/generated/BscanLocal.sv
+FILE ../../lib/generated/SyncFF.sv
 FILE ../../lib/verilog/SelectIndex.sv
 FILE ../../lib/generated/ResetInverter.sv
 FILE ../../lib/generated/AdapterToBus.sv
