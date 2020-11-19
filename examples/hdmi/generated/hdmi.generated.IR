@@ -1,0 +1,132 @@
+STRUCT NOCDataH  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE EchoIfc  {
+    FILE hdmi_OC_cpp
+    SOFTWARE request
+    SOFTWARE indication
+    INTERFACE EchoRequest request
+    INTERFACE/Ptr EchoIndication indication
+    FIELD/output Bit(1) adv7511_clk
+    FIELD/output Bit(36) adv7511_d
+    FIELD/output Bit(1) adv7511_de
+    FIELD/output Bit(1) adv7511_hs
+    FIELD/output Bit(1) adv7511_vs
+}
+INTERFACE EchoIndication  {
+    FILE hdmi_OC_cpp
+    METHOD/Action heard__ENA ( Bit(32) v )
+    METHOD/Action heard2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action heard3__ENA ( Bit(16) a , Bit(32) b , Bit(32) c , Bit(16) d )
+}
+INTERFACE EchoRequest  {
+    FILE hdmi_OC_cpp
+    METHOD/Action say__ENA ( Bit(32) v )
+    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
+    METHOD/Action setLeds__ENA ( Bit(8) v )
+}
+INTERFACE FunnelBaseIfc(funnelWidth=99,width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_funnel_OC_h
+    INTERFACE/Count funnelWidth  PipeIn(width=32) in
+    INTERFACE/Ptr PipeIn(width=32) out
+}
+INTERFACE PipeIn(width=32)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
+INTERFACE top_sync_vg_patternIFC  {
+    FILE generated_PC_top_PF_sync_OC_h
+    FIELD/parameter Bit(12) HV_OFFSET_0
+    FIELD/parameter Bit(12) HV_OFFSET_1
+    FIELD/parameter Bit(12) H_BP
+    FIELD/parameter Bit(12) H_FP
+    FIELD/parameter Bit(12) H_SYNC
+    FIELD/parameter Bit(12) H_TOTAL
+    FIELD/parameter Bit(1) INTERLACED
+    FIELD/parameter Bit(20) PATTERN_RAMP_STEP
+    FIELD/parameter Bit(8) PATTERN_TYPE
+    FIELD/parameter Bit(12) V_BP_0
+    FIELD/parameter Bit(12) V_BP_1
+    FIELD/parameter Bit(12) V_FP_0
+    FIELD/parameter Bit(12) V_FP_1
+    FIELD/parameter Bit(12) V_SYNC_0
+    FIELD/parameter Bit(12) V_SYNC_1
+    FIELD/parameter Bit(12) V_TOTAL_0
+    FIELD/parameter Bit(12) V_TOTAL_1
+    FIELD/output Bit(1) adv7511_clk
+    FIELD/output Bit(36) adv7511_d
+    FIELD/output Bit(1) adv7511_de
+    FIELD/output Bit(1) adv7511_hs
+    FIELD/output Bit(1) adv7511_vs
+    FIELD/input Bit(1) clk_in
+    FIELD/input Bit(6) pb
+    FIELD/input Bit(1) resetb
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE FunnelBufferedBase(funnelWidth=99,width=32) FunnelBaseIfc(funnelWidth=99,width=32) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_funnel_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE top_sync_vg_pattern top_sync_vg_patternIFC {
+    FILE generated_PC_top_PF_sync_OC_h
+}
+MODULE Echo EchoIfc {
+    FILE hdmi_OC_cpp
+    FIELD top_sync_vg_pattern top_sync
+    FIELD Bit(1) busy
+    FIELD Bit(1) busy_delay
+    FIELD Bit(32) v_temp
+    FIELD Bit(32) v_delay
+    FIELD Bit(16) a_temp
+    FIELD Bit(16) b_temp
+    FIELD Bit(16) a_delay
+    FIELD Bit(16) b_delay
+    FIELD Bit(32) v_type
+    METHOD/Rule/Action RULE$initHdmi__ENA {
+        LET Bit(1) :top_sync$clk_in = __defaultClock
+        LET Bit(1) :top_sync$resetb = __defaultnReset
+        LET Bit(6) :top_sync$pb = 0
+        LET Bit(1) :adv7511_clk = top_sync$adv7511_clk
+        LET Bit(36) :adv7511_d = top_sync$adv7511_d
+        LET Bit(1) :adv7511_de = top_sync$adv7511_de
+        LET Bit(1) :adv7511_hs = top_sync$adv7511_hs
+        LET Bit(1) :adv7511_vs = top_sync$adv7511_vs
+    }
+    METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
+        PRINTF :printf{"request.say %x\n",request$say$v}
+        STORE :v_temp = request$say$v
+        STORE :busy = 1
+        STORE :v_type = 1
+    }
+    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
+        STORE :a_temp = request$say2$a
+        STORE :b_temp = request$say2$b
+        STORE :busy = 1
+        STORE :v_type = 2
+    }
+    METHOD/Action request$setLeds__ENA ( Bit(8) v )
+    METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
+        STORE :busy = 0
+        STORE :busy_delay = 1
+        STORE :v_delay = v_temp
+        STORE :a_delay = a_temp
+        STORE :b_delay = b_temp
+    }
+    METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
+        STORE :busy_delay = 0
+        CALL/Action ((v_type) == (1)):indication$heard__ENA{v_delay}
+        CALL/Action !((v_type) == (1)):indication$heard2__ENA{a_delay,b_delay}
+    }
+}

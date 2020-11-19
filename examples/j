@@ -18,6 +18,7 @@ cd ../bscant ;make
 cd ../packing ;make
 cd ../out2int ;make
 cd ../funnel ;make
+cd ../hdmi ;make
 cd ../../lib; make
 cd ../class-exercises/acc-01; make
 cd ../acc-02; make
