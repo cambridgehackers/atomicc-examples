@@ -1,12 +1,14 @@
 `include "vsimTop.generated.vh"
 
 `default_nettype none
+`include "VsimTop.linker.vh"
 module VsimTop (
     input wire CLK,
     input wire nRST,
     input wire CLK_derivedClock,
     input wire nRST_derivedReset,
-    input wire CLK_sys_clk);
+    input wire CLK_sys_clk
+    `TopAppendPort );
     PipeInLast#(.width(32)) sink_0$port();
     PipeInLast#(.width(32)) source_0$port();
     PipeInLast#(.width(32)) user$read();
@@ -18,7 +20,7 @@ module VsimTop (
         .port(sink_0$port));
     VsimSend#(.width(32)) source_0 (.CLK(CLK), .nRST(nRST),
         .port(user$read));
-`include "VsimTop.linker.vh"
+`TopAppendCode
 endmodule
 
 `default_nettype wire    // set back to default value
