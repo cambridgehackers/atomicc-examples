@@ -39,10 +39,16 @@ INTERFACE ZynqTop_interface {
     FIELD/inout Bit(1) FIXED_IO_ps_clk
     FIELD/inout Bit(1) FIXED_IO_ps_porb
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
+    FIELD/inout Bit(1) i2c0$scl
+    FIELD/inout Bit(1) i2c0$sda
+    FIELD/inout Bit(1) i2c1$scl
+    FIELD/inout Bit(1) i2c1$sda
 }
 MODULE P7Wrap P7Wrap_interface {
     FIELD PS7 pps
     FIELD ClockTop pclockTop
+    FIELD IOBUF tsda0
+    FIELD IOBUF tscl0
 }
 INTERFACE P7Wrap_interface {
     FIELD/inout Bit(54) MIO
@@ -66,6 +72,10 @@ INTERFACE P7Wrap_interface {
     FIELD/inout Bit(1) FIXED_IO_ps_clk
     FIELD/inout Bit(1) FIXED_IO_ps_porb
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
+    FIELD/inout Bit(1) i2c0$scl
+    FIELD/inout Bit(1) i2c0$sda
+    FIELD/inout Bit(1) i2c1$scl
+    FIELD/inout Bit(1) i2c1$sda
 }
 MODULE AxiTop AxiTop_interface {
     FIELD PipeOut __traceMemory$out

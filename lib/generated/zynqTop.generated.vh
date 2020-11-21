@@ -80,6 +80,19 @@ interface ClockIfc;
                     input  clockOut);
 endinterface
 `endif
+`ifndef __MIOBUF_DEF__
+`define __MIOBUF_DEF__
+interface MIOBUF;
+    logic  I;
+    logic  IO;
+    logic  O;
+    logic  T;
+    modport server (input  I, T,
+                    output O);
+    modport client (output I, T,
+                    input  O);
+endinterface
+`endif
 `ifndef __ZynqClock_DEF__
 `define __ZynqClock_DEF__
 interface ZynqClock;
@@ -127,6 +140,13 @@ interface Pps7fclk;
                     input  CLK, RESETN);
 endinterface
 `endif
+`ifndef __I2C_Pins_DEF__
+`define __I2C_Pins_DEF__
+interface I2C_Pins;
+    logic  scl;
+    logic  sda;
+endinterface
+`endif
 `ifndef __P7WrapIfc_DEF__
 `define __P7WrapIfc_DEF__
 interface P7WrapIfc;
@@ -142,6 +162,8 @@ endinterface
 //METASTART; P7Wrap
 //METAINTERNAL; pps; PS7;
 //METAINTERNAL; pclockTop; ClockTop;
+//METAINTERNAL; tsda0; IOBUF;
+//METAINTERNAL; tscl0; IOBUF;
 //METAGUARD; MAXIGP0_I.R; 0 != pps$MAXIGP0RREADY;
 //METAGUARD; MAXIGP0_I.B; 0 != pps$MAXIGP0BREADY;
 //METAGUARD; RULE$init; 1'd1;

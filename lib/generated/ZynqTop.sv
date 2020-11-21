@@ -23,7 +23,11 @@ module ZynqTop (
     inout wire DDR_WEB,
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
-    inout wire FIXED_IO_ps_srstb
+    inout wire FIXED_IO_ps_srstb,
+    inout wire i2c0$scl,
+    inout wire i2c0$sda,
+    inout wire i2c1$scl,
+    inout wire i2c1$sda
     `TopAppendPort );
     reg resetFunnel;
     reg [32 - 1:0]selectIndex;
@@ -67,7 +71,11 @@ module ZynqTop (
         .intr(ps7_ps7_foo$intr),
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I),
-        .FCLK(ps7_ps7_foo$FCLK));
+        .FCLK(ps7_ps7_foo$FCLK),
+        .i2c0$scl(i2c0$scl),
+        .i2c0$sda(i2c0$sda),
+        .i2c1$scl(i2c1$scl),
+        .i2c1$sda(i2c1$sda));
     AxiTop test (
         .CLK(CLK),
         .nRST(nRST),

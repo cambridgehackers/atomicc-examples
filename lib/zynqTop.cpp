@@ -21,6 +21,7 @@
 #include "atomicc.h"
 #include "VPPS7.h"
 #include "VBUFG.h"
+#include "VIOBUF.h"
 #include "axiTop.h"
 #include "clockTop.h"
 #include "bscan.h"
@@ -52,6 +53,11 @@ class ZynqInterrupt {
     __input __uint(1)  CLK;
     __input __uint(1)  nRST;
 };
+class I2C_Pins {
+    __inout __uint(1) scl;
+    __inout __uint(1) sda;
+};
+
 class P7WrapIfc {
     ZynqClock        _;
     ZynqInterrupt    intr;
@@ -59,11 +65,15 @@ class P7WrapIfc {
     MaxiI            MAXIGP0_I;
     __inout  __uint(54) MIO;
     Pps7fclk         FCLK;
+    I2C_Pins         i2c0;
+    I2C_Pins         i2c1;
 };
 
 class P7Wrap __implements P7WrapIfc {
     PS7 pps;
     ClockTop pclockTop;
+    IOBUF tsda0;
+    IOBUF tscl0;
     __connect FCLK = pps.FCLK;
 
     void MAXIGP0_I.R(__uint(32) data, __uint(12) id, bool last, __uint(2) resp) if (pps.MAXIGP0.RREADY) {
@@ -77,6 +87,14 @@ class P7Wrap __implements P7WrapIfc {
         pps.MAXIGP0.BRESP = resp;
     }
     __rule init {
+        tscl0.T = ~pps.EMIOI2C0.SCLTN;
+        tscl0.I = pps.EMIOI2C0.SCLO;
+        pps.EMIOI2C0.SCLI = tscl0.O;
+        i2c0.scl = tscl0.IO;
+        tsda0.T = ~pps.EMIOI2C0.SDATN;
+        tsda0.I = pps.EMIOI2C0.SDAO;
+        pps.EMIOI2C0.SDAI = tsda0.O;
+        i2c0.sda = tsda0.IO;
         MIO = pps.MIO;
         pps.FPGAID.LEN = 1;
         pps.MAXIGP0.ACLK = __defaultClock;
@@ -127,6 +145,8 @@ class P7Wrap __implements P7WrapIfc {
 class ZynqTopIFC {
     ZynqClock        _;
     __inout  __uint(54) MIO;
+    I2C_Pins         i2c0;
+    I2C_Pins         i2c1;
 };
 
 class __topModule ZynqTop __implements ZynqTopIFC {
@@ -148,6 +168,10 @@ class __topModule ZynqTop __implements ZynqTopIFC {
         ps7_ps7_foo.intr.nRST = __defaultnReset;
         test._.CLK = __defaultClock;
         test._.nRST = __defaultnReset;
+        ps7_ps7_foo.i2c0.scl = i2c0.scl;
+        ps7_ps7_foo.i2c0.sda = i2c0.sda;
+        ps7_ps7_foo.i2c1.scl = i2c1.scl;
+        ps7_ps7_foo.i2c1.sda = i2c1.sda;
     }
     // trace readout to bscan
     Bscan<3,32> bscan;

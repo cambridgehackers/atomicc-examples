@@ -26,9 +26,17 @@ module P7Wrap (
     ZynqInterrupt.server intr,
     MaxiO.client MAXIGP0_O,
     MaxiI.server MAXIGP0_I,
-    Pps7fclk.server FCLK);
+    Pps7fclk.server FCLK,
+    inout wire i2c0$scl,
+    inout wire i2c0$sda,
+    inout wire i2c1$scl,
+    inout wire i2c1$sda);
     logic CLK;
     logic nRST;
+    logic pps$EMIOI2C0SCLO;
+    logic pps$EMIOI2C0SCLTN;
+    logic pps$EMIOI2C0SDAO;
+    logic pps$EMIOI2C0SDATN;
     logic [32 - 1:0]pps$MAXIGP0ARADDR;
     logic [12 - 1:0]pps$MAXIGP0ARID;
     logic [4 - 1:0]pps$MAXIGP0ARLEN;
@@ -38,6 +46,8 @@ module P7Wrap (
     logic [32 - 1:0]pps$MAXIGP0WDATA;
     logic [12 - 1:0]pps$MAXIGP0WID;
     logic pps$MAXIGP0WLAST;
+    logic tscl0$O;
+    logic tsda0$O;
     PS7 pps (
         .MIO(MIO),
         .DDRA(DDR_Addr),
@@ -151,12 +161,12 @@ module P7Wrap (
         .EMIOGPIOI(0),
         .EMIOGPIOO(),
         .EMIOGPIOTN(),
-        .EMIOI2C0SCLI(0),
-        .EMIOI2C0SCLO(),
-        .EMIOI2C0SCLTN(),
-        .EMIOI2C0SDAI(0),
-        .EMIOI2C0SDAO(),
-        .EMIOI2C0SDATN(),
+        .EMIOI2C0SCLI(tscl0$O),
+        .EMIOI2C0SCLO(pps$EMIOI2C0SCLO),
+        .EMIOI2C0SCLTN(pps$EMIOI2C0SCLTN),
+        .EMIOI2C0SDAI(tsda0$O),
+        .EMIOI2C0SDAO(pps$EMIOI2C0SDAO),
+        .EMIOI2C0SDATN(pps$EMIOI2C0SDATN),
         .EMIOI2C1SCLI(0),
         .EMIOI2C1SCLO(),
         .EMIOI2C1SCLTN(),
@@ -663,6 +673,18 @@ module P7Wrap (
         .CLK(CLK),
         .nRST(nRST),
         .clockOut());
+    IOBUF tsda0 (
+        .I(pps$EMIOI2C0SDAO),
+        .IO(i2c0$sda),
+        .O(tsda0$O),
+        .T(( !pps$EMIOI2C0SDATN ) && 1'd1));
+    IOBUF tscl0 (
+        .I(pps$EMIOI2C0SCLO),
+        .IO(i2c0$scl),
+        .O(tscl0$O),
+        .T(( !pps$EMIOI2C0SCLTN ) && 1'd1));
+    assign i2c1$scl = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign i2c1$sda = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
     // Extra assigments, not to output wires
     assign CLK = intr.CLK;
     assign MAXIGP0_O.AR$addr = MAXIGP0_O.AR__ENA ? pps$MAXIGP0ARADDR : 32'd0;

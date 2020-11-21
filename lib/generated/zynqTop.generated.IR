@@ -21,6 +21,22 @@ INTERFACE ClockIfc  {
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) clockOut
 }
+INTERFACE I2C_Pins  {
+    FILE zynqTop_OC_cpp
+    FIELD/inout Bit(1) scl
+    FIELD/inout Bit(1) sda
+}
+INTERFACE MIOBUF  {
+    FILE _OC__OC__PC_xilinx_PC_VIOBUF_OC_h
+    FIELD/parameter Bit(32) DRIVE
+    FIELD/input Bit(1) I
+    FIELD/Ptr/parameter Bit(8) IBUF_LOW_PWR
+    FIELD/inout Bit(1) IO
+    FIELD/Ptr/parameter Bit(8) IOSTANDARD
+    FIELD/output Bit(1) O
+    FIELD/Ptr/parameter Bit(8) SLEW
+    FIELD/input Bit(1) T
+}
 INTERFACE MaxiI  {
     FILE axiTop_OC_h
     METHOD/Action R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp )
@@ -45,6 +61,8 @@ INTERFACE P7WrapIfc  {
     INTERFACE MaxiI MAXIGP0_I
     FIELD/inout Bit(54) MIO
     INTERFACE Pps7fclk FCLK
+    INTERFACE I2C_Pins i2c0
+    INTERFACE I2C_Pins i2c1
 }
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
@@ -522,6 +540,8 @@ INTERFACE ZynqTopIFC  {
     FILE zynqTop_OC_cpp
     INTERFACE ZynqClock _
     FIELD/inout Bit(54) MIO
+    INTERFACE I2C_Pins i2c0
+    INTERFACE I2C_Pins i2c1
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
@@ -538,6 +558,9 @@ EMODULE ClockTop ClockIfc {
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h
 }
+EMODULE IOBUF MIOBUF {
+    FILE _OC__OC__PC_xilinx_PC_VIOBUF_OC_h
+}
 EMODULE/Verilog PS7 Pps7PS7 {
     FILE _OC__OC__PC_xilinx_PC_VPPS7_OC_h
 }
@@ -549,6 +572,8 @@ MODULE P7Wrap P7WrapIfc {
     INTERFACECONNECT FCLK pps$FCLK Pps7fclk
     FIELD PS7 pps
     FIELD ClockTop pclockTop
+    FIELD IOBUF tsda0
+    FIELD IOBUF tscl0
     METHOD/Action MAXIGP0_I$R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp ) if ((pps$MAXIGP0RREADY)) {
         LET Bit(32) :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
         LET Bit(12) :pps$MAXIGP0RID = MAXIGP0_I$R$id
@@ -560,6 +585,14 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(2) :pps$MAXIGP0BRESP = MAXIGP0_I$B$resp
     }
     METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :tscl0$T = (pps$EMIOI2C0SCLTN) ^ (1)
+        LET Bit(1) :tscl0$I = pps$EMIOI2C0SCLO
+        LET Bit(1) :pps$EMIOI2C0SCLI = tscl0$O
+        LET Bit(1) :i2c0$scl = tscl0$IO
+        LET Bit(1) :tsda0$T = (pps$EMIOI2C0SDATN) ^ (1)
+        LET Bit(1) :tsda0$I = pps$EMIOI2C0SDAO
+        LET Bit(1) :pps$EMIOI2C0SDAI = tsda0$O
+        LET Bit(1) :i2c0$sda = tsda0$IO
         LET Bit(54) :MIO = pps$MIO
         LET Bit(1) :pps$FPGAIDLEN = 1
         LET Bit(1) :pps$MAXIGP0ACLK = __defaultClock
@@ -630,6 +663,10 @@ MODULE/Top ZynqTop ZynqTopIFC {
         LET Bit(1) :ps7_ps7_foo$intr.nRST = __defaultnReset
         LET Bit(1) :test$CLK = __defaultClock
         LET Bit(1) :test$nRST = __defaultnReset
+        LET Bit(1) :ps7_ps7_foo$i2c0$scl = i2c0$scl
+        LET Bit(1) :ps7_ps7_foo$i2c0$sda = i2c0$sda
+        LET Bit(1) :ps7_ps7_foo$i2c1$scl = i2c1$scl
+        LET Bit(1) :ps7_ps7_foo$i2c1$sda = i2c1$sda
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
         STORE :resetFunnel = (readUser$enq$v) != (-(1))
