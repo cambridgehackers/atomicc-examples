@@ -11,9 +11,9 @@ module SelectOut #(
     PipeOut.client in[funnelWidth - 1:0],
     PipeOut.server out);
     reg [4 - 1:0]index;
+    reg indexValid;
     logic in__deq__RDY_or [funnelWidth - 1:0];
     logic in__deq__RDY_or1;
-    reg indexValid;
     logic in__first__RDY_or [funnelWidth - 1:0];
     logic in__first__RDY_or1;
     logic [width - 1:0]in__first_or [funnelWidth - 1:0];
@@ -38,6 +38,7 @@ module SelectOut #(
     assign out.first__RDY = in__first__RDY_or1;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign in[__inst$Genvar1].deq__ENA = out.deq__ENA && ( index == __inst$Genvar1 );
+    assign in__deq__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].deq__RDY;
     assign in__first__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].first__RDY;
     assign in__first_or[__inst$Genvar1] = in[__inst$Genvar1].first;
     end;
