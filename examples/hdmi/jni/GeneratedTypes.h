@@ -38,13 +38,15 @@ typedef struct {
 } EchoIndicationCb;
 
 int EchoRequest_say ( struct PortalInternal *p, const uint32_t v );
+int EchoRequest_muxreset ( struct PortalInternal *p, const uint8_t v );
 int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b );
 int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v );
-enum { CHAN_NUM_EchoRequest_say,CHAN_NUM_EchoRequest_say2,CHAN_NUM_EchoRequest_setLeds};
+enum { CHAN_NUM_EchoRequest_say,CHAN_NUM_EchoRequest_muxreset,CHAN_NUM_EchoRequest_say2,CHAN_NUM_EchoRequest_setLeds};
 extern const uint32_t EchoRequest_reqinfo;
 typedef struct {
     PORTAL_DISCONNECT disconnect;
     int (*say) (  struct PortalInternal *p, const uint32_t v );
+    int (*muxreset) (  struct PortalInternal *p, const uint8_t v );
     int (*say2) (  struct PortalInternal *p, const uint16_t a, const uint16_t b );
     int (*setLeds) (  struct PortalInternal *p, const uint8_t v );
 } EchoRequestCb;

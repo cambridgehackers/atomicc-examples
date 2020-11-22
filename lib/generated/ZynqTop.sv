@@ -4,6 +4,10 @@
 `include "ZynqTop.linker.vh"
 module ZynqTop (
     inout wire [54 - 1:0]MIO,
+    inout wire I2C0_scl,
+    inout wire I2C0_sda,
+    inout wire I2C1_scl,
+    inout wire I2C1_sda,
     inout wire [15 - 1:0]DDR_Addr,
     inout wire [3 - 1:0]DDR_BankAddr,
     inout wire DDR_CAS_n,
@@ -23,11 +27,7 @@ module ZynqTop (
     inout wire DDR_WEB,
     inout wire FIXED_IO_ps_clk,
     inout wire FIXED_IO_ps_porb,
-    inout wire FIXED_IO_ps_srstb,
-    inout wire i2c0$scl,
-    inout wire i2c0$sda,
-    inout wire i2c1$scl,
-    inout wire i2c1$sda
+    inout wire FIXED_IO_ps_srstb
     `TopAppendPort );
     reg resetFunnel;
     reg [32 - 1:0]selectIndex;
@@ -72,10 +72,10 @@ module ZynqTop (
         .MAXIGP0_O(ps7_ps7_foo$MAXIGP0_O),
         .MAXIGP0_I(test$MAXIGP0_I),
         .FCLK(ps7_ps7_foo$FCLK),
-        .i2c0$scl(i2c0$scl),
-        .i2c0$sda(i2c0$sda),
-        .i2c1$scl(i2c1$scl),
-        .i2c1$sda(i2c1$sda));
+        .i2c0$scl(I2C0_scl),
+        .i2c0$sda(I2C0_sda),
+        .i2c1$scl(I2C1_scl),
+        .i2c1$sda(I2C1_sda));
     AxiTop test (
         .CLK(CLK),
         .nRST(nRST),

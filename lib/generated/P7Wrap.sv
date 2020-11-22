@@ -37,6 +37,10 @@ module P7Wrap (
     logic pps$EMIOI2C0SCLTN;
     logic pps$EMIOI2C0SDAO;
     logic pps$EMIOI2C0SDATN;
+    logic pps$EMIOI2C1SCLO;
+    logic pps$EMIOI2C1SCLTN;
+    logic pps$EMIOI2C1SDAO;
+    logic pps$EMIOI2C1SDATN;
     logic [32 - 1:0]pps$MAXIGP0ARADDR;
     logic [12 - 1:0]pps$MAXIGP0ARID;
     logic [4 - 1:0]pps$MAXIGP0ARLEN;
@@ -47,7 +51,9 @@ module P7Wrap (
     logic [12 - 1:0]pps$MAXIGP0WID;
     logic pps$MAXIGP0WLAST;
     logic tscl0$O;
+    logic tscl1$O;
     logic tsda0$O;
+    logic tsda1$O;
     PS7 pps (
         .MIO(MIO),
         .DDRA(DDR_Addr),
@@ -167,12 +173,12 @@ module P7Wrap (
         .EMIOI2C0SDAI(tsda0$O),
         .EMIOI2C0SDAO(pps$EMIOI2C0SDAO),
         .EMIOI2C0SDATN(pps$EMIOI2C0SDATN),
-        .EMIOI2C1SCLI(0),
-        .EMIOI2C1SCLO(),
-        .EMIOI2C1SCLTN(),
-        .EMIOI2C1SDAI(0),
-        .EMIOI2C1SDAO(),
-        .EMIOI2C1SDATN(),
+        .EMIOI2C1SCLI(tscl1$O),
+        .EMIOI2C1SCLO(pps$EMIOI2C1SCLO),
+        .EMIOI2C1SCLTN(pps$EMIOI2C1SCLTN),
+        .EMIOI2C1SDAI(tsda1$O),
+        .EMIOI2C1SDAO(pps$EMIOI2C1SDAO),
+        .EMIOI2C1SDATN(pps$EMIOI2C1SDATN),
         .EMIOPJTAGTCK(0),
         .EMIOPJTAGTDI(0),
         .EMIOPJTAGTDO(),
@@ -683,8 +689,16 @@ module P7Wrap (
         .IO(i2c0$scl),
         .O(tscl0$O),
         .T(( !pps$EMIOI2C0SCLTN ) && 1'd1));
-    assign i2c1$scl = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
-    assign i2c1$sda = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    IOBUF tsda1 (
+        .I(pps$EMIOI2C1SDAO),
+        .IO(i2c1$sda),
+        .O(tsda1$O),
+        .T(( !pps$EMIOI2C1SDATN ) && 1'd1));
+    IOBUF tscl1 (
+        .I(pps$EMIOI2C1SCLO),
+        .IO(i2c1$scl),
+        .O(tscl1$O),
+        .T(( !pps$EMIOI2C1SCLTN ) && 1'd1));
     // Extra assigments, not to output wires
     assign CLK = intr.CLK;
     assign MAXIGP0_O.AR$addr = MAXIGP0_O.AR__ENA ? pps$MAXIGP0ARADDR : 32'd0;

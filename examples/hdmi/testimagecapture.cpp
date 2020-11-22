@@ -21,6 +21,28 @@
 #include <ctype.h> // isprint, isascii
 #include <stdio.h>
 #include <semaphore.h>
+#include <stdio.h>
+#include "sock_utils.h"
+#include "EchoIndication.h"
+#include "EchoRequest.h"
+#include "GeneratedTypes.h"
+static void memdump(unsigned char *p, int len, const char *title)
+{
+int i;
+
+    i = 0;
+    while (len > 0) {
+        if (!(i & 0xf)) {
+            if (i > 0)
+                printf("\n");
+            printf("%s: ",title);
+        }
+        printf("%02x ", *p++);
+        i++;
+        len--;
+    }
+    printf("\n");
+}
 #include "i2chdmi.h"
 #include "i2ccamera.h"
 #include "edid.h"
@@ -29,6 +51,42 @@
 //static ImageonSerdesRequestProxy *serdesdevice;
 //static HdmiGeneratorRequestProxy *hdmidevice;
 //static ImageonCaptureRequestProxy *idevice;
+
+static EchoRequestProxy *echoRequestProxy = 0;
+static sem_t sem_heard2;
+static int limitSay2 = 5;
+
+class EchoIndication : public EchoIndicationWrapper
+{
+public:
+    virtual void heard(uint32_t v) {
+        printf("heard an echo: %d\n", v);
+        if (limitSay2-- > 0)
+	echoRequestProxy->say2(v, 2*v);
+    }
+    virtual void heard2(uint16_t a, uint16_t b) {
+        sem_post(&sem_heard2);
+        printf("heard an echo2: %d %d\n", a, b);
+    }
+    virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
+        printf("heard an echo3: %d %d\n", a, b);
+    }
+    EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
+};
+
+static void call_say(int v)
+{
+    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
+    echoRequestProxy->say(v);
+    sem_wait(&sem_heard2);
+}
+
+static void call_say2(int v, int v2)
+{
+    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
+    echoRequestProxy->say2(v, v2);
+    sem_wait(&sem_heard2);
+}
 static int trace_spi = 0;
 static int nlines = 1080;
 static int npixels = 1920;
@@ -82,23 +140,6 @@ public:
 
 };
 #endif
-static void memdump(unsigned char *p, int len, const char *title)
-{
-int i;
-
-    i = 0;
-    while (len > 0) {
-        if (!(i & 0xf)) {
-            if (i > 0)
-                printf("\n");
-            printf("%s: ",title);
-        }
-        printf("%02x ", *p++);
-        i++;
-        len--;
-    }
-    printf("\n");
-}
 
 static void init_local_semaphores(void)
 {
@@ -416,6 +457,33 @@ printf("[%s:%d] %x\n", __FUNCTION__, __LINE__, uData);
 int main(int argc, const char **argv)
 {
     init_local_semaphores();
+    Portal *mcommon = new Portal(5, 0, sizeof(uint32_t), portal_mux_handler, NULL,
+#ifdef SIMULATION
+        &transportSocketInit,
+#else
+        &transportPortal,
+#endif
+        NULL, 0);
+    PortalMuxParam param = {};
+    param.pint = &mcommon->pint;
+    EchoIndication echoIndication(IfcNames_EchoIndicationH2S, &transportMux, &param);
+    echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H, &transportMux, &param);
+
+printf("[%s:%d] START\n", __FUNCTION__, __LINE__);
+#if 0
+    int v = 42;
+    printf("Saying %d\n", v);
+    call_say(v);
+    call_say(v*5);
+    call_say(v*17);
+    call_say(v*93);
+    call_say2(v, v*3);
+    printf("TEST TYPE: SEM\n");
+    echoRequestProxy->setLeds(9);
+    echoRequestProxy->setLeds(9);
+    echoRequestProxy->setLeds(9);
+    echoRequestProxy->setLeds(9);
+#endif
     //DmaManager *dma = platformInit();
     //serdesdevice = new ImageonSerdesRequestProxy(IfcNames_ImageonSerdesRequestS2H);
     //hdmidevice = new HdmiGeneratorRequestProxy(IfcNames_HdmiGeneratorRequestS2H);
@@ -426,6 +494,8 @@ int main(int argc, const char **argv)
     //HdmiGeneratorIndication hdmiIndication(IfcNames_HdmiGeneratorIndicationH2S, hdmidevice);
     // read out monitor EDID from ADV7511
     struct edid edid;
+    echoRequestProxy->muxreset(1);
+sleep(2);
     init_i2c_hdmi();
     int i2cfd = open("/dev/i2c-0", O_RDWR);
     fprintf(stderr, "Monitor EDID:\n");
@@ -444,19 +514,24 @@ int main(int argc, const char **argv)
     close(i2cfd);
     parseEdid(edid);
 
+memdump(edid.raw, sizeof(edid.raw), "RAW");
+memdump((unsigned char *)&edid.timing, sizeof(edid.timing), "TIMING");
     long actualFrequency = 0;
     int status;
+#if 0
     status = setClockFrequency(0, 100000000, &actualFrequency);
     printf("[%s:%d] setClockFrequency 0 100000000 status=%d actualfreq=%ld\n", __FUNCTION__, __LINE__, status, actualFrequency);
     status = setClockFrequency(1, 160000000, &actualFrequency);
     printf("[%s:%d] setClockFrequency 1 160000000 status=%d actualfreq=%ld\n", __FUNCTION__, __LINE__, status, actualFrequency);
     status = setClockFrequency(3, 200000000, &actualFrequency);
     printf("[%s:%d] setClockFrequency 3 200000000 status=%d actualfreq=%ld\n", __FUNCTION__, __LINE__, status, actualFrequency);
+#endif
     printf("[%s:%d] before set_i2c_mux_reset_n\n", __FUNCTION__, __LINE__);
-    //idevice->set_i2c_mux_reset_n(1);
+    echoRequestProxy->muxreset(0);
+sleep(2);
     printf("[%s:%d] before setDeLine/Pixel\n", __FUNCTION__, __LINE__);
     for (int i = 0; i < 4; i++) {
-      int pixclk = (long)edid.timing[i].pixclk * 10000;
+        long pixclk = (long)edid.timing[i].pixclk * 10000;
         nlines = edid.timing[i].nlines;    // number of visible lines
         npixels = edid.timing[i].npixels;
         int vblank = edid.timing[i].blines; // number of blanking lines
@@ -472,8 +547,10 @@ int main(int argc, const char **argv)
                 pixclk,
                 60l * (long)(hblank + npixels) * (long)(vblank + nlines),
                 npixels, nlines);
-      if ((pixclk > 0) && (pixclk < 148000000)) {
+      if ((pixclk > 0) && (pixclk < 149000000)) {
+#if 0
         status = setClockFrequency(1, pixclk, 0);
+#endif
 
 hblank--; // needed on zc702
 #if 0

@@ -8,8 +8,8 @@
  */
 
 module sync_vg #(parameter X_BITS=12, Y_BITS=12)
-    ( input wire clk,
-      input wire reset,
+    ( input wire CLK,
+      input wire nRST,
       input wire interlaced,
       input wire [Y_BITS-1:0] v_total_0,
       input wire [Y_BITS-1:0] v_fp_0,
@@ -44,11 +44,11 @@ module sync_vg #(parameter X_BITS=12, Y_BITS=12)
     reg [Y_BITS-1:0] v_sync;
     reg [X_BITS-1:0] hv_offset;
 
-    assign clk_out = !clk;
+    assign clk_out = !CLK;
 
     /* horizontal counter */
-    always @(posedge clk)
-      if (reset)
+    always @(posedge CLK)
+      if (!nRST)
         h_count <= 0;
       else
         if (h_count < h_total - 1)
@@ -57,8 +57,8 @@ module sync_vg #(parameter X_BITS=12, Y_BITS=12)
           h_count <= 0;
 
     /* vertical counter */
-    always @(posedge clk)
-      if (reset)
+    always @(posedge CLK)
+      if (!nRST)
         v_count <= 0;
       else
         if (h_count == h_total - 1)
@@ -70,8 +70,8 @@ module sync_vg #(parameter X_BITS=12, Y_BITS=12)
         end
 
     /* field */
-    always @(posedge clk)
-      if (reset) begin
+    always @(posedge CLK)
+      if (!nRST) begin
         field <= 0;
         v_total <= v_total_0;
         v_fp <= interlaced ? v_fp_1 : v_fp_0; // In the interlaced mode this value must be inverted as v_fp_1 is still in field0
@@ -88,8 +88,8 @@ module sync_vg #(parameter X_BITS=12, Y_BITS=12)
           hv_offset <= field ? hv_offset_0 : hv_offset_1;
         end
 
-    always @(posedge clk)
-      if (reset)
+    always @(posedge CLK)
+      if (!nRST)
         { vs_out, hs_out, de_out, field_out } <= 4'b0;
       else begin
         hs_out <= ((h_count < h_sync));
@@ -119,7 +119,7 @@ endmodule
 
 module pattern_vg #(parameter B=8, // number of bits per channel
                   X_BITS=13, Y_BITS=13,FRACTIONAL_BITS = 12)
-      (input reset, clk_in,
+      (input nRST, CLK,
        input wire [X_BITS-1:0] x,
        input wire [Y_BITS-1:0] y,
        input wire vn_in, hn_in, dn_in,
@@ -133,12 +133,12 @@ module pattern_vg #(parameter B=8, // number of bits per channel
 
     reg [B+FRACTIONAL_BITS-1:0] ramp_values; // 12-bit fractional end for ramp values
 
-    always @(posedge clk_in) begin
+    always @(posedge CLK) begin
       vn_out <= vn_in;
       hn_out <= hn_in;
       den_out <= dn_in;
 
-      if (reset)
+      if (!nRST)
          ramp_values <= 0;
       else if (pattern == 8'b0) begin // no pattern
           r_out <= r_in;
@@ -199,14 +199,13 @@ module pattern_vg #(parameter B=8, // number of bits per channel
 endmodule
 
 module top_sync_vg_pattern
-      (input wire clk_in,
-       input wire resetb,
+      (input wire CLK,
+       input wire nRST,
        output reg adv7511_hs, // HS output to ADV7511
        output reg adv7511_vs, // VS output to ADV7511
        output wire adv7511_clk, // ADV7511: CLK
        output reg [35:0] adv7511_d, // data
-       output reg adv7511_de, // ADV7511: DE
-       input wire [5:0]  pb);
+       output reg adv7511_de); // ADV7511: DE
     /* ************************************* */
 
 /* SELECT ONE OF MODES: */
@@ -275,9 +274,6 @@ module top_sync_vg_pattern
     parameter PATTERN_TYPE = 8'd4; // RAMP
 `endif
 
-    wire reset;
-    assign reset = !resetb;
-
     wire [11:0] x_out;
     wire [12:0] y_out;
     wire [7:0] r_out;
@@ -285,8 +281,8 @@ module top_sync_vg_pattern
     wire [7:0] b_out;
     /* ********************* */
     sync_vg #(.X_BITS(12), .Y_BITS(12)) sync_vg
-    ( .clk(clk_in),
-      .reset(reset),
+    ( .CLK(CLK),
+      .nRST(nRST),
       .interlaced(INTERLACED),
       .clk_out(), // inverted output clock - unconnected
       .v_total_0(V_TOTAL_0),
@@ -314,7 +310,7 @@ module top_sync_vg_pattern
 
     pattern_vg #( .B(8), // Bits per channel
           .X_BITS(12), .Y_BITS(12), .FRACTIONAL_BITS(12)) // Number of fractional bits for ramp pattern
-       pattern_vg ( .reset(reset), .clk_in(clk_in), .x(x_out), .y(y_out[11:0]),
+       pattern_vg ( .nRST(nRST), .CLK(CLK), .x(x_out), .y(y_out[11:0]),
          .vn_in(vs), .hn_in(hs), .dn_in(de),
          .r_in(8'h0), // default red channel value
          .g_in(8'h0), // default green channel value
@@ -328,9 +324,9 @@ module top_sync_vg_pattern
          .pattern(PATTERN_TYPE),
          .ramp_step(PATTERN_RAMP_STEP));
 
-    assign adv7511_clk = ~clk_in;
+    assign adv7511_clk = ~CLK;
 
-    always @(posedge clk_in) begin
+    always @(posedge CLK) begin
       adv7511_d[35:24] <= { r_out, 4'b0 };
       adv7511_d[23:12] <= { g_out, 4'b0 };
       adv7511_d[11:0]  <= { b_out, 4'b0 };

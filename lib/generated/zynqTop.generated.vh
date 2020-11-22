@@ -157,6 +157,10 @@ endinterface
 `define __ZynqTopIFC_DEF__
 interface ZynqTopIFC;
     logic [54 - 1:0] MIO;
+    logic  I2C0_scl;
+    logic  I2C0_sda;
+    logic  I2C1_scl;
+    logic  I2C1_sda;
 endinterface
 `endif
 //METASTART; P7Wrap
@@ -164,6 +168,8 @@ endinterface
 //METAINTERNAL; pclockTop; ClockTop;
 //METAINTERNAL; tsda0; IOBUF;
 //METAINTERNAL; tscl0; IOBUF;
+//METAINTERNAL; tsda1; IOBUF;
+//METAINTERNAL; tscl1; IOBUF;
 //METAGUARD; MAXIGP0_I.R; 0 != pps$MAXIGP0RREADY;
 //METAGUARD; MAXIGP0_I.B; 0 != pps$MAXIGP0BREADY;
 //METAGUARD; RULE$init; 1'd1;

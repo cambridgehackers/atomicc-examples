@@ -2,6 +2,10 @@
 
 `default_nettype none
 module Echo (
+    input wire CLK,
+    input wire nRST,
+    input wire fmc_video_clk1_v,
+    output wire i2c_mux_reset_n,
     output wire adv7511_clk,
     output wire [36 - 1:0]adv7511_d,
     output wire adv7511_de,
@@ -15,24 +19,29 @@ module Echo (
     reg [16 - 1:0]b_temp;
     reg busy;
     reg busy_delay;
+    reg i2c_mux_reset_n_reg;
     reg [32 - 1:0]v_delay;
     reg [32 - 1:0]v_temp;
     reg [32 - 1:0]v_type;
-    logic CLK;
     logic RULE$delay_rule__ENA;
     logic RULE$delay_rule__RDY;
     logic RULE$respond_rule__ENA;
     logic RULE$respond_rule__RDY;
-    logic nRST;
-    top_sync_vg_pattern top_sync (
+    logic iclock$hdmiClock;
+    ClockImageon iclock (
+        .CLK(fmc_video_clk1_v),
+        .nRST(nRST),
+        .hdmiClock(iclock$hdmiClock),
+        .imageonClock());
+    HdmiBlock hdmi (
+        .CLK(iclock$hdmiClock),
+        .nRST(nRST),
         .adv7511_clk(adv7511_clk),
         .adv7511_d(adv7511_d),
         .adv7511_de(adv7511_de),
         .adv7511_hs(adv7511_hs),
-        .adv7511_vs(adv7511_vs),
-        .clk_in(CLK),
-        .pb(6'd0),
-        .resetb(nRST));
+        .adv7511_vs(adv7511_vs));
+    assign i2c_mux_reset_n = i2c_mux_reset_n_reg;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$delay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
@@ -43,6 +52,7 @@ module Echo (
     assign indication.heard2$b = ( ( v_type != 1 ) && busy_delay ) ? b_delay : 16'd0;
     assign indication.heard2__ENA = ( v_type != 1 ) && busy_delay;
     assign indication.heard__ENA = busy_delay && ( v_type == 1 );
+    assign request.muxreset__RDY = 1'd1;
     assign request.say2__RDY = !busy;
     assign request.say__RDY = !busy;
     assign request.setLeds__RDY = 1'd1;
@@ -55,6 +65,7 @@ module Echo (
         b_temp <= 0;
         busy <= 0;
         busy_delay <= 0;
+        i2c_mux_reset_n_reg <= 0;
         v_delay <= 0;
         v_temp <= 0;
         v_type <= 0;
@@ -70,6 +81,9 @@ module Echo (
         if (RULE$respond_rule__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA
             busy_delay <= 1'd0;
         end; // End of RULE$respond_rule__ENA
+        if (request.muxreset__ENA) begin // request.muxreset__ENA
+            i2c_mux_reset_n_reg <= request.muxreset$v;
+        end; // End of request.muxreset__ENA
         if (( !busy ) && request.say2__ENA) begin // request.say2__ENA
             a_temp <= request.say2$a;
             b_temp <= request.say2$b;

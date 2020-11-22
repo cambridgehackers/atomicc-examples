@@ -49,8 +49,11 @@ static void parseEdid(struct edid &edid)
     unsigned char *rec = &edid.raw[54+18*i];
     memset(&edid.timing[i], 0, sizeof(edid.timing[i]));
 
-    if (*(unsigned short*)&rec[0] == 0) {
-      unsigned char descriptor_type = rec[3];
+    unsigned short first = *(unsigned short*)&rec[0];
+    unsigned char descriptor_type = rec[3];
+printf("[%s:%d] type %x\n", __FUNCTION__, __LINE__, descriptor_type);
+memdump(rec, 18, "REC");
+    if (first == 0) {
       switch (descriptor_type) {
       case 0xFF: // monitor serial number
 	fprintf(stderr, "monitor serial number %13.13s\n", &rec[5]);

@@ -14,6 +14,10 @@ module l_top (input wire CLK, input wire nRST,
         .method(DUT__Echo$indication),
         .pipe(indication));
     Echo DUT__Echo (
+        .CLK(CLK),
+        .nRST(nRST),
+        .fmc_video_clk1_v(),
+        .i2c_mux_reset_n(),
         .adv7511_clk(),
         .adv7511_d(),
         .adv7511_de(),

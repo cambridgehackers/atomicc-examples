@@ -540,8 +540,10 @@ INTERFACE ZynqTopIFC  {
     FILE zynqTop_OC_cpp
     INTERFACE ZynqClock _
     FIELD/inout Bit(54) MIO
-    INTERFACE I2C_Pins i2c0
-    INTERFACE I2C_Pins i2c1
+    FIELD/inout Bit(1) I2C0_scl
+    FIELD/inout Bit(1) I2C0_sda
+    FIELD/inout Bit(1) I2C1_scl
+    FIELD/inout Bit(1) I2C1_sda
 }
 EMODULE AxiTop AxiTopIfc {
     FILE axiTop_OC_h
@@ -574,6 +576,8 @@ MODULE P7Wrap P7WrapIfc {
     FIELD ClockTop pclockTop
     FIELD IOBUF tsda0
     FIELD IOBUF tscl0
+    FIELD IOBUF tsda1
+    FIELD IOBUF tscl1
     METHOD/Action MAXIGP0_I$R__ENA ( Bit(32) data , Bit(12) id , Bit(1) last , Bit(2) resp ) if ((pps$MAXIGP0RREADY)) {
         LET Bit(32) :pps$MAXIGP0RDATA = MAXIGP0_I$R$data
         LET Bit(12) :pps$MAXIGP0RID = MAXIGP0_I$R$id
@@ -593,6 +597,14 @@ MODULE P7Wrap P7WrapIfc {
         LET Bit(1) :tsda0$I = pps$EMIOI2C0SDAO
         LET Bit(1) :pps$EMIOI2C0SDAI = tsda0$O
         LET Bit(1) :i2c0$sda = tsda0$IO
+        LET Bit(1) :tscl1$T = (pps$EMIOI2C1SCLTN) ^ (1)
+        LET Bit(1) :tscl1$I = pps$EMIOI2C1SCLO
+        LET Bit(1) :pps$EMIOI2C1SCLI = tscl1$O
+        LET Bit(1) :i2c1$scl = tscl1$IO
+        LET Bit(1) :tsda1$T = (pps$EMIOI2C1SDATN) ^ (1)
+        LET Bit(1) :tsda1$I = pps$EMIOI2C1SDAO
+        LET Bit(1) :pps$EMIOI2C1SDAI = tsda1$O
+        LET Bit(1) :i2c1$sda = tsda1$IO
         LET Bit(54) :MIO = pps$MIO
         LET Bit(1) :pps$FPGAIDLEN = 1
         LET Bit(1) :pps$MAXIGP0ACLK = __defaultClock
@@ -663,10 +675,10 @@ MODULE/Top ZynqTop ZynqTopIFC {
         LET Bit(1) :ps7_ps7_foo$intr.nRST = __defaultnReset
         LET Bit(1) :test$CLK = __defaultClock
         LET Bit(1) :test$nRST = __defaultnReset
-        LET Bit(1) :ps7_ps7_foo$i2c0$scl = i2c0$scl
-        LET Bit(1) :ps7_ps7_foo$i2c0$sda = i2c0$sda
-        LET Bit(1) :ps7_ps7_foo$i2c1$scl = i2c1$scl
-        LET Bit(1) :ps7_ps7_foo$i2c1$sda = i2c1$sda
+        LET Bit(1) :ps7_ps7_foo$i2c0$scl = I2C0_scl
+        LET Bit(1) :ps7_ps7_foo$i2c0$sda = I2C0_sda
+        LET Bit(1) :ps7_ps7_foo$i2c1$scl = I2C1_scl
+        LET Bit(1) :ps7_ps7_foo$i2c1$sda = I2C1_sda
     }
     METHOD/Action readUser$enq__ENA ( Bit(32) v ) {
         STORE :resetFunnel = (readUser$enq$v) != (-(1))

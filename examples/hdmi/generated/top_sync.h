@@ -1,4 +1,5 @@
 class  top_sync_vg_patternIFC {
+    __input  __uint(1)        CLK;
     __parameter __uint(12)       HV_OFFSET_0;
     __parameter __uint(12)       HV_OFFSET_1;
     __parameter __uint(12)       H_BP;
@@ -21,8 +22,6 @@ class  top_sync_vg_patternIFC {
     __output __uint(1)        adv7511_de;
     __output __uint(1)        adv7511_hs;
     __output __uint(1)        adv7511_vs;
-    __input  __uint(1)        clk_in;
-    __input  __uint(6)        pb;
-    __input  __uint(1)        resetb;
+    __input  __uint(1)        nRST;
 };
 class top_sync_vg_pattern __implements  top_sync_vg_patternIFC;

@@ -13,6 +13,7 @@ public:
     EchoRequestProxy(int id, PortalPoller *poller) :
         Portal(id, DEFAULT_TILE, EchoRequest_reqinfo, NULL, NULL, NULL, NULL, this, poller), cb(&EchoRequestProxyReq) {};
     void say ( const uint32_t v ) { cb->say (&pint, v); };
+    void muxreset ( const uint8_t v ) { cb->muxreset (&pint, v); };
     void say2 ( const uint16_t a, const uint16_t b ) { cb->say2 (&pint, a, b); };
     void setLeds ( const uint8_t v ) { cb->setLeds (&pint, v); };
 };

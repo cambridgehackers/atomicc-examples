@@ -34,6 +34,9 @@
                 { "dname": "say", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
                     ] },
+                { "dname": "muxreset", "dparams": [
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "1" } ] } }
+                    ] },
                 { "dname": "say2", "dparams": [
                         { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
                         { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }

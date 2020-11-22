@@ -73,7 +73,7 @@ void init_i2c_hdmi(void)
 {
 static unsigned char muxdata[] = {2, 2};
 static unsigned char hdmidata[] = {
-#if 0
+#if 1
     0x41, 0x10, /* Powerup the Tx */
     0xD6, 0xC0, /* HPD control */
     0x15, 0x01,   0x16, 0x38, /* Video input mode */

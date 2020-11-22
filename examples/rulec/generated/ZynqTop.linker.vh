@@ -1,6 +1,30 @@
 
-`define TopAppendPort
+`define TopAppendPort	,/*comma separator*/			\
+   output wire pmoda__J1,					\
+   output wire pmoda__J2,					\
+   output wire pmoda__J3,					\
+   output wire pmoda__J4,					\
+   output wire pmoda__J7,					\
+   output wire pmoda__J8,					\
+   output wire pmoda__J9					\
+
 `define TopAppendCode 							\
+reg foo; \
+    always @( posedge CLK) begin \
+      if (!nRST) begin \
+        foo <= 0; \
+      end // nRST \
+      else begin \
+        foo <= !foo; \
+      end; \
+    end; \
+    assign pmoda__J1 = foo;					\
+    assign pmoda__J2 = ps7_ps7_foo$MAXIGP0_O.AR__ENA;			\
+    assign pmoda__J3 = ps7_ps7_foo$MAXIGP0_O.AW__ENA;			\
+    assign pmoda__J4 = ps7_ps7_foo$MAXIGP0_O.W__ENA;			\
+    assign pmoda__J7 = nRST;						\
+    assign pmoda__J8 = 0;						\
+    assign pmoda__J9 = 0;						\
     PipeOut#(.width(32)) funnel$in [1 - 1:0]();				\
     PipeOut#(.width(32)) funnel$out();					\
     wire funnel$select__ENA;						\

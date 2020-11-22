@@ -16,6 +16,10 @@ MODULE ZynqTop ZynqTop_interface {
 }
 INTERFACE ZynqTop_interface {
     FIELD/inout Bit(54) MIO
+    FIELD/inout Bit(1) I2C0_scl
+    FIELD/inout Bit(1) I2C0_sda
+    FIELD/inout Bit(1) I2C1_scl
+    FIELD/inout Bit(1) I2C1_sda
     FIELD/inout Bit(15) DDR_Addr
     FIELD/inout Bit(3) DDR_BankAddr
     FIELD/inout Bit(1) DDR_CAS_n
@@ -36,10 +40,6 @@ INTERFACE ZynqTop_interface {
     FIELD/inout Bit(1) FIXED_IO_ps_clk
     FIELD/inout Bit(1) FIXED_IO_ps_porb
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
-    FIELD/inout Bit(1) i2c0$scl
-    FIELD/inout Bit(1) i2c0$sda
-    FIELD/inout Bit(1) i2c1$scl
-    FIELD/inout Bit(1) i2c1$sda
     FIELD/output Bit(1) hdmi_vsync
     FIELD/output Bit(1) hdmi_hsync
     FIELD/output Bit(1) hdmi_de
@@ -51,6 +51,8 @@ MODULE P7Wrap P7Wrap_interface {
     FIELD ClockTop pclockTop
     FIELD IOBUF tsda0
     FIELD IOBUF tscl0
+    FIELD IOBUF tsda1
+    FIELD IOBUF tscl1
 }
 INTERFACE P7Wrap_interface {
     FIELD/inout Bit(54) MIO
@@ -228,12 +230,6 @@ INTERFACE SyncFF_interface {
     FIELD/output Bit(1) out
     FIELD/input  Bit(1) in
 }
-MODULE ResetInverter ResetInverter_interface {
-}
-INTERFACE ResetInverter_interface {
-    FIELD/input  Bit(1) RESET_IN
-    FIELD/output Bit(1) RESET_OUT
-}
 MODULE AdapterToBus__Wf5_Iz13 AdapterToBus__Wf5_Iz13_interface {
 }
 INTERFACE AdapterToBus__Wf5_Iz13_interface {
@@ -306,6 +302,7 @@ INTERFACE ___M2PEchoIndication__Pz14_interface {
     FIELD/input  Bit(1) nRST
 }
 MODULE Echo Echo_interface {
+    FIELD ClockImageon iclock
     FIELD top_sync_vg_pattern top_sync
 }
 INTERFACE Echo_interface {
@@ -320,6 +317,24 @@ MODULE ___P2MEchoRequest__Pz14 ___P2MEchoRequest__Pz14_interface {
 INTERFACE ___P2MEchoRequest__Pz14_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
+}
+MODULE ClockImageon ClockImageon_interface {
+    FIELD MMCME2_ADV imageon_pll
+    FIELD ResetInverter rinverter
+    FIELD BUFG hdmi_clockb
+    FIELD BUFG imageon_clockb
+}
+INTERFACE ClockImageon_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(1) hdmiClock
+    FIELD/output Bit(1) imageonClock
+}
+MODULE ResetInverter ResetInverter_interface {
+}
+INTERFACE ResetInverter_interface {
+    FIELD/input  Bit(1) RESET_IN
+    FIELD/output Bit(1) RESET_OUT
 }
 FILE ../../lib/generated/ZynqTop.sv
 FILE ../../lib/generated/zynqTop.generated.vh
@@ -367,3 +382,4 @@ FILE ../../lib/generated/BRAM.sv
 FILE generated/___M2PEchoIndication.sv
 FILE generated/Echo.sv
 FILE generated/___P2MEchoRequest.sv
+FILE generated/ClockImageon.sv
