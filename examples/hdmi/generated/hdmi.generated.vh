@@ -93,15 +93,70 @@ endinterface
 interface HdmiBlockIfc;
     logic  CLK;
     logic  nRST;
-    logic  adv7511_clk;
     logic [36 - 1:0] adv7511_d;
     logic  adv7511_de;
     logic  adv7511_hs;
     logic  adv7511_vs;
     modport server (input  CLK, nRST,
-                    output adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+                    output adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
     modport client (output CLK, nRST,
-                    input  adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+                    input  adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+endinterface
+`endif
+`ifndef __HdmiDataIfc_DEF__
+`define __HdmiDataIfc_DEF__
+interface HdmiDataIfc#(heightAddr = 13, widthAddr = 12);
+    logic setXY__ENA;
+    logic [widthAddr - 1:0] setXY$x;
+    logic [heightAddr - 1:0] setXY$y;
+    logic  setXY$dataEnable;
+    logic setXY__RDY;
+    modport server (input  setXY__ENA, setXY$x, setXY$y, setXY$dataEnable,
+                    output setXY__RDY);
+    modport client (output setXY__ENA, setXY$x, setXY$y, setXY$dataEnable,
+                    input  setXY__RDY);
+endinterface
+`endif
+`ifndef __HdmiPatternIfc_DEF__
+`define __HdmiPatternIfc_DEF__
+interface HdmiPatternIfc#(heightAddr = 12, widthAddr = 12);
+    logic setup__ENA;
+    logic [widthAddr - 1:0] setup$aactivePixels;
+    logic [heightAddr - 1:0] setup$aactiveLines;
+    logic [8 - 1:0] setup$apattern;
+    logic [20 - 1:0] setup$arampStep;
+    logic setup__RDY;
+    logic [36 - 1:0] data;
+    logic data__RDY;
+    modport server (input  setup__ENA, setup$aactivePixels, setup$aactiveLines, setup$apattern, setup$arampStep,
+                    output setup__RDY, data, data__RDY);
+    modport client (output setup__ENA, setup$aactivePixels, setup$aactiveLines, setup$apattern, setup$arampStep,
+                    input  setup__RDY, data, data__RDY);
+endinterface
+`endif
+`ifndef __HdmiSyncIfc_DEF__
+`define __HdmiSyncIfc_DEF__
+interface HdmiSyncIfc#(heightAddr = 12, widthAddr = 12);
+    logic  dataEnable;
+    logic dataEnable__RDY;
+    logic  hSync;
+    logic hSync__RDY;
+    logic  vSync;
+    logic vSync__RDY;
+    logic setup__ENA;
+    logic [widthAddr - 1:0] setup$ahEnd;
+    logic [widthAddr - 1:0] setup$ahFrontEnd;
+    logic [widthAddr - 1:0] setup$ahBackSync;
+    logic [widthAddr - 1:0] setup$ahSyncWidth;
+    logic [heightAddr - 1:0] setup$avEnd;
+    logic [heightAddr - 1:0] setup$avFrontEnd;
+    logic [heightAddr - 1:0] setup$avBackSync;
+    logic [heightAddr - 1:0] setup$avSyncWidth;
+    logic setup__RDY;
+    modport server (input  setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    output dataEnable, dataEnable__RDY, hSync, hSync__RDY, vSync, vSync__RDY, setup__RDY);
+    modport client (output setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    input  dataEnable, dataEnable__RDY, hSync, hSync__RDY, vSync, vSync__RDY, setup__RDY);
 endinterface
 `endif
 `ifndef __Mmcme2MMCME2_ADV_DEF__
@@ -146,22 +201,6 @@ interface Mmcme2MMCME2_ADV;
                     input  CLKFBOUT, CLKFBOUTB, CLKFBSTOPPED, CLKINSTOPPED, CLKOUT0, CLKOUT0B, CLKOUT1, CLKOUT1B, CLKOUT2, CLKOUT2B, CLKOUT3, CLKOUT3B, CLKOUT4, CLKOUT5, CLKOUT6, DO, DRDY, LOCKED, PSDONE);
 endinterface
 `endif
-`ifndef __top_sync_vg_patternIFC_DEF__
-`define __top_sync_vg_patternIFC_DEF__
-interface top_sync_vg_patternIFC;
-    logic  CLK;
-    logic  adv7511_clk;
-    logic [36 - 1:0] adv7511_d;
-    logic  adv7511_de;
-    logic  adv7511_hs;
-    logic  adv7511_vs;
-    logic  nRST;
-    modport server (input  CLK, nRST,
-                    output adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
-    modport client (output CLK, nRST,
-                    input  adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
-endinterface
-`endif
 //METASTART; ClockImageon
 //METAINTERNAL; imageon_pll; MMCME2_ADV;
 //METAINTERNAL; rinverter; ResetInverter;
@@ -188,9 +227,14 @@ endinterface
 //METAGUARD; RULE$respond_rule; busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
 //METARULES; RULE$initHdmi; RULE$delay_rule; RULE$respond_rule
 //METASTART; HdmiBlock
-//METAINTERNAL; top_sync; top_sync_vg_pattern;
-//METAGUARD; RULE$initHdmi; 1'd1;
-//METARULES; RULE$initHdmi
+//METAINTERNAL; syncBlock; HdmiSync(widthAddr=12,heightAddr=12);
+//METAINTERNAL; patternBlock; HdmiPattern(widthAddr=12,heightAddr=12);
+//METAGUARD; RULE$initHdmi; patternBlock$data__RDY && syncBlock$dataEnable__RDY && syncBlock$hSync__RDY && syncBlock$vSync__RDY;
+//METAINVOKE; RULE$init__ENA; :patternBlock$setup__ENA;:syncBlock$setup__ENA;
+//METAGUARD; RULE$init; ( !once ) && syncBlock$setup__RDY && patternBlock$setup__RDY;
+//METARULES; RULE$initHdmi; RULE$init
+//METACONNECT; syncBlock$data.setXY__ENA; patternBlock$calculate.setXY__ENA
+//METACONNECT; syncBlock$data.setXY__RDY; patternBlock$calculate.setXY__RDY
 //METASTART; l_top
 //METAINTERNAL; M2P__indication; ___M2PEchoIndication;
 //METAINTERNAL; DUT__Echo; Echo;
@@ -225,4 +269,19 @@ endinterface
 //METASTART; ___P2MEchoRequest
 //METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.muxreset__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method.say2__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3:method.setLeds__ENA;
 //METAGUARD; pipe.enq; ( method.say__RDY && ( ( method.muxreset__RDY && ( ( method.say2__RDY && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) || ( ( !method.say2__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) || ( ( !method.muxreset__RDY ) && ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) ) || ( ( !method.say__RDY ) && ( ( !method.muxreset__RDY ) || ( ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) && ( method.muxreset__RDY || ( ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) );
+//METASTART; HdmiData
+//METAGUARD; setXY; 1'd1;
+//METASTART; HdmiPattern
+//METAGUARD; setup; 1'd1;
+//METABEFORE; calculate.setXY__ENA; :setup__ENA
+//METAGUARD; calculate.setXY; 1'd1;
+//METAGUARD; data; 1'd1;
+//METASTART; HdmiSync
+//METAGUARD; dataEnable; 1'd1;
+//METAGUARD; hSync; 1'd1;
+//METAGUARD; vSync; 1'd1;
+//METAGUARD; setup; 1'd1;
+//METAINVOKE; RULE$updatePixel__ENA; :data.setXY__ENA;
+//METAGUARD; RULE$updatePixel; run && data.setXY__RDY;
+//METARULES; RULE$updatePixel
 `endif

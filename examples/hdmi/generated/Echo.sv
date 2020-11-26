@@ -36,11 +36,11 @@ module Echo (
     HdmiBlock hdmi (
         .CLK(iclock$hdmiClock),
         .nRST(nRST),
-        .adv7511_clk(adv7511_clk),
         .adv7511_d(adv7511_d),
         .adv7511_de(adv7511_de),
         .adv7511_hs(adv7511_hs),
         .adv7511_vs(adv7511_vs));
+    assign adv7511_clk = ( !iclock$hdmiClock ) && 1'd1;
     assign i2c_mux_reset_n = i2c_mux_reset_n_reg;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;

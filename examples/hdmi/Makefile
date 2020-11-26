@@ -1,5 +1,5 @@
 export FILEGENFLAGS = --implconstraint imageon-clocks.xdc
-export VERILOG_PATH := ./verilog;$(VERILOG_PATH)
+#export VERILOG_PATH := ./verilog;$(VERILOG_PATH)
 FILEGENFLAGS += -DVERILATOR_PROJECT_ARGS="--trace"
 FILEGENFLAGS += -V $(PWD)/verilog
 FILEGENFLAGS += --pinout imageon-fmc.json
@@ -18,6 +18,6 @@ CPPFILES = testimagecapture.cpp
 
 all:
 	mkdir -p generated
-	$(ATOMICCDIR)/atomiccImport -o generated/top_sync.h -P " " -C top_sync_vg_pattern verilog/top_sync_vg_pattern.v 
+	#$(ATOMICCDIR)/atomiccImport -o generated/top_sync.h -P " " -C top_sync_vg_pattern verilog/top_sync_vg_pattern.v 
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/hdmi.ll hdmi.cpp
 	$(ATOMICCDIR)/atomiccLinker ZynqTop generated/linker

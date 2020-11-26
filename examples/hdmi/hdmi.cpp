@@ -22,7 +22,6 @@
 #include "VMMCME2_ADV.h"
 #include "VBUFG.h"
 #include "resetInverter.h"
-#include "generated/top_sync.h"
 
 #define IfcNames_EchoIndicationH2S 5
 
@@ -77,27 +76,210 @@ class ClockImageon __implements ClockImageonIfc {
     };
 };
 
+template <int widthAddr, int heightAddr>
+class HdmiDataIfc {
+    void setXY(__uint(widthAddr) x, __uint(heightAddr) y, bool dataEnable);
+};
+
+template <int widthAddr, int heightAddr>
+class HdmiData __implements HdmiDataIfc<widthAddr, heightAddr> {
+    void setXY(__uint(widthAddr) x, __uint(heightAddr) y, bool dataEnable) {
+    }
+};
+HdmiData<12,13> dummyhdmid;
+
+template <int widthAddr, int heightAddr>
+class HdmiSyncIfc {
+    __uint(1)          dataEnable();
+    __uint(1)          hSync();
+    __uint(1)          vSync();
+    //__uint(widthAddr)  x();
+    //__uint(heightAddr) y();
+    void setup(__uint(widthAddr) ahEnd, __uint(widthAddr) ahFrontEnd, __uint(widthAddr) ahBackSync, __uint(widthAddr) ahSyncWidth,
+        __uint(heightAddr) avEnd, __uint(heightAddr) avFrontEnd, __uint(heightAddr) avBackSync, __uint(heightAddr) avSyncWidth);
+    HdmiDataIfc<widthAddr, heightAddr> *data;
+};
+
+template <int widthAddr, int heightAddr>
+class HdmiSync __implements HdmiSyncIfc<widthAddr, heightAddr> {
+    __uint(widthAddr) hEnd, hFrontEnd, hBackSync, hSyncWidth;
+    __uint(heightAddr) vEnd, vFrontEnd, vBackSync, vSyncWidth;
+    __uint(widthAddr) pixelCount;
+    __uint(heightAddr) lineCount;
+    bool               run;
+
+    __uint(1)          dataEnableInternal() {
+        return run && lineCount >= vBackSync && lineCount <= vFrontEnd
+                && pixelCount >= hBackSync && pixelCount <= hFrontEnd;
+    }
+    __uint(1)          dataEnable() {
+        return dataEnableInternal();
+    }
+    __uint(1)          hSync() {
+        return pixelCount < hSyncWidth;
+    }
+    __uint(1)          vSync() {
+        return lineCount < vSyncWidth;
+    }
+    void setup(__uint(widthAddr) ahEnd, __uint(widthAddr) ahFrontEnd, __uint(widthAddr) ahBackSync, __uint(widthAddr) ahSyncWidth,
+        __uint(heightAddr) avEnd, __uint(heightAddr) avFrontEnd, __uint(heightAddr) avBackSync, __uint(heightAddr) avSyncWidth) {
+        hEnd = ahEnd;
+        hFrontEnd = ahFrontEnd;
+        hBackSync = ahBackSync;
+        hSyncWidth = ahSyncWidth;
+        vEnd = avEnd;
+        vFrontEnd = avFrontEnd;
+        vBackSync = avBackSync;
+        vSyncWidth = avSyncWidth;
+        run = true;
+    }
+    __rule updatePixel if (run) {
+        if (pixelCount < hEnd)
+          pixelCount = pixelCount + 1;
+        else {
+          pixelCount = 0;
+          if (lineCount == vEnd)
+            lineCount = 0;
+          else
+            lineCount = lineCount + 1;
+        }
+        this->data->setXY( return pixelCount - hBackSync, return lineCount - vBackSync, dataEnableInternal());
+    }
+};
+
+template <int widthAddr, int heightAddr>
+class HdmiPatternIfc {
+    void setup(__uint(widthAddr) aactivePixels, __uint(heightAddr) aactiveLines, __uint(8) apattern, __uint(20//8+12
+) arampStep);
+    __uint(36) data();
+    HdmiDataIfc<widthAddr, heightAddr> calculate;
+};
+
+template <int widthAddr, int heightAddr>
+class HdmiPattern __implements HdmiPatternIfc<widthAddr, heightAddr> {
+    __uint(36) pixelValue;
+    __uint(8+12) rampValue;
+    __uint(widthAddr) activePixels;
+    __uint(heightAddr) activeLines;
+    __uint(8) pattern;
+    __uint(8+12) rampStep;
+    void setup(__uint(widthAddr) aactivePixels, __uint(heightAddr) aactiveLines, __uint(8) apattern, __uint(20//8+12
+) arampStep) {
+        activePixels = aactivePixels;
+        activeLines = aactiveLines;
+        pattern = apattern;
+        rampStep = arampStep;
+    }
+    void calculate.setXY(__uint(widthAddr) x, __uint(heightAddr) y, bool dataEnable) {
+       __uint(8) r_out, g_out, b_out;
+      if (pattern == 1) { // border
+          if (dataEnable && ((y == 0) || (x == 0) || (x == activePixels) || (y == activeLines)))
+              r_out = 0xff;
+          else
+              r_out = 0;
+        }
+      else if (pattern == 2) { // moireX
+        if (dataEnable && (x & 1))
+              r_out = 0xff;
+          else
+              r_out = 0;
+        }
+      else if (pattern == 3) { // moireY
+        if (dataEnable && (y & 1))
+              r_out = 0xff;
+          else
+              r_out = 0;
+        }
+      else if (pattern == 4) { // Simple RAMP
+#define FRACTIONAL_BITS 12
+          r_out = __bitsubstr(rampValue, 8+FRACTIONAL_BITS-1, FRACTIONAL_BITS);
+          if ((x == activePixels) && dataEnable)
+            rampValue = 0;
+          else if (dataEnable)
+            rampValue = rampValue + rampStep;
+        }
+      else
+        r_out = 0;
+      __uint(4) zero = 0;
+      g_out = r_out;
+      b_out = r_out;
+      pixelValue = __bitconcat(r_out, zero, g_out, zero, b_out, zero);
+    }
+    __uint(36) data() {
+        return pixelValue;
+    }
+};
+
 class HdmiBlockIfc {
     __input  __uint(1)        CLK;
     __input  __uint(1)        nRST;
-    __output __uint(1)        adv7511_clk;
     __output __uint(36)       adv7511_d;
     __output __uint(1)        adv7511_de;
     __output __uint(1)        adv7511_hs;
     __output __uint(1)        adv7511_vs;
 };
+#define MODE_1080p /* FORMAT 16 */
+//#define MODE_720p /* FORMAT 4 */
+#ifdef MODE_1080p /* FORMAT 16 */
+#define v_total 1125L
+#define vFront 4
+#define vBack 36L
+#define vSyncWidth 5
+#define h_total 2200L
+#define hFront 88L
+#define hBack 148L
+#define hSyncWidth 44L
+#define PATTERN_RAMP_STEP 0x0222L
+#endif
+#ifdef MODE_720p /* FORMAT 4 */
+#define v_total 750L
+#define vFront 5L
+#define vBack 20L
+#define vSyncWidth 5
+#define h_total 1650L
+#define hFront 110L
+#define hBack 220L
+#define hSyncWidth 40L
+#define PATTERN_RAMP_STEP 0x0333L // 20'hFFFFF / 1280 act_pixels per line = 20'h0333
+#endif
+#define PATTERN_TYPE 4    // RAMP
+//#define PATTERN_TYPE 1 // BORDER.
+// mini
+//pixclk=7425 w=697mm h=392mm features=1e
+//    npixels=1280 bpixels=370 hsyncoff=110 hsyncwidth=40 hbpxls=0
+//    nlines=720 blines=30 vsyncoff=5 vsyncwidth=5 vbpxls=0
+//pixclk=2700 w=697mm h=392mm features=18
+//    npixels=720 bpixels=138 hsyncoff=16 hsyncwidth=62 hbpxls=0
+// visio
+//pixclk=14850 w=509mm h=286mm features=1e
+//    npixels=1920 bpixels=280 hsyncoff=88 hsyncwidth=44 hbpxls=0
+//    nlines=1080 blines=45 vsyncoff=4 vsyncwidth=5 vbpxls=0
+//    nlines=480 blines=45 vsyncoff=9 vsyncwidth=6 vbpxls=0
 class HdmiBlock __implements HdmiBlockIfc {
-    top_sync_vg_pattern top_sync;
+    HdmiSync<12, 12> syncBlock;
+    HdmiPattern<12, 12> patternBlock;
+    __uint(1) dataEnable;
+    __uint(1) hSync;
+    __uint(1) vSync;
+    bool once;
+    __connect syncBlock.data = patternBlock.calculate;
     __rule initHdmi {
-        top_sync.CLK = __defaultClock;
-        top_sync.nRST = __defaultnReset;
-        adv7511_clk = top_sync.adv7511_clk;
-        adv7511_d = top_sync.adv7511_d;
-        adv7511_de = top_sync.adv7511_de;
-        adv7511_hs = top_sync.adv7511_hs;
-        adv7511_vs = top_sync.adv7511_vs;
+        adv7511_d = patternBlock.data();
+        adv7511_de = dataEnable;
+        adv7511_hs = hSync;
+        adv7511_vs = vSync;
+        dataEnable = syncBlock.dataEnable();
+        hSync = syncBlock.hSync();
+        vSync = syncBlock.vSync();
+    }
+    __rule init if (!once) {
+        syncBlock.setup(h_total - 1, h_total - 1 - hFront, hBack + hSyncWidth, hSyncWidth,
+                        v_total - 1, v_total - 1 - vFront, vBack + vSyncWidth, vSyncWidth);
+        patternBlock.setup(h_total - 1 - (hFront + hBack + hSyncWidth), v_total - 1 - (vFront + vBack + vSyncWidth), PATTERN_TYPE, PATTERN_RAMP_STEP);
+        once = true;
     }
 };
+
 class EchoRequest {
     void say(__int(32) v);
     void muxreset(__int(1) v);
@@ -134,7 +316,7 @@ class Echo __implements EchoIfc {
 
         hdmi.CLK = iclock.hdmiClock;
         hdmi.nRST = __defaultnReset;
-        adv7511_clk = hdmi.adv7511_clk;
+        adv7511_clk = !hdmi.CLK;
         adv7511_d = hdmi.adv7511_d;
         adv7511_de = hdmi.adv7511_de;
         adv7511_hs = hdmi.adv7511_hs;
