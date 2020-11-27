@@ -19,6 +19,10 @@ MODULE ZynqTop ZynqTop_interface {
 }
 INTERFACE ZynqTop_interface {
     FIELD/inout Bit(54) MIO
+    FIELD/inout Bit(1) I2C0_scl
+    FIELD/inout Bit(1) I2C0_sda
+    FIELD/inout Bit(1) I2C1_scl
+    FIELD/inout Bit(1) I2C1_sda
     FIELD/inout Bit(15) DDR_Addr
     FIELD/inout Bit(3) DDR_BankAddr
     FIELD/inout Bit(1) DDR_CAS_n
@@ -39,16 +43,14 @@ INTERFACE ZynqTop_interface {
     FIELD/inout Bit(1) FIXED_IO_ps_clk
     FIELD/inout Bit(1) FIXED_IO_ps_porb
     FIELD/inout Bit(1) FIXED_IO_ps_srstb
-    FIELD/inout Bit(1) i2c0$scl
-    FIELD/inout Bit(1) i2c0$sda
-    FIELD/inout Bit(1) i2c1$scl
-    FIELD/inout Bit(1) i2c1$sda
 }
 MODULE P7Wrap P7Wrap_interface {
     FIELD PS7 pps
     FIELD ClockTop pclockTop
     FIELD IOBUF tsda0
     FIELD IOBUF tscl0
+    FIELD IOBUF tsda1
+    FIELD IOBUF tscl1
 }
 INTERFACE P7Wrap_interface {
     FIELD/inout Bit(54) MIO

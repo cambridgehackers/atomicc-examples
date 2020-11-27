@@ -20,4 +20,4 @@ all:
 	mkdir -p generated
 	#$(ATOMICCDIR)/atomiccImport -o generated/top_sync.h -P " " -C top_sync_vg_pattern verilog/top_sync_vg_pattern.v 
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/hdmi.ll hdmi.cpp
-	$(ATOMICCDIR)/atomiccLinker ZynqTop generated/linker
+	#$(ATOMICCDIR)/atomiccLinker ZynqTop generated/linker

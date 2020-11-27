@@ -43,6 +43,7 @@ typedef int _IO_lock_t;
 #define __software __attribute__(( atomicc_software ))
 #define __shared __attribute__(( atomicc_shared ))
 #define __action __attribute__(( atomicc_action ))
+#define __async __attribute__(( atomicc_async ))
 #define __trace(A,B) __attribute__(( atomicc_trace((A), (B)) ))
 #define __topModule __attribute__(( atomicc_topModule ))
 #define __printf __attribute__(( atomicc_printf ))

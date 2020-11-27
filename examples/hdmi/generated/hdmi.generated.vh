@@ -35,17 +35,23 @@ interface EchoRequest;
     logic muxreset__ENA;
     logic  muxreset$v;
     logic muxreset__RDY;
-    logic say2__ENA;
-    logic [16 - 1:0] say2$a;
-    logic [16 - 1:0] say2$b;
-    logic say2__RDY;
     logic setLeds__ENA;
     logic [8 - 1:0] setLeds$v;
     logic setLeds__RDY;
-    modport server (input  say__ENA, say$v, muxreset__ENA, muxreset$v, say2__ENA, say2$a, say2$b, setLeds__ENA, setLeds$v,
-                    output say__RDY, muxreset__RDY, say2__RDY, setLeds__RDY);
-    modport client (output say__ENA, say$v, muxreset__ENA, muxreset$v, say2__ENA, say2$a, say2$b, setLeds__ENA, setLeds$v,
-                    input  say__RDY, muxreset__RDY, say2__RDY, setLeds__RDY);
+    logic setup__ENA;
+    logic [16 - 1:0] setup$ahEnd;
+    logic [16 - 1:0] setup$ahFrontEnd;
+    logic [8 - 1:0] setup$ahBackSync;
+    logic [8 - 1:0] setup$ahSyncWidth;
+    logic [16 - 1:0] setup$avEnd;
+    logic [16 - 1:0] setup$avFrontEnd;
+    logic [8 - 1:0] setup$avBackSync;
+    logic [8 - 1:0] setup$avSyncWidth;
+    logic setup__RDY;
+    modport server (input  say__ENA, say$v, muxreset__ENA, muxreset$v, setLeds__ENA, setLeds$v, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    output say__RDY, muxreset__RDY, setLeds__RDY, setup__RDY);
+    modport client (output say__ENA, say$v, muxreset__ENA, muxreset$v, setLeds__ENA, setLeds$v, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    input  say__RDY, muxreset__RDY, setLeds__RDY, setup__RDY);
 endinterface
 `endif
 `ifndef __EchoIndication_DEF__
@@ -97,10 +103,20 @@ interface HdmiBlockIfc;
     logic  adv7511_de;
     logic  adv7511_hs;
     logic  adv7511_vs;
-    modport server (input  CLK, nRST,
-                    output adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
-    modport client (output CLK, nRST,
-                    input  adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+    logic setup__ENA;
+    logic [16 - 1:0] setup$ahEnd;
+    logic [16 - 1:0] setup$ahFrontEnd;
+    logic [8 - 1:0] setup$ahBackSync;
+    logic [8 - 1:0] setup$ahSyncWidth;
+    logic [16 - 1:0] setup$avEnd;
+    logic [16 - 1:0] setup$avFrontEnd;
+    logic [8 - 1:0] setup$avBackSync;
+    logic [8 - 1:0] setup$avSyncWidth;
+    logic setup__ACK;
+    modport server (input  CLK, nRST, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    output adv7511_d, adv7511_de, adv7511_hs, adv7511_vs, setup__ACK);
+    modport client (output CLK, nRST, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth,
+                    input  adv7511_d, adv7511_de, adv7511_hs, adv7511_vs, setup__ACK);
 endinterface
 `endif
 `ifndef __HdmiDataIfc_DEF__
@@ -212,23 +228,26 @@ endinterface
 //METASTART; Echo
 //METAINTERNAL; iclock; ClockImageon;
 //METAINTERNAL; hdmi; HdmiBlock;
+//METAINTERNAL; bozo; Fifo1Base(width=1);
 //METABEFORE; RULE$initHdmi__ENA; :request.muxreset__ENA
 //METAGUARD; RULE$initHdmi; 1'd1;
-//METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA; request.say2__ENA
+//METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA
 //METAGUARD; request.say; 0 != ( ( busy != 0 ) ^ 1 );
 //METAGUARD; request.muxreset; 1'd1;
-//METAEXCLUSIVE; request.say2__ENA; RULE$delay_rule__ENA
-//METAGUARD; request.say2; 0 != ( ( busy != 0 ) ^ 1 );
-//METAGUARD; request.setLeds; 1'd1;
+//METAINVOKE; request.setup__ENA; :bozo$out.deq__ENA;:hdmi$setup__ENA;
+//METAEXCLUSIVE; request.setup__ENA; RULE$delay_rule__ENA
+//METAGUARD; request.setup; bozo$out.deq__RDY;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA
 //METAGUARD; RULE$delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication.heard2__ENA;v_type == 1:indication.heard__ENA;
-//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
+//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA; :request.setup__ENA
 //METAGUARD; RULE$respond_rule; busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
 //METARULES; RULE$initHdmi; RULE$delay_rule; RULE$respond_rule
 //METASTART; HdmiBlock
 //METAINTERNAL; syncBlock; HdmiSync(widthAddr=12,heightAddr=12);
 //METAINTERNAL; patternBlock; HdmiPattern(widthAddr=12,heightAddr=12);
+//METAEXCLUSIVE; setup__ENA; RULE$init__ENA
+//METAGUARD; setup; 0 != ( once ^ 1 );
 //METAGUARD; RULE$initHdmi; patternBlock$data__RDY && syncBlock$dataEnable__RDY && syncBlock$hSync__RDY && syncBlock$vSync__RDY;
 //METAINVOKE; RULE$init__ENA; :patternBlock$setup__ENA;:syncBlock$setup__ENA;
 //METAGUARD; RULE$init; ( !once ) && syncBlock$setup__RDY && patternBlock$setup__RDY;
@@ -249,10 +268,10 @@ endinterface
 //METACONNECT; DUT__Echo$request.say__RDY; P2M__request$method.say__RDY
 //METACONNECT; DUT__Echo$request.muxreset__ENA; P2M__request$method.muxreset__ENA
 //METACONNECT; DUT__Echo$request.muxreset__RDY; P2M__request$method.muxreset__RDY
-//METACONNECT; DUT__Echo$request.say2__ENA; P2M__request$method.say2__ENA
-//METACONNECT; DUT__Echo$request.say2__RDY; P2M__request$method.say2__RDY
 //METACONNECT; DUT__Echo$request.setLeds__ENA; P2M__request$method.setLeds__ENA
 //METACONNECT; DUT__Echo$request.setLeds__RDY; P2M__request$method.setLeds__RDY
+//METACONNECT; DUT__Echo$request.setup__ENA; P2M__request$method.setup__ENA
+//METACONNECT; DUT__Echo$request.setup__RDY; P2M__request$method.setup__RDY
 //METACONNECT; P2M__request$pipe.enq__ENA; request.enq__ENA
 //METACONNECT; P2M__request$pipe.enq__RDY; request.enq__RDY
 //METACONNECT; indication.enq__ENA; M2P__indication$pipe.enq__ENA
@@ -267,8 +286,8 @@ endinterface
 //METAINVOKE; method.heard3__ENA; :pipe.enq__ENA;
 //METAGUARD; method.heard3; pipe.enq__RDY;
 //METASTART; ___P2MEchoRequest
-//METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.muxreset__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method.say2__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3:method.setLeds__ENA;
-//METAGUARD; pipe.enq; ( method.say__RDY && ( ( method.muxreset__RDY && ( ( method.say2__RDY && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) || ( ( !method.say2__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) || ( ( !method.muxreset__RDY ) && ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) ) || ( ( !method.say__RDY ) && ( ( !method.muxreset__RDY ) || ( ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) && ( method.muxreset__RDY || ( ( ( !method.say2__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.say2__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setLeds__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) );
+//METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.muxreset__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd2:method.setLeds__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd3:method.setup__ENA;
+//METAGUARD; pipe.enq; ( method.say__RDY && ( ( method.muxreset__RDY && ( ( method.setLeds__RDY && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) || ( ( !method.setLeds__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) || ( ( !method.muxreset__RDY ) && ( ( !method.setLeds__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.setLeds__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) ) || ( ( !method.say__RDY ) && ( ( !method.muxreset__RDY ) || ( ( ( !method.setLeds__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.setLeds__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) && ( method.muxreset__RDY || ( ( ( !method.setLeds__RDY ) || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) && ( method.setLeds__RDY || ( ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd2 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.setup__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd3 ) ) ) ) ) ) );
 //METASTART; HdmiData
 //METAGUARD; setXY; 1'd1;
 //METASTART; HdmiPattern

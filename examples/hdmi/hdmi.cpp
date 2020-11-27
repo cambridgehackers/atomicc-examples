@@ -93,8 +93,6 @@ class HdmiSyncIfc {
     __uint(1)          dataEnable();
     __uint(1)          hSync();
     __uint(1)          vSync();
-    //__uint(widthAddr)  x();
-    //__uint(heightAddr) y();
     void setup(__uint(widthAddr) ahEnd, __uint(widthAddr) ahFrontEnd, __uint(widthAddr) ahBackSync, __uint(widthAddr) ahSyncWidth,
         __uint(heightAddr) avEnd, __uint(heightAddr) avFrontEnd, __uint(heightAddr) avBackSync, __uint(heightAddr) avSyncWidth);
     HdmiDataIfc<widthAddr, heightAddr> *data;
@@ -143,7 +141,7 @@ class HdmiSync __implements HdmiSyncIfc<widthAddr, heightAddr> {
           else
             lineCount = lineCount + 1;
         }
-        this->data->setXY( return pixelCount - hBackSync, return lineCount - vBackSync, dataEnableInternal());
+        this->data->setXY(pixelCount - hBackSync, lineCount - vBackSync, dataEnableInternal());
     }
 };
 
@@ -217,6 +215,8 @@ class HdmiBlockIfc {
     __output __uint(1)        adv7511_de;
     __output __uint(1)        adv7511_hs;
     __output __uint(1)        adv7511_vs;
+    __async void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth);
 };
 #define MODE_1080p /* FORMAT 16 */
 //#define MODE_720p /* FORMAT 4 */
@@ -263,6 +263,10 @@ class HdmiBlock __implements HdmiBlockIfc {
     __uint(1) vSync;
     bool once;
     __connect syncBlock.data = patternBlock.calculate;
+    void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) if (!once) {
+        once = true;
+    }
     __rule initHdmi {
         adv7511_d = patternBlock.data();
         adv7511_de = dataEnable;
@@ -275,7 +279,8 @@ class HdmiBlock __implements HdmiBlockIfc {
     __rule init if (!once) {
         syncBlock.setup(h_total - 1, h_total - 1 - hFront, hBack + hSyncWidth, hSyncWidth,
                         v_total - 1, v_total - 1 - vFront, vBack + vSyncWidth, vSyncWidth);
-        patternBlock.setup(h_total - 1 - (hFront + hBack + hSyncWidth), v_total - 1 - (vFront + vBack + vSyncWidth), PATTERN_TYPE, PATTERN_RAMP_STEP);
+        patternBlock.setup(h_total - 1 - hFront - (hBack + hSyncWidth),
+                           v_total - 1 - vFront - (vBack + vSyncWidth), PATTERN_TYPE, PATTERN_RAMP_STEP);
         once = true;
     }
 };
@@ -283,8 +288,9 @@ class HdmiBlock __implements HdmiBlockIfc {
 class EchoRequest {
     void say(__int(32) v);
     void muxreset(__int(1) v);
-    void say2(__int(16) a, __int(16) b);
     void setLeds(__int(8) v);
+    void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth);
 };
 class EchoIndication {
     void heard(__int(32) v);
@@ -309,6 +315,7 @@ class EchoIfc {
 class Echo __implements EchoIfc {
     ClockImageon iclock;
     HdmiBlock    hdmi;
+    Fifo1<__uint(1)> bozo;
     __uint(1)    i2c_mux_reset_n_reg;
     __rule initHdmi {
         iclock.CLK = fmc_video_clk1_v;
@@ -337,13 +344,11 @@ class Echo __implements EchoIfc {
     void request.muxreset(__int(1) v) {
         i2c_mux_reset_n_reg = v;
     }
-    void request.say2(__int(16) a, __int(16) b) if(!busy) {
-        a_temp = a;
-        b_temp = b;
-        busy = 1;
-        v_type = 2;
-    }
-    void request.setLeds(__int(8) v) {
+    void request.setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) {
+        hdmi.setup(ahEnd, ahFrontEnd, ahBackSync, ahSyncWidth, avEnd, avFrontEnd, avBackSync, avSyncWidth);
+        bozo.out.deq();
+        b_delay = 99;
     }
     __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
         busy = 0;

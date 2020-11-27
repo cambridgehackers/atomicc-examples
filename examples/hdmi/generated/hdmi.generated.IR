@@ -36,8 +36,13 @@ INTERFACE EchoRequest  {
     FILE hdmi_OC_cpp
     METHOD/Action say__ENA ( Bit(32) v )
     METHOD/Action muxreset__ENA ( Bit(1) v )
-    METHOD/Action say2__ENA ( Bit(16) a , Bit(16) b )
     METHOD/Action setLeds__ENA ( Bit(8) v )
+    METHOD/Action setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth )
+}
+INTERFACE Fifo(width=1)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    INTERFACE PipeIn(width=1) in
+    INTERFACE PipeOut(width=1) out
 }
 INTERFACE HdmiBlockIfc  {
     FILE hdmi_OC_cpp
@@ -47,6 +52,7 @@ INTERFACE HdmiBlockIfc  {
     FIELD/output Bit(1) adv7511_de
     FIELD/output Bit(1) adv7511_hs
     FIELD/output Bit(1) adv7511_vs
+    METHOD/Action/Async setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth )
 }
 INTERFACE HdmiDataIfc(widthAddr=12,heightAddr=12)  {
     FILE hdmi_OC_cpp
@@ -168,6 +174,11 @@ INTERFACE PipeIn(width=32)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
 }
+INTERFACE PipeOut(width=1)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    METHOD/Action deq__ENA
+    METHOD first Bit(width)
+}
 INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
     FIELD Bit(14) out
@@ -179,6 +190,9 @@ EMODULE BUFG MbufgBUFG {
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE Fifo1Base(width=1) Fifo(width=1) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
 }
 EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {
     FILE _OC__OC__PC__OC__OC__PC_xilinx_PC_VMMCME2_PF_ADV_OC_h
@@ -224,6 +238,7 @@ MODULE Echo EchoIfc {
     FILE hdmi_OC_cpp
     FIELD ClockImageon iclock
     FIELD HdmiBlock hdmi
+    FIELD Fifo1(width=1) bozo
     FIELD Bit(1) i2c_mux_reset_n_reg
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
@@ -255,13 +270,11 @@ MODULE Echo EchoIfc {
     METHOD/Action request$muxreset__ENA ( Bit(1) v ) {
         STORE :i2c_mux_reset_n_reg = request$muxreset$v
     }
-    METHOD/Action request$say2__ENA ( Bit(16) a , Bit(16) b ) if ((((busy) != (0)) ^ (1))) {
-        STORE :a_temp = request$say2$a
-        STORE :b_temp = request$say2$b
-        STORE :busy = 1
-        STORE :v_type = 2
+    METHOD/Action request$setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth ) {
+        CALL/Action/Async :hdmi$setup__ENA{request$setup$ahEnd,request$setup$ahFrontEnd,request$setup$ahBackSync,request$setup$ahSyncWidth,request$setup$avEnd,request$setup$avFrontEnd,request$setup$avBackSync,request$setup$avSyncWidth}
+        CALL/Action :bozo$out$deq__ENA{}
+        STORE :b_delay = 99
     }
-    METHOD/Action request$setLeds__ENA ( Bit(8) v )
     METHOD/Rule/Action RULE$delay_rule__ENA if (((((busy) != (0)) & ((busy_delay) == (0))) != (0))) {
         STORE :busy = 0
         STORE :busy_delay = 1
@@ -275,6 +288,19 @@ MODULE Echo EchoIfc {
         CALL/Action !((v_type) == (1)):indication$heard2__ENA{a_delay,b_delay}
     }
 }
+MODULE Fifo1(width=1) Fifo(width=1) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_fifo_OC_h
+    FIELD Fifo1Base(width=1) fifo
+    METHOD/Action in$enq__ENA ( Bit(1) v ) {
+        CALL/Action :fifo$in$enq__ENA{in$enq$v}
+    }
+    METHOD/Action out$deq__ENA {
+        CALL/Action :fifo$out$deq__ENA{}
+    }
+    METHOD out$first Bit(1) = ((fifo$out$first)) {
+        CALL :fifo$out$first{}
+    }
+}
 MODULE HdmiBlock HdmiBlockIfc {
     FILE hdmi_OC_cpp
     INTERFACECONNECT syncBlock$data patternBlock$calculate HdmiDataIfc(widthAddr=12,heightAddr=12)
@@ -284,6 +310,9 @@ MODULE HdmiBlock HdmiBlockIfc {
     FIELD Bit(1) hSync
     FIELD Bit(1) vSync
     FIELD Bit(1) once
+    METHOD/Action/Async setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth ) if (((once) ^ (1))) {
+        STORE :once = 1
+    }
     METHOD/Rule/Action RULE$initHdmi__ENA {
         CALL :patternBlock$data{}
         LET Bit(36) :adv7511_d = patternBlock$data
@@ -299,7 +328,7 @@ MODULE HdmiBlock HdmiBlockIfc {
     }
     METHOD/Rule/Action RULE$init__ENA if (((once) ^ (1))) {
         CALL/Action :syncBlock$setup__ENA{(2200) - (1),((2200) - (1)) - (88),(148) + (44),44,(1125) - (1),((1125) - (1)) - (4),(36) + (5),5}
-        CALL/Action :patternBlock$setup__ENA{((2200) - (1)) - (((88) + (148)) + (44)),((1125) - (1)) - (((4) + (36)) + (5)),4,546}
+        CALL/Action :patternBlock$setup__ENA{(((2200) - (1)) - (88)) - ((148) + (44)),(((1125) - (1)) - (4)) - ((36) + (5)),4,546}
         STORE :once = 1
     }
 }

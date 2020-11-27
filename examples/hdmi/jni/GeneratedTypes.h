@@ -39,16 +39,16 @@ typedef struct {
 
 int EchoRequest_say ( struct PortalInternal *p, const uint32_t v );
 int EchoRequest_muxreset ( struct PortalInternal *p, const uint8_t v );
-int EchoRequest_say2 ( struct PortalInternal *p, const uint16_t a, const uint16_t b );
 int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v );
-enum { CHAN_NUM_EchoRequest_say,CHAN_NUM_EchoRequest_muxreset,CHAN_NUM_EchoRequest_say2,CHAN_NUM_EchoRequest_setLeds};
+int EchoRequest_setup ( struct PortalInternal *p, const uint16_t ahEnd, const uint16_t ahFrontEnd, const uint8_t ahBackSync, const uint8_t ahSyncWidth, const uint16_t avEnd, const uint16_t avFrontEnd, const uint8_t avBackSync, const uint8_t avSyncWidth );
+enum { CHAN_NUM_EchoRequest_say,CHAN_NUM_EchoRequest_muxreset,CHAN_NUM_EchoRequest_setLeds,CHAN_NUM_EchoRequest_setup};
 extern const uint32_t EchoRequest_reqinfo;
 typedef struct {
     PORTAL_DISCONNECT disconnect;
     int (*say) (  struct PortalInternal *p, const uint32_t v );
     int (*muxreset) (  struct PortalInternal *p, const uint8_t v );
-    int (*say2) (  struct PortalInternal *p, const uint16_t a, const uint16_t b );
     int (*setLeds) (  struct PortalInternal *p, const uint8_t v );
+    int (*setup) (  struct PortalInternal *p, const uint16_t ahEnd, const uint16_t ahFrontEnd, const uint8_t ahBackSync, const uint8_t ahSyncWidth, const uint16_t avEnd, const uint16_t avFrontEnd, const uint8_t avBackSync, const uint8_t avSyncWidth );
 } EchoRequestCb;
 extern EchoRequestCb EchoRequestProxyReq;
 #ifdef __cplusplus

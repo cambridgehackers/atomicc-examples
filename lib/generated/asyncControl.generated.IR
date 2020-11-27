@@ -37,9 +37,10 @@ MODULE AsyncControl AsyncControlIfc {
     FIELD Bit(1) outReg
     FIELD Bit(1) doneReg
     METHOD/Rule/Action RULE$processRule__ENA {
-        STORE (((start) | (end)) != (0)):outReg = ((end) != (0)) ^ (1)
+        STORE (((start) | (end)) != (0)):outReg = start
+        STORE (((start) | (end)) != (0)):doneReg = 0
         STORE (((end) | (clear)) != (0)):doneReg = end
-        LET Bit(1) :out = outReg
-        LET Bit(1) :done = doneReg
+        LET Bit(1) :out = (outReg) | (start)
+        LET Bit(1) :done = (doneReg) | (end)
     }
 }

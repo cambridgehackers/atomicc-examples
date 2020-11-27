@@ -61,8 +61,6 @@ class EchoIndication : public EchoIndicationWrapper
 public:
     virtual void heard(uint32_t v) {
         printf("heard an echo: %d\n", v);
-        if (limitSay2-- > 0)
-	echoRequestProxy->say2(v, 2*v);
     }
     virtual void heard2(uint16_t a, uint16_t b) {
         sem_post(&sem_heard2);
@@ -81,12 +79,6 @@ static void call_say(int v)
     sem_wait(&sem_heard2);
 }
 
-static void call_say2(int v, int v2)
-{
-    printf("[%s:%d] %d\n", __FUNCTION__, __LINE__, v);
-    echoRequestProxy->say2(v, v2);
-    sem_wait(&sem_heard2);
-}
 static int trace_spi = 0;
 static int nlines = 1080;
 static int npixels = 1920;
@@ -470,20 +462,6 @@ int main(int argc, const char **argv)
     echoRequestProxy = new EchoRequestProxy(IfcNames_EchoRequestS2H, &transportMux, &param);
 
 printf("[%s:%d] START\n", __FUNCTION__, __LINE__);
-#if 0
-    int v = 42;
-    printf("Saying %d\n", v);
-    call_say(v);
-    call_say(v*5);
-    call_say(v*17);
-    call_say(v*93);
-    call_say2(v, v*3);
-    printf("TEST TYPE: SEM\n");
-    echoRequestProxy->setLeds(9);
-    echoRequestProxy->setLeds(9);
-    echoRequestProxy->setLeds(9);
-    echoRequestProxy->setLeds(9);
-#endif
     //DmaManager *dma = platformInit();
     //serdesdevice = new ImageonSerdesRequestProxy(IfcNames_ImageonSerdesRequestS2H);
     //hdmidevice = new HdmiGeneratorRequestProxy(IfcNames_HdmiGeneratorRequestS2H);
