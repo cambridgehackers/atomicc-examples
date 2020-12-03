@@ -102,6 +102,18 @@ class Dummy __implements PipeIn<__uint(32)>;
 static Dummy dummyp;
 static SelectIndex<20, 14> dummySelectIndex;
 
+// control '__async' method invocation (from invoker)
+class AsyncControlIfc {
+    __input __uint(1) CLK;
+    __input __uint(1) nRST;
+    __input __uint(1) start;
+    __input __uint(1) end;
+    __input __uint(1) clear;
+    __output __uint(1) out;
+    __output __uint(1) done;
+};
+class AsyncControl __implements AsyncControlIfc;
+
 #if 0
 template<class T> class M2P __implements T { // method -> pipe
 public:

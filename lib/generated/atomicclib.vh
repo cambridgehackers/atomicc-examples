@@ -1,6 +1,7 @@
 `ifndef __ATOMICCLIB_VH__
 `define __ATOMICCLIB_VH__
 `include "adapter.generated.vh"
+`include "asyncControl.generated.vh"
 `include "atomicc.generated.vh"
 `include "axiTop.generated.vh"
 `include "bram.generated.vh"
