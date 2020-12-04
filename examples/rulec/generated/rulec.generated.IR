@@ -3,6 +3,16 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE AsyncControlIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE EchoIfc  {
     FILE rulec_OC_cpp
     SOFTWARE request
@@ -36,6 +46,9 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD Bit(14) out
     FIELD/Ptr/Count funnelWidth  Bit(14) in
     FIELD Bit(5) index
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h

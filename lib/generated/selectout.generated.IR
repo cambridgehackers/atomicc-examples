@@ -3,6 +3,16 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -23,6 +33,9 @@ INTERFACE SelectOutIfc(funnelWidth=8,width=16)  {
     INTERFACE/Ptr/Count funnelWidth  PipeOut(width=16) in
     INTERFACE PipeOut(width=16) out
     METHOD/Action select__ENA ( Bit(32) v )
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h

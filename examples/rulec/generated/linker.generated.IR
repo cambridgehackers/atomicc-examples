@@ -366,6 +366,7 @@ FILE ../../lib/generated/ZynqTop.sv
 FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/generated/atomicclib.vh
 FILE ../../lib/generated/adapter.generated.vh
+FILE ../../lib/generated/asyncControl.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
 FILE ../../lib/generated/axiTop.generated.vh
 FILE ../../lib/generated/bram.generated.vh

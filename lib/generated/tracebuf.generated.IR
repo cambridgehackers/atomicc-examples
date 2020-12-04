@@ -3,6 +3,16 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE AtB(width=48,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=48) in
@@ -51,6 +61,9 @@ INTERFACE TraceIfc(width=48,depth=1024,sensitivity=99,head=77)  {
 }
 EMODULE AdapterToBus(width=48,owidth=32) AtB(width=48,owidth=32) {
     FILE adapter_OC_h
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
 }
 EMODULE BRAM(width=48,depth=1024) BRAMIfc(width=48,depth=1024) {
     FILE bram_OC_h

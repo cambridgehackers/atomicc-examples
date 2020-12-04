@@ -3,6 +3,16 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE PipeIn(width=32)  {
     FILE atomicc_OC_h
     METHOD/Action enq__ENA ( Bit(width) v )
@@ -39,6 +49,9 @@ INTERFACE atomiccDummyIfc  {
     INTERFACE PipeInLast(width=32) pilast
     INTERFACE PipeOutLast(width=32) polast
     INTERFACE PipeInLength(width=32) pilength
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h

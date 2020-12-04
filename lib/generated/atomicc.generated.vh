@@ -9,6 +9,22 @@ typedef struct packed {
     logic [16 - 1:0] length;
 } NOCDataH;
 `endif
+`ifndef __AsyncControlIfc_DEF__
+`define __AsyncControlIfc_DEF__
+interface AsyncControlIfc;
+    logic  CLK;
+    logic  nRST;
+    logic  start;
+    logic  end;
+    logic  clear;
+    logic  out;
+    logic  done;
+    modport server (input  CLK, nRST, start, end, clear,
+                    output out, done);
+    modport client (output CLK, nRST, start, end, clear,
+                    input  out, done);
+endinterface
+`endif
 `ifndef __PipeIn_DEF__
 `define __PipeIn_DEF__
 interface PipeIn#(width = 32);

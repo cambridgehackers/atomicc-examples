@@ -8,6 +8,16 @@ INTERFACE AfB(owidth=32,width=144)  {
     INTERFACE PipeInLast(width=32) in
     INTERFACE/Ptr PipeIn(width=144) out
 }
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE AtB(width=128,owidth=32)  {
     FILE adapter_OC_h
     INTERFACE PipeInLength(width=128) in
@@ -63,6 +73,9 @@ EMODULE AdapterFromBus(owidth=32,width=144) AfB(owidth=32,width=144) {
 }
 EMODULE AdapterToBus(width=128,owidth=32) AtB(width=128,owidth=32) {
     FILE adapter_OC_h
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE atomicc_OC_h

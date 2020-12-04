@@ -229,6 +229,7 @@ endinterface
 //METAINTERNAL; iclock; ClockImageon;
 //METAINTERNAL; hdmi; HdmiBlock;
 //METAINTERNAL; bozo; Fifo1Base(width=1);
+//METAINTERNAL; __CONTROL_hdmi$setup__ENA; AsyncControl;
 //METABEFORE; RULE$initHdmi__ENA; :request.muxreset__ENA
 //METAGUARD; RULE$initHdmi; 1'd1;
 //METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA

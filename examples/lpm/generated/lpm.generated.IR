@@ -9,6 +9,16 @@ STRUCT ProcessData  {
     FIELD Bit(16) IPA
     FIELD Bit(3) state
 }
+INTERFACE AsyncControlIfc  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE BRAMIfc(width=32,depth=1024)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
     METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
@@ -72,6 +82,9 @@ INTERFACE TickIfc  {
     FILE lpm_OC_cpp
     METHOD getTicket Bit(4)
     METHOD/Action allocateTicket__ENA
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
 EMODULE BRAM(width=32,depth=1024) BRAMIfc(width=32,depth=1024) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h

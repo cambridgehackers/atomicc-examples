@@ -14,6 +14,7 @@ prep -top ZynqTop
 ../../lib/generated/zynqTop.generated.vh
 ../../lib/generated/atomicclib.vh
 ../../lib/generated/adapter.generated.vh
+../../lib/generated/asyncControl.generated.vh
 ../../lib/generated/atomicc.generated.vh
 ../../lib/generated/axiTop.generated.vh
 ../../lib/generated/bram.generated.vh

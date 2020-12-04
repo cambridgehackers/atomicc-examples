@@ -3,6 +3,16 @@ STRUCT NOCDataH  {
     FIELD Bit(16) length
     FIELD Bit(128) data
 }
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) end
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
 INTERFACE BscanIfc(width=32)  {
     FILE bscan_OC_h
     INTERFACE PipeIn(width=32) toBscan
@@ -58,6 +68,9 @@ INTERFACE SyncFFIfc  {
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) out
     FIELD/input Bit(1) in
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
 }
 EMODULE BSCANE2 MBSCANE2IFC {
     FILE _OC__OC__PC_xilinx_PC_VBscanE2_OC_h
