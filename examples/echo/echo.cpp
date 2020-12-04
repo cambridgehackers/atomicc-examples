@@ -24,10 +24,14 @@
 
 class EchoRequest {
   void say(const int v);
+  void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth);
 };
 
 class EchoIndication {
   void heard(int v);
+  void heards(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth);
 };
 
 class EchoIfc {
@@ -39,6 +43,12 @@ class Echo __implements EchoIfc {
     Fifo1<int> fifo;
     void sout.say(const int v) {
         fifo.in.enq(v);
+    }
+    void sout.setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) {
+        printf("[%s:%d] ahEnd %d ahFrontEnd %d ahBackSync %d ahSyncWidth %d avEnd %d avFrontEnd %d avBackSync %d avSyncWidth %d\n", __FUNCTION__, __LINE__,
+            ahEnd, ahFrontEnd, ahBackSync, ahSyncWidth, avEnd, avFrontEnd, avBackSync, avSyncWidth);
+        ind->heards(ahEnd, ahFrontEnd, ahBackSync, ahSyncWidth, avEnd, avFrontEnd, avBackSync, avSyncWidth);
     }
     __rule respond_rule {
         fifo.out.deq();

@@ -18,11 +18,31 @@
         { "cdecls": [
                 { "dname": "heard", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
+                { "dname": "heards", "dparams": [
+                        { "pname": "ahEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "ahFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "ahBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "ahSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "avEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "avFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "avBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "avSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
                     ] }
             ], "direction": "1", "cname": "EchoIndication" },
         { "cdecls": [
                 { "dname": "say", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
+                    ] },
+                { "dname": "setup", "dparams": [
+                        { "pname": "ahEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "ahFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "ahBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "ahSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "avEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "avFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "avBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "avSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
                     ] }
             ], "direction": "0", "cname": "EchoRequest" }
     ]

@@ -22,9 +22,9 @@ module Echo (input wire CLK, input wire nRST,
     assign RULE$delay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$respond_rule__ENA = busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
     assign RULE$respond_rule__RDY = busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
-    assign indication.heard$v = ( busy_delay && ( v_type == 1 ) ) ? v_delay : 32'd0;
-    assign indication.heard2$a = ( ( v_type != 1 ) && busy_delay ) ? a_delay : 16'd0;
-    assign indication.heard2$b = ( ( v_type != 1 ) && busy_delay ) ? b_delay : 16'd0;
+    assign indication.heard$v = v_delay;
+    assign indication.heard2$a = a_delay;
+    assign indication.heard2$b = b_delay;
     assign indication.heard2__ENA = ( v_type != 1 ) && busy_delay;
     assign indication.heard__ENA = busy_delay && ( v_type == 1 );
     assign request.say2__RDY = !busy;

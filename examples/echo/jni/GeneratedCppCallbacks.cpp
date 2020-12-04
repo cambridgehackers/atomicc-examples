@@ -14,8 +14,13 @@ int EchoIndicationheard_cb (  struct PortalInternal *p, const uint32_t v ) {
     (static_cast<EchoIndicationWrapper *>(p->parent))->heard ( v);
     return 0;
 };
+int EchoIndicationheards_cb (  struct PortalInternal *p, const uint16_t ahEnd, const uint16_t ahFrontEnd, const uint8_t ahBackSync, const uint8_t ahSyncWidth, const uint16_t avEnd, const uint16_t avFrontEnd, const uint8_t avBackSync, const uint8_t avSyncWidth ) {
+    (static_cast<EchoIndicationWrapper *>(p->parent))->heards ( ahEnd, ahFrontEnd, ahBackSync, ahSyncWidth, avEnd, avFrontEnd, avBackSync, avSyncWidth);
+    return 0;
+};
 EchoIndicationCb EchoIndication_cbTable = {
     EchoIndicationdisconnect_cb,
     EchoIndicationheard_cb,
+    EchoIndicationheards_cb,
 };
 #endif //NO_CPP_PORTAL_CODE

@@ -1,4 +1,7 @@
 include ../../makefile.in
+FILEGENFLAGS += --pinout ../rulec/imageon-fmc.json
+FILEGENFLAGS += --pinout ../rulec/rulec-zedboard.json
+FILEGENFLAGS += --pin-binding fmc:fmc1
 
 CPPFILES = testecho.cpp
 #CPPFLAGS += -emit-llvm
