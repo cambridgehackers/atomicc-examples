@@ -22,10 +22,8 @@ module HdmiBlock (
     reg _setupS__ACK;
     reg dataEnable;
     reg hSync;
-    reg once;
     reg vSync;
     logic RULE$initHdmi__ENA;
-    logic RULE$init__ENA;
     logic _setupS__ENA;
     HdmiDataIfc#(.widthAddr(12),.heightAddr(12)) patternBlock$calculate();
     logic [36 - 1:0]patternBlock$data;
@@ -47,23 +45,23 @@ module HdmiBlock (
         .hSync__RDY(syncBlock$hSync__RDY),
         .vSync(syncBlock$vSync),
         .vSync__RDY(syncBlock$vSync__RDY),
-        .setup__ENA(( !once ) && patternBlock$setup__RDY),
-        .setup$ahEnd(( ( !once ) && patternBlock$setup__RDY ) ? ( 12'd2200 - 12'd1 ) : 12'd0),
-        .setup$ahFrontEnd(( ( !once ) && patternBlock$setup__RDY ) ? ( ( 12'd2200 - 12'd1 ) - 12'd88 ) : 12'd0),
-        .setup$ahBackSync(( ( !once ) && patternBlock$setup__RDY ) ? ( 12'd148 + 12'd44 ) : 12'd0),
-        .setup$ahSyncWidth(( ( !once ) && patternBlock$setup__RDY ) ? 12'd44 : 12'd0),
-        .setup$avEnd(( ( !once ) && patternBlock$setup__RDY ) ? ( 12'd1125 - 12'd1 ) : 12'd0),
-        .setup$avFrontEnd(( ( !once ) && patternBlock$setup__RDY ) ? ( ( 12'd1125 - 12'd1 ) - 12'd4 ) : 12'd0),
-        .setup$avBackSync(( ( !once ) && patternBlock$setup__RDY ) ? ( 12'd36 + 12'd5 ) : 12'd0),
-        .setup$avSyncWidth(( ( !once ) && patternBlock$setup__RDY ) ? 12'd5 : 12'd0),
+        .setup__ENA(_setupS__ENA),
+        .setup$ahEnd(_setupS__ENA ? ( 12'd2200 - 12'd1 ) : 12'd0),
+        .setup$ahFrontEnd(_setupS__ENA ? ( ( 12'd2200 - 12'd1 ) - 12'd88 ) : 12'd0),
+        .setup$ahBackSync(_setupS__ENA ? ( 12'd148 + 12'd44 ) : 12'd0),
+        .setup$ahSyncWidth(_setupS__ENA ? 12'd44 : 12'd0),
+        .setup$avEnd(_setupS__ENA ? ( 12'd1125 - 12'd1 ) : 12'd0),
+        .setup$avFrontEnd(_setupS__ENA ? ( ( 12'd1125 - 12'd1 ) - 12'd4 ) : 12'd0),
+        .setup$avBackSync(_setupS__ENA ? ( 12'd36 + 12'd5 ) : 12'd0),
+        .setup$avSyncWidth(_setupS__ENA ? 12'd5 : 12'd0),
         .setup__RDY(syncBlock$setup__RDY),
         .data(syncBlock$data));
     HdmiPattern#(.widthAddr(12),.heightAddr(12)) patternBlock (.CLK(CLK), .nRST(nRST),
-        .setup__ENA(( !once ) && syncBlock$setup__RDY),
-        .setup$aactivePixels(( ( !once ) && syncBlock$setup__RDY ) ? ( ( ( 12'd2200 - 12'd1 ) - 12'd88 ) - ( 12'd148 + 12'd44 ) ) : 12'd0),
-        .setup$aactiveLines(( ( !once ) && syncBlock$setup__RDY ) ? ( ( ( 12'd1125 - 12'd1 ) - 12'd4 ) - ( 12'd36 + 12'd5 ) ) : 12'd0),
-        .setup$apattern(( ( !once ) && syncBlock$setup__RDY ) ? 8'd4 : 8'd0),
-        .setup$arampStep(( ( !once ) && syncBlock$setup__RDY ) ? 20'd546 : 20'd0),
+        .setup__ENA(_setupS__ENA),
+        .setup$aactivePixels(_setupS__ENA ? ( ( ( 12'd2200 - 12'd1 ) - 12'd88 ) - ( 12'd148 + 12'd44 ) ) : 12'd0),
+        .setup$aactiveLines(_setupS__ENA ? ( ( ( 12'd1125 - 12'd1 ) - 12'd4 ) - ( 12'd36 + 12'd5 ) ) : 12'd0),
+        .setup$apattern(_setupS__ENA ? 8'd4 : 8'd0),
+        .setup$arampStep(_setupS__ENA ? 20'd546 : 20'd0),
         .setup__RDY(patternBlock$setup__RDY),
         .data(patternBlock$data),
         .data__RDY(patternBlock$data__RDY),
@@ -75,11 +73,10 @@ module HdmiBlock (
     assign adv7511_de = RULE$initHdmi__ENA && dataEnable;
     assign adv7511_hs = RULE$initHdmi__ENA && hSync;
     assign adv7511_vs = RULE$initHdmi__ENA && vSync;
-    assign setup__ACK = ( ( !REGGTEMP_setup__ACK ) && ( !once ) ) || REGGTEMP_setup__ACK;
+    assign setup__ACK = ( ( !REGGTEMP_setup__ACK ) && syncBlock$setup__RDY && patternBlock$setup__RDY ) || REGGTEMP_setup__ACK;
     // Extra assigments, not to output wires
     assign RULE$initHdmi__ENA = patternBlock$data__RDY && syncBlock$dataEnable__RDY && syncBlock$hSync__RDY && syncBlock$vSync__RDY;
-    assign RULE$init__ENA = ( !once ) && syncBlock$setup__RDY && patternBlock$setup__RDY;
-    assign setup__RDY = ( !REGGTEMP_setup__ACK ) && ( !once );
+    assign setup__RDY = ( !REGGTEMP_setup__ACK ) && syncBlock$setup__RDY && patternBlock$setup__RDY;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -87,7 +84,6 @@ module HdmiBlock (
         _setupS__ACK <= 0;
         dataEnable <= 0;
         hSync <= 0;
-        once <= 0;
         vSync <= 0;
       end // nRST
       else begin
@@ -100,11 +96,7 @@ module HdmiBlock (
             hSync <= syncBlock$hSync;
             vSync <= syncBlock$vSync;
         end; // End of RULE$initHdmi__ENA
-        if (( !once ) && syncBlock$setup__RDY && patternBlock$setup__RDY && RULE$init__ENA) begin // RULE$init__ENA
-            once <= 1'd1;
-        end; // End of RULE$init__ENA
-        if (( !REGGTEMP_setup__ACK ) && ( !once ) && _setupS__ENA) begin // setup__ENA
-            once <= 1'd1;
+        if (( !REGGTEMP_setup__ACK ) && syncBlock$setup__RDY && patternBlock$setup__RDY && _setupS__ENA) begin // setup__ENA
             REGGTEMP_setup__ACK <= 1;
         end; // End of setup__ENA
       end

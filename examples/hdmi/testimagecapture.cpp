@@ -543,7 +543,41 @@ hblank--; // needed on zc702
         break;
       }
     }
-
+#define MODE_1080p /* FORMAT 16 */
+//#define MODE_720p /* FORMAT 4 */
+#ifdef MODE_1080p /* FORMAT 16 */
+#define v_total 1125L
+#define vFront 4
+#define vBack 36L
+#define vSyncWidth 5
+#define h_total 2200L
+#define hFront 88L
+#define hBack 148L
+#define hSyncWidth 44L
+#define PATTERN_RAMP_STEP 0x0222L
+#endif
+#ifdef MODE_720p /* FORMAT 4 */
+#define v_total 750L
+#define vFront 5L
+#define vBack 20L
+#define vSyncWidth 5
+#define h_total 1650L
+#define hFront 110L
+#define hBack 220L
+#define hSyncWidth 40L
+#define PATTERN_RAMP_STEP 0x0333L // 20'hFFFFF / 1280 act_pixels per line = 20'h0333
+#endif
+#define PATTERN_TYPE 4    // RAMP
+//#define PATTERN_TYPE 1 // BORDER.
+    echoRequestProxy->setup(
+h_total-1,
+h_total-1-hFront,
+hBack + hSyncWidth,
+hSyncWidth,
+v_total-1,
+v_total-1-vFront,
+vBack + vSyncWidth,
+vSyncWidth);
     fbsize = nlines*npixels*4;
 
     //int srcAlloc = portalAlloc(DMA_BUFFER_SIZE, 0);

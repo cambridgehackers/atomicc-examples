@@ -25,13 +25,13 @@ class AsyncControl __implements AsyncControlIfc {
     __uint(1) doneReg;
 
     __rule processRule {
-         if (start | end) {
+         if (start | ack) {
              outReg = start;
              doneReg = 0;
          }
-         if (end | clear)
-             doneReg = end;
+         if (ack | clear)
+             doneReg = ack;
          out = outReg | start;
-         done = doneReg | end;
+         done = doneReg | ack;
     }
 };

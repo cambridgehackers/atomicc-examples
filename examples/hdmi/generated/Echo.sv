@@ -28,9 +28,8 @@ module Echo (
     logic RULE$delay_rule__RDY;
     logic RULE$respond_rule__ENA;
     logic RULE$respond_rule__RDY;
+    logic __CONTROL_hdmi$setup__ENA$done;
     logic _hdmi$setupS__ACK;
-    PipeIn#(.width(1)) bozo$in();
-    PipeOut#(.width(1)) bozo$out();
     logic hdmi$setup__ACK;
     logic hdmi$setup__ENA;
     logic iclock$hdmiClock;
@@ -56,9 +55,6 @@ module Echo (
         .adv7511_de(adv7511_de),
         .adv7511_hs(adv7511_hs),
         .adv7511_vs(adv7511_vs));
-    Fifo1Base#(.width(1)) bozo (.CLK(CLK), .nRST(nRST),
-        .in(bozo$in),
-        .out(bozo$out));
     SyncFF hdmi$setup__ACKSyncFF (.CLK(CLK), .nRST(nRST),
         .out(hdmi$setup__ACK),
         .in(_hdmi$setupS__ACK));
@@ -66,10 +62,10 @@ module Echo (
         .CLK(CLK),
         .nRST(nRST),
         .start(request.setup__ENA),
-        .end(_hdmi$setupS__ACK),
-        .clear(bozo$out.deq__ENA),
+        .ack(_hdmi$setupS__ACK),
+        .clear(__CONTROL_hdmi$setup__ENA$done),
         .out(hdmi$setup__ENA),
-        .done(bozo$out.deq__ENA));
+        .done(__CONTROL_hdmi$setup__ENA$done));
     assign adv7511_clk = ( !iclock$hdmiClock ) && 1'd1;
     assign i2c_mux_reset_n = i2c_mux_reset_n_reg;
     // Extra assigments, not to output wires
@@ -84,7 +80,7 @@ module Echo (
     assign indication.heard__ENA = busy_delay && ( v_type == 1 );
     assign request.muxreset__RDY = 1'd1;
     assign request.say__RDY = !busy;
-    assign request.setup__RDY = bozo$out.deq__RDY;
+    assign request.setup__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -120,9 +116,6 @@ module Echo (
             v_type <= 32'd1;
             $display( "request$say %x" , request.say$v );
         end; // End of request.say__ENA
-        if (bozo$out.deq__ENA) begin // request.setup__ENA
-            b_delay <= 16'd99;
-        end; // End of request.setup__ENA
       end
     end // always @ (posedge CLK)
 endmodule

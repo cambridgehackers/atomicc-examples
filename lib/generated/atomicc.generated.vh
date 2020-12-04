@@ -15,13 +15,13 @@ interface AsyncControlIfc;
     logic  CLK;
     logic  nRST;
     logic  start;
-    logic  end;
+    logic  ack;
     logic  clear;
     logic  out;
     logic  done;
-    modport server (input  CLK, nRST, start, end, clear,
+    modport server (input  CLK, nRST, start, ack, clear,
                     output out, done);
-    modport client (output CLK, nRST, start, end, clear,
+    modport client (output CLK, nRST, start, ack, clear,
                     input  out, done);
 endinterface
 `endif

@@ -228,31 +228,27 @@ endinterface
 //METASTART; Echo
 //METAINTERNAL; iclock; ClockImageon;
 //METAINTERNAL; hdmi; HdmiBlock;
-//METAINTERNAL; bozo; Fifo1Base(width=1);
 //METAINTERNAL; __CONTROL_hdmi$setup__ENA; AsyncControl;
 //METABEFORE; RULE$initHdmi__ENA; :request.muxreset__ENA
 //METAGUARD; RULE$initHdmi; 1'd1;
 //METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA
 //METAGUARD; request.say; 0 != ( ( busy != 0 ) ^ 1 );
 //METAGUARD; request.muxreset; 1'd1;
-//METAINVOKE; request.setup__ENA; :bozo$out.deq__ENA;:hdmi$setup__ENA;
-//METAEXCLUSIVE; request.setup__ENA; RULE$delay_rule__ENA
-//METAGUARD; request.setup; bozo$out.deq__RDY;
+//METAINVOKE; request.setup__ENA; :hdmi$setup__ENA;
+//METAGUARD; request.setup; 1'd1;
 //METAEXCLUSIVE; RULE$delay_rule__ENA; RULE$respond_rule__ENA
 //METAGUARD; RULE$delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAINVOKE; RULE$respond_rule__ENA; v_type != 1:indication.heard2__ENA;v_type == 1:indication.heard__ENA;
-//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA; :request.setup__ENA
+//METABEFORE; RULE$respond_rule__ENA; :RULE$delay_rule__ENA
 //METAGUARD; RULE$respond_rule; busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
 //METARULES; RULE$initHdmi; RULE$delay_rule; RULE$respond_rule
 //METASTART; HdmiBlock
 //METAINTERNAL; syncBlock; HdmiSync(widthAddr=12,heightAddr=12);
 //METAINTERNAL; patternBlock; HdmiPattern(widthAddr=12,heightAddr=12);
-//METAEXCLUSIVE; setup__ENA; RULE$init__ENA
-//METAGUARD; setup; 0 != ( once ^ 1 );
+//METAINVOKE; setup__ENA; :patternBlock$setup__ENA;:syncBlock$setup__ENA;
+//METAGUARD; setup; syncBlock$setup__RDY && patternBlock$setup__RDY;
 //METAGUARD; RULE$initHdmi; patternBlock$data__RDY && syncBlock$dataEnable__RDY && syncBlock$hSync__RDY && syncBlock$vSync__RDY;
-//METAINVOKE; RULE$init__ENA; :patternBlock$setup__ENA;:syncBlock$setup__ENA;
-//METAGUARD; RULE$init; ( !once ) && syncBlock$setup__RDY && patternBlock$setup__RDY;
-//METARULES; RULE$initHdmi; RULE$init
+//METARULES; RULE$initHdmi
 //METACONNECT; syncBlock$data.setXY__ENA; patternBlock$calculate.setXY__ENA
 //METACONNECT; syncBlock$data.setXY__RDY; patternBlock$calculate.setXY__RDY
 //METASTART; l_top

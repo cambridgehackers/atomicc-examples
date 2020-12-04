@@ -261,11 +261,14 @@ class HdmiBlock __implements HdmiBlockIfc {
     __uint(1) dataEnable;
     __uint(1) hSync;
     __uint(1) vSync;
-    bool once;
+    //bool once;
     __connect syncBlock.data = patternBlock.calculate;
     void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
-        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) if (!once) {
-        once = true;
+        __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) {
+        syncBlock.setup(h_total - 1, h_total - 1 - hFront, hBack + hSyncWidth, hSyncWidth,
+                        v_total - 1, v_total - 1 - vFront, vBack + vSyncWidth, vSyncWidth);
+        patternBlock.setup(h_total - 1 - hFront - (hBack + hSyncWidth),
+                           v_total - 1 - vFront - (vBack + vSyncWidth), PATTERN_TYPE, PATTERN_RAMP_STEP);
     }
     __rule initHdmi {
         adv7511_d = patternBlock.data();
@@ -276,13 +279,9 @@ class HdmiBlock __implements HdmiBlockIfc {
         hSync = syncBlock.hSync();
         vSync = syncBlock.vSync();
     }
-    __rule init if (!once) {
-        syncBlock.setup(h_total - 1, h_total - 1 - hFront, hBack + hSyncWidth, hSyncWidth,
-                        v_total - 1, v_total - 1 - vFront, vBack + vSyncWidth, vSyncWidth);
-        patternBlock.setup(h_total - 1 - hFront - (hBack + hSyncWidth),
-                           v_total - 1 - vFront - (vBack + vSyncWidth), PATTERN_TYPE, PATTERN_RAMP_STEP);
-        once = true;
-    }
+    //__rule init if (!once) {
+        //once = true;
+    //}
 };
 
 class EchoRequest {
@@ -315,7 +314,6 @@ class EchoIfc {
 class Echo __implements EchoIfc {
     ClockImageon iclock;
     HdmiBlock    hdmi;
-    Fifo1<__uint(1)> bozo;
     __uint(1)    i2c_mux_reset_n_reg;
     __rule initHdmi {
         iclock.CLK = fmc_video_clk1_v;
@@ -347,8 +345,6 @@ class Echo __implements EchoIfc {
     void request.setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
         __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth) {
         hdmi.setup(ahEnd, ahFrontEnd, ahBackSync, ahSyncWidth, avEnd, avFrontEnd, avBackSync, avSyncWidth);
-        bozo.out.deq();
-        b_delay = 99;
     }
     __rule delay_rule if((busy != 0 & busy_delay == 0) != 0) {
         busy = 0;

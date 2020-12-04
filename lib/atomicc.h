@@ -108,7 +108,7 @@ class AsyncControlIfc {
     __input __uint(1) CLK;
     __input __uint(1) nRST;
     __input __uint(1) start;
-    __input __uint(1) end;
+    __input __uint(1) ack;
     __input __uint(1) clear;
     __output __uint(1) out;
     __output __uint(1) done;

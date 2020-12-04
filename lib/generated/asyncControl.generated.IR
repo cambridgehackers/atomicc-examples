@@ -8,7 +8,7 @@ INTERFACE AsyncControlIfc  {
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) start
-    FIELD/input Bit(1) end
+    FIELD/input Bit(1) ack
     FIELD/input Bit(1) clear
     FIELD/output Bit(1) out
     FIELD/output Bit(1) done
@@ -37,10 +37,10 @@ MODULE AsyncControl AsyncControlIfc {
     FIELD Bit(1) outReg
     FIELD Bit(1) doneReg
     METHOD/Rule/Action RULE$processRule__ENA {
-        STORE (((start) | (end)) != (0)):outReg = start
-        STORE (((start) | (end)) != (0)):doneReg = 0
-        STORE (((end) | (clear)) != (0)):doneReg = end
+        STORE (((start) | (ack)) != (0)):outReg = start
+        STORE (((start) | (ack)) != (0)):doneReg = 0
+        STORE (((ack) | (clear)) != (0)):doneReg = ack
         LET Bit(1) :out = (outReg) | (start)
-        LET Bit(1) :done = (doneReg) | (end)
+        LET Bit(1) :done = (doneReg) | (ack)
     }
 }

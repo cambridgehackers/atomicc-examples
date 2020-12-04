@@ -5,13 +5,13 @@ module AsyncControl (
     input wire CLK,
     input wire nRST,
     input wire start,
-    input wire end,
+    input wire ack,
     input wire clear,
     output wire out,
     output wire done);
     reg doneReg;
     reg outReg;
-    assign done = doneReg || end;
+    assign done = doneReg || ack;
     assign out = outReg || start;
 
     always @( posedge CLK) begin
@@ -21,9 +21,9 @@ module AsyncControl (
       end // nRST
       else begin
         // RULE$processRule__ENA
-            if (( end | clear ) != 0)
-            doneReg <= end;
-            if (( start | end ) != 0) begin
+            if (( ack | clear ) != 0)
+            doneReg <= ack;
+            if (( start | ack ) != 0) begin
             outReg <= start;
             doneReg <= 1'd0;
             end;
