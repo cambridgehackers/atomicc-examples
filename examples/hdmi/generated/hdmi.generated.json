@@ -17,17 +17,9 @@
     "interfaces": [
         { "cdecls": [
                 { "dname": "heard", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
-                    ] },
-                { "dname": "heard2", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
-                    ] },
-                { "dname": "heard3", "dparams": [
-                        { "pname": "a", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "b", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "c", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
-                        { "pname": "d", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } }
+                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
+                        { "pname": "hdmiCounter", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } },
+                        { "pname": "imageonCounter", "ptype": { "name": "Bit", "params": [ { "name": "32" } ] } }
                     ] }
             ], "direction": "1", "cname": "EchoIndication" },
         { "cdecls": [
@@ -37,18 +29,23 @@
                 { "dname": "muxreset", "dparams": [
                         { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "1" } ] } }
                     ] },
-                { "dname": "setLeds", "dparams": [
-                        { "pname": "v", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                { "dname": "run", "dparams": [
                     ] },
-                { "dname": "setup", "dparams": [
-                        { "pname": "ahEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "ahFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                { "dname": "setuph", "dparams": [
+                        { "pname": "ahEnd", "ptype": { "name": "Bit", "params": [ { "name": "12" } ] } },
+                        { "pname": "ahFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "12" } ] } },
                         { "pname": "ahBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
-                        { "pname": "ahSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
-                        { "pname": "avEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
-                        { "pname": "avFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "16" } ] } },
+                        { "pname": "ahSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] },
+                { "dname": "setupv", "dparams": [
+                        { "pname": "avEnd", "ptype": { "name": "Bit", "params": [ { "name": "12" } ] } },
+                        { "pname": "avFrontEnd", "ptype": { "name": "Bit", "params": [ { "name": "12" } ] } },
                         { "pname": "avBackSync", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
                         { "pname": "avSyncWidth", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } }
+                    ] },
+                { "dname": "setupTest", "dparams": [
+                        { "pname": "apattern", "ptype": { "name": "Bit", "params": [ { "name": "8" } ] } },
+                        { "pname": "aramp", "ptype": { "name": "Bit", "params": [ { "name": "20" } ] } }
                     ] }
             ], "direction": "0", "cname": "EchoRequest" }
     ]

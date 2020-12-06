@@ -20,25 +20,45 @@ int EchoRequest_muxreset ( struct PortalInternal *p, const uint8_t v )
     return 0;
 };
 
-int EchoRequest_setLeds ( struct PortalInternal *p, const uint8_t v )
+int EchoRequest_run ( struct PortalInternal *p )
 {
-    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_setLeds, 2);
+    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_run, 1);
     volatile unsigned int* temp_working_addr = temp_working_addr_start;
-    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_setLeds, "EchoRequest_setLeds")) return 1;
-    p->transport->write(p, &temp_working_addr, v);
-    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_setLeds << 16) | 2, -1);
+    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_run, "EchoRequest_run")) return 1;
+    p->transport->write(p, &temp_working_addr, 0);
+    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_run << 16) | 1, -1);
     return 0;
 };
 
-int EchoRequest_setup ( struct PortalInternal *p, const uint16_t ahEnd, const uint16_t ahFrontEnd, const uint8_t ahBackSync, const uint8_t ahSyncWidth, const uint16_t avEnd, const uint16_t avFrontEnd, const uint8_t avBackSync, const uint8_t avSyncWidth )
+int EchoRequest_setuph ( struct PortalInternal *p, const uint16_t ahEnd, const uint16_t ahFrontEnd, const uint8_t ahBackSync, const uint8_t ahSyncWidth )
 {
-    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_setup, 4);
+    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_setuph, 3);
     volatile unsigned int* temp_working_addr = temp_working_addr_start;
-    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_setup, "EchoRequest_setup")) return 1;
-    p->transport->write(p, &temp_working_addr, ahFrontEnd|(((unsigned long)ahEnd)<<16));
-    p->transport->write(p, &temp_working_addr, avEnd|(((unsigned long)ahSyncWidth)<<16)|(((unsigned long)ahBackSync)<<24));
-    p->transport->write(p, &temp_working_addr, avSyncWidth|(((unsigned long)avBackSync)<<8)|(((unsigned long)avFrontEnd)<<16));
-    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_setup << 16) | 4, -1);
+    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_setuph, "EchoRequest_setuph")) return 1;
+    p->transport->write(p, &temp_working_addr, (ahEnd>>4));
+    p->transport->write(p, &temp_working_addr, ahSyncWidth|(((unsigned long)ahBackSync)<<8)|(((unsigned long)ahFrontEnd)<<16)|(((unsigned long)ahEnd)<<28));
+    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_setuph << 16) | 3, -1);
+    return 0;
+};
+
+int EchoRequest_setupv ( struct PortalInternal *p, const uint16_t avEnd, const uint16_t avFrontEnd, const uint8_t avBackSync, const uint8_t avSyncWidth )
+{
+    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_setupv, 3);
+    volatile unsigned int* temp_working_addr = temp_working_addr_start;
+    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_setupv, "EchoRequest_setupv")) return 1;
+    p->transport->write(p, &temp_working_addr, (avEnd>>4));
+    p->transport->write(p, &temp_working_addr, avSyncWidth|(((unsigned long)avBackSync)<<8)|(((unsigned long)avFrontEnd)<<16)|(((unsigned long)avEnd)<<28));
+    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_setupv << 16) | 3, -1);
+    return 0;
+};
+
+int EchoRequest_setupTest ( struct PortalInternal *p, const uint8_t apattern, const uint32_t aramp )
+{
+    volatile unsigned int* temp_working_addr_start = p->transport->mapchannelReq(p, CHAN_NUM_EchoRequest_setupTest, 2);
+    volatile unsigned int* temp_working_addr = temp_working_addr_start;
+    if (p->transport->busywait(p, CHAN_NUM_EchoRequest_setupTest, "EchoRequest_setupTest")) return 1;
+    p->transport->write(p, &temp_working_addr, aramp|(((unsigned long)apattern)<<20));
+    p->transport->send(p, temp_working_addr_start, (CHAN_NUM_EchoRequest_setupTest << 16) | 2, -1);
     return 0;
 };
 
@@ -46,9 +66,11 @@ EchoRequestCb EchoRequestProxyReq = {
     portal_disconnect,
     EchoRequest_say,
     EchoRequest_muxreset,
-    EchoRequest_setLeds,
-    EchoRequest_setup,
+    EchoRequest_run,
+    EchoRequest_setuph,
+    EchoRequest_setupv,
+    EchoRequest_setupTest,
 };
 EchoRequestCb *pEchoRequestProxyReq = &EchoRequestProxyReq;
 
-const uint32_t EchoRequest_reqinfo = 0x40010;
+const uint32_t EchoRequest_reqinfo = 0x6000c;

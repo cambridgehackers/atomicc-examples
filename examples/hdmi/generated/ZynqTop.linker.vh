@@ -52,7 +52,7 @@ reg foohdmi; \
     end; \
     assign pmoda__J1 = foo;						\
     assign pmoda__J2 = foohdmi;				\
-    assign pmoda__J3 = fmc_video_clk1_v;				\
+    /*assign pmoda__J3 = fmc_video_clk1_v;*/				\
     assign pmoda__J4 = hdmi_vsync;					\
     assign pmoda__J7 = hdmi_hsync;					\
     assign pmoda__J8 = hdmi_de;						\

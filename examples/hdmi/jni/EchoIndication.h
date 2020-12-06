@@ -21,8 +21,6 @@ public:
     virtual void disconnect(void) {
         printf("EchoIndicationWrapper.disconnect called %d\n", pint.client_fd_number);
     };
-    virtual void heard ( const uint32_t v ) = 0;
-    virtual void heard2 ( const uint16_t a, const uint16_t b ) = 0;
-    virtual void heard3 ( const uint16_t a, const uint32_t b, const uint32_t c, const uint16_t d ) = 0;
+    virtual void heard ( const uint32_t v, const uint32_t hdmiCounter, const uint32_t imageonCounter ) = 0;
 };
 #endif // _ECHOINDICATION_H_

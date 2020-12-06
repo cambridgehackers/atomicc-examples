@@ -18,8 +18,8 @@ module HdmiPattern #(
     reg [widthAddr - 1:0]activePixels;
     reg [8 - 1:0]pattern;
     reg [36 - 1:0]pixelValue;
-    reg [8+widthAddr - 1:0]rampStep;
-    reg [8+widthAddr - 1:0]rampValue;
+    reg [20 - 1:0]rampStep;
+    reg [20 - 1:0]rampValue;
     logic [8 - 1:0]_calculate$setXY$b_out;
     logic [8 - 1:0]_calculate$setXY$g_out;
     logic [8 - 1:0]_calculate$setXY$r_out;
@@ -61,13 +61,13 @@ module HdmiPattern #(
             if (( calculate.setXY$x != activePixels ) && ( pattern != 3 ) && ( pattern != 2 ) && ( pattern != 1 ) && ( pattern == 4 ) && calculate.setXY$dataEnable)
             rampValue <= rampValue + rampStep;
             if (( pattern != 3 ) && ( pattern != 2 ) && ( pattern != 1 ) && ( pattern == 4 ) && ( calculate.setXY$x == activePixels ) && calculate.setXY$dataEnable)
-            rampValue <= 8'd0;
+            rampValue <= 20'd0;
         end; // End of calculate.setXY__ENA
         if (setup__ENA) begin // setup__ENA
             activePixels <= setup$aactivePixels;
             activeLines <= setup$aactiveLines;
             pattern <= setup$apattern;
-            rampStep <= setup$arampStep[ 7 : 0 ];
+            rampStep <= setup$arampStep;
         end; // End of setup__ENA
       end
     end // always @ (posedge CLK)

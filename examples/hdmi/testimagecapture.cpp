@@ -55,19 +55,16 @@ int i;
 static EchoRequestProxy *echoRequestProxy = 0;
 static sem_t sem_heard2;
 static int limitSay2 = 5;
+uint32_t prevCounter, prevHdmiCounter, prevImageonCounter;
 
 class EchoIndication : public EchoIndicationWrapper
 {
 public:
-    virtual void heard(uint32_t v) {
-        printf("heard an echo: %d\n", v);
-    }
-    virtual void heard2(uint16_t a, uint16_t b) {
-        sem_post(&sem_heard2);
-        printf("heard an echo2: %d %d\n", a, b);
-    }
-    virtual void heard3(uint16_t a, uint32_t b, uint32_t c, uint16_t d) {
-        printf("heard an echo3: %d %d\n", a, b);
+    virtual void heard(uint32_t v, uint32_t hdmiCounter, uint32_t imageonCounter) {
+        printf("heard an echo: counter %ld hdmi %ld imageon %ld\n", (unsigned long)(v - prevCounter) * 0x10000, (unsigned long)(hdmiCounter - prevHdmiCounter) * 0x10000, (unsigned long)(imageonCounter - prevImageonCounter) * 0x10000);
+        prevCounter = v;
+        prevHdmiCounter = hdmiCounter;
+        prevImageonCounter = imageonCounter;
     }
     EchoIndication(unsigned int id, PortalTransportFunctions *item, void *param) : EchoIndicationWrapper(id, item, param) {}
 };
@@ -472,13 +469,25 @@ printf("[%s:%d] START\n", __FUNCTION__, __LINE__);
     //HdmiGeneratorIndication hdmiIndication(IfcNames_HdmiGeneratorIndicationH2S, hdmidevice);
     // read out monitor EDID from ADV7511
     struct edid edid;
-    echoRequestProxy->muxreset(1);
-sleep(2);
+//sleep(2);
     init_i2c_hdmi();
     int i2cfd = open("/dev/i2c-0", O_RDWR);
+    int edidMem = i2c_read_reg(i2cfd, I2C_HDMI_ADDR, 0x43)/2;  // LSB is just 'W/nR', so elided on linux
+printf("[%s:%d] EDIDMEM %x\n", __FUNCTION__, __LINE__, edidMem);
+    int maxLoop = 1000;
+    while (1) {
+    int edidDone = i2c_read_reg(i2cfd, I2C_HDMI_ADDR, 0x96);
+        if (edidDone & 4)
+            break;
+        if (maxLoop-- < 0) {
+printf("[%s:%d] done [%d] = %x\n", __FUNCTION__, __LINE__, maxLoop, edidDone);
+printf("[%s:%d] edid read failed\n", __FUNCTION__, __LINE__);
+exit(-1);
+        }
+    }
     fprintf(stderr, "Monitor EDID:\n");
     for (int i = 0; i < 256; i++) {
-      edid.raw[i] = i2c_read_reg(i2cfd, 0x3f, i);
+      edid.raw[i] = i2c_read_reg(i2cfd, edidMem, i);
       fprintf(stderr, " %02x", edid.raw[i]);
       if ((i % 16) == 15) {
         fprintf(stderr, " ");
@@ -492,8 +501,6 @@ sleep(2);
     close(i2cfd);
     parseEdid(edid);
 
-memdump(edid.raw, sizeof(edid.raw), "RAW");
-memdump((unsigned char *)&edid.timing, sizeof(edid.timing), "TIMING");
     long actualFrequency = 0;
     int status;
 #if 0
@@ -505,8 +512,7 @@ memdump((unsigned char *)&edid.timing, sizeof(edid.timing), "TIMING");
     printf("[%s:%d] setClockFrequency 3 200000000 status=%d actualfreq=%ld\n", __FUNCTION__, __LINE__, status, actualFrequency);
 #endif
     printf("[%s:%d] before set_i2c_mux_reset_n\n", __FUNCTION__, __LINE__);
-    echoRequestProxy->muxreset(0);
-sleep(2);
+    echoRequestProxy->muxreset(1);
     printf("[%s:%d] before setDeLine/Pixel\n", __FUNCTION__, __LINE__);
     for (int i = 0; i < 4; i++) {
         long pixclk = (long)edid.timing[i].pixclk * 10000;
@@ -526,9 +532,7 @@ sleep(2);
                 60l * (long)(hblank + npixels) * (long)(vblank + nlines),
                 npixels, nlines);
       if ((pixclk > 0) && (pixclk < 149000000)) {
-#if 0
         status = setClockFrequency(1, pixclk, 0);
-#endif
 
 hblank--; // needed on zc702
 #if 0
@@ -540,9 +544,6 @@ hblank--; // needed on zc702
                                 hsyncoff+hsyncwidth, hblank,
                                 hblank + npixels, hblank + npixels / 2);
 #endif
-        break;
-      }
-    }
 #define MODE_1080p /* FORMAT 16 */
 //#define MODE_720p /* FORMAT 4 */
 #ifdef MODE_1080p /* FORMAT 16 */
@@ -569,16 +570,27 @@ hblank--; // needed on zc702
 #endif
 #define PATTERN_TYPE 4    // RAMP
 //#define PATTERN_TYPE 1 // BORDER.
-    echoRequestProxy->setup(
-h_total-1,
-h_total-1-hFront,
-hBack + hSyncWidth,
-hSyncWidth,
-v_total-1,
-v_total-1-vFront,
-vBack + vSyncWidth,
-vSyncWidth);
+// mini
+//pixclk=7425 w=697mm h=392mm features=1e
+//    npixels=1280 bpixels=370 hsyncoff=110 hsyncwidth=40 hbpxls=0
+//    nlines=720 blines=30 vsyncoff=5 vsyncwidth=5 vbpxls=0
+//pixclk=2700 w=697mm h=392mm features=18
+//    npixels=720 bpixels=138 hsyncoff=16 hsyncwidth=62 hbpxls=0
+// visio
+//pixclk=14850 w=509mm h=286mm features=1e
+//    npixels=1920 bpixels=280 hsyncoff=88 hsyncwidth=44 hbpxls=0
+//    nlines=1080 blines=45 vsyncoff=4 vsyncwidth=5 vbpxls=0
+//    nlines=480 blines=45 vsyncoff=9 vsyncwidth=6 vbpxls=0
+    echoRequestProxy->setuph(h_total-1, h_total-1-hFront, hBack + hSyncWidth, hSyncWidth);
+    echoRequestProxy->setupv(v_total-1, v_total-1-vFront, vBack + vSyncWidth, vSyncWidth);
+    echoRequestProxy->setupTest(PATTERN_TYPE, PATTERN_RAMP_STEP);
     fbsize = nlines*npixels*4;
+    //sleep(1);
+    i2c_hdmi_start();
+    echoRequestProxy->run();
+        break;
+      }
+    }
 
     //int srcAlloc = portalAlloc(DMA_BUFFER_SIZE, 0);
     //unsigned int *srcBuffer = (unsigned int *)portalMmap(srcAlloc, DMA_BUFFER_SIZE);
@@ -594,16 +606,12 @@ vSyncWidth);
     //fmc_iic_axi_GpoWrite(uBaseAddr_IIC_FmcImageon, fmc_iic_axi_GpoRead(uBaseAddr_IIC_FmcImageon) | 2);
     idevice->set_host_oe(1);
 
+#endif
 printf("[%s:%d] before i2c_camera\n", __FUNCTION__, __LINE__);
     init_i2c_camera();
-#endif
-printf("[%s:%d] before i2c_hdmi\n", __FUNCTION__, __LINE__);
-    init_i2c_hdmi();
-printf("[%s:%d] after i2c_hdmi\n", __FUNCTION__, __LINE__);
     //init_vclk();
-//jca sleep(5);
 printf("[%s:%d] now displaying test pattern\n", __FUNCTION__, __LINE__);
-sleep(20);
+sleep(1);
 #if 0
     hdmidevice->setTestPattern(0);
 
@@ -645,5 +653,11 @@ sleep(20);
 	usleep(1000000);
     }
 #endif
+for (int i = 0; i < 20; i++) {
+printf("[%s:%d] say %d: ", __FUNCTION__, __LINE__, i);
+    echoRequestProxy->say(i);
+printf("[%s:%d]sleep\n", __FUNCTION__, __LINE__);
+    sleep(10);
+}
     return 0;
 }

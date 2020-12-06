@@ -21,6 +21,8 @@ module HdmiSync #(
     input wire [heightAddr - 1:0]setup$avBackSync,
     input wire [heightAddr - 1:0]setup$avSyncWidth,
     output wire setup__RDY,
+    input wire run__ENA,
+    output wire run__RDY,
     HdmiDataIfc.client data);
     reg [widthAddr - 1:0]hBackSync;
     reg [widthAddr - 1:0]hEnd;
@@ -28,25 +30,26 @@ module HdmiSync #(
     reg [widthAddr - 1:0]hSyncWidth;
     reg [widthAddr - 1:0]lineCount;
     reg [widthAddr - 1:0]pixelCount;
-    reg run;
+    reg runFlag;
     reg [widthAddr - 1:0]vBackSync;
     reg [widthAddr - 1:0]vEnd;
     reg [widthAddr - 1:0]vFrontEnd;
     reg [widthAddr - 1:0]vSyncWidth;
     logic RULE$updatePixel__ENA;
-    assign dataEnable = run && ( lineCount >= vBackSync ) && ( lineCount <= vFrontEnd ) && ( pixelCount >= hBackSync ) && ( pixelCount <= hFrontEnd );
+    assign dataEnable = runFlag && ( lineCount >= vBackSync ) && ( lineCount <= vFrontEnd ) && ( pixelCount >= hBackSync ) && ( pixelCount <= hFrontEnd );
     assign dataEnable__RDY = 1'd1;
-    assign hSync = pixelCount < hSyncWidth;
+    assign hSync = runFlag && ( pixelCount < hSyncWidth );
     assign hSync__RDY = 1'd1;
+    assign run__RDY = 1'd1;
     assign setup__RDY = 1'd1;
-    assign vSync = lineCount < vSyncWidth;
+    assign vSync = runFlag && ( lineCount < vSyncWidth );
     assign vSync__RDY = 1'd1;
     // Extra assigments, not to output wires
-    assign RULE$updatePixel__ENA = run && data.setXY__RDY;
-    assign data.setXY$dataEnable = ( ( run && ( lineCount >= vBackSync ) && ( lineCount <= vFrontEnd ) && ( pixelCount >= hBackSync ) && ( pixelCount <= hFrontEnd ) ) != 0 ) && run;
-    assign data.setXY$x = run ? ( pixelCount - hBackSync ) : 0;
-    assign data.setXY$y = run ? ( lineCount - vBackSync ) : 0;
-    assign data.setXY__ENA = run;
+    assign RULE$updatePixel__ENA = runFlag && data.setXY__RDY;
+    assign data.setXY$dataEnable = ( runFlag && ( lineCount >= vBackSync ) && ( lineCount <= vFrontEnd ) && ( pixelCount >= hBackSync ) && ( pixelCount <= hFrontEnd ) ) != 0;
+    assign data.setXY$x = pixelCount - hBackSync;
+    assign data.setXY$y = lineCount - vBackSync;
+    assign data.setXY__ENA = runFlag;
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -56,14 +59,14 @@ module HdmiSync #(
         hSyncWidth <= 0;
         lineCount <= 0;
         pixelCount <= 0;
-        run <= 0;
+        runFlag <= 0;
         vBackSync <= 0;
         vEnd <= 0;
         vFrontEnd <= 0;
         vSyncWidth <= 0;
       end // nRST
       else begin
-        if (run && data.setXY__RDY && RULE$updatePixel__ENA) begin // RULE$updatePixel__ENA
+        if (runFlag && data.setXY__RDY && RULE$updatePixel__ENA) begin // RULE$updatePixel__ENA
             if (!( pixelCount < hEnd ))
             pixelCount <= 0;
             if (( !( pixelCount < hEnd ) ) && ( lineCount == vEnd ))
@@ -73,6 +76,9 @@ module HdmiSync #(
             if (pixelCount < hEnd)
             pixelCount <= pixelCount + 1;
         end; // End of RULE$updatePixel__ENA
+        if (run__ENA) begin // run__ENA
+            runFlag <= 1'd1;
+        end; // End of run__ENA
         if (setup__ENA) begin // setup__ENA
             hEnd <= setup$ahEnd;
             hFrontEnd <= setup$ahFrontEnd;
@@ -82,7 +88,6 @@ module HdmiSync #(
             vFrontEnd <= setup$avFrontEnd;
             vBackSync <= setup$avBackSync;
             vSyncWidth <= setup$avSyncWidth;
-            run <= 1'd1;
         end; // End of setup__ENA
       end
     end // always @ (posedge CLK)

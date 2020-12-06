@@ -13,55 +13,101 @@ module Echo (
     output wire adv7511_vs,
     EchoRequest.server request,
     EchoIndication.client indication);
+    reg _hdmi$runS__ENA;
     reg _hdmi$setupS__ENA;
-    reg [16 - 1:0]a_delay;
-    reg [16 - 1:0]a_temp;
-    reg [16 - 1:0]b_delay;
-    reg [16 - 1:0]b_temp;
     reg busy;
     reg busy_delay;
+    reg callSetup;
+    reg [48 - 1:0]counter;
+    reg [48 - 1:0]fmcCounter;
+    reg [32 - 1:0]fmcCounter1;
+    reg [32 - 1:0]fmcCounter2;
+    reg [32 - 1:0]hdmiCounter;
+    reg [32 - 1:0]hdmiCounter2;
     reg i2c_mux_reset_n_reg;
+    reg [32 - 1:0]imageonCounter;
+    reg [32 - 1:0]imageonCounter2;
+    reg [8 - 1:0]jhBackSync;
+    reg [16 - 1:0]jhEnd;
+    reg [16 - 1:0]jhFrontEnd;
+    reg [8 - 1:0]jhSyncWidth;
+    reg [8 - 1:0]jpattern;
+    reg [20 - 1:0]jrampStep;
+    reg [8 - 1:0]jvBackSync;
+    reg [16 - 1:0]jvEnd;
+    reg [16 - 1:0]jvFrontEnd;
+    reg [8 - 1:0]jvSyncWidth;
     reg [32 - 1:0]v_delay;
     reg [32 - 1:0]v_temp;
     reg [32 - 1:0]v_type;
     logic RULE$delay_rule__ENA;
     logic RULE$delay_rule__RDY;
     logic RULE$respond_rule__ENA;
-    logic RULE$respond_rule__RDY;
+    logic __CONTROL_hdmi$run__ENA$done;
     logic __CONTROL_hdmi$setup__ENA$done;
+    logic _hdmi$runS__ACK;
     logic _hdmi$setupS__ACK;
+    logic [48 - 1:0]hdmi$readCounter;
+    logic hdmi$run__ACK;
+    logic hdmi$run__ENA;
     logic hdmi$setup__ACK;
     logic hdmi$setup__ENA;
     logic iclock$hdmiClock;
+    logic iclock$imageonClock;
+    logic [48 - 1:0]imageon$readCounter;
+    logic videoClock$O;
     ClockImageon iclock (
-        .CLK(fmc_video_clk1_v),
+        .CLK(videoClock$O),
         .nRST(nRST),
         .hdmiClock(iclock$hdmiClock),
-        .imageonClock());
+        .imageonClock(iclock$imageonClock));
     HdmiBlock hdmi (
         .setup__ENA(hdmi$setup__ENA),
-        .setup$ahEnd(hdmi$setup__ENA ? request.setup$ahEnd : 16'd0),
-        .setup$ahFrontEnd(hdmi$setup__ENA ? request.setup$ahFrontEnd : 16'd0),
-        .setup$ahBackSync(hdmi$setup__ENA ? request.setup$ahBackSync : 8'd0),
-        .setup$ahSyncWidth(hdmi$setup__ENA ? request.setup$ahSyncWidth : 8'd0),
-        .setup$avEnd(hdmi$setup__ENA ? request.setup$avEnd : 16'd0),
-        .setup$avFrontEnd(hdmi$setup__ENA ? request.setup$avFrontEnd : 16'd0),
-        .setup$avBackSync(hdmi$setup__ENA ? request.setup$avBackSync : 8'd0),
-        .setup$avSyncWidth(hdmi$setup__ENA ? request.setup$avSyncWidth : 8'd0),
+        .setup$ahEnd(jhEnd),
+        .setup$ahFrontEnd(jhFrontEnd),
+        .setup$ahBackSync(jhBackSync),
+        .setup$ahSyncWidth(jhSyncWidth),
+        .setup$avEnd(jvEnd),
+        .setup$avFrontEnd(jvFrontEnd),
+        .setup$avBackSync(jvBackSync),
+        .setup$avSyncWidth(jvSyncWidth),
+        .setup$apattern(jpattern),
+        .setup$aramp(jrampStep),
         .setup__ACK(_hdmi$setupS__ACK),
+        .run__ENA(hdmi$run__ENA),
+        .run__ACK(_hdmi$runS__ACK),
         .CLK(iclock$hdmiClock),
         .nRST(nRST),
         .adv7511_d(adv7511_d),
         .adv7511_de(adv7511_de),
         .adv7511_hs(adv7511_hs),
-        .adv7511_vs(adv7511_vs));
+        .adv7511_vs(adv7511_vs),
+        .readCounter(hdmi$readCounter));
+    HdmiImageon imageon (
+        .CLK(iclock$imageonClock),
+        .nRST(nRST),
+        .readCounter(imageon$readCounter));
+    BUFG videoClock (
+        .I(fmc_video_clk1_v),
+        .O(videoClock$O));
+    SyncFF hdmi$run__ACKSyncFF (.CLK(CLK), .nRST(nRST),
+        .out(hdmi$run__ACK),
+        .in(_hdmi$runS__ACK));
     SyncFF hdmi$setup__ACKSyncFF (.CLK(CLK), .nRST(nRST),
         .out(hdmi$setup__ACK),
         .in(_hdmi$setupS__ACK));
+    AsyncControl __CONTROL_hdmi$run__ENA (
+        .CLK(CLK),
+        .nRST(nRST),
+        .start(request.run__ENA),
+        .ack(_hdmi$runS__ACK),
+        .clear(__CONTROL_hdmi$run__ENA$done),
+        .out(hdmi$run__ENA),
+        .done(__CONTROL_hdmi$run__ENA$done));
     AsyncControl __CONTROL_hdmi$setup__ENA (
         .CLK(CLK),
         .nRST(nRST),
-        .start(request.setup__ENA),
+        .start(callSetup),
         .ack(_hdmi$setupS__ACK),
         .clear(__CONTROL_hdmi$setup__ENA$done),
         .out(hdmi$setup__ENA),
@@ -71,51 +117,105 @@ module Echo (
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$delay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
-    assign RULE$respond_rule__ENA = busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
-    assign RULE$respond_rule__RDY = busy_delay && ( ( indication.heard__RDY && ( ( v_type == 1 ) || indication.heard2__RDY ) ) || ( ( !indication.heard__RDY ) && ( v_type != 1 ) && indication.heard2__RDY ) );
-    assign indication.heard$v = ( busy_delay && ( v_type == 1 ) ) ? v_delay : 32'd0;
-    assign indication.heard2$a = ( ( v_type != 1 ) && busy_delay ) ? a_delay : 16'd0;
-    assign indication.heard2$b = ( ( v_type != 1 ) && busy_delay ) ? b_delay : 16'd0;
-    assign indication.heard2__ENA = ( v_type != 1 ) && busy_delay;
-    assign indication.heard__ENA = busy_delay && ( v_type == 1 );
+    assign RULE$respond_rule__ENA = busy_delay && indication.heard__RDY;
+    assign indication.heard$hdmiCounter = hdmiCounter2;
+    assign indication.heard$imageonCounter = fmcCounter2;
+    assign indication.heard$v = counter[ ( 48 - 1 ) : 16 ];
+    assign indication.heard__ENA = busy_delay;
     assign request.muxreset__RDY = 1'd1;
+    assign request.run__RDY = 1'd1;
     assign request.say__RDY = !busy;
-    assign request.setup__RDY = 1'd1;
+    assign request.setupTest__RDY = 1'd1;
+    assign request.setuph__RDY = 1'd1;
+    assign request.setupv__RDY = 1'd1;
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        _hdmi$runS__ENA <= 0;
         _hdmi$setupS__ENA <= 0;
-        a_delay <= 0;
-        a_temp <= 0;
-        b_delay <= 0;
-        b_temp <= 0;
         busy <= 0;
         busy_delay <= 0;
+        callSetup <= 0;
+        counter <= 0;
+        fmcCounter <= 0;
+        fmcCounter1 <= 0;
+        fmcCounter2 <= 0;
+        hdmiCounter <= 0;
+        hdmiCounter2 <= 0;
         i2c_mux_reset_n_reg <= 0;
+        imageonCounter <= 0;
+        imageonCounter2 <= 0;
+        jhBackSync <= 0;
+        jhEnd <= 0;
+        jhFrontEnd <= 0;
+        jhSyncWidth <= 0;
+        jpattern <= 0;
+        jrampStep <= 0;
+        jvBackSync <= 0;
+        jvEnd <= 0;
+        jvFrontEnd <= 0;
+        jvSyncWidth <= 0;
         v_delay <= 0;
         v_temp <= 0;
         v_type <= 0;
       end // nRST
       else begin
+        if (__CONTROL_hdmi$setup__ENA$done) begin // RULE$callSetupRule__ENA
+            callSetup <= 1'd0;
+        end; // End of RULE$callSetupRule__ENA
         if (RULE$delay_rule__RDY && RULE$delay_rule__ENA) begin // RULE$delay_rule__ENA
             busy <= 1'd0;
             busy_delay <= 1'd1;
             v_delay <= v_temp;
-            a_delay <= a_temp;
-            b_delay <= b_temp;
+            hdmiCounter2 <= hdmiCounter;
+            imageonCounter2 <= imageonCounter;
+            fmcCounter2 <= fmcCounter1;
         end; // End of RULE$delay_rule__ENA
-        if (RULE$respond_rule__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA
+        if (busy_delay && indication.heard__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA
             busy_delay <= 1'd0;
         end; // End of RULE$respond_rule__ENA
+        // RULE$updateRule__ENA
+            counter <= counter + 48'd1;
+        // End of RULE$updateRule__ENA
         if (request.muxreset__ENA) begin // request.muxreset__ENA
             i2c_mux_reset_n_reg <= request.muxreset$v;
         end; // End of request.muxreset__ENA
         if (( !busy ) && request.say__ENA) begin // request.say__ENA
-            v_temp <= request.say$v;
+            v_temp <= 32'd99999999;
             busy <= 1'd1;
             v_type <= 32'd1;
+            hdmiCounter <= hdmi$readCounter[ ( 48 - 1 ) : 16 ];
+            imageonCounter <= imageon$readCounter[ ( 48 - 1 ) : 16 ];
+            fmcCounter1 <= fmcCounter[ ( 48 - 1 ) : 16 ];
             $display( "request$say %x" , request.say$v );
         end; // End of request.say__ENA
+        if (request.setupTest__ENA) begin // request.setupTest__ENA
+            callSetup <= 1'd1;
+            jpattern <= request.setupTest$apattern;
+            jrampStep <= request.setupTest$aramp;
+        end; // End of request.setupTest__ENA
+        if (request.setuph__ENA) begin // request.setuph__ENA
+            jhEnd <= request.setuph$ahEnd;
+            jhFrontEnd <= request.setuph$ahFrontEnd;
+            jhBackSync <= request.setuph$ahBackSync;
+            jhSyncWidth <= request.setuph$ahSyncWidth;
+        end; // End of request.setuph__ENA
+        if (request.setupv__ENA) begin // request.setupv__ENA
+            jvEnd <= request.setupv$avEnd;
+            jvFrontEnd <= request.setupv$avFrontEnd;
+            jvBackSync <= request.setupv$avBackSync;
+            jvSyncWidth <= request.setupv$avSyncWidth;
+        end; // End of request.setupv__ENA
+      end
+    end // always @ (posedge CLK)
+
+    always @( posedge videoClock$O) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        // RULE$fmcupdateRule__ENA
+            fmcCounter <= fmcCounter + 48'd1;
+        // End of RULE$fmcupdateRule__ENA
       end
     end // always @ (posedge CLK)
 endmodule
