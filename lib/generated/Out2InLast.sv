@@ -8,8 +8,8 @@ module Out2InLast #(
     PipeInLast.client out);
     // Extra assigments, not to output wires
     assign in.deq__ENA = in.first__RDY && in.last__RDY && out.enq__RDY;
-    assign out.enq$last = ( in.first__RDY && in.last__RDY && in.deq__RDY ) ? in.last : 0;
-    assign out.enq$v = ( in.first__RDY && in.last__RDY && in.deq__RDY ) ? in.first : 0;
+    assign out.enq$last = in.last;
+    assign out.enq$v = in.first;
     assign out.enq__ENA = in.first__RDY && in.last__RDY && in.deq__RDY;
 endmodule
 

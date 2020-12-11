@@ -14,6 +14,7 @@ generated/BusyCtr.sv
 generated/busyctr.generated.vh
 ../../lib/generated/atomicclib.vh
 ../../lib/generated/adapter.generated.vh
+../../lib/generated/asyncControl.generated.vh
 ../../lib/generated/atomicc.generated.vh
 ../../lib/generated/axiTop.generated.vh
 ../../lib/generated/bram.generated.vh
@@ -21,6 +22,7 @@ generated/busyctr.generated.vh
 ../../lib/generated/clockTop.generated.vh
 ../../lib/generated/configCounter.generated.vh
 ../../lib/generated/connectNet2.generated.vh
+../../lib/generated/externalPin.generated.vh
 ../../lib/generated/fifo.generated.vh
 ../../lib/generated/funnel.generated.vh
 ../../lib/generated/grayCounter.generated.vh
@@ -32,6 +34,7 @@ generated/busyctr.generated.vh
 ../../lib/generated/resetInverter.generated.vh
 ../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
+../../lib/generated/spi.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh

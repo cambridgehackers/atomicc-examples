@@ -17,7 +17,7 @@ module AdapterFromBus #(
     assign _RULE$pushValue$agg_2e_tmp.data = buffer;
     assign _RULE$pushValue$agg_2e_tmp.length = length;
     assign in.enq__RDY = !waitForEnq;
-    assign out.enq$v = waitForEnq ? _RULE$pushValue$agg_2e_tmp : 0;
+    assign out.enq$v = _RULE$pushValue$agg_2e_tmp;
     assign out.enq__ENA = waitForEnq;
 
     always @( posedge CLK) begin

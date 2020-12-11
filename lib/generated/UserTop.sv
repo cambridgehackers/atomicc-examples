@@ -33,11 +33,11 @@ module UserTop (input wire CLK, input wire nRST,
     // Extra assigments, not to output wires
     assign _indication$enq$temp$v = indication.enq$v;
     assign _wad$enq$temp$v = wad.enq$v;
-    assign ctop$request.enq$v = wad.enq__ENA ? wad.enq$v : 0;
+    assign ctop$request.enq$v = wad.enq$v;
     assign ctop$request.enq__ENA = wad.enq__ENA;
     assign indication.enq__RDY = radapter_0$in.enq__RDY;
-    assign radapter_0$in.enq$size = indication.enq__ENA ? _indication$enq$temp$v.length : 0;
-    assign radapter_0$in.enq$v = indication.enq__ENA ? _indication$enq$temp$v.data : 0;
+    assign radapter_0$in.enq$size = _indication$enq$temp$v.length;
+    assign radapter_0$in.enq$v = _indication$enq$temp$v.data;
     assign radapter_0$in.enq__ENA = indication.enq__ENA;
     assign wad.enq__RDY = ctop$request.enq__RDY;
 

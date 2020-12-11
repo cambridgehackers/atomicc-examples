@@ -19,10 +19,10 @@ module FifoPong #(
         .in(element2$in),
         .out(element2$out));
     // Extra assigments, not to output wires
-    assign element1$in.enq$v = ( ( !pong ) && in.enq__ENA ) ? in.enq$v : 0;
+    assign element1$in.enq$v = in.enq$v;
     assign element1$in.enq__ENA = ( !pong ) && in.enq__ENA;
     assign element1$out.deq__ENA = ( !pong ) && out.deq__ENA;
-    assign element2$in.enq$v = ( in.enq__ENA && pong ) ? in.enq$v : 0;
+    assign element2$in.enq$v = in.enq$v;
     assign element2$in.enq__ENA = in.enq__ENA && pong;
     assign element2$out.deq__ENA = out.deq__ENA && pong;
     assign in.enq__RDY = ( element2$in.enq__RDY && ( pong || element1$in.enq__RDY ) ) || ( ( !element2$in.enq__RDY ) && ( !pong ) && element1$in.enq__RDY );

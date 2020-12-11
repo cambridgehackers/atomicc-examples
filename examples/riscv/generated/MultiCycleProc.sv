@@ -33,8 +33,8 @@ module MultiCycleProc (input wire CLK, input wire nRST,
     assign RULE$execArith__RDY = ( d2e_valid == 1 ) && ( e2w_valid == 0 ) && rf.read__RDY && exec.basicExec__RDY;
     assign RULE$writeBack__ENA = ( e2w_valid == 1 ) && rf.write__RDY;
     assign _RULE$execArith$val = exec.basicExec;
-    assign rf.write$regnum = ( e2w_valid == 1 ) ? e2w_dst : 32'd0;
-    assign rf.write$regval = ( e2w_valid == 1 ) ? e2w_val : 32'd0;
+    assign rf.write$regnum = e2w_dst;
+    assign rf.write$regval = e2w_val;
     assign rf.write__ENA = e2w_valid == 1;
 
     always @( posedge CLK) begin

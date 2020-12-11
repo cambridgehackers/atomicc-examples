@@ -6,7 +6,7 @@ module ___M2PPackIndication (input wire CLK, input wire nRST,
     PipeIn.client pipe);
     // Extra assigments, not to output wires
     assign method.heard__RDY = pipe.enq__RDY;
-    assign pipe.enq$v = method.heard__ENA ? { 16'd0 , 16'd5 , 8'd0 , method.heard$v , method.heard$writeCount , method.heard$readCount , method.heard$seqno , 32'd0 , 16'd96 } : 0;
+    assign pipe.enq$v = { 16'd0 , 16'd5 , 8'd0 , method.heard$v , method.heard$writeCount , method.heard$readCount , method.heard$seqno , 32'd0 , 16'd96 };
     assign pipe.enq__ENA = method.heard__ENA;
 endmodule
 

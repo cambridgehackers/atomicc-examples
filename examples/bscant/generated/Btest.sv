@@ -19,7 +19,7 @@ module Btest (input wire CLK, input wire nRST,
     assign RULE$copyRule__ENA = bscan$toBscan.enq__RDY;
     assign bscan$toBscan.enq$v = nextV;
     assign bscan$toBscan.enq__ENA = 1'd1;
-    assign indication.heard$v = readUser.enq__ENA ? readUser.enq$v : 0;
+    assign indication.heard$v = readUser.enq$v;
     assign indication.heard__ENA = readUser.enq__ENA;
     assign readUser.enq__RDY = indication.heard__RDY;
     assign request.say__RDY = 1'd1;

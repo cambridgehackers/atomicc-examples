@@ -19,20 +19,19 @@ module Trace #(
     reg [32 - 1:0]timestamp;
     logic RULE$copyRule__ENA;
     logic RULE$copyRule__RDY;
-    logic [width - 1:0]bram$dataOut;
     logic bram$read__RDY;
     logic bram$write__RDY;
     PipeInLength#(.width(width)) radapter$in();
     PipeOutLast#(.width(32)) radapter$out();
     BRAM#(.width(width),.depth(depth)) bram (.CLK(CLK), .nRST(nRST),
         .write__ENA(( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable),
-        .write$addr(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? addr : 11'd0),
-        .write$data(( ( buffer != data[ ( ( width - 32 ) - 1 ) : ( ( width - 32 ) - sensitivity ) ] ) && enable ) ? { timestamp , data[ ( ( width - 32 ) - 1 ) : 0 ] } : 0),
+        .write$addr(addr),
+        .write$data({ timestamp , data[ ( ( width - 32 ) - 1 ) : 0 ] }),
         .write__RDY(bram$write__RDY),
         .read__ENA(out.deq__ENA && radapter$out.last),
-        .read$addr(( out.deq__ENA && radapter$out.last ) ? readAddr : 11'd0),
+        .read$addr(readAddr),
         .read__RDY(bram$read__RDY),
-        .dataOut(bram$dataOut),
+        .dataOut(radapter$in.enq$v),
         .dataOut__RDY(radapter$in.enq__ENA));
     AdapterToBus#(.width(width),.owidth(32)) radapter (.CLK(CLK), .nRST(nRST),
         .clear__ENA(clear__ENA),
@@ -45,8 +44,7 @@ module Trace #(
     assign out.deq__RDY = radapter$out.last__RDY && ( ( bram$read__RDY && radapter$out.deq__RDY ) || ( ( !bram$read__RDY ) && ( !radapter$out.last ) && radapter$out.deq__RDY ) );
     assign out.first = radapter$out.first;
     assign out.first__RDY = radapter$out.first__RDY;
-    assign radapter$in.enq$size = radapter$in.enq__ENA ? ( (32'(width)) ) : 32'd0;
-    assign radapter$in.enq$v = radapter$in.enq__ENA ? bram$dataOut : 0;
+    assign radapter$in.enq$size = width;
     assign radapter$out.deq__ENA = out.deq__ENA;
 
     always @( posedge CLK) begin

@@ -30,12 +30,12 @@ module FunnelTest (input wire CLK, input wire nRST,
         .index(index));
     // Extra assigments, not to output wires
     assign RULE$respond_rule__ENA = result$out.first__RDY && indication.heard__RDY && result$out.deq__RDY;
-    assign indication.heard$v = ( result$out.first__RDY && result$out.deq__RDY ) ? result$out.first : 0;
+    assign indication.heard$v = result$out.first;
     assign indication.heard__ENA = result$out.first__RDY && result$out.deq__RDY;
     assign request.say__RDY = fifo$in__enq__RDY_or1;
     assign result$out.deq__ENA = result$out.first__RDY && indication.heard__RDY;
 for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
-    assign fifo$in[__inst$Genvar1].enq$v = ( request.say__ENA && ( index == __inst$Genvar1 ) ) ? request.say$v : 0;
+    assign fifo$in[__inst$Genvar1].enq$v = request.say$v;
     assign fifo$in[__inst$Genvar1].enq__ENA = request.say__ENA && ( index == __inst$Genvar1 );
     assign fifo$in__enq__RDY_or[__inst$Genvar1] = fifo$in[__inst$Genvar1].enq__RDY;
     assign fifo$out[ __inst$Genvar1 ].enq__RDY = funnel$in[ __inst$Genvar1 ].enq__RDY;

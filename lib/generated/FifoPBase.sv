@@ -17,7 +17,7 @@ module FifoPBase #(
         .in(base$in),
         .out(out));
     // Extra assigments, not to output wires
-    assign fifo$in.enq$v = in.enq__ENA ? in.enq$v : 0;
+    assign fifo$in.enq$v = in.enq$v;
     assign fifo$in.enq__ENA = in.enq__ENA;
     assign in.enq__RDY = fifo$in.enq__RDY;
 endmodule

@@ -20,8 +20,8 @@ module Echo (input wire CLK, input wire nRST,
     assign RULE$delay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$delay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$respond_rule__ENA = busy_delay && indication.heard__RDY;
-    assign indication.heard$meth = busy_delay ? meth_delay : 32'd0;
-    assign indication.heard$v = busy_delay ? v_delay : 32'd0;
+    assign indication.heard$meth = meth_delay;
+    assign indication.heard$v = v_delay;
     assign indication.heard__ENA = busy_delay;
     assign request.say2__RDY = !busy;
     assign request.say__RDY = !busy;

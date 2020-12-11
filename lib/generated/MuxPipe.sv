@@ -12,7 +12,7 @@ module MuxPipe (input wire CLK, input wire nRST,
         .out(forwardFifo$out));
     // Extra assigments, not to output wires
     assign forward.enq__RDY = forwardFifo$in.enq__RDY;
-    assign forwardFifo$in.enq$v = forward.enq__ENA ? forward.enq$v : 0;
+    assign forwardFifo$in.enq$v = forward.enq$v;
     assign forwardFifo$in.enq__ENA = forward.enq__ENA;
     assign forwardFifo$out.deq__ENA = ( !in.enq__ENA ) && forwardFifo$out.first__RDY && out.enq__RDY;
     assign in.enq__RDY = ( !forwardFifo$out.first__RDY ) && out.enq__RDY;

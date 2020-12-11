@@ -8,7 +8,7 @@ module Out2InBase #(
     PipeIn.client out);
     // Extra assigments, not to output wires
     assign in.deq__ENA = in.first__RDY && out.enq__RDY;
-    assign out.enq$v = ( in.first__RDY && in.deq__RDY ) ? in.first : 0;
+    assign out.enq$v = in.first;
     assign out.enq__ENA = in.first__RDY && in.deq__RDY;
 endmodule
 

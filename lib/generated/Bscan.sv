@@ -20,7 +20,6 @@ module Bscan #(
     logic captureF$nRST;
     logic captureF$out;
     logic localBscan$capture_out;
-    logic [width - 1:0]localBscan$fromBscan;
     logic localBscan$update;
     logic updateF$CLK;
     logic updateF$in;
@@ -51,7 +50,7 @@ module Bscan #(
         .TDO(bscan$TDO),
         .TDI(bscan$TDI),
         .toBscan(toBscan.enq__ENA ? toBscan.enq$v : 0),
-        .fromBscan(localBscan$fromBscan));
+        .fromBscan(fromBscan.enq$v));
     SyncFF updateF (
         .CLK(updateF$CLK),
         .nRST(updateF$nRST),
@@ -71,7 +70,6 @@ module Bscan #(
     assign updateF$nRST = nRST;
     // Extra assigments, not to output wires
     assign captureF$out = toBscan.enq__RDY;
-    assign fromBscan.enq$v = fromBscan.enq__ENA ? localBscan$fromBscan : 0;
     assign updateF$out = fromBscan.enq__ENA;
 endmodule
 

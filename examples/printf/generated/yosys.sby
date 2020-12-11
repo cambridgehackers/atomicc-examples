@@ -33,6 +33,7 @@ prep -top VsimTop
 ../../lib/generated/resetInverter.generated.vh
 ../../lib/generated/selectout.generated.vh
 ../../lib/generated/sizedFifo.generated.vh
+../../lib/generated/spi.generated.vh
 ../../lib/generated/syncFF.generated.vh
 ../../lib/generated/tracebuf.generated.vh
 ../../lib/generated/userTop.generated.vh

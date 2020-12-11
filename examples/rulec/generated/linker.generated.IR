@@ -125,7 +125,6 @@ MODULE Bscan__I3 Bscan__I3_interface {
     FIELD SyncFF captureF
 }
 INTERFACE Bscan__I3_interface {
-    FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
@@ -385,6 +384,7 @@ FILE ../../lib/generated/printfStub.generated.vh
 FILE ../../lib/generated/resetInverter.generated.vh
 FILE ../../lib/generated/selectout.generated.vh
 FILE ../../lib/generated/sizedFifo.generated.vh
+FILE ../../lib/generated/spi.generated.vh
 FILE ../../lib/generated/syncFF.generated.vh
 FILE ../../lib/generated/tracebuf.generated.vh
 FILE ../../lib/generated/userTop.generated.vh

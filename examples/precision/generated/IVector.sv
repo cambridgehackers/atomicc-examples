@@ -18,11 +18,11 @@ module IVector (input wire CLK, input wire nRST,
     assign _RULE$respond$temp = fifo$out.first;
     assign _request$say$temp.a = request.say$meth;
     assign _request$say$temp.b = request.say$v;
-    assign fifo$in.enq$v = request.say__ENA ? _request$say$temp : 0;
+    assign fifo$in.enq$v = _request$say$temp;
     assign fifo$in.enq__ENA = request.say__ENA;
     assign fifo$out.deq__ENA = fifo$out.first__RDY && ind.heard__RDY;
-    assign ind.heard$meth = ( fifo$out.first__RDY && fifo$out.deq__RDY ) ? _RULE$respond$temp.a : 0;
-    assign ind.heard$v = ( fifo$out.first__RDY && fifo$out.deq__RDY ) ? _RULE$respond$temp.b : 0;
+    assign ind.heard$meth = _RULE$respond$temp.a;
+    assign ind.heard$v = _RULE$respond$temp.b;
     assign ind.heard__ENA = fifo$out.first__RDY && fifo$out.deq__RDY;
     assign request.say__RDY = fifo$in.enq__RDY;
 

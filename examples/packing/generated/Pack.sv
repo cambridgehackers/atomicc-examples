@@ -9,10 +9,10 @@ module Pack (input wire CLK, input wire nRST,
     reg [8 - 1:0]seqval;
     reg [8 - 1:0]writeCount;
     // Extra assigments, not to output wires
-    assign indication.heard$readCount = request.say__ENA ? ( readCount + 64 ) : 0;
-    assign indication.heard$seqno = request.say__ENA ? seqval : 8'd0;
-    assign indication.heard$v = request.say__ENA ? request.say$v : 0;
-    assign indication.heard$writeCount = request.say__ENA ? ( writeCount + 32 ) : 0;
+    assign indication.heard$readCount = readCount + 64;
+    assign indication.heard$seqno = seqval;
+    assign indication.heard$v = request.say$v;
+    assign indication.heard$writeCount = writeCount + 32;
     assign indication.heard__ENA = request.say__ENA;
     assign request.say__RDY = indication.heard__RDY;
 

@@ -41,14 +41,6 @@ module P7Wrap (
     logic pps$EMIOI2C1SCLTN;
     logic pps$EMIOI2C1SDAO;
     logic pps$EMIOI2C1SDATN;
-    logic [32 - 1:0]pps$MAXIGP0ARADDR;
-    logic [12 - 1:0]pps$MAXIGP0ARID;
-    logic [4 - 1:0]pps$MAXIGP0ARLEN;
-    logic [32 - 1:0]pps$MAXIGP0AWADDR;
-    logic [12 - 1:0]pps$MAXIGP0AWID;
-    logic [4 - 1:0]pps$MAXIGP0AWLEN;
-    logic [32 - 1:0]pps$MAXIGP0WDATA;
-    logic [12 - 1:0]pps$MAXIGP0WID;
     logic pps$MAXIGP0WLAST;
     logic tscl0$O;
     logic tscl1$O;
@@ -287,23 +279,23 @@ module P7Wrap (
         .IRQF2P(intr.interrupt),
         .IRQP2F(),
         .MAXIGP0ACLK(CLK),
-        .MAXIGP0ARADDR(pps$MAXIGP0ARADDR),
+        .MAXIGP0ARADDR(MAXIGP0_O.AR$addr),
         .MAXIGP0ARBURST(),
         .MAXIGP0ARCACHE(),
         .MAXIGP0ARESETN(),
-        .MAXIGP0ARID(pps$MAXIGP0ARID),
-        .MAXIGP0ARLEN(pps$MAXIGP0ARLEN),
+        .MAXIGP0ARID(MAXIGP0_O.AR$id),
+        .MAXIGP0ARLEN(MAXIGP0_O.AR$len),
         .MAXIGP0ARLOCK(),
         .MAXIGP0ARPROT(),
         .MAXIGP0ARQOS(),
         .MAXIGP0ARREADY(MAXIGP0_O.AR__RDY),
         .MAXIGP0ARSIZE(),
         .MAXIGP0ARVALID(MAXIGP0_O.AR__ENA),
-        .MAXIGP0AWADDR(pps$MAXIGP0AWADDR),
+        .MAXIGP0AWADDR(MAXIGP0_O.AW$addr),
         .MAXIGP0AWBURST(),
         .MAXIGP0AWCACHE(),
-        .MAXIGP0AWID(pps$MAXIGP0AWID),
-        .MAXIGP0AWLEN(pps$MAXIGP0AWLEN),
+        .MAXIGP0AWID(MAXIGP0_O.AW$id),
+        .MAXIGP0AWLEN(MAXIGP0_O.AW$len),
         .MAXIGP0AWLOCK(),
         .MAXIGP0AWPROT(),
         .MAXIGP0AWQOS(),
@@ -320,8 +312,8 @@ module P7Wrap (
         .MAXIGP0RREADY(MAXIGP0_I.R__RDY),
         .MAXIGP0RRESP(MAXIGP0_I.R__ENA ? MAXIGP0_I.R$resp : 2'd0),
         .MAXIGP0RVALID(MAXIGP0_I.R__ENA),
-        .MAXIGP0WDATA(pps$MAXIGP0WDATA),
-        .MAXIGP0WID(pps$MAXIGP0WID),
+        .MAXIGP0WDATA(MAXIGP0_O.W$data),
+        .MAXIGP0WID(MAXIGP0_O.W$id),
         .MAXIGP0WLAST(pps$MAXIGP0WLAST),
         .MAXIGP0WREADY(MAXIGP0_O.W__RDY),
         .MAXIGP0WSTRB(),
@@ -701,15 +693,7 @@ module P7Wrap (
         .T(( !pps$EMIOI2C1SCLTN ) && 1'd1));
     // Extra assigments, not to output wires
     assign CLK = intr.CLK;
-    assign MAXIGP0_O.AR$addr = MAXIGP0_O.AR__ENA ? pps$MAXIGP0ARADDR : 32'd0;
-    assign MAXIGP0_O.AR$id = MAXIGP0_O.AR__ENA ? pps$MAXIGP0ARID : 12'd0;
-    assign MAXIGP0_O.AR$len = MAXIGP0_O.AR__ENA ? pps$MAXIGP0ARLEN : 4'd0;
-    assign MAXIGP0_O.AW$addr = MAXIGP0_O.AW__ENA ? pps$MAXIGP0AWADDR : 32'd0;
-    assign MAXIGP0_O.AW$id = MAXIGP0_O.AW__ENA ? pps$MAXIGP0AWID : 12'd0;
-    assign MAXIGP0_O.AW$len = MAXIGP0_O.AW__ENA ? pps$MAXIGP0AWLEN : 4'd0;
-    assign MAXIGP0_O.W$data = MAXIGP0_O.W__ENA ? pps$MAXIGP0WDATA : 32'd0;
-    assign MAXIGP0_O.W$id = MAXIGP0_O.W__ENA ? pps$MAXIGP0WID : 12'd0;
-    assign MAXIGP0_O.W$last = pps$MAXIGP0WLAST && MAXIGP0_O.W__ENA;
+    assign MAXIGP0_O.W$last = pps$MAXIGP0WLAST != 0;
     assign nRST = intr.nRST;
 endmodule
 

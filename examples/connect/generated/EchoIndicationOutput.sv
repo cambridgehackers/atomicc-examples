@@ -10,7 +10,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     assign _indication$heard$ind.data.heard.v = indication.heard$v;
     assign _indication$heard$ind.tag = 32'd1;
     assign indication.heard__RDY = pipe.enq__RDY;
-    assign pipe.enq$v = indication.heard__ENA ? _indication$heard$ind : 0;
+    assign pipe.enq$v = _indication$heard$ind;
     assign pipe.enq__ENA = indication.heard__ENA;
 endmodule
 

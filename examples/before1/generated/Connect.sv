@@ -36,10 +36,10 @@ module Connect (input wire CLK, input wire nRST,
     // Extra assigments, not to output wires
     assign RULE$swap2_rule__ENA = lEcho$swap.y2xnull__RDY;
     assign RULE$swap_rule__ENA = lEcho$swap.x2y__RDY && lEcho$swap.y2x__RDY;
-    assign lERO_test$request.say$meth = request.say__ENA ? request.say$meth : 0;
-    assign lERO_test$request.say$v = request.say__ENA ? request.say$v : 0;
-    assign lERO_test$request.say2$meth = request.say2__ENA ? request.say2$meth : 0;
-    assign lERO_test$request.say2$v = request.say2__ENA ? request.say2$v : 0;
+    assign lERO_test$request.say$meth = request.say$meth;
+    assign lERO_test$request.say$v = request.say$v;
+    assign lERO_test$request.say2$meth = request.say2$meth;
+    assign lERO_test$request.say2$v = request.say2$v;
     assign lERO_test$request.say2__ENA = request.say2__ENA;
     assign lERO_test$request.say__ENA = request.say__ENA;
     assign lEcho$swap.x2y__ENA = lEcho$swap.y2x__RDY;
