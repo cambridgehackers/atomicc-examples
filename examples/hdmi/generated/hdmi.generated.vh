@@ -19,11 +19,13 @@ interface ClockImageonIfc;
     logic  CLK;
     logic  nRST;
     logic  hdmiClock;
+    logic  hdminReset;
     logic  imageonClock;
+    logic  imageonnReset;
     modport server (input  CLK, nRST,
-                    output hdmiClock, imageonClock);
+                    output hdmiClock, hdminReset, imageonClock, imageonnReset);
     modport client (output CLK, nRST,
-                    input  hdmiClock, imageonClock);
+                    input  hdmiClock, hdminReset, imageonClock, imageonnReset);
 endinterface
 `endif
 `ifndef __EchoRequest_DEF__
@@ -80,27 +82,15 @@ interface EchoIfc;
     logic  nRST;
     logic  fmc_video_clk1_v;
     logic  i2c_mux_reset_n;
-    logic  adv7511_clk;
-    logic [36 - 1:0] adv7511_d;
-    logic  adv7511_de;
-    logic  adv7511_hs;
-    logic  adv7511_vs;
     modport server (input  CLK, nRST, fmc_video_clk1_v,
-                    output i2c_mux_reset_n, adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+                    output i2c_mux_reset_n);
     modport client (output CLK, nRST, fmc_video_clk1_v,
-                    input  i2c_mux_reset_n, adv7511_clk, adv7511_d, adv7511_de, adv7511_hs, adv7511_vs);
+                    input  i2c_mux_reset_n);
 endinterface
 `endif
 `ifndef __HdmiBlockIfc_DEF__
 `define __HdmiBlockIfc_DEF__
 interface HdmiBlockIfc;
-    logic  CLK;
-    logic  nRST;
-    logic [36 - 1:0] adv7511_d;
-    logic  adv7511_de;
-    logic  adv7511_hs;
-    logic  adv7511_vs;
-    logic [48 - 1:0] readCounter;
     logic setup__ENA;
     logic [16 - 1:0] setup$ahEnd;
     logic [16 - 1:0] setup$ahFrontEnd;
@@ -115,10 +105,10 @@ interface HdmiBlockIfc;
     logic setup__ACK;
     logic run__ENA;
     logic run__ACK;
-    modport server (input  CLK, nRST, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth, setup$apattern, setup$aramp, run__ENA,
-                    output adv7511_d, adv7511_de, adv7511_hs, adv7511_vs, readCounter, setup__ACK, run__ACK);
-    modport client (output CLK, nRST, setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth, setup$apattern, setup$aramp, run__ENA,
-                    input  adv7511_d, adv7511_de, adv7511_hs, adv7511_vs, readCounter, setup__ACK, run__ACK);
+    modport server (input  setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth, setup$apattern, setup$aramp, run__ENA,
+                    output setup__ACK, run__ACK);
+    modport client (output setup__ENA, setup$ahEnd, setup$ahFrontEnd, setup$ahBackSync, setup$ahSyncWidth, setup$avEnd, setup$avFrontEnd, setup$avBackSync, setup$avSyncWidth, setup$apattern, setup$aramp, run__ENA,
+                    input  setup__ACK, run__ACK);
 endinterface
 `endif
 `ifndef __HdmiDataIfc_DEF__
@@ -140,11 +130,8 @@ endinterface
 interface HdmiImageonIfc;
     logic  CLK;
     logic  nRST;
-    logic [48 - 1:0] readCounter;
-    modport server (input  CLK, nRST,
-                    output readCounter);
-    modport client (output CLK, nRST,
-                    input  readCounter);
+    modport server (input  CLK, nRST);
+    modport client (output CLK, nRST);
 endinterface
 `endif
 `ifndef __HdmiPatternIfc_DEF__
@@ -239,6 +226,8 @@ endinterface
 //METAINTERNAL; fbclockb; BUFG;
 //METAINTERNAL; hdmi_clockb; BUFG;
 //METAINTERNAL; imageon_clockb; BUFG;
+//METAINTERNAL; hdmiSync; SyncBit;
+//METAINTERNAL; imageonSync; SyncBit;
 //METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 //METASTART; Echo
@@ -248,8 +237,9 @@ endinterface
 //METAINTERNAL; videoClock; BUFG;
 //METAINTERNAL; __CONTROL_hdmi$run__ENA; AsyncControl;
 //METAINTERNAL; __CONTROL_hdmi$setup__ENA; AsyncControl;
+//METAGUARD; RULE$updateRuleI; 1'd1;
+//METAGUARD; RULE$updateRuleH; 1'd1;
 //METAGUARD; RULE$updateRule; 1'd1;
-//METAGUARD; RULE$fmcupdateRule; 1'd1;
 //METABEFORE; RULE$initHdmi__ENA; :request.muxreset__ENA
 //METAGUARD; RULE$initHdmi; 1'd1;
 //METAEXCLUSIVE; request.say__ENA; RULE$delay_rule__ENA
@@ -267,26 +257,24 @@ endinterface
 //METAGUARD; RULE$delay_rule; ( ( busy != 0 ) & ( busy_delay == 0 ) ) != 0;
 //METAINVOKE; RULE$respond_rule__ENA; :indication.heard__ENA;
 //METAGUARD; RULE$respond_rule; busy_delay && indication.heard__RDY;
-//METARULES; RULE$updateRule; RULE$fmcupdateRule; RULE$initHdmi; RULE$callSetupRule; RULE$delay_rule; RULE$respond_rule
+//METARULES; RULE$updateRuleI; RULE$updateRuleH; RULE$updateRule; RULE$initHdmi; RULE$callSetupRule; RULE$delay_rule; RULE$respond_rule
 //METASTART; HdmiBlock
 //METAINTERNAL; syncBlock; HdmiSync(widthAddr=12,heightAddr=12);
 //METAINTERNAL; patternBlock; HdmiPattern(widthAddr=12,heightAddr=12);
-//METABEFORE; RULE$initRule__ENA; :RULE$updateRule__ENA
-//METAGUARD; RULE$initRule; 1'd1;
-//METAGUARD; RULE$updateRule; 1'd1;
+//METAINTERNAL; adv7511_d_pin; ExternalPin(width=36);
+//METAINTERNAL; adv7511_de_pin; ExternalPin(width=1);
+//METAINTERNAL; adv7511_hs_pin; ExternalPin(width=1);
+//METAINTERNAL; adv7511_vs_pin; ExternalPin(width=1);
+//METAINTERNAL; adv7511_clk_pin; ExternalPin(width=1);
 //METAINVOKE; setup__ENA; :patternBlock$setup__ENA;:syncBlock$setup__ENA;
 //METAGUARD; setup; patternBlock$setup__RDY && syncBlock$setup__RDY;
 //METAINVOKE; run__ENA; :syncBlock$run__ENA;
 //METAGUARD; run; syncBlock$run__RDY;
 //METAGUARD; RULE$initHdmi; patternBlock$data__RDY && syncBlock$dataEnable__RDY && syncBlock$hSync__RDY && syncBlock$vSync__RDY;
-//METARULES; RULE$initRule; RULE$updateRule; RULE$initHdmi
+//METARULES; RULE$initHdmi
 //METACONNECT; syncBlock$data.setXY__ENA; patternBlock$calculate.setXY__ENA
 //METACONNECT; syncBlock$data.setXY__RDY; patternBlock$calculate.setXY__RDY
 //METASTART; HdmiImageon
-//METABEFORE; RULE$initRule__ENA; :RULE$updateRule__ENA
-//METAGUARD; RULE$initRule; 1'd1;
-//METAGUARD; RULE$updateRule; 1'd1;
-//METARULES; RULE$initRule; RULE$updateRule
 //METASTART; l_top
 //METAINTERNAL; M2P__indication; ___M2PEchoIndication;
 //METAINTERNAL; DUT__Echo; Echo;

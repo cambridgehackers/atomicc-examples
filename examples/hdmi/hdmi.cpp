@@ -22,6 +22,8 @@
 #include "VMMCME2_ADV.h"
 #include "VBUFG.h"
 #include "resetInverter.h"
+#include "externalPin.h"
+#include "syncBit.h"
 
 #define IfcNames_EchoIndicationH2S 5
 
@@ -29,7 +31,9 @@ class ClockImageonIfc {
     __input  __uint(1)  CLK;
     __input  __uint(1)  nRST;
     __output __uint(1)  hdmiClock;
+    __output __uint(1)  hdminReset;
     __output __uint(1)  imageonClock;
+    __output __uint(1)  imageonnReset;
 };
 
 #define WidthFraction 20 // 12 + 8
@@ -42,17 +46,18 @@ class ClockImageon __implements ClockImageonIfc {
         COMPENSATION = "ZHOLD", STARTUP_WAIT = "FALSE",
         CLKFBOUT_MULT_F = 8.0, CLKFBOUT_PHASE = 0.0,
         CLKIN1_PERIOD = 6.734007, // 148.5 MHz
-        //CLKIN1_PERIOD = 10.0,
         CLKIN2_PERIOD = 6.734007, DIVCLK_DIVIDE = 1,
         CLKOUT0_DIVIDE_F = 8.0, CLKOUT0_DUTY_CYCLE = 0.5, CLKOUT0_PHASE = 0.0,
         CLKOUT1_DIVIDE = 32, CLKOUT1_DUTY_CYCLE = 0.5, CLKOUT1_PHASE = 0.0, // 37.125 MHz
-        CLKOUT2_DIVIDE = 1, CLKOUT2_DUTY_CYCLE = 0.5, CLKOUT2_PHASE = 0.0,
+        CLKOUT2_DIVIDE = 1, CLKOUT2_DUTY_CYCLE = 0.5, CLKOUT2_PHASE = 0.0,  // 148.5
         REF_JITTER1 = 1.0e-2, REF_JITTER2 = 1.0e-2
         ) imageon_pll;
     ResetInverter rinverter;
     BUFG fbclockb;
     BUFG hdmi_clockb;
     BUFG imageon_clockb;
+    SyncBit hdmiSync;
+    SyncBit imageonSync;
     __rule init {
         rinverter.RESET_IN = nRST;
         imageon_pll.CLKIN1 = __defaultClock;
@@ -73,8 +78,15 @@ class ClockImageon __implements ClockImageonIfc {
 
         hdmi_clockb.I = imageon_pll.CLKOUT0;
         hdmiClock = hdmi_clockb.O;
+        hdmiSync.CLK = hdmi_clockb.O;
+        hdmiSync.in = __defaultnReset;
+        hdminReset = hdmiSync.out;
+
         imageon_clockb.I = imageon_pll.CLKOUT1;
         imageonClock = imageon_clockb.O;
+        imageonSync.CLK = imageon_clockb.O;
+        imageonSync.in = __defaultnReset;
+        imageonnReset = imageonSync.out;
     };
 };
 
@@ -93,17 +105,9 @@ HdmiData<12,13> dummyhdmid;
 class HdmiImageonIfc {
     __input  __uint(1)  CLK;
     __input  __uint(1)  nRST;
-    __output __uint(48) readCounter;
 };
 
 class HdmiImageon __implements HdmiImageonIfc {
-    __uint(48) counter;
-    __rule initRule {
-       readCounter = counter;
-    }
-    __rule updateRule {
-        counter++;
-    }
 };
 
 template <int widthAddr, int heightAddr>
@@ -228,17 +232,10 @@ class HdmiPattern __implements HdmiPatternIfc<widthAddr, heightAddr> {
 };
 
 class HdmiBlockIfc {
-    __input  __uint(1)        CLK;
-    __input  __uint(1)        nRST;
-    __output __uint(36)       adv7511_d;
-    __output __uint(1)        adv7511_de;
-    __output __uint(1)        adv7511_hs;
-    __output __uint(1)        adv7511_vs;
     __async void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
         __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth,
         __uint(8) apattern, __uint(WidthFraction) aramp);
     __async void run(void);
-    __output __uint(48) readCounter;
 };
 #define PATTERN_RAMP_STEP 0x0222L
 //#define PATTERN_RAMP_STEP 0x0333L // 20'hFFFFF / 1280 act_pixels per line = 20'h0333
@@ -251,13 +248,11 @@ class HdmiBlock __implements HdmiBlockIfc {
     __uint(1) hSync;
     __uint(1) vSync;
     __connect syncBlock.data = patternBlock.calculate;
-    __uint(48) counter;
-    __rule initRule {
-       readCounter = counter;
-    }
-    __rule updateRule {
-        counter++;
-    }
+    ExternalPin<36> adv7511_d_pin;
+    ExternalPin<1> adv7511_de_pin;
+    ExternalPin<1> adv7511_hs_pin;
+    ExternalPin<1> adv7511_vs_pin;
+    ExternalPin<1> adv7511_clk_pin;
 
     void setup(__uint(16) ahEnd, __uint(16) ahFrontEnd, __uint(8) ahBackSync, __uint(8) ahSyncWidth,
         __uint(16) avEnd, __uint(16) avFrontEnd, __uint(8) avBackSync, __uint(8) avSyncWidth,
@@ -269,10 +264,11 @@ class HdmiBlock __implements HdmiBlockIfc {
         syncBlock.run();
     }
     __rule initHdmi {
-        adv7511_d = patternBlock.data();
-        adv7511_de = dataEnable;
-        adv7511_hs = hSync;
-        adv7511_vs = vSync;
+        adv7511_d_pin.in = patternBlock.data();
+        adv7511_de_pin.in = dataEnable;
+        adv7511_hs_pin.in = hSync;
+        adv7511_vs_pin.in = vSync;
+        adv7511_clk_pin.in = !__defaultClock;
         dataEnable = syncBlock.dataEnable();
         hSync = syncBlock.hSync();
         vSync = syncBlock.vSync();
@@ -298,31 +294,26 @@ class EchoIfc {
     __input  __uint(1)        nRST;
     __input  __uint(1)        fmc_video_clk1_v;
     __output __uint(1)        i2c_mux_reset_n;
-    __output __uint(1)        adv7511_clk;
-    __output __uint(36)       adv7511_d;
-    __output __uint(1)        adv7511_de;
-    __output __uint(1)        adv7511_hs;
-    __output __uint(1)        adv7511_vs;
 };
 
 class Echo __implements EchoIfc {
     ClockImageon iclock;
-    HdmiBlock    hdmi;
+    __clock("iclock.hdmiClock", "iclock.hdminReset") HdmiBlock    hdmi;
     HdmiImageon  imageon;
     BUFG videoClock;
     __uint(48) counter;
-    __clock("videoClock.O") __uint(48) fmcCounter;
-    __uint(32) hdmiCounter;
-    __uint(32) imageonCounter;
-    __uint(32) fmcCounter1;
-    __uint(32) fmcCounter2;
-    __uint(32) hdmiCounter2;
-    __uint(32) imageonCounter2;
+    __clock("iclock.hdmiClock", "iclock.hdminReset") __uint(48) hdmiCounter;
+    __clock("iclock.imageonClock", "iclock.imageonnReset") __uint(48) imageonCounter;
+    __uint(32) imageonCounter1, imageonCounter2;
+    __uint(32) hdmiCounter1, hdmiCounter2;
+    __rule updateRuleI {
+        imageonCounter++;
+    }
+    __rule updateRuleH {
+        hdmiCounter++;
+    }
     __rule updateRule {
         counter++;
-    }
-    __rule fmcupdateRule {
-        fmcCounter++;
     }
 
     __uint(1)    i2c_mux_reset_n_reg;
@@ -331,15 +322,11 @@ class Echo __implements EchoIfc {
         iclock.CLK = videoClock.O;
         iclock.nRST = __defaultnReset;
 
-        hdmi.CLK = iclock.hdmiClock;
-        hdmi.nRST = __defaultnReset;
+        //hdmi.CLK = iclock.hdmiClock;
+        //hdmi.nRST = __defaultnReset;
         imageon.CLK = iclock.imageonClock;
         imageon.nRST = __defaultnReset;
-        adv7511_clk = !hdmi.CLK;
-        adv7511_d = hdmi.adv7511_d;
-        adv7511_de = hdmi.adv7511_de;
-        adv7511_hs = hdmi.adv7511_hs;
-        adv7511_vs = hdmi.adv7511_vs;
+        //adv7511_clk = !iclock.hdmiClock;
 
         i2c_mux_reset_n = i2c_mux_reset_n_reg;
     }
@@ -364,9 +351,8 @@ class Echo __implements EchoIfc {
         }
         busy = 1;
         v_type = 1;
-        hdmiCounter = __bitsubstr(hdmi.readCounter, 48-1, 16);
-        imageonCounter = __bitsubstr(imageon.readCounter, 48-1, 16);
-        fmcCounter1 = __bitsubstr(fmcCounter, 48-1, 16);
+        hdmiCounter1 = __bitsubstr(hdmiCounter, 48-1, 16);
+        imageonCounter1 = __bitsubstr(imageonCounter, 48-1, 16);
     }
     void request.muxreset(__int(1) v) {
         i2c_mux_reset_n_reg = v;
@@ -399,12 +385,11 @@ class Echo __implements EchoIfc {
         busy = 0;
         busy_delay = 1;
         v_delay = v_temp;
-        hdmiCounter2 = hdmiCounter;
-        imageonCounter2 = imageonCounter;
-        fmcCounter2 = fmcCounter1;
+        hdmiCounter2 = hdmiCounter1;
+        imageonCounter2 = imageonCounter1;
     };
     __rule respond_rule if(busy_delay != 0) {
         busy_delay = 0;
-        indication->heard(__bitsubstr(counter, 48-1, 16), hdmiCounter2, fmcCounter2);//imageonCounter2);
+        indication->heard(__bitsubstr(counter, 48-1, 16), hdmiCounter2, imageonCounter2);
    };
 };

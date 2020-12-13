@@ -112,6 +112,7 @@ FILE ../../lib/generated/bscan.generated.vh
 FILE ../../lib/generated/clockTop.generated.vh
 FILE ../../lib/generated/configCounter.generated.vh
 FILE ../../lib/generated/connectNet2.generated.vh
+FILE ../../lib/generated/externalPin.generated.vh
 FILE ../../lib/generated/fifo.generated.vh
 FILE ../../lib/generated/funnel.generated.vh
 FILE ../../lib/generated/grayCounter.generated.vh

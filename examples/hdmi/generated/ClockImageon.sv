@@ -5,8 +5,12 @@ module ClockImageon (
     input wire CLK,
     input wire nRST,
     output wire hdmiClock,
-    output wire imageonClock);
+    output wire hdminReset,
+    output wire imageonClock,
+    output wire imageonnReset);
     logic fbclockb$O;
+    logic hdmi_clockb$O;
+    logic imageon_clockb$O;
     logic imageon_pll$CLKFBOUT;
     logic imageon_pll$CLKOUT0;
     logic imageon_pll$CLKOUT1;
@@ -53,10 +57,20 @@ module ClockImageon (
         .O(fbclockb$O));
     BUFG hdmi_clockb (
         .I(imageon_pll$CLKOUT0),
-        .O(hdmiClock));
+        .O(hdmi_clockb$O));
     BUFG imageon_clockb (
         .I(imageon_pll$CLKOUT1),
-        .O(imageonClock));
+        .O(imageon_clockb$O));
+    SyncBit hdmiSync (
+        .CLK(hdmi_clockb$O),
+        .in(nRST),
+        .out(hdminReset));
+    SyncBit imageonSync (
+        .CLK(imageon_clockb$O),
+        .in(nRST),
+        .out(imageonnReset));
+    assign hdmiClock = hdmi_clockb$O;
+    assign imageonClock = imageon_clockb$O;
 endmodule
 
 `default_nettype wire    // set back to default value

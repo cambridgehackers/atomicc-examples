@@ -13,16 +13,12 @@ module l_top (input wire CLK, input wire nRST,
     ___M2PEchoIndication M2P__indication (.CLK(CLK), .nRST(nRST),
         .method(DUT__Echo$indication),
         .pipe(indication));
+    wire bozoclock;
     Echo DUT__Echo (
         .CLK(CLK),
         .nRST(nRST),
-        .fmc_video_clk1_v(),
+        .fmc_video_clk1_v(bozoclock),
         .i2c_mux_reset_n(),
-        .adv7511_clk(),
-        .adv7511_d(),
-        .adv7511_de(),
-        .adv7511_hs(),
-        .adv7511_vs(),
         .request(P2M__request$method),
         .indication(DUT__Echo$indication));
     ___P2MEchoRequest P2M__request (.CLK(CLK), .nRST(nRST),

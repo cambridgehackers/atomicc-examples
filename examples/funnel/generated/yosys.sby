@@ -22,6 +22,7 @@ prep -top VsimTop
 ../../lib/generated/clockTop.generated.vh
 ../../lib/generated/configCounter.generated.vh
 ../../lib/generated/connectNet2.generated.vh
+../../lib/generated/externalPin.generated.vh
 ../../lib/generated/fifo.generated.vh
 ../../lib/generated/funnel.generated.vh
 ../../lib/generated/grayCounter.generated.vh

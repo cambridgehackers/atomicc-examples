@@ -18,7 +18,14 @@
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
  */
+
+// PLL generator cdce913 i2c interface defaults to BLOCK_READ/WRITE, which
+// returns multiple bytes for a read operation.  The selection between BLOCK_READ/WRITE
+// and BYTE_READ/WRITE operations is described in table 8 of the cdce913 datasheet.
+// The length of data returned in the BLOCK_READ operation is set by the field BCOUNT
+// in Register 0x06, bits [7:1].
 #define BYTE_OPERATION 0x80 // to use BYTE_READ/WRITE instead of BLOCK_READ/WRITE (cdce913 datasheet, table 8)
+
 static void init_i2c_camera(void)
 {
 // PCA9546A Mux:
@@ -28,6 +35,7 @@ static void init_i2c_camera(void)
 //     Channel 3: PLL-IO      0x08
 static unsigned char cmuxdata[] = {8, 8};
 static unsigned char cdce913_data[] = {
+    // Table 11. Generic Configuration Register
     0x00, 0x81,  0x01, 0x01,
                   // [1:0] - Slave Address A[1:0]=01b
     //0x02, 0xB4,
@@ -35,10 +43,16 @@ static unsigned char cdce913_data[] = {
     0x02, 0xB4,   // [  7] = M1 = 1 (PLL1 Clock)
                   // [1:0] = PDIV1[9:8] = 0
     0x03, 0x02,   // [7:0] = PDIV1[7:0] = 2
-    0x04, 0x02,  0x05, 0x50,  0x06, 0x60,  0x07, 0x00,
-    0x08, 0x00,  0x09, 0x00,  0x0A, 0x00,  0x0B, 0x00,
-    0x0C, 0x00,  0x0D, 0x00,  0x0E, 0x00,  0x0F, 0x00,
-    0x10, 0x00,  0x11, 0x00,  0x12, 0x00,  0x13, 0x00,
+    0x04, 0x02,  0x05, 0x50,  0x06, 0x60,
+    //unused 0x07, 0x00,
+    //unused 0x08, 0x00,  0x09, 0x00,  0x0A, 0x00,  0x0B, 0x00,
+    //unused 0x0C, 0x00,  0x0D, 0x00,  0x0E, 0x00,  0x0F, 0x00,
+
+    // Table 12. PLL1 Configuration Register
+    0x10, 0x00,
+    0x11, 0x00,
+    0x12, 0x00,
+    0x13, 0x00,
     //0x14, 0xED,
     0x14, 0x6D,   // [  7] = MUX1 = 0 (PLL1)
                   // [  6] = M2 = 1 (PDIV2)
@@ -70,6 +84,7 @@ static unsigned char cdce913_data[] = {
     //0x1D, 0x40,
     //0x1E, 0x02,
     //0x1F, 0x08,
+
                   // PLL1 : Fin=27MHz, M=2, N=11, PDIV=2 Fout=74.25MHz
                   //        Fvco = 148.5 MHz
                   //        P = 4 - int(log2(11/2)) = 4 - 2 = 2
@@ -84,16 +99,17 @@ static unsigned char cdce913_data[] = {
     0x1F, 0xC9,   // [7:5] = PLL1_1Q[2:0] = 110
                   // [4:2] = PLL1_1P[2:0] = 010
                   // [1:0] = VC01_1_RANGE[1:0] = 01 (125 MHz < Fvco1 < 150 MHz)
-    // 148.500000 MHz
-    // PLL1: M = 2, N = 11, Pdiv = 1
-    //       Fin  = 27.000000MHz
-    //       Fvco = Fin * N/M = 148.500000MHz
-    //       Range = 1 (125 MHz <= Fvco < 150 MHz)
-    //       Fout = Fvco / Pdiv = 148.500000MHz
-    //       P = 4 - int(log2(M/N)) = 2
-    //       Np = N * 2^P = 44
-    //       Q = int(Np/M) = 22
-    //       R = Np - M*Q = 0
+
+                  // 148.500000 MHz
+                  // PLL1: M = 2, N = 11, Pdiv = 1
+                  //       Fin  = 27.000000MHz
+                  //       Fvco = Fin * N/M = 148.500000MHz
+                  //       Range = 1 (125 MHz <= Fvco < 150 MHz)
+                  //       Fout = Fvco / Pdiv = 148.500000MHz
+                  //       P = 4 - int(log2(M/N)) = 2
+                  //       Np = N * 2^P = 44
+                  //       Q = int(Np/M) = 22
+                  //       R = Np - M*Q = 0
     0x02, 0xB4,   // [  7] = M1 = 1 (PLL1 clock)
                   // [1:0] = Pdiv1[9:8]
     0x03, 0x01,   // [7:0] = Pdiv1[7:0]
@@ -114,13 +130,16 @@ printf("[%s:%d] /dev/i2c-1 open fd %d\n", __FUNCTION__, __LINE__, fd);
     if (i2c_write_array(fd, 0x70, cmuxdata, sizeof(cmuxdata), 0))
         printf("[%s] write mux failed\n", __FUNCTION__);
     int version = i2c_read_reg(fd, 0x65, 0x00 | BYTE_OPERATION);
-printf("[%s:%d] pllversion %x\n", __FUNCTION__, __LINE__, version);
+printf("[%s:%d] pllversion %x\nPLL data:\n", __FUNCTION__, __LINE__, version);
     // initialize clock generator
     if (i2c_write_array(fd, 0x65, cdce913_data, sizeof(cdce913_data), BYTE_OPERATION))
         printf("[%s] write data failed\n", __FUNCTION__);
     for (int i = 0; i <= 0x1f; i++) {
         int val = i2c_read_reg(fd, 0x65, i | BYTE_OPERATION);
-printf("[%s:%d] pll [%x] = %x\n", __FUNCTION__, __LINE__, i, val);
+        printf(" %02x", val);
+        if (i % 16 == 0)
+            printf("\n");
     }
+    printf("\n");
     close(fd);
 }

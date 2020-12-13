@@ -1,7 +1,7 @@
 `include "hdmi.generated.vh"
 
 `default_nettype none
-module HdmiBlock (
+module HdmiBlock (input wire CLK, input wire nRST,
     input wire setup__ENA,
     input wire [16 - 1:0]setup$ahEnd,
     input wire [16 - 1:0]setup$ahFrontEnd,
@@ -15,25 +15,27 @@ module HdmiBlock (
     input wire [20 - 1:0]setup$aramp,
     output wire setup__ACK,
     input wire run__ENA,
-    output wire run__ACK,
-    input wire CLK,
-    input wire nRST,
-    output wire [36 - 1:0]adv7511_d,
-    output wire adv7511_de,
-    output wire adv7511_hs,
-    output wire adv7511_vs,
-    output wire [48 - 1:0]readCounter);
+    output wire run__ACK);
     reg REGGTEMP_run__ACK;
     reg REGGTEMP_setup__ACK;
     reg _runS__ACK;
     reg _setupS__ACK;
-    reg [48 - 1:0]counter;
     reg dataEnable;
     reg hSync;
     reg vSync;
     logic RULE$initHdmi__ENA;
     logic _runS__ENA;
     logic _setupS__ENA;
+    logic adv7511_clk_pin$in;
+    logic adv7511_clk_pin$out;
+    logic [36 - 1:0]adv7511_d_pin$in;
+    logic [36 - 1:0]adv7511_d_pin$out;
+    logic adv7511_de_pin$in;
+    logic adv7511_de_pin$out;
+    logic adv7511_hs_pin$in;
+    logic adv7511_hs_pin$out;
+    logic adv7511_vs_pin$in;
+    logic adv7511_vs_pin$out;
     HdmiDataIfc#(.widthAddr(12),.heightAddr(12)) patternBlock$calculate();
     logic [36 - 1:0]patternBlock$data;
     logic patternBlock$data__RDY;
@@ -79,17 +81,32 @@ module HdmiBlock (
         .data(patternBlock$data),
         .data__RDY(patternBlock$data__RDY),
         .calculate(syncBlock$data));
+    ExternalPin#(.width(36)) adv7511_d_pin (
+        .in(adv7511_d_pin$in),
+        .out(adv7511_d_pin$out));
+    ExternalPin#(.width(1)) adv7511_de_pin (
+        .in(adv7511_de_pin$in),
+        .out(adv7511_de_pin$out));
+    ExternalPin#(.width(1)) adv7511_hs_pin (
+        .in(adv7511_hs_pin$in),
+        .out(adv7511_hs_pin$out));
+    ExternalPin#(.width(1)) adv7511_vs_pin (
+        .in(adv7511_vs_pin$in),
+        .out(adv7511_vs_pin$out));
+    ExternalPin#(.width(1)) adv7511_clk_pin (
+        .in(adv7511_clk_pin$in),
+        .out(adv7511_clk_pin$out));
     SyncFF run__ENASyncFF (.CLK(CLK), .nRST(nRST),
         .out(_runS__ENA),
         .in(run__ENA));
     SyncFF setup__ENASyncFF (.CLK(CLK), .nRST(nRST),
         .out(_setupS__ENA),
         .in(setup__ENA));
-    assign adv7511_d = RULE$initHdmi__ENA ? patternBlock$data : 36'd0;
-    assign adv7511_de = RULE$initHdmi__ENA && dataEnable;
-    assign adv7511_hs = RULE$initHdmi__ENA && hSync;
-    assign adv7511_vs = RULE$initHdmi__ENA && vSync;
-    assign readCounter = counter;
+    assign adv7511_clk_pin$in = !CLK;
+    assign adv7511_d_pin$in = RULE$initHdmi__ENA ? patternBlock$data : 36'd0;
+    assign adv7511_de_pin$in = RULE$initHdmi__ENA && dataEnable;
+    assign adv7511_hs_pin$in = RULE$initHdmi__ENA && hSync;
+    assign adv7511_vs_pin$in = RULE$initHdmi__ENA && vSync;
     assign run__ACK = ( ( !REGGTEMP_run__ACK ) && syncBlock$run__RDY ) || REGGTEMP_run__ACK;
     assign setup__ACK = ( ( !REGGTEMP_setup__ACK ) && patternBlock$setup__RDY && syncBlock$setup__RDY ) || REGGTEMP_setup__ACK;
     // Extra assigments, not to output wires
@@ -103,7 +120,6 @@ module HdmiBlock (
         REGGTEMP_setup__ACK <= 0;
         _runS__ACK <= 0;
         _setupS__ACK <= 0;
-        counter <= 0;
         dataEnable <= 0;
         hSync <= 0;
         vSync <= 0;
@@ -120,9 +136,6 @@ module HdmiBlock (
             hSync <= syncBlock$hSync;
             vSync <= syncBlock$vSync;
         end; // End of RULE$initHdmi__ENA
-        // RULE$updateRule__ENA
-            counter <= counter + 48'd1;
-        // End of RULE$updateRule__ENA
         if (( !REGGTEMP_run__ACK ) && syncBlock$run__RDY && _runS__ENA) begin // run__ENA
             REGGTEMP_run__ACK <= 1;
         end; // End of run__ENA

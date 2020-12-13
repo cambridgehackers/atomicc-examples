@@ -18,7 +18,9 @@ INTERFACE ClockImageonIfc  {
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
     FIELD/output Bit(1) hdmiClock
+    FIELD/output Bit(1) hdminReset
     FIELD/output Bit(1) imageonClock
+    FIELD/output Bit(1) imageonnReset
 }
 INTERFACE EchoIfc  {
     FILE hdmi_OC_cpp
@@ -30,11 +32,6 @@ INTERFACE EchoIfc  {
     FIELD/input Bit(1) nRST
     FIELD/input Bit(1) fmc_video_clk1_v
     FIELD/output Bit(1) i2c_mux_reset_n
-    FIELD/output Bit(1) adv7511_clk
-    FIELD/output Bit(36) adv7511_d
-    FIELD/output Bit(1) adv7511_de
-    FIELD/output Bit(1) adv7511_hs
-    FIELD/output Bit(1) adv7511_vs
 }
 INTERFACE EchoIndication  {
     FILE hdmi_OC_cpp
@@ -49,15 +46,18 @@ INTERFACE EchoRequest  {
     METHOD/Action setupv__ENA ( Bit(12) avEnd , Bit(12) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth )
     METHOD/Action setupTest__ENA ( Bit(8) apattern , Bit(20) aramp )
 }
+INTERFACE ExternalPinIFC(width=1)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_externalPin_OC_h
+    FIELD/input Bit(1) in
+    FIELD/output Bit(1) out
+}
+INTERFACE ExternalPinIFC(width=36)  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_externalPin_OC_h
+    FIELD/input Bit(36) in
+    FIELD/output Bit(36) out
+}
 INTERFACE HdmiBlockIfc  {
     FILE hdmi_OC_cpp
-    FIELD/input Bit(1) CLK
-    FIELD/input Bit(1) nRST
-    FIELD/output Bit(36) adv7511_d
-    FIELD/output Bit(1) adv7511_de
-    FIELD/output Bit(1) adv7511_hs
-    FIELD/output Bit(1) adv7511_vs
-    FIELD/output Bit(48) readCounter
     METHOD/Action/Async setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth , Bit(8) apattern , Bit(20) aramp )
     METHOD/Action/Async run__ENA
 }
@@ -73,7 +73,6 @@ INTERFACE HdmiImageonIfc  {
     FILE hdmi_OC_cpp
     FIELD/input Bit(1) CLK
     FIELD/input Bit(1) nRST
-    FIELD/output Bit(48) readCounter
 }
 INTERFACE HdmiPatternIfc(widthAddr=12,heightAddr=12)  {
     FILE hdmi_OC_cpp
@@ -194,6 +193,13 @@ INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
     FIELD/Ptr/Count funnelWidth  Bit(14) in
     FIELD Bit(5) index
 }
+INTERFACE SyncBitIFC  {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_syncBit_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) in
+    FIELD/output Bit(1) out
+    FIELD/parameter Bit(32) width
+}
 EMODULE AsyncControl AsyncControlIfc {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
@@ -202,6 +208,12 @@ EMODULE BUFG MbufgBUFG {
 }
 EMODULE Dummy PipeIn(width=32) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
+}
+EMODULE ExternalPin(width=1) ExternalPinIFC(width=1) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_externalPin_OC_h
+}
+EMODULE ExternalPin(width=36) ExternalPinIFC(width=36) {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_externalPin_OC_h
 }
 EMODULE MMCME2_ADV Mmcme2MMCME2_ADV {
     FILE _OC__OC__PC__OC__OC__PC_xilinx_PC_VMMCME2_PF_ADV_OC_h
@@ -212,6 +224,9 @@ EMODULE ResetInverter MResetInverterResetInverter {
 EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_atomicc_OC_h
 }
+EMODULE SyncBit SyncBitIFC {
+    FILE _OC__OC__PC__OC__OC__PC_lib_PC_syncBit_OC_h
+}
 MODULE ClockImageon ClockImageonIfc {
     FILE hdmi_OC_cpp
     FIELD MMCME2_ADV imageon_pll
@@ -220,6 +235,8 @@ MODULE ClockImageon ClockImageonIfc {
     FIELD BUFG fbclockb
     FIELD BUFG hdmi_clockb
     FIELD BUFG imageon_clockb
+    FIELD SyncBit hdmiSync
+    FIELD SyncBit imageonSync
     METHOD/Rule/Action RULE$init__ENA {
         LET Bit(1) :rinverter$RESET_IN = nRST
         LET Bit(1) :imageon_pll$CLKIN1 = __defaultClock
@@ -239,24 +256,29 @@ MODULE ClockImageon ClockImageonIfc {
         LET Bit(1) :imageon_pll$CLKFBIN = fbclockb$O
         LET Bit(1) :hdmi_clockb$I = imageon_pll$CLKOUT0
         LET Bit(1) :hdmiClock = hdmi_clockb$O
+        LET Bit(1) :hdmiSync$CLK = hdmi_clockb$O
+        LET Bit(1) :hdmiSync$in = __defaultnReset
+        LET Bit(1) :hdminReset = hdmiSync$out
         LET Bit(1) :imageon_clockb$I = imageon_pll$CLKOUT1
         LET Bit(1) :imageonClock = imageon_clockb$O
+        LET Bit(1) :imageonSync$CLK = imageon_clockb$O
+        LET Bit(1) :imageonSync$in = __defaultnReset
+        LET Bit(1) :imageonnReset = imageonSync$out
     }
 }
 MODULE Echo EchoIfc {
     FILE hdmi_OC_cpp
     FIELD ClockImageon iclock
-    FIELD HdmiBlock hdmi
+    FIELD/Clock=iclock.hdmiClock:iclock.hdminReset HdmiBlock hdmi
     FIELD HdmiImageon imageon
     FIELD BUFG videoClock
     FIELD Bit(48) counter
-    FIELD/Clock=videoClock.O Bit(48) fmcCounter
-    FIELD Bit(32) hdmiCounter
-    FIELD Bit(32) imageonCounter
-    FIELD Bit(32) fmcCounter1
-    FIELD Bit(32) fmcCounter2
-    FIELD Bit(32) hdmiCounter2
+    FIELD/Clock=iclock.hdmiClock:iclock.hdminReset Bit(48) hdmiCounter
+    FIELD/Clock=iclock.imageonClock:iclock.imageonnReset Bit(48) imageonCounter
+    FIELD Bit(32) imageonCounter1
     FIELD Bit(32) imageonCounter2
+    FIELD Bit(32) hdmiCounter1
+    FIELD Bit(32) hdmiCounter2
     FIELD Bit(1) i2c_mux_reset_n_reg
     FIELD Bit(1) busy
     FIELD Bit(1) busy_delay
@@ -274,25 +296,21 @@ MODULE Echo EchoIfc {
     FIELD Bit(8) jpattern
     FIELD Bit(20) jrampStep
     FIELD Bit(32) v_type
+    METHOD/Rule/Action RULE$updateRuleI__ENA {
+        STORE/Clock=iclock.imageonClock:iclock.imageonnReset :imageonCounter = (imageonCounter) + (1)
+    }
+    METHOD/Rule/Action RULE$updateRuleH__ENA {
+        STORE/Clock=iclock.hdmiClock:iclock.hdminReset :hdmiCounter = (hdmiCounter) + (1)
+    }
     METHOD/Rule/Action RULE$updateRule__ENA {
         STORE :counter = (counter) + (1)
-    }
-    METHOD/Rule/Action RULE$fmcupdateRule__ENA {
-        STORE/Clock=videoClock.O :fmcCounter = (fmcCounter) + (1)
     }
     METHOD/Rule/Action RULE$initHdmi__ENA {
         LET Bit(1) :videoClock$I = fmc_video_clk1_v
         LET Bit(1) :iclock$CLK = videoClock$O
         LET Bit(1) :iclock$nRST = __defaultnReset
-        LET Bit(1) :hdmi$CLK = iclock$hdmiClock
-        LET Bit(1) :hdmi$nRST = __defaultnReset
         LET Bit(1) :imageon$CLK = iclock$imageonClock
         LET Bit(1) :imageon$nRST = __defaultnReset
-        LET Bit(1) :adv7511_clk = ((hdmi$CLK) != (0)) ^ (1)
-        LET Bit(36) :adv7511_d = hdmi$adv7511_d
-        LET Bit(1) :adv7511_de = hdmi$adv7511_de
-        LET Bit(1) :adv7511_hs = hdmi$adv7511_hs
-        LET Bit(1) :adv7511_vs = hdmi$adv7511_vs
         LET Bit(1) :i2c_mux_reset_n = i2c_mux_reset_n_reg
     }
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
@@ -300,9 +318,8 @@ MODULE Echo EchoIfc {
         STORE :v_temp = 99999999
         STORE :busy = 1
         STORE :v_type = 1
-        STORE :hdmiCounter = __bitsubstr{hdmi$readCounter,(48) - (1),16}
-        STORE :imageonCounter = __bitsubstr{imageon$readCounter,(48) - (1),16}
-        STORE :fmcCounter1 = __bitsubstr{fmcCounter,(48) - (1),16}
+        STORE :hdmiCounter1 = __bitsubstr{hdmiCounter,(48) - (1),16}
+        STORE :imageonCounter1 = __bitsubstr{imageonCounter,(48) - (1),16}
     }
     METHOD/Action request$muxreset__ENA ( Bit(1) v ) {
         STORE :i2c_mux_reset_n_reg = request$muxreset$v
@@ -335,13 +352,12 @@ MODULE Echo EchoIfc {
         STORE :busy = 0
         STORE :busy_delay = 1
         STORE :v_delay = v_temp
-        STORE :hdmiCounter2 = hdmiCounter
-        STORE :imageonCounter2 = imageonCounter
-        STORE :fmcCounter2 = fmcCounter1
+        STORE :hdmiCounter2 = hdmiCounter1
+        STORE :imageonCounter2 = imageonCounter1
     }
     METHOD/Rule/Action RULE$respond_rule__ENA if (((busy_delay) != (0))) {
         STORE :busy_delay = 0
-        CALL/Action :indication$heard__ENA{__bitsubstr{counter,(48) - (1),16},hdmiCounter2,fmcCounter2}
+        CALL/Action :indication$heard__ENA{__bitsubstr{counter,(48) - (1),16},hdmiCounter2,imageonCounter2}
     }
 }
 MODULE HdmiBlock HdmiBlockIfc {
@@ -352,13 +368,11 @@ MODULE HdmiBlock HdmiBlockIfc {
     FIELD Bit(1) dataEnable
     FIELD Bit(1) hSync
     FIELD Bit(1) vSync
-    FIELD Bit(48) counter
-    METHOD/Rule/Action RULE$initRule__ENA {
-        LET Bit(48) :readCounter = counter
-    }
-    METHOD/Rule/Action RULE$updateRule__ENA {
-        STORE :counter = (counter) + (1)
-    }
+    FIELD ExternalPin(width=36) adv7511_d_pin
+    FIELD ExternalPin(width=1) adv7511_de_pin
+    FIELD ExternalPin(width=1) adv7511_hs_pin
+    FIELD ExternalPin(width=1) adv7511_vs_pin
+    FIELD ExternalPin(width=1) adv7511_clk_pin
     METHOD/Action/Async setup__ENA ( Bit(16) ahEnd , Bit(16) ahFrontEnd , Bit(8) ahBackSync , Bit(8) ahSyncWidth , Bit(16) avEnd , Bit(16) avFrontEnd , Bit(8) avBackSync , Bit(8) avSyncWidth , Bit(8) apattern , Bit(20) aramp ) {
         CALL/Action :patternBlock$setup__ENA{(setup$ahFrontEnd) - (setup$ahBackSync),(setup$avFrontEnd) - (setup$avBackSync),4,546}
         CALL/Action :syncBlock$setup__ENA{setup$ahEnd,setup$ahFrontEnd,setup$ahBackSync,setup$ahSyncWidth,setup$avEnd,setup$avFrontEnd,setup$avBackSync,setup$avSyncWidth}
@@ -368,10 +382,11 @@ MODULE HdmiBlock HdmiBlockIfc {
     }
     METHOD/Rule/Action RULE$initHdmi__ENA {
         CALL :patternBlock$data{}
-        LET Bit(36) :adv7511_d = patternBlock$data
-        LET Bit(1) :adv7511_de = dataEnable
-        LET Bit(1) :adv7511_hs = hSync
-        LET Bit(1) :adv7511_vs = vSync
+        LET Bit(36) :adv7511_d_pin$in = patternBlock$data
+        LET Bit(1) :adv7511_de_pin$in = dataEnable
+        LET Bit(1) :adv7511_hs_pin$in = hSync
+        LET Bit(1) :adv7511_vs_pin$in = vSync
+        LET Bit(1) :adv7511_clk_pin$in = ((__defaultClock) != (0)) ^ (1)
         CALL :syncBlock$dataEnable{}
         STORE :dataEnable = syncBlock$dataEnable
         CALL :syncBlock$hSync{}
@@ -386,13 +401,6 @@ MODULE HdmiData(widthAddr=12,heightAddr=13) HdmiDataIfc(widthAddr=12,heightAddr=
 }
 MODULE HdmiImageon HdmiImageonIfc {
     FILE hdmi_OC_cpp
-    FIELD Bit(48) counter
-    METHOD/Rule/Action RULE$initRule__ENA {
-        LET Bit(48) :readCounter = counter
-    }
-    METHOD/Rule/Action RULE$updateRule__ENA {
-        STORE :counter = (counter) + (1)
-    }
 }
 MODULE HdmiPattern(widthAddr=12,heightAddr=12) HdmiPatternIfc(widthAddr=12,heightAddr=12) {
     FILE hdmi_OC_cpp
