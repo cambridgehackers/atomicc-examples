@@ -45,7 +45,7 @@ module Bscan #(
         .nRST(nRST),
         .capture(( ( bscan$SEL & bscan$CAPTURE ) != 0 ) && 1'd1),
         .shift(( ( bscan$SEL & bscan$SHIFT ) != 0 ) && 1'd1),
-        .update(( ( bscan$SEL & bscan$UPDATE ) != 0 ) && 1'd1),
+        .update(localBscan$update),
         .capture_out(localBscan$capture_out),
         .TDO(bscan$TDO),
         .TDI(bscan$TDI),

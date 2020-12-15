@@ -1,0 +1,96 @@
+STRUCT NOCDataH  {
+    FILE atomicc_OC_h
+    FIELD Bit(16) length
+    FIELD Bit(128) data
+}
+INTERFACE AsyncControlIfc  {
+    FILE atomicc_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/input Bit(1) nRST
+    FIELD/input Bit(1) start
+    FIELD/input Bit(1) ack
+    FIELD/input Bit(1) clear
+    FIELD/output Bit(1) out
+    FIELD/output Bit(1) done
+}
+INTERFACE ClockDivIFC  {
+    FILE clockDiv_OC_h
+    FIELD/input Bit(1) CLK
+    FIELD/output Bit(1) CLK_OUT
+    FIELD/parameter Bit(32) lower
+    FIELD/input Bit(1) nRST
+    FIELD/parameter Bit(32) offset
+    FIELD/parameter Bit(32) upper
+    FIELD/parameter Bit(32) width
+}
+INTERFACE PipeIn(width=32)  {
+    FILE atomicc_OC_h
+    METHOD/Action enq__ENA ( Bit(width) v )
+}
+INTERFACE SPIMasterIfc(width=26)  {
+    FILE spi_OC_h
+    FIELD Bit(1) CLK
+    FIELD Bit(1) nRST
+    INTERFACE PipeIn(width=26) request
+    INTERFACE/Ptr PipeIn(width=26) response
+    FIELD/output Bit(1) clock
+    FIELD/output Bit(1) mosi
+    FIELD/input Bit(1) miso
+}
+INTERFACE SelectIndexIfc(funnelWidth=20,width=14)  {
+    FILE atomicc_OC_h
+    FIELD Bit(14) out
+    FIELD/Ptr/Count funnelWidth  Bit(14) in
+    FIELD Bit(5) index
+}
+EMODULE AsyncControl AsyncControlIfc {
+    FILE atomicc_OC_h
+}
+EMODULE ClockDiv ClockDivIFC {
+    FILE clockDiv_OC_h
+}
+EMODULE Dummy PipeIn(width=32) {
+    FILE atomicc_OC_h
+}
+EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=20,width=14) {
+    FILE atomicc_OC_h
+}
+MODULE SPIMaster(width=26) SPIMasterIfc(width=26) {
+    FILE spi_OC_cpp
+    INTERFACECONNECT spiresponse spi$response PipeIn(width=26)
+    FIELD ClockDiv clockDivider
+    PARAMS clockDivider lower=10
+    FIELD SPIMasterInternal(width=26) spi
+    INTERFACE PipeIn(width=26) spiresponse
+    METHOD/Action request$enq__ENA ( Bit(width) v )
+    METHOD/Action spiresponse$enq__ENA ( Bit(width) v )
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :clockDivider$CLK = __defaultClock
+        LET Bit(1) :clockDivider$nRST = __defaultnReset
+        LET Bit(1) :spi$CLK = clockDivider$CLK_OUT
+        LET Bit(1) :spi$nRST = __defaultnReset
+        LET Bit(1) :clock = spi$clock
+        LET Bit(1) :mosi = spi$mosi
+        LET Bit(1) :spi$miso = miso
+    }
+}
+MODULE SPIMasterInternal(width=26) SPIMasterIfc(width=26) {
+    FILE spi_OC_cpp
+    FIELD Bit(26) shiftreg
+    FIELD Bit((__builtin_clog2(26) + 1)) countreg
+    METHOD/Rule/Action RULE$running__ENA if (((countreg) > (0))) {
+        ALLOCA Bit(26) _RULE$running$newshiftreg
+        STORE :countreg = (countreg) - (1)
+        LET Bit(26) :_RULE$running$newshiftreg = __bitconcat{__bitsubstr{shiftreg,(26) - (2),0},miso}
+        STORE :shiftreg = _RULE$running$newshiftreg
+        CALL/Action ((countreg) == (1)):response$enq__ENA{_RULE$running$newshiftreg}
+    }
+    METHOD/Action request$enq__ENA ( Bit(width) v ) if (((countreg) == (0))) {
+        STORE :shiftreg = request$enq$v
+        STORE :countreg = 26
+    }
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(1) :mosi = __bitsubstr{shiftreg,(26) - (1)}
+        LET Bit(1) :clock = ((__defaultClock) != (0)) ^ (1)
+    }
+}

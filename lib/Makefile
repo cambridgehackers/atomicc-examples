@@ -16,7 +16,7 @@ SOURCES= iobufVec.cpp fifo.cpp mux.cpp adapter.cpp vsimTop.cpp zynqTop.cpp \
     mimo.cpp sizedFifo.cpp configCounter.cpp \
     grayCounter.cpp bscan.cpp syncFF.cpp printfStub.cpp out2in.cpp \
     funnel.cpp atomicc.cpp bram.cpp tracebuf.cpp selectout.cpp \
-    asyncControl.cpp
+    asyncControl.cpp spi.cpp externalPin.cpp
 
 CDIRS=$(patsubst %.cpp, %, $(SOURCES))
 
@@ -26,3 +26,7 @@ $(CDIRS):
 	./make_header.sh
 
 all: $(CDIRS)
+
+import:
+	$(ATOMICCDIR)/atomiccImport -o clockDiv.h -P " " -C ClockDiv verilog/ClockDiv.v
+	$(ATOMICCDIR)/atomiccImport -o syncBit.h -P " " -C SyncBit verilog/SyncBit.v

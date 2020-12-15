@@ -45,7 +45,7 @@ typedef int _IO_lock_t;
 #define __action __attribute__(( atomicc_action ))
 #define __async __attribute__(( atomicc_async ))
 #define __trace(A,B) __attribute__(( atomicc_trace((A), (B)) ))
-#define __clock(A) __attribute__(( atomicc_clock((A)) ))
+#define __clock(A,B) __attribute__(( atomicc_clock((A), (B)) ))
 #define __topModule __attribute__(( atomicc_topModule ))
 #define __printf __attribute__(( atomicc_printf ))
 #define __serialize(A) struct __attribute__(( atomicc_serialize )) { A ifc; }
