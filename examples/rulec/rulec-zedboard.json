@@ -1,0 +1,136 @@
+{
+    "I2C0_scl": {
+	"i2c0": "scl"
+    },
+    "I2C0_sda": {
+	"i2c0": "sda"
+    },
+    "pmoda__J1": {
+        "pmoda": "J1",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J2": {
+        "pmoda": "J2",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J3": {
+        "pmoda": "J3",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J4": {
+        "pmoda": "J4",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J7": {
+        "pmoda": "J7",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J8": {
+        "pmoda": "J8",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J9": {
+        "pmoda": "J9",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmoda__J10": {
+        "pmoda": "J10",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J1": {
+        "pmodb": "J1",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J2": {
+        "pmodb": "J2",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J3": {
+        "pmodb": "J3",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J4": {
+        "pmodb": "J4",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J7": {
+        "pmodb": "J7",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J8": {
+        "pmodb": "J8",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J9": {
+        "pmodb": "J9",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodb__J10": {
+        "pmodb": "J10",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J1": {
+        "pmodc": "J1",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J2": {
+        "pmodc": "J2",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J3": {
+        "pmodc": "J3",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J4": {
+        "pmodc": "J4",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J7": {
+        "pmodc": "J7",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J8": {
+        "pmodc": "J8",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J9": {
+        "pmodc": "J9",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodc__J10": {
+        "pmodc": "J10",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J1": {
+        "pmodd": "J1",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J2": {
+        "pmodd": "J2",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J3": {
+        "pmodd": "J3",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J4": {
+        "pmodd": "J4",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J7": {
+        "pmodd": "J7",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J8": {
+        "pmodd": "J8",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J9": {
+        "pmodd": "J9",
+        "PIO_DIRECTION": "OUTPUT"
+    },
+    "pmodd__J10": {
+        "pmodd": "J10",
+        "PIO_DIRECTION": "OUTPUT"
+    }
+}
