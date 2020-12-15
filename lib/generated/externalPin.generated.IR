@@ -39,4 +39,8 @@ EMODULE/Verilog SelectIndex(funnelWidth=20,width=14) SelectIndexIfc(funnelWidth=
 }
 MODULE ExternalPin(width=32) ExternalPinIFC(width=32) {
     FILE externalPin_OC_cpp
+    FIELD/shared Bit(32) dummy
+    METHOD/Rule/Action RULE$init__ENA {
+        LET Bit(32) :out = dummy
+    }
 }

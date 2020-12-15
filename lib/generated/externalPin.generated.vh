@@ -14,4 +14,6 @@ interface ExternalPinIFC#(width = 32);
 endinterface
 `endif
 //METASTART; ExternalPin
+//METAGUARD; RULE$init; 1'd1;
+//METARULES; RULE$init
 `endif

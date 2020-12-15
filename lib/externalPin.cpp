@@ -22,7 +22,10 @@
 
 template <int width>
 class ExternalPin __implements  ExternalPinIFC<width> {
-    // force verilog generation
+    __shared __uint(width) dummy;
+    __rule init {
+        this->out = dummy;  // prevent default '0' output
+    }
 };
 
 ExternalPin<32> dummyExt;

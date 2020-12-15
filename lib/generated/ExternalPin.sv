@@ -6,8 +6,9 @@ module ExternalPin #(
     input wire [width - 1:0]in,
     output wire [width - 1:0]out);
     logic CLK;
+    logic [width - 1:0]dummy;
     logic nRST;
-    assign out = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign out = dummy;
 endmodule
 
 `default_nettype wire    // set back to default value
