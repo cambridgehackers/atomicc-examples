@@ -290,13 +290,11 @@ class EchoIndication {
 class EchoIfc {
     __software EchoRequest                     request;
     __software EchoIndication                 *indication;
-    __input  __uint(1)        CLK;
-    __input  __uint(1)        nRST;
-    __input  __uint(1)        fmc_video_clk1_v;
-    __output __uint(1)        i2c_mux_reset_n;
 };
 
 class Echo __implements EchoIfc {
+    ExternalPin<1> fmc_video_clk1_v_pin;
+    ExternalPin<1> i2c_mux_reset_n_pin;
     ClockImageon iclock;
     __clock("iclock.hdmiClock", "iclock.hdminReset") HdmiBlock    hdmi;
     HdmiImageon  imageon;
@@ -318,7 +316,7 @@ class Echo __implements EchoIfc {
 
     __uint(1)    i2c_mux_reset_n_reg;
     __rule initHdmi {
-        videoClock.I = fmc_video_clk1_v;
+        videoClock.I = fmc_video_clk1_v_pin.out;
         iclock.CLK = videoClock.O;
         iclock.nRST = __defaultnReset;
 
@@ -328,7 +326,7 @@ class Echo __implements EchoIfc {
         imageon.nRST = __defaultnReset;
         //adv7511_clk = !iclock.hdmiClock;
 
-        i2c_mux_reset_n = i2c_mux_reset_n_reg;
+        i2c_mux_reset_n_pin.in = i2c_mux_reset_n_reg;
     }
     __uint(1) busy, busy_delay;
     __int(32) v_temp, v_delay;

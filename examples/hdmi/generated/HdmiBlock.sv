@@ -102,7 +102,7 @@ module HdmiBlock (input wire CLK, input wire nRST,
     SyncFF setup__ENASyncFF (.CLK(CLK), .nRST(nRST),
         .out(_setupS__ENA),
         .in(setup__ENA));
-    assign adv7511_clk_pin$in = !CLK;
+    assign adv7511_clk_pin$in = RULE$initHdmi__ENA && ( CLK == 0 );
     assign adv7511_d_pin$in = RULE$initHdmi__ENA ? patternBlock$data : 36'd0;
     assign adv7511_de_pin$in = RULE$initHdmi__ENA && dataEnable;
     assign adv7511_hs_pin$in = RULE$initHdmi__ENA && hSync;

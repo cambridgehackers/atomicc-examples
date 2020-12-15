@@ -1,11 +1,7 @@
 `include "hdmi.generated.vh"
 
 `default_nettype none
-module Echo (
-    input wire CLK,
-    input wire nRST,
-    input wire fmc_video_clk1_v,
-    output wire i2c_mux_reset_n,
+module Echo (input wire CLK, input wire nRST,
     EchoRequest.server request,
     EchoIndication.client indication);
     reg _hdmi$runS__ENA;
@@ -41,15 +37,25 @@ module Echo (
     logic __CONTROL_hdmi$setup__ENA$done;
     logic _hdmi$runS__ACK;
     logic _hdmi$setupS__ACK;
+    logic fmc_video_clk1_v_pin$in;
+    logic fmc_video_clk1_v_pin$out;
     logic hdmi$run__ACK;
     logic hdmi$run__ENA;
     logic hdmi$setup__ACK;
     logic hdmi$setup__ENA;
+    logic i2c_mux_reset_n_pin$in;
+    logic i2c_mux_reset_n_pin$out;
     logic iclock$hdmiClock;
     logic iclock$hdminReset;
     logic iclock$imageonClock;
     logic iclock$imageonnReset;
     logic videoClock$O;
+    ExternalPin#(.width(1)) fmc_video_clk1_v_pin (
+        .in(fmc_video_clk1_v_pin$in),
+        .out(fmc_video_clk1_v_pin$out));
+    ExternalPin#(.width(1)) i2c_mux_reset_n_pin (
+        .in(i2c_mux_reset_n_pin$in),
+        .out(i2c_mux_reset_n_pin$out));
     ClockImageon iclock (
         .CLK(videoClock$O),
         .nRST(nRST),
@@ -76,7 +82,7 @@ module Echo (
         .CLK(iclock$imageonClock),
         .nRST(nRST));
     BUFG videoClock (
-        .I(fmc_video_clk1_v),
+        .I(fmc_video_clk1_v_pin$out),
         .O(videoClock$O));
     SyncFF hdmi$run__ACKSyncFF (.CLK(CLK), .nRST(nRST),
         .out(hdmi$run__ACK),
@@ -100,7 +106,8 @@ module Echo (
         .clear(__CONTROL_hdmi$setup__ENA$done),
         .out(hdmi$setup__ENA),
         .done(__CONTROL_hdmi$setup__ENA$done));
-    assign i2c_mux_reset_n = i2c_mux_reset_n_reg;
+    assign fmc_video_clk1_v_pin$in = 0; //MISSING_ASSIGNMENT_FOR_OUTPUT_VALUE
+    assign i2c_mux_reset_n_pin$in = i2c_mux_reset_n_reg;
     // Extra assigments, not to output wires
     assign RULE$delay_rule__ENA = ( busy & ( !busy_delay ) ) != 0;
     assign RULE$delay_rule__RDY = ( busy & ( !busy_delay ) ) != 0;

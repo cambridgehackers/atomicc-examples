@@ -75,19 +75,6 @@ interface EchoIndication;
                     input  heard__RDY);
 endinterface
 `endif
-`ifndef __EchoIfc_DEF__
-`define __EchoIfc_DEF__
-interface EchoIfc;
-    logic  CLK;
-    logic  nRST;
-    logic  fmc_video_clk1_v;
-    logic  i2c_mux_reset_n;
-    modport server (input  CLK, nRST, fmc_video_clk1_v,
-                    output i2c_mux_reset_n);
-    modport client (output CLK, nRST, fmc_video_clk1_v,
-                    input  i2c_mux_reset_n);
-endinterface
-`endif
 `ifndef __HdmiBlockIfc_DEF__
 `define __HdmiBlockIfc_DEF__
 interface HdmiBlockIfc;
@@ -231,6 +218,8 @@ endinterface
 //METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$init
 //METASTART; Echo
+//METAINTERNAL; fmc_video_clk1_v_pin; ExternalPin(width=1);
+//METAINTERNAL; i2c_mux_reset_n_pin; ExternalPin(width=1);
 //METAINTERNAL; iclock; ClockImageon;
 //METAINTERNAL; hdmi; HdmiBlock;
 //METAINTERNAL; imageon; HdmiImageon;

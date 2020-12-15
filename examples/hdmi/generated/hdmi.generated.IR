@@ -28,10 +28,6 @@ INTERFACE EchoIfc  {
     SOFTWARE indication
     INTERFACE EchoRequest request
     INTERFACE/Ptr EchoIndication indication
-    FIELD/input Bit(1) CLK
-    FIELD/input Bit(1) nRST
-    FIELD/input Bit(1) fmc_video_clk1_v
-    FIELD/output Bit(1) i2c_mux_reset_n
 }
 INTERFACE EchoIndication  {
     FILE hdmi_OC_cpp
@@ -268,6 +264,8 @@ MODULE ClockImageon ClockImageonIfc {
 }
 MODULE Echo EchoIfc {
     FILE hdmi_OC_cpp
+    FIELD ExternalPin(width=1) fmc_video_clk1_v_pin
+    FIELD ExternalPin(width=1) i2c_mux_reset_n_pin
     FIELD ClockImageon iclock
     FIELD/Clock=iclock.hdmiClock:iclock.hdminReset HdmiBlock hdmi
     FIELD HdmiImageon imageon
@@ -306,12 +304,12 @@ MODULE Echo EchoIfc {
         STORE :counter = (counter) + (1)
     }
     METHOD/Rule/Action RULE$initHdmi__ENA {
-        LET Bit(1) :videoClock$I = fmc_video_clk1_v
+        LET Bit(1) :videoClock$I = fmc_video_clk1_v_pin$out
         LET Bit(1) :iclock$CLK = videoClock$O
         LET Bit(1) :iclock$nRST = __defaultnReset
         LET Bit(1) :imageon$CLK = iclock$imageonClock
         LET Bit(1) :imageon$nRST = __defaultnReset
-        LET Bit(1) :i2c_mux_reset_n = i2c_mux_reset_n_reg
+        LET Bit(1) :i2c_mux_reset_n_pin$in = i2c_mux_reset_n_reg
     }
     METHOD/Action request$say__ENA ( Bit(32) v ) if ((((busy) != (0)) ^ (1))) {
         PRINTF :printf{"request.say %x\n",request$say$v}

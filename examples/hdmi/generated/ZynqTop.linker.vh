@@ -57,8 +57,8 @@ reg foohdmi; \
     assign pmoda__J7 = hdmi_hsync;					\
     assign pmoda__J8 = hdmi_de;						\
     assign pmoda__J9 = hdmi_data[0];					\
-    assign test.user.ctop.bozoclock = fmc_video_clk1_v;			\
-    assign i2c_mux_reset_n = test.user.ctop.DUT__Echo.i2c_mux_reset_n;	\
+    assign test.user.ctop.DUT__Echo.fmc_video_clk1_v_pin.out = fmc_video_clk1_v;	\
+    assign i2c_mux_reset_n = test.user.ctop.DUT__Echo.i2c_mux_reset_n_pin.in;	\
     assign io_vita_clk_pll = 0;						\
     assign io_vita_trigger_0__read = 0;					\
     assign spi_mosi = 0;						\
