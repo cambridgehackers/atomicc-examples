@@ -1,5 +1,3 @@
-`ifndef __connect_GENERATED__VH__
-`define __connect_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __EchoIndication_data_DEF__
@@ -49,32 +47,6 @@ typedef struct packed {
     logic [32 - 1:0] meth;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say;
 `endif
-`ifndef __EchoRequest_DEF__
-`define __EchoRequest_DEF__
-interface EchoRequest;
-    logic say__ENA;
-    logic [32 - 1:0] say$meth;
-    logic [32 - 1:0] say$v;
-    logic say__RDY;
-    modport server (input  say__ENA, say$meth, say$v,
-                    output say__RDY);
-    modport client (output say__ENA, say$meth, say$v,
-                    input  say__RDY);
-endinterface
-`endif
-`ifndef __EchoIndication_DEF__
-`define __EchoIndication_DEF__
-interface EchoIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$meth;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$meth, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$meth, heard$v,
-                    input  heard__RDY);
-endinterface
-`endif
 //METASTART; Connect
 //METAINTERNAL; lEIO; EchoIndicationOutput;
 //METAINTERNAL; lERI; EchoRequestInput;
@@ -108,4 +80,3 @@ endinterface
 //METASTART; EchoRequestOutput
 //METAINVOKE; request.say__ENA; :pipe.enq__ENA;
 //METAGUARD; request.say; pipe.enq__RDY;
-`endif

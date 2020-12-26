@@ -1,5 +1,3 @@
-`ifndef __wbpriarbiter_GENERATED__VH__
-`define __wbpriarbiter_GENERATED__VH__
 `include "atomicclib.vh"
 
 //METASTART; FwbSlave
@@ -28,4 +26,3 @@
 //METAGUARD; b$ack; o$ack__RDY;
 //METAGUARD; b$stall; o$stall__RDY;
 //METAGUARD; b$err; o$err__RDY;
-`endif

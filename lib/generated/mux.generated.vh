@@ -1,5 +1,3 @@
-`ifndef __mux_GENERATED__VH__
-`define __mux_GENERATED__VH__
 `include "atomicclib.vh"
 
 //METASTART; MuxPipe
@@ -12,4 +10,3 @@
 //METAINVOKE; RULE$fifoRule__ENA; :forwardFifo$out.deq__ENA;:out.enq__ENA;
 //METAGUARD; RULE$fifoRule; ( !in$enq__ENA ) && forwardFifo$out.first__RDY && out.enq__RDY && forwardFifo$out.deq__RDY;
 //METARULES; RULE$fifoRule
-`endif

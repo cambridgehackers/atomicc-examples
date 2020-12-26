@@ -1,5 +1,3 @@
-`ifndef __reqarb_GENERATED__VH__
-`define __reqarb_GENERATED__VH__
 `include "atomicclib.vh"
 
 //METASTART; ReqArb
@@ -8,4 +6,3 @@
 //METAGUARD; a; ( !b__ENA ) && out$a__RDY;
 //METAINVOKE; b__ENA; :out$a__ENA;
 //METAGUARD; b; ( !a__ENA ) && out$a__RDY;
-`endif

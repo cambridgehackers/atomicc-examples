@@ -1,0 +1,22 @@
+interface ZynqClock;
+    logic [15 - 1:0] DDR_Addr;
+    logic [3 - 1:0] DDR_BankAddr;
+    logic  DDR_CAS_n;
+    logic  DDR_CKE;
+    logic  DDR_Clk_n;
+    logic  DDR_Clk_p;
+    logic  DDR_CS_n;
+    logic [4 - 1:0] DDR_DM;
+    logic [32 - 1:0] DDR_DQ;
+    logic [4 - 1:0] DDR_DQS_n;
+    logic [4 - 1:0] DDR_DQS_p;
+    logic  DDR_DRSTB;
+    logic  DDR_ODT;
+    logic  DDR_RAS_n;
+    logic  FIXED_IO_ddr_vrn;
+    logic  FIXED_IO_ddr_vrp;
+    logic  DDR_WEB;
+    logic  FIXED_IO_ps_clk;
+    logic  FIXED_IO_ps_porb;
+    logic  FIXED_IO_ps_srstb;
+endinterface

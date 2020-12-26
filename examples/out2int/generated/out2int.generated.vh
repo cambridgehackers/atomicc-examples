@@ -1,31 +1,5 @@
-`ifndef __out2int_GENERATED__VH__
-`define __out2int_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __OinRequest_DEF__
-`define __OinRequest_DEF__
-interface OinRequest;
-    logic say__ENA;
-    logic [32 - 1:0] say$v;
-    logic say__RDY;
-    modport server (input  say__ENA, say$v,
-                    output say__RDY);
-    modport client (output say__ENA, say$v,
-                    input  say__RDY);
-endinterface
-`endif
-`ifndef __OinIndication_DEF__
-`define __OinIndication_DEF__
-interface OinIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$v,
-                    input  heard__RDY);
-endinterface
-`endif
 //METASTART; Oin
 //METAINTERNAL; first; Fifo1Base(width=32);
 //METAINTERNAL; second; Fifo1Base(width=32);
@@ -59,4 +33,3 @@ endinterface
 //METASTART; ___P2MOinRequest
 //METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.say__ENA;
 //METAGUARD; pipe.enq; method.say__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 );
-`endif

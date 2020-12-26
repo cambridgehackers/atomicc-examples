@@ -1,5 +1,3 @@
-`ifndef __before1_GENERATED__VH__
-`define __before1_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __EchoIndication_data_DEF__
@@ -50,51 +48,6 @@ typedef struct packed {
     logic [32 - 1:0] v;
     logic [32 - 1:0] meth;
 } _IC_anonymous_AC_struct_JC__KD__KD_EchoRequest_PF_union_KD__KD_EchoRequest_PF_say2;
-`endif
-`ifndef __EchoRequest_DEF__
-`define __EchoRequest_DEF__
-interface EchoRequest;
-    logic say__ENA;
-    logic [32 - 1:0] say$meth;
-    logic [32 - 1:0] say$v;
-    logic say__RDY;
-    logic say2__ENA;
-    logic [32 - 1:0] say2$meth;
-    logic [32 - 1:0] say2$v;
-    logic say2__RDY;
-    modport server (input  say__ENA, say$meth, say$v, say2__ENA, say2$meth, say2$v,
-                    output say__RDY, say2__RDY);
-    modport client (output say__ENA, say$meth, say$v, say2__ENA, say2$meth, say2$v,
-                    input  say__RDY, say2__RDY);
-endinterface
-`endif
-`ifndef __EchoIndication_DEF__
-`define __EchoIndication_DEF__
-interface EchoIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$meth;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$meth, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$meth, heard$v,
-                    input  heard__RDY);
-endinterface
-`endif
-`ifndef __Swap_DEF__
-`define __Swap_DEF__
-interface Swap;
-    logic y2x__ENA;
-    logic y2x__RDY;
-    logic y2xnull__ENA;
-    logic y2xnull__RDY;
-    logic x2y__ENA;
-    logic x2y__RDY;
-    modport server (input  y2x__ENA, y2xnull__ENA, x2y__ENA,
-                    output y2x__RDY, y2xnull__RDY, x2y__RDY);
-    modport client (output y2x__ENA, y2xnull__ENA, x2y__ENA,
-                    input  y2x__RDY, y2xnull__RDY, x2y__RDY);
-endinterface
 `endif
 //METASTART; Connect
 //METAINTERNAL; lEIO; EchoIndicationOutput;
@@ -160,4 +113,3 @@ endinterface
 //METAGUARD; request.say; pipe.enq__RDY;
 //METAINVOKE; request.say2__ENA; :pipe.enq__ENA;
 //METAGUARD; request.say2; pipe.enq__RDY;
-`endif

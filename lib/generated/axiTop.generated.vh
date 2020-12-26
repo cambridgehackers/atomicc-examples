@@ -1,5 +1,3 @@
-`ifndef __axiTop_GENERATED__VH__
-`define __axiTop_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __ReadResp_DEF__
@@ -8,76 +6,6 @@ typedef struct packed {
     logic [32 - 1:0] data;
     logic [6 - 1:0] id;
 } ReadResp;
-`endif
-`ifndef __ZynqInterruptT_DEF__
-`define __ZynqInterruptT_DEF__
-interface ZynqInterruptT;
-    logic  CLK;
-    logic  nRST;
-    logic  interrupt;
-    modport server (input  CLK, nRST,
-                    output interrupt);
-    modport client (output CLK, nRST,
-                    input  interrupt);
-endinterface
-`endif
-`ifndef __MaxiO_DEF__
-`define __MaxiO_DEF__
-interface MaxiO;
-    logic AR__ENA;
-    logic [32 - 1:0] AR$addr;
-    logic [12 - 1:0] AR$id;
-    logic [4 - 1:0] AR$len;
-    logic AR__RDY;
-    logic AW__ENA;
-    logic [32 - 1:0] AW$addr;
-    logic [12 - 1:0] AW$id;
-    logic [4 - 1:0] AW$len;
-    logic AW__RDY;
-    logic W__ENA;
-    logic [32 - 1:0] W$data;
-    logic [12 - 1:0] W$id;
-    logic  W$last;
-    logic W__RDY;
-    modport server (input  AR__ENA, AR$addr, AR$id, AR$len, AW__ENA, AW$addr, AW$id, AW$len, W__ENA, W$data, W$id, W$last,
-                    output AR__RDY, AW__RDY, W__RDY);
-    modport client (output AR__ENA, AR$addr, AR$id, AR$len, AW__ENA, AW$addr, AW$id, AW$len, W__ENA, W$data, W$id, W$last,
-                    input  AR__RDY, AW__RDY, W__RDY);
-endinterface
-`endif
-`ifndef __MaxiI_DEF__
-`define __MaxiI_DEF__
-interface MaxiI;
-    logic R__ENA;
-    logic [32 - 1:0] R$data;
-    logic [12 - 1:0] R$id;
-    logic  R$last;
-    logic [2 - 1:0] R$resp;
-    logic R__RDY;
-    logic B__ENA;
-    logic [12 - 1:0] B$id;
-    logic [2 - 1:0] B$resp;
-    logic B__RDY;
-    modport server (input  R__ENA, R$data, R$id, R$last, R$resp, B__ENA, B$id, B$resp,
-                    output R__RDY, B__RDY);
-    modport client (output R__ENA, R$data, R$id, R$last, R$resp, B__ENA, B$id, B$resp,
-                    input  R__RDY, B__RDY);
-endinterface
-`endif
-`ifndef __TraceIfc_DEF__
-`define __TraceIfc_DEF__
-interface TraceIfc#(depth = 1024, head = 77, sensitivity = 99, width = 4);
-    logic  CLK;
-    logic  nRST;
-    logic  enable;
-    logic [width - 1:0] data;
-    logic clear__ENA;
-    logic clear__RDY;
-    modport server (input  CLK, nRST, enable, data, clear__ENA,
-                    output clear__RDY);
-    modport client (output CLK, nRST, enable, data, clear__ENA,
-                    input  clear__RDY);
-endinterface
 `endif
 //METASTART; AxiTop
 //METAINTERNAL; reqArs; Fifo1Base(width=6);
@@ -113,4 +41,3 @@ endinterface
 //METARULES; RULE$init; RULE$lread; RULE$lreadData; RULE$lwrite; RULE$writeResponse
 //METACONNECT; readUser.enq__ENA; user$read.enq__ENA
 //METACONNECT; readUser.enq__RDY; user$read.enq__RDY
-`endif

@@ -1,5 +1,3 @@
-`ifndef __ivector_GENERATED__VH__
-`define __ivector_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __IVectorTest_DEF__
@@ -15,32 +13,6 @@ typedef struct packed {
     logic [32 - 1:0] b;
     logic [32 - 1:0] a;
 } ValuePair;
-`endif
-`ifndef __IVectorRequest_DEF__
-`define __IVectorRequest_DEF__
-interface IVectorRequest;
-    logic say__ENA;
-    logic [32 - 1:0] say$meth;
-    logic [32 - 1:0] say$v;
-    logic say__RDY;
-    modport server (input  say__ENA, say$meth, say$v,
-                    output say__RDY);
-    modport client (output say__ENA, say$meth, say$v,
-                    input  say__RDY);
-endinterface
-`endif
-`ifndef __IVectorIndication_DEF__
-`define __IVectorIndication_DEF__
-interface IVectorIndication;
-    logic heard__ENA;
-    logic [32 - 1:0] heard$meth;
-    logic [32 - 1:0] heard$v;
-    logic heard__RDY;
-    modport server (input  heard__ENA, heard$meth, heard$v,
-                    output heard__RDY);
-    modport client (output heard__ENA, heard$meth, heard$v,
-                    input  heard__RDY);
-endinterface
 `endif
 //METASTART; IVector
 //METAINTERNAL; fifo0; FifoPong(width=96);
@@ -94,4 +66,3 @@ endinterface
 //METAINVOKE; out.deq__ENA; !pong:element1$out.deq__ENA;pong:element2$out.deq__ENA;
 //METAGUARD; out.deq; ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !pong ) && element1$out.deq__RDY );
 //METAGUARD; out.first; ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !pong ) && element1$out.first__RDY );
-`endif

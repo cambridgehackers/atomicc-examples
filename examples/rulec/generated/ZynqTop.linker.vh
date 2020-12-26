@@ -13,7 +13,7 @@ reg foo; \
     always @( posedge CLK) begin \
       if (!nRST) begin \
         foo <= 0; \
-      end // nRST \
+      end /* nRST */ \
       else begin \
         foo <= !foo; \
       end; \

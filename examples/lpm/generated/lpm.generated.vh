@@ -1,5 +1,3 @@
-`ifndef __lpm_GENERATED__VH__
-`define __lpm_GENERATED__VH__
 `include "atomicclib.vh"
 
 `ifndef __ProcessData_DEF__
@@ -9,79 +7,6 @@ typedef struct packed {
     logic [16 - 1:0] IPA;
     logic [4 - 1:0] ticket;
 } ProcessData;
-`endif
-`ifndef __TickIfc_DEF__
-`define __TickIfc_DEF__
-interface TickIfc;
-    logic [4 - 1:0] getTicket;
-    logic getTicket__RDY;
-    logic allocateTicket__ENA;
-    logic allocateTicket__RDY;
-    modport server (input  allocateTicket__ENA,
-                    output getTicket, getTicket__RDY, allocateTicket__RDY);
-    modport client (output allocateTicket__ENA,
-                    input  getTicket, getTicket__RDY, allocateTicket__RDY);
-endinterface
-`endif
-`ifndef __LpmIfc_DEF__
-`define __LpmIfc_DEF__
-interface LpmIfc;
-    logic enter__ENA;
-    logic [32 - 1:0] enter$x;
-    logic enter__RDY;
-    logic write__ENA;
-    logic [32 - 1:0] write$addr;
-    logic [32 - 1:0] write$data;
-    logic write__RDY;
-    modport server (input  enter__ENA, enter$x, write__ENA, write$addr, write$data,
-                    output enter__RDY, write__RDY);
-    modport client (output enter__ENA, enter$x, write__ENA, write$addr, write$data,
-                    input  enter__RDY, write__RDY);
-endinterface
-`endif
-`ifndef __LpmMemIfc_DEF__
-`define __LpmMemIfc_DEF__
-interface LpmMemIfc;
-    logic read__ENA;
-    logic [32 - 1:0] read$addr;
-    logic read__RDY;
-    logic write__ENA;
-    logic [32 - 1:0] write$addr;
-    logic [32 - 1:0] write$data;
-    logic write__RDY;
-    modport server (input  read__ENA, read$addr, write__ENA, write$addr, write$data,
-                    output read__RDY, write__RDY);
-    modport client (output read__ENA, read$addr, write__ENA, write$addr, write$data,
-                    input  read__RDY, write__RDY);
-endinterface
-`endif
-`ifndef __LpmRequest_DEF__
-`define __LpmRequest_DEF__
-interface LpmRequest;
-    logic enter__ENA;
-    logic [32 - 1:0] enter$data;
-    logic enter__RDY;
-    logic write__ENA;
-    logic [32 - 1:0] write$addr;
-    logic [32 - 1:0] write$data;
-    logic write__RDY;
-    modport server (input  enter__ENA, enter$data, write__ENA, write$addr, write$data,
-                    output enter__RDY, write__RDY);
-    modport client (output enter__ENA, enter$data, write__ENA, write$addr, write$data,
-                    input  enter__RDY, write__RDY);
-endinterface
-`endif
-`ifndef __LpmIndication_DEF__
-`define __LpmIndication_DEF__
-interface LpmIndication;
-    logic out__ENA;
-    logic [32 - 1:0] out$data;
-    logic out__RDY;
-    modport server (input  out__ENA, out$data,
-                    output out__RDY);
-    modport client (output out__ENA, out$data,
-                    input  out__RDY);
-endinterface
 `endif
 //METASTART; BufTicket
 //METAGUARD; getTicket; 1'd1;
@@ -143,4 +68,3 @@ endinterface
 //METASTART; ___P2MLpmRequest
 //METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.enter__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.write__ENA;
 //METAGUARD; pipe.enq; ( method.enter__RDY && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) ) || ( ( !method.enter__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) );
-`endif

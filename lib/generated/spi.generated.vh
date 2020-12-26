@@ -1,33 +1,5 @@
-`ifndef __spi_GENERATED__VH__
-`define __spi_GENERATED__VH__
 `include "atomicclib.vh"
 
-`ifndef __ClockDivIFC_DEF__
-`define __ClockDivIFC_DEF__
-interface ClockDivIFC;
-    logic  CLK;
-    logic  CLK_OUT;
-    logic  nRST;
-    modport server (input  CLK, nRST,
-                    output CLK_OUT);
-    modport client (output CLK, nRST,
-                    input  CLK_OUT);
-endinterface
-`endif
-`ifndef __SPIMasterIfc_DEF__
-`define __SPIMasterIfc_DEF__
-interface SPIMasterIfc#(width = 26);
-    logic  CLK;
-    logic  nRST;
-    logic  clock;
-    logic  mosi;
-    logic  miso;
-    modport server (input  miso,
-                    output clock, mosi);
-    modport client (output miso,
-                    input  clock, mosi);
-endinterface
-`endif
 //METASTART; SPIMaster
 //METAINTERNAL; clockDivider; ClockDiv;
 //METAINTERNAL; spi; SPIMasterInternal(width=26);
@@ -45,4 +17,3 @@ endinterface
 //METABEFORE; RULE$init__ENA; :RULE$running__ENA; :request.enq__ENA
 //METAGUARD; RULE$init; 1'd1;
 //METARULES; RULE$running; RULE$init
-`endif

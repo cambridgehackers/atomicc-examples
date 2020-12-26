@@ -1,5 +1,3 @@
-`ifndef __sizedFifo_GENERATED__VH__
-`define __sizedFifo_GENERATED__VH__
 `include "atomicclib.vh"
 
 //METASTART; SizedFifoBase
@@ -9,4 +7,3 @@
 //METAGUARD; out.first; 1'd1;
 //METABEFORE; in.enq__ENA; :out.deq__ENA
 //METAGUARD; in.enq; 0 != ( ( c == depth ) ^ 1 );
-`endif

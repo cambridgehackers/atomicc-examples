@@ -1,5 +1,3 @@
-`ifndef __fifo_GENERATED__VH__
-`define __fifo_GENERATED__VH__
 `include "atomicclib.vh"
 
 //METASTART; Fifo1Base
@@ -28,4 +26,3 @@
 //METAGUARD; in.enq; 0 != ( full ^ 1 );
 //METAGUARD; out.deq; 0 != full;
 //METAGUARD; out.first; 0 != full;
-`endif
