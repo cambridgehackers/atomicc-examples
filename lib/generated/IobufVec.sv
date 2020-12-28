@@ -1,5 +1,4 @@
-`include "iobufVec.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module IobufVec #(
     parameter integer iovecWidth = 999999)(

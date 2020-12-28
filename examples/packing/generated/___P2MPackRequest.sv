@@ -1,5 +1,4 @@
-`include "packing.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___P2MPackRequest (input wire CLK, input wire nRST,
     PackRequest.client method,

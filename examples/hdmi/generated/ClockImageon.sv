@@ -1,5 +1,4 @@
-`include "hdmi.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ClockImageon (
     input wire CLK,

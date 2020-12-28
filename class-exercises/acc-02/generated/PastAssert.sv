@@ -1,5 +1,4 @@
-`include "pastassert.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module PastAssert #(
     parameter integer MAX_AMOUNT = 22,

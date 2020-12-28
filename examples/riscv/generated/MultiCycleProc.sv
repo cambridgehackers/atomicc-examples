@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "MultiCycleProc.generated.vh"
-
 `default_nettype none
 module MultiCycleProc (input wire CLK, input wire nRST,
     Decoder.client dec,

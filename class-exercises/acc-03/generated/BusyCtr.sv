@@ -1,5 +1,4 @@
-`include "busyctr.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module BusyCtr #(
     parameter integer MAX_AMOUNT = 22)(

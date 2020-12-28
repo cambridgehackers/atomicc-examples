@@ -1,0 +1,52 @@
+//METASTART; IVector
+//METAINTERNAL; fifo0; FifoPong(width=96);
+//METAINTERNAL; fifo1; FifoPong(width=96);
+//METAINTERNAL; fifo2; FifoPong(width=96);
+//METAINTERNAL; fifo3; FifoPong(width=96);
+//METAINTERNAL; fifo4; FifoPong(width=96);
+//METAINTERNAL; fifo5; FifoPong(width=96);
+//METAINTERNAL; fifo6; FifoPong(width=96);
+//METAINTERNAL; fifo7; FifoPong(width=96);
+//METAINTERNAL; fifo8; FifoPong(width=96);
+//METAINTERNAL; fifo9; FifoPong(width=96);
+//METAINTERNAL; fifo$in__enq__RDY_orCC; SelectIndex(funnelWidth=20,width=14);
+//METAINVOKE; in.say__ENA; :fifo$in[__inst$Genvar1].enq__ENA;
+//METAGUARD; in.say; fifo$in__enq__RDY_or1;
+//METAINVOKE; RULE$respond_rule_0__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_0__ENA; RULE$respond_rule_1__ENA; RULE$respond_rule_2__ENA; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_0; fifo$out[ 0 ].first__RDY && fifo$out[ 0 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_1__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_1__ENA; RULE$respond_rule_2__ENA; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_1; fifo$out[ 1 ].first__RDY && fifo$out[ 1 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_2__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_2__ENA; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_2; fifo$out[ 2 ].first__RDY && fifo$out[ 2 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_3__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_3__ENA; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_3; fifo$out[ 3 ].first__RDY && fifo$out[ 3 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_4__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_4__ENA; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_4; fifo$out[ 4 ].first__RDY && fifo$out[ 4 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_5__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_5__ENA; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_5; fifo$out[ 5 ].first__RDY && fifo$out[ 5 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_6__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_6__ENA; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_6; fifo$out[ 6 ].first__RDY && fifo$out[ 6 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_7__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_7__ENA; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_7; fifo$out[ 7 ].first__RDY && fifo$out[ 7 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_8__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAEXCLUSIVE; RULE$respond_rule_8__ENA; RULE$respond_rule_9__ENA
+//METAGUARD; RULE$respond_rule_8; fifo$out[ 8 ].first__RDY && fifo$out[ 8 ].deq__RDY && out.heard__RDY;
+//METAINVOKE; RULE$respond_rule_9__ENA; :fifo$out[__inst$Genvar1].deq__ENA;:out.heard__ENA;
+//METAGUARD; RULE$respond_rule_9; fifo$out[ 9 ].first__RDY && fifo$out[ 9 ].deq__RDY && out.heard__RDY;
+//METARULES; RULE$respond_rule_0; RULE$respond_rule_1; RULE$respond_rule_2; RULE$respond_rule_3; RULE$respond_rule_4; RULE$respond_rule_5; RULE$respond_rule_6; RULE$respond_rule_7; RULE$respond_rule_8; RULE$respond_rule_9
+//METASTART; FifoPong
+//METAINTERNAL; element1; Fifo1Base(width=96);
+//METAINTERNAL; element2; Fifo1Base(width=96);
+//METAINVOKE; in.enq__ENA; !pong:element1$in.enq__ENA;pong:element2$in.enq__ENA;
+//METAGUARD; in.enq; ( element2$in.enq__RDY && ( pong || element1$in.enq__RDY ) ) || ( ( !element2$in.enq__RDY ) && ( !pong ) && element1$in.enq__RDY );
+//METAINVOKE; out.deq__ENA; !pong:element1$out.deq__ENA;pong:element2$out.deq__ENA;
+//METAGUARD; out.deq; ( element2$out.deq__RDY && ( pong || element1$out.deq__RDY ) ) || ( ( !element2$out.deq__RDY ) && ( !pong ) && element1$out.deq__RDY );
+//METAGUARD; out.first; ( element2$out.first__RDY && ( pong || element1$out.first__RDY ) ) || ( ( !element2$out.first__RDY ) && ( !pong ) && element1$out.first__RDY );

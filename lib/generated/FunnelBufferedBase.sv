@@ -1,5 +1,4 @@
-`include "funnel.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module FunnelBufferedBase #(
     parameter integer funnelWidth = 4,

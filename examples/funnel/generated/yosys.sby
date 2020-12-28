@@ -5,43 +5,18 @@ mode bmc
 smtbmc
 
 [script]
-read_verilog -sv -formal VsimTop.sv PipeInLast.sv UserTop.sv PipeIn.sv PipeOutLast.sv PipeInLength.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv FunnelIndication.sv FunnelRequest.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv PipeOut.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv SelectIndex.sv Out2InBase.sv FunnelBase.sv 
+read_verilog -sv -formal VsimTop.sv PipeInLast.sv UserTop.sv VsimReceive.sv VsimSend.sv PipeIn.sv PipeOutLast.sv PipeInLength.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv FunnelIndication.sv FunnelRequest.sv ___M2PFunnelIndication.sv FunnelTest.sv ___P2MFunnelRequest.sv PipeOut.sv FifoPBase.sv FunnelBufferedBase.sv Fifo1Base.sv SelectIndex.sv Out2InBase.sv FunnelBase.sv 
 
 prep -top VsimTop
 
 [files]
 ../../lib/generated/VsimTop.sv
-../../lib/generated/vsimTop.generated.vh
-../../lib/generated/atomicclib.vh
-../../lib/generated/adapter.generated.vh
-../../lib/generated/asyncControl.generated.vh
 ../../lib/generated/atomicc.generated.vh
-../../lib/generated/axiTop.generated.vh
-../../lib/generated/bram.generated.vh
-../../lib/generated/bscan.generated.vh
-../../lib/generated/clockTop.generated.vh
-../../lib/generated/configCounter.generated.vh
-../../lib/generated/connectNet2.generated.vh
-../../lib/generated/externalPin.generated.vh
-../../lib/generated/fifo.generated.vh
-../../lib/generated/funnel.generated.vh
-../../lib/generated/grayCounter.generated.vh
-../../lib/generated/iobufVec.generated.vh
-../../lib/generated/mimo.generated.vh
-../../lib/generated/mux.generated.vh
-../../lib/generated/out2in.generated.vh
-../../lib/generated/printfStub.generated.vh
-../../lib/generated/resetInverter.generated.vh
-../../lib/generated/selectout.generated.vh
-../../lib/generated/sizedFifo.generated.vh
-../../lib/generated/spi.generated.vh
-../../lib/generated/syncFF.generated.vh
-../../lib/generated/tracebuf.generated.vh
-../../lib/generated/userTop.generated.vh
-../../lib/generated/zynqTop.generated.vh
 ../../lib/verilog/VsimTop.linker.vh
 ../../lib/generated/PipeInLast.sv
 ../../lib/generated/UserTop.sv
+../../../atomicc/simulation/verilog/VsimReceive.sv
+../../../atomicc/simulation/verilog/VsimSend.sv
 ../../lib/generated/PipeIn.sv
 ../../lib/generated/PipeOutLast.sv
 ../../lib/generated/PipeInLength.sv
@@ -49,7 +24,6 @@ prep -top VsimTop
 ../../lib/generated/Out2InLast.sv
 ../../lib/generated/AdapterFromBus.sv
 generated/l_top.sv
-generated/funneltest.generated.vh
 generated/FunnelIndication.sv
 generated/FunnelRequest.sv
 generated/___M2PFunnelIndication.sv

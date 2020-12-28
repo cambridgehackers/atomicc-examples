@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "ivector.generated.vh"
-
 `default_nettype none
 module IVector (input wire CLK, input wire nRST,
     IVectorRequest.server in,

@@ -1,5 +1,4 @@
-`include "lfsrequiv.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module LfsrEquiv (input wire CLK, input wire nRST,
     input wire shiftBit__ENA,

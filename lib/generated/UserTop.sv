@@ -1,5 +1,4 @@
-`include "userTop.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module UserTop (input wire CLK, input wire nRST,
     PipeInLast.server write,

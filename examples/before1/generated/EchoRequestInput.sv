@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "before1.generated.vh"
-
 `default_nettype none
 module EchoRequestInput (input wire CLK, input wire nRST,
     PipeIn.server pipe,

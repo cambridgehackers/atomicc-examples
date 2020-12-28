@@ -1,5 +1,4 @@
-`include "externalPin.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ExternalPin #(
     parameter integer width = 32)(

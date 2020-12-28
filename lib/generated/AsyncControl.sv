@@ -1,5 +1,4 @@
-`include "asyncControl.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module AsyncControl (
     input wire CLK,

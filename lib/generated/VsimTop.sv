@@ -1,5 +1,4 @@
-`include "vsimTop.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 `include "VsimTop.linker.vh"
 module VsimTop (

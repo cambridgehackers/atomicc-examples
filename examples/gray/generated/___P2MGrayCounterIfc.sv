@@ -1,5 +1,4 @@
-`include "gray.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___P2MGrayCounterIfc #(
     parameter integer width = 4)(

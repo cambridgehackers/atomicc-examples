@@ -1,5 +1,4 @@
-`include "zynqTop.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module P7Wrap (
     inout wire [54 - 1:0]MIO,

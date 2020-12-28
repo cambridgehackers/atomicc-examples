@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "lpm.generated.vh"
-
 `default_nettype none
 module Lpm (input wire CLK, input wire nRST,
     input wire enter__ENA,

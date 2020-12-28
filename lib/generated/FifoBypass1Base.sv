@@ -1,5 +1,4 @@
-`include "fifo.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module FifoBypass1Base #(
     parameter integer width = 999999)(

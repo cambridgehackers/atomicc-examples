@@ -1,5 +1,4 @@
-`include "configCounter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ConfigCounter #(
     parameter integer count_sz = 10)(

@@ -14,3 +14,4 @@ all:
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/rulec.ll rulec.cpp
 	$(ATOMICCDIR)/atomiccLinker ZynqTop generated/linker
+	#$(ATOMICCDIR)/atomiccLinker VsimTop generated/linker

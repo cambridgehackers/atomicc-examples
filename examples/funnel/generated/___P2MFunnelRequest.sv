@@ -1,5 +1,4 @@
-`include "funneltest.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___P2MFunnelRequest (input wire CLK, input wire nRST,
     FunnelRequest.client method,

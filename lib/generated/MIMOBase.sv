@@ -1,5 +1,4 @@
-`include "mimo.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module MIMOBase #(
     parameter integer widthIn = 32,

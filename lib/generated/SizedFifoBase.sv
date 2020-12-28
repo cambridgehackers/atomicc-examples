@@ -1,5 +1,4 @@
-`include "sizedFifo.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module SizedFifoBase #(
     parameter integer depth = 20,

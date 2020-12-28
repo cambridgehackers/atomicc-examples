@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "ivector.generated.vh"
-
 `default_nettype none
 module FifoPong #(
     parameter integer width = 96)(

@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "lpm.generated.vh"
-
 `default_nettype none
 module LpmTest (input wire CLK, input wire nRST,
     LpmRequest.server request,

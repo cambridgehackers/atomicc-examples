@@ -1,5 +1,4 @@
-`include "hdmi.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Echo (input wire CLK, input wire nRST,
     EchoRequest.server request,

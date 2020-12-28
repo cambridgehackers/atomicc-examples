@@ -1,5 +1,4 @@
-`include "funneltest.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___M2PFunnelIndication (input wire CLK, input wire nRST,
     FunnelIndication.server method,

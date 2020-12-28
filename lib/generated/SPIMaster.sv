@@ -1,5 +1,4 @@
-`include "spi.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module SPIMaster #(
     parameter integer width = 26)(

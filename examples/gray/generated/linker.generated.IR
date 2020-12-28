@@ -415,34 +415,7 @@ INTERFACE BRAM__Wf5_D400_interface {
     FIELD/output Bit(1) dataOut__RDY
 }
 FILE ../../lib/generated/ZynqTop.sv
-FILE ../../lib/generated/zynqTop.generated.vh
-FILE ../../lib/generated/atomicclib.vh
-FILE ../../lib/generated/adapter.generated.vh
-FILE ../../lib/generated/asyncControl.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
-FILE ../../lib/generated/axiTop.generated.vh
-FILE ../../lib/generated/bram.generated.vh
-FILE ../../lib/generated/bscan.generated.vh
-FILE ../../lib/generated/clockTop.generated.vh
-FILE ../../lib/generated/configCounter.generated.vh
-FILE ../../lib/generated/connectNet2.generated.vh
-FILE ../../lib/generated/externalPin.generated.vh
-FILE ../../lib/generated/fifo.generated.vh
-FILE ../../lib/generated/funnel.generated.vh
-FILE ../../lib/generated/grayCounter.generated.vh
-FILE ../../lib/generated/iobufVec.generated.vh
-FILE ../../lib/generated/mimo.generated.vh
-FILE ../../lib/generated/mux.generated.vh
-FILE ../../lib/generated/out2in.generated.vh
-FILE ../../lib/generated/printfStub.generated.vh
-FILE ../../lib/generated/resetInverter.generated.vh
-FILE ../../lib/generated/selectout.generated.vh
-FILE ../../lib/generated/sizedFifo.generated.vh
-FILE ../../lib/generated/spi.generated.vh
-FILE ../../lib/generated/syncFF.generated.vh
-FILE ../../lib/generated/tracebuf.generated.vh
-FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/vsimTop.generated.vh
 FILE generated/ZynqTop.linker.vh
 FILE ../../lib/generated/PipeIn.sv
 FILE ../../lib/generated/Pps7fclk.sv
@@ -451,6 +424,7 @@ FILE ../../lib/generated/MaxiO.sv
 FILE ../../lib/generated/ZynqInterrupt.sv
 FILE ../../lib/generated/P7Wrap.sv
 FILE ../../lib/generated/AxiTop.sv
+FILE ../../lib/generated/axiTop.generated.vh
 FILE ../../lib/generated/Bscan.sv
 FILE ../../lib/generated/PipeOut.sv
 FILE ../../lib/generated/SelectOut.sv
@@ -469,7 +443,6 @@ FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
-FILE generated/gray.generated.vh
 FILE ../../lib/generated/BRAM.sv
 FILE ../../lib/generated/GrayCounterIfc.sv
 FILE generated/___P2MGrayCounterIfc.sv

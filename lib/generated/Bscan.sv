@@ -1,5 +1,4 @@
-`include "bscan.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Bscan #(
     parameter integer id = 99,

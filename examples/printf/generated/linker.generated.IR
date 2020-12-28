@@ -34,6 +34,21 @@ INTERFACE UserTop_interface {
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }
+MODULE VsimReceive VsimReceive_interface {
+}
+INTERFACE VsimReceive_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/output Bit(64) dpi_msgReceive_enq
+}
+MODULE VsimSend VsimSend_interface {
+}
+INTERFACE VsimSend_interface {
+    FIELD/input  Bit(1) CLK
+    FIELD/input  Bit(1) nRST
+    FIELD/input  Bit(32) enq
+    FIELD/input  Bit(32) last
+}
 MODULE AdapterToBus__Iz1 AdapterToBus__Iz1_interface {
 }
 INTERFACE AdapterToBus__Iz1_interface {
@@ -101,37 +116,12 @@ INTERFACE Printf_interface {
     FIELD/output Bit(1) enq__RDY
 }
 FILE ../../lib/generated/VsimTop.sv
-FILE ../../lib/generated/vsimTop.generated.vh
-FILE ../../lib/generated/atomicclib.vh
-FILE ../../lib/generated/adapter.generated.vh
-FILE ../../lib/generated/asyncControl.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
-FILE ../../lib/generated/axiTop.generated.vh
-FILE ../../lib/generated/bram.generated.vh
-FILE ../../lib/generated/bscan.generated.vh
-FILE ../../lib/generated/clockTop.generated.vh
-FILE ../../lib/generated/configCounter.generated.vh
-FILE ../../lib/generated/connectNet2.generated.vh
-FILE ../../lib/generated/externalPin.generated.vh
-FILE ../../lib/generated/fifo.generated.vh
-FILE ../../lib/generated/funnel.generated.vh
-FILE ../../lib/generated/grayCounter.generated.vh
-FILE ../../lib/generated/iobufVec.generated.vh
-FILE ../../lib/generated/mimo.generated.vh
-FILE ../../lib/generated/mux.generated.vh
-FILE ../../lib/generated/out2in.generated.vh
-FILE ../../lib/generated/printfStub.generated.vh
-FILE ../../lib/generated/resetInverter.generated.vh
-FILE ../../lib/generated/selectout.generated.vh
-FILE ../../lib/generated/sizedFifo.generated.vh
-FILE ../../lib/generated/spi.generated.vh
-FILE ../../lib/generated/syncFF.generated.vh
-FILE ../../lib/generated/tracebuf.generated.vh
-FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/zynqTop.generated.vh
 FILE ../../lib/verilog/VsimTop.linker.vh
 FILE ../../lib/generated/PipeInLast.sv
 FILE ../../lib/generated/UserTop.sv
+FILE ../../../atomicc/simulation/verilog/VsimReceive.sv
+FILE ../../../atomicc/simulation/verilog/VsimSend.sv
 FILE ../../lib/generated/PipeIn.sv
 FILE ../../lib/generated/PipeOutLast.sv
 FILE ../../lib/generated/PipeInLength.sv
@@ -139,7 +129,6 @@ FILE ../../lib/generated/AdapterToBus.sv
 FILE ../../lib/generated/Out2InLast.sv
 FILE ../../lib/generated/AdapterFromBus.sv
 FILE generated/l_top.sv
-FILE generated/printf.generated.vh
 FILE generated/EchoIndication.sv
 FILE generated/EchoRequest.sv
 FILE generated/___M2PEchoIndication.sv

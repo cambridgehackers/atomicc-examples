@@ -1,5 +1,4 @@
-`include "syncFF.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module SyncFF (
     input wire CLK,

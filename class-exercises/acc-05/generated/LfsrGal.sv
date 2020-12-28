@@ -1,5 +1,4 @@
-`include "lfsrequiv.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module LfsrGal #(
     parameter integer LN = 8,

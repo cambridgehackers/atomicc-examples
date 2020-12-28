@@ -1,5 +1,4 @@
-`include "echo.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module l_top (input wire CLK, input wire nRST,
     PipeIn.server request,

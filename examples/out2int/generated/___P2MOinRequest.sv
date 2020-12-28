@@ -1,5 +1,4 @@
-`include "out2int.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___P2MOinRequest (input wire CLK, input wire nRST,
     OinRequest.client method,

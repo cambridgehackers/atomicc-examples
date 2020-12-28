@@ -1,5 +1,4 @@
-`include "connectNet2.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module CONNECTNET2 (
     input wire IN1,

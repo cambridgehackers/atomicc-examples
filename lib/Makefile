@@ -23,7 +23,7 @@ CDIRS=$(patsubst %.cpp, %, $(SOURCES))
 $(CDIRS):
 	mkdir -p generated
 	$(CPP) -c $(CPPFLAGS) -S $(LLVMFLAGS) -o generated/$@.ll $@.cpp
-	./make_header.sh
+	#./make_header.sh
 
 all: $(CDIRS)
 

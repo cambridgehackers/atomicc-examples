@@ -1,5 +1,4 @@
-`include "wbpriarbiter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module FwbSlave (
     output wire [(32 / 8) - 1:0]f_nreqs,

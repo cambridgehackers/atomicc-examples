@@ -1,5 +1,4 @@
-`include "clock.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ModFt600 (
     input wire usb_clk,

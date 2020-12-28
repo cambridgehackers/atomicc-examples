@@ -1,5 +1,4 @@
-`include "packing.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Pack (input wire CLK, input wire nRST,
     PackRequest.server request,

@@ -1,5 +1,4 @@
-`include "bscant.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___M2PBtestIndication (input wire CLK, input wire nRST,
     BtestIndication.server method,

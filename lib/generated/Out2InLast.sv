@@ -1,5 +1,4 @@
-`include "out2in.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Out2InLast #(
     parameter integer width = 999999)(

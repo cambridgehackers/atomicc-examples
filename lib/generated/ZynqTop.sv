@@ -1,5 +1,4 @@
-`include "zynqTop.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 `include "ZynqTop.linker.vh"
 module ZynqTop (

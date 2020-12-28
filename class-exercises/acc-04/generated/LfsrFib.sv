@@ -1,5 +1,4 @@
-`include "dblpipe.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module LfsrFib #(
     parameter integer LN = 8,

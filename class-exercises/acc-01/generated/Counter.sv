@@ -1,5 +1,4 @@
-`include "counter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Counter #(
     parameter integer MAX_AMOUNT = 22)(

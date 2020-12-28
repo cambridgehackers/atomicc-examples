@@ -25,33 +25,5 @@ INTERFACE LfsrFib_interface {
     FIELD/output Bit(1) outBit__RDY
 }
 FILE generated/DblPipe.sv
-FILE generated/dblpipe.generated.vh
-FILE ../../lib/generated/atomicclib.vh
-FILE ../../lib/generated/adapter.generated.vh
-FILE ../../lib/generated/asyncControl.generated.vh
 FILE ../../lib/generated/atomicc.generated.vh
-FILE ../../lib/generated/axiTop.generated.vh
-FILE ../../lib/generated/bram.generated.vh
-FILE ../../lib/generated/bscan.generated.vh
-FILE ../../lib/generated/clockTop.generated.vh
-FILE ../../lib/generated/configCounter.generated.vh
-FILE ../../lib/generated/connectNet2.generated.vh
-FILE ../../lib/generated/externalPin.generated.vh
-FILE ../../lib/generated/fifo.generated.vh
-FILE ../../lib/generated/funnel.generated.vh
-FILE ../../lib/generated/grayCounter.generated.vh
-FILE ../../lib/generated/iobufVec.generated.vh
-FILE ../../lib/generated/mimo.generated.vh
-FILE ../../lib/generated/mux.generated.vh
-FILE ../../lib/generated/out2in.generated.vh
-FILE ../../lib/generated/printfStub.generated.vh
-FILE ../../lib/generated/resetInverter.generated.vh
-FILE ../../lib/generated/selectout.generated.vh
-FILE ../../lib/generated/sizedFifo.generated.vh
-FILE ../../lib/generated/spi.generated.vh
-FILE ../../lib/generated/syncFF.generated.vh
-FILE ../../lib/generated/tracebuf.generated.vh
-FILE ../../lib/generated/userTop.generated.vh
-FILE ../../lib/generated/vsimTop.generated.vh
-FILE ../../lib/generated/zynqTop.generated.vh
 FILE generated/LfsrFib.sv

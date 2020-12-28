@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "connect.generated.vh"
-
 `default_nettype none
 module EchoIndicationOutput (input wire CLK, input wire nRST,
     EchoIndication.server indication,

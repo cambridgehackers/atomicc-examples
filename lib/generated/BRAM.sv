@@ -1,5 +1,4 @@
-`include "bram.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module BRAM #(
     parameter integer width = 4,

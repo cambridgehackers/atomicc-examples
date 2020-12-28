@@ -1,5 +1,4 @@
-`include "mux.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module MuxPipe (input wire CLK, input wire nRST,
     PipeIn.server in,

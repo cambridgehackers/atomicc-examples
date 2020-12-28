@@ -1,5 +1,4 @@
-`include "selectout.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module SelectOut #(
     parameter integer funnelWidth = 8,

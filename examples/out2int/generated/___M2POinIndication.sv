@@ -1,5 +1,4 @@
-`include "out2int.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___M2POinIndication (input wire CLK, input wire nRST,
     OinIndication.server method,

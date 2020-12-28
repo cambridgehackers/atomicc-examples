@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "lpm.generated.vh"
-
 `default_nettype none
 module ___P2MLpmRequest (input wire CLK, input wire nRST,
     LpmRequest.client method,

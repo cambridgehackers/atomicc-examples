@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "axiTop.generated.vh"
-
 `default_nettype none
 module AxiTop (
     input wire CLK,

@@ -1,5 +1,4 @@
-`include "printfStub.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Printf (input wire CLK, input wire nRST,
     input wire enq__ENA,

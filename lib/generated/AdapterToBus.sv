@@ -1,5 +1,4 @@
-`include "adapter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module AdapterToBus #(
     parameter integer width = 128,

@@ -1,5 +1,4 @@
-`include "clockTop.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ClockTop #(
     parameter real CLKIN1_PERIOD = 0.0)(

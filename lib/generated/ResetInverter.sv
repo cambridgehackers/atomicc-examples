@@ -1,5 +1,4 @@
-`include "resetInverter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ResetInverter (
     input wire RESET_IN,

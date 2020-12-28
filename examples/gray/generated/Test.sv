@@ -1,5 +1,4 @@
-`include "gray.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module Test (input wire CLK, input wire nRST,
     GrayCounterIfc.server request);

@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "lpm.generated.vh"
-
 `default_nettype none
 module BufTicket (input wire CLK, input wire nRST,
     output wire [4 - 1:0]getTicket,

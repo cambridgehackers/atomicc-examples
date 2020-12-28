@@ -1,5 +1,4 @@
-`include "grayCounter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module GrayCounter #(
     parameter integer width = 10)(

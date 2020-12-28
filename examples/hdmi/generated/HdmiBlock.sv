@@ -1,5 +1,4 @@
-`include "hdmi.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module HdmiBlock (input wire CLK, input wire nRST,
     input wire setup__ENA,

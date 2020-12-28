@@ -1,5 +1,4 @@
-`include "hdmi.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module ___M2PEchoIndication (input wire CLK, input wire nRST,
     EchoIndication.server method,

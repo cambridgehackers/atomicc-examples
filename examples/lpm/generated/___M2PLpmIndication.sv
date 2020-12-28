@@ -1,5 +1,5 @@
+`include "atomicc.generated.vh"
 `include "lpm.generated.vh"
-
 `default_nettype none
 module ___M2PLpmIndication (input wire CLK, input wire nRST,
     LpmIndication.server method,
