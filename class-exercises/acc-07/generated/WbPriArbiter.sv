@@ -1,5 +1,4 @@
-`include "wbpriarbiter.generated.vh"
-
+`include "atomicc.generated.vh"
 `default_nettype none
 module WbPriArbiter #(
     parameter integer OPT_ZERO_ON_IDLE = 0,

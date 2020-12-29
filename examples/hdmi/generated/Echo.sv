@@ -210,7 +210,7 @@ module Echo (input wire CLK, input wire nRST,
 
     always @( posedge iclock$imageonClock) begin
       if (!iclock$imageonnReset) begin
-        //imageonCounter <= 0;
+        imageonCounter <= 0;
       end // nRST
       else begin
         // RULE$updateRuleI__ENA
