@@ -41,8 +41,10 @@ MODULE PastAssert(MAX_AMOUNT=22,F_TESTID=9999) PastAssertIfc(MAX_AMOUNT=22,F_TES
     FILE pastassert_OC_cpp
     FIELD Bit(16) counter
     FIELD Bit(1) fPastValid
+    FIELD Bit(4) ZF_TESTID
     METHOD/Action startSignal__ENA if (((counter) == (0))) {
         STORE :counter = (22) - (1)
+        STORE :ZF_TESTID = (ZF_TESTID) + (1)
     }
     METHOD busy Bit(1) = (((counter) != (0)))
     METHOD/Rule/Action RULE$decRule__ENA if (((counter) != (0))) {
@@ -50,12 +52,12 @@ MODULE PastAssert(MAX_AMOUNT=22,F_TESTID=9999) PastAssertIfc(MAX_AMOUNT=22,F_TES
     }
     METHOD/Rule/Action RULE$verifyRule__ENA {
         ASSERT :assert((counter) < (22))
-        ASSERT ((9999) == (1)):assert(((startSignal__ENA) != (0)) ^ (1))
-        ASSERT ((9999) == (1)):assert($past{(counter) == (0)})
-        ASSERT ((9999) == (2)):assert(((startSignal__ENA) != (0)) ^ (1))
-        ASSERT ((9999) == (2)):assert((counter) == (0))
-        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((9999) == (3)))):assert((counter) == (-1))
-        STORE ((9999) == (4)):fPastValid = (1) != (0)
-        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((fPastValid) & ((9999) == (4))))):assert((counter) == (-1))
+        ASSERT ((ZF_TESTID) == (1)):assert(((startSignal__ENA) != (0)) ^ (1))
+        ASSERT ((ZF_TESTID) == (1)):assert($past{(counter) == (0)})
+        ASSERT ((ZF_TESTID) == (2)):assert(((startSignal__ENA) != (0)) ^ (1))
+        ASSERT ((ZF_TESTID) == (2)):assert((counter) == (0))
+        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((ZF_TESTID) == (3)))):assert((counter) == (-1))
+        STORE ((ZF_TESTID) == (4)):fPastValid = (1) != (0)
+        ASSERT ((($past{counter}) == (0)) & ((($past{startSignal__ENA}) != (0)) & ((fPastValid) & ((ZF_TESTID) == (4))))):assert((counter) == (-1))
     }
 }

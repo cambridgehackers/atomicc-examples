@@ -2,7 +2,7 @@
 mode bmc
 
 [engines]
-smtbmc
+btor pono
 
 [script]
 read_verilog -sv -formal DblPipe.sv LfsrFib.sv 

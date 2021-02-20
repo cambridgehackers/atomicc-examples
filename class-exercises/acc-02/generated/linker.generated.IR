@@ -2,7 +2,6 @@ MODULE PastAssert PastAssert_interface {
 }
 INTERFACE PastAssert_interface {
     FIELD/parameter Bit(32) MAX_AMOUNT
-    FIELD/parameter Bit(32) F_TESTID
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
     FIELD/input  Bit(1) startSignal__ENA

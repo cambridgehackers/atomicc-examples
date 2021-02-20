@@ -8,6 +8,7 @@ module PastAssert #(
     output wire startSignal__RDY,
     output wire busy,
     output wire busy__RDY);
+    reg [4 - 1:0]ZF_TESTID;
     reg [16 - 1:0]counter;
     reg fPastValid;
     logic RULE$decRule__ENA;
@@ -19,6 +20,7 @@ module PastAssert #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
+        ZF_TESTID <= 0;
         counter <= 0;
         fPastValid <= 0;
       end // nRST
@@ -27,34 +29,40 @@ module PastAssert #(
             counter <= counter + ( -16'd1 );
         end; // End of RULE$decRule__ENA
         // RULE$verifyRule__ENA
-            if (F_TESTID == 4)
+            if (ZF_TESTID == 4)
             fPastValid <= 1 != 0;
         // End of RULE$verifyRule__ENA
         if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA
             counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
+            ZF_TESTID <= ZF_TESTID + 4'd1;
         end; // End of startSignal__ENA
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
+    initial begin
+        ZF_TESTID <= 0;
+        counter <= 0;
+        fPastValid <= 0;
+    end
     always @(*)
         assert( counter < ( (16'(MAX_AMOUNT)) ) );
     always @(*)
-        if (F_TESTID == 1)
+        if (ZF_TESTID == 1)
             assert( ( startSignal__ENA != 0 ) ^ 1'd1 );
-    always @(*)
-        if (F_TESTID == 1)
+    always @( posedge CLK)
+        if (ZF_TESTID == 1)
             assert( $past( counter == 0 ) );
     always @(*)
-        if (F_TESTID == 2)
+        if (ZF_TESTID == 2)
             assert( ( startSignal__ENA != 0 ) ^ 1'd1 );
     always @(*)
-        if (F_TESTID == 2)
+        if (ZF_TESTID == 2)
             assert( counter == 0 );
     always @( posedge CLK)
-        if (( $past( startSignal__ENA ) != 0 ) && ( F_TESTID == 3 ) && ( $past( counter ) == 0 ))
+        if (( $past( startSignal__ENA ) != 0 ) && ( ZF_TESTID == 3 ) && ( $past( counter ) == 0 ))
             assert( counter == ( -1 ) );
     always @( posedge CLK)
-        if (( $past( startSignal__ENA ) != 0 ) && fPastValid && ( F_TESTID == 4 ) && ( $past( counter ) == 0 ))
+        if (( $past( startSignal__ENA ) != 0 ) && fPastValid && ( ZF_TESTID == 4 ) && ( $past( counter ) == 0 ))
             assert( counter == ( -1 ) );
 `endif
 endmodule

@@ -64,6 +64,11 @@ class TRACEGRAY GrayCounter __implements GrayCounterIfc<width> {
                & ((i == width - 1) | __bitsubstr(counterBit, i < 1 ? 0:(i - 1)))
                & ((i == 1) | !__reduce("|", __bitsubstr(counterBit, i < 2 ? 0:(i - 2), 0))));
         }
+//property legal_graycode (code);
+//@(posedge clk) ($countones($past(code) ^ code)<=1));
+// $onehot0(code ^ $past(code))
+//endproperty
+//assert legal_graycode(async_ptr);
     }
 
     __rule init {

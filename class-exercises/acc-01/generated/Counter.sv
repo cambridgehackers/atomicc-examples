@@ -29,6 +29,9 @@ module Counter #(
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
+    initial begin
+        counter <= 0;
+    end
     always @(*)
         assert( counter < ( (16'(MAX_AMOUNT)) ) );
 `endif

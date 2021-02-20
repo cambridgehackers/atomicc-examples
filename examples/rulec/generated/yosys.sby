@@ -2,7 +2,7 @@
 mode bmc
 
 [engines]
-smtbmc
+btor pono
 
 [script]
 read_verilog -sv -formal VsimTop.sv PipeInLast.sv UserTop.sv VsimReceive.sv VsimSend.sv PipeIn.sv PipeOutLast.sv PipeInLength.sv AdapterToBus.sv Out2InLast.sv AdapterFromBus.sv l_top.sv EchoIndication.sv EchoRequest.sv ___M2PEchoIndication.sv Echo.sv ___P2MEchoRequest.sv 

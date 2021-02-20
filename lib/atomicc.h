@@ -56,6 +56,27 @@ extern "C" int *__bitsubstrl(int, ...);
 extern "C" int __reduce(const char *, ...);
 extern "C" void __finish(void);
 extern "C" bool $past(int);
+#if 0
+$sampled ( expression )
+$rose ( expression [, [clocking_event] ] )
+$fell ( expression [, [clocking_event] ] )
+$stable ( expression [, [clocking_event] ] )
+$changed ( expression [ , [ clocking_event ] ] )
+$past ( expression1 [, [number_of_ticks ] [, [expression2 ] [, [clocking_event]]] ] )
+__sampled(e) e.
+__rose(e,c) $past(b,1,1,c) !== 1 && b === 1, where b is the LSB of e.
+__fell(e,c) $past(b,1,1,c) !== 0 && b === 0, where b is the LSB of e.
+__stable(e,c) $past(e,1,1,c) === e.
+__changed(e,c) $past(e,1,1,c) !== e.
+__rose_gclk(e) $past_gclk(b) !== 1 && b === 1, where b is the LSB of e.
+__fell_gclk(e) $past_gclk(b) !== 0 && b === 0, where b is the LSB of e.
+__stable_gclk(e) $past_gclk(e) === e.
+__changed_gclk(e) $past_gclk(e) !== e.
+__rising_gclk(e) b !== 1 && $future_gclk(b) === 1, where b is the LSB of e.
+__falling_gclk(e) b !== 0 && $future_gclk(b) === 0, where b is the LSB of e.
+__steady_gclk(e) e === $future_gclk(e).
+__changing_gclk(e) e !== $future_gclk(e).
+#endif
 
 template<class T>
 class PipeIn {

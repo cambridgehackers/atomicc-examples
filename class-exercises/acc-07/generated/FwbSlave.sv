@@ -73,6 +73,11 @@ module FwbSlave (
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
+    initial begin
+        f_past_valid <= 0;
+        nacks <= 0;
+        nreqs <= 0;
+    end
     always @(*)
         if (( ( !status$err__RDY ) || ( ( ( !status$stall__RDY ) || ( !f_past_valid ) ) && ( status$stall__RDY || ( ( ( !status$ack ) || ( ( ( !a$stb__ENA ) || ( ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( !( nreqs - nacks ) ) && ( !f_past_valid ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( !f_past_valid ) ) ) ) && ( a$stb__ENA || ( !f_past_valid ) ) ) ) && ( status$ack || ( ( ( !a$stb__ENA ) || ( ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( ( !( nreqs - nacks ) ) || ( ( !status$err ) && ( !f_past_valid ) ) ) && ( ( nreqs - nacks ) || ( !f_past_valid ) ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( !f_past_valid ) ) ) ) && ( a$stb__ENA || ( !f_past_valid ) ) ) ) ) ) && status$ack__RDY ) ) && ( status$err__RDY || ( ( !status$ack ) && ( ( !BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 ) || ( ( !( nreqs - nacks ) ) && ( !f_past_valid ) ) ) && ( BasicBlockCond_PF__PF_ZN8FwbSlave11RULE$verifyEv_PF_cond_OC_true_OC_i179 || ( !f_past_valid ) ) && status$ack__RDY ) ))
             assert( ( nRST != 0 ) ^ 1'd1 );
