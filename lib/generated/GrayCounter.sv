@@ -26,7 +26,6 @@ module GrayCounter #(
     logic _readBin$temp [width - 1:0];
     logic [width - 1:0]counterBit;
     logic [width - 1:0]m;
-    genvar __inst$Genvar1;
     Trace#(.width(32+1+1+1+1+1+width+width+width+width),.depth(1024),.head(0),.sensitivity(1+1+1+1+1)) __traceMemory (
         .clear__ENA(__traceMemory$clear__ENA),
         .clear__RDY(),
@@ -46,13 +45,36 @@ module GrayCounter #(
     // Extra assigments, not to output wires
     assign RULE$incdec__ENA = increment__ENA != decrement__ENA;
     assign _RULE$incdec$useLsb = ( ^counterBit ) == decrement__ENA;
-for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign _readBin$rtemp[ __inst$Genvar1 ] = _readBin$temp[ __inst$Genvar1 ];
     assign _readBin$temp[ __inst$Genvar1 ] = ^counterBit[ ( width - 1 ) : __inst$Genvar1 ];
     assign counterBit[ __inst$Genvar1 ] = counter[ __inst$Genvar1 ];
     end;
 
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (writeBin__ENA) begin // writeBin__ENA
+            counter[ width - 1 ] <= writeBin$v[ ( width - 1 ) ];
+        end; // End of writeBin__ENA
+      end
+    end // always @ (posedge CLK)
+
+    for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < ( width - 1 ); __inst$Genvar1 = __inst$Genvar1 + 1) begin
+
+    always @( posedge CLK) begin
+      if (!nRST) begin
+      end // nRST
+      else begin
+        if (writeBin__ENA) begin // writeBin__ENA
+            counter[ __inst$Genvar1 ] <= ^writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
+        end; // End of writeBin__ENA
+      end
+    end // always @ (posedge CLK)
+   end // end of forloop
+
+    for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
@@ -61,12 +83,6 @@ for(__inst$Genvar1 = 0; __inst$Genvar1 < width; __inst$Genvar1 = __inst$Genvar1 
         if (( increment__ENA != decrement__ENA ) && RULE$incdec__ENA) begin // RULE$incdec__ENA
             counter[ __inst$Genvar1 ] <= counter[ __inst$Genvar1 ] ^ ( ( __inst$Genvar1 == 0 ) ? _RULE$incdec$useLsb : ( ( ( _RULE$incdec$useLsb != 0 ) ^ 1'd1 ) & ( ( __inst$Genvar1 == ( width - 1 ) ) | counterBit[ ( ( ( !( __inst$Genvar1 < 1 ) ) && ( __inst$Genvar1 != 0 ) ) ? ( __inst$Genvar1 - 1 ) : 0 ) ] ) & ( ( __inst$Genvar1 == 1 ) | ( ( ( |counterBit[ ( ( ( !( __inst$Genvar1 < 2 ) ) && ( __inst$Genvar1 != 0 ) ) ? ( __inst$Genvar1 - 2 ) : 0 ) : 0 ] ) != 0 ) ^ 1'd1 ) ) ) );
         end; // End of RULE$incdec__ENA
-        if (writeBin__ENA) begin // writeBin__ENA
-            if (__inst$Genvar1 != ( width - 1 ))
-            counter[ __inst$Genvar1 ] <= ^writeBin$v[ ( __inst$Genvar1 + 1 ) : __inst$Genvar1 ];
-            if (__inst$Genvar1 == ( width - 1 ))
-            counter[ __inst$Genvar1 ] <= writeBin$v[ __inst$Genvar1 ];
-        end; // End of writeBin__ENA
         if (writeGray__ENA) begin // writeGray__ENA
             counter[ __inst$Genvar1 ] <= writeGray$v[ __inst$Genvar1 ];
         end; // End of writeGray__ENA

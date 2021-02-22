@@ -50,11 +50,9 @@ class TRACEGRAY GrayCounter __implements GrayCounterIfc<width> {
         return rtemp;
     }
     void writeBin(__uint(width) v) {
-        for(int i = 0; i < width; i += 1)
-            if (i == width - 1)
-                counter[i] = __bitsubstr(v, i);
-            else
-                counter[i] = __reduce("^", __bitsubstr(v, i + 1, i));
+        counter[width-1] = __bitsubstr(v, width-1);
+        for(int i = 0; i < width-1; i += 1)
+            counter[i] = __reduce("^", __bitsubstr(v, i + 1, i));
     }
 
     __rule incdec if (__valid(increment) != __valid(decrement)) {

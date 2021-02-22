@@ -76,7 +76,8 @@ MODULE/Trace=1024:0 GrayCounter(width=10) GrayCounterIfc(width=10) {
         GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$4Body__ENA
     }
     METHOD/Action writeBin__ENA ( Bit(width) v ) {
-        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < width)),((__inst$Genvar1 + 1)),FOR$5Body__ENA
+        STORE :counter[(10) - (1)] = __bitsubstr{writeBin$v,(10) - (1)}
+        GENERATE :__inst$Genvar1,(0),((__inst$Genvar1 < (width - 1))),((__inst$Genvar1 + 1)),FOR$5Body__ENA
     }
     METHOD/Action FOR$0Body__ENA ( Bit(32) __inst$Genvar1 , Bit(1) _RULE$incdec$useLsb ) {
         STORE :counter[__inst$Genvar1] = (counter[__inst$Genvar1]) ^ (__phi(((__inst$Genvar1) == (0)):(_RULE$incdec$useLsb), !((__inst$Genvar1) == (0)):(((((_RULE$incdec$useLsb) != (0)) ^ (1)) & (((__inst$Genvar1) == ((10) - (1))) | (__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (1)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (1)))}))) & (((__inst$Genvar1) == (1)) | (((__reduce{"|",__bitsubstr{counterBit,__phi((((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):(0), (!((__inst$Genvar1) < (2)) & !((__inst$Genvar1) == (0))):((__inst$Genvar1) - (2))),0}}) != (0)) ^ (1))))))
@@ -102,7 +103,6 @@ MODULE/Trace=1024:0 GrayCounter(width=10) GrayCounterIfc(width=10) {
         LET Bit(32) :__bitsubstr{_readBin$rtemp,__inst$Genvar1} = _readBin$temp[__inst$Genvar1]
     }
     METHOD/Action FOR$5Body__ENA ( Bit(32) __inst$Genvar1 , Bit(width) writeBin$v ) {
-        STORE ((__inst$Genvar1) == ((10) - (1))):counter[__inst$Genvar1] = __bitsubstr{writeBin$v,__inst$Genvar1}
-        STORE !((__inst$Genvar1) == ((10) - (1))):counter[__inst$Genvar1] = __reduce{"^",__bitsubstr{writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
+        STORE :counter[__inst$Genvar1] = __reduce{"^",__bitsubstr{writeBin$v,(__inst$Genvar1) + (1),__inst$Genvar1}}
     }
 }
