@@ -229,8 +229,10 @@ vcssim: $(SIM_OBJECTS)
 	rm -rf novas.fsdb simv.daidir
 	#verilator -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop
 	# -LDFLAGS -L$(DTOP)/bin
+	#+lint=all,noVCDE,noTFIPC,noIWU,noOUDPE
 	vcs -full64  -sverilog  -o bin/simv \
-		-notice +lint=all,noVCDE,noTFIPC,noIWU,noOUDPE \
+		-notice +lint=all,noPCTI-L,noUI,noNS \
+		+warn=noLFCOR \
 		-timescale=1ns/1ps \
 		$(ACCSIM)/verilog/VcsProgram.sv \
 		$(VERILOG_PATH:%=-y %) \
