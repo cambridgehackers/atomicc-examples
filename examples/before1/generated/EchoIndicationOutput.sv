@@ -24,6 +24,7 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
     unique case(1'b1)
     ( ind_busy & even ) != 0: pipe.enq$v = ind0;
     ( ind_busy & ( !even ) ) != 0: pipe.enq$v = ind1;
+    default:;
     endcase
     end
 

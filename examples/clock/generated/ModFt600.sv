@@ -17,7 +17,6 @@ module ModFt600 (
     logic iobufs$O [16 - 1:0];
     logic iobufs$T [16 - 1:0];
     logic nRST;
-    genvar __inst$Genvar1;
     IOBUF iobufs [16 - 1:0] (
         .I(iobufs$I),
         .IO(iobufs$IO),
@@ -27,7 +26,7 @@ module ModFt600 (
     assign usb_oe_n = usb_rxf_delay[ 0 ];
     assign usb_rd_n = ( usb_rxf_delay != 0 ) && 1'd1;
     assign usb_wr_n = usb_txe_delay || usb_fifo_empty || ( !usb_rxf_delay[ 0 ] );
-for(__inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
+for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
     assign iobufs$IO[ __inst$Genvar1 ] = usb_ad >> __inst$Genvar1;
     end;
 

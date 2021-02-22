@@ -66,6 +66,7 @@ module WbPriArbiter #(
     unique case(1'b1)
     a$stb__ENA: o$stb$addr = a$stb$addr;
     b$stb__ENA: o$stb$addr = b$stb$addr;
+    default:;
     endcase
     end
     always_comb begin
@@ -73,6 +74,7 @@ module WbPriArbiter #(
     unique case(1'b1)
     a$stb__ENA: o$stb$data = a$stb$data;
     b$stb__ENA: o$stb$data = b$stb$data;
+    default:;
     endcase
     end
     always_comb begin
@@ -80,6 +82,7 @@ module WbPriArbiter #(
     unique case(1'b1)
     a$stb__ENA: o$stb$sel = a$stb$sel;
     b$stb__ENA: o$stb$sel = b$stb$sel;
+    default:;
     endcase
     end
 

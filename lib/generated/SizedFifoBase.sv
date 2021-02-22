@@ -10,7 +10,6 @@ module SizedFifoBase #(
     reg [$clog2(depth+0)+1 - 1:0]c;
     reg [width - 1:0]q [depth - 1:0];
     logic [width - 1:0]x_wire;
-    genvar __inst$Genvar1;
     // Extra assigments, not to output wires
     assign in.enq__RDY = c != depth;
     assign out.deq__RDY = c != 0;
@@ -36,7 +35,7 @@ module SizedFifoBase #(
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = 0; ( __inst$Genvar1 + 1 ) < depth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(genvar __inst$Genvar1 = 0; ( __inst$Genvar1 + 1 ) < depth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin

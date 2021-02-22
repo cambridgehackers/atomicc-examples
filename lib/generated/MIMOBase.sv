@@ -9,7 +9,6 @@ module MIMOBase #(
     reg [widthOut+widthIn - 1:0]buffer;
     reg [$clog2(widthOut+widthIn)+1 - 1:0]c;
     logic [widthIn - 1:0]m;
-    genvar __inst$Genvar1;
     // Extra assigments, not to output wires
     assign in.enq__RDY = !( c >= widthOut );
     assign m = in.enq__ENA ? in.enq$v : 0;
@@ -36,7 +35,7 @@ module MIMOBase #(
       end
     end // always @ (posedge CLK)
 
-    for(__inst$Genvar1 = 0; __inst$Genvar1 < widthOut; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+    for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < widthOut; __inst$Genvar1 = __inst$Genvar1 + 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin

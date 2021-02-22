@@ -130,6 +130,7 @@ module AxiTop (
     ( !portalRControl ) && ( readAddr == 0 ): _RULE$lread$res = requestValue$out.first;
     ( !portalRControl ) && ( readAddr == 4 ): _RULE$lread$res = user$write.enq__RDY;
     ( readAddr != 0 ) && ( readAddr != 4 ) && ( !portalRControl ): _RULE$lread$res = 32'd0;
+    default:;
     endcase
     end
 

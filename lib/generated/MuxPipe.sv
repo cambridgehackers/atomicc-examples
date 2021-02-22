@@ -21,6 +21,7 @@ module MuxPipe (input wire CLK, input wire nRST,
     unique case(1'b1)
     in.enq__ENA: out.enq$v = in.enq$v;
     ( !in.enq__ENA ) && forwardFifo$out.first__RDY && forwardFifo$out.deq__RDY: out.enq$v = forwardFifo$out.first;
+    default:;
     endcase
     end
 endmodule

@@ -17,7 +17,6 @@ module SelectOut #(
     logic in__first__RDY_or1;
     logic [width - 1:0]in__first_or [funnelWidth - 1:0];
     logic [width - 1:0]in__first_or1;
-    genvar __inst$Genvar1;
     SelectIndex#(.width(1),.funnelWidth(funnelWidth)) in__deq__RDY_orCC (
         .out(in__deq__RDY_or1),
         .in(in__deq__RDY_or),
@@ -35,7 +34,7 @@ module SelectOut #(
     assign out.deq__RDY = indexValid && in__deq__RDY_or1;
     assign out.first = in__first_or1;
     assign out.first__RDY = in__first__RDY_or1;
-for(__inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign in[__inst$Genvar1].deq__ENA = out.deq__ENA && ( index == __inst$Genvar1 );
     assign in__deq__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].deq__RDY;
     assign in__first__RDY_or[__inst$Genvar1] = in[__inst$Genvar1].first__RDY;

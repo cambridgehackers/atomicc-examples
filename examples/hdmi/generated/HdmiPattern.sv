@@ -42,6 +42,7 @@ module HdmiPattern #(
     ( ( !calculate.setXY$dataEnable ) || ( ( pattern != 2 ) && ( pattern != 1 ) && ( ( calculate.setXY$y & 1 ) == 0 ) && ( pattern == 3 ) ) ) && ( calculate.setXY$dataEnable || ( ( pattern != 2 ) && ( pattern != 1 ) && ( pattern == 3 ) ) ): _calculate$setXY$r_out = 8'd0;
     ( pattern != 3 ) && ( pattern != 2 ) && ( pattern != 1 ) && ( pattern == 4 ): _calculate$setXY$r_out = rampValue[ ( ( 8 + widthAddr ) - 1 ) : widthAddr ];
     ( pattern != 4 ) && ( pattern != 3 ) && ( pattern != 2 ) && ( pattern != 1 ): _calculate$setXY$r_out = 8'd0;
+    default:;
     endcase
     end
 

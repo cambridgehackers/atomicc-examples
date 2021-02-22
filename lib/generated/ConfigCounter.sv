@@ -36,6 +36,7 @@ module ConfigCounter #(
     unique case(1'b1)
     decrement__ENA: dec_wire = decrement$v;
     cnt >= maybeDecrement$v: dec_wire = maybeDecrement$v;
+    default:;
     endcase
     end
 

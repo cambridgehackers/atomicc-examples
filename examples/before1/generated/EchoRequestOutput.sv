@@ -21,6 +21,7 @@ module EchoRequestOutput (input wire CLK, input wire nRST,
     unique case(1'b1)
     request.say__ENA: pipe.enq$v = _request$say$ind;
     request.say2__ENA: pipe.enq$v = _request$say2$ind;
+    default:;
     endcase
     end
 

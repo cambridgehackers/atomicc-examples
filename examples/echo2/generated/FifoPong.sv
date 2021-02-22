@@ -34,6 +34,7 @@ module FifoPong #(
     unique case(1'b1)
     pong: _out$first$retval = element2$out.first;
     !pong: _out$first$retval = element1$out.first;
+    default:;
     endcase
     end
 

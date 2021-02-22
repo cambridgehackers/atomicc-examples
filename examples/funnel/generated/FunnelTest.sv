@@ -13,7 +13,6 @@ module FunnelTest (input wire CLK, input wire nRST,
     PipeIn#(.width(32)) funnel$out();
     PipeIn#(.width(32)) result$in();
     PipeOut#(.width(32)) result$out();
-    genvar __inst$Genvar1;
     FifoPBase#(.width(32)) fifo [4 - 1:0] (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
@@ -33,7 +32,7 @@ module FunnelTest (input wire CLK, input wire nRST,
     assign indication.heard__ENA = result$out.first__RDY && result$out.deq__RDY;
     assign request.say__RDY = fifo$in__enq__RDY_or1;
     assign result$out.deq__ENA = result$out.first__RDY && indication.heard__RDY;
-for(__inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
+for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genvar1 + 1) begin
     assign fifo$in[__inst$Genvar1].enq$v = request.say$v;
     assign fifo$in[__inst$Genvar1].enq__ENA = request.say__ENA && ( index == __inst$Genvar1 );
     assign fifo$in__enq__RDY_or[__inst$Genvar1] = fifo$in[__inst$Genvar1].enq__RDY;

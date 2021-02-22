@@ -85,6 +85,7 @@ module Lpm (input wire CLK, input wire nRST,
     unique case(1'b1)
     ( ( ( mem$out.first & 1 ) == 1 ) && mem$read__RDY && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY ) || ( ( ( mem$out.first & 1 ) != 1 ) && ( ( !mem$out.first__RDY ) || ( ( ( !fifo$out.first__RDY ) || ( ( ( !mem$out.deq__RDY ) || ( ( !fifo$out.deq__RDY ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && mem$read__RDY ) ) && ( mem$out.deq__RDY || ( mem$read__RDY && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY ) ) ) ) && ( fifo$out.first__RDY || ( mem$read__RDY && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY ) ) ) ) && ( mem$out.first__RDY || ( mem$read__RDY && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY ) ) ): fifo$in.enq$v = _RULE$enterRule$agg_2e_tmp;
     ( ( mem$out.first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && mem$read__RDY && fifo$out.deq__RDY: fifo$in.enq$v = _RULE$recircRule$agg_2e_tmp;
+    default:;
     endcase
     end
     always_comb begin
@@ -92,6 +93,7 @@ module Lpm (input wire CLK, input wire nRST,
     unique case(1'b1)
     ( ( ( mem$out.first & 1 ) == 1 ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) || ( ( ( mem$out.first & 1 ) != 1 ) && ( ( !mem$out.first__RDY ) || ( ( ( !fifo$out.first__RDY ) || ( ( ( !mem$out.deq__RDY ) || ( ( !fifo$out.deq__RDY ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) && ( mem$out.deq__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) && ( fifo$out.first__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) && ( mem$out.first__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ): mem$read$addr = 0 + _RULE$enterRule$x[ 9 : 6 ];
     ( ( mem$out.first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY: mem$read$addr = mem$out.first + ( ( _RULE$recircRule$y.state == 1 ) ? _RULE$recircRule$y.IPA[ ( 6 - 1 ) : 3 ] : _RULE$recircRule$y.IPA[ ( 3 - 1 ) : 0 ] );
+    default:;
     endcase
     end
 
