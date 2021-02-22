@@ -223,6 +223,30 @@ $(DTOP)/bin/libconnectal-sim.so: $(SIM_OBJECTS) prepare_bin_target
 prepare_bin_target:
 	$(Q)mkdir -p $(BOARD) bin jni hw
 
+#VCS_EXTRA_FLAGS = +define+SVA_ON -assert svaext+enable_diag -debug_acc+all
+#VCS_EXTRA_FLAGS = -debug_all
+vcssim: $(SIM_OBJECTS)
+	rm -rf novas.fsdb simv.daidir
+	#verilator -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop
+	# -LDFLAGS -L$(DTOP)/bin
+	vcs -full64  -sverilog  -o bin/simv \
+		-notice +lint=all,noVCDE,noTFIPC,noIWU,noOUDPE \
+		-timescale=1ns/1ps \
+		$(ACCSIM)/verilog/VcsProgram.sv \
+		$(VERILOG_PATH:%=-y %) \
+		$(VERILOG_PATH:%=+incdir+%) \
+		-y $(ACCSIM)/verilog \
+		+libext+.sv+.v \
+		-CFLAGS "-I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -I$(PWD)" \
+		$(ACCSIM)/cpp/vcstop.cpp \
+		$(SIM_OBJECTS) \
+		$(VCS_EXTRA_FLAGS)
+# -kdb
+#deprecated -fsdb
+#		-debug_acc+dmptf -debug_region+cell+encrypt \
+#		$(CONNECTALSDIR)/../lib/generated/VsimTop.sv \
+
+
 verilog:
 # $(VFILE)
 #	@echo "verilog"
