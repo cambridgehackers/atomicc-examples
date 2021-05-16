@@ -53,11 +53,8 @@ OBJCOPY?= objcopy
 BINFILE?=bin/mkTop.sof.gz
 endif #!XILINX
 OBJCOPY?=true
+HAS_APPLICATION= $(shell test -f jni/Ubuntu.mk; echo $$? )
 
-export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
-export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
-SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, TlpReplay.cpp BsimDma.cpp sock_utils.c portalPrintf.c poller.cpp transportSocket.c transportHardware.c portal.c)
-SIM_CXX_LOCAL = $(SIM_CXX_COMMON) $(DTOP)/../jni/GeneratedCppCallbacks.cpp
 CONNECTAL_EXENAME?=ubuntu.exe
 CONNECTAL_EXENAME2?=ubuntu.exe2
 ifneq ($(CONNECTAL_SHARED),)
@@ -78,11 +75,30 @@ endif
 GDB_BSIM= LD_PRELOAD=libSegFault.so SEGFAULT_USE_ALTSTACK=1 SEGFAULT_OUTPUT_NAME=bin/bsim-segv-output.txt
 
 
+PROF_FLAGS= #-pg
+export SIM_CFLAGS= $(CFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -I $(CONNECTALDIR)/lib/json -O $(PROF_FLAGS)
+export SIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -fPIC -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__ -I $(CONNECTALDIR)/cpp -I $(CONNECTALDIR) -O $(PROF_FLAGS)
+SIM_CXX_COMMON = $(addprefix $(CONNECTALDIR)/cpp/, TlpReplay.cpp BsimDma.cpp sock_utils.c portalPrintf.c poller.cpp transportSocket.c transportHardware.c portal.c)
+SIM_CXX_LOCAL = $(SIM_CXX_COMMON) $(DTOP)/../jni/GeneratedCppCallbacks.cpp
+#ifeq ($(HAS_APPLICATION),1)
+#SIM_CXX_LOCAL += $(DTOP)/../jni/GeneratedCppCallbacks.cpp
+#endif
+
 VIVADO=$(shell which vivado)
+ifneq ($(VIVADO), )
 export VIVADODIR=$(shell dirname $(shell dirname $(VIVADO))))
 VIVADOFLAGS= -notrace
+XVLOGFLAGS =
+endif
 
-#VFILE=verilog/$(MKTOP).sv
+MODELSIM=$(shell which vsim)
+ifneq ($(MODELSIM), )
+endif
+
+QUARTUS=$(shell which quartus_sh)
+ifneq ($(QUARTUS), )
+export QUARTUSDIR=$(shell dirname $(shell dirname $(QUARTUS)))
+endif
 
 all: exe bits extratarget
 
@@ -122,6 +138,9 @@ endif # AWSF1
 endif #xsim
 endif #android
 else #!xilinx
+ifneq ($(ALTERA),)
+	gzip -c $(MKTOP).sof > bin/$(MKTOP).sof.gz
+endif #
 endif #!xilinx
 	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --remove-section fpgadata bin/$(EXENAME); fi
 	$(Q)if [ -f bin/$(EXENAME) -a -f "$(BINFILE)" ]; then $(OBJCOPY) --add-section fpgadata=$(BINFILE) bin/$(EXENAME); fi
@@ -175,6 +194,7 @@ $(foreach src, $(filter %.cpp, $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)), $(eval $(ca
 SIM_OBJECTS = $(addprefix $(DTOP)/lib/, $(addsuffix .o, $(basename $(notdir $(SIM_CXX_LOCAL) $(SIM_CXX_PROJECT)))))
 
 VIVADODIR=$(realpath $(shell dirname $(VIVADO))/..)
+XSC_CFLAGS= -Wa,-W -fPIC -m64  -I"$(VIVADODIR)/data/xsim/include" -DSYSTEM_VERILOG -DBOARD_xsim -I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -Ijni
 
 XVLOGDEFINES = $(subst -D,-d,$(BSVDEFINES))
 
@@ -187,6 +207,34 @@ VHDL_PRJ_FILE = $(wildcard $(addsuffix /xsim/vhdl.prj, $(XCIDIRS)))
 VLOG_PRJ_BLD  = $(addsuffix .bld, $(VLOG_PRJ_FILE))
 VHDL_PRJ_BLD  = $(addsuffix .bld, $(VHDL_PRJ_FILE))
 
+%/vlog.prj.bld: %/vlog.prj
+	sed -i s/xil_defaultlib/work/ $(*)/vlog.prj
+	xvlog $(XVLOGFLAGS) -prj $(*)/vlog.prj
+
+%/vhdl.prj.bld: %/vhdl.prj
+	sed -i s/xil_defaultlib/work/ $(*)/vhdl.prj
+	xvhdl $(XVLOGFLAGS) -prj $(*)/vhdl.prj
+
+xsim: verilog $(SIM_OBJECTS) $(VLOG_PRJ_BLD) $(VHDL_PRJ_BLD)
+	xvlog $(XVLOGFLAGS) $(XVLOGDEFINES) $(VERILOG_PATH:%=--sourcelibdir %) --sourcelibext .v verilog/*.v $(VERILOG_FILES)
+ifneq ($(VHDL_FILES),)
+	xvhdl $(XVHDLFLAGS) $(VHDL_FILES)
+endif
+	xvlog $(XVLOGDEFINES) --sv $(CONNECTALDIR)/verilog/*.sv ## not needed because these all get passed to xelab because they use DPI
+	ls -l $(SIM_OBJECTS)
+	xsc -v  -cc gcc -link $(SIM_OBJECTS) -o xsimtop || echo xsc failed
+	xelab -timescale 1ns/1ps --stats $(XVLOGDEFINES) -cc gcc $(SVLOG) --dpiheader XsimTop.h --debug wave -L unisim -L unifast -L unimacro work.xsimtop -sv_lib xsimtop || echo xelab failed
+	true
+
+CVC64 ?= cvc64
+CVC_DEFINES = $(addprefix +define+, $(BSVDEFINES_LIST))
+CVC_TRACE_ARGS = +printstats +fstvars
+CVC_ARGS ?= 
+CVC_SOURCES = $(addprefix -v , $(wildcard $(BLUESPECDIR)/Verilog/*.v $(DTOP)/verilog/*.v))
+cvcsim: bin/cvcsim
+
+bin/cvcsim: $(DTOP)/bin/libconnectal-sim.so verilog bin/cvcsim
+	$(CVC64) $(CVC_DEFINES) $(CVC_ARGS) -y $(CONNECTALDIR)/verilog $(CVC_SOURCES) -sv $(CONNECTALDIR)/verilog/XsimSink.sv  $(CONNECTALDIR)/verilog/XsimSource.sv $(CONNECTALDIR)/verilog/XsimDmaReadWrite.sv -sv $(CONNECTALDIR)/verilog/xsimtop.sv -sv_lib $(DTOP)/bin/libconnectal-sim.so -o bin/cvcsim
 
 vlsim:  $(DTOP)/obj_dir/vlsim
 
@@ -202,6 +250,36 @@ $(DTOP)/obj_dir/vlsim: $(DTOP)/obj_dir/vlsim.mk
 	+$(MAKE) USER_LDLIBS="-lconnectal-sim -lpthread" VM_PARALLEL_BUILDS=1 -C obj_dir -f vlsim.mk
 	cp obj_dir/vlsim bin/vlsim
 
+vcssim:  prepare_bin_target bin/simv
+
+VCS_DEFINES = $(addprefix +define+, $(BSVDEFINES_LIST))
+VCS_ARGS?= -CFLAGS "-I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -I$(DTOP)/jni -I$(DTOP) -D__ATOMICC__"
+VCS_ARGS += +define+SVA_ON -assert svaext+enable_diag
+VCS_ARGS += -debug_acc+all
+VCS_ARGS += -kdb -fsdb
+VCS_ARGS += +lint=all +lint=noUI +lint=noNS
+VCS_ARGS += +define+__ATOMICC__ $(ACCSIM)/cpp/vcstop.cpp
+VCS_ARGS += $(VCS_PROJECT_ARGS)
+#ifeq ($(HAS_APPLICATION),1)
+#VCSTOP=$(ACCSIM)/verilog/VcsProgram.sv $(ACCSIM)/cpp/vcstop.cpp
+#else
+#VCSTOP=../generated/*.sv
+#endif
+#ifneq ($(HAS_APPLICATION),1)
+#VCS_EXTRA_FLAGS = +define+SVA_ON +define+FORMAL -assert svaext+enable_diag -debug_acc+all \
+#	-kdb -fsdb
+#-debug_acc+dmptf -debug_region+cell+encrypt
+#endif
+#VCS_EXTRA_FLAGS = -debug_all
+
+bin/simv: verilog
+	vcs -full64  -sverilog $(VCS_DEFINES) $(VCS_ARGS) -o $(DTOP)/bin/simv \
+		$(CONNECTALDIR)/verilog/xsimtop.sv $(SIM_CXX_LOCAL) \
+		+libext+.v+.sv $(VERILOG_PATH:%=-y %) $(VERILOG_PATH:%=+incdir+%)
+
+verdi:
+	verdi -simflow -simBin bin/simv -ssf novas.fsdb
+
 MODELSIMDIR=$(realpath $(dir $(MODELSIM))/..)
 VSIM_CFLAGS= $(CFLAGS_PROJECT) -Wa,-W -fPIC -m64 -I"$(MODELSIMDIR)/include" -DSYSTEM_VERILOG -DBOARD_vsim -I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__
 VSIM_CXXFLAGS= $(CXXFLAGS_PROJECT) -Wa,-W -fPIC -m64 -I"$(MODELSIMDIR)/include" -DSYSTEM_VERILOG -DBOARD_vsim -I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -Ijni -I$(DTOP) -I$(DTOP)/.. -D__ATOMICC__
@@ -215,6 +293,16 @@ VSIM_SV = $(addprefix -sv $(CONNECTALDIR)/verilog/, xsimtop.sv XsimDmaReadWrite.
 SV_SEARCH_PATH = $(addprefix -y , $(VERILOG_PATH))
 SV_SEARCH_PATH += $(addprefix -y , $(addsuffix /submodules, $(VERILOG_PATH)))
 SV_SEARCH_PATH += $(addprefix -y , $(addsuffix /submodules/mentor, $(VERILOG_PATH)))
+VSIM_LIBRARY_FILES += $(addprefix -sv $(QUARTUSDIR)/eda/sim_lib/, altera_lnsim.sv)
+VSIM_LIBRARY_FILES += $(addprefix -v $(QUARTUSDIR)/eda/sim_lib/, altera_mf.v 220model.v sgate.v altera_primitives.v mentor/stratixv_atoms_ncrypt.v stratixv_atoms.v mentor/stratixv_hssi_atoms_ncrypt.v stratixv_hssi_atoms.v)
+VSIM_MISC_FILES = $(addprefix -sv , $(MODELSIM_FILES))
+
+vsim: verilog $(VSIM_OBJECTS)
+	rm -rf work
+	vlib work
+	vlog -timescale 1ns/1ps -dpiheader XsimTop.h $(VSIM_DEFINES) $(VSIM_SV) $(VSIM_LIBRARY_FILES) $(VSIM_MISC_FILES) +libext+.sv+.v $(SV_SEARCH_PATH) $(VERILOG_PATH:%=-y %) -sv verilog/*.v
+	$(CXX) $(CXXFLAGS_PROJECT) -O -g -I$(DTOP)/jni -shared -fPIC -g -o xsimtop.so $(VSIM_OBJECTS)
+
 
 $(DTOP)/bin/libconnectal-sim.so: $(SIM_OBJECTS) prepare_bin_target
 	$(Q)mkdir -p $(DTOP)/bin
@@ -222,32 +310,6 @@ $(DTOP)/bin/libconnectal-sim.so: $(SIM_OBJECTS) prepare_bin_target
 
 prepare_bin_target:
 	$(Q)mkdir -p $(BOARD) bin jni hw
-
-#VCS_EXTRA_FLAGS = +define+SVA_ON -assert svaext+enable_diag -debug_acc+all
-#VCS_EXTRA_FLAGS = -debug_all
-vcssim: $(SIM_OBJECTS)
-	rm -rf novas.fsdb simv.daidir
-	#verilator -DMainClockPeriod=4 -DDerivedClockPeriod=4 --top-module VsimTop
-	# -LDFLAGS -L$(DTOP)/bin
-	#+lint=all,noVCDE,noTFIPC,noIWU,noOUDPE
-	vcs -full64  -sverilog  -o bin/simv \
-		-notice +lint=all,noPCTI-L,noUI,noNS \
-		+warn=noLFCOR \
-		-timescale=1ns/1ps \
-		$(ACCSIM)/verilog/VcsProgram.sv \
-		$(VERILOG_PATH:%=-y %) \
-		$(VERILOG_PATH:%=+incdir+%) \
-		-y $(ACCSIM)/verilog \
-		+libext+.sv+.v \
-		-CFLAGS "-I$(CONNECTALDIR)/cpp -I$(CONNECTALDIR) -I$(PWD)" \
-		$(ACCSIM)/cpp/vcstop.cpp \
-		$(SIM_OBJECTS) \
-		$(VCS_EXTRA_FLAGS)
-# -kdb
-#deprecated -fsdb
-#		-debug_acc+dmptf -debug_region+cell+encrypt \
-#		$(CONNECTALSDIR)/../lib/generated/VsimTop.sv \
-
 
 verilog:
 # $(VFILE)

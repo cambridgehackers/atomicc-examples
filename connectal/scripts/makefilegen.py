@@ -128,7 +128,7 @@ foreach {pat} {CLK_GATE_hdmi_clock_if CLK_*deleteme_unused_clock* CLK_GATE_*dele
 '''
 
 fpgamakeRuleTemplate='''
-export VERILOG_PATH=verilog %(verilog)s $(ATOMICC_VERILOG)
+export VERILOG_PATH=%(verilog)s $(ATOMICC_VERILOG)
 MODELSIM_FILES= %(modelsim)s
 FPGAMAKE=$(CONNECTALDIR)/../fpgamake/fpgamake
 fpgamake.mk: $(VFILE) Makefile prepare_bin_target
@@ -387,6 +387,7 @@ if __name__=='__main__':
     #options.verilog.append(os.path.join(connectaldir, 'verilog'))
     options.verilog.append(os.path.join(connectalsdir, '../lib/generated'))
     options.verilog.append(os.path.join(connectalsdir, '../lib/verilog'))
+    options.verilog.append(os.path.join(atomiccdir, 'simulation/verilog'))
 
     if noisyFlag:
         pprint.pprint(options.__dict__)

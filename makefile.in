@@ -60,10 +60,6 @@ verilator:
 run:
 	cd verilator; make run
 
-vcs:
-	BOARD=vcs make gen
-	cd vcs; make
-
 $(allarchlist): %:
 ifeq ($(BOARD),)
 	$(eval BOARD := $@)
