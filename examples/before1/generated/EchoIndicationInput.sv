@@ -19,9 +19,9 @@ module EchoIndicationInput (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        busy_delay <= 0;
-        meth_delay <= 0;
-        v_delay <= 0;
+        busy_delay <= 1'd0;
+        meth_delay <= 32'd0;
+        v_delay <= 32'd0;
       end // nRST
       else begin
         if (busy_delay && indication.heard__RDY && RULE$input_rule__ENA) begin // RULE$input_rule__ENA

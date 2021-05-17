@@ -13,7 +13,7 @@ module BufTicket (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        current <= 0;
+        current <= 4'd0;
       end // nRST
       else begin
         if (allocateTicket__ENA) begin // allocateTicket__ENA

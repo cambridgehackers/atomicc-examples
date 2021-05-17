@@ -16,14 +16,14 @@ module LfsrGal #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        sreg <= 0;
+        sreg <= (LN) ' ('d0);
       end // nRST
       else begin
         if (shiftBit__ENA) begin // shiftBit__ENA
             if (!shiftBit$v)
             sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] };
             if (shiftBit$v)
-            sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] } ^ TAPS;
+            sreg <= { shiftBit$v , sreg[ ( LN - 1 ) : 1 ] } ^ ( ((LN)'(TAPS)) );
         end; // End of shiftBit__ENA
       end
     end // always @ (posedge CLK)

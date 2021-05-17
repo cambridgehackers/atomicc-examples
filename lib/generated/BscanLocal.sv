@@ -23,8 +23,8 @@ module BscanLocal #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        shiftReg <= 0;
-        wasCaptured <= 0;
+        shiftReg <= (width) ' ('d0);
+        wasCaptured <= 1'd0;
       end // nRST
       else begin
         // RULE$init__ENA

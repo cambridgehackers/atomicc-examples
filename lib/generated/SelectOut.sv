@@ -43,8 +43,8 @@ for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < funnelWidth; __inst$Genvar1 = __
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        index <= 0;
-        indexValid <= 0;
+        index <= 4'd0;
+        indexValid <= 1'd0;
       end // nRST
       else begin
         if (select__ENA) begin // select__ENA

@@ -115,13 +115,13 @@ module HdmiBlock (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        REGGTEMP_run__ACK <= 0;
-        REGGTEMP_setup__ACK <= 0;
-        _runS__ACK <= 0;
-        _setupS__ACK <= 0;
-        dataEnable <= 0;
-        hSync <= 0;
-        vSync <= 0;
+        REGGTEMP_run__ACK <= 1'd0;
+        REGGTEMP_setup__ACK <= 1'd0;
+        _runS__ACK <= 1'd0;
+        _setupS__ACK <= 1'd0;
+        dataEnable <= 1'd0;
+        hSync <= 1'd0;
+        vSync <= 1'd0;
       end // nRST
       else begin
         // 

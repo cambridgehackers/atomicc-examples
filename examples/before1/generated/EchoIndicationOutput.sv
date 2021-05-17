@@ -30,10 +30,10 @@ module EchoIndicationOutput (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        even <= 0;
+        even <= 1'd0;
         ind0 <= 0;
         ind1 <= 0;
-        ind_busy <= 0;
+        ind_busy <= 1'd0;
       end // nRST
       else begin
         if (RULE$output_rulee__RDY && RULE$output_rulee__ENA) begin // RULE$output_rulee__ENA

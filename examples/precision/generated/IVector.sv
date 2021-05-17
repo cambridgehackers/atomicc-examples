@@ -28,9 +28,9 @@ module IVector (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        counter <= 0;
+        counter <= 9'd0;
         fcounter <= 0;
-        gcounter <= 0;
+        gcounter <= 9'd0;
       end // nRST
     end // always @ (posedge CLK)
 endmodule

@@ -15,7 +15,7 @@ module ModFt600 (
     logic nRST;
     IobufVec#(.iovecWidth(16)) iov (
         .IO(usb_ad),
-        .I(0),
+        .I(16'd0),
         .O(),
         .T(usb_rxf_delay[ 0 ]));
     assign usb_oe_n = usb_rxf_delay[ 0 ];
@@ -24,9 +24,9 @@ module ModFt600 (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        usb_fifo_empty <= 0;
-        usb_rxf_delay <= 0;
-        usb_txe_delay <= 0;
+        usb_fifo_empty <= 1'd0;
+        usb_rxf_delay <= 2'd0;
+        usb_txe_delay <= 1'd0;
       end // nRST
       else begin
         // RULE$handshake__ENA

@@ -15,8 +15,8 @@ module Fifo1Base #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element <= 0;
-        full <= 0;
+        element <= (width) ' ('d0);
+        full <= 1'd0;
       end // nRST
       else begin
         if (( !full ) && in.enq__ENA) begin // in.enq__ENA

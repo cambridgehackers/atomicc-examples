@@ -40,7 +40,7 @@ module FifoPong #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        pong <= 0;
+        pong <= 1'd0;
       end // nRST
       else begin
         if (out.deq__RDY && out.deq__ENA) begin // out.deq__ENA

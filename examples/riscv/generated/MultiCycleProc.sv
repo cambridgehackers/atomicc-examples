@@ -39,19 +39,19 @@ module MultiCycleProc (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        d2e_addr <= 0;
-        d2e_arithOp <= 0;
-        d2e_dst <= 0;
-        d2e_op <= 0;
-        d2e_src1 <= 0;
-        d2e_src2 <= 0;
-        d2e_valid <= 0;
-        e2w_addr <= 0;
-        e2w_dst <= 0;
-        e2w_nextPC <= 0;
-        e2w_val <= 0;
-        e2w_valid <= 0;
-        pc <= 0;
+        d2e_addr <= 32'd0;
+        d2e_arithOp <= 32'd0;
+        d2e_dst <= 32'd0;
+        d2e_op <= 32'd0;
+        d2e_src1 <= 32'd0;
+        d2e_src2 <= 32'd0;
+        d2e_valid <= 32'd0;
+        e2w_addr <= 32'd0;
+        e2w_dst <= 32'd0;
+        e2w_nextPC <= 32'd0;
+        e2w_val <= 32'd0;
+        e2w_valid <= 32'd0;
+        pc <= 32'd0;
       end // nRST
       else begin
         if (RULE$decode__RDY && RULE$decode__ENA) begin // RULE$decode__ENA

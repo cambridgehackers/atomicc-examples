@@ -48,7 +48,7 @@ module Bscan #(
         .capture_out(localBscan$capture_out),
         .TDO(bscan$TDO),
         .TDI(bscan$TDI),
-        .toBscan(toBscan.enq__ENA ? toBscan.enq$v : 0),
+        .toBscan(toBscan.enq__ENA ? toBscan.enq$v : ( ( width ) ' ( 'd0 ) )),
         .fromBscan(fromBscan.enq$v));
     SyncFF updateF (
         .CLK(updateF$CLK),

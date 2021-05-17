@@ -34,7 +34,7 @@ module LfsrEquiv (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        o_data <= 0;
+        o_data <= 1'd0;
       end // nRST
       else begin
         if (fib$outBit__RDY && gal$outBit__RDY && RULE$updateRule__ENA) begin // RULE$updateRule__ENA

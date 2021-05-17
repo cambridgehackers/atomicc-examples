@@ -10,13 +10,13 @@ module FifoBypass1Base #(
     // Extra assigments, not to output wires
     assign in.enq__RDY = !full;
     assign out.deq__RDY = full;
-    assign out.first = full ? element : ( in.enq__ENA ? in.enq$v : 0 );
+    assign out.first = full ? element : ( in.enq__ENA ? in.enq$v : ( (width) ' ('d0) ) );
     assign out.first__RDY = full;
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        element <= 0;
-        full <= 0;
+        element <= (width) ' ('d0);
+        full <= 1'd0;
       end // nRST
       else begin
         if (( !full ) && in.enq__ENA) begin // in.enq__ENA

@@ -32,15 +32,15 @@ module Echo (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        a_delay <= 0;
-        a_temp <= 0;
-        b_delay <= 0;
-        b_temp <= 0;
-        busy <= 0;
-        busy_delay <= 0;
-        v_delay <= 0;
-        v_temp <= 0;
-        v_type <= 0;
+        a_delay <= 16'd0;
+        a_temp <= 16'd0;
+        b_delay <= 16'd0;
+        b_temp <= 16'd0;
+        busy <= 1'd0;
+        busy_delay <= 1'd0;
+        v_delay <= 32'd0;
+        v_temp <= 32'd0;
+        v_type <= 32'd0;
       end // nRST
       else begin
         if (RULE$delay_rule__RDY && RULE$delay_rule__ENA) begin // RULE$delay_rule__ENA

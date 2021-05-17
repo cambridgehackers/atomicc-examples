@@ -16,13 +16,13 @@ module AdapterToBus #(
     assign out.deq__RDY = clear__ENA || ( remain != 0 );
     assign out.first = buffer[ ( width - 1 ) : ( width - owidth ) ];
     assign out.first__RDY = clear__ENA || ( remain != 0 );
-    assign out.last = remain <= 16'(owidth);
+    assign out.last = remain <= ( ( 16 ) ' ( owidth ) );
     assign out.last__RDY = clear__ENA || ( remain != 0 );
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        buffer <= 0;
-        remain <= 0;
+        buffer <= (width) ' ('d0);
+        remain <= 16'd0;
       end // nRST
       else begin
         if (clear__ENA) begin // clear__ENA
@@ -36,11 +36,11 @@ module AdapterToBus #(
         end; // End of in.enq__ENA
         if (( clear__ENA && out.deq__ENA ) || ( ( !clear__ENA ) && ( remain != 0 ) && out.deq__ENA )) begin // out.deq__ENA
             buffer <= buffer << owidth;
-            if (!( remain <= 16'(owidth) ))
-            remain <= remain - ( (16'(owidth)) );
+            if (!( remain <= ( ( 16 ) ' ( owidth ) ) ))
+            remain <= remain - ( ((16)'(owidth)) );
             if (0 != 0)
             $display( "adapterTOout remain %x" , remain );
-            if (remain <= 16'(owidth))
+            if (remain <= ( ( 16 ) ' ( owidth ) ))
             remain <= 16'd0;
         end; // End of out.deq__ENA
       end

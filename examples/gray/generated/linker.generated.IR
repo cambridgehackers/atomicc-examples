@@ -118,6 +118,7 @@ MODULE Bscan__I3 Bscan__I3_interface {
     FIELD SyncFF captureF
 }
 INTERFACE Bscan__I3_interface {
+    FIELD/parameter Bit(32) width
     FIELD/input  Bit(1) CLK
     FIELD/input  Bit(1) nRST
 }

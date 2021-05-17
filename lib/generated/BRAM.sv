@@ -24,9 +24,9 @@ module BRAM #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        afterRead <= 0;
-        readB <= 0;
-        writeEnable <= 0;
+        afterRead <= 1'd0;
+        readB <= (width) ' ('d0);
+        writeEnable <= 1'd0;
       end // nRST
       else begin
         // RULE$init__ENA

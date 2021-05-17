@@ -82,7 +82,7 @@ for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < 10; __inst$Genvar1 = __inst$Genv
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        vsize <= 0;
+        vsize <= 32'd0;
       end // nRST
     end // always @ (posedge CLK)
 endmodule

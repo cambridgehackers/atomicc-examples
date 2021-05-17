@@ -21,9 +21,9 @@ module AdapterFromBus #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        buffer <= 0;
-        length <= 0;
-        waitForEnq <= 0;
+        buffer <= 128'd0;
+        length <= 16'd0;
+        waitForEnq <= 1'd0;
       end // nRST
       else begin
         if (waitForEnq && out.enq__RDY && RULE$pushValue__ENA) begin // RULE$pushValue__ENA
@@ -34,7 +34,7 @@ module AdapterFromBus #(
         end; // End of RULE$pushValue__ENA
         if (( !waitForEnq ) && in.enq__ENA) begin // in.enq__ENA
             buffer <= { in.enq$v , buffer[ ( 128 - 1 ) : owidth ] };
-            length <= length + ( (16'(owidth)) );
+            length <= length + ( ((16)'(owidth)) );
             if (0 != 0)
             $display( "adapterFROMin %x last %x buffer %x" , in.enq$v , in.enq$last , buffer );
             if (in.enq$last)

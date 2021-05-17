@@ -30,7 +30,7 @@ module ConfigCounter #(
     assign read = cnt;
     assign read__RDY = 1'd1;
     // Extra assigments, not to output wires
-    assign _RULE$react$new_count = ( cnt + ( increment__ENA ? increment$v : 0 ) ) - dec_wire;
+    assign _RULE$react$new_count = ( cnt + ( increment__ENA ? increment$v : ( (count_sz) ' ('d0) ) ) ) - dec_wire;
     always_comb begin
     dec_wire = 0;
     unique case(1'b1)
@@ -42,8 +42,8 @@ module ConfigCounter #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        cnt <= 0;
-        positive_reg <= 0;
+        cnt <= (count_sz) ' ('d0);
+        positive_reg <= 1'd0;
       end // nRST
       else begin
         // RULE$react__ENA

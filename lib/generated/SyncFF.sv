@@ -10,7 +10,7 @@ module SyncFF (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        flag <= 0;
+        flag <= 3'd0;
       end // nRST
       else begin
         // RULE$init__ENA

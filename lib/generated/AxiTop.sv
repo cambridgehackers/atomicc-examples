@@ -136,16 +136,16 @@ module AxiTop (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        intEnable <= 0;
-        portalRControl <= 0;
-        portalWControl <= 0;
-        readAddr <= 0;
-        readCount <= 0;
-        selectRIndReq <= 0;
-        selectWIndReq <= 0;
-        writeAddr <= 0;
-        writeCount <= 0;
-        writeReady <= 0;
+        intEnable <= 1'd0;
+        portalRControl <= 1'd0;
+        portalWControl <= 1'd0;
+        readAddr <= 5'd0;
+        readCount <= 4'd0;
+        selectRIndReq <= 1'd0;
+        selectWIndReq <= 1'd0;
+        writeAddr <= 5'd0;
+        writeCount <= 4'd0;
+        writeReady <= 1'd0;
       end // nRST
       else begin
         if (MAXIGP0_O.AR__RDY && MAXIGP0_O.AR__ENA) begin // MAXIGP0_O.AR__ENA

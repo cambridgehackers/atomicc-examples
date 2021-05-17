@@ -26,17 +26,17 @@ module SPIMasterInternal #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        countreg <= 0;
-        shiftreg <= 0;
+        countreg <= ($clog2(width)+1) ' ('d0);
+        shiftreg <= (width) ' ('d0);
       end // nRST
       else begin
         if (RULE$running__RDY && RULE$running__ENA) begin // RULE$running__ENA
-            countreg <= countreg - 1;
+            countreg <= countreg - ( ($clog2(width)+1) ' ('d1) );
             shiftreg <= _RULE$running$newshiftreg;
         end; // End of RULE$running__ENA
         if (( countreg == 0 ) && request.enq__ENA) begin // request.enq__ENA
             shiftreg <= request.enq$v;
-            countreg <= width;
+            countreg <= (($clog2(width)+1)'(width));
         end; // End of request.enq__ENA
       end
     end // always @ (posedge CLK)

@@ -15,8 +15,8 @@ module AsyncControl (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        doneReg <= 0;
-        outReg <= 0;
+        doneReg <= 1'd0;
+        outReg <= 1'd0;
       end // nRST
       else begin
         // RULE$processRule__ENA

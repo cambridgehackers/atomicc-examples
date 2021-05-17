@@ -48,12 +48,12 @@ module HdmiPattern #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        activeLines <= 0;
-        activePixels <= 0;
-        pattern <= 0;
-        pixelValue <= 0;
-        rampStep <= 0;
-        rampValue <= 0;
+        activeLines <= (widthAddr) ' ('d0);
+        activePixels <= (widthAddr) ' ('d0);
+        pattern <= 8'd0;
+        pixelValue <= 36'd0;
+        rampStep <= 20'd0;
+        rampValue <= 20'd0;
       end // nRST
       else begin
         if (calculate.setXY__ENA) begin // calculate.setXY__ENA

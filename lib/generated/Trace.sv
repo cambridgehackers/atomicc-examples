@@ -48,10 +48,10 @@ module Trace #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        addr <= 0;
-        buffer <= 0;
-        readAddr <= 0;
-        timestamp <= 0;
+        addr <= 11'd0;
+        buffer <= (sensitivity) ' ('d0);
+        readAddr <= 11'd0;
+        timestamp <= 32'd0;
       end // nRST
       else begin
         if (RULE$copyRule__RDY && RULE$copyRule__ENA) begin // RULE$copyRule__ENA

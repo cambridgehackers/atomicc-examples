@@ -32,9 +32,9 @@ for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < 16; __inst$Genvar1 = 1) begin
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        usb_fifo_empty <= 0;
-        usb_rxf_delay <= 0;
-        usb_txe_delay <= 0;
+        usb_fifo_empty <= 1'd0;
+        usb_rxf_delay <= 2'd0;
+        usb_txe_delay <= 1'd0;
       end // nRST
       else begin
         // RULE$handshake__ENA

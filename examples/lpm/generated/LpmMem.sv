@@ -30,7 +30,7 @@ module LpmMem (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        valid <= 0;
+        valid <= 1'd0;
       end // nRST
       else begin
         if (valid && out.deq__ENA) begin // out.deq__ENA

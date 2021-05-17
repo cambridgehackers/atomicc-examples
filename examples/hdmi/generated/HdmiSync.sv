@@ -52,28 +52,28 @@ module HdmiSync #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        hBackSync <= 0;
-        hEnd <= 0;
-        hFrontEnd <= 0;
-        hSyncWidth <= 0;
-        lineCount <= 0;
-        pixelCount <= 0;
-        runFlag <= 0;
-        vBackSync <= 0;
-        vEnd <= 0;
-        vFrontEnd <= 0;
-        vSyncWidth <= 0;
+        hBackSync <= (widthAddr) ' ('d0);
+        hEnd <= (widthAddr) ' ('d0);
+        hFrontEnd <= (widthAddr) ' ('d0);
+        hSyncWidth <= (widthAddr) ' ('d0);
+        lineCount <= (widthAddr) ' ('d0);
+        pixelCount <= (widthAddr) ' ('d0);
+        runFlag <= 1'd0;
+        vBackSync <= (widthAddr) ' ('d0);
+        vEnd <= (widthAddr) ' ('d0);
+        vFrontEnd <= (widthAddr) ' ('d0);
+        vSyncWidth <= (widthAddr) ' ('d0);
       end // nRST
       else begin
         if (runFlag && data.setXY__RDY && RULE$updatePixel__ENA) begin // RULE$updatePixel__ENA
             if (!( pixelCount < hEnd ))
-            pixelCount <= 0;
+            pixelCount <= (widthAddr) ' ('d0);
             if (( !( pixelCount < hEnd ) ) && ( lineCount == vEnd ))
-            lineCount <= 0;
+            lineCount <= (widthAddr) ' ('d0);
             if (( lineCount != vEnd ) && ( !( pixelCount < hEnd ) ))
-            lineCount <= lineCount + 1;
+            lineCount <= lineCount + ( (widthAddr) ' ('d1) );
             if (pixelCount < hEnd)
-            pixelCount <= pixelCount + 1;
+            pixelCount <= pixelCount + ( (widthAddr) ' ('d1) );
         end; // End of RULE$updatePixel__ENA
         if (run__ENA) begin // run__ENA
             runFlag <= 1'd1;

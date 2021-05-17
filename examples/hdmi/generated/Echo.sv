@@ -124,30 +124,30 @@ module Echo (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        _hdmi$runS__ENA <= 0;
-        _hdmi$setupS__ENA <= 0;
-        busy <= 0;
-        busy_delay <= 0;
-        callSetup <= 0;
-        counter <= 0;
-        hdmiCounter1 <= 0;
-        hdmiCounter2 <= 0;
-        i2c_mux_reset_n_reg <= 0;
-        imageonCounter1 <= 0;
-        imageonCounter2 <= 0;
-        jhBackSync <= 0;
-        jhEnd <= 0;
-        jhFrontEnd <= 0;
-        jhSyncWidth <= 0;
-        jpattern <= 0;
-        jrampStep <= 0;
-        jvBackSync <= 0;
-        jvEnd <= 0;
-        jvFrontEnd <= 0;
-        jvSyncWidth <= 0;
-        v_delay <= 0;
-        v_temp <= 0;
-        v_type <= 0;
+        _hdmi$runS__ENA <= 1'd0;
+        _hdmi$setupS__ENA <= 1'd0;
+        busy <= 1'd0;
+        busy_delay <= 1'd0;
+        callSetup <= 1'd0;
+        counter <= 48'd0;
+        hdmiCounter1 <= 32'd0;
+        hdmiCounter2 <= 32'd0;
+        i2c_mux_reset_n_reg <= 1'd0;
+        imageonCounter1 <= 32'd0;
+        imageonCounter2 <= 32'd0;
+        jhBackSync <= 8'd0;
+        jhEnd <= 16'd0;
+        jhFrontEnd <= 16'd0;
+        jhSyncWidth <= 8'd0;
+        jpattern <= 8'd0;
+        jrampStep <= 20'd0;
+        jvBackSync <= 8'd0;
+        jvEnd <= 16'd0;
+        jvFrontEnd <= 16'd0;
+        jvSyncWidth <= 8'd0;
+        v_delay <= 32'd0;
+        v_temp <= 32'd0;
+        v_type <= 32'd0;
       end // nRST
       else begin
         if (__CONTROL_hdmi$setup__ENA$done) begin // RULE$callSetupRule__ENA
@@ -199,7 +199,7 @@ module Echo (input wire CLK, input wire nRST,
 
     always @( posedge iclock$hdmiClock) begin
       if (!iclock$hdminReset) begin
-        hdmiCounter <= 0;
+        hdmiCounter <= 48'd0;
       end // nRST
       else begin
         // RULE$updateRuleH__ENA
@@ -210,7 +210,7 @@ module Echo (input wire CLK, input wire nRST,
 
     always @( posedge iclock$imageonClock) begin
       if (!iclock$imageonnReset) begin
-        imageonCounter <= 0;
+        imageonCounter <= 48'd0;
       end // nRST
       else begin
         // RULE$updateRuleI__ENA

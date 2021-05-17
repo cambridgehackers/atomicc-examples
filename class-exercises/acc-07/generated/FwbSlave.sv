@@ -48,7 +48,7 @@ module FwbSlave (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        f_past_valid <= 0;
+        f_past_valid <= 1'd0;
         nacks <= 0;
         nreqs <= 0;
       end // nRST
@@ -74,7 +74,7 @@ module FwbSlave (
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     initial begin
-        f_past_valid <= 0;
+        f_past_valid <= 1'd0;
         nacks <= 0;
         nreqs <= 0;
     end

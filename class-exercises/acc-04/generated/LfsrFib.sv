@@ -16,7 +16,7 @@ module LfsrFib #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        sreg <= 0;
+        sreg <= (LN) ' ('d0);
       end // nRST
       else begin
         if (shiftBit__ENA) begin // shiftBit__ENA

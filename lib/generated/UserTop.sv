@@ -16,7 +16,7 @@ module UserTop (input wire CLK, input wire nRST,
     PipeInLast#(.width(32)) wadapter_0$in();
     PipeIn#(.width(144)) wadapter_0$out();
     AdapterToBus#(.width(128),.owidth(32)) radapter_0 (.CLK(CLK), .nRST(nRST),
-        .clear__ENA(0),
+        .clear__ENA(1'd0),
         .clear__RDY(),
         .in(radapter_0$in),
         .out(out2$in));

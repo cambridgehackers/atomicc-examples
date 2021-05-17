@@ -101,8 +101,8 @@ module ZynqTop (
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        resetFunnel <= 0;
-        selectIndex <= 0;
+        resetFunnel <= 1'd0;
+        selectIndex <= 32'd0;
       end // nRST
       else begin
         if (resetFunnel && RULE$resetOneShot__ENA) begin // RULE$resetOneShot__ENA

@@ -11,26 +11,26 @@ module SizedFifoBase #(
     reg [width - 1:0]q [depth - 1:0];
     logic [width - 1:0]x_wire;
     // Extra assigments, not to output wires
-    assign in.enq__RDY = c != depth;
+    assign in.enq__RDY = c != ( (($clog2(depth+0)+1)'(depth)) );
     assign out.deq__RDY = c != 0;
     assign out.first = q[ 0 ];
     assign out.first__RDY = 1'd1;
-    assign x_wire = in.enq__ENA ? in.enq$v : 0;
+    assign x_wire = in.enq__ENA ? in.enq$v : ( (width) ' ('d0) );
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        c <= 0;
+        c <= ($clog2(depth+0)+1) ' ('d0);
       end // nRST
       else begin
-        if (( c != depth ) && in.enq__ENA) begin // in.enq__ENA
+        if (( c != ( ( $clog2( depth + 0 ) + 1 ) ' ( depth ) ) ) && in.enq__ENA) begin // in.enq__ENA
             if (( bypass == 0 ) || ( !out.deq__ENA )) begin
             q[ c ] <= in.enq$v;
-            c <= c + 1;
+            c <= c + ( ($clog2(depth+0)+1) ' ('d1) );
             end;
         end; // End of in.enq__ENA
         if (( c != 0 ) && out.deq__ENA) begin // out.deq__ENA
             if (( bypass == 0 ) || ( !in.enq__ENA ))
-            c <= c + ( -1 );
+            c <= c + ( -( ($clog2(depth+0)+1) ' ('d1) ) );
         end; // End of out.deq__ENA
       end
     end // always @ (posedge CLK)

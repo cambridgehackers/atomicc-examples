@@ -25,10 +25,10 @@ module Btest (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        nextV <= 0;
-        readCount <= 0;
-        ready <= 0;
-        writeCount <= 0;
+        nextV <= 32'd0;
+        readCount <= 8'd0;
+        ready <= 1'd0;
+        writeCount <= 8'd0;
       end // nRST
       else begin
         if (bscan$toBscan.enq__RDY && RULE$copyRule__ENA) begin // RULE$copyRule__ENA

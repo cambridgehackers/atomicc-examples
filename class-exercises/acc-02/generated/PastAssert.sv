@@ -20,9 +20,9 @@ module PastAssert #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        ZF_TESTID <= 0;
-        counter <= 0;
-        fPastValid <= 0;
+        ZF_TESTID <= 4'd0;
+        counter <= 16'd0;
+        fPastValid <= 1'd0;
       end // nRST
       else begin
         if (( counter != 0 ) && RULE$decRule__ENA) begin // RULE$decRule__ENA
@@ -33,19 +33,19 @@ module PastAssert #(
             fPastValid <= 1 != 0;
         // End of RULE$verifyRule__ENA
         if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA
-            counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
+            counter <= ( ((16)'(MAX_AMOUNT)) ) - 16'd1;
             ZF_TESTID <= ZF_TESTID + 4'd1;
         end; // End of startSignal__ENA
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     initial begin
-        ZF_TESTID <= 0;
-        counter <= 0;
-        fPastValid <= 0;
+        ZF_TESTID <= 4'd0;
+        counter <= 16'd0;
+        fPastValid <= 1'd0;
     end
     always @(*)
-        assert( counter < ( (16'(MAX_AMOUNT)) ) );
+        assert( counter < ( ((16)'(MAX_AMOUNT)) ) );
     always @(*)
         if (ZF_TESTID == 1)
             assert( ( startSignal__ENA != 0 ) ^ 1'd1 );

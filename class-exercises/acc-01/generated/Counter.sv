@@ -17,23 +17,23 @@ module Counter #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        counter <= 0;
+        counter <= 16'd0;
       end // nRST
       else begin
         if (( counter != 0 ) && RULE$decRule__ENA) begin // RULE$decRule__ENA
             counter <= counter + ( -16'd1 );
         end; // End of RULE$decRule__ENA
         if (( counter == 0 ) && startSignal__ENA) begin // startSignal__ENA
-            counter <= ( (16'(MAX_AMOUNT)) ) - 16'd1;
+            counter <= ( ((16)'(MAX_AMOUNT)) ) - 16'd1;
         end; // End of startSignal__ENA
       end
     end // always @ (posedge CLK)
 `ifdef	FORMAL
     initial begin
-        counter <= 0;
+        counter <= 16'd0;
     end
     always @(*)
-        assert( counter < ( (16'(MAX_AMOUNT)) ) );
+        assert( counter < ( ((16)'(MAX_AMOUNT)) ) );
 `endif
 endmodule
 

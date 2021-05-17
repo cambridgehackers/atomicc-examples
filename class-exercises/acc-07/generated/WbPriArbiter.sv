@@ -88,7 +88,7 @@ module WbPriArbiter #(
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        r_a_owner <= 0;
+        r_a_owner <= 1'd0;
       end // nRST
       else begin
         if (acyc && o$stb__RDY && a$stb__ENA) begin // a$stb__ENA

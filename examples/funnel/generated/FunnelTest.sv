@@ -43,7 +43,7 @@ for(genvar __inst$Genvar1 = 0; __inst$Genvar1 < 4; __inst$Genvar1 = __inst$Genva
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        index <= 0;
+        index <= 8'd0;
       end // nRST
       else begin
         if (result$out.first__RDY && indication.heard__RDY && result$out.deq__RDY && RULE$respond_rule__ENA) begin // RULE$respond_rule__ENA

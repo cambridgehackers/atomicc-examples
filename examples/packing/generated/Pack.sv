@@ -17,10 +17,10 @@ module Pack (input wire CLK, input wire nRST,
 
     always @( posedge CLK) begin
       if (!nRST) begin
-        counter <= 0;
-        readCount <= 0;
-        seqval <= 0;
-        writeCount <= 0;
+        counter <= 32'd0;
+        readCount <= 8'd0;
+        seqval <= 8'd0;
+        writeCount <= 8'd0;
       end // nRST
       else begin
         if (indication.heard__RDY && request.say__ENA) begin // request.say__ENA
