@@ -22,6 +22,14 @@
 #include <atomicc.h>
 #include <fifo.h>
 
+#if 0
+for (int entries=0; entries <= depth; entries++) {
+   __uint(width) entry;
+   fifo_consistent: assert property(
+      (push && !full && (f_num_entries-pop == entries), entry=in)
+          |=> pop[->entries] ##1 pop[->1] ##0 (out == entry));
+}
+#endif
 /*
  * Standard fifo: enq() and deq() are exclusive
  */
