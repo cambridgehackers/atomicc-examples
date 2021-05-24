@@ -22,8 +22,8 @@
 #include "atomicc.h"
 template <int width, int depth>
 class BRAMIfc {
-    void write(__uint(__clog2(depth)) addr, __uint(width) data);
-    void read(__uint(__clog2(depth)) addr);
+    void write(__uint(__clog2(depth-1)) addr, __uint(width) data);
+    void read(__uint(__clog2(depth-1)) addr);
     __uint(width) dataOut(void);
 };
 

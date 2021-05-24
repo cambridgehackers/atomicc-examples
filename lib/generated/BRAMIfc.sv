@@ -1,10 +1,10 @@
 interface BRAMIfc#(depth = 1024, width = 48);
     logic write__ENA;
-    logic [$clog2(depth) - 1:0] write$addr;
+    logic [$clog2(depth-1) - 1:0] write$addr;
     logic [width - 1:0] write$data;
     logic write__RDY;
     logic read__ENA;
-    logic [$clog2(depth) - 1:0] read$addr;
+    logic [$clog2(depth-1) - 1:0] read$addr;
     logic read__RDY;
     logic [width - 1:0] dataOut;
     logic dataOut__RDY;

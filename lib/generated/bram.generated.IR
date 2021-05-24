@@ -15,8 +15,8 @@ INTERFACE AsyncControlIfc  {
 }
 INTERFACE BRAMIfc(width=4,depth=1024)  {
     FILE bram_OC_h
-    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
-    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr )
     METHOD dataOut Bit(width)
 }
 INTERFACE PipeIn(width=32)  {
@@ -44,10 +44,10 @@ MODULE BRAM(width=4,depth=1024) BRAMIfc(width=4,depth=1024) {
     FIELD Bit(4) readB
     FIELD Bit(1) writeEnable
     FIELD Bit(1) afterRead
-    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data ) {
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(width) data ) {
         STORE ((writeEnable) != (0)):RAM[write$addr] = write$data
     }
-    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr ) {
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr ) {
         STORE :readB = RAM[read$addr]
     }
     METHOD dataOut Bit(width) = ((readB)) if (((afterRead) != (0)))

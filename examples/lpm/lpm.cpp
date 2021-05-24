@@ -73,16 +73,18 @@ class BufTicket __implements TickIfc {
         current++;
     }
 };
+template <int depth>
 class LpmMemIfc {
-    void read(__uint(32) addr);
-    void write(__uint(32) addr, __uint(32) data);
+    void read(__uint(__clog2(depth-1)) addr);
+    void write(__uint(__clog2(depth-1)) addr, __uint(32) data);
     PipeOut<__uint(32)> out;
 };
-class LpmMem __implements LpmMemIfc {
+template <int depth>
+class LpmMem __implements LpmMemIfc<depth> {
     BRAM<32, 1024> RAM;
     bool           valid;
 
-    void read(__uint(32) addr) if (!valid) {
+    void read(__uint(__clog2(depth-1)) addr) if (!valid) {
         printf("LpmMem read: %x\n", addr);
         RAM.read(addr);
         valid = true;
@@ -96,7 +98,7 @@ class LpmMem __implements LpmMemIfc {
 //out.first());
         valid = false;
     }
-    void write(__uint(32) addr, __uint(32) data) {
+    void write(__uint(__clog2(depth-1)) addr, __uint(32) data) {
         RAM.write(addr, data);
     }
 };
@@ -111,7 +113,7 @@ class Lpm __implements LpmIfc {
     Fifo1<IPA>          inQ;
     BufTicket           compBuf;
     FifoPipeline1<ProcessData> fifo;
-    LpmMem              mem;
+    LpmMem<1024>        mem;
     void enter(IPA x) {
 	inQ.in.enq(x);
     }

@@ -5,11 +5,11 @@ module BRAM #(
     parameter integer depth = 1024)(
     input wire CLK, input wire nRST,
     input wire write__ENA,
-    input wire [$clog2(depth) - 1:0]write$addr,
+    input wire [$clog2(depth-1) - 1:0]write$addr,
     input wire [width - 1:0]write$data,
     output wire write__RDY,
     input wire read__ENA,
-    input wire [$clog2(depth) - 1:0]read$addr,
+    input wire [$clog2(depth-1) - 1:0]read$addr,
     output wire read__RDY,
     output wire [width - 1:0]dataOut,
     output wire dataOut__RDY);

@@ -28,11 +28,11 @@ class BRAM __implements BRAMIfc<width, depth> {
     __uint(1) writeEnable;
     __uint(1) afterRead;
 
-    void write(__uint(__clog2(depth)) addr, __uint(width) data) {
+    void write(__uint(__clog2(depth-1)) addr, __uint(width) data) {
         if (writeEnable)    // need a separate 'enable' for vivado BRAM inference
             RAM[addr] = data;
     }
-    void read(__uint(__clog2(depth)) addr) {
+    void read(__uint(__clog2(depth-1)) addr) {
         readB = RAM[addr];
     }
     __uint(width) dataOut(void) if (afterRead) {

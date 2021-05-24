@@ -1,19 +1,21 @@
 `include "atomicc.generated.vh"
 `include "lpm.generated.vh"
 `default_nettype none
-module LpmMem (input wire CLK, input wire nRST,
+module LpmMem #(
+    parameter integer depth = 1024)(
+    input wire CLK, input wire nRST,
     input wire read__ENA,
-    input wire [32 - 1:0]read$addr,
+    input wire [$clog2(depth-1) - 1:0]read$addr,
     output wire read__RDY,
     input wire write__ENA,
-    input wire [32 - 1:0]write$addr,
+    input wire [$clog2(depth-1) - 1:0]write$addr,
     input wire [32 - 1:0]write$data,
     output wire write__RDY,
     PipeOut.server out);
     reg valid;
     logic RAM$dataOut__RDY;
     logic RAM$read__RDY;
-    BRAM#(.width(32),.depth(1024)) RAM (.CLK(CLK), .nRST(nRST),
+    BRAM#(.width(32),.depth(depth)) RAM (.CLK(CLK), .nRST(nRST),
         .write__ENA(write__ENA),
         .write$addr(write$addr),
         .write$data(write$data),

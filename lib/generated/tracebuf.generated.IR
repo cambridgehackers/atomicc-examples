@@ -21,8 +21,8 @@ INTERFACE AtB(width=48,owidth=32)  {
 }
 INTERFACE BRAMIfc(width=48,depth=1024)  {
     FILE bram_OC_h
-    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
-    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr )
     METHOD dataOut Bit(width)
 }
 INTERFACE PipeIn(width=32)  {

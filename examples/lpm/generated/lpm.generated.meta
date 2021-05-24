@@ -5,7 +5,7 @@
 //METAINTERNAL; inQ; Fifo1Base(width=32);
 //METAINTERNAL; compBuf; BufTicket;
 //METAINTERNAL; fifo; FifoPipeline1Base(width=23);
-//METAINTERNAL; mem; LpmMem;
+//METAINTERNAL; mem; LpmMem(depth=1024);
 //METAINVOKE; enter__ENA; :inQ$in.enq__ENA;
 //METAGUARD; enter; inQ$in.enq__RDY;
 //METAINVOKE; RULE$enterRule__ENA; :compBuf$allocateTicket__ENA;:fifo$in.enq__ENA;:inQ$out.deq__ENA;:mem$read__ENA;
@@ -19,15 +19,6 @@
 //METAINVOKE; write__ENA; :mem$write__ENA;
 //METAGUARD; write; mem$write__RDY;
 //METARULES; RULE$enterRule; RULE$recircRule; RULE$exitRule
-//METASTART; LpmMem
-//METAINTERNAL; RAM; BRAM(width=32,depth=1024);
-//METAINVOKE; read__ENA; :RAM$read__ENA;
-//METAEXCLUSIVE; read__ENA; out.deq__ENA
-//METAGUARD; read; ( !valid ) && RAM$read__RDY;
-//METAGUARD; out.first; valid && RAM$dataOut__RDY;
-//METAGUARD; out.deq; 0 != valid;
-//METAINVOKE; write__ENA; :RAM$write__ENA;
-//METAGUARD; write; RAM$write__RDY;
 //METASTART; LpmTest
 //METAINTERNAL; test; Lpm;
 //METAINVOKE; request.enter__ENA; :test$enter__ENA;
@@ -58,3 +49,12 @@
 //METASTART; ___P2MLpmRequest
 //METAINVOKE; pipe.enq__ENA; pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd0:method.enter__ENA;pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] == 16'd1:method.write__ENA;
 //METAGUARD; pipe.enq; ( method.enter__RDY && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) ) || ( ( !method.enter__RDY ) && ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd0 ) && ( method.write__RDY || ( pipe.enq$v[ ( ( 16 + 128 ) - 1 ) : ( ( 16 + 128 ) - 16 ) ] != 16'd1 ) ) );
+//METASTART; LpmMem
+//METAINTERNAL; RAM; BRAM(width=32,depth=1024);
+//METAINVOKE; read__ENA; :RAM$read__ENA;
+//METAEXCLUSIVE; read__ENA; out.deq__ENA
+//METAGUARD; read; ( !valid ) && RAM$read__RDY;
+//METAGUARD; out.first; valid && RAM$dataOut__RDY;
+//METAGUARD; out.deq; 0 != valid;
+//METAINVOKE; write__ENA; :RAM$write__ENA;
+//METAGUARD; write; RAM$write__RDY;

@@ -31,7 +31,7 @@ module Lpm (input wire CLK, input wire nRST,
     PipeIn#(.width(32)) inQ$in();
     PipeOut#(.width(32)) inQ$out();
     PipeOut#(.width(32)) mem$out();
-    logic [32 - 1:0]mem$read$addr;
+    logic [$clog2(1024-1) - 1:0]mem$read$addr;
     logic mem$read__RDY;
     Fifo1Base#(.width(32)) inQ (.CLK(CLK), .nRST(nRST),
         .in(inQ$in),
@@ -44,7 +44,7 @@ module Lpm (input wire CLK, input wire nRST,
     FifoPipeline1Base#(.width(23)) fifo (.CLK(CLK), .nRST(nRST),
         .in(fifo$in),
         .out(fifo$out));
-    LpmMem mem (.CLK(CLK), .nRST(nRST),
+    LpmMem#(.depth(1024)) mem (.CLK(CLK), .nRST(nRST),
         .read__ENA(( ( ( ( mem$out.first & 1 ) == 1 ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) || ( ( ( mem$out.first & 1 ) != 1 ) && ( ( !mem$out.first__RDY ) || ( ( ( !fifo$out.first__RDY ) || ( ( ( !mem$out.deq__RDY ) || ( ( !fifo$out.deq__RDY ) && inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) && ( mem$out.deq__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) && ( fifo$out.first__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) && ( mem$out.first__RDY || ( inQ$out.first__RDY && compBuf$getTicket__RDY && compBuf$allocateTicket__RDY && inQ$out.deq__RDY && fifo$in.enq__RDY ) ) ) ) | ( ( ( mem$out.first & 1 ) != 1 ) && mem$out.first__RDY && fifo$out.first__RDY && mem$out.deq__RDY && fifo$out.deq__RDY )),
         .read$addr(mem$read$addr),
         .read__RDY(mem$read__RDY),

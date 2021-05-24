@@ -21,8 +21,8 @@ INTERFACE AsyncControlIfc  {
 }
 INTERFACE BRAMIfc(width=32,depth=1024)  {
     FILE _OC__OC__PC__OC__OC__PC_lib_PC_bram_OC_h
-    METHOD/Action write__ENA ( Bit(__builtin_clog2(depth)) addr , Bit(width) data )
-    METHOD/Action read__ENA ( Bit(__builtin_clog2(depth)) addr )
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(width) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr )
     METHOD dataOut Bit(width)
 }
 INTERFACE Fifo(width=23)  {
@@ -45,11 +45,11 @@ INTERFACE LpmIndication  {
     FILE lpm_OC_cpp
     METHOD/Action out__ENA ( Bit(32) data )
 }
-INTERFACE LpmMemIfc  {
+INTERFACE LpmMemIfc(depth=1024)  {
     FILE lpm_OC_cpp
     INTERFACE PipeOut(width=32) out
-    METHOD/Action read__ENA ( Bit(32) addr )
-    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data )
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr )
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(32) data )
 }
 INTERFACE LpmRequest  {
     FILE lpm_OC_cpp
@@ -143,7 +143,7 @@ MODULE Lpm LpmIfc {
     FIELD Fifo1(width=32) inQ
     FIELD BufTicket compBuf
     FIELD FifoPipeline1(width=23) fifo
-    FIELD LpmMem mem
+    FIELD LpmMem(depth=1024) mem
     METHOD/Action enter__ENA ( Bit(32) x ) {
         CALL/Action :inQ$in$enq__ENA{enter$x}
     }
@@ -197,11 +197,11 @@ MODULE Lpm LpmIfc {
         CALL/Action :mem$write__ENA{write$addr,write$data}
     }
 }
-MODULE LpmMem LpmMemIfc {
+MODULE LpmMem(depth=1024) LpmMemIfc(depth=1024) {
     FILE lpm_OC_cpp
     FIELD BRAM(width=32,depth=1024) RAM
     FIELD Bit(1) valid
-    METHOD/Action read__ENA ( Bit(32) addr ) if (((valid) ^ (1))) {
+    METHOD/Action read__ENA ( Bit(__builtin_clog2((depth - 1))) addr ) if (((valid) ^ (1))) {
         PRINTF :printf{"LpmMem read: %x\n",read$addr}
         CALL/Action :RAM$read__ENA{read$addr}
         STORE :valid = 1
@@ -213,7 +213,7 @@ MODULE LpmMem LpmMemIfc {
         PRINTF :printf{"LpmMem out.deq:\n"}
         STORE :valid = 0
     }
-    METHOD/Action write__ENA ( Bit(32) addr , Bit(32) data ) {
+    METHOD/Action write__ENA ( Bit(__builtin_clog2((depth - 1))) addr , Bit(32) data ) {
         CALL/Action :RAM$write__ENA{write$addr,write$data}
     }
 }
